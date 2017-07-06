@@ -351,8 +351,8 @@ namespace ts {
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
-    export function escapeLeadingUnderscores(identifier: string): UnderscoreEscapedString {
-        return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as UnderscoreEscapedString;
+    export function escapeLeadingUnderscores(identifier: string): __String {
+        return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
     }
 
     /**
@@ -475,7 +475,7 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
-    export function getTextOfPropertyName(name: PropertyName): UnderscoreEscapedString {
+    export function getTextOfPropertyName(name: PropertyName): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 return (<Identifier>name).text;
@@ -1967,7 +1967,7 @@ namespace ts {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
-    export function getPropertyNameForPropertyNameNode(name: DeclarationName): UnderscoreEscapedString {
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName): __String {
         if (name.kind === SyntaxKind.Identifier) {
             return name.text;
         }
@@ -2018,8 +2018,8 @@ namespace ts {
         return undefined;
     }
 
-    export function getPropertyNameForKnownSymbolName(symbolName: string): UnderscoreEscapedString {
-        return "__@" + symbolName as UnderscoreEscapedString;
+    export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
+        return "__@" + symbolName as __String;
     }
 
     /**
@@ -2385,7 +2385,7 @@ namespace ts {
         return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
     }
 
-    export function isIntrinsicJsxName(name: UnderscoreEscapedString | string) {
+    export function isIntrinsicJsxName(name: __String | string) {
         // An escaped identifier had a leading underscore prior to being escaped, which would return true
         // The escape adds an extra underscore which does not change the result
         const ch = (name as string).substr(0, 1);
@@ -4017,7 +4017,7 @@ namespace ts {
      * @param identifier The escaped identifier text.
      * @returns The unescaped identifier text.
      */
-    export function unescapeLeadingUnderscores(identifier: UnderscoreEscapedString): string {
+    export function unescapeLeadingUnderscores(identifier: __String): string {
         const id = identifier as string;
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
     }
@@ -4029,7 +4029,7 @@ namespace ts {
      * @returns The unescaped identifier text.
      */
     export function unescapeIdentifier(id: string): string {
-        return unescapeLeadingUnderscores(id as UnderscoreEscapedString);
+        return unescapeLeadingUnderscores(id as __String);
     }
 
     export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {

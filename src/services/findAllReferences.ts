@@ -432,7 +432,7 @@ namespace ts.FindAllReferences.Core {
         readonly location: Node;
         readonly symbol: Symbol;
         readonly text: string;
-        readonly escapedText: UnderscoreEscapedString;
+        readonly escapedText: __String;
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
         readonly parents: Symbol[] | undefined;
 
@@ -977,7 +977,7 @@ namespace ts.FindAllReferences.Core {
      * Reference the constructor and all calls to `new this()`.
      */
     function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
-        for (const decl of classSymbol.members.get("__constructor").declarations) {
+        for (const decl of classSymbol.members.get(InternalSymbolName.Constructor).declarations) {
             const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             addNode(ctrKeyword);
@@ -1001,7 +1001,7 @@ namespace ts.FindAllReferences.Core {
     /** Find references to `super` in the constructor of an extending class.  */
     function findSuperConstructorAccesses(cls: ClassLikeDeclaration, addNode: (node: Node) => void): void {
         const symbol = cls.symbol;
-        const ctr = symbol.members.get("__constructor");
+        const ctr = symbol.members.get(InternalSymbolName.Constructor);
         if (!ctr) {
             return;
         }

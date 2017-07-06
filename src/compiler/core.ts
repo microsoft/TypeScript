@@ -1016,13 +1016,13 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T>, callback: (value: T, key: UnderscoreEscapedString) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
     export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T> | Map<T>, callback: (value: T, key: (string & UnderscoreEscapedString)) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T> | Map<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
-            const result = callback(value, key as (string & UnderscoreEscapedString));
+            const result = callback(value, key as (string & __String));
             if (result) {
                 return result;
             }
@@ -1031,12 +1031,12 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}>, callback: (key: UnderscoreEscapedString) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: UnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
     export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}> | Map<{}>, callback: (key: string & UnderscoreEscapedString) => T | undefined): T | undefined {
+    export function forEachKey<T>(map: UnderscoreEscapedMap<{}> | Map<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
-            const result = callback(key as string & UnderscoreEscapedString);
+            const result = callback(key as string & __String);
             if (result) {
                 return result;
             }
@@ -2296,13 +2296,13 @@ namespace ts {
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
         getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
-        getSymbolConstructor(): new (flags: SymbolFlags, name: UnderscoreEscapedString) => Symbol;
+        getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
         getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
-    function Symbol(this: Symbol, flags: SymbolFlags, name: UnderscoreEscapedString) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;

@@ -595,7 +595,7 @@ namespace ts.FindAllReferences {
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
     }
 
-    function symbolName(symbol: Symbol): UnderscoreEscapedString | undefined {
+    function symbolName(symbol: Symbol): __String | undefined {
         if (symbol.name !== "default") {
             return symbol.getName();
         }

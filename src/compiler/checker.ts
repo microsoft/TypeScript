@@ -71,9 +71,9 @@ namespace ts {
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
 
-        const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as UnderscoreEscapedString);
+        const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
-        const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as UnderscoreEscapedString);
+        const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -236,8 +236,8 @@ namespace ts {
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
-        const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as UnderscoreEscapedString);
-        const resolvingSymbol = createSymbol(0, "__resolving__");
+        const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
+        const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
@@ -259,7 +259,7 @@ namespace ts {
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -444,25 +444,25 @@ namespace ts {
         });
         const typeofType = createTypeofType();
 
-        let _jsxNamespace: UnderscoreEscapedString;
+        let _jsxNamespace: __String;
         let _jsxFactoryEntity: EntityName;
-        let _jsxElementPropertiesName: UnderscoreEscapedString;
+        let _jsxElementPropertiesName: __String;
         let _hasComputedJsxElementPropertiesName = false;
-        let _jsxElementChildrenPropertyName: UnderscoreEscapedString;
+        let _jsxElementChildrenPropertyName: __String;
         let _hasComputedJsxElementChildrenPropertyName = false;
 
         /** Things we lazy load from the JSX namespace */
         const jsxTypes = createUnderscoreEscapedMap<Type>();
 
         const JsxNames = {
-            JSX: "JSX" as UnderscoreEscapedString,
-            IntrinsicElements: "IntrinsicElements" as UnderscoreEscapedString,
-            ElementClass: "ElementClass" as UnderscoreEscapedString,
-            ElementAttributesPropertyNameContainer: "ElementAttributesProperty" as UnderscoreEscapedString,
-            ElementChildrenAttributeNameContainer: "ElementChildrenAttribute" as UnderscoreEscapedString,
-            Element: "Element" as UnderscoreEscapedString,
-            IntrinsicAttributes: "IntrinsicAttributes" as UnderscoreEscapedString,
-            IntrinsicClassAttributes: "IntrinsicClassAttributes" as UnderscoreEscapedString
+            JSX: "JSX" as __String,
+            IntrinsicElements: "IntrinsicElements" as __String,
+            ElementClass: "ElementClass" as __String,
+            ElementAttributesPropertyNameContainer: "ElementAttributesProperty" as __String,
+            ElementChildrenAttributeNameContainer: "ElementChildrenAttribute" as __String,
+            Element: "Element" as __String,
+            IntrinsicAttributes: "IntrinsicAttributes" as __String,
+            IntrinsicClassAttributes: "IntrinsicClassAttributes" as __String
         };
 
         const subtypeRelation = createMap<RelationComparisonResult>();
@@ -496,9 +496,9 @@ namespace ts {
 
         return checker;
 
-        function getJsxNamespace(): UnderscoreEscapedString {
+        function getJsxNamespace(): __String {
             if (!_jsxNamespace) {
-                _jsxNamespace = "React" as UnderscoreEscapedString;
+                _jsxNamespace = "React" as __String;
                 if (compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
                     if (_jsxFactoryEntity) {
@@ -526,7 +526,7 @@ namespace ts {
             diagnostics.add(diagnostic);
         }
 
-        function createSymbol(flags: SymbolFlags, name: UnderscoreEscapedString) {
+        function createSymbol(flags: SymbolFlags, name: __String) {
             symbolCount++;
             const symbol = <TransientSymbol>(new Symbol(flags | SymbolFlags.Transient, name));
             symbol.checkFlags = 0;
@@ -706,7 +706,7 @@ namespace ts {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
-        function getSymbol(symbols: SymbolTable, name: UnderscoreEscapedString, meaning: SymbolFlags): Symbol {
+        function getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol {
             if (meaning) {
                 const symbol = symbols.get(name);
                 if (symbol) {
@@ -732,7 +732,7 @@ namespace ts {
          * @param parameterName a name of the parameter to get the symbols for.
          * @return a tuple of two symbols
          */
-        function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: UnderscoreEscapedString): [Symbol, Symbol] {
+        function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: __String): [Symbol, Symbol] {
             const constructorDeclaration = parameter.parent;
             const classDeclaration = parameter.parent.parent;
 
@@ -855,20 +855,20 @@ namespace ts {
         // the given name can be found.
         function resolveName(
             location: Node | undefined,
-            name: UnderscoreEscapedString,
+            name: __String,
             meaning: SymbolFlags,
             nameNotFoundMessage: DiagnosticMessage | undefined,
-            nameArg: UnderscoreEscapedString | Identifier,
+            nameArg: __String | Identifier,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, getSymbol, suggestedNameNotFoundMessage);
         }
 
         function resolveNameHelper(
             location: Node | undefined,
-            name: UnderscoreEscapedString,
+            name: __String,
             meaning: SymbolFlags,
             nameNotFoundMessage: DiagnosticMessage,
-            nameArg: UnderscoreEscapedString | Identifier,
+            nameArg: __String | Identifier,
             lookup: typeof getSymbol,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
@@ -933,7 +933,7 @@ namespace ts {
 
                             // It's an external module. First see if the module has an export default and if the local
                             // name of that export default matches.
-                            if (result = moduleExports.get("default" as UnderscoreEscapedString)) {
+                            if (result = moduleExports.get("default" as __String)) {
                                 const localSymbol = getLocalSymbolForExportDefault(result);
                                 if (localSymbol && (result.flags & meaning) && localSymbol.name === name) {
                                     break loop;
@@ -1101,7 +1101,7 @@ namespace ts {
                         !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning))  {
-                        let suggestion: UnderscoreEscapedString | undefined;
+                        let suggestion: __String | undefined;
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
                             if (suggestion) {
@@ -1159,8 +1159,8 @@ namespace ts {
             return result;
         }
 
-        function diagnosticName(nameArg: UnderscoreEscapedString | Identifier) {
-            return typeof nameArg === "string" ? unescapeLeadingUnderscores(nameArg as UnderscoreEscapedString) : declarationNameToString(nameArg as Identifier);
+        function diagnosticName(nameArg: __String | Identifier) {
+            return typeof nameArg === "string" ? unescapeLeadingUnderscores(nameArg as __String) : declarationNameToString(nameArg as Identifier);
         }
 
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
@@ -1173,7 +1173,7 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: UnderscoreEscapedString, nameArg: UnderscoreEscapedString | Identifier): boolean {
+        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: __String, nameArg: __String | Identifier): boolean {
             if ((errorLocation.kind === SyntaxKind.Identifier && (isTypeReferenceIdentifier(<Identifier>errorLocation)) || isInTypeQuery(errorLocation))) {
                 return false;
             }
@@ -1236,7 +1236,7 @@ namespace ts {
             }
         }
 
-        function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning === SymbolFlags.Namespace) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol) {
@@ -1248,7 +1248,7 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
                 if (name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never") {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
@@ -1263,7 +1263,7 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol) {
@@ -1339,10 +1339,10 @@ namespace ts {
                     exportDefaultSymbol = moduleSymbol;
                 }
                 else {
-                    const exportValue = moduleSymbol.exports.get("export=" as UnderscoreEscapedString);
+                    const exportValue = moduleSymbol.exports.get("export=" as __String);
                     exportDefaultSymbol = exportValue
-                        ? getPropertyOfType(getTypeOfSymbol(exportValue), "default" as UnderscoreEscapedString)
-                        : resolveSymbol(moduleSymbol.exports.get("default" as UnderscoreEscapedString), dontResolveAlias);
+                        ? getPropertyOfType(getTypeOfSymbol(exportValue), "default" as __String)
+                        : resolveSymbol(moduleSymbol.exports.get("default" as __String), dontResolveAlias);
                 }
 
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
@@ -1394,13 +1394,13 @@ namespace ts {
             return result;
         }
 
-        function getExportOfModule(symbol: Symbol, name: UnderscoreEscapedString, dontResolveAlias: boolean): Symbol {
+        function getExportOfModule(symbol: Symbol, name: __String, dontResolveAlias: boolean): Symbol {
             if (symbol.flags & SymbolFlags.Module) {
                 return resolveSymbol(getExportsOfSymbol(symbol).get(name), dontResolveAlias);
             }
         }
 
-        function getPropertyOfVariable(symbol: Symbol, name: UnderscoreEscapedString): Symbol {
+        function getPropertyOfVariable(symbol: Symbol, name: __String): Symbol {
             if (symbol.flags & SymbolFlags.Variable) {
                 const typeAnnotation = (<VariableDeclaration>symbol.valueDeclaration).type;
                 if (typeAnnotation) {
@@ -1421,7 +1421,7 @@ namespace ts {
 
                     let symbolFromVariable: Symbol;
                     // First check if module was specified with "export=". If so, get the member from the resolved type
-                    if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get("export=" as UnderscoreEscapedString)) {
+                    if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get("export=" as __String)) {
                         symbolFromVariable = getPropertyOfType(getTypeOfSymbol(targetSymbol), name.text);
                     }
                     else {
@@ -1738,7 +1738,7 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export=" as UnderscoreEscapedString), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export=" as __String), dontResolveAlias)) || moduleSymbol;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -1753,7 +1753,7 @@ namespace ts {
         }
 
         function hasExportAssignmentSymbol(moduleSymbol: Symbol): boolean {
-            return moduleSymbol.exports.get("export=" as UnderscoreEscapedString) !== undefined;
+            return moduleSymbol.exports.get("export=" as __String) !== undefined;
         }
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
@@ -1769,7 +1769,7 @@ namespace ts {
             return exports;
         }
 
-        function tryGetMemberInModuleExports(memberName: UnderscoreEscapedString, moduleSymbol: Symbol): Symbol | undefined {
+        function tryGetMemberInModuleExports(memberName: __String, moduleSymbol: Symbol): Symbol | undefined {
             const symbolTable = getExportsOfModule(moduleSymbol);
             if (symbolTable) {
                 return symbolTable.get(memberName);
@@ -1838,7 +1838,7 @@ namespace ts {
                 visitedSymbols.push(symbol);
                 const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
-                const exportStars = symbol.exports.get("__export");
+                const exportStars = symbol.exports.get(InternalSymbolName.ExportStar);
                 if (exportStars) {
                     const nestedSymbols = createSymbolTable();
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
@@ -1939,7 +1939,7 @@ namespace ts {
         // or the @ symbol. A third underscore indicates an escaped form of an identifer that started
         // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
         // Symbol instance.
-        function isReservedMemberName(name: UnderscoreEscapedString) {
+        function isReservedMemberName(name: __String) {
             return (name as string).charCodeAt(0) === CharacterCodes._ &&
                 (name as string).charCodeAt(1) === CharacterCodes._ &&
                 (name as string).charCodeAt(2) !== CharacterCodes._ &&
@@ -4048,7 +4048,7 @@ namespace ts {
         }
 
         // Return the type of the given property in the given type, or undefined if no such property exists
-        function getTypeOfPropertyOfType(type: Type, name: UnderscoreEscapedString): Type {
+        function getTypeOfPropertyOfType(type: Type, name: __String): Type {
             const prop = getPropertyOfType(type, name);
             return prop ? getTypeOfSymbol(prop) : undefined;
         }
@@ -4166,7 +4166,7 @@ namespace ts {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     const propName = "" + indexOf(pattern.elements, declaration);
                     type = isTupleLikeType(parentType)
-                        ? getTypeOfPropertyOfType(parentType, propName as UnderscoreEscapedString)
+                        ? getTypeOfPropertyOfType(parentType, propName as __String)
                         : elementType;
                     if (!type) {
                         if (isTupleType(parentType)) {
@@ -5333,8 +5333,8 @@ namespace ts {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 const symbol = type.symbol;
                 (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(symbol.members);
-                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get("__call"));
-                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get("__new"));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Call));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.New));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
             }
@@ -5625,8 +5625,8 @@ namespace ts {
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
                 const members = symbol.members;
-                const callSignatures = getSignaturesOfSymbol(members.get("__call"));
-                const constructSignatures = getSignaturesOfSymbol(members.get("__new"));
+                const callSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.Call));
+                const constructSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.New));
                 const stringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 const numberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
                 setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
@@ -5641,7 +5641,7 @@ namespace ts {
                 }
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    constructSignatures = getSignaturesOfSymbol(symbol.members.get("__constructor"));
+                    constructSignatures = getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor));
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
@@ -5811,7 +5811,7 @@ namespace ts {
         /** If the given type is an object type and that type has a property by the given name,
          * return the symbol for that property. Otherwise return undefined.
          */
-        function getPropertyOfObjectType(type: Type, name: UnderscoreEscapedString): Symbol {
+        function getPropertyOfObjectType(type: Type, name: __String): Symbol {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 const symbol = resolved.members.get(name);
@@ -6006,7 +6006,7 @@ namespace ts {
                 t;
         }
 
-        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: UnderscoreEscapedString): Symbol {
+        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol {
             let props: Symbol[];
             const types = containingType.types;
             const isUnion = containingType.flags & TypeFlags.Union;
@@ -6077,7 +6077,7 @@ namespace ts {
         // constituents, in which case the isPartial flag is set when the containing type is union type. We need
         // these partial properties when identifying discriminant properties, but otherwise they are filtered out
         // and do not appear to be present in the union type.
-        function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: UnderscoreEscapedString): Symbol {
+        function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: __String): Symbol {
             const properties = type.propertyCache || (type.propertyCache = createSymbolTable());
             let property = properties.get(name);
             if (!property) {
@@ -6089,7 +6089,7 @@ namespace ts {
             return property;
         }
 
-        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: UnderscoreEscapedString): Symbol {
+        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: __String): Symbol {
             const property = getUnionOrIntersectionProperty(type, name);
             // We need to filter out partial properties in union types
             return property && !(getCheckFlags(property) & CheckFlags.Partial) ? property : undefined;
@@ -6103,7 +6103,7 @@ namespace ts {
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
          */
-        function getPropertyOfType(type: Type, name: UnderscoreEscapedString): Symbol | undefined {
+        function getPropertyOfType(type: Type, name: __String): Symbol | undefined {
             type = getApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -6230,7 +6230,7 @@ namespace ts {
             if (isExternalModuleNameRelative(moduleName)) {
                 return undefined;
             }
-            const symbol = getSymbol(globals, `"${moduleName}"` as UnderscoreEscapedString, SymbolFlags.ValueModule);
+            const symbol = getSymbol(globals, `"${moduleName}"` as __String, SymbolFlags.ValueModule);
             // merged symbol is module declaration symbol combined with all augmentations
             return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
@@ -6394,7 +6394,7 @@ namespace ts {
                 let hasRestLikeParameter = hasRestParameter(declaration);
                 if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && containsArgumentsReference(declaration)) {
                     hasRestLikeParameter = true;
-                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as UnderscoreEscapedString);
+                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
                     syntheticArgsSymbol.type = anyArrayType;
                     syntheticArgsSymbol.isRestParameter = true;
                     parameters.push(syntheticArgsSymbol);
@@ -6599,7 +6599,7 @@ namespace ts {
         }
 
         function getIndexSymbol(symbol: Symbol): Symbol {
-            return symbol.members.get("__index");
+            return symbol.members.get(InternalSymbolName.Index);
         }
 
         function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
@@ -6979,78 +6979,78 @@ namespace ts {
             return <ObjectType>type;
         }
 
-        function getGlobalValueSymbol(name: UnderscoreEscapedString, reportErrors: boolean): Symbol {
+        function getGlobalValueSymbol(name: __String, reportErrors: boolean): Symbol {
             return getGlobalSymbol(name, SymbolFlags.Value, reportErrors ? Diagnostics.Cannot_find_global_value_0 : undefined);
         }
 
-        function getGlobalTypeSymbol(name: UnderscoreEscapedString, reportErrors: boolean): Symbol {
+        function getGlobalTypeSymbol(name: __String, reportErrors: boolean): Symbol {
             return getGlobalSymbol(name, SymbolFlags.Type, reportErrors ? Diagnostics.Cannot_find_global_type_0 : undefined);
         }
 
-        function getGlobalSymbol(name: UnderscoreEscapedString, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
+        function getGlobalSymbol(name: __String, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
             return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
-        function getGlobalType(name: UnderscoreEscapedString, arity: 0, reportErrors: boolean): ObjectType;
-        function getGlobalType(name: UnderscoreEscapedString, arity: number, reportErrors: boolean): GenericType;
-        function getGlobalType(name: UnderscoreEscapedString, arity: number, reportErrors: boolean): ObjectType {
+        function getGlobalType(name: __String, arity: 0, reportErrors: boolean): ObjectType;
+        function getGlobalType(name: __String, arity: number, reportErrors: boolean): GenericType;
+        function getGlobalType(name: __String, arity: number, reportErrors: boolean): ObjectType {
             const symbol = getGlobalTypeSymbol(name, reportErrors);
             return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
         }
 
         function getGlobalTypedPropertyDescriptorType() {
-            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor" as UnderscoreEscapedString, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
+            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor" as __String, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
         }
 
         function getGlobalTemplateStringsArrayType() {
-            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
-            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as UnderscoreEscapedString, reportErrors));
+            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as __String, reportErrors));
         }
 
         function getGlobalESSymbolType(reportErrors: boolean) {
-            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol" as UnderscoreEscapedString, /*arity*/ 0, reportErrors)) || emptyObjectType;
+            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalPromiseType(reportErrors: boolean) {
-            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
-            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise" as UnderscoreEscapedString, reportErrors));
+            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise" as __String, reportErrors));
         }
 
         function getGlobalPromiseConstructorLikeType(reportErrors: boolean) {
-            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike" as UnderscoreEscapedString, /*arity*/ 0, reportErrors)) || emptyObjectType;
+            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalAsyncIterableType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableType(reportErrors: boolean) {
-            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIteratorType(reportErrors: boolean) {
-            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalTypeOrUndefined(name: UnderscoreEscapedString, arity = 0): ObjectType {
+        function getGlobalTypeOrUndefined(name: __String, arity = 0): ObjectType {
             const symbol = getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined);
             return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
         }
@@ -7059,7 +7059,7 @@ namespace ts {
          * Returns a type that is inside a namespace at the global scope, e.g.
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
-        function getExportedTypeFromNamespace(namespace: UnderscoreEscapedString, name: UnderscoreEscapedString): Type {
+        function getExportedTypeFromNamespace(namespace: __String, name: __String): Type {
             const namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
             const typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
@@ -7117,7 +7117,7 @@ namespace ts {
             for (let i = 0; i < arity; i++) {
                 const typeParameter = <TypeParameter>createType(TypeFlags.TypeParameter);
                 typeParameters.push(typeParameter);
-                const property = createSymbol(SymbolFlags.Property, "" + i as UnderscoreEscapedString);
+                const property = createSymbol(SymbolFlags.Property, "" + i as __String);
                 property.type = typeParameter;
                 properties.push(property);
             }
@@ -9898,7 +9898,7 @@ namespace ts {
         }
 
         function isTupleLikeType(type: Type): boolean {
-            return !!getPropertyOfType(type, "0" as UnderscoreEscapedString);
+            return !!getPropertyOfType(type, "0" as __String);
         }
 
         function isUnitType(type: Type): boolean {
@@ -10753,7 +10753,7 @@ namespace ts {
             return undefined;
         }
 
-        function isDiscriminantProperty(type: Type, name: UnderscoreEscapedString) {
+        function isDiscriminantProperty(type: Type, name: __String) {
             if (type && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
@@ -10834,7 +10834,7 @@ namespace ts {
             // check. This gives us a quicker out in the common case where an object type is not a function.
             const resolved = resolveStructuredTypeMembers(type);
             return !!(resolved.callSignatures.length || resolved.constructSignatures.length ||
-                resolved.members.get("bind" as UnderscoreEscapedString) && isTypeSubtypeOf(type, globalFunctionType));
+                resolved.members.get("bind" as __String) && isTypeSubtypeOf(type, globalFunctionType));
         }
 
         function getTypeFacts(type: Type): TypeFacts {
@@ -10912,7 +10912,7 @@ namespace ts {
         }
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
-            return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index as UnderscoreEscapedString) ||
+            return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index as __String) ||
                 checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) ||
                 unknownType;
         }
@@ -11745,7 +11745,7 @@ namespace ts {
                 }
 
                 let targetType: Type;
-                const prototypeProperty = getPropertyOfType(rightType, "prototype" as UnderscoreEscapedString);
+                const prototypeProperty = getPropertyOfType(rightType, "prototype" as __String);
                 if (prototypeProperty) {
                     // Target type is type of the prototype property
                     const prototypePropertyType = getTypeOfSymbol(prototypeProperty);
@@ -12836,7 +12836,7 @@ namespace ts {
             return undefined;
         }
 
-        function getTypeOfPropertyOfContextualType(type: Type, name: UnderscoreEscapedString) {
+        function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
             return mapType(type, t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
@@ -12896,7 +12896,7 @@ namespace ts {
             const type = getApparentTypeOfContextualType(arrayLiteral);
             if (type) {
                 const index = indexOf(arrayLiteral.elements, node);
-                return getTypeOfPropertyOfContextualType(type, "" + index as UnderscoreEscapedString)
+                return getTypeOfPropertyOfContextualType(type, "" + index as __String)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
                     || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
             }
@@ -13228,11 +13228,11 @@ namespace ts {
             return isTypeAny(type) || isTypeOfKind(type, kind);
         }
 
-        function isInfinityOrNaNString(name: string | UnderscoreEscapedString): boolean {
+        function isInfinityOrNaNString(name: string | __String): boolean {
             return name === "Infinity" || name === "-Infinity" || name === "NaN";
         }
 
-        function isNumericLiteralName(name: string | UnderscoreEscapedString) {
+        function isNumericLiteralName(name: string | __String) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
             //     - setting properties/indexing with them is always equivalent to doing so with the numeric literal 'numLit',
@@ -13498,7 +13498,7 @@ namespace ts {
         /**
          * Returns true iff the JSX element name would be a valid JS identifier, ignoring restrictions about keywords not being identifiers
          */
-        function isUnhyphenatedJsxName(name: string | UnderscoreEscapedString) {
+        function isUnhyphenatedJsxName(name: string | __String) {
             // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
             return (name as string).indexOf("-") < 0;
         }
@@ -13657,7 +13657,7 @@ namespace ts {
             return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, checkMode);
         }
 
-        function getJsxType(name: UnderscoreEscapedString) {
+        function getJsxType(name: __String) {
             let jsxType = jsxTypes.get(name);
             if (jsxType === undefined) {
                 jsxTypes.set(name, jsxType = getExportedTypeFromNamespace(JsxNames.JSX, name) || unknownType);
@@ -13749,7 +13749,7 @@ namespace ts {
          * @param nameOfAttribPropContainer a string of value JsxNames.ElementAttributesPropertyNameContainer or JsxNames.ElementChildrenAttributeNameContainer
          *          if other string is given or the container doesn't exist, return undefined.
          */
-        function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: UnderscoreEscapedString): UnderscoreEscapedString {
+        function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: __String): __String {
             // JSX
             const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
             // JSX.ElementAttributesProperty | JSX.ElementChildrenAttribute [symbol]
@@ -13761,7 +13761,7 @@ namespace ts {
             if (propertiesOfJsxElementAttribPropInterface) {
                 // Element Attributes has zero properties, so the element attributes type will be the class instance type
                 if (propertiesOfJsxElementAttribPropInterface.length === 0) {
-                    return "" as UnderscoreEscapedString;
+                    return "" as __String;
                 }
                 // Element Attributes has one property, so the element attributes type will be the type of the corresponding
                 // property of the class instance type
@@ -13790,7 +13790,7 @@ namespace ts {
             return _jsxElementPropertiesName;
         }
 
-        function getJsxElementChildrenPropertyname(): UnderscoreEscapedString {
+        function getJsxElementChildrenPropertyname(): __String {
             if (!_hasComputedJsxElementChildrenPropertyName) {
                 _hasComputedJsxElementChildrenPropertyName = true;
                 _jsxElementChildrenPropertyName = getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer);
@@ -14190,7 +14190,7 @@ namespace ts {
          * @param name a property name to search
          * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
          */
-        function isKnownProperty(targetType: Type, name: UnderscoreEscapedString, isComparingJsxAttributes: boolean): boolean {
+        function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
                 if (resolved.stringIndexInfo ||
@@ -14493,12 +14493,12 @@ namespace ts {
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
 
-        function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): UnderscoreEscapedString | undefined {
+        function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): __String | undefined {
             const suggestion = getSpellingSuggestionForName(unescapeLeadingUnderscores(node.text), getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && suggestion.name;
         }
 
-        function getSuggestionForNonexistentSymbol(location: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): UnderscoreEscapedString {
+        function getSuggestionForNonexistentSymbol(location: Node, name: __String, meaning: SymbolFlags): __String {
             const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, (symbols, name, meaning) => {
                 const symbol = getSymbol(symbols, name, meaning);
                 if (symbol) {
@@ -14603,7 +14603,7 @@ namespace ts {
             return false;
         }
 
-        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: UnderscoreEscapedString): boolean {
+        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
             const left = node.kind === SyntaxKind.PropertyAccessExpression
                 ? (<PropertyAccessExpression>node).expression
                 : (<QualifiedName>node).left;
@@ -14614,7 +14614,7 @@ namespace ts {
         function isValidPropertyAccessWithType(
             node: PropertyAccessExpression | QualifiedName,
             left: LeftHandSideExpression | QualifiedName,
-            propertyName: UnderscoreEscapedString,
+            propertyName: __String,
             type: Type): boolean {
 
             if (type !== unknownType && !isTypeAny(type)) {
@@ -17068,7 +17068,7 @@ namespace ts {
             const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
                 if (element.kind !== SyntaxKind.SpreadElement) {
-                    const propName = "" + elementIndex as UnderscoreEscapedString;
+                    const propName = "" + elementIndex as __String;
                     const type = isTypeAny(sourceType)
                         ? sourceType
                         : isTupleLikeType(sourceType)
@@ -18119,7 +18119,7 @@ namespace ts {
                 }
             }
 
-            function addName(names: UnderscoreEscapedMap<Declaration>, location: Node, name: UnderscoreEscapedString, meaning: Declaration) {
+            function addName(names: UnderscoreEscapedMap<Declaration>, location: Node, name: __String, meaning: Declaration) {
                 const prev = names.get(name);
                 if (prev) {
                     if (prev & Declaration.Method) {
@@ -18893,7 +18893,7 @@ namespace ts {
                 return typeAsPromise.promisedTypeOfPromise = (<GenericType>promise).typeArguments[0];
             }
 
-            const thenFunction = getTypeOfPropertyOfType(promise, "then" as UnderscoreEscapedString);
+            const thenFunction = getTypeOfPropertyOfType(promise, "then" as __String);
             if (isTypeAny(thenFunction)) {
                 return undefined;
             }
@@ -19025,7 +19025,7 @@ namespace ts {
             // of a runtime problem. If the user wants to return this value from an async
             // function, they would need to wrap it in some other value. If they want it to
             // be treated as a promise, they can cast to <any>.
-            const thenFunction = getTypeOfPropertyOfType(type, "then" as UnderscoreEscapedString);
+            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
             if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
                 if (errorNode) {
                     Debug.assert(!!diagnosticMessage);
@@ -20462,7 +20462,7 @@ namespace ts {
             }
 
             // Both async and non-async iterators must have a `next` method.
-            const nextMethod = getTypeOfPropertyOfType(type, "next" as UnderscoreEscapedString);
+            const nextMethod = getTypeOfPropertyOfType(type, "next" as __String);
             if (isTypeAny(nextMethod)) {
                 return undefined;
             }
@@ -20490,7 +20490,7 @@ namespace ts {
                 }
             }
 
-            const nextValue = nextResult && getTypeOfPropertyOfType(nextResult, "value" as UnderscoreEscapedString);
+            const nextValue = nextResult && getTypeOfPropertyOfType(nextResult, "value" as __String);
             if (!nextValue) {
                 if (errorNode) {
                     error(errorNode, isAsyncIterator
@@ -21370,7 +21370,7 @@ namespace ts {
                             if (type.symbol && type.symbol.flags & SymbolFlags.Enum) {
                                 const name = expr.kind === SyntaxKind.PropertyAccessExpression ?
                                     (<PropertyAccessExpression>expr).name.text :
-                                    (<LiteralExpression>(<ElementAccessExpression>expr).argumentExpression).text as UnderscoreEscapedString;
+                                    (<LiteralExpression>(<ElementAccessExpression>expr).argumentExpression).text as __String;
                                 return evaluateEnumMember(expr, type.symbol, name);
                             }
                         }
@@ -21379,7 +21379,7 @@ namespace ts {
                 return undefined;
             }
 
-            function evaluateEnumMember(expr: Expression, enumSymbol: Symbol, name: UnderscoreEscapedString) {
+            function evaluateEnumMember(expr: Expression, enumSymbol: Symbol, name: __String) {
                 const memberSymbol = enumSymbol.exports.get(name);
                 if (memberSymbol) {
                     const declaration = memberSymbol.valueDeclaration;
@@ -21902,7 +21902,7 @@ namespace ts {
             const moduleSymbol = getSymbolOfNode(node);
             const links = getSymbolLinks(moduleSymbol);
             if (!links.exportsChecked) {
-                const exportEqualsSymbol = moduleSymbol.exports.get("export=" as UnderscoreEscapedString);
+                const exportEqualsSymbol = moduleSymbol.exports.get("export=" as __String);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
                     if (!isTopLevelInExternalModuleAugmentation(declaration)) {
@@ -22615,7 +22615,7 @@ namespace ts {
                         if (objectType === unknownType) return undefined;
                         const apparentType = getApparentType(objectType);
                         if (apparentType === unknownType) return undefined;
-                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text as UnderscoreEscapedString);
+                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text as __String);
                     }
                     break;
             }
@@ -23452,23 +23452,23 @@ namespace ts {
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
             getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
-            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
+            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as __String, /*arity*/ 0, /*reportErrors*/ true);
             getSymbolLinks(unknownSymbol).type = unknownType;
 
             // Initialize special types
-            globalArrayType = getGlobalType("Array" as UnderscoreEscapedString, /*arity*/ 1, /*reportErrors*/ true);
-            globalObjectType = getGlobalType("Object" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
-            globalFunctionType = getGlobalType("Function" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
-            globalStringType = getGlobalType("String" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
-            globalNumberType = getGlobalType("Number" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
-            globalBooleanType = getGlobalType("Boolean" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
-            globalRegExpType = getGlobalType("RegExp" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
+            globalArrayType = getGlobalType("Array" as __String, /*arity*/ 1, /*reportErrors*/ true);
+            globalObjectType = getGlobalType("Object" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            globalFunctionType = getGlobalType("Function" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            globalStringType = getGlobalType("String" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            globalNumberType = getGlobalType("Number" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            globalRegExpType = getGlobalType("RegExp" as __String, /*arity*/ 0, /*reportErrors*/ true);
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
-            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as UnderscoreEscapedString, /*arity*/ 1);
+            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
-            globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as UnderscoreEscapedString, /*arity*/ 1);
+            globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {

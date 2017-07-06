@@ -304,7 +304,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
-        name: UnderscoreEscapedString;
+        name: __String;
         declarations?: Declaration[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -315,7 +315,7 @@ namespace ts {
         // symbol has no JSDoc tags, then the empty array will be returned.
         tags?: JSDocTagInfo[];
 
-        constructor(flags: SymbolFlags, name: UnderscoreEscapedString) {
+        constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
             this.name = name;
         }
@@ -324,7 +324,7 @@ namespace ts {
             return this.flags;
         }
 
-        getName(): UnderscoreEscapedString {
+        getName(): __String {
             return this.name;
         }
 
@@ -364,7 +364,7 @@ namespace ts {
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
-        public text: UnderscoreEscapedString;
+        public text: __String;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -2115,7 +2115,7 @@ namespace ts {
             }
         }
 
-        function setNameTable(text: UnderscoreEscapedString, node: ts.Node): void {
+        function setNameTable(text: __String, node: ts.Node): void {
             nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
         }
     }

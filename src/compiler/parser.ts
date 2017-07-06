@@ -1178,7 +1178,7 @@ namespace ts {
             }
 
             const result = createNode(kind, scanner.getStartPos());
-            (<Identifier>result).text = "" as UnderscoreEscapedString;
+            (<Identifier>result).text = "" as __String;
             return finishNode(result);
         }
 

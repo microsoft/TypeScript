@@ -10,7 +10,7 @@ namespace ts {
     }
 
     interface ActiveLabel {
-        name: UnderscoreEscapedString;
+        name: __String;
         breakTarget: FlowLabel;
         continueTarget: FlowLabel;
         referenced: boolean;
@@ -132,8 +132,8 @@ namespace ts {
         let inStrictMode: boolean;
 
         let symbolCount = 0;
-        let Symbol: { new (flags: SymbolFlags, name: UnderscoreEscapedString): Symbol };
-        let classifiableNames: UnderscoreEscapedMap<UnderscoreEscapedString>;
+        let Symbol: { new (flags: SymbolFlags, name: __String): Symbol };
+        let classifiableNames: UnderscoreEscapedMap<__String>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -147,7 +147,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = createUnderscoreEscapedMap<UnderscoreEscapedString>();
+            classifiableNames = createUnderscoreEscapedMap<__String>();
             symbolCount = 0;
             skipTransformFlagAggregation = file.isDeclarationFile;
 
@@ -191,7 +191,7 @@ namespace ts {
             }
         }
 
-        function createSymbol(flags: SymbolFlags, name: UnderscoreEscapedString): Symbol {
+        function createSymbol(flags: SymbolFlags, name: __String): Symbol {
             symbolCount++;
             return new Symbol(flags, name);
         }
@@ -226,12 +226,12 @@ namespace ts {
 
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
-        function getDeclarationName(node: Declaration): UnderscoreEscapedString {
+        function getDeclarationName(node: Declaration): __String {
             const name = getNameOfDeclaration(node);
             if (name) {
                 if (isAmbientModule(node)) {
                     const moduleName = getTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
-                    return (isGlobalScopeAugmentation(<ModuleDeclaration>node) ? "__global" : `"${moduleName}"`) as UnderscoreEscapedString;
+                    return (isGlobalScopeAugmentation(<ModuleDeclaration>node) ? "__global" : `"${moduleName}"`) as __String;
                 }
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = (<ComputedPropertyName>name).expression;
@@ -247,42 +247,42 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.Constructor:
-                    return "__constructor";
+                    return InternalSymbolName.Constructor;
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
-                    return "__call";
+                    return InternalSymbolName.Call;
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
-                    return "__new";
+                    return InternalSymbolName.New;
                 case SyntaxKind.IndexSignature:
-                    return "__index";
+                    return InternalSymbolName.Index;
                 case SyntaxKind.ExportDeclaration:
-                    return "__export";
+                    return InternalSymbolName.ExportStar;
                 case SyntaxKind.ExportAssignment:
-                    return ((<ExportAssignment>node).isExportEquals ? "export=" : "default");
+                    return ((<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default);
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
-                        return "export=";
+                        return InternalSymbolName.ExportEquals;
                     }
                     Debug.fail("Unknown binary declaration kind");
                     break;
 
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
-                    return (hasModifier(node, ModifierFlags.Default) ? "default" : undefined);
+                    return (hasModifier(node, ModifierFlags.Default) ? InternalSymbolName.Default : undefined);
                 case SyntaxKind.JSDocFunctionType:
-                    return (isJSDocConstructSignature(node) ? "__new" : "__call");
+                    return (isJSDocConstructSignature(node) ? InternalSymbolName.New : InternalSymbolName.Call);
                 case SyntaxKind.Parameter:
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
                     Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
                     const functionType = <JSDocFunctionType>node.parent;
                     const index = indexOf(functionType.parameters, node);
-                    return "arg" + index as UnderscoreEscapedString;
+                    return "arg" + index as __String;
                 case SyntaxKind.JSDocTypedefTag:
                     const parentNode = node.parent && node.parent.parent;
-                    let nameFromParentNode: UnderscoreEscapedString;
+                    let nameFromParentNode: __String;
                     if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
                         if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                             const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
@@ -313,11 +313,11 @@ namespace ts {
             const isDefaultExport = hasModifier(node, ModifierFlags.Default);
 
             // The exported symbol for an export default function/class node is always named "default"
-            const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
+            const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name === undefined) {
-                symbol = createSymbol(SymbolFlags.None, "__missing");
+                symbol = createSymbol(SymbolFlags.None, InternalSymbolName.Missing);
             }
             else {
                 // Check and see if the symbol table already has a symbol with this name.  If not,
@@ -1007,7 +1007,7 @@ namespace ts {
             currentFlow = unreachableFlow;
         }
 
-        function findActiveLabel(name: UnderscoreEscapedString) {
+        function findActiveLabel(name: __String) {
             if (activeLabels) {
                 for (const label of activeLabels) {
                     if (label.name === name) {
@@ -1170,7 +1170,7 @@ namespace ts {
             bindEach(node.statements);
         }
 
-        function pushActiveLabel(name: UnderscoreEscapedString, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
+        function pushActiveLabel(name: __String, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
             const activeLabel = {
                 name,
                 breakTarget,
@@ -1646,7 +1646,7 @@ namespace ts {
             const symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
 
-            const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = createSymbolTable();
             typeLiteralSymbol.members.set(symbol.name, symbol);
@@ -1694,18 +1694,18 @@ namespace ts {
                 }
             }
 
-            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object");
+            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, InternalSymbolName.Object);
         }
 
         function bindJsxAttributes(node: JsxAttributes) {
-            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__jsxAttributes");
+            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, InternalSymbolName.JSXAttributes);
         }
 
         function bindJsxAttribute(node: JsxAttribute, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             return declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 
-        function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: UnderscoreEscapedString) {
+        function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: __String) {
             const symbol = createSymbol(symbolFlags, name);
             addDeclarationToSymbol(symbol, node, symbolFlags);
         }
@@ -1896,8 +1896,8 @@ namespace ts {
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function getDestructuringParameterName(node: Declaration): UnderscoreEscapedString {
-            return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node) as UnderscoreEscapedString;
+        function getDestructuringParameterName(node: Declaration): __String {
+            return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node) as __String;
         }
 
         function bind(node: Node): void {
@@ -2191,7 +2191,7 @@ namespace ts {
         }
 
         function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral | JSDocRecordType) {
-            return bindAnonymousDeclaration(<Declaration>node, SymbolFlags.TypeLiteral, "__type");
+            return bindAnonymousDeclaration(<Declaration>node, SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
@@ -2213,7 +2213,7 @@ namespace ts {
         }
 
         function bindSourceFileAsExternalModule() {
-            bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"` as UnderscoreEscapedString);
+            bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"` as __String);
         }
 
         function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
@@ -2404,11 +2404,11 @@ namespace ts {
             }
         }
 
-        function lookupSymbolForName(name: UnderscoreEscapedString) {
+        function lookupSymbolForName(name: __String) {
             return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
         }
 
-        function bindPropertyAssignment(functionName: UnderscoreEscapedString, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
+        function bindPropertyAssignment(functionName: __String, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
             let targetSymbol = lookupSymbolForName(functionName);
 
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
@@ -2441,7 +2441,7 @@ namespace ts {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
             else {
-                const bindingName = node.name ? node.name.text : "__class";
+                const bindingName = node.name ? node.name.text : InternalSymbolName.Class;
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
@@ -2460,7 +2460,7 @@ namespace ts {
             // Note: we check for this here because this class may be merging into a module.  The
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
-            const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype" as UnderscoreEscapedString);
+            const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype" as __String);
             const symbolExport = symbol.exports.get(prototypeSymbol.name);
             if (symbolExport) {
                 if (node.name) {
@@ -2554,7 +2554,7 @@ namespace ts {
                 node.flowNode = currentFlow;
             }
             checkStrictModeFunctionName(node);
-            const bindingName = node.name ? node.name.text : "__function";
+            const bindingName = node.name ? node.name.text : InternalSymbolName.Function;
             return bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
         }
 
@@ -2568,7 +2568,7 @@ namespace ts {
             }
 
             return hasDynamicName(node)
-                ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
+                ? bindAnonymousDeclaration(node, symbolFlags, InternalSymbolName.Computed)
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 

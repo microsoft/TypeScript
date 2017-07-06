@@ -1494,7 +1494,7 @@ namespace ts.Completions {
                     continue;
                 }
 
-                let existingName: UnderscoreEscapedString;
+                let existingName: __String;
 
                 if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
                     // include only identifiers in completion list
