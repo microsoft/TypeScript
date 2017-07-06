@@ -355,6 +355,14 @@ namespace ts {
         return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as UnderscoreEscapedString;
     }
 
+    /**
+     * @deprecated
+     * @param identifier The identifier to escape
+     */
+    export function escapeIdentifier(identifier: string): string {
+        return escapeLeadingUnderscores(identifier) as string;
+    }
+
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
@@ -4011,6 +4019,16 @@ namespace ts {
      */
     export function unescapeLeadingUnderscores(identifier: UnderscoreEscapedString): string {
         return (identifier as string).length >= 3 && (identifier as string).charCodeAt(0) === CharacterCodes._ && (identifier as string).charCodeAt(1) === CharacterCodes._ && (identifier as string).charCodeAt(2) === CharacterCodes._ ? (identifier as string).substr(1) : identifier as string;
+    }
+
+    /**
+     * Remove extra underscore from escaped identifier text content.
+     * @deprecated
+     * @param identifier The escaped identifier text.
+     * @returns The unescaped identifier text.
+     */
+    export function unescapeIdentifier(id: string): string {
+        return unescapeLeadingUnderscores(id as UnderscoreEscapedString);
     }
 
     export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
