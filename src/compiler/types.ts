@@ -3005,24 +3005,33 @@ namespace ts {
         isRestParameter?: boolean;
     }
 
-    export type InternalSymbolName =
-        | "__call" // Call signatures
-        | "__constructor" // Constructor implementations
-        | "__new" // Constructor signatures
-        | "__index" // Index signatures
-        | "__export" // Module export * declarations
-        | "__global" // Global self-reference
-        | "__missing" // Indicates missing symbol
-        | "__type" // Anonymous type literal symbol
-        | "__object" // Anonymous object literal declaration
-        | "__jsxAttributes" // Anonymous JSX attributes object literal declaration
-        | "__class" // Unnamed class expression
-        | "__function" // Unnamed function expression
-        | "__computed" // Computed property name declaration with dynamic name
-        | "__resolving__" // Indicator symbol used to mark partially resolved type aliases
-        | "export=" // Export assignment symbol
-        | "default"; // Default export symbol (technically not wholly internal, but included here for usability)
+    export const enum InternalSymbolName {
+        "__call" = "__call", // Call signatures
+        "__constructor" = "__constructor", // Constructor implementations
+        "__new" = "__new", // Constructor signatures
+        "__index" = "__index", // Index signatures
+        "__export" = "__export", // Module export * declarations
+        "__global" = "__global", // Global self-reference
+        "__missing" = "__missing", // Indicates missing symbol
+        "__type" = "__type", // Anonymous type literal symbol
+        "__object" = "__object", // Anonymous object literal declaration
+        "__jsxAttributes" = "__jsxAttributes", // Anonymous JSX attributes object literal declaration
+        "__class" = "__class", // Unnamed class expression
+        "__function" = "__function", // Unnamed function expression
+        "__computed" = "__computed", // Computed property name declaration with dynamic name
+        "__resolving__" = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
+        "export=" = "export=", // Export assignment symbol
+        "default" = "default", // Default export symbol (technically not wholly internal, but included here for usability)
+    }
 
+    /**
+     * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
+     * The shape of this brand is rather unique compared to others we've used.
+     * Instead of just an intersection of a string and an object, it is that union-ed
+     * with an intersection of void and an object. This makes it wholly incompatible
+     * with a normal string (which is good, it cannot be misused on assignment or on usage),
+     * while still being comparable with a normal string via === (also good) and castable from a string.
+     */
     export type UnderscoreEscapedString = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
     /** EscapedStringMap based on ES6 Map interface. */
