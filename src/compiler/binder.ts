@@ -259,7 +259,7 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                     return InternalSymbolName.ExportStar;
                 case SyntaxKind.ExportAssignment:
-                    return ((<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default);
+                    return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
