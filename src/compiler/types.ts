@@ -828,7 +828,7 @@ namespace ts {
         | SetAccessorDeclaration
         | FunctionExpression
         | ArrowFunction;
-    export type FunctionLikeTypes =
+    export type FunctionLike =
         | FunctionLikeDeclaration
         | FunctionTypeNode
         | ConstructorTypeNode
@@ -2627,7 +2627,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLikeTypes): boolean | undefined;
+        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
