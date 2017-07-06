@@ -126,7 +126,7 @@ namespace ts.server {
 
         private switchToScriptVersionCache(newText?: string): ScriptVersionCache {
             if (!this.svc) {
-                this.svc = ScriptVersionCache.fromString(this.host, newText !== undefined ? newText : this.getOrLoadText());
+                this.svc = ScriptVersionCache.fromString(newText !== undefined ? newText : this.getOrLoadText());
                 this.svcVersion++;
                 this.text = undefined;
             }
