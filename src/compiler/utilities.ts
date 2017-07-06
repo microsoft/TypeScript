@@ -4018,7 +4018,8 @@ namespace ts {
      * @returns The unescaped identifier text.
      */
     export function unescapeLeadingUnderscores(identifier: UnderscoreEscapedString): string {
-        return (identifier as string).length >= 3 && (identifier as string).charCodeAt(0) === CharacterCodes._ && (identifier as string).charCodeAt(1) === CharacterCodes._ && (identifier as string).charCodeAt(2) === CharacterCodes._ ? (identifier as string).substr(1) : identifier as string;
+        const id = identifier as string;
+        return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
     }
 
     /**
