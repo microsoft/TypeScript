@@ -1095,8 +1095,10 @@ namespace ts {
      *
      * @param array the array of input elements.
      */
-    export function arrayToSet<T>(array: T[], makeKey: (value: T) => string): Map<true> {
-        return arrayToMap<T, true>(array, makeKey, () => true);
+    export function arrayToSet(array: string[]): Map<true>;
+    export function arrayToSet<T>(array: T[], makeKey: (value: T) => string): Map<true>;
+    export function arrayToSet(array: any[], makeKey?: (value: any) => string): Map<true> {
+        return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
     export function cloneMap<T>(map: Map<T>) {
