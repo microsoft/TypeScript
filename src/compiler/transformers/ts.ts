@@ -1682,7 +1682,7 @@ namespace ts {
             const valueDeclaration =
                 isClassLike(node)
                     ? getFirstConstructorWithBody(node)
-                    : isFunctionLike(node) && nodeIsPresent(node.body)
+                    : isFunctionLike(node) && nodeIsPresent((node as FunctionLikeDeclaration).body)
                         ? node
                         : undefined;
 
@@ -1707,7 +1707,7 @@ namespace ts {
             return createArrayLiteral(expressions);
         }
 
-        function getParametersOfDecoratedDeclaration(node: FunctionLikeDeclaration, container: ClassLikeDeclaration) {
+        function getParametersOfDecoratedDeclaration(node: FunctionLike, container: ClassLikeDeclaration) {
             if (container && node.kind === SyntaxKind.GetAccessor) {
                 const { setAccessor } = getAllAccessorDeclarations(container.members, <AccessorDeclaration>node);
                 if (setAccessor) {

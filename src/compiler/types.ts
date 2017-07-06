@@ -705,13 +705,23 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface PropertySignature extends TypeElement {
-        kind: SyntaxKind.PropertySignature | SyntaxKind.JSDocRecordMember;
+    export interface TSPropertySignature extends TypeElement {
+        kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
         questionToken?: QuestionToken;      // Present on optional property
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
+
+    export interface JSDocPropertySignature extends TypeElement {
+        kind: SyntaxKind.JSDocRecordMember;
+        name: PropertyName;                 // Declared property name
+        questionToken?: QuestionToken;      // Present on optional property
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
+    }
+
+    export type PropertySignature = TSPropertySignature | JSDocPropertySignature;
 
     export interface PropertyDeclaration extends ClassElement {
         kind: SyntaxKind.PropertyDeclaration;
@@ -796,13 +806,13 @@ namespace ts {
 
     /**
      * Several node kinds share function-like features such as a signature,
-     * a name, and a body. These nodes should extend FunctionLikeDeclaration.
+     * a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
      * Examples:
      * - FunctionDeclaration
      * - MethodDeclaration
      * - AccessorDeclaration
      */
-    export interface FunctionLikeDeclaration extends SignatureDeclaration {
+    export interface FunctionLikeDeclarationBase extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
 
         asteriskToken?: AsteriskToken;
@@ -810,7 +820,24 @@ namespace ts {
         body?: Block | Expression;
     }
 
-    export interface FunctionDeclaration extends FunctionLikeDeclaration, DeclarationStatement {
+    export type FunctionLikeDeclaration =
+        | FunctionDeclaration
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | FunctionExpression
+        | ArrowFunction;
+    export type FunctionLike =
+        | FunctionLikeDeclaration
+        | FunctionTypeNode
+        | ConstructorTypeNode
+        | IndexSignatureDeclaration
+        | MethodSignature
+        | ConstructSignatureDeclaration
+        | CallSignatureDeclaration;
+
+    export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
         name?: Identifier;
         body?: FunctionBody;
@@ -830,13 +857,13 @@ namespace ts {
     // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.MethodDeclaration;
         name: PropertyName;
         body?: FunctionBody;
     }
 
-    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+    export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
@@ -850,7 +877,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface GetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.GetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -859,7 +886,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface SetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.SetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -1323,13 +1350,13 @@ namespace ts {
     export type FunctionBody = Block;
     export type ConciseBody = FunctionBody | Expression;
 
-    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
+    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase {
         kind: SyntaxKind.FunctionExpression;
         name?: Identifier;
         body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
-    export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+    export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase {
         kind: SyntaxKind.ArrowFunction;
         equalsGreaterThanToken: EqualsGreaterThanToken;
         body: ConciseBody;
@@ -2110,7 +2137,7 @@ namespace ts {
 
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
-    export interface JSDocRecordMember extends PropertySignature {
+    export interface JSDocRecordMember extends JSDocPropertySignature {
         kind: SyntaxKind.JSDocRecordMember;
         name: Identifier | StringLiteral | NumericLiteral;
         type?: JSDocType;
@@ -2600,7 +2627,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
+        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
