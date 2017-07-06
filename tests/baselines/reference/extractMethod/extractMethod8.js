@@ -16,7 +16,7 @@ namespace A {
             let a1 = 1;
             return newFunction() + 100;
 
-            function newFunction() { 1 + a1 + x; }
+            function newFunction() { return 1 + a1 + x; }
         }
     }
 }
@@ -29,7 +29,7 @@ namespace A {
             return newFunction(a1) + 100;
         }
 
-        function newFunction(a1: number) { 1 + a1 + x; }
+        function newFunction(a1: number) { return 1 + a1 + x; }
     }
 }
 ==SCOPE::namespace A==
@@ -42,7 +42,7 @@ namespace A {
         }
     }
 
-    function newFunction(a1: number) { 1 + a1 + x; }
+    function newFunction(a1: number) { return 1 + a1 + x; }
 }
 ==SCOPE::file '/a.ts'==
 namespace A {
@@ -54,4 +54,4 @@ namespace A {
         }
     }
 }
-function newFunction(a1: number, x: number) { 1 + a1 + x; }
+function newFunction(a1: number, x: number) { return 1 + a1 + x; }
