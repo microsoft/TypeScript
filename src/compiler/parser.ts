@@ -1226,8 +1226,8 @@ namespace ts {
 
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
-                const node = <StringLiteral | NumericLiteral>parseLiteralNode(); // Interning makes the string literal be escaped - we do not want that
-                internIdentifier(node.text); // We do, however, want to intern the text for the purposes of the identifier list
+                const node = <StringLiteral | NumericLiteral>parseLiteralNode();
+                internIdentifier(node.text);
                 return node;
             }
             if (allowComputedPropertyNames && token() === SyntaxKind.OpenBracketToken) {
@@ -5625,8 +5625,8 @@ namespace ts {
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
             else {
-                node.name = <StringLiteral>parseLiteralNode(); // Interning as an identifier causes it to be escaped - we do not want that
-                internIdentifier(node.name.text); // We do, however, want to intern the identifier for completions
+                node.name = <StringLiteral>parseLiteralNode();
+                internIdentifier(node.name.text);
             }
 
             if (token() === SyntaxKind.OpenBraceToken) {
