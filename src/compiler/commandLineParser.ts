@@ -1298,6 +1298,11 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
 
+        function isLastConfigOption(options: MapLike<CommandLineOption[]>, optionsInCategory: CommandLineOption[], categoryIndex: number, optionIndex: number) {
+            const configOptionsLength = Object.keys(options).length;
+            return categoryIndex === configOptionsLength && optionIndex === optionsInCategory.length;
+        }
+
         function writeConfigurations() {
             // Filter applicable options to place in the file
             const categorizedOptions = reduceLeft(
@@ -1316,20 +1321,27 @@ namespace ts {
             const nameColumn: string[] = [];
             const descriptionColumn: string[] = [];
             const knownKeysCount = getOwnKeys(configurations.compilerOptions).length;
+            let categoryIndex = 0;
             for (const category in categorizedOptions) {
+                categoryIndex++;
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
                     descriptionColumn.push("");
                 }
                 nameColumn.push(`/* ${category} */`);
                 descriptionColumn.push("");
+                let optionIndex = 0;
                 for (const option of categorizedOptions[category]) {
+                    optionIndex++;
                     let optionName;
                     if (hasProperty(configurations.compilerOptions, option.name)) {
                         optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
                     }
                     else {
-                        optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
+                        optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))}`;
+                        if (!isLastConfigOption(categorizedOptions, categorizedOptions[category], categoryIndex, optionIndex)) {
+                            optionName += ",";
+                        }
                     }
                     nameColumn.push(optionName);
                     descriptionColumn.push(`/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`);
@@ -1346,7 +1358,7 @@ namespace ts {
             for (let i = 0; i < nameColumn.length; i++) {
                 const optionName = nameColumn[i];
                 const description = descriptionColumn[i];
-                result.push(optionName && `${tab}${tab}${optionName}${ description && (makePadding(marginLength - optionName.length + 2) + description)}`);
+                result.push(optionName && `${tab}${tab}${optionName}${description && (makePadding(marginLength - optionName.length + 2) + description)}`);
             }
             if (configurations.files && configurations.files.length) {
                 result.push(`${tab}},`);
@@ -1516,13 +1528,13 @@ namespace ts {
      * It does *not* resolve the included files.
      */
     function parseConfig(
-            json: any,
-            sourceFile: JsonSourceFile,
-            host: ParseConfigHost,
-            basePath: string,
-            configFileName: string,
-            resolutionStack: Path[],
-            errors: Diagnostic[],
+        json: any,
+        sourceFile: JsonSourceFile,
+        host: ParseConfigHost,
+        basePath: string,
+        configFileName: string,
+        resolutionStack: Path[],
+        errors: Diagnostic[],
     ): ParsedTsconfig {
         basePath = normalizeSlashes(basePath);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
@@ -1834,7 +1846,7 @@ namespace ts {
         return normalizeNonListOptionValue(option, basePath, value);
     }
 
-    function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue  {
+    function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (option.isFilePath) {
             value = normalizePath(combinePaths(basePath, value));
             if (value === "") {
