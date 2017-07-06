@@ -132,6 +132,7 @@ namespace ts.refactor.extractMethod {
      * not shown to the user, but can be used by us diagnostically)
      */
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
+        const length = span.length || 0;
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
         let start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
@@ -144,7 +145,7 @@ namespace ts.refactor.extractMethod {
 
         if (!start || !end) {
             // cannot find either start or end node
-            return { errors: [createFileDiagnostic(sourceFile, span.start, span.length, Messages.CannotExtractFunction)] };
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractFunction)] };
         }
 
         if (start.parent !== end.parent) {
@@ -170,13 +171,13 @@ namespace ts.refactor.extractMethod {
             }
             else {
                 // start and end nodes belong to different subtrees
-                return { errors: [createFileDiagnostic(sourceFile, span.start, span.length, Messages.CannotExtractFunction)] };
+                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractFunction)] };
             }
         }
         if (start !== end) {
             // start and end should be statements and parent should be either block or a source file
             if (!isBlockLike(start.parent)) {
-                return { errors: [createFileDiagnostic(sourceFile, span.start, span.length, Messages.CannotExtractFunction)] };
+                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractFunction)] };
             }
             const statements: Statement[] = [];
             for (const n of (<BlockLike>start.parent).statements) {
