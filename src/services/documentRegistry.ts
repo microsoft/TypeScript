@@ -179,7 +179,7 @@ namespace ts {
                 const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false, scriptKind);
 
                 entry = {
-                    sourceFile: sourceFile,
+                    sourceFile,
                     languageServiceRefCount: 0,
                     owners: []
                 };

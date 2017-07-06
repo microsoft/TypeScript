@@ -508,7 +508,7 @@ namespace ts.server {
             const walkFns = {
                 goSubtree: true,
                 done: false,
-                leaf: function (this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
+                leaf(this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
                         this.done = true;
                     }
@@ -607,25 +607,25 @@ namespace ts.server {
         }
 
         static linesFromText(text: string) {
-            const lineStarts = ts.computeLineStarts(text);
+            const lineMap = ts.computeLineStarts(text);
 
-            if (lineStarts.length === 0) {
-                return { lines: <string[]>[], lineMap: lineStarts };
+            if (lineMap.length === 0) {
+                return { lines: <string[]>[], lineMap };
             }
-            const lines = <string[]>new Array(lineStarts.length);
-            const lc = lineStarts.length - 1;
+            const lines = <string[]>new Array(lineMap.length);
+            const lc = lineMap.length - 1;
             for (let lmi = 0; lmi < lc; lmi++) {
-                lines[lmi] = text.substring(lineStarts[lmi], lineStarts[lmi + 1]);
+                lines[lmi] = text.substring(lineMap[lmi], lineMap[lmi + 1]);
             }
 
-            const endText = text.substring(lineStarts[lc]);
+            const endText = text.substring(lineMap[lc]);
             if (endText.length > 0) {
                 lines[lc] = endText;
             }
             else {
                 lines.length--;
             }
-            return { lines: lines, lineMap: lineStarts };
+            return { lines, lineMap };
         }
     }
 
@@ -791,12 +791,7 @@ namespace ts.server {
                     charOffset += child.charCount();
                 }
             }
-            return {
-                child: child,
-                childIndex: i,
-                relativeLineNumber: relativeLineNumber,
-                charOffset: charOffset
-            };
+            return { child, childIndex: i, relativeLineNumber, charOffset };
         }
 
         childFromCharOffset(lineNumber: number, charOffset: number) {
@@ -813,12 +808,7 @@ namespace ts.server {
                     lineNumber += child.lineCount();
                 }
             }
-            return {
-                child: child,
-                childIndex: i,
-                charOffset: charOffset,
-                lineNumber: lineNumber
-            };
+            return { child, childIndex: i, charOffset, lineNumber };
         }
 
         splitAfter(childIndex: number) {

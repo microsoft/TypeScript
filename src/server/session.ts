@@ -439,7 +439,7 @@ namespace ts.server {
                 }
 
                 const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event<protocol.DiagnosticEventBody>({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                this.event<protocol.DiagnosticEventBody>({ file, diagnostics: bakedDiags }, "semanticDiag");
             }
             catch (err) {
                 this.logError(err, "semantic check");
@@ -451,7 +451,7 @@ namespace ts.server {
                 const diags = project.getLanguageService().getSyntacticDiagnostics(file);
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event<protocol.DiagnosticEventBody>({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                    this.event<protocol.DiagnosticEventBody>({ file, diagnostics: bakedDiags }, "syntaxDiag");
                 }
             }
             catch (err) {
@@ -939,8 +939,8 @@ namespace ts.server {
                             const lineText = refScriptInfo.getSnapshot().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                             return {
                                 file: ref.fileName,
-                                start: start,
-                                lineText: lineText,
+                                start,
+                                lineText,
                                 end: refScriptInfo.positionToLineOffset(ts.textSpanEnd(ref.textSpan)),
                                 isWriteAccess: ref.isWriteAccess,
                                 isDefinition: ref.isDefinition
@@ -1072,7 +1072,7 @@ namespace ts.server {
                     kindModifiers: quickInfo.kindModifiers,
                     start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
                     end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
-                    displayString: displayString,
+                    displayString,
                     documentation: docString,
                     tags: quickInfo.tags || []
                 };
@@ -1402,8 +1402,8 @@ namespace ts.server {
                                 name: navItem.name,
                                 kind: navItem.kind,
                                 file: navItem.fileName,
-                                start: start,
-                                end: end,
+                                start,
+                                end,
                             };
                             if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                                 bakedItem.kindModifiers = navItem.kindModifiers;

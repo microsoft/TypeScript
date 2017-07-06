@@ -389,7 +389,7 @@ namespace ts.server.typingsInstaller {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
                     if (!isInvoked) {
-                        this.sendResponse({ projectName: projectName, kind: server.ActionInvalidate });
+                        this.sendResponse({ projectName, kind: server.ActionInvalidate });
                         isInvoked = true;
                     }
                 }, /*pollingInterval*/ 2000);

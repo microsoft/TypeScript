@@ -21181,7 +21181,7 @@ namespace ts {
                 for (const prop of properties) {
                     const existing = seen.get(prop.name);
                     if (!existing) {
-                        seen.set(prop.name, { prop: prop, containingType: base });
+                        seen.set(prop.name, { prop, containingType: base });
                     }
                     else {
                         const isInheritedProperty = existing.containingType !== type;
