@@ -561,7 +561,7 @@ gulp.task(run, /*help*/ false, [servicesFile], () => {
         .pipe(newer(run))
         .pipe(sourcemaps.init())
         .pipe(testProject())
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "." }))
         .pipe(gulp.dest("src/harness"));
 });
 
