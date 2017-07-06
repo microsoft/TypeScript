@@ -849,10 +849,9 @@ namespace ts.server {
             this.children.length--;
         }
 
-        findChildIndex(child: LineCollection) {
-            let childIndex = 0;
-            const clen = this.children.length;
-            while ((this.children[childIndex] !== child) && (childIndex < clen)) childIndex++;
+        private findChildIndex(child: LineCollection) {
+            const childIndex = this.children.indexOf(child);
+            Debug.assert(childIndex !== -1);
             return childIndex;
         }
 
