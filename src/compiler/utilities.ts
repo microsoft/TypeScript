@@ -2,6 +2,8 @@
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
+
     export const externalHelpersModuleNameText = "tslib";
 
     export interface ReferencePathMatchResult {
@@ -1437,16 +1439,16 @@ namespace ts {
             (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
-    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration) {
+    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
         return !!getFirstJSDocTag(node, SyntaxKind.JSDocParameterTag);
     }
 
-    function getFirstJSDocTag(node: Node, kind: SyntaxKind) {
+    function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag | undefined {
         const tags = getJSDocTags(node);
-        return tags && find(tags, doc => doc.kind === kind);
+        return find(tags, doc => doc.kind === kind);
     }
 
-    export function getAllJSDocs(node: Node): Array<JSDoc | JSDocTag> | undefined {
+    export function getAllJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         if (isJSDocTypedefTag(node)) {
             return [node.parent];
         }
@@ -1454,25 +1456,20 @@ namespace ts {
     }
 
     export function getJSDocTags(node: Node): JSDocTag[] | undefined {
-        const cache = node.jsDocCache;
-        switch (cache) {
-            case null: // tslint:disable-line no-null-keyword
-                return undefined;
-            case undefined:
-                const tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
-                node.jsDocCache = tags === undefined ? null : tags; // tslint:disable-line no-null-keyword
-                return tags;
-            default:
-                return cache;
+        let tags = node.jsDocCache;
+        // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
+        if (tags === undefined) {
+            node.jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
         }
+        return tags;
     }
 
-    function getJSDocCommentsAndTags(node: Node): Array<JSDoc | JSDocTag> | undefined {
+    function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
         let result: Array<JSDoc | JSDocTag> | undefined;
-        work(node);
-        return result;
+        getJSDocCommentsAndTagsWorker(node);
+        return result || emptyArray;
 
-        function work(node: Node) {
+        function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
             // /**
@@ -1491,7 +1488,7 @@ namespace ts {
                 isVariableOfVariableDeclarationStatement ? parent.parent :
                 undefined;
             if (variableStatementNode) {
-                work(variableStatementNode);
+                getJSDocCommentsAndTagsWorker(variableStatementNode);
             }
 
             // Also recognize when the node is the RHS of an assignment expression
@@ -1501,14 +1498,14 @@ namespace ts {
                 (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
                 parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                work(parent.parent);
+                getJSDocCommentsAndTagsWorker(parent.parent);
             }
 
             const isModuleDeclaration = node.kind === SyntaxKind.ModuleDeclaration &&
                 parent && parent.kind === SyntaxKind.ModuleDeclaration;
             const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
             if (isModuleDeclaration || isPropertyAssignmentExpression) {
-                work(parent);
+                getJSDocCommentsAndTagsWorker(parent);
             }
 
             // Pull parameter comments from declaring function as well

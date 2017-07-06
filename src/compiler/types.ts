@@ -527,7 +527,7 @@ namespace ts {
         /* @internal */ original?: Node;                // The original node if this is an updated node.
         /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
         /* @internal */ jsDoc?: JSDoc[];                // JSDoc that directly precedes this node
-        /* @internal */ jsDocCache?: JSDocTag[] | null; // Cache for getJSDocTags
+        /* @internal */ jsDocCache?: JSDocTag[];        // Cache for getJSDocTags
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)

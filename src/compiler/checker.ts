@@ -56,7 +56,6 @@ namespace ts {
         let enumCount = 0;
         let symbolInstantiationDepth = 0;
 
-        const emptyArray: any[] = [];
         const emptySymbols = createMap<Symbol>();
 
         const compilerOptions = host.getCompilerOptions();
