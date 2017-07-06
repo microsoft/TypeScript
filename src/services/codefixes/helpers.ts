@@ -205,7 +205,7 @@ namespace ts.codefix {
             }
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
-        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.getName());
+        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.getUnescapedName());
 
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*addAnyType*/ true);
 

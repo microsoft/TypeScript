@@ -324,7 +324,11 @@ namespace ts {
             return this.flags;
         }
 
-        getName(): string {
+        getName(): UnderscoreEscapedString {
+            return this.name;
+        }
+
+        getUnescapedName(): string {
             return unescapeLeadingUnderscores(this.name);
         }
 

@@ -595,17 +595,17 @@ namespace ts.FindAllReferences {
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
     }
 
-    function symbolName(symbol: Symbol): string | undefined {
+    function symbolName(symbol: Symbol): UnderscoreEscapedString | undefined {
         if (symbol.name !== "default") {
             return symbol.getName();
         }
 
         return forEach(symbol.declarations, decl => {
             if (isExportAssignment(decl)) {
-                return isIdentifier(decl.expression) ? unescapeLeadingUnderscores(decl.expression.text) : undefined;
+                return isIdentifier(decl.expression) ? decl.expression.text : undefined;
             }
             const name = getNameOfDeclaration(decl);
-            return name && name.kind === SyntaxKind.Identifier && unescapeLeadingUnderscores(name.text);
+            return name && name.kind === SyntaxKind.Identifier && name.text;
         });
     }
 

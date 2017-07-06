@@ -1092,7 +1092,7 @@ namespace ts {
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
-        return moduleSymbol.getName().charCodeAt(0) === CharacterCodes.doubleQuote;
+        return moduleSymbol.getUnescapedName().charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */

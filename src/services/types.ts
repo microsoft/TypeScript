@@ -24,7 +24,8 @@ namespace ts {
 
     export interface Symbol {
         getFlags(): SymbolFlags;
-        getName(): string;
+        getName(): UnderscoreEscapedString;
+        getUnescapedName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];

@@ -416,7 +416,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
             return {
-                name: parameter.getName(),
+                name: parameter.getUnescapedName(),
                 documentation: parameter.getDocumentationComment(),
                 displayParts,
                 isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
@@ -428,7 +428,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
             return {
-                name: typeParameter.symbol.getName(),
+                name: typeParameter.symbol.getUnescapedName(),
                 documentation: emptyArray,
                 displayParts,
                 isOptional: false
