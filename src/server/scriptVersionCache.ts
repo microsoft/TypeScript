@@ -80,7 +80,7 @@ namespace ts.server {
             const lines = lm.lines;
             if (lines.length > 1) {
                 if (lines[lines.length - 1] === "") {
-                    lines.length--;
+                    lines.pop();
                 }
             }
             let branchParent: LineNode;
@@ -157,7 +157,7 @@ namespace ts.server {
                 this.state = CharRangeSection.End;
             }
             // always pop stack because post only called when child has been visited
-            this.stack.length--;
+            this.stack.pop();
             return undefined;
         }
 
@@ -193,20 +193,20 @@ namespace ts.server {
                     else {
                         child = fresh(lineCollection);
                         currentNode.add(child);
-                        this.startPath[this.startPath.length] = child;
+                        this.startPath.push(child);
                     }
                     break;
                 case CharRangeSection.Entire:
                     if (this.state !== CharRangeSection.End) {
                         child = fresh(lineCollection);
                         currentNode.add(child);
-                        this.startPath[this.startPath.length] = child;
+                        this.startPath.push(child);
                     }
                     else {
                         if (!lineCollection.isLeaf()) {
                             child = fresh(lineCollection);
                             currentNode.add(child);
-                            this.endBranch[this.endBranch.length] = child;
+                            this.endBranch.push(child);
                         }
                     }
                     break;
@@ -221,7 +221,7 @@ namespace ts.server {
                         if (!lineCollection.isLeaf()) {
                             child = fresh(lineCollection);
                             currentNode.add(child);
-                            this.endBranch[this.endBranch.length] = child;
+                            this.endBranch.push(child);
                         }
                     }
                     break;
@@ -233,7 +233,7 @@ namespace ts.server {
                     break;
             }
             if (this.goSubtree) {
-                this.stack[this.stack.length] = <LineNode>child;
+                this.stack.push(<LineNode>child);
             }
             return lineCollection;
         }
@@ -289,7 +289,7 @@ namespace ts.server {
 
         // REVIEW: can optimize by coalescing simple edits
         edit(pos: number, deleteLen: number, insertedText?: string) {
-            this.changes[this.changes.length] = new TextChange(pos, deleteLen, insertedText);
+            this.changes.push(new TextChange(pos, deleteLen, insertedText));
             if ((this.changes.length > ScriptVersionCache.changeNumberThreshold) ||
                 (deleteLen > ScriptVersionCache.changeLengthThreshold) ||
                 (insertedText && (insertedText.length > ScriptVersionCache.changeLengthThreshold))) {
@@ -366,7 +366,7 @@ namespace ts.server {
                     for (let i = oldVersion + 1; i <= newVersion; i++) {
                         const snap = this.versions[this.versionToIndex(i)];
                         for (const textChange of snap.changesSincePreviousVersion) {
-                            textChangeRanges[textChangeRanges.length] = textChange.getTextChangeRange();
+                            textChangeRanges.push(textChange.getTextChangeRange());
                         }
                     }
                     return ts.collapseTextChangeRangesAcrossMultipleVersions(textChangeRanges);
@@ -623,7 +623,7 @@ namespace ts.server {
                 lines[lc] = endText;
             }
             else {
-                lines.length--;
+                lines.pop();
             }
             return { lines: lines, lineMap: lineStarts };
         }
@@ -846,7 +846,7 @@ namespace ts.server {
                     this.children[i] = this.children[i + 1];
                 }
             }
-            this.children.length--;
+            this.children.pop();
         }
 
         findChildIndex(child: LineCollection) {
@@ -895,12 +895,12 @@ namespace ts.server {
                     }
                     for (let i = splitNodes.length - 1; i >= 0; i--) {
                         if (splitNodes[i].children.length === 0) {
-                            splitNodes.length--;
+                            splitNodes.pop();
                         }
                     }
                 }
                 if (shiftNode) {
-                    splitNodes[splitNodes.length] = shiftNode;
+                    splitNodes.push(shiftNode);
                 }
                 this.updateCounts();
                 for (let i = 0; i < splitNodeCount; i++) {
@@ -912,7 +912,7 @@ namespace ts.server {
 
         // assume there is room for the item; return true if more room
         add(collection: LineCollection) {
-            this.children[this.children.length] = collection;
+            this.children.push(collection);
             return (this.children.length < lineCollectionCapacity);
         }
 
