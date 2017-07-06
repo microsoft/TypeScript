@@ -2765,7 +2765,7 @@ namespace FourSlash {
                 end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd
             };
 
-            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection);
+            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection) || [];
             if (name) {
                 refactors = refactors.filter(r => r.name === name);
             }

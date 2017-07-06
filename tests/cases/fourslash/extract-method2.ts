@@ -12,7 +12,6 @@
 goTo.select('start', 'end')
 verify.refactorAvailable('Extract Method');
 edit.applyRefactor('Extract Method', "scope_2");
-debug.printCurrentFileState();
 verify.currentFileContentIs(
 `namespace NS {
     class Q {

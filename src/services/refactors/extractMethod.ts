@@ -16,9 +16,13 @@ namespace ts.refactor.extractMethod {
     /** Compute the associated code actions */
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: context.endPosition - context.startPosition });
-        const targetRange: TargetRange = rangeToExtract.targetRange;
-        const extractions = extractRange(targetRange, context.file, context);
 
+        const targetRange: TargetRange = rangeToExtract.targetRange;
+        if (targetRange === undefined) {
+            return undefined;
+        }
+
+        const extractions = extractRange(targetRange, context.file, context);
         if (extractions.length === 0) {
             // No extractions possible
             return undefined;
@@ -77,6 +81,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = m("Cannot extract range containing writes to references located outside of the target range in generators.");
         export const TypeWillNotBeVisibleInTheNewScope = m("Type will not visible in the new scope.");
         export const FunctionWillNotBeVisibleInTheNewScope = m("Function will not visible in the new scope.");
+        export const InsufficientSelection = m("Select more than a single identifier.");
     }
 
     export enum RangeFacts {
@@ -189,7 +194,7 @@ namespace ts.refactor.extractMethod {
             return { targetRange: { range: statements, facts } };
         }
         else {
-            const errors = checkNode(start);
+            const errors = checkRootNode(start) || checkNode(start);
             if (errors) {
                 return { errors };
             }
@@ -197,6 +202,13 @@ namespace ts.refactor.extractMethod {
                 ? [start]
                 : <Expression>start;
             return { targetRange: { range, facts } };
+        }
+
+        function checkRootNode(n: Node): Diagnostic[] | undefined {
+            if (isIdentifier(n)) {
+                return [createDiagnosticForNode(n, Messages.InsufficientSelection)];
+            }
+            return undefined;
         }
 
         // Verifies whether we can actually extract this node or not.
@@ -362,6 +374,10 @@ namespace ts.refactor.extractMethod {
      * or an error explaining why we can't extract into that scope.
      */
     export function extractRange(targetRange: TargetRange, sourceFile: SourceFile, context: RefactorContext): ReadonlyArray<ExtractResultForScope> {
+        if (targetRange === undefined) {
+            return [];
+        }
+
         const scopes = collectEnclosingScopes(targetRange);
         if (scopes.length === 0) {
             return [];
