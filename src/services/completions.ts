@@ -821,7 +821,7 @@ namespace ts.Completions {
                 return true;
             }
 
-            if (symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule)) {
+            if (symbol.flags & SymbolFlags.Module) {
                 const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                 // If the exported symbols contains type,
                 // symbol can be referenced at locations where type is allowed
