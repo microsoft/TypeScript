@@ -1178,12 +1178,11 @@ namespace ts {
             }
 
             const result = createNode(kind, scanner.getStartPos());
-            (<Identifier>result).text = "";
+            (<Identifier>result).text = "" as __String;
             return finishNode(result);
         }
 
         function internIdentifier(text: string): string {
-            text = escapeIdentifier(text);
             let identifier = identifiers.get(text);
             if (identifier === undefined) {
                 identifiers.set(text, identifier = text);
@@ -1203,7 +1202,7 @@ namespace ts {
                 if (token() !== SyntaxKind.Identifier) {
                     node.originalKeywordKind = token();
                 }
-                node.text = internIdentifier(scanner.getTokenValue());
+                node.text = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
                 nextToken();
                 return finishNode(node);
             }
@@ -1227,7 +1226,9 @@ namespace ts {
 
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
-                return <StringLiteral | NumericLiteral>parseLiteralNode(/*internName*/ true);
+                const node = <StringLiteral | NumericLiteral>parseLiteralNode();
+                node.text = internIdentifier(node.text);
+                return node;
             }
             if (allowComputedPropertyNames && token() === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
@@ -2049,26 +2050,26 @@ namespace ts {
             return finishNode(span);
         }
 
-        function parseLiteralNode(internName?: boolean): LiteralExpression {
-            return <LiteralExpression>parseLiteralLikeNode(token(), internName);
+        function parseLiteralNode(): LiteralExpression {
+            return <LiteralExpression>parseLiteralLikeNode(token());
         }
 
         function parseTemplateHead(): TemplateHead {
-            const fragment = parseLiteralLikeNode(token(), /*internName*/ false);
+            const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
             return <TemplateHead>fragment;
         }
 
         function parseTemplateMiddleOrTemplateTail(): TemplateMiddle | TemplateTail {
-            const fragment = parseLiteralLikeNode(token(), /*internName*/ false);
+            const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateMiddle || fragment.kind === SyntaxKind.TemplateTail, "Template fragment has wrong token kind");
             return <TemplateMiddle | TemplateTail>fragment;
         }
 
-        function parseLiteralLikeNode(kind: SyntaxKind, internName: boolean): LiteralLikeNode {
+        function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
             const node = <LiteralExpression>createNode(kind);
             const text = scanner.getTokenValue();
-            node.text = internName ? internIdentifier(text) : text;
+            node.text = text;
 
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;
@@ -5624,7 +5625,8 @@ namespace ts {
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
             else {
-                node.name = <StringLiteral>parseLiteralNode(/*internName*/ true);
+                node.name = <StringLiteral>parseLiteralNode();
+                node.name.text = internIdentifier(node.name.text);
             }
 
             if (token() === SyntaxKind.OpenBraceToken) {
@@ -5768,7 +5770,7 @@ namespace ts {
         function parseModuleSpecifier(): Expression {
             if (token() === SyntaxKind.StringLiteral) {
                 const result = parseLiteralNode();
-                internIdentifier((<LiteralExpression>result).text);
+                result.text = internIdentifier(result.text);
                 return result;
             }
             else {
@@ -6990,7 +6992,7 @@ namespace ts {
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.text = content.substring(pos, end);
+                    result.text = escapeLeadingUnderscores(content.substring(pos, end));
                     finishNode(result, end);
 
                     nextJSDocToken();

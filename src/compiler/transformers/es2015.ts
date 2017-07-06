@@ -661,7 +661,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(node.label.text)) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(unescapeLeadingUnderscores(node.label.text))) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -680,11 +680,11 @@ namespace ts {
                     else {
                         if (node.kind === SyntaxKind.BreakStatement) {
                             labelMarker = `break-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ true, node.label.text, labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ true, unescapeLeadingUnderscores(node.label.text), labelMarker);
                         }
                         else {
                             labelMarker = `continue-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ false, node.label.text, labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ false, unescapeLeadingUnderscores(node.label.text), labelMarker);
                         }
                     }
                     let returnExpression: Expression = createLiteral(labelMarker);
@@ -2236,11 +2236,11 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(node.label.text, node.label.text);
+            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), unescapeLeadingUnderscores(node.label.text));
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(node.label.text, undefined);
+            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), undefined);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
@@ -3053,7 +3053,7 @@ namespace ts {
             else {
                 loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
-                    const outParamName = createUniqueName("out_" + unescapeIdentifier(name.text));
+                    const outParamName = createUniqueName("out_" + unescapeLeadingUnderscores(name.text));
                     loopOutParameters.push({ originalName: name, outParamName });
                 }
             }
