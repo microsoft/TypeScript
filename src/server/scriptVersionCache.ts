@@ -322,7 +322,7 @@ namespace ts.server {
         reload(script: string) {
             this.currentVersion++;
             this.changes = []; // history wiped out by reload
-            const snap = new LineIndexSnapshot(this.currentVersion, this);
+            const snap = new LineIndexSnapshot(this.currentVersion, this, new LineIndex());
 
             // delete all versions
             for (let i = 0; i < this.versions.length; i++) {
@@ -330,7 +330,6 @@ namespace ts.server {
             }
 
             this.versions[this.currentVersionToIndex()] = snap;
-            snap.index = new LineIndex();
             const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
 
@@ -344,9 +343,7 @@ namespace ts.server {
                 for (const change of this.changes) {
                     snapIndex = snapIndex.edit(change.pos, change.deleteLen, change.insertedText);
                 }
-                snap = new LineIndexSnapshot(this.currentVersion + 1, this);
-                snap.index = snapIndex;
-                snap.changesSincePreviousVersion = this.changes;
+                snap = new LineIndexSnapshot(this.currentVersion + 1, this, snapIndex, this.changes);
 
                 this.currentVersion = snap.version;
                 this.versions[this.currentVersionToIndex()] = snap;
@@ -382,10 +379,9 @@ namespace ts.server {
 
         static fromString(host: ServerHost, script: string) {
             const svc = new ScriptVersionCache();
-            const snap = new LineIndexSnapshot(0, svc);
+            const snap = new LineIndexSnapshot(0, svc, new LineIndex());
             svc.versions[svc.currentVersion] = snap;
             svc.host = host;
-            snap.index = new LineIndex();
             const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
             return svc;
@@ -393,10 +389,7 @@ namespace ts.server {
     }
 
     export class LineIndexSnapshot implements ts.IScriptSnapshot {
-        index: LineIndex;
-        changesSincePreviousVersion: TextChange[] = [];
-
-        constructor(readonly version: number, readonly cache: ScriptVersionCache) {
+        constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: ReadonlyArray<TextChange> = emptyArray) {
         }
 
         getText(rangeStart: number, rangeEnd: number) {
@@ -407,37 +400,14 @@ namespace ts.server {
             return this.index.root.charCount();
         }
 
-        // this requires linear space so don't hold on to these
-        getLineStartPositions(): number[] {
-            const starts: number[] = [-1];
-            let count = 1;
-            let pos = 0;
-            this.index.every(ll => {
-                starts[count] = pos;
-                count++;
-                pos += ll.text.length;
-                return true;
-            }, 0);
-            return starts;
-        }
-
-        getLineMapper() {
-            return (line: number) => {
-                return this.index.lineNumberToInfo(line).offset;
-            };
-        }
-
-        getTextChangeRangeSinceVersion(scriptVersion: number) {
-            if (this.version <= scriptVersion) {
-                return ts.unchangedTextChangeRange;
-            }
-            else {
-                return this.cache.getTextChangesBetweenVersions(scriptVersion, this.version);
-            }
-        }
         getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange {
             if (oldSnapshot instanceof LineIndexSnapshot && this.cache === oldSnapshot.cache) {
-                return this.getTextChangeRangeSinceVersion(oldSnapshot.version);
+                if (this.version <= oldSnapshot.version) {
+                    return ts.unchangedTextChangeRange;
+                }
+                else {
+                    return this.cache.getTextChangesBetweenVersions(oldSnapshot.version, this.version);
+                }
             }
         }
     }
