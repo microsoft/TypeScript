@@ -33,41 +33,35 @@ namespace ts.server {
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
         pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
-            parent: LineNode, nodeType: CharRangeSection): LineCollection;
+            parent: LineNode, nodeType: CharRangeSection): void;
         post?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
-            parent: LineNode, nodeType: CharRangeSection): LineCollection;
+            parent: LineNode, nodeType: CharRangeSection): void;
     }
 
-    class BaseLineIndexWalker implements ILineIndexWalker {
+    class EditWalker implements ILineIndexWalker {
         goSubtree = true;
-        done = false;
-        leaf(_rangeStart: number, _rangeLength: number, _ll: LineLeaf) {
-        }
-    }
+        get done() { return false; }
 
-    class EditWalker extends BaseLineIndexWalker {
-        lineIndex = new LineIndex();
+        readonly lineIndex = new LineIndex();
         // path to start of range
-        startPath: LineCollection[];
-        endBranch: LineCollection[] = [];
-        branchNode: LineNode;
+        private readonly startPath: LineCollection[];
+        private readonly endBranch: LineCollection[] = [];
+        private branchNode: LineNode;
         // path to current node
-        stack: LineNode[];
-        state = CharRangeSection.Entire;
-        lineCollectionAtBranch: LineCollection;
-        initialText = "";
-        trailingText = "";
-        suppressTrailingText = false;
+        private readonly stack: LineNode[];
+        private state = CharRangeSection.Entire;
+        private lineCollectionAtBranch: LineCollection;
+        private initialText = "";
+        private trailingText = "";
 
         constructor() {
-            super();
             this.lineIndex.root = new LineNode();
             this.startPath = [this.lineIndex.root];
             this.stack = [this.lineIndex.root];
         }
 
-        insertLines(insertedText: string) {
-            if (this.suppressTrailingText) {
+        insertLines(insertedText: string, suppressTrailingText: boolean) {
+            if (suppressTrailingText) {
                 this.trailingText = "";
             }
             if (insertedText) {
@@ -150,7 +144,7 @@ namespace ts.server {
             return this.lineIndex;
         }
 
-        post(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection): LineCollection {
+        post(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection): void {
             // have visited the path for start of range, now looking for end
             // if range is on single line, we will never make this state transition
             if (lineCollection === this.lineCollectionAtBranch) {
@@ -158,10 +152,9 @@ namespace ts.server {
             }
             // always pop stack because post only called when child has been visited
             this.stack.pop();
-            return undefined;
         }
 
-        pre(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection, _parent: LineCollection, nodeType: CharRangeSection) {
+        pre(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection, _parent: LineCollection, nodeType: CharRangeSection): void {
             // currentNode corresponds to parent, but in the new tree
             const currentNode = this.stack[this.stack.length - 1];
 
@@ -235,7 +228,6 @@ namespace ts.server {
             if (this.goSubtree) {
                 this.stack.push(<LineNode>child);
             }
-            return lineCollection;
         }
         // just gather text from the leaves
         leaf(relativeStart: number, relativeLength: number, ll: LineLeaf) {
@@ -535,6 +527,7 @@ namespace ts.server {
                     checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
                 }
                 const walker = new EditWalker();
+                let suppressTrailingText = false;
                 if (pos >= this.root.charCount()) {
                     // insert at end
                     pos = this.root.charCount() - 1;
@@ -546,7 +539,7 @@ namespace ts.server {
                         newText = endString;
                     }
                     deleteLength = 0;
-                    walker.suppressTrailingText = true;
+                    suppressTrailingText = true;
                 }
                 else if (deleteLength > 0) {
                     // check whether last characters deleted are line break
@@ -566,7 +559,7 @@ namespace ts.server {
                 }
                 if (pos < this.root.charCount()) {
                     this.root.walk(pos, deleteLength, walker);
-                    walker.insertLines(newText);
+                    walker.insertLines(newText, suppressTrailingText);
                 }
                 if (this.checkEdits) {
                     const updatedText = this.getText(0, this.root.charCount());
