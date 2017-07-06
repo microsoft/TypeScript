@@ -247,32 +247,32 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.Constructor:
-                    return "__constructor" as UnderscoreEscapedString;
+                    return "__constructor";
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
-                    return "__call" as UnderscoreEscapedString;
+                    return "__call";
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
-                    return "__new" as UnderscoreEscapedString;
+                    return "__new";
                 case SyntaxKind.IndexSignature:
-                    return "__index" as UnderscoreEscapedString;
+                    return "__index";
                 case SyntaxKind.ExportDeclaration:
-                    return "__export" as UnderscoreEscapedString;
+                    return "__export";
                 case SyntaxKind.ExportAssignment:
-                    return ((<ExportAssignment>node).isExportEquals ? "export=" : "default") as UnderscoreEscapedString;
+                    return ((<ExportAssignment>node).isExportEquals ? "export=" : "default");
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
-                        return "export=" as UnderscoreEscapedString;
+                        return "export=";
                     }
                     Debug.fail("Unknown binary declaration kind");
                     break;
 
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
-                    return (hasModifier(node, ModifierFlags.Default) ? "default" : undefined) as UnderscoreEscapedString;
+                    return (hasModifier(node, ModifierFlags.Default) ? "default" : undefined);
                 case SyntaxKind.JSDocFunctionType:
-                    return (isJSDocConstructSignature(node) ? "__new" : "__call") as UnderscoreEscapedString;
+                    return (isJSDocConstructSignature(node) ? "__new" : "__call");
                 case SyntaxKind.Parameter:
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
@@ -313,11 +313,11 @@ namespace ts {
             const isDefaultExport = hasModifier(node, ModifierFlags.Default);
 
             // The exported symbol for an export default function/class node is always named "default"
-            const name = isDefaultExport && parent ? ("default" as UnderscoreEscapedString) : getDeclarationName(node);
+            const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name === undefined) {
-                symbol = createSymbol(SymbolFlags.None, "__missing" as UnderscoreEscapedString);
+                symbol = createSymbol(SymbolFlags.None, "__missing");
             }
             else {
                 // Check and see if the symbol table already has a symbol with this name.  If not,
@@ -1646,7 +1646,7 @@ namespace ts {
             const symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
 
-            const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type" as UnderscoreEscapedString);
+            const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = createSymbolTable();
             typeLiteralSymbol.members.set(symbol.name, symbol);
@@ -1694,11 +1694,11 @@ namespace ts {
                 }
             }
 
-            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object" as UnderscoreEscapedString);
+            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object");
         }
 
         function bindJsxAttributes(node: JsxAttributes) {
-            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__jsxAttributes" as UnderscoreEscapedString);
+            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__jsxAttributes");
         }
 
         function bindJsxAttribute(node: JsxAttribute, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
@@ -2191,7 +2191,7 @@ namespace ts {
         }
 
         function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral | JSDocRecordType) {
-            return bindAnonymousDeclaration(<Declaration>node, SymbolFlags.TypeLiteral, "__type" as UnderscoreEscapedString);
+            return bindAnonymousDeclaration(<Declaration>node, SymbolFlags.TypeLiteral, "__type");
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
@@ -2441,7 +2441,7 @@ namespace ts {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
             else {
-                const bindingName = node.name ? node.name.text : "__class" as UnderscoreEscapedString;
+                const bindingName = node.name ? node.name.text : "__class";
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
@@ -2554,7 +2554,7 @@ namespace ts {
                 node.flowNode = currentFlow;
             }
             checkStrictModeFunctionName(node);
-            const bindingName = node.name ? node.name.text : "__function" as UnderscoreEscapedString;
+            const bindingName = node.name ? node.name.text : "__function";
             return bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
         }
 
@@ -2568,7 +2568,7 @@ namespace ts {
             }
 
             return hasDynamicName(node)
-                ? bindAnonymousDeclaration(node, symbolFlags, "__computed" as UnderscoreEscapedString)
+                ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 

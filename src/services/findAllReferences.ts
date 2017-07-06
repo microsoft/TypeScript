@@ -977,7 +977,7 @@ namespace ts.FindAllReferences.Core {
      * Reference the constructor and all calls to `new this()`.
      */
     function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
-        for (const decl of classSymbol.members.get("__constructor" as UnderscoreEscapedString).declarations) {
+        for (const decl of classSymbol.members.get("__constructor").declarations) {
             const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             addNode(ctrKeyword);
@@ -1001,7 +1001,7 @@ namespace ts.FindAllReferences.Core {
     /** Find references to `super` in the constructor of an extending class.  */
     function findSuperConstructorAccesses(cls: ClassLikeDeclaration, addNode: (node: Node) => void): void {
         const symbol = cls.symbol;
-        const ctr = symbol.members.get("__constructor" as UnderscoreEscapedString);
+        const ctr = symbol.members.get("__constructor");
         if (!ctr) {
             return;
         }

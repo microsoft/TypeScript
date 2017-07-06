@@ -3005,7 +3005,25 @@ namespace ts {
         isRestParameter?: boolean;
     }
 
-    export type UnderscoreEscapedString = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void });
+    export type InternalSymbolName =
+        | "__call" // Call signatures
+        | "__constructor" // Constructor implementations
+        | "__new" // Constructor signatures
+        | "__index" // Index signatures
+        | "__export" // Module export * declarations
+        | "__global" // Global self-reference
+        | "__missing" // Indicates missing symbol
+        | "__type" // Anonymous type literal symbol
+        | "__object" // Anonymous object literal declaration
+        | "__jsxAttributes" // Anonymous JSX attributes object literal declaration
+        | "__class" // Unnamed class expression
+        | "__function" // Unnamed function expression
+        | "__computed" // Computed property name declaration with dynamic name
+        | "__resolving__" // Indicator symbol used to mark partially resolved type aliases
+        | "export=" // Export assignment symbol
+        | "default"; // Default export symbol (technically not wholly internal, but included here for usability)
+
+    export type UnderscoreEscapedString = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
     /** EscapedStringMap based on ES6 Map interface. */
     export interface UnderscoreEscapedMap<T> {

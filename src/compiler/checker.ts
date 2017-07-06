@@ -237,7 +237,7 @@ namespace ts {
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as UnderscoreEscapedString);
-        const resolvingSymbol = createSymbol(0, "__resolving__" as UnderscoreEscapedString);
+        const resolvingSymbol = createSymbol(0, "__resolving__");
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
@@ -259,7 +259,7 @@ namespace ts {
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type" as UnderscoreEscapedString);
+        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -1838,7 +1838,7 @@ namespace ts {
                 visitedSymbols.push(symbol);
                 const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
-                const exportStars = symbol.exports.get("__export" as UnderscoreEscapedString);
+                const exportStars = symbol.exports.get("__export");
                 if (exportStars) {
                     const nestedSymbols = createSymbolTable();
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
@@ -5333,8 +5333,8 @@ namespace ts {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 const symbol = type.symbol;
                 (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(symbol.members);
-                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get("__call" as UnderscoreEscapedString));
-                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get("__new" as UnderscoreEscapedString));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get("__call"));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get("__new"));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
             }
@@ -5625,8 +5625,8 @@ namespace ts {
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
                 const members = symbol.members;
-                const callSignatures = getSignaturesOfSymbol(members.get("__call" as UnderscoreEscapedString));
-                const constructSignatures = getSignaturesOfSymbol(members.get("__new" as UnderscoreEscapedString));
+                const callSignatures = getSignaturesOfSymbol(members.get("__call"));
+                const constructSignatures = getSignaturesOfSymbol(members.get("__new"));
                 const stringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 const numberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
                 setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
@@ -5641,7 +5641,7 @@ namespace ts {
                 }
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    constructSignatures = getSignaturesOfSymbol(symbol.members.get("__constructor" as UnderscoreEscapedString));
+                    constructSignatures = getSignaturesOfSymbol(symbol.members.get("__constructor"));
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
@@ -6599,7 +6599,7 @@ namespace ts {
         }
 
         function getIndexSymbol(symbol: Symbol): Symbol {
-            return symbol.members.get("__index" as UnderscoreEscapedString);
+            return symbol.members.get("__index");
         }
 
         function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
