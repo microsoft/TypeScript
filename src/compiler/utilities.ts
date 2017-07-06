@@ -481,10 +481,10 @@ namespace ts {
                 return (<Identifier>name).text;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
-                return (<LiteralExpression>name).text as UnderscoreEscapedString;
+                return escapeLeadingUnderscores((<LiteralExpression>name).text);
             case SyntaxKind.ComputedPropertyName:
                 if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
-                    return (<LiteralExpression>(<ComputedPropertyName>name).expression).text as UnderscoreEscapedString;
+                    return escapeLeadingUnderscores((<LiteralExpression>(<ComputedPropertyName>name).expression).text);
                 }
         }
 
