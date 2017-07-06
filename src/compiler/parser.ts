@@ -1227,7 +1227,7 @@ namespace ts {
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
                 const node = <StringLiteral | NumericLiteral>parseLiteralNode();
-                internIdentifier(node.text);
+                node.text = internIdentifier(node.text);
                 return node;
             }
             if (allowComputedPropertyNames && token() === SyntaxKind.OpenBracketToken) {
@@ -4099,7 +4099,7 @@ namespace ts {
                         indexedAccess.argumentExpression = allowInAnd(parseExpression);
                         if (indexedAccess.argumentExpression.kind === SyntaxKind.StringLiteral || indexedAccess.argumentExpression.kind === SyntaxKind.NumericLiteral) {
                             const literal = <LiteralExpression>indexedAccess.argumentExpression;
-                            internIdentifier(literal.text);
+                            literal.text = internIdentifier(literal.text);
                         }
                     }
 
@@ -5626,7 +5626,7 @@ namespace ts {
             }
             else {
                 node.name = <StringLiteral>parseLiteralNode();
-                internIdentifier(node.name.text);
+                node.name.text = internIdentifier(node.name.text);
             }
 
             if (token() === SyntaxKind.OpenBraceToken) {
@@ -5770,7 +5770,7 @@ namespace ts {
         function parseModuleSpecifier(): Expression {
             if (token() === SyntaxKind.StringLiteral) {
                 const result = parseLiteralNode();
-                internIdentifier((<LiteralExpression>result).text);
+                result.text = internIdentifier(result.text);
                 return result;
             }
             else {
