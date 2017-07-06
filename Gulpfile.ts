@@ -256,14 +256,8 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
     return true;
 }
 
-// Doing tsconfig inheritance manually. https://github.com/ivogabe/gulp-typescript/issues/459
-const tsconfigBase = JSON.parse(fs.readFileSync("src/tsconfig-base.json", "utf-8")).compilerOptions;
-
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
-    for (const key in tsconfigBase) {
-        copy[key] = tsconfigBase[key];
-    }
     for (const key in base) {
         copy[key] = base[key];
     }
