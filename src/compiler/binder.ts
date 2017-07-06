@@ -1170,7 +1170,7 @@ namespace ts {
         }
 
         function pushActiveLabel(name: string, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
-            const activeLabel = {
+            const activeLabel: ActiveLabel = {
                 name,
                 breakTarget,
                 continueTarget,
@@ -1895,10 +1895,6 @@ namespace ts {
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function getDestructuringParameterName(node: Declaration) {
-            return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
-        }
-
         function bind(node: Node): void {
             if (!node) {
                 return;
@@ -2512,7 +2508,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node));
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + indexOf(node.parent.parameters, node));
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
