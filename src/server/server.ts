@@ -510,6 +510,7 @@ namespace ts.server {
         const watchedFiles: WatchedFile[] = [];
         let nextFileToCheck = 0;
         let watchTimer: any;
+        return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
             return fs.statSync(fileName).mtime;
@@ -577,14 +578,6 @@ namespace ts.server {
         function removeFile(file: WatchedFile) {
             unorderedRemoveItem(watchedFiles, file);
         }
-
-        return {
-            getModifiedTime: getModifiedTime,
-            poll: poll,
-            startWatchTimer: startWatchTimer,
-            addFile: addFile,
-            removeFile: removeFile
-        };
     }
 
     // REVIEW: for now this implementation uses polling.

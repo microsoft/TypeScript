@@ -589,7 +589,7 @@ namespace ts {
          * Text of identifier (with escapes converted to characters).
          * If the identifier begins with two underscores, this will begin with three.
          */
-        text: string;
+        text: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
@@ -705,13 +705,23 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface PropertySignature extends TypeElement {
-        kind: SyntaxKind.PropertySignature | SyntaxKind.JSDocRecordMember;
+    export interface TSPropertySignature extends TypeElement {
+        kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
         questionToken?: QuestionToken;      // Present on optional property
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
+
+    export interface JSDocPropertySignature extends TypeElement {
+        kind: SyntaxKind.JSDocRecordMember;
+        name: PropertyName;                 // Declared property name
+        questionToken?: QuestionToken;      // Present on optional property
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
+    }
+
+    export type PropertySignature = TSPropertySignature | JSDocPropertySignature;
 
     export interface PropertyDeclaration extends ClassElement {
         kind: SyntaxKind.PropertyDeclaration;
@@ -796,13 +806,13 @@ namespace ts {
 
     /**
      * Several node kinds share function-like features such as a signature,
-     * a name, and a body. These nodes should extend FunctionLikeDeclaration.
+     * a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
      * Examples:
      * - FunctionDeclaration
      * - MethodDeclaration
      * - AccessorDeclaration
      */
-    export interface FunctionLikeDeclaration extends SignatureDeclaration {
+    export interface FunctionLikeDeclarationBase extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
 
         asteriskToken?: AsteriskToken;
@@ -810,7 +820,24 @@ namespace ts {
         body?: Block | Expression;
     }
 
-    export interface FunctionDeclaration extends FunctionLikeDeclaration, DeclarationStatement {
+    export type FunctionLikeDeclaration =
+        | FunctionDeclaration
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | FunctionExpression
+        | ArrowFunction;
+    export type FunctionLike =
+        | FunctionLikeDeclaration
+        | FunctionTypeNode
+        | ConstructorTypeNode
+        | IndexSignatureDeclaration
+        | MethodSignature
+        | ConstructSignatureDeclaration
+        | CallSignatureDeclaration;
+
+    export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
         name?: Identifier;
         body?: FunctionBody;
@@ -830,13 +857,13 @@ namespace ts {
     // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.MethodDeclaration;
         name: PropertyName;
         body?: FunctionBody;
     }
 
-    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+    export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
@@ -850,7 +877,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface GetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.GetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -859,7 +886,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface SetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.SetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -1323,13 +1350,13 @@ namespace ts {
     export type FunctionBody = Block;
     export type ConciseBody = FunctionBody | Expression;
 
-    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
+    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase {
         kind: SyntaxKind.FunctionExpression;
         name?: Identifier;
         body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
-    export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+    export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase {
         kind: SyntaxKind.ArrowFunction;
         equalsGreaterThanToken: EqualsGreaterThanToken;
         body: ConciseBody;
@@ -2110,7 +2137,7 @@ namespace ts {
 
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
-    export interface JSDocRecordMember extends PropertySignature {
+    export interface JSDocRecordMember extends JSDocPropertySignature {
         kind: SyntaxKind.JSDocRecordMember;
         name: Identifier | StringLiteral | NumericLiteral;
         type?: JSDocType;
@@ -2357,7 +2384,7 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: Map<string>;
+        /* @internal */ classifiableNames?: UnderscoreEscapedMap<__String>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -2463,7 +2490,7 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
-        /* @internal */ getClassifiableNames(): Map<string>;
+        /* @internal */ getClassifiableNames(): UnderscoreEscapedMap<__String>;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -2600,7 +2627,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
+        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
@@ -2937,7 +2964,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        name: string;                           // Name of symbol
+        name: __String;                           // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members
@@ -3005,7 +3032,51 @@ namespace ts {
         isRestParameter?: boolean;
     }
 
-    export type SymbolTable = Map<Symbol>;
+    export const enum InternalSymbolName {
+        Call = "__call", // Call signatures
+        Constructor = "__constructor", // Constructor implementations
+        New = "__new", // Constructor signatures
+        Index = "__index", // Index signatures
+        ExportStar = "__export", // Module export * declarations
+        Global = "__global", // Global self-reference
+        Missing = "__missing", // Indicates missing symbol
+        Type = "__type", // Anonymous type literal symbol
+        Object = "__object", // Anonymous object literal declaration
+        JSXAttributes = "__jsxAttributes", // Anonymous JSX attributes object literal declaration
+        Class = "__class", // Unnamed class expression
+        Function = "__function", // Unnamed function expression
+        Computed = "__computed", // Computed property name declaration with dynamic name
+        Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
+        ExportEquals = "export=", // Export assignment symbol
+        Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
+    }
+
+    /**
+     * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
+     * The shape of this brand is rather unique compared to others we've used.
+     * Instead of just an intersection of a string and an object, it is that union-ed
+     * with an intersection of void and an object. This makes it wholly incompatible
+     * with a normal string (which is good, it cannot be misused on assignment or on usage),
+     * while still being comparable with a normal string via === (also good) and castable from a string.
+     */
+    export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
+
+    /** EscapedStringMap based on ES6 Map interface. */
+    export interface UnderscoreEscapedMap<T> {
+        get(key: __String): T | undefined;
+        has(key: __String): boolean;
+        set(key: __String, value: T): this;
+        delete(key: __String): boolean;
+        clear(): void;
+        forEach(action: (value: T, key: __String) => void): void;
+        readonly size: number;
+        keys(): Iterator<__String>;
+        values(): Iterator<T>;
+        entries(): Iterator<[__String, T]>;
+    }
+
+    /** SymbolTable based on ES6 Map interface. */
+    export type SymbolTable = UnderscoreEscapedMap<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */

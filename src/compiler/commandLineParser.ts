@@ -1047,7 +1047,7 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));
                 }
 
-                const keyText = getTextOfPropertyName(element.name);
+                const keyText = unescapeLeadingUnderscores(getTextOfPropertyName(element.name));
                 const option = knownOptions ? knownOptions.get(keyText) : undefined;
                 if (extraKeyDiagnosticMessage && !option) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
