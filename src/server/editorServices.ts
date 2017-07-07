@@ -652,9 +652,11 @@ namespace ts.server {
             const configFileName = project.getConfigFilePath();
             if (eventKind === FileWatcherEventKind.Deleted) {
                 this.logger.info(`Config file deleted: ${configFileName}`);
-                // TODO: (sheetalkamat) Get the list of open files from this project
-                // and update the projects
                 this.removeProject(project);
+                // Reload the configured projects for these open files in the project as
+                // they could be held up by another config file somewhere in the parent directory
+                const openFilesInProject = this.getOrphanFiles();
+                this.reloadConfiguredProjectForFiles(openFilesInProject);
             }
             else {
                 this.logger.info(`Config file changed: ${configFileName}`);
@@ -767,6 +769,17 @@ namespace ts.server {
             }
         }
 
+        private getOrphanFiles() {
+            let orphanFiles: ScriptInfo[];
+            // for all open files
+            for (const f of this.openFiles) {
+                if (f.containingProjects.length === 0) {
+                    (orphanFiles || (orphanFiles = [])).push(f);
+                }
+            }
+            return orphanFiles;
+        }
+
         /**
          * Remove this file from the set of open, non-configured files.
          * @param info The file that has been closed or newly configured
@@ -808,14 +821,8 @@ namespace ts.server {
                     this.removeProject(project);
                 }
 
-                let orphanFiles: ScriptInfo[];
-                // for all open files
-                for (const f of this.openFiles) {
-                    // collect orphanted files and try to re-add them as newly opened
-                    if (f.containingProjects.length === 0) {
-                        (orphanFiles || (orphanFiles = [])).push(f);
-                    }
-                }
+                // collect orphanted files and try to re-add them as newly opened
+                const orphanFiles = this.getOrphanFiles();
 
                 // treat orphaned files as newly opened
                 if (orphanFiles) {
@@ -1395,9 +1402,14 @@ namespace ts.server {
          */
         reloadProjects() {
             this.logger.info("reload projects.");
+            this.reloadConfiguredProjectForFiles(this.openFiles);
+            this.refreshInferredProjects();
+        }
+
+        reloadConfiguredProjectForFiles(openFiles: ScriptInfo[]) {
             const mapUpdatedProjects = createMap<true>();
             // try to reload config file for all open files
-            for (const info of this.openFiles) {
+            for (const info of openFiles) {
                 // This tries to search for a tsconfig.json for the given file. If we found it,
                 // we first detect if there is already a configured project created for it: if so,
                 // we re- read the tsconfig file content and update the project only if we havent already done so
@@ -1415,7 +1427,6 @@ namespace ts.server {
                     }
                 }
             }
-            this.refreshInferredProjects();
         }
 
         /**
