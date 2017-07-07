@@ -26,8 +26,8 @@ namespace ts.GoToDefinition {
 
         // Labels
         if (isJumpStatementTarget(node)) {
-            const labelName = (<Identifier>node).text;
-            const label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+            const labelName = unescapeLeadingUnderscores((<Identifier>node).text);
+            const label = getTargetLabel((<BreakOrContinueStatement>node.parent), labelName);
             return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
         }
 
@@ -271,7 +271,7 @@ namespace ts.GoToDefinition {
             fileName: targetFileName,
             textSpan: createTextSpanFromBounds(0, 0),
             kind: ScriptElementKind.scriptElement,
-            name: name,
+            name,
             containerName: undefined,
             containerKind: undefined
         };

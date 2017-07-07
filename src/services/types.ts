@@ -24,7 +24,8 @@ namespace ts {
 
     export interface Symbol {
         getFlags(): SymbolFlags;
-        getName(): string;
+        getName(): __String;
+        getUnescapedName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
@@ -56,7 +57,7 @@ namespace ts {
     export interface SourceFile {
         /* @internal */ version: string;
         /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: Map<number>;
+        /* @internal */ nameTable: UnderscoreEscapedMap<number>;
 
         /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
 

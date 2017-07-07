@@ -82,7 +82,7 @@ namespace ts.JsDoc {
                 if (tagsForDoc) {
                     tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => {
                         return {
-                            name: jsDocTag.tagName.text,
+                            name: unescapeLeadingUnderscores(jsDocTag.tagName.text),
                             text: jsDocTag.comment
                         }; }));
                 }
@@ -133,7 +133,7 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
-        const nameThusFar = tag.name.text;
+        const nameThusFar = unescapeLeadingUnderscores(tag.name.text);
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
         if (!ts.isFunctionLike(fn)) return [];
@@ -141,7 +141,7 @@ namespace ts.JsDoc {
         return mapDefined(fn.parameters, param => {
             if (!isIdentifier(param.name)) return undefined;
 
-            const name = param.name.text;
+            const name = unescapeLeadingUnderscores(param.name.text);
             if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.text === name)
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
