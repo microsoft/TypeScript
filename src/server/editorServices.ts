@@ -611,7 +611,8 @@ namespace ts.server {
          * @param project the project that associates with this directory watcher
          * @param fileName the absolute file name that changed in watched directory
          */
-        private onSourceFileInDirectoryChangedForConfiguredProject(project: ConfiguredProject, fileName: string) {
+        /* @internal */
+        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileName: string) {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
@@ -623,10 +624,13 @@ namespace ts.server {
             this.throttledOperations.schedule(
                 project.getConfigFilePath(),
                 /*delay*/250,
-                () => this.handleChangeInSourceFileForConfiguredProject(project, fileName));
+                () => this.handleFileAddOrRemoveInWatchedDirectoryOfProject(project, fileName));
         }
 
-        private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject, triggerFile: string) {
+        private handleFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, triggerFile: string) {
+            // TODO: (sheetalkamat) this actually doesnt need to re-read the config file from the disk
+            // it just needs to update the file list of file names
+            // We might be able to do that by caching the info from first parse and add reusing this with the change in the file path
             const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath());
             this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors, triggerFile);
 
@@ -676,6 +680,10 @@ namespace ts.server {
                 return;
             }
 
+            // TODO: (sheetalkamat)
+            // 1. We should only watch tsconfig/jsconfig file here instead of watching directory
+            // 2. We should try reloading projects with open files in Inferred project only
+            // 3. We should use this watcher to answer questions to findConfigFile rather than calling host everytime
             this.logger.info(`Detected newly added tsconfig file: ${fileName}`);
             this.reloadProjects();
         }
@@ -1117,28 +1125,18 @@ namespace ts.server {
                 this.documentRegistry,
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
-                projectOptions.wildcardDirectories,
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
             this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
             project.watchConfigFile((project, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind));
-            if (!sizeLimitExceeded) {
-                this.watchConfigDirectoryForProject(project, projectOptions);
-            }
-            project.watchWildcards((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
+            project.watchWildcards(projectOptions.wildcardDirectories);
             project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
 
             this.configuredProjects.push(project);
             this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
             return project;
-        }
-
-        private watchConfigDirectoryForProject(project: ConfiguredProject, options: ProjectOptions): void {
-            if (!options.configHasFilesProperty) {
-                project.watchConfigDirectory((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
-            }
         }
 
         private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: Diagnostic[]): void {
@@ -1271,12 +1269,12 @@ namespace ts.server {
                     project.setProjectErrors(configFileErrors);
                 }
                 project.disableLanguageService();
-                project.stopWatchingDirectory();
+                project.stopWatchingWildCards();
                 project.setProjectErrors(configFileErrors);
             }
             else {
                 project.enableLanguageService();
-                this.watchConfigDirectoryForProject(project, projectOptions);
+                project.watchWildcards(projectOptions.wildcardDirectories);
                 this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
             }
         }

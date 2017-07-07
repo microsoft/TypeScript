@@ -957,6 +957,8 @@ namespace ts.server {
         }
     }
 
+    type WildCardDirectoryWatchers = { watcher: FileWatcher, recursive: boolean };
+
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
      * and if successfull create a ConfiguredProject for it.
@@ -964,9 +966,8 @@ namespace ts.server {
      */
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
-        private projectFileWatcher: FileWatcher;
-        private directoryWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<FileWatcher>;
+        private configFileWatcher: FileWatcher;
+        private directoriesWatchedForWildcards: Map<WildCardDirectoryWatchers>;
         private typeRootsWatchers: FileWatcher[];
         readonly canonicalConfigFilePath: NormalizedPath;
 
@@ -980,7 +981,6 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
-            private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
@@ -1098,7 +1098,7 @@ namespace ts.server {
         }
 
         watchConfigFile(callback: (project: ConfiguredProject, eventKind: FileWatcherEventKind) => void) {
-            this.projectFileWatcher = this.projectService.host.watchFile(this.getConfigFilePath(), (_fileName, eventKind) => callback(this, eventKind));
+            this.configFileWatcher = this.projectService.host.watchFile(this.getConfigFilePath(), (_fileName, eventKind) => callback(this, eventKind));
         }
 
         watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void) {
@@ -1111,49 +1111,70 @@ namespace ts.server {
             this.typeRootsWatchers = watchers;
         }
 
-        watchConfigDirectory(callback: (project: ConfiguredProject, path: string) => void) {
-            if (this.directoryWatcher) {
-                return;
-            }
-
-            const directoryToWatch = getDirectoryPath(this.getConfigFilePath());
-            this.projectService.logger.info(`Add recursive watcher for: ${directoryToWatch}`);
-            this.directoryWatcher = this.projectService.host.watchDirectory(directoryToWatch, path => callback(this, path), /*recursive*/ true);
-        }
-
-        watchWildcards(callback: (project: ConfiguredProject, path: string) => void) {
-            if (!this.wildcardDirectories) {
-                return;
-            }
-            const configDirectoryPath = getDirectoryPath(this.getConfigFilePath());
-
-            this.directoriesWatchedForWildcards = createMap<FileWatcher>();
-            this.wildcardDirectories.forEach((flag, directory) => {
-                if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
-                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                    this.projectService.logger.info(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
-                    this.directoriesWatchedForWildcards.set(directory, this.projectService.host.watchDirectory(
+        private addWatcherForDirectory(flag: WatchDirectoryFlags, directory: string, replaceExisting: boolean) {
+            if (replaceExisting || !this.directoriesWatchedForWildcards.has(directory)) {
+                const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                this.projectService.logger.info(`Add ${recursive ? "recursive " : ""} watcher for: ${directory}`);
+                this.directoriesWatchedForWildcards.set(directory, {
+                    watcher: this.projectService.host.watchDirectory(
                         directory,
-                        path => callback(this, path),
+                        path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
                         recursive
-                    ));
-                }
-            });
+                    ),
+                    recursive
+                });
+            }
         }
 
-        stopWatchingDirectory() {
-            if (this.directoryWatcher) {
-                this.directoryWatcher.close();
-                this.directoryWatcher = undefined;
+        watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
+            if (wildcardDirectories) {
+                if (this.directoriesWatchedForWildcards) {
+                    this.directoriesWatchedForWildcards.forEach(({ watcher, recursive }, directory) => {
+                        const currentFlag = wildcardDirectories.get(directory);
+                        // Remove already watching wild card if it isnt in updated map
+                        if (currentFlag === undefined) {
+                            this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
+                            watcher.close();
+                            this.directoriesWatchedForWildcards.delete(directory);
+                        }
+                        // Or if the recursive doesnt match (add the updated one here)
+                        else {
+                            const currentRecursive = (currentFlag & WatchDirectoryFlags.Recursive) !== 0;
+                            if (currentRecursive !== recursive) {
+                                this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
+                                watcher.close();
+                                this.addWatcherForDirectory(currentFlag, directory, /*replaceExisting*/ true);
+                            }
+                        }
+                    });
+                }
+                else {
+                    this.directoriesWatchedForWildcards = createMap<WildCardDirectoryWatchers>();
+                }
+                wildcardDirectories.forEach((flag, directory) =>
+                    this.addWatcherForDirectory(flag, directory, /*replaceExisting*/ false));
+            }
+            else {
+                this.stopWatchingWildCards();
+            }
+        }
+
+        stopWatchingWildCards() {
+            if (this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards.forEach(({ watcher, recursive }, directory) => {
+                    this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
+                    watcher.close();
+                });
+                this.directoriesWatchedForWildcards = undefined;
             }
         }
 
         close() {
             super.close();
 
-            if (this.projectFileWatcher) {
-                this.projectFileWatcher.close();
-                this.projectFileWatcher = undefined;
+            if (this.configFileWatcher) {
+                this.configFileWatcher.close();
+                this.configFileWatcher = undefined;
             }
 
             if (this.typeRootsWatchers) {
@@ -1163,12 +1184,7 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            this.directoriesWatchedForWildcards.forEach(watcher => {
-                watcher.close();
-            });
-            this.directoriesWatchedForWildcards = undefined;
-
-            this.stopWatchingDirectory();
+            this.stopWatchingWildCards();
         }
 
         addOpenRef() {
