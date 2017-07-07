@@ -132,8 +132,9 @@ namespace ts {
         let inStrictMode: boolean;
 
         let symbolCount = 0;
+
         let Symbol: { new (flags: SymbolFlags, name: __String): Symbol };
-        let classifiableNames: UnderscoreEscapedMap<__String>;
+        let classifiableNames: UnderscoreEscapedMap<true>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -147,7 +148,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = createUnderscoreEscapedMap<__String>();
+            classifiableNames = createUnderscoreEscapedMap<true>();
             symbolCount = 0;
             skipTransformFlagAggregation = file.isDeclarationFile;
 
@@ -349,7 +350,7 @@ namespace ts {
                 }
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames.set(name, name);
+                    classifiableNames.set(name, true);
                 }
 
                 if (symbol.flags & excludes) {
@@ -2445,7 +2446,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames.set(node.name.text, node.name.text);
+                    classifiableNames.set(node.name.text, true);
                 }
             }
 

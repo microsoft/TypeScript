@@ -123,11 +123,11 @@ namespace ts.server {
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
-        private updatedFileNames: Map<string>;
+        private updatedFileNames: Map<true>;
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
-        private lastReportedFileNames: Map<string>;
+        private lastReportedFileNames: Map<true>;
         /**
          * Last version that was reported.
          */
@@ -487,7 +487,7 @@ namespace ts.server {
         }
 
         registerFileUpdate(fileName: string) {
-            (this.updatedFileNames || (this.updatedFileNames = createMap<string>())).set(fileName, fileName);
+            (this.updatedFileNames || (this.updatedFileNames = createMap<true>())).set(fileName, true);
         }
 
         markAsDirty() {
@@ -611,7 +611,7 @@ namespace ts.server {
                 }
 
                 const missingFilePaths = this.program.getMissingFilePaths();
-                const missingFilePathsSet = arrayToSet(missingFilePaths, p => p);
+                const missingFilePathsSet = arrayToSet(missingFilePaths);
 
                 // Files that are no longer missing (e.g. because they are no longer required)
                 // should no longer be watched.
@@ -742,7 +742,7 @@ namespace ts.server {
                 }
                 // compute and return the difference
                 const lastReportedFileNames = this.lastReportedFileNames;
-                const currentFiles = arrayToMap(this.getFileNames(), x => x);
+                const currentFiles = arrayToSet(this.getFileNames());
 
                 const added: string[] = [];
                 const removed: string[] = [];
@@ -765,7 +765,7 @@ namespace ts.server {
             else {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
-                this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
+                this.lastReportedFileNames = arrayToSet(projectFileNames);
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, files: projectFileNames, projectErrors: this.getGlobalProjectErrors() };
             }
