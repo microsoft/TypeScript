@@ -74,7 +74,7 @@ namespace ts.SignatureHelp {
         const typeChecker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = nameToDeclarations.get(name.text);
+            const declarations = nameToDeclarations.get(unescapeLeadingUnderscores(name.text));
 
             if (declarations) {
                 for (const declaration of declarations) {
@@ -416,7 +416,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
             return {
-                name: parameter.name,
+                name: parameter.getUnescapedName(),
                 documentation: parameter.getDocumentationComment(),
                 displayParts,
                 isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
@@ -428,7 +428,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
             return {
-                name: typeParameter.symbol.name,
+                name: typeParameter.symbol.getUnescapedName(),
                 documentation: emptyArray,
                 displayParts,
                 isOptional: false

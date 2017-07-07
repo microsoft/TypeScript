@@ -26,6 +26,7 @@
         "no-trailing-whitespace": [true, "ignore-template-strings"],
         "no-type-assertion-whitespace": true,
         "no-var-keyword": true,
+        "object-literal-shorthand": true,
         "object-literal-surrounding-space": true,
         "one-line": [true,
             "check-open-brace",
@@ -63,6 +64,6 @@
             "check-module",
             "check-separator",
             "check-type"
-        ]	
+        ]
 	}
 }

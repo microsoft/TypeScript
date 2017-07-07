@@ -99,7 +99,7 @@ namespace ts {
     }
 
     function createLiteralFromNode(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral {
-        const node = createStringLiteral(sourceNode.text);
+        const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
     }
@@ -112,7 +112,7 @@ namespace ts {
     export function createIdentifier(text: string, typeArguments: TypeNode[]): Identifier;
     export function createIdentifier(text: string, typeArguments?: TypeNode[]): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-        node.text = escapeIdentifier(text);
+        node.text = escapeLeadingUnderscores(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
@@ -124,7 +124,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(node.text, typeArguments), node)
+        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.text), typeArguments), node)
         : node;
     }
 
@@ -314,13 +314,14 @@ namespace ts {
         return node;
     }
 
-    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
+    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
+            || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createProperty(decorators, modifiers, name, node.questionToken, type, initializer), node)
+            ? updateNode(createProperty(decorators, modifiers, name, questionToken, type, initializer), node)
             : node;
     }
 
@@ -360,6 +361,7 @@ namespace ts {
             || node.modifiers !== modifiers
             || node.asteriskToken !== asteriskToken
             || node.name !== name
+            || node.questionToken !== questionToken
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
@@ -2643,12 +2645,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(jsxFactory.right.text);
+            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.text));
             right.text = jsxFactory.right.text;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(jsxFactory.text, parent);
+            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.text), parent);
         }
     }
 

@@ -130,42 +130,26 @@ namespace ts.server {
             return response;
         }
 
-        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
-            const args: protocol.OpenRequestArgs = { file: fileName, fileContent: content, scriptKindName };
+        openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+            const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);
         }
 
-        closeFile(fileName: string): void {
-            const args: protocol.FileRequestArgs = { file: fileName };
+        closeFile(file: string): void {
+            const args: protocol.FileRequestArgs = { file };
             this.processRequest(CommandNames.Close, args);
         }
 
-        changeFile(fileName: string, start: number, end: number, newText: string): void {
+        changeFile(fileName: string, start: number, end: number, insertString: string): void {
             // clear the line map after an edit
             this.lineMaps.set(fileName, undefined);
 
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, start);
-            const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
-
-            const args: protocol.ChangeRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-                endLine: endLineOffset.line,
-                endOffset: endLineOffset.offset,
-                insertString: newText
-            };
-
+            const args: protocol.ChangeRequestArgs = { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
             this.processRequest(CommandNames.Change, args);
         }
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset
-            };
+            const args = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.QuickInfoRequest>(CommandNames.Quickinfo, args);
             const response = this.processResponse<protocol.QuickInfoResponse>(request);
@@ -183,11 +167,8 @@ namespace ts.server {
             };
         }
 
-        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
-            const args: protocol.ProjectInfoRequestArgs = {
-                file: fileName,
-                needFileNameList: needFileNameList
-            };
+        getProjectInfo(file: string, needFileNameList: boolean): protocol.ProjectInfo {
+            const args: protocol.ProjectInfoRequestArgs = { file, needFileNameList };
 
             const request = this.processRequest<protocol.ProjectInfoRequest>(CommandNames.ProjectInfo, args);
             const response = this.processResponse<protocol.ProjectInfoResponse>(request);
@@ -199,13 +180,7 @@ namespace ts.server {
         }
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.CompletionsRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-                prefix: undefined
-            };
+            const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             const response = this.processResponse<protocol.CompletionsResponse>(request);
@@ -230,13 +205,7 @@ namespace ts.server {
         }
 
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.CompletionDetailsRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-                entryNames: [entryName]
-            };
+            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [entryName] };
 
             const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
@@ -270,28 +239,20 @@ namespace ts.server {
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
                     isCaseSensitive: entry.isCaseSensitive,
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end)
                 };
             });
         }
 
-        getFormattingEditsForRange(fileName: string, start: number, end: number, _options: ts.FormatCodeOptions): ts.TextChange[] {
-            const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
-            const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
-            const args: protocol.FormatRequestArgs = {
-                file: fileName,
-                line: startLineOffset.line,
-                offset: startLineOffset.offset,
-                endLine: endLineOffset.line,
-                endOffset: endLineOffset.offset,
-            };
+        getFormattingEditsForRange(file: string, start: number, end: number, _options: ts.FormatCodeOptions): ts.TextChange[] {
+            const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
 
             // TODO: handle FormatCodeOptions
             const request = this.processRequest<protocol.FormatRequest>(CommandNames.Format, args);
             const response = this.processResponse<protocol.FormatResponse>(request);
 
-            return response.body.map(entry => this.convertCodeEditsToTextChange(fileName, entry));
+            return response.body.map(entry => this.convertCodeEditsToTextChange(file, entry));
         }
 
         getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): ts.TextChange[] {
@@ -299,13 +260,7 @@ namespace ts.server {
         }
 
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): ts.TextChange[] {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FormatOnKeyRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-                key: key
-            };
+            const args: protocol.FormatOnKeyRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), key };
 
             // TODO: handle FormatCodeOptions
             const request = this.processRequest<protocol.FormatOnKeyRequest>(CommandNames.Formatonkey, args);
@@ -315,12 +270,7 @@ namespace ts.server {
         }
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-            };
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.Definition, args);
             const response = this.processResponse<protocol.DefinitionResponse>(request);
@@ -332,7 +282,7 @@ namespace ts.server {
                 return {
                     containerKind: ScriptElementKind.unknown,
                     containerName: "",
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     kind: ScriptElementKind.unknown,
                     name: ""
@@ -341,12 +291,7 @@ namespace ts.server {
         }
 
         getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-            };
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.TypeDefinition, args);
             const response = this.processResponse<protocol.TypeDefinitionResponse>(request);
@@ -358,7 +303,7 @@ namespace ts.server {
                 return {
                     containerKind: ScriptElementKind.unknown,
                     containerName: "",
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     kind: ScriptElementKind.unknown,
                     name: ""
@@ -367,12 +312,7 @@ namespace ts.server {
         }
 
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-            };
+            const args = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.ImplementationRequest>(CommandNames.Implementation, args);
             const response = this.processResponse<protocol.ImplementationResponse>(request);
@@ -396,12 +336,7 @@ namespace ts.server {
         }
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-            };
+            const args = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.ReferencesRequest>(CommandNames.References, args);
             const response = this.processResponse<protocol.ReferencesResponse>(request);
@@ -411,7 +346,7 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     isWriteAccess: entry.isWriteAccess,
                     isDefinition: entry.isDefinition,
@@ -423,22 +358,22 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getSyntacticDiagnostics(fileName: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file: fileName,  includeLinePosition: true };
+        getSyntacticDiagnostics(file: string): Diagnostic[] {
+            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file,  includeLinePosition: true };
 
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, file));
         }
 
-        getSemanticDiagnostics(fileName: string): Diagnostic[] {
-            const args: protocol.SemanticDiagnosticsSyncRequestArgs = { file: fileName, includeLinePosition: true };
+        getSemanticDiagnostics(file: string): Diagnostic[] {
+            const args: protocol.SemanticDiagnosticsSyncRequestArgs = { file, includeLinePosition: true };
 
             const request = this.processRequest<protocol.SemanticDiagnosticsSyncRequest>(CommandNames.SemanticDiagnosticsSync, args);
             const response = this.processResponse<protocol.SemanticDiagnosticsSyncResponse>(request);
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, fileName));
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, file));
         }
 
         convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, _fileName: string): Diagnostic {
@@ -456,7 +391,7 @@ namespace ts.server {
                 start: entry.start,
                 length: entry.length,
                 messageText: entry.message,
-                category: category,
+                category,
                 code: entry.code
             };
         }
@@ -466,14 +401,7 @@ namespace ts.server {
         }
 
         getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.RenameRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-                findInStrings,
-                findInComments
-            };
+            const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
 
             const request = this.processRequest<protocol.RenameRequest>(CommandNames.Rename, args);
             const response = this.processResponse<protocol.RenameResponse>(request);
@@ -483,10 +411,7 @@ namespace ts.server {
                 entry.locs.map((loc: protocol.TextSpan) => {
                     const start = this.lineOffsetToPosition(fileName, loc.start);
                     const end = this.lineOffsetToPosition(fileName, loc.end);
-                    locations.push({
-                        textSpan: ts.createTextSpanFromBounds(start, end),
-                        fileName: fileName
-                    });
+                    locations.push({ textSpan: ts.createTextSpanFromBounds(start, end), fileName, });
                 });
             });
             return this.lastRenameEntry = {
@@ -497,11 +422,11 @@ namespace ts.server {
                 kindModifiers: response.body.info.kindModifiers,
                 localizedErrorMessage: response.body.info.localizedErrorMessage,
                 triggerSpan: ts.createTextSpanFromBounds(position, position),
-                fileName: fileName,
-                position: position,
-                findInStrings: findInStrings,
-                findInComments: findInComments,
-                locations: locations
+                fileName,
+                position,
+                findInStrings,
+                findInComments,
+                locations,
             };
         }
 
@@ -534,12 +459,12 @@ namespace ts.server {
             }));
         }
 
-        getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            const request = this.processRequest<protocol.NavBarRequest>(CommandNames.NavBar, { file: fileName });
+        getNavigationBarItems(file: string): NavigationBarItem[] {
+            const request = this.processRequest<protocol.NavBarRequest>(CommandNames.NavBar, { file });
             const response = this.processResponse<protocol.NavBarResponse>(request);
 
-            const lineMap = this.getLineMap(fileName);
-            return this.decodeNavigationBarItems(response.body, fileName, lineMap);
+            const lineMap = this.getLineMap(file);
+            return this.decodeNavigationBarItems(response.body, file, lineMap);
         }
 
         private decodeNavigationTree(tree: protocol.NavigationTree, fileName: string, lineMap: number[]): NavigationTree {
@@ -552,12 +477,12 @@ namespace ts.server {
             };
         }
 
-        getNavigationTree(fileName: string): NavigationTree {
-            const request = this.processRequest<protocol.NavTreeRequest>(CommandNames.NavTree, { file: fileName });
+        getNavigationTree(file: string): NavigationTree {
+            const request = this.processRequest<protocol.NavTreeRequest>(CommandNames.NavTree, { file });
             const response = this.processResponse<protocol.NavTreeResponse>(request);
 
-            const lineMap = this.getLineMap(fileName);
-            return this.decodeNavigationTree(response.body, fileName, lineMap);
+            const lineMap = this.getLineMap(file);
+            return this.decodeNavigationTree(response.body, file, lineMap);
         }
 
         private decodeSpan(span: protocol.TextSpan, fileName: string, lineMap: number[]) {
@@ -575,12 +500,7 @@ namespace ts.server {
         }
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.SignatureHelpRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset
-            };
+            const args: protocol.SignatureHelpRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
             const response = this.processResponse<protocol.SignatureHelpResponse>(request);
@@ -596,10 +516,7 @@ namespace ts.server {
 
             const result: SignatureHelpItems = {
                 items: helpItems.items,
-                applicableSpan: {
-                    start: start,
-                    length: end - start
-                },
+                applicableSpan: { start, length: end - start },
                 selectedItemIndex: helpItems.selectedItemIndex,
                 argumentIndex: helpItems.argumentIndex,
                 argumentCount: helpItems.argumentCount,
@@ -608,12 +525,7 @@ namespace ts.server {
         }
 
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-            };
+            const args = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.OccurrencesRequest>(CommandNames.Occurrences, args);
             const response = this.processResponse<protocol.OccurrencesResponse>(request);
@@ -632,8 +544,7 @@ namespace ts.server {
         }
 
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
-            const { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.DocumentHighlightsRequestArgs = { file: fileName, line, offset, filesToSearch };
+            const args: protocol.DocumentHighlightsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), filesToSearch };
 
             const request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
             const response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
@@ -676,39 +587,36 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
-            const startLineOffset = this.positionToOneBasedLineOffset(fileName, start);
-            const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
-
-            const args: protocol.CodeFixRequestArgs = {
-                file: fileName,
-                startLine: startLineOffset.line,
-                startOffset: startLineOffset.offset,
-                endLine: endLineOffset.line,
-                endOffset: endLineOffset.offset,
-                errorCodes: errorCodes,
-            };
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+            const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(entry => this.convertCodeActions(entry, fileName));
+            return response.body.map(entry => this.convertCodeActions(entry, file));
         }
 
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
-            if (typeof positionOrRange === "number") {
-                const { line, offset } = this.positionToOneBasedLineOffset(fileName, positionOrRange);
-                return <protocol.FileLocationRequestArgs>{ file: fileName, line, offset };
-            }
-            const { line: startLine, offset: startOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.pos);
-            const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.end);
-            return <protocol.FileRangeRequestArgs>{
-                file: fileName,
-                startLine,
-                startOffset,
-                endLine,
-                endOffset
-            };
+            return typeof positionOrRange === "number"
+                ? this.createFileLocationRequestArgs(fileName, positionOrRange)
+                : this.createFileRangeRequestArgs(fileName, positionOrRange.pos, positionOrRange.end);
+        }
+
+        private createFileLocationRequestArgs(file: string, position: number): protocol.FileLocationRequestArgs {
+            const { line, offset } = this.positionToOneBasedLineOffset(file, position);
+            return { file, line, offset };
+        }
+
+        private createFileRangeRequestArgs(file: string, start: number, end: number): protocol.FileRangeRequestArgs {
+            const { line: startLine, offset: startOffset } = this.positionToOneBasedLineOffset(file, start);
+            const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(file, end);
+            return { file, startLine, startOffset, endLine, endOffset };
+        }
+
+        private createFileLocationRequestArgsWithEndLineAndOffset(file: string, start: number, end: number): protocol.FileLocationRequestArgs & { endLine: number, endOffset: number } {
+            const { line, offset } = this.positionToOneBasedLineOffset(file, start);
+            const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(file, end);
+            return { file, line, offset, endLine, endOffset };
         }
 
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
@@ -779,21 +687,13 @@ namespace ts.server {
             const end = this.lineOffsetToPosition(fileName, change.end);
 
             return {
-                span: {
-                    start: start,
-                    length: end - start
-                },
+                span: { start, length: end - start },
                 newText: change.newText ? change.newText : ""
             };
         }
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
-            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
-            const args: protocol.FileLocationRequestArgs = {
-                file: fileName,
-                line: lineOffset.line,
-                offset: lineOffset.offset,
-            };
+            const args = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.BraceRequest>(CommandNames.Brace, args);
             const response = this.processResponse<protocol.BraceResponse>(request);
@@ -801,10 +701,7 @@ namespace ts.server {
             return response.body.map(entry => {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
-                return {
-                    start: start,
-                    length: end - start,
-                };
+                return { start, length: end - start };
             });
         }
 
