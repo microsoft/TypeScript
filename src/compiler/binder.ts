@@ -132,8 +132,9 @@ namespace ts {
         let inStrictMode: boolean;
 
         let symbolCount = 0;
+
         let Symbol: { new (flags: SymbolFlags, name: __String): Symbol };
-        let classifiableNames: UnderscoreEscapedMap<__String>;
+        let classifiableNames: UnderscoreEscapedMap<true>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -147,7 +148,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = createUnderscoreEscapedMap<__String>();
+            classifiableNames = createUnderscoreEscapedMap<true>();
             symbolCount = 0;
             skipTransformFlagAggregation = file.isDeclarationFile;
 
@@ -349,7 +350,7 @@ namespace ts {
                 }
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames.set(name, name);
+                    classifiableNames.set(name, true);
                 }
 
                 if (symbol.flags & excludes) {
@@ -1171,7 +1172,7 @@ namespace ts {
         }
 
         function pushActiveLabel(name: __String, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
-            const activeLabel = {
+            const activeLabel: ActiveLabel = {
                 name,
                 breakTarget,
                 continueTarget,
@@ -1896,10 +1897,6 @@ namespace ts {
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function getDestructuringParameterName(node: Declaration): __String {
-            return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node) as __String;
-        }
-
         function bind(node: Node): void {
             if (!node) {
                 return;
@@ -2445,7 +2442,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames.set(node.name.text, node.name.text);
+                    classifiableNames.set(node.name.text, true);
                 }
             }
 
@@ -2513,7 +2510,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node));
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + indexOf(node.parent.parameters, node) as __String);
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);

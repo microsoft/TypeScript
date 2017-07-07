@@ -70,7 +70,7 @@ namespace ts {
          * set of labels that occurred inside the converted loop
          * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
          */
-        labels?: Map<string>;
+        labels?: Map<boolean>;
         /*
          * collection of labeled jumps that transfer control outside the converted loop.
          * maps store association 'label -> labelMarker' where
@@ -2236,16 +2236,16 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), unescapeLeadingUnderscores(node.label.text));
+            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), true);
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), undefined);
+            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), false);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             if (convertedLoopState && !convertedLoopState.labels) {
-                convertedLoopState.labels = createMap<string>();
+                convertedLoopState.labels = createMap<boolean>();
             }
             const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
             return isIterationStatement(statement, /*lookInLabeledStatements*/ false)

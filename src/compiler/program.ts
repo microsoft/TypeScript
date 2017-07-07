@@ -405,7 +405,7 @@ namespace ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
-        let classifiableNames: UnderscoreEscapedMap<__String>;
+        let classifiableNames: UnderscoreEscapedMap<true>;
         let modifiedFilePaths: Path[] | undefined;
 
         const cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
@@ -580,7 +580,7 @@ namespace ts {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                classifiableNames = createUnderscoreEscapedMap<__String>();
+                classifiableNames = createUnderscoreEscapedMap<true>();
 
                 for (const sourceFile of files) {
                     copyEntries(sourceFile.classifiableNames, classifiableNames);
