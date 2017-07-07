@@ -271,7 +271,7 @@ and grew 1cm per day`;
         });
 
         it("Edit ScriptVersionCache ", () => {
-            const svc = server.ScriptVersionCache.fromString(<server.ServerHost>ts.sys, testContent);
+            const svc = server.ScriptVersionCache.fromString(testContent);
             let checkText = testContent;
 
             for (let i = 0; i < iterationCount; i++) {

@@ -257,16 +257,15 @@ namespace ts.server {
     }
 
     export class ScriptVersionCache {
-        changes: TextChange[] = [];
-        versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
-        minVersion = 0;  // no versions earlier than min version will maintain change history
+        private changes: TextChange[] = [];
+        private readonly versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
+        private minVersion = 0;  // no versions earlier than min version will maintain change history
 
-        private host: ServerHost;
         private currentVersion = 0;
 
-        static changeNumberThreshold = 8;
-        static changeLengthThreshold = 256;
-        static maxVersions = 8;
+        private static readonly changeNumberThreshold = 8;
+        private static readonly changeLengthThreshold = 256;
+        private static readonly maxVersions = 8;
 
         private versionToIndex(version: number) {
             if (version < this.minVersion || version > this.currentVersion) {
@@ -298,16 +297,6 @@ namespace ts.server {
                 this.getSnapshot();
             }
             return this.currentVersion;
-        }
-
-        reloadFromFile(filename: string) {
-            let content = this.host.readFile(filename);
-            // If the file doesn't exist or cannot be read, we should
-            // wipe out its cached content on the server to avoid side effects.
-            if (!content) {
-                content = "";
-            }
-            this.reload(content);
         }
 
         // reload whole script, leaving no change history behind reload
@@ -369,11 +358,10 @@ namespace ts.server {
             }
         }
 
-        static fromString(host: ServerHost, script: string) {
+        static fromString(script: string) {
             const svc = new ScriptVersionCache();
             const snap = new LineIndexSnapshot(0, svc, new LineIndex());
             svc.versions[svc.currentVersion] = snap;
-            svc.host = host;
             const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
             return svc;
@@ -774,7 +762,7 @@ namespace ts.server {
             return { child, childIndex: i, charOffset, lineNumber };
         }
 
-        splitAfter(childIndex: number) {
+        private splitAfter(childIndex: number) {
             let splitNode: LineNode;
             const clen = this.children.length;
             childIndex++;
