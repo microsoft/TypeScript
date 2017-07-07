@@ -851,9 +851,9 @@ namespace ts.server {
         }
 
         // assume there is room for the item; return true if more room
-        add(collection: LineCollection) {
+        add(collection: LineCollection): void {
             this.children.push(collection);
-            return (this.children.length < lineCollectionCapacity);
+            Debug.assert(this.children.length <= lineCollectionCapacity);
         }
 
         charCount() {
