@@ -871,24 +871,6 @@ namespace ts.server {
             return configFileName;
         }
 
-        /**
-         * This function tries to search for a tsconfig.json for the given file. If we found it,
-         * we first detect if there is already a configured project created for it: if so, we re-read
-         * the tsconfig file content and update the project; otherwise we create a new one.
-         */
-        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath) {
-            const configFileName = this.getConfigFileNameForFile(fileName);
-            if (configFileName) {
-                const project = this.findConfiguredProjectByProjectName(configFileName);
-                if (!project) {
-                    this.openConfigFile(configFileName, fileName);
-                }
-                else {
-                    this.reloadConfiguredProject(project);
-                }
-            }
-        }
-
         // This is different from the method the compiler uses because
         // the compiler can assume it will always start searching in the
         // current directory (the directory in which tsc was invoked).
@@ -1413,11 +1395,25 @@ namespace ts.server {
          */
         reloadProjects() {
             this.logger.info("reload projects.");
+            const mapUpdatedProjects = createMap<true>();
             // try to reload config file for all open files
             for (const info of this.openFiles) {
-                // TODO: (sheetalkamat) batch these = multiple open files from the same project will
-                // end up updating project that many times
-                this.openOrUpdateConfiguredProjectForFile(info.fileName);
+                // This tries to search for a tsconfig.json for the given file. If we found it,
+                // we first detect if there is already a configured project created for it: if so,
+                // we re- read the tsconfig file content and update the project only if we havent already done so
+                // otherwise we create a new one.
+                const configFileName = this.getConfigFileNameForFile(info.fileName);
+                if (configFileName) {
+                    let project = this.findConfiguredProjectByProjectName(configFileName);
+                    if (!project) {
+                        project = this.openConfigFile(configFileName, info.fileName);
+                        mapUpdatedProjects.set(configFileName, true);
+                    }
+                    else if (!mapUpdatedProjects.has(configFileName)) {
+                        this.reloadConfiguredProject(project);
+                        mapUpdatedProjects.set(configFileName, true);
+                    }
+                }
             }
             this.refreshInferredProjects();
         }
