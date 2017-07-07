@@ -69,11 +69,11 @@ namespace ts.JsDoc {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
-            forEach(getJSDocTags(declaration), tag => {
+            for (const tag of getJSDocTags(declaration)) {
                 if (tag.kind === SyntaxKind.JSDocTag) {
-                    tags.push({ name: tag.tagName.text, text: tag.comment });
+                    tags.push({ name: unescapeLeadingUnderscores(tag.tagName.text), text: tag.comment });
                 }
-            });
+            }
         });
         return tags;
     }
@@ -120,7 +120,7 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
-        const nameThusFar = tag.name.text;
+        const nameThusFar = unescapeLeadingUnderscores(tag.name.text);
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
         if (!ts.isFunctionLike(fn)) return [];
@@ -128,7 +128,7 @@ namespace ts.JsDoc {
         return mapDefined(fn.parameters, param => {
             if (!isIdentifier(param.name)) return undefined;
 
-            const name = param.name.text;
+            const name = unescapeLeadingUnderscores(param.name.text);
             if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.text === name)
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;

@@ -242,7 +242,7 @@ namespace ts.textChanges {
         }
 
         public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
-            this.changes.push({ sourceFile, options, node: newNode, range: { pos: pos, end: pos } });
+            this.changes.push({ sourceFile, options, node: newNode, range: { pos, end: pos } });
             return this;
         }
 
@@ -511,7 +511,7 @@ namespace ts.textChanges {
             lineMap,
             getLineAndCharacterOfPosition: pos => computeLineAndCharacterOfPosition(lineMap, pos)
         };
-        const changes = formatting.formatNode(nonFormattedText.node, file, sourceFile.languageVariant, initialIndentation, delta, rulesProvider);
+        const changes = formatting.formatNodeGivenIndentation(nonFormattedText.node, file, sourceFile.languageVariant, initialIndentation, delta, rulesProvider);
         return applyChanges(nonFormattedText.text, changes);
     }
 

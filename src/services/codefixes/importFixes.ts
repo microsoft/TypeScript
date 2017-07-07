@@ -148,7 +148,7 @@ namespace ts.codefix {
             else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
                 symbol = checker.getAliasedSymbol(checker.resolveNameAtLocation(token, checker.getJsxNamespace(), SymbolFlags.Value));
-                symbolName = symbol.name;
+                symbolName = symbol.getUnescapedName();
             }
             else {
                 Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");

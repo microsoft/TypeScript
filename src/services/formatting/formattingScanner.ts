@@ -96,7 +96,7 @@ namespace ts.formatting {
                 // consume leading trivia
                 scanner.scan();
                 const item = {
-                    pos: pos,
+                    pos,
                     end: scanner.getStartPos(),
                     kind: t
                 };
@@ -264,11 +264,7 @@ namespace ts.formatting {
                 }
             }
 
-            lastTokenInfo = {
-                leadingTrivia: leadingTrivia,
-                trailingTrivia: trailingTrivia,
-                token: token
-            };
+            lastTokenInfo = { leadingTrivia, trailingTrivia, token };
 
             return fixTokenKind(lastTokenInfo, n);
         }

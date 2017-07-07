@@ -493,7 +493,7 @@ namespace Harness {
         args(): string[];
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[];
+        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number): string[];
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
     }
@@ -537,7 +537,7 @@ namespace Harness {
                     ts.sys.tryEnableSourceMapsForHost();
                 }
             }
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -733,12 +733,12 @@ namespace Harness {
                 Http.writeToServerSync(serverRoot + path, "WRITE", contents);
             }
 
-            export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
+            export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number) {
                 const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
                 for (const file of listFiles(path)) {
                     fs.addFile(file);
                 }
-                return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
+                return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), depth, path => {
                     const entry = fs.traversePath(path);
                     if (entry && entry.isDirectory()) {
                         const directory = <Utils.VirtualDirectory>entry;
