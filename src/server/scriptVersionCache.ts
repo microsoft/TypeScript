@@ -8,15 +8,13 @@ namespace ts.server {
     export interface LineCollection {
         charCount(): number;
         lineCount(): number;
-        isLeaf(): boolean;
+        isLeaf(): this is LineLeaf;
         walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
     }
 
-    export interface ILineInfo {
-        line: number;
-        offset: number;
-        text?: string;
-        leaf?: LineLeaf;
+    export interface AbsolutePositionAndLineText {
+        absolutePosition: number;
+        lineText: string | undefined;
     }
 
     export enum CharRangeSection {
@@ -397,22 +395,27 @@ namespace ts.server {
         // set this to true to check each edit for accuracy
         checkEdits = false;
 
-        charOffsetToLineNumberAndPos(charOffset: number) {
-            return this.root.charOffsetToLineNumberAndPos(1, charOffset);
+        absolutePositionOfStartOfLine(oneBasedLine: number): number {
+            return this.lineNumberToInfo(oneBasedLine).absolutePosition;
         }
 
-        lineNumberToInfo(lineNumber: number): ILineInfo {
+        positionToLineOffset(position: number): protocol.Location {
+            const { oneBasedLine, zeroBasedColumn } = this.root.charOffsetToLineInfo(1, position);
+            return { line: oneBasedLine, offset: zeroBasedColumn + 1 };
+        }
+
+        private positionToColumnAndLineText(position: number): { zeroBasedColumn: number, lineText: string } {
+            return this.root.charOffsetToLineInfo(1, position);
+        }
+
+        lineNumberToInfo(oneBasedLine: number): AbsolutePositionAndLineText {
             const lineCount = this.root.lineCount();
-            if (lineNumber <= lineCount) {
-                const lineInfo = this.root.lineNumberToInfo(lineNumber, 0);
-                lineInfo.line = lineNumber;
-                return lineInfo;
+            if (oneBasedLine <= lineCount) {
+                const { position, leaf } = this.root.lineNumberToInfo(oneBasedLine, 0);
+                return { absolutePosition: position, lineText: leaf && leaf.text };
             }
             else {
-                return {
-                    line: lineNumber,
-                    offset: this.root.charCount()
-                };
+                return { absolutePosition: this.root.charCount(), lineText: undefined };
             }
         }
 
@@ -502,17 +505,12 @@ namespace ts.server {
                 else if (deleteLength > 0) {
                     // check whether last characters deleted are line break
                     const e = pos + deleteLength;
-                    const lineInfo = this.charOffsetToLineNumberAndPos(e);
-                    if ((lineInfo && (lineInfo.offset === 0))) {
+                    const { zeroBasedColumn, lineText } = this.positionToColumnAndLineText(e);
+                    if (zeroBasedColumn === 0) {
                         // move range end just past line that will merge with previous line
-                        deleteLength += lineInfo.text.length;
+                        deleteLength += lineText.length;
                         // store text by appending to end of insertedText
-                        if (newText) {
-                            newText = newText + lineInfo.text;
-                        }
-                        else {
-                            newText = lineInfo.text;
-                        }
+                        newText = newText ? newText + lineText : lineText;
                     }
                 }
                 if (pos < this.root.charCount()) {
@@ -676,90 +674,88 @@ namespace ts.server {
             }
         }
 
-        charOffsetToLineNumberAndPos(lineNumber: number, charOffset: number): ILineInfo {
-            const childInfo = this.childFromCharOffset(lineNumber, charOffset);
+        // Input position is relative to the start of this node.
+        // Output line number is absolute.
+        charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): { oneBasedLine: number, zeroBasedColumn: number, lineText: string | undefined } {
+            const childInfo = this.childFromCharOffset(lineNumberAccumulator, relativePosition);
             if (!childInfo.child) {
                 return {
-                    line: lineNumber,
-                    offset: charOffset,
+                    oneBasedLine: lineNumberAccumulator,
+                    zeroBasedColumn: relativePosition,
+                    lineText: undefined,
                 };
             }
             else if (childInfo.childIndex < this.children.length) {
                 if (childInfo.child.isLeaf()) {
                     return {
-                        line: childInfo.lineNumber,
-                        offset: childInfo.charOffset,
-                        text: (<LineLeaf>(childInfo.child)).text,
-                        leaf: (<LineLeaf>(childInfo.child))
+                        oneBasedLine: childInfo.lineNumberAccumulator,
+                        zeroBasedColumn: childInfo.relativePosition,
+                        lineText: childInfo.child.text,
                     };
                 }
                 else {
                     const lineNode = <LineNode>(childInfo.child);
-                    return lineNode.charOffsetToLineNumberAndPos(childInfo.lineNumber, childInfo.charOffset);
+                    return lineNode.charOffsetToLineInfo(childInfo.lineNumberAccumulator, childInfo.relativePosition);
                 }
             }
             else {
                 const lineInfo = this.lineNumberToInfo(this.lineCount(), 0);
-                return { line: this.lineCount(), offset: lineInfo.leaf.charCount() };
+                return { oneBasedLine: this.lineCount(), zeroBasedColumn: lineInfo.leaf.charCount(), lineText: undefined };
             }
         }
 
-        lineNumberToInfo(lineNumber: number, charOffset: number): ILineInfo {
-            const childInfo = this.childFromLineNumber(lineNumber, charOffset);
+        lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number, leaf: LineLeaf | undefined } {
+            const childInfo = this.childFromLineNumber(relativeOneBasedLine, positionAccumulator);
             if (!childInfo.child) {
-                return {
-                    line: lineNumber,
-                    offset: charOffset
-                };
+                return { position: positionAccumulator, leaf: undefined };
             }
             else if (childInfo.child.isLeaf()) {
-                return {
-                    line: lineNumber,
-                    offset: childInfo.charOffset,
-                    text: (<LineLeaf>(childInfo.child)).text,
-                    leaf: (<LineLeaf>(childInfo.child))
-                };
+                return { position: childInfo.positionAccumulator, leaf: childInfo.child };
             }
             else {
                 const lineNode = <LineNode>(childInfo.child);
-                return lineNode.lineNumberToInfo(childInfo.relativeLineNumber, childInfo.charOffset);
+                return lineNode.lineNumberToInfo(childInfo.relativeOneBasedLine, childInfo.positionAccumulator);
             }
         }
 
-        childFromLineNumber(lineNumber: number, charOffset: number) {
+        /**
+         * Input line number is relative to the start of this node.
+         * Output line number is relative to the child.
+         * positionAccumulator will be an absolute position once relativeLineNumber reaches 0.
+         */
+        private childFromLineNumber(relativeOneBasedLine: number, positionAccumulator: number): { child: LineCollection, relativeOneBasedLine: number, positionAccumulator: number } {
             let child: LineCollection;
-            let relativeLineNumber = lineNumber;
             let i: number;
-            let len: number;
-            for (i = 0, len = this.children.length; i < len; i++) {
+            for (i = 0; i < this.children.length; i++) {
                 child = this.children[i];
                 const childLineCount = child.lineCount();
-                if (childLineCount >= relativeLineNumber) {
+                if (childLineCount >= relativeOneBasedLine) {
                     break;
                 }
                 else {
-                    relativeLineNumber -= childLineCount;
-                    charOffset += child.charCount();
+                    relativeOneBasedLine -= childLineCount;
+                    positionAccumulator += child.charCount();
                 }
             }
-            return { child, childIndex: i, relativeLineNumber, charOffset };
+            return { child, relativeOneBasedLine, positionAccumulator };
         }
 
-        childFromCharOffset(lineNumber: number, charOffset: number) {
+        private childFromCharOffset(lineNumberAccumulator: number, relativePosition: number
+            ): { child: LineCollection, childIndex: number, relativePosition: number, lineNumberAccumulator: number } {
             let child: LineCollection;
             let i: number;
             let len: number;
             for (i = 0, len = this.children.length; i < len; i++) {
                 child = this.children[i];
-                if (child.charCount() > charOffset) {
+                if (child.charCount() > relativePosition) {
                     break;
                 }
                 else {
-                    charOffset -= child.charCount();
-                    lineNumber += child.lineCount();
+                    relativePosition -= child.charCount();
+                    lineNumberAccumulator += child.lineCount();
                 }
             }
-            return { child, childIndex: i, charOffset, lineNumber };
+            return { child, childIndex: i, relativePosition, lineNumberAccumulator };
         }
 
         private splitAfter(childIndex: number) {
