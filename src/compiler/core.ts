@@ -1733,7 +1733,7 @@ namespace ts {
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
-            directoryComponents.length--;
+            directoryComponents.pop();
         }
 
         // Find the component that differs
