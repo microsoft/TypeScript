@@ -227,6 +227,7 @@ namespace ts {
                 location = getParseTreeNode(location);
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, escapeLeadingUnderscores(name));
             },
+            getRemainingSwitchCaseTypes,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -11065,6 +11066,15 @@ namespace ts {
                 links.switchTypes = !contains(types, undefined) ? types : emptyArray;
             }
             return links.switchTypes;
+        }
+
+        function getRemainingSwitchCaseTypes(node: SwitchStatement): Type[] | undefined {
+            const type = getTypeOfExpression(node.expression);
+            if (!isLiteralType(type)) return undefined;
+
+            const types = type.flags & TypeFlags.Union ? (type as ts.UnionType).types : [type];
+            const switchTypes = mapDefined(node.caseBlock.clauses, getTypeOfSwitchClause);
+            return types.filter(t => !contains(switchTypes, t));
         }
 
         function eachTypeContainedIn(source: Type, types: Type[]) {
