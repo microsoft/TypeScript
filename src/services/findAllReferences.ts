@@ -593,16 +593,18 @@ namespace ts.FindAllReferences.Core {
             checker.getPropertySymbolOfDestructuringAssignment(<Identifier>location);
     }
 
-    function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol): boolean {
+    function getObjectBindingElementWithoutPropertyName(symbol: Symbol): BindingElement | undefined {
         const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
-        return bindingElement &&
+        if (bindingElement &&
             bindingElement.parent.kind === SyntaxKind.ObjectBindingPattern &&
-            !bindingElement.propertyName;
+            !bindingElement.propertyName) {
+            return bindingElement;
+        }
     }
 
     function getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol: Symbol, checker: TypeChecker): Symbol | undefined {
-        if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
-            const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
+        const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
+        if (bindingElement) {
             const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
             return typeOfPattern && checker.getPropertyOfType(typeOfPattern, unescapeLeadingUnderscores((<Identifier>bindingElement.name).text));
         }
@@ -641,7 +643,7 @@ namespace ts.FindAllReferences.Core {
 
         // If symbol is of object binding pattern element without property name we would want to
         // look for property too and that could be anywhere
-        if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
+        if (getObjectBindingElementWithoutPropertyName(symbol)) {
             return undefined;
         }
 
