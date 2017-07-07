@@ -76,7 +76,7 @@ namespace ts.Completions {
             addRange(entries, getKeywordCompletions(keywordFilters));
         }
 
-        return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
+        return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, entries };
     }
 
     function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>, target: ScriptTarget): CompletionEntry[] {

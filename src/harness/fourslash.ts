@@ -2544,7 +2544,7 @@ namespace FourSlash {
 
             // if there was an explicit match kind specified, then it should be validated.
             if (matchKind !== undefined) {
-                const missingItem = { name: name, kind: kind, searchValue: searchValue, matchKind: matchKind, fileName: fileName, parentName: parentName };
+                const missingItem = { name, kind, searchValue, matchKind, fileName, parentName };
                 this.raiseError(`verifyNavigationItemsListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(items)})`);
             }
         }
@@ -2618,7 +2618,7 @@ namespace FourSlash {
                 }
             }
 
-            const missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
+            const missingItem = { fileName, start, end, isWriteAccess };
             this.raiseError(`verifyOccurrencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(occurrences)})`);
         }
 
@@ -3239,7 +3239,7 @@ ${code}
                             }
 
                             const range: Range = {
-                                fileName: fileName,
+                                fileName,
                                 start: rangeStart.position,
                                 end: (i - 1) - difference,
                                 marker: rangeStart.marker
@@ -3367,7 +3367,7 @@ ${code}
             content: output,
             fileOptions: {},
             version: 0,
-            fileName: fileName
+            fileName,
         };
     }
 
@@ -4198,11 +4198,8 @@ namespace FourSlashInterface {
         }
 
         function getClassification(classificationType: ts.ClassificationTypeNames, text: string, position?: number): Classification {
-            return {
-                classificationType,
-                text: text,
-                textSpan: position === undefined ? undefined : { start: position, end: position + text.length }
-            };
+            const textSpan = position === undefined ? undefined : { start: position, end: position + text.length };
+            return { classificationType, text, textSpan };
         }
     }
 }

@@ -115,7 +115,7 @@ namespace ts.projectSystem {
         for (const typing of installedTypings) {
             dependencies[typing] = "1.0.0";
         }
-        return JSON.stringify({ dependencies: dependencies });
+        return JSON.stringify({ dependencies });
     }
 
     export function getExecutingFilePathFromLibFile(): string {

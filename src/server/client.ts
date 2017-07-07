@@ -184,10 +184,7 @@ namespace ts.server {
         }
 
         getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
-            const args: protocol.ProjectInfoRequestArgs = {
-                file: fileName,
-                needFileNameList: needFileNameList
-            };
+            const args: protocol.ProjectInfoRequestArgs = { file: fileName, needFileNameList };
 
             const request = this.processRequest<protocol.ProjectInfoRequest>(CommandNames.ProjectInfo, args);
             const response = this.processResponse<protocol.ProjectInfoResponse>(request);
@@ -270,7 +267,7 @@ namespace ts.server {
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
                     isCaseSensitive: entry.isCaseSensitive,
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end)
                 };
             });
@@ -304,7 +301,7 @@ namespace ts.server {
                 file: fileName,
                 line: lineOffset.line,
                 offset: lineOffset.offset,
-                key: key
+                key,
             };
 
             // TODO: handle FormatCodeOptions
@@ -332,7 +329,7 @@ namespace ts.server {
                 return {
                     containerKind: ScriptElementKind.unknown,
                     containerName: "",
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     kind: ScriptElementKind.unknown,
                     name: ""
@@ -358,7 +355,7 @@ namespace ts.server {
                 return {
                     containerKind: ScriptElementKind.unknown,
                     containerName: "",
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     kind: ScriptElementKind.unknown,
                     name: ""
@@ -411,7 +408,7 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    fileName: fileName,
+                    fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     isWriteAccess: entry.isWriteAccess,
                     isDefinition: entry.isDefinition,
@@ -456,7 +453,7 @@ namespace ts.server {
                 start: entry.start,
                 length: entry.length,
                 messageText: entry.message,
-                category: category,
+                category,
                 code: entry.code
             };
         }
@@ -483,10 +480,7 @@ namespace ts.server {
                 entry.locs.map((loc: protocol.TextSpan) => {
                     const start = this.lineOffsetToPosition(fileName, loc.start);
                     const end = this.lineOffsetToPosition(fileName, loc.end);
-                    locations.push({
-                        textSpan: ts.createTextSpanFromBounds(start, end),
-                        fileName: fileName
-                    });
+                    locations.push({ textSpan: ts.createTextSpanFromBounds(start, end), fileName, });
                 });
             });
             return this.lastRenameEntry = {
@@ -497,11 +491,11 @@ namespace ts.server {
                 kindModifiers: response.body.info.kindModifiers,
                 localizedErrorMessage: response.body.info.localizedErrorMessage,
                 triggerSpan: ts.createTextSpanFromBounds(position, position),
-                fileName: fileName,
-                position: position,
-                findInStrings: findInStrings,
-                findInComments: findInComments,
-                locations: locations
+                fileName,
+                position,
+                findInStrings,
+                findInComments,
+                locations,
             };
         }
 
@@ -596,10 +590,7 @@ namespace ts.server {
 
             const result: SignatureHelpItems = {
                 items: helpItems.items,
-                applicableSpan: {
-                    start: start,
-                    length: end - start
-                },
+                applicableSpan: { start, length: end - start },
                 selectedItemIndex: helpItems.selectedItemIndex,
                 argumentIndex: helpItems.argumentIndex,
                 argumentCount: helpItems.argumentCount,
@@ -686,7 +677,7 @@ namespace ts.server {
                 startOffset: startLineOffset.offset,
                 endLine: endLineOffset.line,
                 endOffset: endLineOffset.offset,
-                errorCodes: errorCodes,
+                errorCodes,
             };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
@@ -779,10 +770,7 @@ namespace ts.server {
             const end = this.lineOffsetToPosition(fileName, change.end);
 
             return {
-                span: {
-                    start: start,
-                    length: end - start
-                },
+                span: { start, length: end - start },
                 newText: change.newText ? change.newText : ""
             };
         }
@@ -801,10 +789,7 @@ namespace ts.server {
             return response.body.map(entry => {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
-                return {
-                    start: start,
-                    length: end - start,
-                };
+                return { start, length: end - start };
             });
         }
 

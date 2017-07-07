@@ -30,13 +30,9 @@ describe("Colorization", function () {
     function identifier(text: string, position?: number) { return createClassification(text, ts.TokenClass.Identifier, position); }
     function numberLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.NumberLiteral, position); }
     function stringLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.StringLiteral, position); }
-    function finalEndOfLineState(value: number): ClassificationEntry { return { value: value, classification: undefined, position: 0 }; }
-    function createClassification(text: string, tokenClass: ts.TokenClass, position?: number): ClassificationEntry {
-        return {
-            value: text,
-            classification: tokenClass,
-            position: position,
-        };
+    function finalEndOfLineState(value: number): ClassificationEntry { return { value, classification: undefined, position: 0 }; }
+    function createClassification(value: string, classification: ts.TokenClass, position?: number): ClassificationEntry {
+        return { value, classification, position };
     }
 
     function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {

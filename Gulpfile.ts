@@ -669,7 +669,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function(err) {
+            runTestsInParallel(taskConfigsFolder, run, { testTimeout, noColors: colors === " --no-colors " }, function(err) {
                 // last worker clean everything and runs linter in case if there were no errors
                 del(taskConfigsFolder).then(() => {
                     if (!err) {

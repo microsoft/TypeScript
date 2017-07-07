@@ -68,7 +68,7 @@ class TypeWriterWalker {
         this.results.push({
             line: lineAndCharacter.line,
             syntaxKind: node.kind,
-            sourceText: sourceText,
+            sourceText,
             type: typeString,
             symbol: symbolString
         });

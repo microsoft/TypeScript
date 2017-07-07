@@ -389,7 +389,7 @@ namespace ts.server {
                     request_seq: 0,
                     type: "response",
                     command,
-                    body: body,
+                    body,
                     success: true
                 });
             });
@@ -436,7 +436,7 @@ namespace ts.server {
                 request_seq: 0,
                 type: "response",
                 command,
-                body: body,
+                body,
                 success: true
             });
         });

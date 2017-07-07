@@ -271,7 +271,7 @@ namespace ts.GoToDefinition {
             fileName: targetFileName,
             textSpan: createTextSpanFromBounds(0, 0),
             kind: ScriptElementKind.scriptElement,
-            name: name,
+            name,
             containerName: undefined,
             containerKind: undefined
         };

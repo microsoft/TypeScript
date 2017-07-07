@@ -1198,10 +1198,7 @@ namespace ts {
     }
 
     export function displayPart(text: string, kind: SymbolDisplayPartKind): SymbolDisplayPart {
-        return <SymbolDisplayPart>{
-            text: text,
-            kind: SymbolDisplayPartKind[kind]
-        };
+        return { text, kind: SymbolDisplayPartKind[kind] };
     }
 
     export function spacePart() {

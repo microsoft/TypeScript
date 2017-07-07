@@ -151,11 +151,7 @@ namespace ts {
      */
     export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
-        const moduleResolutionState: ModuleResolutionState = {
-            compilerOptions: options,
-            host: host,
-            traceEnabled
-        };
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled };
 
         const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {

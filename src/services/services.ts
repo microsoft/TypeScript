@@ -838,7 +838,7 @@ namespace ts {
                 entry = {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
-                    scriptSnapshot: scriptSnapshot,
+                    scriptSnapshot,
                     scriptKind: getScriptKind(fileName, this.host)
                 };
             }
@@ -1524,12 +1524,8 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const outputFiles: OutputFile[] = [];
 
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
-                outputFiles.push({
-                    name: fileName,
-                    writeByteOrderMark: writeByteOrderMark,
-                    text: data
-                });
+            function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
+                outputFiles.push({ name: fileName, writeByteOrderMark, text });
             }
 
             const customTransformers = host.getCustomTransformers && host.getCustomTransformers();
@@ -1773,25 +1769,14 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = { start, length: end - start };
-            const newLineChar = getNewLineOrDefaultFromHost(host);
+            const newLineCharacter = getNewLineOrDefaultFromHost(host);
 
             let allFixes: CodeAction[] = [];
 
-            forEach(deduplicate(errorCodes), error => {
+            forEach(deduplicate(errorCodes), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-
-                const context = {
-                    errorCode: error,
-                    sourceFile: sourceFile,
-                    span: span,
-                    program: program,
-                    newLineCharacter: newLineChar,
-                    host: host,
-                    cancellationToken: cancellationToken,
-                    rulesProvider: getRuleProvider(formatOptions)
-                };
-
-                const fixes = codefix.getFixes(context);
+                const rulesProvider = getRuleProvider(formatOptions);
+                const fixes = codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
                 if (fixes) {
                     allFixes = allFixes.concat(fixes);
                 }
@@ -1907,11 +1892,7 @@ namespace ts {
                     }
 
                     const message = matchArray[2];
-                    result.push({
-                        descriptor: descriptor,
-                        message: message,
-                        position: matchPosition
-                    });
+                    result.push({ descriptor, message, position: matchPosition });
                 }
             }
 

@@ -325,7 +325,7 @@ namespace ts {
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
-                useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+                useCaseSensitiveFileNames,
                 write(s: string): void {
                     process.stdout.write(s);
                 },
@@ -394,9 +394,7 @@ namespace ts {
                         }
                     );
                 },
-                resolvePath: function(path: string): string {
-                    return _path.resolve(path);
-                },
+                resolvePath: path => _path.resolve(path),
                 fileExists,
                 directoryExists,
                 createDirectory(directoryName: string) {

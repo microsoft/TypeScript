@@ -48,7 +48,7 @@ class Test262BaselineRunner extends RunnerBase {
                 // Emit the results
                 testState = {
                     filename: testFilename,
-                    inputFiles: inputFiles,
+                    inputFiles,
                     compilerResult: undefined,
                 };
 

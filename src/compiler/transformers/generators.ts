@@ -2220,8 +2220,8 @@ namespace ts {
             beginBlock(<LoopBlock>{
                 kind: CodeBlockKind.Loop,
                 isScript: false,
-                breakLabel: breakLabel,
-                continueLabel: continueLabel
+                breakLabel,
+                continueLabel,
             });
             return breakLabel;
         }
@@ -2262,7 +2262,7 @@ namespace ts {
             beginBlock(<SwitchBlock>{
                 kind: CodeBlockKind.Switch,
                 isScript: false,
-                breakLabel: breakLabel
+                breakLabel,
             });
             return breakLabel;
         }
