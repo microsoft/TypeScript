@@ -97,22 +97,20 @@ namespace ts.server {
             }
 
             // path at least length two (root and leaf)
-            let insertionNode = <LineNode>this.startPath[this.startPath.length - 2];
             const leafNode = <LineLeaf>this.startPath[this.startPath.length - 1];
-            const len = lines.length;
 
-            if (len > 0) {
+            if (lines.length > 0) {
                 leafNode.text = lines[0];
 
-                if (len > 1) {
-                    let insertedNodes = <LineCollection[]>new Array(len - 1);
+                if (lines.length > 1) {
+                    let insertedNodes = <LineCollection[]>new Array(lines.length - 1);
                     let startNode = <LineCollection>leafNode;
                     for (let i = 1; i < lines.length; i++) {
                         insertedNodes[i - 1] = new LineLeaf(lines[i]);
                     }
                     let pathIndex = this.startPath.length - 2;
                     while (pathIndex >= 0) {
-                        insertionNode = <LineNode>this.startPath[pathIndex];
+                        const insertionNode = <LineNode>this.startPath[pathIndex];
                         insertedNodes = insertionNode.insertAt(startNode, insertedNodes);
                         pathIndex--;
                         startNode = insertionNode;
@@ -134,6 +132,7 @@ namespace ts.server {
                 }
             }
             else {
+                const insertionNode = <LineNode>this.startPath[this.startPath.length - 2];
                 // no content for leaf node, so delete it
                 insertionNode.remove(leafNode);
                 for (let j = this.startPath.length - 2; j >= 0; j--) {
@@ -281,9 +280,9 @@ namespace ts.server {
         // REVIEW: can optimize by coalescing simple edits
         edit(pos: number, deleteLen: number, insertedText?: string) {
             this.changes.push(new TextChange(pos, deleteLen, insertedText));
-            if ((this.changes.length > ScriptVersionCache.changeNumberThreshold) ||
-                (deleteLen > ScriptVersionCache.changeLengthThreshold) ||
-                (insertedText && (insertedText.length > ScriptVersionCache.changeLengthThreshold))) {
+            if (this.changes.length > ScriptVersionCache.changeNumberThreshold ||
+                deleteLen > ScriptVersionCache.changeLengthThreshold ||
+                insertedText && insertedText.length > ScriptVersionCache.changeLengthThreshold) {
                 this.getSnapshot();
             }
         }
@@ -527,27 +526,27 @@ namespace ts.server {
             }
         }
 
-        static buildTreeFromBottom(nodes: LineCollection[]): LineNode {
-            const nodeCount = Math.ceil(nodes.length / lineCollectionCapacity);
-            const interiorNodes: LineNode[] = [];
+        private static buildTreeFromBottom(nodes: LineCollection[]): LineNode {
+            const interiorNodeCount = Math.ceil(nodes.length / lineCollectionCapacity);
+            const interiorNodes: LineNode[] = new Array(interiorNodeCount);
             let nodeIndex = 0;
-            for (let i = 0; i < nodeCount; i++) {
-                interiorNodes[i] = new LineNode();
+            for (let i = 0; i < interiorNodeCount; i++) {
+                const interiorNode = interiorNodes[i] = new LineNode();
                 let charCount = 0;
                 let lineCount = 0;
                 for (let j = 0; j < lineCollectionCapacity; j++) {
-                    if (nodeIndex < nodes.length) {
-                        interiorNodes[i].add(nodes[nodeIndex]);
-                        charCount += nodes[nodeIndex].charCount();
-                        lineCount += nodes[nodeIndex].lineCount();
-                    }
-                    else {
+                    if (nodeIndex >= nodes.length) {
                         break;
                     }
+
+                    const node = nodes[nodeIndex];
+                    interiorNode.add(node);
+                    charCount += node.charCount();
+                    lineCount += node.lineCount();
                     nodeIndex++;
                 }
-                interiorNodes[i].totalChars = charCount;
-                interiorNodes[i].totalLines = lineCount;
+                interiorNode.totalChars = charCount;
+                interiorNode.totalLines = lineCount;
             }
             if (interiorNodes.length === 1) {
                 return interiorNodes[0];
@@ -583,7 +582,7 @@ namespace ts.server {
     export class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
-        children: LineCollection[] = [];
+        private children: LineCollection[] = [];
 
         isLeaf() {
             return false;
@@ -598,7 +597,7 @@ namespace ts.server {
             }
         }
 
-        execWalk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker, childIndex: number, nodeType: CharRangeSection) {
+        private execWalk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker, childIndex: number, nodeType: CharRangeSection) {
             if (walkFns.pre) {
                 walkFns.pre(rangeStart, rangeLength, this.children[childIndex], this, nodeType);
             }
@@ -614,7 +613,7 @@ namespace ts.server {
             return walkFns.done;
         }
 
-        skipChild(relativeStart: number, relativeLength: number, childIndex: number, walkFns: ILineIndexWalker, nodeType: CharRangeSection) {
+        private skipChild(relativeStart: number, relativeLength: number, childIndex: number, walkFns: ILineIndexWalker, nodeType: CharRangeSection) {
             if (walkFns.pre && (!walkFns.done)) {
                 walkFns.pre(relativeStart, relativeLength, this.children[childIndex], this, nodeType);
                 walkFns.goSubtree = true;
@@ -624,16 +623,14 @@ namespace ts.server {
         walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
             // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars)
             let childIndex = 0;
-            let child = this.children[0];
-            let childCharCount = child.charCount();
+            let childCharCount = this.children[childIndex].charCount();
             // find sub-tree containing start
             let adjustedStart = rangeStart;
             while (adjustedStart >= childCharCount) {
                 this.skipChild(adjustedStart, rangeLength, childIndex, walkFns, CharRangeSection.PreStart);
                 adjustedStart -= childCharCount;
                 childIndex++;
-                child = this.children[childIndex];
-                childCharCount = child.charCount();
+                childCharCount = this.children[childIndex].charCount();
             }
             // Case I: both start and end of range in same subtree
             if ((adjustedStart + rangeLength) <= childCharCount) {
@@ -648,7 +645,7 @@ namespace ts.server {
                 }
                 let adjustedLength = rangeLength - (childCharCount - adjustedStart);
                 childIndex++;
-                child = this.children[childIndex];
+                const child = this.children[childIndex];
                 childCharCount = child.charCount();
                 while (adjustedLength > childCharCount) {
                     if (this.execWalk(0, childCharCount, walkFns, childIndex, CharRangeSection.Mid)) {
@@ -656,8 +653,7 @@ namespace ts.server {
                     }
                     adjustedLength -= childCharCount;
                     childIndex++;
-                    child = this.children[childIndex];
-                    childCharCount = child.charCount();
+                    childCharCount = this.children[childIndex].charCount();
                 }
                 if (adjustedLength > 0) {
                     if (this.execWalk(0, adjustedLength, walkFns, childIndex, CharRangeSection.End)) {
