@@ -649,10 +649,6 @@ namespace ts.server {
                 for (const missingFilePath of missingFilePaths) {
                     if (!this.missingFilesMap.has(missingFilePath)) {
                         const fileWatcher = this.projectService.host.watchFile(missingFilePath, (_filename: string, eventKind: FileWatcherEventKind) => {
-                            // TODO: (sheetalkamat) This needs to be fixed because of the way we create the projects
-                            // Eg. ConfiguredProject and ExternalProject add roots only for existing files
-                            // What this means is that if the file is not present when creating the project
-                            // the program structure will not change because we created wrong program.
                             if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
                                 fileWatcher.close();
                                 this.missingFilesMap.delete(missingFilePath);

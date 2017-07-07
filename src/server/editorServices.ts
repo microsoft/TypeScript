@@ -674,11 +674,6 @@ namespace ts.server {
                 return;
             }
 
-            // TODO: (sheetalkamat) Technically we shouldnt have to do this:
-            // We can report these errors in reload projects or after reload project?
-            const { configFileErrors } = this.convertConfigFileContentToProjectOptions(fileName);
-            this.reportConfigFileDiagnostics(fileName, configFileErrors, fileName);
-
             this.logger.info(`Detected newly added tsconfig file: ${fileName}`);
             this.reloadProjects();
         }
@@ -1262,9 +1257,6 @@ namespace ts.server {
         private reloadConfiguredProject(project: ConfiguredProject) {
             // At this point, there is no reason to not have configFile in the host
 
-            // TODO: (sheetalkamat) configErrors should always be in project and there shouldnt be
-            // any need to return these errors
-
             // note: the returned "success" is true does not mean the "configFileErrors" is empty.
             // because we might have tolerated the errors and kept going. So always return the configFileErrors
             // regardless the "success" here is true or not.
@@ -1273,8 +1265,9 @@ namespace ts.server {
                 // reset project settings to default
                 this.updateNonInferredProject(project, [], fileNamePropertyReader, {}, {}, /*compileOnSave*/ false, configFileErrors);
             }
-
-            return this.updateConfiguredProject(project, projectOptions, configFileErrors);
+            else {
+                this.updateConfiguredProject(project, projectOptions, configFileErrors);
+            }
         }
 
         /**
@@ -1286,7 +1279,7 @@ namespace ts.server {
                 project.setCompilerOptions(projectOptions.compilerOptions);
                 if (!project.languageServiceEnabled) {
                     // language service is already disabled
-                    return configFileErrors;
+                    project.setProjectErrors(configFileErrors);
                 }
                 project.disableLanguageService();
                 project.stopWatchingDirectory();
