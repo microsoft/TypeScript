@@ -66,8 +66,6 @@ namespace ts.projectSystem {
             // only file2 exists - expect error
             host.reloadFS([file2, libFile]);
             {
-                host.triggerFileWatcherCallback(file1.path, FileWatcherEventKind.Deleted);
-                host.triggerFileWatcherCallback(file2.path, FileWatcherEventKind.Created);
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
                 const diags = session.executeCommand(compilerOptionsRequest).response;
                 checkDiagnosticsWithLinePos(diags, ["File '/a/b/app.ts' not found."]);
@@ -76,7 +74,6 @@ namespace ts.projectSystem {
             // both files exist - expect no errors
             host.reloadFS([file1, file2, libFile]);
             {
-                host.triggerFileWatcherCallback(file1.path, FileWatcherEventKind.Created);
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
                 const diags = session.executeCommand(compilerOptionsRequest).response;
                 checkDiagnosticsWithLinePos(diags, []);
@@ -112,7 +109,6 @@ namespace ts.projectSystem {
             checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
 
             host.reloadFS([file1, file2, config, libFile]);
-            host.triggerFileWatcherCallback(file2.path, FileWatcherEventKind.Created);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             diags = session.executeCommand(compilerOptionsRequest).response;
@@ -154,7 +150,6 @@ namespace ts.projectSystem {
             }
             // fix config and trigger watcher
             host.reloadFS([file1, file2, correctConfig]);
-            host.triggerFileWatcherCallback(correctConfig.path, FileWatcherEventKind.Changed);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
@@ -196,7 +191,6 @@ namespace ts.projectSystem {
             }
             // break config and trigger watcher
             host.reloadFS([file1, file2, corruptedConfig]);
-            host.triggerFileWatcherCallback(corruptedConfig.path, FileWatcherEventKind.Changed);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);

@@ -208,7 +208,6 @@ namespace ts.projectSystem {
 
                 file1Consumer1.content = `let y = 10;`;
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer1.path, FileWatcherEventKind.Changed);
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
@@ -225,7 +224,6 @@ namespace ts.projectSystem {
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 // Delete file1Consumer2
                 host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer2.path, FileWatcherEventKind.Deleted);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
             });
 
@@ -242,7 +240,6 @@ namespace ts.projectSystem {
                     content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
-                host.triggerDirectoryWatcherCallback(ts.getDirectoryPath(file1Consumer3.path), file1Consumer3.path);
                 host.runQueuedTimeoutCallbacks();
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
@@ -475,7 +472,6 @@ namespace ts.projectSystem {
 
                 openFilesForSession([referenceFile1], session);
                 host.reloadFS([referenceFile1, configFile]);
-                host.triggerFileWatcherCallback(moduleFile1.path, FileWatcherEventKind.Deleted);
 
                 const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [
