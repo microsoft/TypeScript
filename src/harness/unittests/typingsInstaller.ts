@@ -38,7 +38,7 @@ namespace ts.projectSystem {
     function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
-                host.createFileOrFolder(file, /*createParentDirectory*/ true);
+                host.ensureFileOrFolder(file);
             }
             cb(success);
         });
