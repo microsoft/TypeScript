@@ -8735,11 +8735,12 @@ namespace ts {
             containingMessageChain?: DiagnosticMessageChain): boolean {
 
             let errorInfo: DiagnosticMessageChain;
+            let maybeKeys: string[];
             let sourceStack: Type[];
             let targetStack: Type[];
-            let maybeStack: Map<RelationComparisonResult>[];
-            let expandingFlags: number;
+            let maybeCount = 0;
             let depth = 0;
+            let expandingFlags = 0;
             let overflow = false;
             let isIntersectionConstituent = false;
 
@@ -9107,10 +9108,15 @@ namespace ts {
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
-                if (depth > 0) {
-                    for (let i = 0; i < depth; i++) {
+                if (!maybeKeys) {
+                    maybeKeys = [];
+                    sourceStack = [];
+                    targetStack = [];
+                }
+                else {
+                    for (let i = 0; i < maybeCount; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (maybeStack[i].get(id)) {
+                        if (id === maybeKeys[i]) {
                             return Ternary.Maybe;
                         }
                     }
@@ -9119,16 +9125,11 @@ namespace ts {
                         return Ternary.False;
                     }
                 }
-                else {
-                    sourceStack = [];
-                    targetStack = [];
-                    maybeStack = [];
-                    expandingFlags = 0;
-                }
+                const maybeStart = maybeCount;
+                maybeKeys[maybeCount] = id;
+                maybeCount++;
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
-                maybeStack[depth] = createMap<RelationComparisonResult>();
-                maybeStack[depth].set(id, RelationComparisonResult.Succeeded);
                 depth++;
                 const saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= 1;
@@ -9137,15 +9138,19 @@ namespace ts {
                 expandingFlags = saveExpandingFlags;
                 depth--;
                 if (result) {
-                    const maybeCache = maybeStack[depth];
-                    // If result is definitely true, copy assumptions to global cache, else copy to next level up
-                    const destinationCache = (result === Ternary.True || depth === 0) ? relation : maybeStack[depth - 1];
-                    copyEntries(maybeCache, destinationCache);
+                    if (result === Ternary.True || depth === 0) {
+                        // If result is definitely true, record all maybe keys as having succeeded
+                        for (let i = maybeStart; i < maybeCount; i++) {
+                            relation.set(maybeKeys[i], RelationComparisonResult.Succeeded);
+                        }
+                        maybeCount = maybeStart;
+                    }
                 }
                 else {
-                    // A false result goes straight into global cache (when something is false under assumptions it
-                    // will also be false without assumptions)
+                    // A false result goes straight into global cache (when something is false under
+                    // assumptions it will also be false without assumptions)
                     relation.set(id, reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed);
+                    maybeCount = maybeStart;
                 }
                 return result;
             }
