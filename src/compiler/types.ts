@@ -192,6 +192,7 @@ namespace ts {
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
+        PromisedKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
@@ -986,7 +987,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.PromisedKeyword;
         type: TypeNode;
     }
 
@@ -3157,17 +3158,18 @@ namespace ts {
         Intersection            = 1 << 17,  // Intersection (T & U)
         Index                   = 1 << 18,  // keyof T
         IndexedAccess           = 1 << 19,  // T[K]
+        Promised                = 1 << 20,  // promised T
         /* @internal */
-        FreshLiteral            = 1 << 20,  // Fresh literal type
+        FreshLiteral            = 1 << 21,  // Fresh literal type
         /* @internal */
-        ContainsWideningType    = 1 << 21,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 23,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
-        NonPrimitive            = 1 << 24,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 24,  // Type is or contains object literal type
+        NonPrimitive            = 1 << 25,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 25,  // Jsx attributes type
+        JsxAttributes           = 1 << 26,  // Jsx attributes type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3186,12 +3188,12 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
+        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess | Promised,
         TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive | Promised,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -3313,6 +3315,8 @@ namespace ts {
         resolvedBaseConstraint: Type;
         /* @internal */
         couldContainTypeVariables: boolean;
+        /* @internal */
+        resolvedPromisedType: PromisedType;
     }
 
     export interface UnionType extends UnionOrIntersectionType { }
@@ -3376,9 +3380,8 @@ namespace ts {
 
     /* @internal */
     export interface PromiseOrAwaitableType extends ObjectType, UnionType {
-        promiseTypeOfPromiseConstructor?: Type;
-        promisedTypeOfPromise?: Type;
-        awaitedTypeOfType?: Type;
+        fulfillmentType?: Type;     // Type of `value` parameter of `onfulfilled` callback.
+        promisedType?: Type;        // The "fulfillment type" if a Promise-like, otherwise this type.
     }
 
     export interface TypeVariable extends Type {
@@ -3386,6 +3389,8 @@ namespace ts {
         resolvedBaseConstraint: Type;
         /* @internal */
         resolvedIndexType: IndexType;
+        /* @internal */
+        resolvedPromisedType: PromisedType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3413,6 +3418,11 @@ namespace ts {
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends Type {
         type: TypeVariable | UnionOrIntersectionType;
+    }
+
+    // promised T types (TypeFlags.Promised)
+    export interface PromisedType extends Type {
+        type: TypeVariable;
     }
 
     export const enum SignatureKind {

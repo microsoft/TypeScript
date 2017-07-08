@@ -627,15 +627,15 @@ namespace ts {
         return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
     }
 
-    export function createTypeOperatorNode(type: TypeNode) {
+    export function createTypeOperatorNode(type: TypeNode, operator: SyntaxKind.KeyOfKeyword | SyntaxKind.PromisedKeyword) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
-        node.operator = SyntaxKind.KeyOfKeyword;
+        node.operator = operator;
         node.type = parenthesizeElementTypeMember(type);
         return node;
     }
 
     export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
-        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
+        return node.type !== type ? updateNode(createTypeOperatorNode(type, node.operator), node) : node;
     }
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
