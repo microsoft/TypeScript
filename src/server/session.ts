@@ -49,7 +49,7 @@ namespace ts.server {
 
     interface FileStart {
         file: string;
-        start: ILineInfo;
+        start: protocol.Location;
     }
 
     function compareNumber(a: number, b: number) {
@@ -84,15 +84,15 @@ namespace ts.server {
         };
     }
 
-    function convertToILineInfo(lineAndCharacter: LineAndCharacter): ILineInfo {
+    function convertToLocation(lineAndCharacter: LineAndCharacter): protocol.Location {
         return { line: lineAndCharacter.line + 1, offset: lineAndCharacter.character + 1 };
     }
 
     function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
     function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: false): protocol.Diagnostic;
     function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
-        const start = diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start));
-        const end = diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length));
+        const start = diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start));
+        const end = diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length));
         const text = ts.flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
         const category = DiagnosticCategory[diag.category].toLowerCase();
@@ -555,8 +555,8 @@ namespace ts.server {
                 length: d.length,
                 category: DiagnosticCategory[d.category].toLowerCase(),
                 code: d.code,
-                startLocation: d.file && convertToILineInfo(getLineAndCharacterOfPosition(d.file, d.start)),
-                endLocation: d.file && convertToILineInfo(getLineAndCharacterOfPosition(d.file, d.start + d.length))
+                startLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start)),
+                endLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start + d.length))
             });
         }
 
@@ -1131,32 +1131,29 @@ namespace ts.server {
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
             if ((args.key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
-                const lineInfo = scriptInfo.getLineInfo(args.line);
-                if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
-                    const lineText = lineInfo.leaf.text;
-                    if (lineText.search("\\S") < 0) {
-                        const preferredIndent = project.getLanguageService(/*ensureSynchronized*/ false).getIndentationAtPosition(file, position, formatOptions);
-                        let hasIndent = 0;
-                        let i: number, len: number;
-                        for (i = 0, len = lineText.length; i < len; i++) {
-                            if (lineText.charAt(i) === " ") {
-                                hasIndent++;
-                            }
-                            else if (lineText.charAt(i) === "\t") {
-                                hasIndent += formatOptions.tabSize;
-                            }
-                            else {
-                                break;
-                            }
+                const { lineText, absolutePosition } = scriptInfo.getLineInfo(args.line);
+                if (lineText && lineText.search("\\S") < 0) {
+                    const preferredIndent = project.getLanguageService(/*ensureSynchronized*/ false).getIndentationAtPosition(file, position, formatOptions);
+                    let hasIndent = 0;
+                    let i: number, len: number;
+                    for (i = 0, len = lineText.length; i < len; i++) {
+                        if (lineText.charAt(i) === " ") {
+                            hasIndent++;
                         }
-                        // i points to the first non whitespace character
-                        if (preferredIndent !== hasIndent) {
-                            const firstNoWhiteSpacePosition = lineInfo.offset + i;
-                            edits.push({
-                                span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
-                                newText: formatting.getIndentationString(preferredIndent, formatOptions)
-                            });
+                        else if (lineText.charAt(i) === "\t") {
+                            hasIndent += formatOptions.tabSize;
                         }
+                        else {
+                            break;
+                        }
+                    }
+                    // i points to the first non whitespace character
+                    if (preferredIndent !== hasIndent) {
+                        const firstNoWhiteSpacePosition = absolutePosition + i;
+                        edits.push({
+                            span: ts.createTextSpanFromBounds(absolutePosition, firstNoWhiteSpacePosition),
+                            newText: formatting.getIndentationString(preferredIndent, formatOptions)
+                        });
                     }
                 }
             }
@@ -1514,7 +1511,7 @@ namespace ts.server {
 
             if (simplifiedResult) {
                 const file = result.renameFilename;
-                let location: ILineInfo | undefined  = undefined;
+                let location: protocol.Location | undefined;
                 if (file !== undefined && result.renameLocation !== undefined) {
                     const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(file));
                     location = renameScriptInfo.positionToLineOffset(result.renameLocation);
