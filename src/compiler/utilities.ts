@@ -1619,7 +1619,7 @@ namespace ts {
     }
 
     export function isRestParameter(node: ParameterDeclaration) {
-        if (node && (node.flags & NodeFlags.JavaScriptFile)) {
+        if (isInJavaScriptFile(node)) {
             if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
                 forEach(getJSDocParameterTags(node),
                         t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
@@ -2743,7 +2743,7 @@ namespace ts {
         if (node.typeParameters) {
             return node.typeParameters;
         }
-        if (node.flags & NodeFlags.JavaScriptFile) {
+        if (isInJavaScriptFile(node)) {
             const templateTag = getJSDocTemplateTag(node);
             return templateTag && templateTag.typeParameters;
         }
