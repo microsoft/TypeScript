@@ -1,0 +1,19 @@
+=== /b.ts ===
+import a = require("./a");
+>a : typeof a
+
+a.x;
+>a.x : number
+>a : typeof a
+>x : number
+
+=== /a.d.ts ===
+declare namespace a {
+>a : typeof a
+
+    export const x: number;
+>x : number
+}
+export = a;
+>a : typeof a
+
