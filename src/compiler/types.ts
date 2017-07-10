@@ -679,7 +679,7 @@ namespace ts {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
-        name: BindingName;                  // Declared parameter name
+        name?: BindingName;                 // Declared parameter name. Missing if this is a parameter in a JSDocFunctionType.
         questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
@@ -767,7 +767,7 @@ namespace ts {
     export interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
+        name?: DeclarationName; // May be missing for ParameterDeclaration, see comment there
         questionToken?: QuestionToken;
         type?: TypeNode;
         initializer?: Expression;
