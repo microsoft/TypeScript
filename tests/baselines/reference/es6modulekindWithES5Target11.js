@@ -16,9 +16,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var C = (function () {
-    var C = C_1 = function C() {
+    function C() {
         this.p = 1;
-    };
+    }
+    C_1 = C;
     C.x = function () { return C_1.y; };
     C.prototype.method = function () { };
     C.y = 1;

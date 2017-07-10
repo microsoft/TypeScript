@@ -8,7 +8,7 @@
 ////    export var x: number;
 ////}
 ////Foo/*c1*/; // should get "x", "prototype"
-////var s: Foo/*c2*/; // should get "x" and "prototype"
+////var s: Foo/*c2*/; // no types, in Foo, so shouldnt have anything
 ////var f = new Foo();
 ////f/*c3*/;
 
@@ -20,9 +20,7 @@ verify.completionListContains("staticMethod");
 
 goTo.marker("c2");
 edit.insert(".");
-verify.completionListContains("x");
-verify.completionListContains("staticMethod");
-verify.completionListContains("prototype");
+verify.completionListIsEmpty();
 
 goTo.marker("c3");
 edit.insert(".");

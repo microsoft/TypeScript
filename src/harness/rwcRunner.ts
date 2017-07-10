@@ -22,14 +22,14 @@ namespace RWC {
     }
 
     function isTsConfigFile(file: { path: string }): boolean {
-        const tsConfigFileName = "tsconfig.json";
-        return file.path.substr(file.path.length - tsConfigFileName.length).toLowerCase() === tsConfigFileName;
+        return file.path.indexOf("tsconfig") !== -1 && file.path.indexOf("json") !== -1;
     }
 
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
             let inputFiles: Harness.Compiler.TestFile[] = [];
             let otherFiles: Harness.Compiler.TestFile[] = [];
+            let tsconfigFiles: Harness.Compiler.TestFile[] = [];
             let compilerResult: Harness.Compiler.CompilerResult;
             let compilerOptions: ts.CompilerOptions;
             const baselineOpts: Harness.Baseline.BaselineOptions = {
@@ -44,6 +44,7 @@ namespace RWC {
                 // Therefore we have to clean out large objects after the test is done.
                 inputFiles = [];
                 otherFiles = [];
+                tsconfigFiles = [];
                 compilerResult = undefined;
                 compilerOptions = undefined;
                 currentDirectory = undefined;
@@ -74,16 +75,18 @@ namespace RWC {
                     const tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
                     if (tsconfigFile) {
                         const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
-                        const parsedTsconfigFileContents = ts.parseConfigFileTextToJson(tsconfigFile.path, tsconfigFileContents.content);
+                        tsconfigFiles.push({ unitName: tsconfigFile.path, content: tsconfigFileContents.content });
+                        const parsedTsconfigFileContents = ts.parseJsonText(tsconfigFile.path, tsconfigFileContents.content);
                         const configParseHost: ts.ParseConfigHost = {
                             useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                             fileExists: Harness.IO.fileExists,
                             readDirectory: Harness.IO.readDirectory,
                             readFile: Harness.IO.readFile
                         };
-                        const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
+                        const configParseResult = ts.parseJsonSourceFileConfigFileContent(parsedTsconfigFileContents, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
                         opts.options = ts.extend(opts.options, configParseResult.options);
+                        ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
                     // Load the files
@@ -198,8 +201,8 @@ namespace RWC {
                         return null;
                     }
                     // Do not include the library in the baselines to avoid noise
-                    const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
-                    const errors = compilerResult.errors.filter(e => e.file && !Harness.isDefaultLibraryFile(e.file.fileName));
+                    const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
+                    const errors = compilerResult.errors.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.getErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
             });
@@ -209,16 +212,16 @@ namespace RWC {
             it("has the expected errors in generated declaration files", () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
                     Harness.Baseline.runBaseline(`${baseName}.dts.errors.txt`, () => {
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
-
-                        if (declFileCompilationResult.declResult.errors.length === 0) {
+                        if (compilerResult.errors.length === 0) {
                             return null;
                         }
 
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
+
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
                             Harness.IO.newLine() + Harness.IO.newLine() +
-                            Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                            Harness.Compiler.getErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                     }, baselineOpts);
                 }
             });

@@ -514,14 +514,14 @@ namespace ts {
 
         function visitImportCallExpression(node: ImportCall): Expression {
             switch (compilerOptions.module) {
-                case ModuleKind.CommonJS:
-                    return transformImportCallExpressionCommonJS(node);
                 case ModuleKind.AMD:
                     return transformImportCallExpressionAMD(node);
                 case ModuleKind.UMD:
                     return transformImportCallExpressionUMD(node);
+                case ModuleKind.CommonJS:
+                default:
+                    return transformImportCallExpressionCommonJS(node);
             }
-            Debug.fail("All supported module kind in this transformation step should have been handled");
         }
 
         function transformImportCallExpressionUMD(node: ImportCall): Expression {
@@ -1225,7 +1225,7 @@ namespace ts {
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
             const name = getDeclarationName(decl);
-            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(name.text);
+            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.text));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);

@@ -1,12 +1,28 @@
-tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,15): error TS2453: The type argument for type parameter 'V' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'boolean' is not a valid type argument because it is not a supertype of candidate 'number'.
+tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,19): error TS2345: Argument of type '([string, true] | [string, 0])[]' is not assignable to parameter of type 'Iterable<[string, boolean]>'.
+  Types of property '[Symbol.iterator]' are incompatible.
+    Type '() => IterableIterator<[string, true] | [string, 0]>' is not assignable to type '() => Iterator<[string, boolean]>'.
+      Type 'IterableIterator<[string, true] | [string, 0]>' is not assignable to type 'Iterator<[string, boolean]>'.
+        Types of property 'next' are incompatible.
+          Type '(value?: any) => IteratorResult<[string, true] | [string, 0]>' is not assignable to type '(value?: any) => IteratorResult<[string, boolean]>'.
+            Type 'IteratorResult<[string, true] | [string, 0]>' is not assignable to type 'IteratorResult<[string, boolean]>'.
+              Type '[string, true] | [string, 0]' is not assignable to type '[string, boolean]'.
+                Type '[string, 0]' is not assignable to type '[string, boolean]'.
+                  Type '0' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of39.ts (1 errors) ====
     var map = new Map([["", true], ["", 0]]);
-                  ~~~
-!!! error TS2453: The type argument for type parameter 'V' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'boolean' is not a valid type argument because it is not a supertype of candidate 'number'.
+                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '([string, true] | [string, 0])[]' is not assignable to parameter of type 'Iterable<[string, boolean]>'.
+!!! error TS2345:   Types of property '[Symbol.iterator]' are incompatible.
+!!! error TS2345:     Type '() => IterableIterator<[string, true] | [string, 0]>' is not assignable to type '() => Iterator<[string, boolean]>'.
+!!! error TS2345:       Type 'IterableIterator<[string, true] | [string, 0]>' is not assignable to type 'Iterator<[string, boolean]>'.
+!!! error TS2345:         Types of property 'next' are incompatible.
+!!! error TS2345:           Type '(value?: any) => IteratorResult<[string, true] | [string, 0]>' is not assignable to type '(value?: any) => IteratorResult<[string, boolean]>'.
+!!! error TS2345:             Type 'IteratorResult<[string, true] | [string, 0]>' is not assignable to type 'IteratorResult<[string, boolean]>'.
+!!! error TS2345:               Type '[string, true] | [string, 0]' is not assignable to type '[string, boolean]'.
+!!! error TS2345:                 Type '[string, 0]' is not assignable to type '[string, boolean]'.
+!!! error TS2345:                   Type '0' is not assignable to type 'boolean'.
     for (var [k, v] of map) {
         k;
         v;

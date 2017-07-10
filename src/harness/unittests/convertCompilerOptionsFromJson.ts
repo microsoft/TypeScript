@@ -4,6 +4,11 @@
 namespace ts {
     describe("convertCompilerOptionsFromJson", () => {
         function assertCompilerOptions(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
+            assertCompilerOptionsWithJson(json, configFileName, expectedResult);
+            assertCompilerOptionsWithJsonNode(json, configFileName, expectedResult);
+        }
+
+        function assertCompilerOptionsWithJson(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
             const { options: actualCompilerOptions, errors: actualErrors} = convertCompilerOptionsFromJson(json["compilerOptions"], "/apath/", configFileName);
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
@@ -18,6 +23,34 @@ namespace ts {
                 assert.equal(actualError.code, expectedError.code);
                 assert.equal(actualError.category, expectedError.category);
                 assert.equal(actualError.messageText, expectedError.messageText);
+            }
+        }
+
+        function assertCompilerOptionsWithJsonNode(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
+            const fileText = JSON.stringify(json);
+            const result = parseJsonText(configFileName, fileText);
+            assert(!result.parseDiagnostics.length);
+            assert(!!result.endOfFileToken);
+            const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
+            const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
+            expectedResult.compilerOptions["configFilePath"] = configFileName;
+
+            const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
+            const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
+            assert.equal(parsedCompilerOptions, expectedCompilerOptions);
+            assert.equal(actualCompilerOptions.configFile, result);
+
+            const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+            const expectedErrors = expectedResult.errors;
+            assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
+            for (let i = 0; i < actualErrors.length; i++) {
+                const actualError = actualErrors[i];
+                const expectedError = expectedErrors[i];
+                assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
+                assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
+                assert(actualError.file);
+                assert(actualError.start);
+                assert(actualError.length);
             }
         }
 
