@@ -3975,6 +3975,8 @@ namespace ts {
         resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
         failedLookupLocations: string[];
+        /*@internal*/
+        isInvalidated?: boolean;
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -3987,6 +3989,8 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
         failedLookupLocations: string[];
+        /*@internal*/
+        isInvalidated?: boolean;
     }
 
     export interface CompilerHost extends ModuleResolutionHost {

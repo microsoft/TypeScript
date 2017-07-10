@@ -3,6 +3,7 @@
 /// <reference path="scriptInfo.ts" />
 
 namespace ts.server {
+    type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
         private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
@@ -62,7 +63,7 @@ namespace ts.server {
             return collected;
         }
 
-        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
+        private resolveNamesWithLocalCache<T extends NameResolutionWithFailedLookupLocations, R>(
             names: string[],
             containingFile: string,
             cache: Map<Map<T>>,
@@ -77,7 +78,6 @@ namespace ts.server {
             const newResolutions: Map<T> = createMap<T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
-            const lastDeletedFileName = this.project.projectService.lastDeletedFile && this.project.projectService.lastDeletedFile.fileName;
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
@@ -112,7 +112,7 @@ namespace ts.server {
                 if (oldResolution === newResolution) {
                     return true;
                 }
-                if (!oldResolution || !newResolution) {
+                if (!oldResolution || !newResolution || oldResolution.isInvalidated) {
                     return false;
                 }
                 const oldResult = getResult(oldResolution);
@@ -127,13 +127,13 @@ namespace ts.server {
             }
 
             function moduleResolutionIsValid(resolution: T): boolean {
-                if (!resolution) {
+                if (!resolution || resolution.isInvalidated) {
                     return false;
                 }
 
                 const result = getResult(resolution);
                 if (result) {
-                    return getResultFileName(result) !== lastDeletedFileName;
+                    return true;
                 }
 
                 // consider situation if we have no candidate locations as valid resolution.
@@ -234,8 +234,34 @@ namespace ts.server {
         }
 
         notifyFileRemoved(info: ScriptInfo) {
-            this.resolvedModuleNames.delete(info.path);
-            this.resolvedTypeReferenceDirectives.delete(info.path);
+            this.invalidateResolutionOfDeletedFile(info, this.resolvedModuleNames,
+                m => m.resolvedModule, r => r.resolvedFileName);
+            this.invalidateResolutionOfDeletedFile(info, this.resolvedTypeReferenceDirectives,
+                m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName);
+        }
+
+        private invalidateResolutionOfDeletedFile<T extends NameResolutionWithFailedLookupLocations, R>(
+            deletedInfo: ScriptInfo,
+            cache: Map<Map<T>>,
+            getResult: (s: T) => R,
+            getResultFileName: (result: R) => string | undefined) {
+            cache.forEach((value, path) => {
+                if (path === deletedInfo.path) {
+                    cache.delete(path);
+                }
+                else if (value) {
+                    value.forEach((resolution) => {
+                        if (resolution && !resolution.isInvalidated) {
+                            const result = getResult(resolution);
+                            if (result) {
+                                if (getResultFileName(result) === deletedInfo.path) {
+                                    resolution.isInvalidated = true;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
         }
 
         setCompilationSettings(opt: ts.CompilerOptions) {
