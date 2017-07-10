@@ -4339,7 +4339,7 @@ namespace ts {
      */
     export type Visitor = (node: Node) => VisitResult<Node>;
 
-    export type VisitResult<T extends Node> = T | T[];
+    export type VisitResult<T extends Node> = T | T[] | undefined;
 
     export interface Printer {
         /**
