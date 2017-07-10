@@ -700,10 +700,10 @@ namespace ts {
         return result;
     }
 
-    export function sum<K extends string>(array: { [x in K]: number }[], prop: K): number {
+    export function sum<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
         let result = 0;
         for (const v of array) {
-            result += v[prop];
+            result += (v[prop] as number);
         }
         return result;
     }
