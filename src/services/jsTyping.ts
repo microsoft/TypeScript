@@ -29,8 +29,6 @@ namespace ts.JsTyping {
     // that we are confident require typings
     let safeList: Map<string>;
 
-    const EmptySafeList: Map<string> = createMap<string>();
-
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
         "buffer", "querystring", "events", "http", "cluster",
@@ -177,16 +175,14 @@ namespace ts.JsTyping {
          * @param fileNames are the names for source files in the project
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
-            if (safeList !== EmptySafeList) {
-                for (const j of fileNames) {
-                    if (!hasJavaScriptFileExtension(j)) continue;
+            for (const j of fileNames) {
+                if (!hasJavaScriptFileExtension(j)) continue;
 
-                    const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
-                    const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
-                    const safe = safeList.get(cleanedTypingName);
-                    if (safe !== undefined) {
-                        addInferredTyping(safe);
-                    }
+                const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
+                const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+                const safe = safeList.get(cleanedTypingName);
+                if (safe !== undefined) {
+                    addInferredTyping(safe);
                 }
             }
 
