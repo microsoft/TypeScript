@@ -87,9 +87,7 @@ namespace ts.codefix {
                     case SyntaxKind.ImportSpecifier:
                         const namedImports = <NamedImports>parent.parent;
                         if (namedImports.elements.length === 1) {
-                            // Only 1 import and it is unused. So the entire declaration should be removed.
-                            const importSpec = getAncestor(identifier, SyntaxKind.ImportDeclaration);
-                            return [deleteNode(importSpec)];
+                            return deleteNamedImportBinding(namedImports);
                         }
                         else {
                             // delete import specifier
@@ -100,7 +98,7 @@ namespace ts.codefix {
                     // or "'import {a, b as ns} from './file'"
                     case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
                         const importClause = <ImportClause>parent;
-                        if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
+                        if (!importClause.namedBindings) { // |import d from './file'|
                             const importDecl = getAncestor(importClause, SyntaxKind.ImportDeclaration);
                             return [deleteNode(importDecl)];
                         }
@@ -118,22 +116,31 @@ namespace ts.codefix {
                         }
 
                     case SyntaxKind.NamespaceImport:
-                        const namespaceImport = <NamespaceImport>parent;
-                        if (namespaceImport.name === identifier && !(<ImportClause>namespaceImport.parent).name) {
-                            const importDecl = getAncestor(namespaceImport, SyntaxKind.ImportDeclaration);
-                            return [deleteNode(importDecl)];
-                        }
-                        else {
-                            const previousToken = getTokenAtPosition(sourceFile, namespaceImport.pos - 1, /*includeJsDocComment*/ false);
-                            if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
-                                const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
-                                return [deleteRange({ pos: startPosition, end: namespaceImport.end })];
-                            }
-                            return [deleteRange(namespaceImport)];
-                        }
+                        return deleteNamedImportBinding(<NamespaceImport>parent);
 
                     default:
                         return [deleteDefault()];
+                }
+            }
+
+            function deleteNamedImportBinding(namedBindings: NamedImportBindings): CodeAction[] | undefined {
+                if ((<ImportClause>namedBindings.parent).name) {
+                    // Delete named imports while preserving the default import
+                    // import d|, * as ns| from './file'
+                    // import d|, { a }| from './file'
+                    const previousToken = getTokenAtPosition(sourceFile, namedBindings.pos - 1, /*includeJsDocComment*/ false);
+                    if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
+                        const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
+                        return [deleteRange({ pos: startPosition, end: namedBindings.end })];
+                    }
+                    return undefined;
+                }
+                else {
+                    // Delete the entire import declaration
+                    // |import * as ns from './file'|
+                    // |import { a } from './file'|
+                    const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration);
+                    return [deleteNode(importDecl)];
                 }
             }
 
