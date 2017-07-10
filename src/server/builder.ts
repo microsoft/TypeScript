@@ -84,13 +84,13 @@ namespace ts.server {
          * NOTE: this field is created on demand and should not be accessed directly.
          * Use 'getFileInfos' instead.
          */
-        private fileInfos_doNotAccessDirectly: FileMap<T>;
+        private fileInfos_doNotAccessDirectly: Map<T>;
 
         constructor(public readonly project: Project, private ctor: { new (scriptInfo: ScriptInfo, project: Project): T }) {
         }
 
         private getFileInfos() {
-            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createFileMap<T>());
+            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createMap<T>());
         }
 
         protected hasFileInfos() {
@@ -117,7 +117,7 @@ namespace ts.server {
         }
 
         protected getFileInfoPaths(): Path[] {
-            return this.getFileInfos().getKeys();
+            return arrayFrom(this.getFileInfos().keys() as Iterator<Path>);
         }
 
         protected setFileInfo(path: Path, info: T) {
@@ -125,11 +125,11 @@ namespace ts.server {
         }
 
         protected removeFileInfo(path: Path) {
-            this.getFileInfos().remove(path);
+            this.getFileInfos().delete(path);
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.getFileInfos().forEachValue((_path, value) => action(value));
+            this.getFileInfos().forEach(action);
         }
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];

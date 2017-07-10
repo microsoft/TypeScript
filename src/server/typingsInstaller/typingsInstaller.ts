@@ -390,7 +390,7 @@ namespace ts.server.typingsInstaller {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
                     if (!isInvoked) {
-                        this.sendResponse({ projectName: projectName, kind: server.ActionInvalidate });
+                        this.sendResponse({ projectName, kind: server.ActionInvalidate });
                         isInvoked = true;
                     }
                 }, /*pollingInterval*/ 2000);
@@ -435,5 +435,4 @@ namespace ts.server.typingsInstaller {
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
-    const versionMajorMinor = version.split(".").slice(0, 2).join(".");
 }

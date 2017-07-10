@@ -343,7 +343,7 @@ namespace ts.server {
         /**
          * Container of all known scripts
          */
-        private readonly filenameToScriptInfo = createFileMap<ScriptInfo>();
+        private readonly filenameToScriptInfo = createMap<ScriptInfo>();
         /**
          * maps external project file name to list of config files that were the part of this project
          */
@@ -568,7 +568,7 @@ namespace ts.server {
                     if (info.containingProjects.length === 0) {
                         // Orphan script info, remove it as we can always reload it on next open
                         info.stopWatcher();
-                        this.filenameToScriptInfo.remove(info.path);
+                        this.filenameToScriptInfo.delete(info.path);
                     }
                     else {
                         // file has been changed which might affect the set of referenced files in projects that include
@@ -588,7 +588,7 @@ namespace ts.server {
             // TODO: handle isOpen = true case
 
             if (!info.isScriptOpen()) {
-                this.filenameToScriptInfo.remove(info.path);
+                this.filenameToScriptInfo.delete(info.path);
                 this.lastDeletedFile = info;
 
                 // capture list of projects since detachAllProjects will wipe out original list
@@ -852,14 +852,13 @@ namespace ts.server {
         }
 
         private deleteOrphanScriptInfoNotInAnyProject() {
-            for (const path of this.filenameToScriptInfo.getKeys()) {
-                const info = this.filenameToScriptInfo.get(path);
+            this.filenameToScriptInfo.forEach(info => {
                 if (!info.isScriptOpen() && info.containingProjects.length === 0) {
                     // if there are not projects that include this script info - delete it
                     info.stopWatcher();
-                    this.filenameToScriptInfo.remove(info.path);
+                    this.filenameToScriptInfo.delete(info.path);
                 }
-            }
+            });
         }
 
         /**

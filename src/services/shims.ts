@@ -467,7 +467,7 @@ namespace ts {
         }
     }
 
-    export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
+    export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost, JsTyping.TypingResolutionHost {
 
         public directoryExists: (directoryName: string) => boolean;
         public realpath: (path: string) => string;
@@ -484,33 +484,17 @@ namespace ts {
         }
 
         public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[], depth?: number): string[] {
-            // Wrap the API changes for 2.0 release. This try/catch
-            // should be removed once TypeScript 2.0 has shipped.
-            try {
-                const pattern = getFileMatcherPatterns(rootDir, exclude, include,
-                    this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
-                return JSON.parse(this.shimHost.readDirectory(
-                    rootDir,
-                    JSON.stringify(extensions),
-                    JSON.stringify(pattern.basePaths),
-                    pattern.excludePattern,
-                    pattern.includeFilePattern,
-                    pattern.includeDirectoryPattern,
-                    depth
-                ));
-            }
-            catch (e) {
-                const results: string[] = [];
-                for (const extension of extensions) {
-                    for (const file of this.readDirectoryFallback(rootDir, extension, exclude))
-                    {
-                        if (!contains(results, file)) {
-                            results.push(file);
-                        }
-                    }
-                }
-                return results;
-            }
+            const pattern = getFileMatcherPatterns(rootDir, exclude, include,
+                this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+            return JSON.parse(this.shimHost.readDirectory(
+                rootDir,
+                JSON.stringify(extensions),
+                JSON.stringify(pattern.basePaths),
+                pattern.excludePattern,
+                pattern.includeFilePattern,
+                pattern.includeDirectoryPattern,
+                depth
+            ));
         }
 
         public fileExists(fileName: string): boolean {
@@ -519,10 +503,6 @@ namespace ts {
 
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
-        }
-
-        private readDirectoryFallback(rootDir: string, extension: string, exclude: string[]) {
-            return JSON.parse(this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude)));
         }
 
         public getDirectories(path: string): string[] {
