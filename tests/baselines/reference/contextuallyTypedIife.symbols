@@ -81,23 +81,23 @@
 
 // destructuring parameters (with defaults too!)
 (({ q }) => q)({ q : 13 });
->q : Symbol(q, Decl(contextuallyTypedIife.ts, 22, 3))
+>q : Symbol(q, Decl(contextuallyTypedIife.ts, 22, 16))
 >q : Symbol(q, Decl(contextuallyTypedIife.ts, 22, 3))
 >q : Symbol(q, Decl(contextuallyTypedIife.ts, 22, 16))
 
 (({ p = 14 }) => p)({ p : 15 });
->p : Symbol(p, Decl(contextuallyTypedIife.ts, 23, 3))
+>p : Symbol(p, Decl(contextuallyTypedIife.ts, 23, 21))
 >p : Symbol(p, Decl(contextuallyTypedIife.ts, 23, 3))
 >p : Symbol(p, Decl(contextuallyTypedIife.ts, 23, 21))
 
 (({ r = 17 } = { r: 18 }) => r)({r : 19});
->r : Symbol(r, Decl(contextuallyTypedIife.ts, 24, 3))
+>r : Symbol(r, Decl(contextuallyTypedIife.ts, 24, 33))
 >r : Symbol(r, Decl(contextuallyTypedIife.ts, 24, 16))
 >r : Symbol(r, Decl(contextuallyTypedIife.ts, 24, 3))
 >r : Symbol(r, Decl(contextuallyTypedIife.ts, 24, 33))
 
 (({ u = 22 } = { u: 23 }) => u)();
->u : Symbol(u, Decl(contextuallyTypedIife.ts, 25, 3))
+>u : Symbol(u, Decl(contextuallyTypedIife.ts, 25, 16))
 >u : Symbol(u, Decl(contextuallyTypedIife.ts, 25, 16))
 >u : Symbol(u, Decl(contextuallyTypedIife.ts, 25, 3))
 

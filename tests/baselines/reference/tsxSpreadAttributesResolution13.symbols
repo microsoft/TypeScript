@@ -47,7 +47,7 @@ interface AnotherComponentProps {
 
 function ChildComponent({ property1 }: AnotherComponentProps) {
 >ChildComponent : Symbol(ChildComponent, Decl(file.tsx, 21, 1))
->property1 : Symbol(property1, Decl(file.tsx, 23, 25))
+>property1 : Symbol(AnotherComponentProps.property1, Decl(file.tsx, 19, 33))
 >AnotherComponentProps : Symbol(AnotherComponentProps, Decl(file.tsx, 17, 1))
 
     return (

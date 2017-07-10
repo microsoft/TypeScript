@@ -13,7 +13,7 @@ var rest1: { y: number, w: string, z: string };
 >z : Symbol(z, Decl(restIntersection.ts, 2, 34))
 
 var {x, ...rest1 } = intersection;
->x : Symbol(x, Decl(restIntersection.ts, 3, 5))
+>x : Symbol(x, Decl(restIntersection.ts, 0, 19))
 >rest1 : Symbol(rest1, Decl(restIntersection.ts, 2, 3), Decl(restIntersection.ts, 3, 7))
 >intersection : Symbol(intersection, Decl(restIntersection.ts, 0, 3))
 

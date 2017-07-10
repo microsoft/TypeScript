@@ -24,11 +24,11 @@ var x, y, z;
 if (true) {
     let { x: x } = { x: 0 };
 >x : Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 9, 20))
->x : Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 9, 9))
+>x : Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 9, 20))
 >x : Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 9, 20))
 
     let { y } = { y: 0 };
->y : Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 10, 9))
+>y : Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 10, 17))
 >y : Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 10, 17))
 
     let z;

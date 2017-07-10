@@ -47,7 +47,7 @@ var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
 >nested2 : Symbol(nested2, Decl(objectRestAssignment.ts, 11, 11))
 >y : Symbol(y, Decl(objectRestAssignment.ts, 11, 25))
 >b : Symbol(b, Decl(objectRestAssignment.ts, 8, 47))
->z : Symbol(z, Decl(objectRestAssignment.ts, 11, 37))
+>z : Symbol(z, Decl(objectRestAssignment.ts, 8, 52))
 >c : Symbol(c, Decl(objectRestAssignment.ts, 11, 40))
 >rest2 : Symbol(rest2, Decl(objectRestAssignment.ts, 11, 48))
 >overEmit : Symbol(overEmit, Decl(objectRestAssignment.ts, 8, 3))

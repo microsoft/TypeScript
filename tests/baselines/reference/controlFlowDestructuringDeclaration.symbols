@@ -65,7 +65,7 @@ function f4() {
 >f4 : Symbol(f4, Decl(controlFlowDestructuringDeclaration.ts, 23, 1))
 
     let { x }: { x: string | number } = { x: 1 };
->x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 26, 9))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 26, 16))
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 26, 16))
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 26, 41))
 
@@ -73,7 +73,7 @@ function f4() {
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 26, 9))
 
     let { y }: { y: string | undefined } = { y: "" };
->y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 28, 9))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 28, 16))
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 28, 16))
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 28, 44))
 
@@ -81,7 +81,7 @@ function f4() {
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 28, 9))
 
     let { z = "" }: { z: string | undefined } = { z: undefined };
->z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 30, 9))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 30, 21))
 >z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 30, 21))
 >z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 30, 49))
 >undefined : Symbol(undefined)
@@ -94,7 +94,7 @@ function f5() {
 >f5 : Symbol(f5, Decl(controlFlowDestructuringDeclaration.ts, 32, 1))
 
     let { x }: { x?: string | number } = { x: 1 };
->x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 35, 9))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 35, 16))
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 35, 16))
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 35, 42))
 
@@ -102,7 +102,7 @@ function f5() {
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 35, 9))
 
     let { y }: { y?: string | undefined } = { y: "" };
->y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 37, 9))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 37, 16))
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 37, 16))
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 37, 45))
 
@@ -110,7 +110,7 @@ function f5() {
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 37, 9))
 
     let { z = "" }: { z?: string | undefined } = { z: undefined };
->z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 39, 9))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 39, 21))
 >z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 39, 21))
 >z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 39, 50))
 >undefined : Symbol(undefined)
@@ -123,21 +123,21 @@ function f6() {
 >f6 : Symbol(f6, Decl(controlFlowDestructuringDeclaration.ts, 41, 1))
 
     let { x }: { x?: string | number } = {};
->x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 44, 9))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 44, 16))
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 44, 16))
 
     x;
 >x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 44, 9))
 
     let { y }: { y?: string | undefined } = {};
->y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 46, 9))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 46, 16))
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 46, 16))
 
     y;
 >y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 46, 9))
 
     let { z = "" }: { z?: string | undefined } = {};
->z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 48, 9))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 48, 21))
 >z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 48, 21))
 
     z;

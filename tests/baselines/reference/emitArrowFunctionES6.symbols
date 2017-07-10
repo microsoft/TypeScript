@@ -52,25 +52,25 @@ var p5 = ([a = 1]) => { };
 
 var p6 = ({ a }) => { };
 >p6 : Symbol(p6, Decl(emitArrowFunctionES6.ts, 14, 3))
->a : Symbol(a, Decl(emitArrowFunctionES6.ts, 14, 11))
+>a : Symbol(a)
 
 var p7 = ({ a: { b } }) => { };
 >p7 : Symbol(p7, Decl(emitArrowFunctionES6.ts, 15, 3))
 >a : Symbol(a)
->b : Symbol(b, Decl(emitArrowFunctionES6.ts, 15, 16))
+>b : Symbol(b)
 
 var p8 = ({ a = 1 }) => { };
 >p8 : Symbol(p8, Decl(emitArrowFunctionES6.ts, 16, 3))
->a : Symbol(a, Decl(emitArrowFunctionES6.ts, 16, 11))
+>a : Symbol(a)
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : Symbol(p9, Decl(emitArrowFunctionES6.ts, 17, 3))
 >a : Symbol(a)
->b : Symbol(b, Decl(emitArrowFunctionES6.ts, 17, 16))
+>b : Symbol(b, Decl(emitArrowFunctionES6.ts, 17, 28))
 >b : Symbol(b, Decl(emitArrowFunctionES6.ts, 17, 28))
 
 var p10 = ([{ value, done }]) => { };
 >p10 : Symbol(p10, Decl(emitArrowFunctionES6.ts, 18, 3))
->value : Symbol(value, Decl(emitArrowFunctionES6.ts, 18, 13))
->done : Symbol(done, Decl(emitArrowFunctionES6.ts, 18, 20))
+>value : Symbol(value)
+>done : Symbol(done)
 

@@ -14,8 +14,8 @@ interface I {
 >I : Symbol(I, Decl(a.d.ts, 4, 29))
 
     ({descendants, read}?: {
->descendants : Symbol(descendants, Decl(a.d.ts, 8, 6))
->read : Symbol(read, Decl(a.d.ts, 8, 18))
+>descendants : Symbol(descendants, Decl(a.d.ts, 8, 28))
+>read : Symbol(read, Decl(a.d.ts, 9, 30))
 
         descendants?: boolean;
 >descendants : Symbol(descendants, Decl(a.d.ts, 8, 28))
@@ -36,7 +36,7 @@ interface Foo {
 >b : Symbol(Foo.b, Decl(a.d.ts, 17, 14))
 }
 export var { a, ...x } : Foo;
->a : Symbol(a, Decl(a.d.ts, 19, 12))
+>a : Symbol(Foo.a, Decl(a.d.ts, 16, 15))
 >x : Symbol(x, Decl(a.d.ts, 19, 15))
 >Foo : Symbol(Foo, Decl(a.d.ts, 12, 1))
 
@@ -58,8 +58,8 @@ declare namespace N {
 >I : Symbol(I, Decl(b.ts, 4, 22))
 
 		({descendants, read}?: {
->descendants : Symbol(descendants, Decl(b.ts, 8, 4))
->read : Symbol(read, Decl(b.ts, 8, 16))
+>descendants : Symbol(descendants, Decl(b.ts, 8, 26))
+>read : Symbol(read, Decl(b.ts, 9, 25))
 
 			descendants?: boolean;
 >descendants : Symbol(descendants, Decl(b.ts, 8, 26))
@@ -80,7 +80,7 @@ declare namespace N {
 >b : Symbol(Foo.b, Decl(b.ts, 17, 12))
 	}
 	export var { a, ...x } : Foo;
->a : Symbol(a, Decl(b.ts, 19, 13))
+>a : Symbol(Foo.a, Decl(b.ts, 16, 16))
 >x : Symbol(x, Decl(b.ts, 19, 16))
 >Foo : Symbol(Foo, Decl(b.ts, 12, 2))
 }

@@ -4,6 +4,6 @@ declare var [a, b];  // Error, destructuring declaration not allowed in ambient 
 >b : Symbol(b, Decl(declarationInAmbientContext.ts, 0, 15))
 
 declare var {c, d};  // Error, destructuring declaration not allowed in ambient context
->c : Symbol(c, Decl(declarationInAmbientContext.ts, 1, 13))
->d : Symbol(d, Decl(declarationInAmbientContext.ts, 1, 15))
+>c : Symbol(c)
+>d : Symbol(d)
 

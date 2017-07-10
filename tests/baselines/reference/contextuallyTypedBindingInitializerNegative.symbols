@@ -72,7 +72,7 @@ interface Tuples {
 }
 function g({ prop = [101, 1234] }: Tuples) {}
 >g : Symbol(g, Decl(contextuallyTypedBindingInitializerNegative.ts, 19, 1))
->prop : Symbol(prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 20, 12))
+>prop : Symbol(Tuples.prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 17, 18))
 >Tuples : Symbol(Tuples, Decl(contextuallyTypedBindingInitializerNegative.ts, 15, 91))
 
 interface StringUnion {
@@ -83,6 +83,6 @@ interface StringUnion {
 }
 function h({ prop = "baz" }: StringUnion) {}
 >h : Symbol(h, Decl(contextuallyTypedBindingInitializerNegative.ts, 24, 1))
->prop : Symbol(prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 25, 12))
+>prop : Symbol(StringUnion.prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 22, 23))
 >StringUnion : Symbol(StringUnion, Decl(contextuallyTypedBindingInitializerNegative.ts, 20, 45))
 

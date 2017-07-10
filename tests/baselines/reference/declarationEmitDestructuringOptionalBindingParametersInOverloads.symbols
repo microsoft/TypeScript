@@ -12,9 +12,9 @@ function foo(...rest: any[]) {
 
 function foo2( { x, y, z }?: { x: string; y: number; z: boolean });
 >foo2 : Symbol(foo2, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 2, 1), Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 67))
->x : Symbol(x, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 16))
->y : Symbol(y, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 19))
->z : Symbol(z, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 22))
+>x : Symbol(x, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 30))
+>y : Symbol(y, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 41))
+>z : Symbol(z, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 52))
 >x : Symbol(x, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 30))
 >y : Symbol(y, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 41))
 >z : Symbol(z, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 4, 52))

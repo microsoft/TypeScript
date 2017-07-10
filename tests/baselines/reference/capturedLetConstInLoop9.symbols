@@ -88,7 +88,7 @@ function foo() {
 >b : Symbol(b, Decl(capturedLetConstInLoop9.ts, 47, 16))
 
             var [{x, y:z}] = [{x:1, y:2}];
->x : Symbol(x, Decl(capturedLetConstInLoop9.ts, 48, 18))
+>x : Symbol(x, Decl(capturedLetConstInLoop9.ts, 48, 31))
 >y : Symbol(y, Decl(capturedLetConstInLoop9.ts, 48, 35))
 >z : Symbol(z, Decl(capturedLetConstInLoop9.ts, 48, 20))
 >x : Symbol(x, Decl(capturedLetConstInLoop9.ts, 48, 31))
@@ -121,7 +121,7 @@ function foo() {
 >b : Symbol(b, Decl(capturedLetConstInLoop9.ts, 66, 16))
 
             var [{x1, y:z1}] = [{x1:1, y:arguments.length}];
->x1 : Symbol(x1, Decl(capturedLetConstInLoop9.ts, 67, 18))
+>x1 : Symbol(x1, Decl(capturedLetConstInLoop9.ts, 67, 33))
 >y : Symbol(y, Decl(capturedLetConstInLoop9.ts, 67, 38))
 >z1 : Symbol(z1, Decl(capturedLetConstInLoop9.ts, 67, 21))
 >x1 : Symbol(x1, Decl(capturedLetConstInLoop9.ts, 67, 33))

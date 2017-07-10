@@ -5,7 +5,7 @@ let array: { x: number, y: string }[];
 >y : Symbol(y, Decl(objectRestForOf.ts, 0, 23))
 
 for (let { x, ...restOf } of array) {
->x : Symbol(x, Decl(objectRestForOf.ts, 1, 10))
+>x : Symbol(x, Decl(objectRestForOf.ts, 0, 12))
 >restOf : Symbol(restOf, Decl(objectRestForOf.ts, 1, 13))
 >array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))
 

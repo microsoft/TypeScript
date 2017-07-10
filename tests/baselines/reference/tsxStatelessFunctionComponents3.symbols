@@ -33,7 +33,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 >StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
 >children : Symbol(children, Decl(file.tsx, 12, 35))
->children : Symbol(children, Decl(file.tsx, 12, 52))
+>children : Symbol(children, Decl(file.tsx, 12, 35), Decl(react.d.ts, 200, 21))
 
     <div >
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))

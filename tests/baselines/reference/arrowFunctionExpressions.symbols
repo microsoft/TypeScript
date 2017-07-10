@@ -66,27 +66,27 @@ var p5 = ([a = 1]) => { };
 
 var p6 = ({ a }) => { };
 >p6 : Symbol(p6, Decl(arrowFunctionExpressions.ts, 20, 3))
->a : Symbol(a, Decl(arrowFunctionExpressions.ts, 20, 11))
+>a : Symbol(a)
 
 var p7 = ({ a: { b } }) => { };
 >p7 : Symbol(p7, Decl(arrowFunctionExpressions.ts, 21, 3))
 >a : Symbol(a)
->b : Symbol(b, Decl(arrowFunctionExpressions.ts, 21, 16))
+>b : Symbol(b)
 
 var p8 = ({ a = 1 }) => { };
 >p8 : Symbol(p8, Decl(arrowFunctionExpressions.ts, 22, 3))
->a : Symbol(a, Decl(arrowFunctionExpressions.ts, 22, 11))
+>a : Symbol(a)
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : Symbol(p9, Decl(arrowFunctionExpressions.ts, 23, 3))
 >a : Symbol(a)
->b : Symbol(b, Decl(arrowFunctionExpressions.ts, 23, 16))
+>b : Symbol(b, Decl(arrowFunctionExpressions.ts, 23, 28))
 >b : Symbol(b, Decl(arrowFunctionExpressions.ts, 23, 28))
 
 var p10 = ([{ value, done }]) => { };
 >p10 : Symbol(p10, Decl(arrowFunctionExpressions.ts, 24, 3))
->value : Symbol(value, Decl(arrowFunctionExpressions.ts, 24, 13))
->done : Symbol(done, Decl(arrowFunctionExpressions.ts, 24, 20))
+>value : Symbol(value)
+>done : Symbol(done)
 
 // Arrow function used in class member initializer
 // Arrow function used in class member function

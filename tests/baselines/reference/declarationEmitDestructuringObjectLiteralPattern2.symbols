@@ -32,17 +32,17 @@ function f15() {
 >c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 20))
 }
 var { a4, b4, c4 } = f15();
->a4 : Symbol(a4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 8, 5))
->b4 : Symbol(b4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 8, 9))
->c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 8, 13))
+>a4 : Symbol(a4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 12))
+>b4 : Symbol(b4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 16))
+>c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 20))
 >f15 : Symbol(f15, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 0, 89))
 
 module m {
 >m : Symbol(m, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 8, 27))
 
     export var { a4, b4, c4 } = f15();
->a4 : Symbol(a4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 11, 16))
->b4 : Symbol(b4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 11, 20))
->c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 11, 24))
+>a4 : Symbol(a4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 12))
+>b4 : Symbol(b4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 16))
+>c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 6, 20))
 >f15 : Symbol(f15, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 0, 89))
 }

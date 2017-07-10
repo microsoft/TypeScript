@@ -15,12 +15,12 @@ var { a2 }: any = {};
 //      S has an apparent property with the property name specified in
 //          P of a type that is assignable to the target given in P, or
 var { b1, } = { b1:1, };
->b1 : Symbol(b1, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 11, 5))
+>b1 : Symbol(b1, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 11, 15))
 >b1 : Symbol(b1, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 11, 15))
 
 var { b2: { b21 } = { b21: "string" }  } = { b2: { b21: "world" } };
 >b2 : Symbol(b2, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 12, 44))
->b21 : Symbol(b21, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 12, 11))
+>b21 : Symbol(b21, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 12, 21))
 >b21 : Symbol(b21, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 12, 21))
 >b2 : Symbol(b2, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 12, 44))
 >b21 : Symbol(b21, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 12, 50))
@@ -34,7 +34,7 @@ var {b4 = 1}: any = { b4: 100000 };
 
 var {b5: { b52 }  } = { b5: { b52 } };
 >b5 : Symbol(b5, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 15, 23))
->b52 : Symbol(b52, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 15, 10))
+>b52 : Symbol(b52, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 15, 29))
 >b5 : Symbol(b5, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 15, 23))
 >b52 : Symbol(b52, Decl(destructuringObjectBindingPatternAndAssignment1ES6.ts, 15, 29))
 

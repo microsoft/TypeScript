@@ -19,7 +19,7 @@ exports.A = function () {
 
 === tests/cases/conformance/salsa/a.js ===
 const { A } = require("./a-ext");
->A : Symbol(A, Decl(a.js, 0, 7))
+>A : Symbol(A, Decl(a-ext.js, 0, 0))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
 >"./a-ext" : Symbol("tests/cases/conformance/salsa/a-ext", Decl(a-ext.js, 0, 0))
 
@@ -46,7 +46,7 @@ exports.B = class {
 
 === tests/cases/conformance/salsa/b.js ===
 const { B } = require("./b-ext");
->B : Symbol(B, Decl(b.js, 0, 7))
+>B : Symbol(B, Decl(b-ext.js, 0, 0))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
 >"./b-ext" : Symbol("tests/cases/conformance/salsa/b-ext", Decl(b-ext.js, 0, 0))
 
@@ -68,7 +68,7 @@ export function C() {
 
 === tests/cases/conformance/salsa/c.js ===
 const { C } = require("./c-ext");
->C : Symbol(C, Decl(c.js, 0, 7))
+>C : Symbol(C, Decl(c-ext.js, 0, 0))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
 >"./c-ext" : Symbol("tests/cases/conformance/salsa/c-ext", Decl(c-ext.js, 0, 0))
 
@@ -91,7 +91,7 @@ export var D = function() {
 
 === tests/cases/conformance/salsa/d.js ===
 const { D } = require("./d-ext");
->D : Symbol(D, Decl(d.js, 0, 7))
+>D : Symbol(D, Decl(d-ext.js, 0, 10))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
 >"./d-ext" : Symbol("tests/cases/conformance/salsa/d-ext", Decl(d-ext.js, 0, 0))
 
@@ -117,7 +117,7 @@ export class E {
 
 === tests/cases/conformance/salsa/e.js ===
 const { E } = require("./e-ext");
->E : Symbol(E, Decl(e.js, 0, 7))
+>E : Symbol(E, Decl(e-ext.js, 0, 0))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
 >"./e-ext" : Symbol("tests/cases/conformance/salsa/e-ext", Decl(e-ext.js, 0, 0))
 

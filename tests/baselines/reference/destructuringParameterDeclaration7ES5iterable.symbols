@@ -11,14 +11,14 @@ interface ISomething {
 
 function foo({}, {foo, bar}: ISomething) {}
 >foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5iterable.ts, 3, 1))
->foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5iterable.ts, 5, 18))
->bar : Symbol(bar, Decl(destructuringParameterDeclaration7ES5iterable.ts, 5, 22))
+>foo : Symbol(ISomething.foo, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 22))
+>bar : Symbol(ISomething.bar, Decl(destructuringParameterDeclaration7ES5iterable.ts, 1, 16))
 >ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 0))
 
 function baz([], {foo, bar}: ISomething) {}
 >baz : Symbol(baz, Decl(destructuringParameterDeclaration7ES5iterable.ts, 5, 43))
->foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5iterable.ts, 7, 18))
->bar : Symbol(bar, Decl(destructuringParameterDeclaration7ES5iterable.ts, 7, 22))
+>foo : Symbol(ISomething.foo, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 22))
+>bar : Symbol(ISomething.bar, Decl(destructuringParameterDeclaration7ES5iterable.ts, 1, 16))
 >ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 0))
 
 function one([], {}) {}

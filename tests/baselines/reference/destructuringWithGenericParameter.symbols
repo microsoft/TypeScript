@@ -33,7 +33,7 @@ function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => v
 genericFunction(genericObject, ({greeting}) => {
 >genericFunction : Symbol(genericFunction, Decl(destructuringWithGenericParameter.ts, 4, 61))
 >genericObject : Symbol(genericObject, Decl(destructuringWithGenericParameter.ts, 4, 3))
->greeting : Symbol(greeting, Decl(destructuringWithGenericParameter.ts, 10, 33))
+>greeting : Symbol(greeting, Decl(destructuringWithGenericParameter.ts, 4, 38))
 
     var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
 >s : Symbol(s, Decl(destructuringWithGenericParameter.ts, 11, 7))

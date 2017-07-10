@@ -15,7 +15,7 @@ class Animal {
 >printSpecies : Symbol(Animal.printSpecies, Decl(unusedLocalProperty.ts, 3, 5))
 
         let { species } = this;
->species : Symbol(species, Decl(unusedLocalProperty.ts, 6, 13))
+>species : Symbol(Animal.species, Decl(unusedLocalProperty.ts, 2, 16))
 >this : Symbol(Animal, Decl(unusedLocalProperty.ts, 0, 45))
 
         console.log(species);

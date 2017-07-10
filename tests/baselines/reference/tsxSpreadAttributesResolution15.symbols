@@ -42,7 +42,7 @@ interface AnotherComponentProps {
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
 >AnotherComponent : Symbol(AnotherComponent, Decl(file.tsx, 17, 1))
->property1 : Symbol(property1, Decl(file.tsx, 19, 27))
+>property1 : Symbol(AnotherComponentProps.property1, Decl(file.tsx, 13, 33))
 >AnotherComponentProps : Symbol(AnotherComponentProps, Decl(file.tsx, 11, 1))
 
     return (

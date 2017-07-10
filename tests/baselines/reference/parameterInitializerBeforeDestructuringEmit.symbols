@@ -11,7 +11,7 @@ interface Foo {
 
 function foobar({ bar = {}, ...opts }: Foo = {}) {
 >foobar : Symbol(foobar, Decl(parameterInitializerBeforeDestructuringEmit.ts, 3, 1))
->bar : Symbol(bar, Decl(parameterInitializerBeforeDestructuringEmit.ts, 5, 17))
+>bar : Symbol(Foo.bar, Decl(parameterInitializerBeforeDestructuringEmit.ts, 0, 15))
 >opts : Symbol(opts, Decl(parameterInitializerBeforeDestructuringEmit.ts, 5, 27))
 >Foo : Symbol(Foo, Decl(parameterInitializerBeforeDestructuringEmit.ts, 0, 0))
 
@@ -28,7 +28,7 @@ class C {
 >C : Symbol(C, Decl(parameterInitializerBeforeDestructuringEmit.ts, 9, 1))
 
     constructor({ bar = {}, ...opts }: Foo = {}) {
->bar : Symbol(bar, Decl(parameterInitializerBeforeDestructuringEmit.ts, 12, 17))
+>bar : Symbol(Foo.bar, Decl(parameterInitializerBeforeDestructuringEmit.ts, 0, 15))
 >opts : Symbol(opts, Decl(parameterInitializerBeforeDestructuringEmit.ts, 12, 27))
 >Foo : Symbol(Foo, Decl(parameterInitializerBeforeDestructuringEmit.ts, 0, 0))
 
