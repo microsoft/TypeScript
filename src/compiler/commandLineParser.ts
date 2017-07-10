@@ -1047,13 +1047,13 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));
                 }
 
-                const keyText = getTextOfPropertyName(element.name);
+                const keyText = unescapeLeadingUnderscores(getTextOfPropertyName(element.name));
                 const option = knownOptions ? knownOptions.get(keyText) : undefined;
                 if (extraKeyDiagnosticMessage && !option) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
                 }
                 const value = convertPropertyValueToJson(element.initializer, option);
-                if (typeof keyText !== undefined && typeof value !== undefined) {
+                if (typeof keyText !== "undefined" && typeof value !== "undefined") {
                     result[keyText] = value;
                     // Notify key value set, if user asked for it
                     if (jsonConversionNotifier &&
@@ -1290,7 +1290,7 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return arrayFrom((<CommandLineOptionOfCustomType>option).type.keys())[0];
+                    return (option as CommandLineOptionOfCustomType).type.keys().next().value;
             }
         }
 
@@ -1992,7 +1992,7 @@ namespace ts {
         }
 
         if (include && include.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include)) {
+            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include, /*depth*/ undefined)) {
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //

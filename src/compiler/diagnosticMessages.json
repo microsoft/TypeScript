@@ -707,7 +707,7 @@
         "category": "Error",
         "code": 1223
     },
-    "Signature '{0}' must have a type predicate.": {
+    "Signature '{0}' must be a type predicate.": {
         "category": "Error",
         "code": 1224
     },
@@ -3637,7 +3637,7 @@
         "category": "Message",
         "code": 90025
     },
-    
+
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001

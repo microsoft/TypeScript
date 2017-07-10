@@ -493,7 +493,7 @@ namespace Harness {
         args(): string[];
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[];
+        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number): string[];
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
     }
@@ -537,7 +537,7 @@ namespace Harness {
                     ts.sys.tryEnableSourceMapsForHost();
                 }
             }
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -733,12 +733,12 @@ namespace Harness {
                 Http.writeToServerSync(serverRoot + path, "WRITE", contents);
             }
 
-            export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
+            export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number) {
                 const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
                 for (const file of listFiles(path)) {
                     fs.addFile(file);
                 }
-                return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
+                return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), depth, path => {
                     const entry = fs.traversePath(path);
                     if (entry && entry.isDirectory()) {
                         const directory = <Utils.VirtualDirectory>entry;
@@ -893,13 +893,13 @@ namespace Harness {
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
 
             /** Maps a symlink name to a realpath. Used only for exposing `realpath`. */
-            const realPathMap = ts.createFileMap<string>();
+            const realPathMap = ts.createMap<string>();
             /**
              * Maps a file name to a source file.
              * This will have a different SourceFile for every symlink pointing to that file;
              * if the program resolves realpaths then symlink entries will be ignored.
              */
-            const fileMap = ts.createFileMap<ts.SourceFile>();
+            const fileMap = ts.createMap<ts.SourceFile>();
             for (const file of inputFiles) {
                 if (file.content !== undefined) {
                     const fileName = ts.normalizePath(file.unitName);
@@ -975,7 +975,7 @@ namespace Harness {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
-                fileExists: fileName => fileMap.contains(toPath(fileName)),
+                fileExists: fileName => fileMap.has(toPath(fileName)),
                 readFile: (fileName: string): string => {
                     const file = fileMap.get(toPath(fileName));
                     if (ts.endsWith(fileName, "json")) {
@@ -999,7 +999,7 @@ namespace Harness {
                 getDirectories: d => {
                     const path = ts.toPath(d, currentDirectory, getCanonicalFileName);
                     const result: string[] = [];
-                    fileMap.forEachValue(key => {
+                    ts.forEachKey(fileMap, key => {
                         if (key.indexOf(path) === 0 && key.lastIndexOf("/") > path.length) {
                             let dirName = key.substr(path.length, key.indexOf("/", path.length + 1) - path.length);
                             if (dirName[0] === "/") {
@@ -1015,12 +1015,12 @@ namespace Harness {
             };
         }
 
-        function mapHasFileInDirectory(directoryPath: ts.Path, map: ts.FileMap<any>): boolean {
+        function mapHasFileInDirectory(directoryPath: ts.Path, map: ts.Map<{}>): boolean {
             if (!map) {
                 return false;
             }
             let exists = false;
-            map.forEachValue(fileName => {
+            ts.forEachKey(map, fileName => {
                 if (!exists && ts.startsWith(fileName, directoryPath) && fileName[directoryPath.length] === "/") {
                     exists = true;
                 }

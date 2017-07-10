@@ -111,7 +111,7 @@ async function out() {
 >out : Symbol(out, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 44, 37))
 
     return new Promise(function (resolve, reject) {});
->Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >resolve : Symbol(resolve, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 48, 33))
 >reject : Symbol(reject, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 48, 41))
 }
