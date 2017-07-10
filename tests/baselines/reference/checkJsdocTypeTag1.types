@@ -86,3 +86,17 @@ x2(0);
 >x2 : (arg0: number) => number
 >0 : 0
 
+/**
+ * @type {object}
+ */
+var props = {};
+>props : any
+>{} : {}
+
+/**
+ * @type {Object}
+ */
+var props = {};
+>props : any
+>{} : {}
+
