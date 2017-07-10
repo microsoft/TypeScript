@@ -84,13 +84,17 @@ namespace ts.server {
          * NOTE: this field is created on demand and should not be accessed directly.
          * Use 'getFileInfos' instead.
          */
-        private fileInfos_doNotAccessDirectly: FileMap<T>;
+        private fileInfos_doNotAccessDirectly: Map<T>;
 
         constructor(public readonly project: Project, private ctor: { new (scriptInfo: ScriptInfo, project: Project): T }) {
         }
 
         private getFileInfos() {
-            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createFileMap<T>());
+            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createMap<T>());
+        }
+
+        protected hasFileInfos() {
+            return !!this.fileInfos_doNotAccessDirectly;
         }
 
         public clear() {
@@ -113,7 +117,7 @@ namespace ts.server {
         }
 
         protected getFileInfoPaths(): Path[] {
-            return this.getFileInfos().getKeys();
+            return arrayFrom(this.getFileInfos().keys() as Iterator<Path>);
         }
 
         protected setFileInfo(path: Path, info: T) {
@@ -121,20 +125,22 @@ namespace ts.server {
         }
 
         protected removeFileInfo(path: Path) {
-            this.getFileInfos().remove(path);
+            this.getFileInfos().delete(path);
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.getFileInfos().forEachValue((_path, value) => action(value));
+            this.getFileInfos().forEach(action);
         }
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         abstract onProjectUpdateGraph(): void;
+        protected abstract ensureFileInfoIfInProject(scriptInfo: ScriptInfo): void;
 
         /**
          * @returns {boolean} whether the emit was conducted or not
          */
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+            this.ensureFileInfoIfInProject(scriptInfo);
             const fileInfo = this.getFileInfo(scriptInfo.path);
             if (!fileInfo) {
                 return false;
@@ -158,7 +164,21 @@ namespace ts.server {
             super(project, BuilderFileInfo);
         }
 
+        protected ensureFileInfoIfInProject(scriptInfo: ScriptInfo) {
+            if (this.project.containsScriptInfo(scriptInfo)) {
+                this.getOrCreateFileInfo(scriptInfo.path);
+            }
+        }
+
         onProjectUpdateGraph() {
+            if (this.hasFileInfos()) {
+                this.forEachFileInfo(fileInfo => {
+                    if (!this.project.containsScriptInfo(fileInfo.scriptInfo)) {
+                        // This file was deleted from this project
+                        this.removeFileInfo(fileInfo.scriptInfo.path);
+                    }
+                });
+            }
         }
 
         /**
@@ -262,8 +282,15 @@ namespace ts.server {
             return [];
         }
 
-        onProjectUpdateGraph() {
+        protected ensureFileInfoIfInProject(_scriptInfo: ScriptInfo) {
             this.ensureProjectDependencyGraphUpToDate();
+        }
+
+        onProjectUpdateGraph() {
+            // Update the graph only if we have computed graph earlier
+            if (this.hasFileInfos()) {
+                this.ensureProjectDependencyGraphUpToDate();
+            }
         }
 
         private ensureProjectDependencyGraphUpToDate() {

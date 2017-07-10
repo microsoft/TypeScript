@@ -1,4 +1,4 @@
-﻿{
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -707,7 +707,7 @@
         "category": "Error",
         "code": 1223
     },
-    "Signature '{0}' must have a type predicate.": {
+    "Signature '{0}' must be a type predicate.": {
         "category": "Error",
         "code": 1224
     },
@@ -898,6 +898,14 @@
     "Dynamic import cannot have type arguments": {
         "category": "Error",
         "code": 1326
+    },
+    "String literal with double quotes expected.": {
+        "category": "Error",
+        "code": 1327
+    },
+    "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
+        "category": "Error",
+        "code": 1328
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3278,6 +3286,10 @@
         "category": "Message",
         "code": 6184
     },
+    "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6185
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3621,7 +3633,11 @@
         "category": "Message",
         "code": 90024
     },
-    
+    "Prefix '{0}' with an underscore.": {
+        "category": "Message",
+        "code": 90025
+    },
+
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001

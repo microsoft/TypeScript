@@ -36,7 +36,7 @@ namespace ts {
 
                     transpileOptions.reportDiagnostics = true;
 
-                    justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? ".tsx" : ".ts");
+                    justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? Extension.Tsx : Extension.Ts);
                     toBeCompiled = [{
                         unitName: transpileOptions.fileName,
                         content: input
@@ -88,7 +88,7 @@ namespace ts {
                 }
 
                 it("Correct output for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".js"), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), () => {
                         if (transpileResult.outputText) {
                             return transpileResult.outputText;
                         }

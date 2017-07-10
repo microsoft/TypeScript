@@ -134,12 +134,14 @@ declare namespace FourSlashInterface {
         private negative;
         not: verifyNegatable;
         allowedClassElementKeywords: string[];
+        allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
         completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListContainsClassElementKeywords(): void;
+        completionListContainsConstructorParameterKeywords(): void;
         completionListAllowsNewIdentifier(): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
@@ -250,6 +252,7 @@ declare namespace FourSlashInterface {
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
+        documentHighlightsOf(startRange: Range, ranges: Range[]): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.

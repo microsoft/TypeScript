@@ -131,12 +131,12 @@ interface Foo {
 }
 declare function test1(x: Foo): void;
 declare class Bar {
-    d: number;
+    d: number | undefined;
     e: number;
     a: number;
     b?: number;
     c?: number | undefined;
-    constructor(d?: number, e?: number);
+    constructor(d?: number | undefined, e?: number);
     f(): number;
     g?(): number;
     h?(): number;

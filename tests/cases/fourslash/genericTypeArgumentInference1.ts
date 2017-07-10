@@ -2,7 +2,7 @@
 
 ////module Underscore {
 ////    export interface Iterator<T, U> {
-////        <T,U>(value: T, index: any, list: any): U;
+////        (value: T, index: any, list: any): U;
 ////    }
 ////
 ////    export interface Static {
@@ -12,7 +12,7 @@
 ////}
 ////
 ////declare var _: Underscore.Static;
-////var /*1*/r = _./*11*/all([true, 1, null, 'yes'], _.identity);
+////var /*1*/r = _./*11*/all([true, 1, null, 'yes'], x => !x);
 ////var /*2*/r2 = _./*21*/all([true], _.identity);
 ////var /*3*/r3 = _./*31*/all([], _.identity);
 ////var /*4*/r4 = _./*41*/all([<any>true], _.identity);

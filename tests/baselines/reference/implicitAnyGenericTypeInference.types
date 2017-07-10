@@ -18,11 +18,11 @@ var c: Comparer<any>;
 >Comparer : Comparer<T>
 
 c = { compareTo: (x, y) => { return y; } };
->c = { compareTo: (x, y) => { return y; } } : { compareTo: (x: any, y: U) => U; }
+>c = { compareTo: (x, y) => { return y; } } : { compareTo: <U>(x: any, y: U) => U; }
 >c : Comparer<any>
->{ compareTo: (x, y) => { return y; } } : { compareTo: (x: any, y: U) => U; }
->compareTo : (x: any, y: U) => U
->(x, y) => { return y; } : (x: any, y: U) => U
+>{ compareTo: (x, y) => { return y; } } : { compareTo: <U>(x: any, y: U) => U; }
+>compareTo : <U>(x: any, y: U) => U
+>(x, y) => { return y; } : <U>(x: any, y: U) => U
 >x : any
 >y : U
 >y : U

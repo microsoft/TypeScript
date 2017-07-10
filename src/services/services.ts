@@ -304,7 +304,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
-        name: string;
+        name: __String;
         declarations?: Declaration[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -315,7 +315,7 @@ namespace ts {
         // symbol has no JSDoc tags, then the empty array will be returned.
         tags?: JSDocTagInfo[];
 
-        constructor(flags: SymbolFlags, name: string) {
+        constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
             this.name = name;
         }
@@ -324,8 +324,12 @@ namespace ts {
             return this.flags;
         }
 
-        getName(): string {
+        getName(): __String {
             return this.name;
+        }
+
+        getUnescapedName(): string {
+            return unescapeLeadingUnderscores(this.name);
         }
 
         getDeclarations(): Declaration[] | undefined {
@@ -360,7 +364,7 @@ namespace ts {
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
-        public text: string;
+        public text: __String;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -509,7 +513,7 @@ namespace ts {
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
-        public nameTable: Map<number>;
+        public nameTable: UnderscoreEscapedMap<number>;
         public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: StringLiteral[];
@@ -589,7 +593,7 @@ namespace ts {
             function getDeclarationName(declaration: Declaration) {
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
-                    const result = getTextOfIdentifierOrLiteral(name);
+                    const result = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
                     if (result !== undefined) {
                         return result;
                     }
@@ -597,23 +601,10 @@ namespace ts {
                     if (name.kind === SyntaxKind.ComputedPropertyName) {
                         const expr = (<ComputedPropertyName>name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return (<PropertyAccessExpression>expr).name.text;
+                            return unescapeLeadingUnderscores((<PropertyAccessExpression>expr).name.text);
                         }
 
-                        return getTextOfIdentifierOrLiteral(expr);
-                    }
-                }
-
-                return undefined;
-            }
-
-            function getTextOfIdentifierOrLiteral(node: Node) {
-                if (node) {
-                    if (node.kind === SyntaxKind.Identifier ||
-                        node.kind === SyntaxKind.StringLiteral ||
-                        node.kind === SyntaxKind.NumericLiteral) {
-
-                        return (<Identifier | LiteralExpression>node).text;
+                        return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
                     }
                 }
 
@@ -657,7 +648,6 @@ namespace ts {
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ExportSpecifier:
                     case SyntaxKind.ImportSpecifier:
-                    case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportClause:
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.GetAccessor:
@@ -818,14 +808,14 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: FileMap<HostFileInformation>;
+        private fileNameToEntry: Map<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
-            this.fileNameToEntry = createFileMap<HostFileInformation>();
+            this.fileNameToEntry = createMap<HostFileInformation>();
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
@@ -848,7 +838,7 @@ namespace ts {
                 entry = {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
-                    scriptSnapshot: scriptSnapshot,
+                    scriptSnapshot,
                     scriptKind: getScriptKind(fileName, this.host)
                 };
             }
@@ -857,29 +847,24 @@ namespace ts {
             return entry;
         }
 
-        private getEntry(path: Path): HostFileInformation {
+        public getEntryByPath(path: Path): HostFileInformation {
             return this.fileNameToEntry.get(path);
         }
 
-        private contains(path: Path): boolean {
-            return this.fileNameToEntry.contains(path);
-        }
-
-        public getOrCreateEntry(fileName: string): HostFileInformation {
-            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
-            return this.getOrCreateEntryByPath(fileName, path);
+        public containsEntryByPath(path: Path): boolean {
+            return this.fileNameToEntry.has(path);
         }
 
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            return this.contains(path)
-                ? this.getEntry(path)
+            return this.containsEntryByPath(path)
+                ? this.getEntryByPath(path)
                 : this.createEntry(fileName, path);
         }
 
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue((_path, value) => {
+            this.fileNameToEntry.forEach(value => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -889,12 +874,12 @@ namespace ts {
         }
 
         public getVersion(path: Path): string {
-            const file = this.getEntry(path);
+            const file = this.getEntryByPath(path);
             return file && file.version;
         }
 
         public getScriptSnapshot(path: Path): IScriptSnapshot {
-            const file = this.getEntry(path);
+            const file = this.getEntryByPath(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1159,12 +1144,19 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
-                    return hostCache.getOrCreateEntry(fileName) !== undefined;
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    return hostCache.containsEntryByPath(path) ?
+                        !!hostCache.getEntryByPath(path) :
+                        (host.fileExists && host.fileExists(fileName));
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
-                    const entry = hostCache.getOrCreateEntry(fileName);
-                    return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    if (hostCache.containsEntryByPath(path)) {
+                        const entry = hostCache.getEntryByPath(path);
+                        return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    }
+                    return host.readFile && host.readFile(fileName);
                 },
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
@@ -1297,8 +1289,20 @@ namespace ts {
                     }
                 }
 
+                const currentOptions = program.getCompilerOptions();
+                const newOptions = hostCache.compilationSettings();
                 // If the compilation settings do no match, then the program is not up-to-date
-                return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
+                if (!compareDataObjects(currentOptions, newOptions)) {
+                    return false;
+                }
+
+                // If everything matches but the text of config file is changed,
+                // error locations can change for program options, so update the program
+                if (currentOptions.configFile && newOptions.configFile) {
+                    return currentOptions.configFile.text === newOptions.configFile.text;
+                }
+
+                return true;
             }
         }
 
@@ -1316,7 +1320,9 @@ namespace ts {
             if (program) {
                 forEach(program.getSourceFiles(), f =>
                     documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                program = undefined;
             }
+            host = undefined;
         }
 
         /// Diagnostics
@@ -1518,12 +1524,8 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const outputFiles: OutputFile[] = [];
 
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
-                outputFiles.push({
-                    name: fileName,
-                    writeByteOrderMark: writeByteOrderMark,
-                    text: data
-                });
+            function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
+                outputFiles.push({ name: fileName, writeByteOrderMark, text });
             }
 
             const customTransformers = host.getCustomTransformers && host.getCustomTransformers();
@@ -1747,8 +1749,10 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-
-            if (key === "}") {
+            if (key === "{") {
+                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+            }
+            else if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === ";") {
@@ -1765,25 +1769,14 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = { start, length: end - start };
-            const newLineChar = getNewLineOrDefaultFromHost(host);
+            const newLineCharacter = getNewLineOrDefaultFromHost(host);
 
             let allFixes: CodeAction[] = [];
 
-            forEach(deduplicate(errorCodes), error => {
+            forEach(deduplicate(errorCodes), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-
-                const context = {
-                    errorCode: error,
-                    sourceFile: sourceFile,
-                    span: span,
-                    program: program,
-                    newLineCharacter: newLineChar,
-                    host: host,
-                    cancellationToken: cancellationToken,
-                    rulesProvider: getRuleProvider(formatOptions)
-                };
-
-                const fixes = codefix.getFixes(context);
+                const rulesProvider = getRuleProvider(formatOptions);
+                const fixes = codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
                 if (fixes) {
                     allFixes = allFixes.concat(fixes);
                 }
@@ -1820,6 +1813,13 @@ namespace ts {
 
             if (isInTemplateString(sourceFile, position)) {
                 return false;
+            }
+
+            switch (openingBrace) {
+                case CharacterCodes.singleQuote:
+                case CharacterCodes.doubleQuote:
+                case CharacterCodes.backtick:
+                    return !isInComment(sourceFile, position);
             }
 
             return true;
@@ -1892,11 +1892,7 @@ namespace ts {
                     }
 
                     const message = matchArray[2];
-                    result.push({
-                        descriptor: descriptor,
-                        message: message,
-                        position: matchPosition
-                    });
+                    result.push({ descriptor, message, position: matchPosition });
                 }
             }
 
@@ -2058,7 +2054,7 @@ namespace ts {
 
     /* @internal */
     /** Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`. */
-    export function getNameTable(sourceFile: SourceFile): Map<number> {
+    export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -2067,7 +2063,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createMap<number>();
+        const nameTable = createUnderscoreEscapedMap<number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;
@@ -2087,7 +2083,7 @@ namespace ts {
                         node.parent.kind === SyntaxKind.ExternalModuleReference ||
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable((<LiteralExpression>node).text, node);
+                        setNameTable(getEscapedTextOfIdentifierOrLiteral((<LiteralExpression>node)), node);
                     }
                     break;
                 default:
@@ -2100,7 +2096,7 @@ namespace ts {
             }
         }
 
-        function setNameTable(text: string, node: ts.Node): void {
+        function setNameTable(text: __String, node: ts.Node): void {
             nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
         }
     }
@@ -2143,7 +2139,7 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = getTextOfPropertyName(node.name);
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(node.name));
         if (name && contextualType) {
             const result: Symbol[] = [];
             const symbol = contextualType.getProperty(name);

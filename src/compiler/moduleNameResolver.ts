@@ -151,11 +151,7 @@ namespace ts {
      */
     export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
-        const moduleResolutionState: ModuleResolutionState = {
-            compilerOptions: options,
-            host: host,
-            traceEnabled
-        };
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled };
 
         const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {
@@ -306,7 +302,7 @@ namespace ts {
     }
 
     export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache {
-        const directoryToModuleNameMap = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        const directoryToModuleNameMap = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const moduleNameToDirectoryMap = createMap<PerModuleNameCache>();
 
         return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName };
@@ -334,7 +330,7 @@ namespace ts {
         }
 
         function createPerModuleNameCache(): PerModuleNameCache {
-            const directoryPathMap = createFileMap<ResolvedModuleWithFailedLookupLocations>();
+            const directoryPathMap = createMap<ResolvedModuleWithFailedLookupLocations>();
 
             return { get, set };
 
@@ -356,7 +352,7 @@ namespace ts {
             function set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void {
                 const path = toPath(directory, currentDirectory, getCanonicalFileName);
                 // if entry is already in cache do nothing
-                if (directoryPathMap.contains(path)) {
+                if (directoryPathMap.has(path)) {
                     return;
                 }
                 directoryPathMap.set(path, result);
@@ -370,7 +366,7 @@ namespace ts {
                 let current = path;
                 while (true) {
                     const parent = getDirectoryPath(current);
-                    if (parent === current || directoryPathMap.contains(parent)) {
+                    if (parent === current || directoryPathMap.has(parent)) {
                         break;
                     }
                     directoryPathMap.set(parent, result);
@@ -815,15 +811,15 @@ namespace ts {
 
         switch (extensions) {
             case Extensions.DtsOnly:
-                return tryExtension(".d.ts", Extension.Dts);
+                return tryExtension(Extension.Dts);
             case Extensions.TypeScript:
-                return tryExtension(".ts", Extension.Ts) || tryExtension(".tsx", Extension.Tsx) || tryExtension(".d.ts", Extension.Dts);
+                return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
             case Extensions.JavaScript:
-                return tryExtension(".js", Extension.Js) || tryExtension(".jsx", Extension.Jsx);
+                return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
         }
 
-        function tryExtension(ext: string, extension: Extension): Resolved | undefined {
-            const path = tryFile(candidate + ext, failedLookupLocations, onlyRecordFailures, state);
+        function tryExtension(extension: Extension): Resolved | undefined {
+            const path = tryFile(candidate + extension, failedLookupLocations, onlyRecordFailures, state);
             return path && { path, extension };
         }
     }
@@ -995,7 +991,7 @@ namespace ts {
     export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            return withoutAtTypePrefix.indexOf("__") !== -1 ?
+            return withoutAtTypePrefix.indexOf(mangledScopedPackageSeparator) !== -1 ?
                 "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
                 withoutAtTypePrefix;
         }

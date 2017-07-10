@@ -244,7 +244,7 @@ namespace ts.Completions.PathCompletions {
         const moduleNameFragment = isNestedModule ? fragment.substr(0, fragment.lastIndexOf(directorySeparator)) : undefined;
 
         // Get modules that the type checker picked up
-        const ambientModules = map(typeChecker.getAmbientModules(), sym => stripQuotes(sym.name));
+        const ambientModules = map(typeChecker.getAmbientModules(), sym => stripQuotes(unescapeLeadingUnderscores(sym.name)));
         let nonRelativeModuleNames = filter(ambientModules, moduleName => startsWith(moduleName, fragment));
 
         // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
