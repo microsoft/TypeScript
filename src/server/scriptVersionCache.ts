@@ -281,9 +281,9 @@ namespace ts.server {
         // REVIEW: can optimize by coalescing simple edits
         edit(pos: number, deleteLen: number, insertedText?: string) {
             this.changes.push(new TextChange(pos, deleteLen, insertedText));
-            if ((this.changes.length > ScriptVersionCache.changeNumberThreshold) ||
-                (deleteLen > ScriptVersionCache.changeLengthThreshold) ||
-                (insertedText && (insertedText.length > ScriptVersionCache.changeLengthThreshold))) {
+            if (this.changes.length > ScriptVersionCache.changeNumberThreshold ||
+                deleteLen > ScriptVersionCache.changeLengthThreshold ||
+                insertedText && insertedText.length > ScriptVersionCache.changeLengthThreshold) {
                 this.getSnapshot();
             }
         }
@@ -468,12 +468,9 @@ namespace ts.server {
             return !walkFns.done;
         }
 
-        edit(pos: number, deleteLength: number, newText?: string) {
-            function editFlat(source: string, s: number, dl: number, nt = "") {
-                return source.substring(0, s) + nt + source.substring(s + dl, source.length);
-            }
+        edit(pos: number, deleteLength: number, newText?: string): LineIndex {
             if (this.root.charCount() === 0) {
-                // TODO: assert deleteLength === 0
+                Debug.assert(deleteLength === 0); // Can't delete from empty document
                 if (newText !== undefined) {
                     this.load(LineIndex.linesFromText(newText).lines);
                     return this;
@@ -482,7 +479,8 @@ namespace ts.server {
             else {
                 let checkText: string;
                 if (this.checkEdits) {
-                    checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
+                    const source = this.getText(0, this.root.charCount());
+                    checkText = source.slice(0, pos) + newText + source.slice(pos + deleteLength);
                 }
                 const walker = new EditWalker();
                 let suppressTrailingText = false;
@@ -507,22 +505,18 @@ namespace ts.server {
                         // move range end just past line that will merge with previous line
                         deleteLength += lineInfo.text.length;
                         // store text by appending to end of insertedText
-                        if (newText) {
-                            newText = newText + lineInfo.text;
-                        }
-                        else {
-                            newText = lineInfo.text;
-                        }
+                        newText = newText ? newText + lineInfo.text : lineInfo.text;
                     }
                 }
-                if (pos < this.root.charCount()) {
-                    this.root.walk(pos, deleteLength, walker);
-                    walker.insertLines(newText, suppressTrailingText);
-                }
+
+                this.root.walk(pos, deleteLength, walker);
+                walker.insertLines(newText, suppressTrailingText);
+
                 if (this.checkEdits) {
-                    const updatedText = this.getText(0, this.root.charCount());
+                    const updatedText = walker.lineIndex.getText(0, walker.lineIndex.getLength());
                     Debug.assert(checkText === updatedText, "buffer edit mismatch");
                 }
+
                 return walker.lineIndex;
             }
         }
