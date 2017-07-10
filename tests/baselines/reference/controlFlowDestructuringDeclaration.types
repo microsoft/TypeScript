@@ -99,7 +99,7 @@ function f4() {
 >y : string
 
     let { z = "" }: { z: string | undefined } = { z: undefined };
->z : string
+>z : string | undefined
 >"" : ""
 >z : string | undefined
 >{ z: undefined } : { z: undefined; }
@@ -134,7 +134,7 @@ function f5() {
 >y : string
 
     let { z = "" }: { z?: string | undefined } = { z: undefined };
->z : string
+>z : string | undefined
 >"" : ""
 >z : string | undefined
 >{ z: undefined } : { z: undefined; }
@@ -165,7 +165,7 @@ function f6() {
 >y : string | undefined
 
     let { z = "" }: { z?: string | undefined } = {};
->z : string
+>z : string | undefined
 >"" : ""
 >z : string | undefined
 >{} : {}
