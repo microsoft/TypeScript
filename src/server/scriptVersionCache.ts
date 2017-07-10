@@ -33,41 +33,35 @@ namespace ts.server {
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
         pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
-            parent: LineNode, nodeType: CharRangeSection): LineCollection;
+            parent: LineNode, nodeType: CharRangeSection): void;
         post?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
-            parent: LineNode, nodeType: CharRangeSection): LineCollection;
+            parent: LineNode, nodeType: CharRangeSection): void;
     }
 
-    class BaseLineIndexWalker implements ILineIndexWalker {
+    class EditWalker implements ILineIndexWalker {
         goSubtree = true;
-        done = false;
-        leaf(_rangeStart: number, _rangeLength: number, _ll: LineLeaf) {
-        }
-    }
+        get done() { return false; }
 
-    class EditWalker extends BaseLineIndexWalker {
-        lineIndex = new LineIndex();
+        readonly lineIndex = new LineIndex();
         // path to start of range
-        startPath: LineCollection[];
-        endBranch: LineCollection[] = [];
-        branchNode: LineNode;
+        private readonly startPath: LineCollection[];
+        private readonly endBranch: LineCollection[] = [];
+        private branchNode: LineNode;
         // path to current node
-        stack: LineNode[];
-        state = CharRangeSection.Entire;
-        lineCollectionAtBranch: LineCollection;
-        initialText = "";
-        trailingText = "";
-        suppressTrailingText = false;
+        private readonly stack: LineNode[];
+        private state = CharRangeSection.Entire;
+        private lineCollectionAtBranch: LineCollection;
+        private initialText = "";
+        private trailingText = "";
 
         constructor() {
-            super();
             this.lineIndex.root = new LineNode();
             this.startPath = [this.lineIndex.root];
             this.stack = [this.lineIndex.root];
         }
 
-        insertLines(insertedText: string) {
-            if (this.suppressTrailingText) {
+        insertLines(insertedText: string, suppressTrailingText: boolean) {
+            if (suppressTrailingText) {
                 this.trailingText = "";
             }
             if (insertedText) {
@@ -80,7 +74,7 @@ namespace ts.server {
             const lines = lm.lines;
             if (lines.length > 1) {
                 if (lines[lines.length - 1] === "") {
-                    lines.length--;
+                    lines.pop();
                 }
             }
             let branchParent: LineNode;
@@ -150,18 +144,17 @@ namespace ts.server {
             return this.lineIndex;
         }
 
-        post(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection): LineCollection {
+        post(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection): void {
             // have visited the path for start of range, now looking for end
             // if range is on single line, we will never make this state transition
             if (lineCollection === this.lineCollectionAtBranch) {
                 this.state = CharRangeSection.End;
             }
             // always pop stack because post only called when child has been visited
-            this.stack.length--;
-            return undefined;
+            this.stack.pop();
         }
 
-        pre(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection, _parent: LineCollection, nodeType: CharRangeSection) {
+        pre(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection, _parent: LineCollection, nodeType: CharRangeSection): void {
             // currentNode corresponds to parent, but in the new tree
             const currentNode = this.stack[this.stack.length - 1];
 
@@ -193,20 +186,20 @@ namespace ts.server {
                     else {
                         child = fresh(lineCollection);
                         currentNode.add(child);
-                        this.startPath[this.startPath.length] = child;
+                        this.startPath.push(child);
                     }
                     break;
                 case CharRangeSection.Entire:
                     if (this.state !== CharRangeSection.End) {
                         child = fresh(lineCollection);
                         currentNode.add(child);
-                        this.startPath[this.startPath.length] = child;
+                        this.startPath.push(child);
                     }
                     else {
                         if (!lineCollection.isLeaf()) {
                             child = fresh(lineCollection);
                             currentNode.add(child);
-                            this.endBranch[this.endBranch.length] = child;
+                            this.endBranch.push(child);
                         }
                     }
                     break;
@@ -221,7 +214,7 @@ namespace ts.server {
                         if (!lineCollection.isLeaf()) {
                             child = fresh(lineCollection);
                             currentNode.add(child);
-                            this.endBranch[this.endBranch.length] = child;
+                            this.endBranch.push(child);
                         }
                     }
                     break;
@@ -233,9 +226,8 @@ namespace ts.server {
                     break;
             }
             if (this.goSubtree) {
-                this.stack[this.stack.length] = <LineNode>child;
+                this.stack.push(<LineNode>child);
             }
-            return lineCollection;
         }
         // just gather text from the leaves
         leaf(relativeStart: number, relativeLength: number, ll: LineLeaf) {
@@ -265,16 +257,15 @@ namespace ts.server {
     }
 
     export class ScriptVersionCache {
-        changes: TextChange[] = [];
-        versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
-        minVersion = 0;  // no versions earlier than min version will maintain change history
+        private changes: TextChange[] = [];
+        private readonly versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
+        private minVersion = 0;  // no versions earlier than min version will maintain change history
 
-        private host: ServerHost;
         private currentVersion = 0;
 
-        static changeNumberThreshold = 8;
-        static changeLengthThreshold = 256;
-        static maxVersions = 8;
+        private static readonly changeNumberThreshold = 8;
+        private static readonly changeLengthThreshold = 256;
+        private static readonly maxVersions = 8;
 
         private versionToIndex(version: number) {
             if (version < this.minVersion || version > this.currentVersion) {
@@ -289,7 +280,7 @@ namespace ts.server {
 
         // REVIEW: can optimize by coalescing simple edits
         edit(pos: number, deleteLen: number, insertedText?: string) {
-            this.changes[this.changes.length] = new TextChange(pos, deleteLen, insertedText);
+            this.changes.push(new TextChange(pos, deleteLen, insertedText));
             if ((this.changes.length > ScriptVersionCache.changeNumberThreshold) ||
                 (deleteLen > ScriptVersionCache.changeLengthThreshold) ||
                 (insertedText && (insertedText.length > ScriptVersionCache.changeLengthThreshold))) {
@@ -308,21 +299,11 @@ namespace ts.server {
             return this.currentVersion;
         }
 
-        reloadFromFile(filename: string) {
-            let content = this.host.readFile(filename);
-            // If the file doesn't exist or cannot be read, we should
-            // wipe out its cached content on the server to avoid side effects.
-            if (!content) {
-                content = "";
-            }
-            this.reload(content);
-        }
-
         // reload whole script, leaving no change history behind reload
         reload(script: string) {
             this.currentVersion++;
             this.changes = []; // history wiped out by reload
-            const snap = new LineIndexSnapshot(this.currentVersion, this);
+            const snap = new LineIndexSnapshot(this.currentVersion, this, new LineIndex());
 
             // delete all versions
             for (let i = 0; i < this.versions.length; i++) {
@@ -330,7 +311,6 @@ namespace ts.server {
             }
 
             this.versions[this.currentVersionToIndex()] = snap;
-            snap.index = new LineIndex();
             const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
 
@@ -344,9 +324,7 @@ namespace ts.server {
                 for (const change of this.changes) {
                     snapIndex = snapIndex.edit(change.pos, change.deleteLen, change.insertedText);
                 }
-                snap = new LineIndexSnapshot(this.currentVersion + 1, this);
-                snap.index = snapIndex;
-                snap.changesSincePreviousVersion = this.changes;
+                snap = new LineIndexSnapshot(this.currentVersion + 1, this, snapIndex, this.changes);
 
                 this.currentVersion = snap.version;
                 this.versions[this.currentVersionToIndex()] = snap;
@@ -366,7 +344,7 @@ namespace ts.server {
                     for (let i = oldVersion + 1; i <= newVersion; i++) {
                         const snap = this.versions[this.versionToIndex(i)];
                         for (const textChange of snap.changesSincePreviousVersion) {
-                            textChangeRanges[textChangeRanges.length] = textChange.getTextChangeRange();
+                            textChangeRanges.push(textChange.getTextChangeRange());
                         }
                     }
                     return ts.collapseTextChangeRangesAcrossMultipleVersions(textChangeRanges);
@@ -380,12 +358,10 @@ namespace ts.server {
             }
         }
 
-        static fromString(host: ServerHost, script: string) {
+        static fromString(script: string) {
             const svc = new ScriptVersionCache();
-            const snap = new LineIndexSnapshot(0, svc);
+            const snap = new LineIndexSnapshot(0, svc, new LineIndex());
             svc.versions[svc.currentVersion] = snap;
-            svc.host = host;
-            snap.index = new LineIndex();
             const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
             return svc;
@@ -393,10 +369,7 @@ namespace ts.server {
     }
 
     export class LineIndexSnapshot implements ts.IScriptSnapshot {
-        index: LineIndex;
-        changesSincePreviousVersion: TextChange[] = [];
-
-        constructor(readonly version: number, readonly cache: ScriptVersionCache) {
+        constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: ReadonlyArray<TextChange> = emptyArray) {
         }
 
         getText(rangeStart: number, rangeEnd: number) {
@@ -407,37 +380,14 @@ namespace ts.server {
             return this.index.root.charCount();
         }
 
-        // this requires linear space so don't hold on to these
-        getLineStartPositions(): number[] {
-            const starts: number[] = [-1];
-            let count = 1;
-            let pos = 0;
-            this.index.every(ll => {
-                starts[count] = pos;
-                count++;
-                pos += ll.text.length;
-                return true;
-            }, 0);
-            return starts;
-        }
-
-        getLineMapper() {
-            return (line: number) => {
-                return this.index.lineNumberToInfo(line).offset;
-            };
-        }
-
-        getTextChangeRangeSinceVersion(scriptVersion: number) {
-            if (this.version <= scriptVersion) {
-                return ts.unchangedTextChangeRange;
-            }
-            else {
-                return this.cache.getTextChangesBetweenVersions(scriptVersion, this.version);
-            }
-        }
         getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange {
             if (oldSnapshot instanceof LineIndexSnapshot && this.cache === oldSnapshot.cache) {
-                return this.getTextChangeRangeSinceVersion(oldSnapshot.version);
+                if (this.version <= oldSnapshot.version) {
+                    return ts.unchangedTextChangeRange;
+                }
+                else {
+                    return this.cache.getTextChangesBetweenVersions(oldSnapshot.version, this.version);
+                }
             }
         }
     }
@@ -508,7 +458,7 @@ namespace ts.server {
             const walkFns = {
                 goSubtree: true,
                 done: false,
-                leaf: function (this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
+                leaf(this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
                         this.done = true;
                     }
@@ -535,6 +485,7 @@ namespace ts.server {
                     checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
                 }
                 const walker = new EditWalker();
+                let suppressTrailingText = false;
                 if (pos >= this.root.charCount()) {
                     // insert at end
                     pos = this.root.charCount() - 1;
@@ -546,7 +497,7 @@ namespace ts.server {
                         newText = endString;
                     }
                     deleteLength = 0;
-                    walker.suppressTrailingText = true;
+                    suppressTrailingText = true;
                 }
                 else if (deleteLength > 0) {
                     // check whether last characters deleted are line break
@@ -566,7 +517,7 @@ namespace ts.server {
                 }
                 if (pos < this.root.charCount()) {
                     this.root.walk(pos, deleteLength, walker);
-                    walker.insertLines(newText);
+                    walker.insertLines(newText, suppressTrailingText);
                 }
                 if (this.checkEdits) {
                     const updatedText = this.getText(0, this.root.charCount());
@@ -607,25 +558,25 @@ namespace ts.server {
         }
 
         static linesFromText(text: string) {
-            const lineStarts = ts.computeLineStarts(text);
+            const lineMap = ts.computeLineStarts(text);
 
-            if (lineStarts.length === 0) {
-                return { lines: <string[]>[], lineMap: lineStarts };
+            if (lineMap.length === 0) {
+                return { lines: <string[]>[], lineMap };
             }
-            const lines = <string[]>new Array(lineStarts.length);
-            const lc = lineStarts.length - 1;
+            const lines = <string[]>new Array(lineMap.length);
+            const lc = lineMap.length - 1;
             for (let lmi = 0; lmi < lc; lmi++) {
-                lines[lmi] = text.substring(lineStarts[lmi], lineStarts[lmi + 1]);
+                lines[lmi] = text.substring(lineMap[lmi], lineMap[lmi + 1]);
             }
 
-            const endText = text.substring(lineStarts[lc]);
+            const endText = text.substring(lineMap[lc]);
             if (endText.length > 0) {
                 lines[lc] = endText;
             }
             else {
-                lines.length--;
+                lines.pop();
             }
-            return { lines: lines, lineMap: lineStarts };
+            return { lines, lineMap };
         }
     }
 
@@ -791,12 +742,7 @@ namespace ts.server {
                     charOffset += child.charCount();
                 }
             }
-            return {
-                child: child,
-                childIndex: i,
-                relativeLineNumber: relativeLineNumber,
-                charOffset: charOffset
-            };
+            return { child, childIndex: i, relativeLineNumber, charOffset };
         }
 
         childFromCharOffset(lineNumber: number, charOffset: number) {
@@ -813,15 +759,10 @@ namespace ts.server {
                     lineNumber += child.lineCount();
                 }
             }
-            return {
-                child: child,
-                childIndex: i,
-                charOffset: charOffset,
-                lineNumber: lineNumber
-            };
+            return { child, childIndex: i, charOffset, lineNumber };
         }
 
-        splitAfter(childIndex: number) {
+        private splitAfter(childIndex: number) {
             let splitNode: LineNode;
             const clen = this.children.length;
             childIndex++;
@@ -846,13 +787,12 @@ namespace ts.server {
                     this.children[i] = this.children[i + 1];
                 }
             }
-            this.children.length--;
+            this.children.pop();
         }
 
-        findChildIndex(child: LineCollection) {
-            let childIndex = 0;
-            const clen = this.children.length;
-            while ((this.children[childIndex] !== child) && (childIndex < clen)) childIndex++;
+        private findChildIndex(child: LineCollection) {
+            const childIndex = this.children.indexOf(child);
+            Debug.assert(childIndex !== -1);
             return childIndex;
         }
 
@@ -895,12 +835,12 @@ namespace ts.server {
                     }
                     for (let i = splitNodes.length - 1; i >= 0; i--) {
                         if (splitNodes[i].children.length === 0) {
-                            splitNodes.length--;
+                            splitNodes.pop();
                         }
                     }
                 }
                 if (shiftNode) {
-                    splitNodes[splitNodes.length] = shiftNode;
+                    splitNodes.push(shiftNode);
                 }
                 this.updateCounts();
                 for (let i = 0; i < splitNodeCount; i++) {
@@ -911,9 +851,9 @@ namespace ts.server {
         }
 
         // assume there is room for the item; return true if more room
-        add(collection: LineCollection) {
-            this.children[this.children.length] = collection;
-            return (this.children.length < lineCollectionCapacity);
+        add(collection: LineCollection): void {
+            this.children.push(collection);
+            Debug.assert(this.children.length <= lineCollectionCapacity);
         }
 
         charCount() {

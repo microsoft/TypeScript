@@ -5,8 +5,8 @@
 namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-        private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+        private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
@@ -65,7 +65,7 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<Map<T>>,
+            cache: Map<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R,
             getResultFileName: (result: R) => string | undefined,
@@ -210,8 +210,11 @@ namespace ts.server {
             return this.host.resolvePath(path);
         }
 
-        fileExists(path: string): boolean {
-            return this.host.fileExists(path);
+        fileExists(file: string): boolean {
+            // As an optimization, don't hit the disks for files we already know don't exist
+            // (because we're watching for their creation).
+            const path = toPath(file, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            return !this.project.isWatchedMissingFile(path) && this.host.fileExists(file);
         }
 
         readFile(fileName: string): string {
@@ -222,8 +225,8 @@ namespace ts.server {
             return this.host.directoryExists(path);
         }
 
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
-            return this.host.readDirectory(path, extensions, exclude, include);
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include, depth);
         }
 
         getDirectories(path: string): string[] {
@@ -231,8 +234,8 @@ namespace ts.server {
         }
 
         notifyFileRemoved(info: ScriptInfo) {
-            this.resolvedModuleNames.remove(info.path);
-            this.resolvedTypeReferenceDirectives.remove(info.path);
+            this.resolvedModuleNames.delete(info.path);
+            this.resolvedTypeReferenceDirectives.delete(info.path);
         }
 
         setCompilationSettings(opt: ts.CompilerOptions) {

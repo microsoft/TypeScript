@@ -275,6 +275,13 @@ namespace ts {
     }
 
     export function getContainerNode(node: Node): Declaration {
+        if (node.kind === SyntaxKind.JSDocTypedefTag) {
+            // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
+            // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
+            // Then we get parent again in the loop.
+            node = node.parent.parent;
+        }
+
         while (true) {
             node = node.parent;
             if (!node) {
@@ -588,14 +595,14 @@ namespace ts {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
-    export function findContainingList(node: Node): Node {
+    export function findContainingList(node: Node): SyntaxList | undefined {
         // The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
         const syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
-            if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
+            if (isSyntaxList(c) && c.pos <= node.pos && c.end >= node.end) {
                 return c;
             }
         });
@@ -787,7 +794,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number): boolean {
         const previousToken = findPrecedingToken(position, sourceFile);
-        if (previousToken && previousToken.kind === SyntaxKind.StringLiteral) {
+        if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
 
@@ -1085,7 +1092,7 @@ namespace ts {
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
-        return moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
+        return moduleSymbol.getUnescapedName().charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
@@ -1191,10 +1198,7 @@ namespace ts {
     }
 
     export function displayPart(text: string, kind: SymbolDisplayPartKind): SymbolDisplayPart {
-        return <SymbolDisplayPart>{
-            text: text,
-            kind: SymbolDisplayPartKind[kind]
-        };
+        return { text, kind: SymbolDisplayPartKind[kind] };
     }
 
     export function spacePart() {
@@ -1265,7 +1269,7 @@ namespace ts {
         // If this is an export or import specifier it could have been renamed using the 'as' syntax.
         // If so we want to search for whatever is under the cursor.
         if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return location.text;
+            return getTextOfIdentifierOrLiteral(location);
         }
 
         // Try to get the local symbol if we're dealing with an 'export default'
@@ -1303,14 +1307,7 @@ namespace ts {
     export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
-        let scriptKind: ScriptKind;
-        if (host && host.getScriptKind) {
-            scriptKind = host.getScriptKind(fileName);
-        }
-        if (!scriptKind) {
-            scriptKind = getScriptKindFromFileName(fileName);
-        }
-        return ensureScriptKind(fileName, scriptKind);
+        return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
