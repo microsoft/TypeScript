@@ -1797,6 +1797,10 @@ namespace FourSlash {
                 // this.languageService.getScriptLexicalStructure(fileName);
             }
 
+            if (this.currentCaretPosition < 0) {
+                this.currentCaretPosition = 0;
+            }
+
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
 
