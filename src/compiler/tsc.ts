@@ -223,20 +223,13 @@ namespace ts {
                 return;
             }
 
-            const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
-            const configObject = result.config;
-            if (!configObject) {
-                reportDiagnostics([result.error], /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
+            const result = parseJsonText(configFileName, cachedConfigFileText);
+            reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
+
             const cwd = sys.getCurrentDirectory();
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
-            if (configParseResult.errors.length > 0) {
-                reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
+            const configParseResult = parseJsonSourceFileConfigFileContent(result, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
+            reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
+
             if (isWatchSet(configParseResult.options)) {
                 if (!sys.watchFile) {
                     reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
@@ -292,6 +285,16 @@ namespace ts {
 
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+
+            const missingPaths = compileResult.program.getMissingFilePaths();
+            missingPaths.forEach(path => {
+                const fileWatcher = sys.watchFile(path, (_fileName, eventKind) => {
+                    if (eventKind === FileWatcherEventKind.Created) {
+                        fileWatcher.close();
+                        startTimerForRecompilation();
+                    }
+                });
+            });
         }
 
         function cachedFileExists(fileName: string): boolean {
@@ -315,7 +318,7 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName, eventKind) => sourceFileChanged(sourceFile, eventKind));
             }
             return sourceFile;
         }
@@ -337,10 +340,10 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile, removed?: boolean) {
+        function sourceFileChanged(sourceFile: SourceFile, eventKind: FileWatcherEventKind) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
-            if (removed) {
+            if (eventKind === FileWatcherEventKind.Deleted) {
                 unorderedRemoveItem(rootFileNames, sourceFile.fileName);
             }
             startTimerForRecompilation();
@@ -660,6 +663,10 @@ namespace ts {
 
         return;
     }
+}
+
+if (ts.Debug.isDebugging) {
+    ts.Debug.enableDebugInfo();
 }
 
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {

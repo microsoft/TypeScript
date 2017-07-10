@@ -4,6 +4,12 @@
 namespace ts.Completions {
     export type Log = (message: string) => void;
 
+    const enum KeywordCompletionFilters {
+        None,
+        ClassElementKeywords,           // Keywords at class keyword
+        ConstructorParameterKeywords,   // Keywords at constructor parameter
+    }
+
     export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: Log, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
             return PathCompletions.getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
@@ -18,7 +24,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, request, hasFilteredClassMemberKeywords } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, request, keywordFilters } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX &&
             location && location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
@@ -54,27 +60,26 @@ namespace ts.Completions {
             addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target));
         }
         else {
-            if (!symbols || symbols.length === 0) {
-                if (!hasFilteredClassMemberKeywords) {
+            if ((!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
                     return undefined;
-                }
             }
 
             getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
         }
 
-        if (hasFilteredClassMemberKeywords) {
-            addRange(entries, classMemberKeywordCompletions);
-        }
-        // Add keywords if this is not a member completion list
-        else if (!isMemberCompletion) {
-            addRange(entries, keywordCompletions);
+        // TODO add filter for keyword based on type/value/namespace and also location
+
+        // Add all keywords if
+        // - this is not a member completion list (all the keywords)
+        // - other filters are enabled in required scenario so add those keywords
+        if (keywordFilters !== KeywordCompletionFilters.None || !isMemberCompletion) {
+            addRange(entries, getKeywordCompletions(keywordFilters));
         }
 
-        return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
+        return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, entries };
     }
 
-    function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>, target: ScriptTarget): CompletionEntry[] {
+    function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<true>, target: ScriptTarget): CompletionEntry[] {
         const entries: CompletionEntry[] = [];
 
         const nameTable = getNameTable(sourceFile);
@@ -83,10 +88,11 @@ namespace ts.Completions {
             if (pos === position) {
                 return;
             }
+            const realName = unescapeLeadingUnderscores(name);
 
-            if (!uniqueNames.get(name)) {
-                uniqueNames.set(name, name);
-                const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
+            if (!uniqueNames.get(realName)) {
+                uniqueNames.set(realName, true);
+                const displayName = getCompletionEntryDisplayName(realName, target, /*performCharacterChecks*/ true);
                 if (displayName) {
                     const entry = {
                         name: displayName,
@@ -127,17 +133,17 @@ namespace ts.Completions {
         };
     }
 
-    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log): Map<string> {
+    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log): Map<true> {
         const start = timestamp();
-        const uniqueNames = createMap<string>();
+        const uniqueNames = createMap<true>();
         if (symbols) {
             for (const symbol of symbols) {
                 const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target);
                 if (entry) {
-                    const id = escapeIdentifier(entry.name);
+                    const id = entry.name;
                     if (!uniqueNames.get(id)) {
                         entries.push(entry);
-                        uniqueNames.set(id, id);
+                        uniqueNames.set(id, true);
                     }
                 }
             }
@@ -229,7 +235,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
         const uniques = createMap<true>();
 
-        typeChecker.getResolvedSignature(argumentInfo.invocation, candidates);
+        typeChecker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
 
         for (const candidate of candidates) {
             addStringLiteralCompletionsFromType(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), entries, typeChecker, uniques);
@@ -317,7 +323,10 @@ namespace ts.Completions {
         }
 
         // Didn't find a symbol with this name.  See if we can find a keyword instead.
-        const keywordCompletion = forEach(keywordCompletions, c => c.name === entryName);
+        const keywordCompletion = forEach(
+            getKeywordCompletions(KeywordCompletionFilters.None),
+            c => c.name === entryName
+        );
         if (keywordCompletion) {
             return {
                 name: entryName,
@@ -356,7 +365,7 @@ namespace ts.Completions {
         location: Node;
         isRightOfDot: boolean;
         request?: Request;
-        hasFilteredClassMemberKeywords: boolean;
+        keywordFilters: KeywordCompletionFilters;
     }
     type Request = { kind: "JsDocTagName" } | { kind: "JsDocTag" } | { kind: "JsDocParameterName", tag: JSDocParameterTag };
 
@@ -366,7 +375,7 @@ namespace ts.Completions {
         let request: Request | undefined;
 
         let start = timestamp();
-        const currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        let currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
         // We will check for jsdoc comments with insideComment and getJsDocTagAtPosition. (TODO: that seems rather inefficient to check the same thing so many times.)
 
         log("getCompletionData: Get current token: " + (timestamp() - start));
@@ -376,6 +385,7 @@ namespace ts.Completions {
         const insideComment = isInComment(sourceFile, position, currentToken);
         log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
+        let insideJsDocTagTypeExpression = false;
         if (insideComment) {
             if (hasDocComment(sourceFile, position)) {
                 if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
@@ -410,33 +420,31 @@ namespace ts.Completions {
             // Completion should work inside certain JsDoc tags. For example:
             //     /** @type {number | string} */
             // Completion should work in the brackets
-            let insideJsDocTagExpression = false;
             const tag = getJsDocTagAtPosition(currentToken, position);
             if (tag) {
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                     request = { kind: "JsDocTagName" };
                 }
-
-                switch (tag.kind) {
-                    case SyntaxKind.JSDocTypeTag:
-                    case SyntaxKind.JSDocParameterTag:
-                    case SyntaxKind.JSDocReturnTag:
-                        const tagWithExpression = <JSDocTypeTag | JSDocParameterTag | JSDocReturnTag>tag;
-                        if (tagWithExpression.typeExpression && tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end) {
-                            insideJsDocTagExpression = true;
-                        }
-                        else if (isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
-                            request = { kind: "JsDocParameterName", tag };
-                        }
-                        break;
+                if (isTagWithTypeExpression(tag) && tag.typeExpression) {
+                    currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ true);
+                    if (!currentToken ||
+                        (!isDeclarationName(currentToken) &&
+                            (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
+                                (<JSDocPropertyTag>currentToken.parent).name !== currentToken))) {
+                        // Use as type location if inside tag's type expression
+                        insideJsDocTagTypeExpression = isCurrentlyEditingNode(tag.typeExpression);
+                    }
+                }
+                if (isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
+                    request = { kind: "JsDocParameterName", tag };
                 }
             }
 
             if (request) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, request, hasFilteredClassMemberKeywords: false };
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, request, keywordFilters: KeywordCompletionFilters.None };
             }
 
-            if (!insideJsDocTagExpression) {
+            if (!insideJsDocTagTypeExpression) {
                 // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal
                 // comment or the plain text part of a jsDoc comment, so no completion should be available
                 log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
@@ -445,7 +453,7 @@ namespace ts.Completions {
         }
 
         start = timestamp();
-        const previousToken = findPrecedingToken(position, sourceFile);
+        const previousToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, insideJsDocTagTypeExpression);
         log("getCompletionData: Get previous token 1: " + (timestamp() - start));
 
         // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
@@ -456,7 +464,7 @@ namespace ts.Completions {
         // Skip this partial identifier and adjust the contextToken to the token that precedes it.
         if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
             const start = timestamp();
-            contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
+            contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile, /*startNode*/ undefined, insideJsDocTagTypeExpression);
             log("getCompletionData: Get previous token 2: " + (timestamp() - start));
         }
 
@@ -468,7 +476,7 @@ namespace ts.Completions {
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
 
-        let location = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
+        let location = getTouchingPropertyName(sourceFile, position, insideJsDocTagTypeExpression); // TODO: GH#15853
         if (contextToken) {
             // Bail out if this is a known invalid completion location
             if (isCompletionListBlocker(contextToken)) {
@@ -532,7 +540,7 @@ namespace ts.Completions {
         let isGlobalCompletion = false;
         let isMemberCompletion: boolean;
         let isNewIdentifierLocation: boolean;
-        let hasFilteredClassMemberKeywords = false;
+        let keywordFilters = KeywordCompletionFilters.None;
         let symbols: Symbol[] = [];
 
         if (isRightOfDot) {
@@ -570,7 +578,21 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, hasFilteredClassMemberKeywords };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters };
+
+        type JSDocTagWithTypeExpression = JSDocAugmentsTag | JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
+
+        function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
+            switch (tag.kind) {
+                case SyntaxKind.JSDocAugmentsTag:
+                case SyntaxKind.JSDocParameterTag:
+                case SyntaxKind.JSDocPropertyTag:
+                case SyntaxKind.JSDocReturnTag:
+                case SyntaxKind.JSDocTypeTag:
+                case SyntaxKind.JSDocTypedefTag:
+                    return true;
+            }
+        }
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
@@ -578,6 +600,9 @@ namespace ts.Completions {
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
 
+            // Since this is qualified name check its a type node location
+            const isTypeLocation = isPartOfTypeNode(node.parent) || insideJsDocTagTypeExpression;
+            const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
 
@@ -589,23 +614,31 @@ namespace ts.Completions {
                 if (symbol && symbol.flags & SymbolFlags.HasExports) {
                     // Extract module or enum members
                     const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                    const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.getUnescapedName());
+                    const isValidTypeAccess = (symbol: Symbol) => symbolCanbeReferencedAtTypeLocation(symbol);
+                    const isValidAccess = isRhsOfImportDeclaration ?
+                        // Any kind is allowed when dotting off namespace in internal import equals declaration
+                        (symbol: Symbol) => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
+                        isTypeLocation ? isValidTypeAccess : isValidValueAccess;
                     forEach(exportedSymbols, symbol => {
-                        if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                        if (isValidAccess(symbol)) {
                             symbols.push(symbol);
                         }
                     });
                 }
             }
 
-            const type = typeChecker.getTypeAtLocation(node);
-            addTypeProperties(type);
+            if (!isTypeLocation) {
+                const type = typeChecker.getTypeAtLocation(node);
+                addTypeProperties(type);
+            }
         }
 
         function addTypeProperties(type: Type) {
             if (type) {
                 // Filter private properties
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.getUnescapedName())) {
                         symbols.push(symbol);
                     }
                 }
@@ -638,6 +671,16 @@ namespace ts.Completions {
                 // cursor is in an import clause
                 // try to show exported member for imported module
                 return tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports);
+            }
+
+            if (tryGetConstructorLikeCompletionContainer(contextToken)) {
+                // no members, only keywords
+                isMemberCompletion = false;
+                // Declaring new property/method/accessor
+                isNewIdentifierLocation = true;
+                // Has keywords for constructor parameter
+                keywordFilters = KeywordCompletionFilters.ConstructorParameterKeywords;
+                return true;
             }
 
             if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
@@ -706,11 +749,85 @@ namespace ts.Completions {
                     isStatement(scopeNode);
             }
 
-            /// TODO filter meaning based on the current context
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-            symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+            symbols = filterGlobalCompletion(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings));
 
             return true;
+        }
+
+        function filterGlobalCompletion(symbols: Symbol[]) {
+            return filter(symbols, symbol => {
+                if (!isSourceFile(location)) {
+                    // export = /**/ here we want to get all meanings, so any symbol is ok
+                    if (isExportAssignment(location.parent)) {
+                        return true;
+                    }
+
+                    // This is an alias, follow what it aliases
+                    if (symbol && symbol.flags & SymbolFlags.Alias) {
+                        symbol = typeChecker.getAliasedSymbol(symbol);
+                    }
+
+                    // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
+                    if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
+                        return !!(symbol.flags & SymbolFlags.Namespace);
+                    }
+
+                    if (insideJsDocTagTypeExpression ||
+                        (!isContextTokenValueLocation(contextToken) &&
+                            (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken)))) {
+                        // Its a type, but you can reach it by namespace.type as well
+                        return symbolCanbeReferencedAtTypeLocation(symbol);
+                    }
+                }
+
+                // expressions are value space (which includes the value namespaces)
+                return !!(symbol.flags & SymbolFlags.Value);
+            });
+        }
+
+        function isContextTokenValueLocation(contextToken: Node) {
+            return contextToken &&
+                contextToken.kind === SyntaxKind.TypeOfKeyword &&
+                contextToken.parent.kind === SyntaxKind.TypeQuery;
+        }
+
+        function isContextTokenTypeLocation(contextToken: Node) {
+            if (contextToken) {
+                const parentKind = contextToken.parent.kind;
+                switch (contextToken.kind) {
+                    case SyntaxKind.ColonToken:
+                        return parentKind === SyntaxKind.PropertyDeclaration ||
+                            parentKind === SyntaxKind.PropertySignature ||
+                            parentKind === SyntaxKind.Parameter ||
+                            parentKind === SyntaxKind.VariableDeclaration ||
+                            isFunctionLikeKind(parentKind);
+
+                    case SyntaxKind.EqualsToken:
+                        return parentKind === SyntaxKind.TypeAliasDeclaration;
+
+                    case SyntaxKind.AsKeyword:
+                        return parentKind === SyntaxKind.AsExpression;
+                }
+            }
+        }
+
+        function symbolCanbeReferencedAtTypeLocation(symbol: Symbol): boolean {
+            // This is an alias, follow what it aliases
+            if (symbol && symbol.flags & SymbolFlags.Alias) {
+                symbol = typeChecker.getAliasedSymbol(symbol);
+            }
+
+            if (symbol.flags & SymbolFlags.Type) {
+                return true;
+            }
+
+            if (symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule)) {
+                const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                // If the exported symbols contains type,
+                // symbol can be referenced at locations where type is allowed
+                return forEach(exportedSymbols, symbolCanbeReferencedAtTypeLocation);
+            }
         }
 
         /**
@@ -844,7 +961,7 @@ namespace ts.Completions {
          *
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
-        function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | BindingPattern): boolean {
+        function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | ObjectBindingPattern): boolean {
             // We're looking up possible property names from contextual/inferred/declared type.
             isMemberCompletion = true;
 
@@ -860,40 +977,35 @@ namespace ts.Completions {
                 typeMembers = typeChecker.getAllPossiblePropertiesOfType(typeForObject);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
             }
-            else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
+            else {
+                Debug.assert(objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern);
                 // We are *only* completing on properties from the type being destructured.
                 isNewIdentifierLocation = false;
 
                 const rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
-                if (isVariableLike(rootDeclaration)) {
-                    // We don't want to complete using the type acquired by the shape
-                    // of the binding pattern; we are only interested in types acquired
-                    // through type declaration or inference.
-                    // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
-                    // type of parameter will flow in from the contextual type of the function
-                    let canGetType = !!(rootDeclaration.initializer || rootDeclaration.type);
-                    if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
-                        if (isExpression(rootDeclaration.parent)) {
-                            canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
-                        }
-                        else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
-                            canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
-                        }
+                if (!isVariableLike(rootDeclaration)) throw Debug.fail("Root declaration is not variable-like.");
+
+                // We don't want to complete using the type acquired by the shape
+                // of the binding pattern; we are only interested in types acquired
+                // through type declaration or inference.
+                // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
+                // type of parameter will flow in from the contextual type of the function
+                let canGetType = rootDeclaration.initializer || rootDeclaration.type || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
+                if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
+                    if (isExpression(rootDeclaration.parent)) {
+                        canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
                     }
-                    if (canGetType) {
-                        const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                        if (!typeForObject) return false;
-                        // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
-                        typeMembers = typeChecker.getPropertiesOfType(typeForObject);
-                        existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
+                    else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
+                        canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
                     }
                 }
-                else {
-                    Debug.fail("Root declaration is not variable-like.");
+                if (canGetType) {
+                    const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                    if (!typeForObject) return false;
+                    // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
+                    typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                    existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
                 }
-            }
-            else {
-                Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
             }
 
             if (typeMembers && typeMembers.length > 0) {
@@ -953,7 +1065,7 @@ namespace ts.Completions {
             // Declaring new property/method/accessor
             isNewIdentifierLocation = true;
             // Has keywords for class elements
-            hasFilteredClassMemberKeywords = true;
+            keywordFilters = KeywordCompletionFilters.ClassElementKeywords;
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(classLikeDeclaration);
             const implementsTypeNodes = getClassImplementsHeritageClauseElements(classLikeDeclaration);
@@ -1003,14 +1115,14 @@ namespace ts.Completions {
          * Returns the immediate owning object literal or binding pattern of a context token,
          * on the condition that one exists and that the context implies completion should be given.
          */
-        function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | BindingPattern {
+        function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | ObjectBindingPattern {
             if (contextToken) {
                 switch (contextToken.kind) {
                     case SyntaxKind.OpenBraceToken:  // const x = { |
                     case SyntaxKind.CommaToken:      // const x = { a: 0, |
                         const parent = contextToken.parent;
-                        if (parent && (parent.kind === SyntaxKind.ObjectLiteralExpression || parent.kind === SyntaxKind.ObjectBindingPattern)) {
-                            return <ObjectLiteralExpression | BindingPattern>parent;
+                        if (isObjectLiteralExpression(parent) || isObjectBindingPattern(parent)) {
+                            return parent;
                         }
                         break;
                 }
@@ -1043,6 +1155,16 @@ namespace ts.Completions {
             return isClassElement(node.parent) && isClassLike(node.parent.parent);
         }
 
+        function isParameterOfConstructorDeclaration(node: Node) {
+            return isParameter(node) && isConstructorDeclaration(node.parent);
+        }
+
+        function isConstructorParameterCompletion(node: Node) {
+            return node.parent &&
+                isParameterOfConstructorDeclaration(node.parent) &&
+                (isConstructorParameterCompletionKeyword(node.kind) || isDeclarationName(node));
+        }
+
         /**
          * Returns the immediate owning class declaration of a context token,
          * on the condition that one exists and that the context implies completion should be given.
@@ -1056,8 +1178,14 @@ namespace ts.Completions {
                         }
                         break;
 
-                    // class c {getValue(): number; | }
+                    // class c {getValue(): number, | }
                     case SyntaxKind.CommaToken:
+                        if (isClassLike(contextToken.parent)) {
+                            return contextToken.parent;
+                        }
+                        break;
+
+                    // class c {getValue(): number; | }
                     case SyntaxKind.SemicolonToken:
                     // class c { method() { } | }
                     case SyntaxKind.CloseBraceToken:
@@ -1078,6 +1206,26 @@ namespace ts.Completions {
             // class c { method() { } | method2() { } }
             if (location && location.kind === SyntaxKind.SyntaxList && isClassLike(location.parent)) {
                 return location.parent;
+            }
+            return undefined;
+        }
+
+        /**
+         * Returns the immediate owning class declaration of a context token,
+         * on the condition that one exists and that the context implies completion should be given.
+         */
+        function tryGetConstructorLikeCompletionContainer(contextToken: Node): ConstructorDeclaration {
+            if (contextToken) {
+                switch (contextToken.kind) {
+                    case SyntaxKind.OpenParenToken:
+                    case SyntaxKind.CommaToken:
+                        return  isConstructorDeclaration(contextToken.parent) && contextToken.parent;
+
+                    default:
+                        if (isConstructorParameterCompletion(contextToken)) {
+                            return contextToken.parent.parent as ConstructorDeclaration;
+                        }
+                }
             }
             return undefined;
         }
@@ -1145,21 +1293,6 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function isFunction(kind: SyntaxKind): boolean {
-            if (!isFunctionLikeKind(kind)) {
-                return false;
-            }
-
-            switch (kind) {
-                case SyntaxKind.Constructor:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionType:
-                    return false;
-                default:
-                    return true;
-            }
-        }
-
         /**
          * @returns true if we are certain that the currently edited location must define a new location; false otherwise.
          */
@@ -1171,12 +1304,15 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.VariableDeclarationList ||
                         containingNodeKind === SyntaxKind.VariableStatement ||
                         containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
-                        isFunction(containingNodeKind) ||
-                        containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
-                        containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D<T, |
+                        isFunctionLikeButNotConstructor(containingNodeKind) ||
                         containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
                         containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
-                        containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
+                        containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type Map, K, |
+                        // class A<T, |
+                        // var C = class D<T, |
+                        (isClassLike(contextToken.parent) &&
+                            contextToken.parent.typeParameters &&
+                            contextToken.parent.typeParameters.end >= contextToken.pos);
 
                 case SyntaxKind.DotToken:
                     return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
@@ -1189,7 +1325,7 @@ namespace ts.Completions {
 
                 case SyntaxKind.OpenParenToken:
                     return containingNodeKind === SyntaxKind.CatchClause ||
-                        isFunction(containingNodeKind);
+                        isFunctionLikeButNotConstructor(containingNodeKind);
 
                 case SyntaxKind.OpenBraceToken:
                     return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
@@ -1207,7 +1343,7 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
                         containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
                         containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
-                        isFunction(containingNodeKind);
+                        isFunctionLikeKind(containingNodeKind);
 
                 case SyntaxKind.StaticKeyword:
                     return containingNodeKind === SyntaxKind.PropertyDeclaration && !isClassLike(contextToken.parent.parent);
@@ -1220,7 +1356,7 @@ namespace ts.Completions {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
-                    return containingNodeKind === SyntaxKind.Parameter;
+                    return containingNodeKind === SyntaxKind.Parameter && !isConstructorDeclaration(contextToken.parent.parent);
 
                 case SyntaxKind.AsKeyword:
                     return containingNodeKind === SyntaxKind.ImportSpecifier ||
@@ -1253,6 +1389,18 @@ namespace ts.Completions {
                 return false;
             }
 
+            if (isConstructorParameterCompletion(contextToken)) {
+                // constructor parameter completion is available only if
+                // - its modifier of the constructor parameter or
+                // - its name of the parameter and not being edited
+                // eg. constructor(a |<- this shouldnt show completion
+                if (!isIdentifier(contextToken) ||
+                    isConstructorParameterCompletionKeywordText(contextToken.getText()) ||
+                    isCurrentlyEditingNode(contextToken)) {
+                    return false;
+                }
+            }
+
             // Previous token may have been a keyword that was converted to an identifier.
             switch (contextToken.getText()) {
                 case "abstract":
@@ -1273,7 +1421,11 @@ namespace ts.Completions {
                     return true;
             }
 
-            return false;
+            return isDeclarationName(contextToken) && !isJsxAttribute(contextToken.parent);
+        }
+
+        function isFunctionLikeButNotConstructor(kind: SyntaxKind) {
+            return isFunctionLikeKind(kind) && kind !== SyntaxKind.Constructor;
         }
 
         function isDotOfNumericLiteral(contextToken: Node): boolean {
@@ -1295,7 +1447,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-            const existingImportsOrExports = createMap<boolean>();
+            const existingImportsOrExports = createUnderscoreEscapedMap<boolean>();
 
             for (const element of namedImportsOrExports) {
                 // If this is the current item we are editing right now, do not filter it out
@@ -1325,7 +1477,7 @@ namespace ts.Completions {
                 return contextualMemberSymbols;
             }
 
-            const existingMemberNames = createMap<boolean>();
+            const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -1342,7 +1494,7 @@ namespace ts.Completions {
                     continue;
                 }
 
-                let existingName: string;
+                let existingName: __String;
 
                 if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
                     // include only identifiers in completion list
@@ -1351,10 +1503,11 @@ namespace ts.Completions {
                     }
                 }
                 else {
-                    // TODO(jfreeman): Account for computed property name
+                    // TODO: Account for computed property name
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
-                    existingName = (getNameOfDeclaration(m) as Identifier).text;
+                    const name = getNameOfDeclaration(m);
+                    existingName = getEscapedTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
                 }
 
                 existingMemberNames.set(existingName, true);
@@ -1369,7 +1522,7 @@ namespace ts.Completions {
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
         function filterClassMembersList(baseSymbols: Symbol[], implementingTypeSymbols: Symbol[], existingMembers: ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
-            const existingMemberNames = createMap<boolean>();
+            const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyDeclaration &&
@@ -1422,7 +1575,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-            const seenNames = createMap<boolean>();
+            const seenNames = createUnderscoreEscapedMap<boolean>();
             for (const attr of attributes) {
                 // If this is the current item we are editing right now, do not filter it out
                 if (isCurrentlyEditingNode(attr)) {
@@ -1492,14 +1645,45 @@ namespace ts.Completions {
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
-    const keywordCompletions: CompletionEntry[] = [];
-    for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
-        keywordCompletions.push({
-            name: tokenToString(i),
-            kind: ScriptElementKind.keyword,
-            kindModifiers: ScriptElementKindModifier.none,
-            sortText: "0"
-        });
+    const _keywordCompletions: CompletionEntry[][] = [];
+    function getKeywordCompletions(keywordFilter: KeywordCompletionFilters): CompletionEntry[] {
+        const completions = _keywordCompletions[keywordFilter];
+        if (completions) {
+            return completions;
+        }
+        return _keywordCompletions[keywordFilter] = generateKeywordCompletions(keywordFilter);
+
+        type FilterKeywordCompletions = (entryName: string) => boolean;
+        function generateKeywordCompletions(keywordFilter: KeywordCompletionFilters) {
+            switch (keywordFilter) {
+                case KeywordCompletionFilters.None:
+                    return getAllKeywordCompletions();
+                case KeywordCompletionFilters.ClassElementKeywords:
+                    return getFilteredKeywordCompletions(isClassMemberCompletionKeywordText);
+                case KeywordCompletionFilters.ConstructorParameterKeywords:
+                    return getFilteredKeywordCompletions(isConstructorParameterCompletionKeywordText);
+            }
+        }
+
+        function getAllKeywordCompletions() {
+            const allKeywordsCompletions: CompletionEntry[] = [];
+            for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
+                allKeywordsCompletions.push({
+                    name: tokenToString(i),
+                    kind: ScriptElementKind.keyword,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    sortText: "0"
+                });
+            }
+            return allKeywordsCompletions;
+        }
+
+        function getFilteredKeywordCompletions(filterFn: FilterKeywordCompletions) {
+            return filter(
+                getKeywordCompletions(KeywordCompletionFilters.None),
+                entry => filterFn(entry.name)
+            );
+        }
     }
 
     function isClassMemberCompletionKeyword(kind: SyntaxKind) {
@@ -1522,8 +1706,19 @@ namespace ts.Completions {
         return isClassMemberCompletionKeyword(stringToToken(text));
     }
 
-    const classMemberKeywordCompletions = filter(keywordCompletions, entry =>
-        isClassMemberCompletionKeywordText(entry.name));
+    function isConstructorParameterCompletionKeyword(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.ReadonlyKeyword:
+                return true;
+        }
+    }
+
+    function isConstructorParameterCompletionKeywordText(text: string) {
+        return isConstructorParameterCompletionKeyword(stringToToken(text));
+    }
 
     function isEqualityExpression(node: Node): node is BinaryExpression {
         return isBinaryExpression(node) && isEqualityOperatorKind(node.operatorToken.kind);

@@ -2,8 +2,9 @@
 /// <reference path="performance.ts" />
 
 namespace ts {
+    export const versionMajorMinor = "2.5";
     /** The version of the TypeScript compiler release */
-    export const version = "2.4.0";
+    export const version = `${versionMajorMinor}.0`;
 }
 
 /* @internal */
@@ -44,6 +45,22 @@ namespace ts {
     /** Create a new map. If a template object is provided, the map will copy entries from it. */
     export function createMap<T>(): Map<T> {
         return new MapCtr<T>();
+    }
+
+    /** Create a new escaped identifier map. */
+    export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
+        return new MapCtr<T>() as UnderscoreEscapedMap<T>;
+    }
+
+    /* @internal */
+    export function createSymbolTable(symbols?: Symbol[]): SymbolTable {
+        const result = createMap<Symbol>() as SymbolTable;
+        if (symbols) {
+            for (const symbol of symbols) {
+                result.set(symbol.name, symbol);
+            }
+        }
+        return result;
     }
 
     export function createMapFromTemplate<T>(template?: MapLike<T>): Map<T> {
@@ -145,54 +162,6 @@ namespace ts {
         };
     }
 
-    export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        const files = createMap<T>();
-        return {
-            get,
-            set,
-            contains,
-            remove,
-            forEachValue: forEachValueInMap,
-            getKeys,
-            clear,
-        };
-
-        function forEachValueInMap(f: (key: Path, value: T) => void) {
-            files.forEach((file, key) => {
-                f(<Path>key, file);
-            });
-        }
-
-        function getKeys() {
-            return arrayFrom(files.keys()) as Path[];
-        }
-
-        // path should already be well-formed so it does not need to be normalized
-        function get(path: Path): T {
-            return files.get(toKey(path));
-        }
-
-        function set(path: Path, value: T) {
-            files.set(toKey(path), value);
-        }
-
-        function contains(path: Path) {
-            return files.has(toKey(path));
-        }
-
-        function remove(path: Path) {
-            files.delete(toKey(path));
-        }
-
-        function clear() {
-            files.clear();
-        }
-
-        function toKey(path: Path): string {
-            return keyMapper ? keyMapper(path) : path;
-        }
-    }
-
     export function toPath(fileName: string, basePath: string, getCanonicalFileName: (path: string) => string): Path {
         const nonCanonicalizedPath = isRootedDiskPath(fileName)
             ? normalizePath(fileName)
@@ -215,7 +184,7 @@ namespace ts {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+    export function forEach<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 const result = callback(array[i], i);
@@ -731,7 +700,7 @@ namespace ts {
         return result;
     }
 
-    export function sum(array: any[], prop: string): number {
+    export function sum<K extends string>(array: { [x in K]: number }[], prop: K): number {
         let result = 0;
         for (const v of array) {
             result += v[prop];
@@ -999,23 +968,17 @@ namespace ts {
         return result;
     }
 
-    export function convertToArray<T, U>(iterator: Iterator<T>, f: (value: T) => U) {
-        const result: U[] = [];
-        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-            result.push(f(value));
-        }
-        return result;
-    }
-
     /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T> | Map<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
-            const result = callback(value, key);
+            const result = callback(value, key as (string & __String));
             if (result) {
                 return result;
             }
@@ -1024,10 +987,12 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
+    export function forEachKey<T>(map: UnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: UnderscoreEscapedMap<{}> | Map<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
-            const result = callback(key);
+            const result = callback(key as string & __String);
             if (result) {
                 return result;
             }
@@ -1036,9 +1001,11 @@ namespace ts {
     }
 
     /** Copy entries from `source` to `target`. */
-    export function copyEntries<T>(source: Map<T>, target: Map<T>): void {
-        source.forEach((value, key) => {
-            target.set(key, value);
+    export function copyEntries<T>(source: UnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
+    export function copyEntries<T>(source: Map<T>, target: Map<T>): void;
+    export function copyEntries<T, U extends UnderscoreEscapedMap<T> | Map<T>>(source: U, target: U): void {
+        (source as Map<T>).forEach((value, key) => {
+            (target as Map<T>).set(key, value);
         });
     }
 
@@ -1101,9 +1068,22 @@ namespace ts {
         return result;
     }
 
-    export function cloneMap<T>(map: Map<T>) {
+    /**
+     * Creates a set from the elements of an array.
+     *
+     * @param array the array of input elements.
+     */
+    export function arrayToSet(array: string[]): Map<true>;
+    export function arrayToSet<T>(array: T[], makeKey: (value: T) => string): Map<true>;
+    export function arrayToSet(array: any[], makeKey?: (value: any) => string): Map<true> {
+        return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
+    }
+
+    export function cloneMap(map: SymbolTable): SymbolTable;
+    export function cloneMap<T>(map: Map<T>): Map<T>;
+    export function cloneMap<T>(map: Map<T> | SymbolTable): Map<T> | SymbolTable {
         const clone = createMap<T>();
-        copyEntries(map, clone);
+        copyEntries(map as Map<T>, clone);
         return clone;
     }
 
@@ -1711,7 +1691,7 @@ namespace ts {
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
-            directoryComponents.length--;
+            directoryComponents.pop();
         }
 
         // Find the component that differs
@@ -2020,7 +2000,7 @@ namespace ts {
         };
     }
 
-    export function matchFiles(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
+    export function matchFiles(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
@@ -2037,15 +2017,14 @@ namespace ts {
 
         const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
-            visitDirectory(basePath, combinePaths(currentDirectory, basePath));
+            visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
 
         return flatten(results);
 
-        function visitDirectory(path: string, absolutePath: string) {
+        function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
             let { files, directories } = getFileSystemEntries(path);
             files = files.slice().sort(comparer);
-            directories = directories.slice().sort(comparer);
 
             for (const current of files) {
                 const name = combinePaths(path, current);
@@ -2063,12 +2042,20 @@ namespace ts {
                 }
             }
 
+            if (depth !== undefined) {
+                depth--;
+                if (depth === 0) {
+                    return;
+                }
+            }
+
+            directories = directories.slice().sort(comparer);
             for (const current of directories) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
                     (!excludeRegex || !excludeRegex.test(absoluteName))) {
-                    visitDirectory(name, absoluteName);
+                    visitDirectory(name, absoluteName, depth);
                 }
             }
         }
@@ -2118,27 +2105,29 @@ namespace ts {
         return absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
     }
 
-    export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
+    export function ensureScriptKind(fileName: string, scriptKind: ScriptKind | undefined): ScriptKind {
         // Using scriptKind as a condition handles both:
         // - 'scriptKind' is unspecified and thus it is `undefined`
         // - 'scriptKind' is set and it is `Unknown` (0)
         // If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
         // to get the ScriptKind from the file name. If it cannot be resolved
         // from the file name then the default 'TS' script kind is returned.
-        return (scriptKind || getScriptKindFromFileName(fileName)) || ScriptKind.TS;
+        return scriptKind || getScriptKindFromFileName(fileName) || ScriptKind.TS;
     }
 
     export function getScriptKindFromFileName(fileName: string): ScriptKind {
         const ext = fileName.substr(fileName.lastIndexOf("."));
         switch (ext.toLowerCase()) {
-            case ".js":
+            case Extension.Js:
                 return ScriptKind.JS;
-            case ".jsx":
+            case Extension.Jsx:
                 return ScriptKind.JSX;
-            case ".ts":
+            case Extension.Ts:
                 return ScriptKind.TS;
-            case ".tsx":
+            case Extension.Tsx:
                 return ScriptKind.TSX;
+            case ".json":
+                return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
         }
@@ -2147,24 +2136,19 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    export const supportedTypeScriptExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
-    export const supportedJavascriptExtensions = [".js", ".jsx"];
-    const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+    export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
+    export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
+    const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
         const needAllExtensions = options && options.allowJs;
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
-            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+            // TODO: Return a ReadonlyArray<string> from this function to avoid casts. https://github.com/Microsoft/TypeScript/issues/16312
+            return needAllExtensions ? allSupportedExtensions as Extension[] : supportedTypeScriptExtensions as Extension[];
         }
-        const extensions = allSupportedExtensions.slice(0);
-        for (const extInfo of extraFileExtensions) {
-            if (extensions.indexOf(extInfo.extension) === -1) {
-                extensions.push(extInfo.extension);
-            }
-        }
-        return extensions;
+        return deduplicate([...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)]);
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -2237,7 +2221,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
+    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);
@@ -2265,13 +2249,13 @@ namespace ts {
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
         getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
-        getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
+        getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
         getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
-    function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;
@@ -2342,7 +2326,7 @@ namespace ts {
 
         export function fail(message?: string, stackCrawlMark?: Function): void {
             debugger;
-            const e = new Error(message ? `Debug Failure. ` : "Debug Failure.");
+            const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
                 (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
             }
@@ -2491,7 +2475,7 @@ namespace ts {
 
     /** True if an extension is one of the supported TypeScript extensions. */
     export function extensionIsTypeScript(ext: Extension): boolean {
-        return ext <= Extension.LastTypeScriptExtension;
+        return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts;
     }
 
     /**
@@ -2510,20 +2494,8 @@ namespace ts {
         return tryGetExtensionFromPath(path) !== undefined;
     }
 
-    const allExtensions = [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx];
-
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        return ts.find(allExtensions, ext => fileExtensionIs(path, extensionText(ext)));
-    }
-
-    export function extensionText(ext: Extension): string {
-        switch (ext) {
-            case Extension.Dts: return ".d.ts";
-            case Extension.Ts: return ".ts";
-            case Extension.Tsx: return ".tsx";
-            case Extension.Js: return ".js";
-            case Extension.Jsx: return ".jsx";
-        }
+        return find(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
     }
 
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {

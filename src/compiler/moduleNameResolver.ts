@@ -164,11 +164,7 @@ namespace ts {
      */
     export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
-        const moduleResolutionState: ModuleResolutionState = {
-            compilerOptions: options,
-            host: host,
-            traceEnabled
-        };
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled };
 
         const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {
@@ -319,7 +315,7 @@ namespace ts {
     }
 
     export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache {
-        const directoryToModuleNameMap = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        const directoryToModuleNameMap = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const moduleNameToDirectoryMap = createMap<PerModuleNameCache>();
 
         return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName };
@@ -347,7 +343,7 @@ namespace ts {
         }
 
         function createPerModuleNameCache(): PerModuleNameCache {
-            const directoryPathMap = createFileMap<ResolvedModuleWithFailedLookupLocations>();
+            const directoryPathMap = createMap<ResolvedModuleWithFailedLookupLocations>();
 
             return { get, set };
 
@@ -369,7 +365,7 @@ namespace ts {
             function set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void {
                 const path = toPath(directory, currentDirectory, getCanonicalFileName);
                 // if entry is already in cache do nothing
-                if (directoryPathMap.contains(path)) {
+                if (directoryPathMap.has(path)) {
                     return;
                 }
                 directoryPathMap.set(path, result);
@@ -383,7 +379,7 @@ namespace ts {
                 let current = path;
                 while (true) {
                     const parent = getDirectoryPath(current);
-                    if (parent === current || directoryPathMap.contains(parent)) {
+                    if (parent === current || directoryPathMap.has(parent)) {
                         break;
                     }
                     directoryPathMap.set(parent, result);
@@ -840,7 +836,7 @@ namespace ts {
         }
 
         function tryExtension(ext: Extension): PathAndExtension | undefined {
-            const path = tryFile(candidate + extensionText(ext), failedLookupLocations, onlyRecordFailures, state);
+            const path = tryFile(candidate + ext, failedLookupLocations, onlyRecordFailures, state);
             return path && { path, ext };
         }
     }
@@ -1024,7 +1020,7 @@ namespace ts {
     export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            return withoutAtTypePrefix.indexOf("__") !== -1 ?
+            return withoutAtTypePrefix.indexOf(mangledScopedPackageSeparator) !== -1 ?
                 "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
                 withoutAtTypePrefix;
         }

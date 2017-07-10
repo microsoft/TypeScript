@@ -211,10 +211,11 @@ namespace Harness.LanguageService {
             const script = this.getScriptSnapshot(fileName);
             return script !== undefined;
         }
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
                 /*useCaseSensitiveFileNames*/ false,
                 this.getCurrentDirectory(),
+                depth,
                 (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
         readFile(path: string): string {
@@ -315,9 +316,7 @@ namespace Harness.LanguageService {
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
-        readDirectory(_rootDir: string, _extension: string): string {
-            return ts.notImplemented();
-        }
+        readDirectory = ts.notImplemented;
         readDirectoryNames = ts.notImplemented;
         readFileNames = ts.notImplemented;
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
@@ -671,9 +670,7 @@ namespace Harness.LanguageService {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory(_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] {
-            return ts.notImplemented();
-        }
+        readDirectory() { return ts.notImplemented(); }
 
         watchFile(): ts.FileWatcher {
             return { close: ts.noop };
@@ -734,7 +731,7 @@ namespace Harness.LanguageService {
         }
 
         createHash(s: string) {
-            return s;
+            return mockHash(s);
         }
 
         require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
@@ -858,5 +855,9 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
         getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
+    }
+
+    export function mockHash(s: string): string {
+        return `hash-${s}`;
     }
 }

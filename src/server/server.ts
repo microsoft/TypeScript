@@ -43,7 +43,7 @@ namespace ts.server {
                     process.env.USERPROFILE ||
                     (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
+                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
             }
             case "openbsd":
             case "freebsd":
@@ -51,7 +51,7 @@ namespace ts.server {
             case "linux":
             case "android": {
                 const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin");
-                return combinePaths(cacheLocation, "typescript");
+                return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
             }
             default:
                 Debug.fail(`unsupported platform '${process.platform}'`);
@@ -510,6 +510,7 @@ namespace ts.server {
         const watchedFiles: WatchedFile[] = [];
         let nextFileToCheck = 0;
         let watchTimer: any;
+        return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
             return fs.statSync(fileName).mtime;
@@ -523,11 +524,14 @@ namespace ts.server {
 
             fs.stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
-                    watchedFile.callback(watchedFile.fileName);
+                    watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
                 }
                 else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                     watchedFile.mtime = stats.mtime;
-                    watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
+                    const eventKind = watchedFile.mtime.getTime() === 0
+                        ? FileWatcherEventKind.Deleted
+                        : FileWatcherEventKind.Changed;
+                    watchedFile.callback(watchedFile.fileName, eventKind);
                 }
             });
         }
@@ -559,7 +563,9 @@ namespace ts.server {
             const file: WatchedFile = {
                 fileName,
                 callback,
-                mtime: getModifiedTime(fileName)
+                mtime: sys.fileExists(fileName)
+                    ? getModifiedTime(fileName)
+                    : new Date(0) // Any subsequent modification will occur after this time
             };
 
             watchedFiles.push(file);
@@ -572,14 +578,6 @@ namespace ts.server {
         function removeFile(file: WatchedFile) {
             unorderedRemoveItem(watchedFiles, file);
         }
-
-        return {
-            getModifiedTime: getModifiedTime,
-            poll: poll,
-            startWatchTimer: startWatchTimer,
-            addFile: addFile,
-            removeFile: removeFile
-        };
     }
 
     // REVIEW: for now this implementation uses polling.

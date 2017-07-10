@@ -6,6 +6,7 @@
         "noImplicitThis": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "alwaysStrict": true,
         "pretty": true,
         "preserveConstEnums": true,
         "stripInternal": true,

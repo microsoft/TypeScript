@@ -61,10 +61,10 @@ x(1);
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
 >x1 : (arg0: number) => any
->(a) => a + 1 : (a: any) => any
->a : any
->a + 1 : any
->a : any
+>(a) => a + 1 : (a: number) => number
+>a : number
+>a + 1 : number
+>a : number
 >1 : 1
 
 x1(0);
@@ -75,10 +75,10 @@ x1(0);
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
 >x2 : (arg0: number) => number
->(a) => a + 1 : (a: any) => any
->a : any
->a + 1 : any
->a : any
+>(a) => a + 1 : (a: number) => number
+>a : number
+>a + 1 : number
+>a : number
 >1 : 1
 
 x2(0);

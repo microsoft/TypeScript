@@ -72,6 +72,7 @@ function runTests(taskConfigsFolder, run, options, cb) {
             current: undefined,
             start: undefined,
             end: undefined,
+            catastrophicError: "",
             failures: []
         };
         partitions[index] = partition;
@@ -86,8 +87,19 @@ function runTests(taskConfigsFolder, run, options, cb) {
             input: p.stdout,
             terminal: false
         });
+
+        var rlError = readline.createInterface({
+            input: p.stderr,
+            terminal: false
+        });
+
         rl.on("line", onmessage);
+        rlError.on("line", onErrorMessage);
         p.on("exit", onexit)
+
+        function onErrorMessage(line) {
+            partition.catastrophicError += line + os.EOL;
+        }
 
         function onmessage(line) {
             if (partition.start === undefined) {
@@ -153,15 +165,17 @@ function runTests(taskConfigsFolder, run, options, cb) {
             }
         }
 
-        function onexit() {
+        function onexit(code) {
             if (partition.end === undefined) {
                 partition.end = Date.now();
             }
 
             partition.duration = partition.end - partition.start;
-            var summaryColor = partition.failed ? "fail" : "green";
-            var summarySymbol = partition.failed ? Base.symbols.err : Base.symbols.ok;
-            var summaryTests = (partition.passed === partition.tests ? partition.passed : partition.passed + "/" + partition.tests) + " passing";
+            var isPartitionFail = partition.failed || code !== 0;
+            var summaryColor = isPartitionFail ? "fail" : "green";
+            var summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
+
+            var summaryTests = (isPartitionFail ? partition.passed + "/" + partition.tests : partition.passed) + " passing";
             var summaryDuration = "(" + ms(partition.duration) + ")";
             var savedUseColors = Base.useColors;
             Base.useColors = !options.noColors;
@@ -198,12 +212,34 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 failures = reporter.failures;
 
             var duration = 0;
+            var catastrophicError = "";
             for (var i = 0; i < numPartitions; i++) {
                 var partition = partitions[i];
                 stats.passes += partition.passed;
                 stats.failures += partition.failed;
                 stats.tests += partition.tests;
                 duration += partition.duration;
+                if (partition.catastrophicError !== "") {
+                    // Partition is written out to a temporary file as a JSON object.
+                    // Below is an example of how the partition JSON object looks like
+                    // {
+                    //      "light":false,
+                    //      "tasks":[
+                    //          { 
+                    //              "runner":"compiler",
+                    //              "files":["tests/cases/compiler/es6ImportNamedImportParsingError.ts"]
+                    //          }
+                    //      ],
+                    //      "runUnitTests":false
+                    // }
+                    var jsonText = fs.readFileSync(partition.file);
+                    var configObj = JSON.parse(jsonText);
+                    if (configObj.tasks && configObj.tasks[0]) {
+                        catastrophicError += "Error from one or more of these files: " + configObj.tasks[0].files + os.EOL;
+                        catastrophicError += partition.catastrophicError;
+                        catastrophicError += os.EOL;
+                    }
+                }
                 for (var j = 0; j < partition.failures.length; j++) {
                     var failure = partition.failures[j];
                     failures.push(makeMochaTest(failure));
@@ -223,6 +259,9 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 reporter.epilogue();
             }
 
+            if (catastrophicError !== "") {
+                return cb(new Error(catastrophicError));
+            }
             if (stats.failures) {
                 return cb(new Error("Test failures reported: " + stats.failures));
             }

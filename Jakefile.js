@@ -25,6 +25,8 @@ var LKGDirectory = "lib/";
 var copyright = "CopyrightNotice.txt";
 var thirdParty = "ThirdPartyNoticeText.txt";
 
+var defaultTestTimeout = 40000;
+
 // add node_modules to path so we don't need global modules, prefer the modules by adding them first
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
@@ -72,6 +74,10 @@ function measure(marker) {
     var diff = process.hrtime(marker.stamp);
     var total = [marker.stamp[0] + diff[0], marker.stamp[1] + diff[1]];
     console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
+}
+
+function removeConstModifierFromEnumDeclarations(text) {
+     return text.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
 }
 
 var compilerSources = filesFromConfig("./src/compiler/tsconfig.json");
@@ -132,6 +138,7 @@ var harnessSources = harnessCoreSources.concat([
     "telemetry.ts",
     "transform.ts",
     "customTransforms.ts",
+    "programMissingFiles.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -280,7 +287,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types "
+        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError --types "
         if (opts.types) {
             options += opts.types.join(",");
         }
@@ -551,7 +558,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
         // Stanalone/web definition file using global 'ts' namespace
         jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, { silent: true });
         var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-        definitionFileContents = definitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+        definitionFileContents = removeConstModifierFromEnumDeclarations(definitionFileContents)
         fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
         // Official node package definition file, pointed to by 'typings' in package.json
@@ -611,6 +618,7 @@ compileFile(
             fs.readFileSync(tsserverLibraryDefinitionFile).toString() +
             "\r\nexport = ts;" +
             "\r\nexport as namespace ts;";
+        tsserverLibraryDefinitionFileContents = removeConstModifierFromEnumDeclarations(tsserverLibraryDefinitionFileContents);
 
         fs.writeFileSync(tsserverLibraryDefinitionFile, tsserverLibraryDefinitionFileContents);
     });
@@ -800,8 +808,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         cleanTestDirs();
     }
 
-    var debug = process.env.debug || process.env.d;
-    var inspect = process.env.inspect;
+    var debug = process.env.debug || process.env["debug-brk"] || process.env.d;
+    var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -842,12 +850,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
     if (!runInParallel) {
         var startTime = mark();
         var args = [];
-        if (inspect) {
-            args.push("--inspect");
-        }
-        if (inspect || debug) {
-            args.push("--debug-brk");
-        }
         args.push("-R", reporter);
         if (tests) {
             args.push("-g", `"${tests}"`);
@@ -861,7 +863,15 @@ function runConsoleTests(defaultReporter, runInParallel) {
         if (bail) {
             args.push("--bail");
         }
-        args.push("-t", testTimeout);
+        if (inspect) {
+            args.unshift("--inspect-brk");
+        }
+        else if (debug) {
+            args.unshift("--debug-brk");
+        }
+        else {
+            args.push("-t", testTimeout);
+        }
         args.push(run);
 
         var cmd = "mocha " + args.join(" ");
@@ -926,7 +936,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 }
 
-var defaultTestTimeout = 22000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function () {
     runConsoleTests('min', /*runInParallel*/ true);
@@ -939,6 +948,7 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
 
 desc("Generates code coverage data via instanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
+    var testTimeout = process.env.timeout || defaultTestTimeout;
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
     exec(cmd);
@@ -950,7 +960,7 @@ var nodeServerInFile = "tests/webTestServer.ts";
 compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true, lib: "es6" });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
-task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
+task("browserify", ["tests", run, builtLocalDirectory, nodeServerOutFile], function() {
     var cmd = 'browserify built/local/run.js -t ./scripts/browserify-optional -d -o built/local/bundle.js';
     exec(cmd);
 }, { async: true });

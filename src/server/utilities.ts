@@ -49,7 +49,7 @@ namespace ts.server {
     export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true),
             compilerOptions: project.getCompilerOptions(),
             typeAcquisition,
             unresolvedImports,

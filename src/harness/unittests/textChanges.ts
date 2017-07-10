@@ -367,20 +367,22 @@ namespace M {
                 changeTracker.insertNodeAfter(sourceFile, findChild("M", sourceFile), createTestClass(), { prefix: newLineCharacter });
             });
         }
-        {
-            function findOpenBraceForConstructor(sourceFile: SourceFile) {
-                const classDecl = <ClassDeclaration>sourceFile.statements[0];
-                const constructorDecl = forEach(classDecl.members, m => m.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>m).body && <ConstructorDeclaration>m);
-                return constructorDecl.body.getFirstToken();
-            }
-            function createTestSuperCall() {
-                const superCall = createCall(
-                    createSuper(),
+
+        function findOpenBraceForConstructor(sourceFile: SourceFile) {
+            const classDecl = <ClassDeclaration>sourceFile.statements[0];
+            const constructorDecl = forEach(classDecl.members, m => m.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>m).body && <ConstructorDeclaration>m);
+            return constructorDecl.body.getFirstToken();
+        }
+        function createTestSuperCall() {
+            const superCall = createCall(
+                createSuper(),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ emptyArray
-                );
-                return createStatement(superCall);
-            }
+            );
+            return createStatement(superCall);
+        }
+
+        {
             const text1 = `
 class A {
     constructor() {

@@ -111,23 +111,47 @@ namespace ts {
             ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
             ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
         ], ([testName, basePath, host]) => {
+            function getParseCommandLine(entry: string) {
+                const {config, error} = ts.readConfigFile(entry, name => host.readFile(name));
+                assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
+                return ts.parseJsonConfigFileContent(config, host, basePath, {}, entry);
+            }
+
+            function getParseCommandLineJsonSourceFile(entry: string) {
+                const jsonSourceFile = ts.readJsonConfigFile(entry, name => host.readFile(name));
+                assert(jsonSourceFile.endOfFileToken && !jsonSourceFile.parseDiagnostics.length, flattenDiagnosticMessageText(jsonSourceFile.parseDiagnostics[0] && jsonSourceFile.parseDiagnostics[0].messageText, "\n"));
+                return {
+                    jsonSourceFile,
+                    parsed: ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, basePath, {}, entry)
+                };
+            }
+
             function testSuccess(name: string, entry: string, expected: CompilerOptions, expectedFiles: string[]) {
+                expected.configFilePath = entry;
                 it(name, () => {
-                    const {config, error} = ts.readConfigFile(entry, name => host.readFile(name));
-                    assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-                    const parsed = ts.parseJsonConfigFileContent(config, host, basePath, {}, entry);
+                    const parsed = getParseCommandLine(entry);
                     assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
-                    expected.configFilePath = entry;
                     assert.deepEqual(parsed.options, expected);
+                    assert.deepEqual(parsed.fileNames, expectedFiles);
+                });
+
+                it(name + " with jsonSourceFile", () => {
+                    const { parsed, jsonSourceFile } = getParseCommandLineJsonSourceFile(entry);
+                    assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
+                    assert.deepEqual(parsed.options, expected);
+                    assert.equal(parsed.options.configFile, jsonSourceFile);
                     assert.deepEqual(parsed.fileNames, expectedFiles);
                 });
             }
 
-            function testFailure(name: string, entry: string, expectedDiagnostics: {code: number, category: DiagnosticCategory, messageText: string}[]) {
+            function testFailure(name: string, entry: string, expectedDiagnostics: { code: number, category: DiagnosticCategory, messageText: string }[]) {
                 it(name, () => {
-                    const {config, error} = ts.readConfigFile(entry, name => host.readFile(name));
-                    assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-                    const parsed = ts.parseJsonConfigFileContent(config, host, basePath, {}, entry);
+                    const parsed = getParseCommandLine(entry);
+                    verifyDiagnostics(parsed.errors, expectedDiagnostics);
+                });
+
+                it(name + " with jsonSourceFile", () => {
+                    const { parsed } = getParseCommandLineJsonSourceFile(entry);
                     verifyDiagnostics(parsed.errors, expectedDiagnostics);
                 });
             }

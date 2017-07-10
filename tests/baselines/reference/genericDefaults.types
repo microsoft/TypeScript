@@ -2446,6 +2446,43 @@ const Derived02c03 = new Derived02<number>(1);
 >Derived02 : typeof Derived02
 >1 : 1
 
+// https://github.com/Microsoft/TypeScript/issues/16211
+interface Base02 {}
+>Base02 : Base02
+
+interface Base02Constructor { new <T = A>(a: T): Base02 & T; }
+>Base02Constructor : Base02Constructor
+>T : T
+>A : A
+>a : T
+>T : T
+>Base02 : Base02
+>T : T
+
+declare const Base02: Base02Constructor;
+>Base02 : Base02Constructor
+>Base02Constructor : Base02Constructor
+
+declare class Derived03 extends Base02 {}
+>Derived03 : Derived03
+>Base02 : Base02 & A
+
+const Derived03c00 = new Derived03(ab);
+>Derived03c00 : Derived03
+>new Derived03(ab) : Derived03
+>Derived03 : typeof Derived03
+>ab : AB
+
+const Derived03c01 = Derived03c00.a;
+>Derived03c01 : number
+>Derived03c00.a : number
+>Derived03c00 : Derived03
+>a : number
+
+type DerivedProps = keyof Derived03;
+>DerivedProps : "a"
+>Derived03 : Derived03
+
 type t00<T = number> = { a: T; }
 >t00 : t00<T>
 >T : T
