@@ -40,13 +40,8 @@ namespace ts.Completions.PathCompletions {
         rootDirs = map(rootDirs, rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
 
         // Determine the path to the directory containing the script relative to the root directory it is contained within
-        let relativeDirectory: string;
-        for (const rootDirectory of rootDirs) {
-            if (containsPath(rootDirectory, scriptPath, basePath, ignoreCase)) {
-                relativeDirectory = scriptPath.substr(rootDirectory.length);
-                break;
-            }
-        }
+        const relativeDirectory = forEach(rootDirs, rootDirectory =>
+            containsPath(rootDirectory, scriptPath, basePath, ignoreCase) ? scriptPath.substr(rootDirectory.length) : undefined);
 
         // Now find a path for each potential directory that is to be merged with the one containing the script
         return deduplicate(map(rootDirs, rootDirectory => combinePaths(rootDirectory, relativeDirectory)));

@@ -1770,19 +1770,12 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
+            const rulesProvider = getRuleProvider(formatOptions);
 
-            let allFixes: CodeAction[] = [];
-
-            forEach(deduplicate(errorCodes), errorCode => {
+            return flatMap(deduplicate(errorCodes), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                const rulesProvider = getRuleProvider(formatOptions);
-                const fixes = codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
-                if (fixes) {
-                    allFixes = allFixes.concat(fixes);
-                }
+                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
             });
-
-            return allFixes;
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {

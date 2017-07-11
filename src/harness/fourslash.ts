@@ -2336,29 +2336,19 @@ namespace FourSlash {
          * @param fileName Path to file where error should be retrieved from.
          */
         private getCodeFixActions(fileName: string, errorCode?: number): ts.CodeAction[] {
-            const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => {
-                return {
-                    start: diagnostic.start,
-                    length: diagnostic.length,
-                    code: diagnostic.code
-                };
-            });
-            const dedupedDiagnositcs = ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties);
+            const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => ({
+                start: diagnostic.start,
+                length: diagnostic.length,
+                code: diagnostic.code
+            }));
 
-            let actions: ts.CodeAction[] = undefined;
-
-            for (const diagnostic of dedupedDiagnositcs) {
-
+            return ts.flatMap(ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties), diagnostic => {
                 if (errorCode && errorCode !== diagnostic.code) {
-                    continue;
+                    return;
                 }
 
-                const newActions = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings);
-                if (newActions && newActions.length) {
-                    actions = actions ? actions.concat(newActions) : newActions;
-                }
-            }
-            return actions;
+                return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings);
+            });
         }
 
         private applyCodeActions(actions: ts.CodeAction[], index?: number): void {
@@ -2389,7 +2379,7 @@ namespace FourSlash {
 
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName, errorCode);
 
-            if (!codeFixes || codeFixes.length === 0) {
+            if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {
                     this.raiseError("No codefixes returned.");
                 }
@@ -2718,11 +2708,11 @@ namespace FourSlash {
         public verifyCodeFixAvailable(negative: boolean) {
             const codeFix = this.getCodeFixActions(this.activeFile.fileName);
 
-            if (negative && codeFix) {
+            if (negative && codeFix.length) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found one.`);
             }
 
-            if (!(negative || codeFix)) {
+            if (!(negative || codeFix.length)) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
             }
         }
