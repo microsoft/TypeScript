@@ -294,7 +294,6 @@ namespace ts.server {
         updateTypes() {
             this.typesVersion++;
             this.markAsDirty();
-            this.updateGraph();
         }
 
         close() {

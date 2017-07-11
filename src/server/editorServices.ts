@@ -595,8 +595,8 @@ namespace ts.server {
 
         private onTypeRootFileChanged(project: ConfiguredProject, fileName: string) {
             this.logger.info(`Type root file ${fileName} changed`);
+            project.updateTypes();
             this.throttledOperations.schedule(project.getConfigFilePath() + " * type root", /*delay*/ 250, () => {
-                project.updateTypes();
                 this.reloadConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
                 this.refreshInferredProjects();
             });
