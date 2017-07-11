@@ -4,6 +4,58 @@
 
 namespace ts.server {
     type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
+
+    export class CachedParseConfigHost implements ParseConfigHost {
+        useCaseSensitiveFileNames: boolean;
+        private getCanonicalFileName: (fileName: string) => string;
+        private cachedReadDirectoryResult = createMap<FileSystemEntries>();
+        constructor(private readonly host: ServerHost) {
+            this.useCaseSensitiveFileNames = host.useCaseSensitiveFileNames;
+            this.getCanonicalFileName = createGetCanonicalFileName(this.useCaseSensitiveFileNames);
+        }
+
+        private getFileSystemEntries(rootDir: string) {
+            const path = ts.toPath(rootDir, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const cachedResult = this.cachedReadDirectoryResult.get(path);
+            if (cachedResult) {
+                return cachedResult;
+            }
+
+            const resultFromHost: FileSystemEntries = {
+                files: this.host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]) || [],
+                directories: this.host.getDirectories(rootDir)
+            };
+
+            this.cachedReadDirectoryResult.set(path, resultFromHost);
+            return resultFromHost;
+        }
+
+        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
+            return matchFiles(rootDir, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.host.getCurrentDirectory(), depth, path => this.getFileSystemEntries(path));
+        }
+
+        fileExists(fileName: string): boolean {
+            const path = ts.toPath(fileName, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const result = this.getFileSystemEntries(getDirectoryPath(path));
+            return contains(result.files, fileName);
+        }
+
+        readFile(path: string): string {
+            return this.host.readFile(path);
+        }
+
+        clearCacheForFile(fileName: Path) {
+            this.cachedReadDirectoryResult.delete(fileName);
+            this.cachedReadDirectoryResult.delete(getDirectoryPath(fileName));
+        }
+
+        clearCache() {
+            this.cachedReadDirectoryResult = createMap<FileSystemEntries>();
+        }
+
+        // TODO: (sheetalkamat) to cache getFileSize as well as fileExists and readFile
+    }
+
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
         private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();

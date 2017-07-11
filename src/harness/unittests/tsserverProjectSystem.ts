@@ -574,7 +574,7 @@ namespace ts.projectSystem {
             const path = this.toFullPath(s);
             const folder = this.fs.get(path);
             if (isFolder(folder)) {
-                return map(folder.entries, x => getBaseFileName(x.fullPath));
+                return mapDefined(folder.entries, entry => isFolder(entry) ? getBaseFileName(entry.fullPath) : undefined);
             }
             Debug.fail(folder ? "getDirectories called on file" : "getDirectories called on missing folder");
             return [];
@@ -590,10 +590,10 @@ namespace ts.projectSystem {
                 if (isFolder(dirEntry)) {
                     dirEntry.entries.forEach((entry) => {
                         if (isFolder(entry)) {
-                            result.directories.push(entry.fullPath);
+                            result.directories.push(getBaseFileName(entry.fullPath));
                         }
                         else if (isFile(entry)) {
-                            result.files.push(entry.fullPath);
+                            result.files.push(getBaseFileName(entry.fullPath));
                         }
                         else {
                             Debug.fail("Unknown entry");

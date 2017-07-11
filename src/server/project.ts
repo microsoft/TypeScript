@@ -972,6 +972,7 @@ namespace ts.server {
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs;
+        cachedParseConfigHost: CachedParseConfigHost;
 
         private plugins: PluginModule[] = [];
 
@@ -1113,14 +1114,14 @@ namespace ts.server {
             this.typeRootsWatchers = watchers;
         }
 
-        private addWatcherForDirectory(flag: WatchDirectoryFlags, directory: string, replaceExisting: boolean) {
+        private addWatcherForDirectory(flag: WatchDirectoryFlags, directory: string, getCanonicalFileName: (fileName: string) => string, replaceExisting: boolean) {
             if (replaceExisting || !this.directoriesWatchedForWildcards.has(directory)) {
                 const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                 this.projectService.logger.info(`Add ${recursive ? "recursive " : ""} watcher for: ${directory}`);
                 this.directoriesWatchedForWildcards.set(directory, {
                     watcher: this.projectService.host.watchDirectory(
                         directory,
-                        path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
+                        path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, toPath(path, directory, getCanonicalFileName)),
                         recursive
                     ),
                     recursive
@@ -1129,6 +1130,7 @@ namespace ts.server {
         }
 
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
+            const getCanonicalFileName = createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
             if (wildcardDirectories) {
                 if (this.directoriesWatchedForWildcards) {
                     this.directoriesWatchedForWildcards.forEach(({ watcher, recursive }, directory) => {
@@ -1145,7 +1147,7 @@ namespace ts.server {
                             if (currentRecursive !== recursive) {
                                 this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
                                 watcher.close();
-                                this.addWatcherForDirectory(currentFlag, directory, /*replaceExisting*/ true);
+                                this.addWatcherForDirectory(currentFlag, directory, getCanonicalFileName, /*replaceExisting*/ true);
                             }
                         }
                     });
@@ -1154,7 +1156,7 @@ namespace ts.server {
                     this.directoriesWatchedForWildcards = createMap<WildCardDirectoryWatchers>();
                 }
                 wildcardDirectories.forEach((flag, directory) =>
-                    this.addWatcherForDirectory(flag, directory, /*replaceExisting*/ false));
+                    this.addWatcherForDirectory(flag, directory, getCanonicalFileName, /*replaceExisting*/ false));
             }
             else {
                 this.stopWatchingWildCards();
