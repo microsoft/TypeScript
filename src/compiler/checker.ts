@@ -2490,12 +2490,17 @@ namespace ts {
                 if (type.flags & TypeFlags.Index) {
                     const indexedType = (<IndexType>type).type;
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
-                    return createTypeOperatorNode(indexTypeNode);
+                    return createTypeOperatorNode(SyntaxKind.KeyOfKeyword, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
+                }
+                if (type.flags & TypeFlags.Readonly || objectFlags & ObjectFlags.Readonly) {
+                    const readonlyType = (<ReadonlyTypeVariable | ReadonlyObjectType>type).type;
+                    const readonlyTypeNode = typeToTypeNodeHelper(readonlyType, context);
+                    return createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, readonlyTypeNode);
                 }
 
                 Debug.fail("Should be unreachable.");
@@ -3247,13 +3252,13 @@ namespace ts {
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
                     }
-                    else if (type.flags & TypeFlags.Index) {
+                    else if (type.flags & (TypeFlags.Index | TypeFlags.Readonly) || getObjectFlags(type) & ObjectFlags.Readonly) {
                         if (flags & TypeFormatFlags.InElementType) {
                             writePunctuation(writer, SyntaxKind.OpenParenToken);
                         }
-                        writer.writeKeyword("keyof");
+                        writer.writeKeyword(type.flags & TypeFlags.Index ? "keyof" : "readonly");
                         writeSpace(writer);
-                        writeType((<IndexType>type).type, TypeFormatFlags.InElementType);
+                        writeType((<IndexType | ReadonlyTypeVariable>type).type, TypeFormatFlags.InElementType);
                         if (flags & TypeFormatFlags.InElementType) {
                             writePunctuation(writer, SyntaxKind.CloseParenToken);
                         }
@@ -4676,7 +4681,7 @@ namespace ts {
                     if (!popTypeResolution()) {
                         type = reportCircularityError(symbol);
                     }
-                    links.type = type;
+                    links.type = getCheckFlags(symbol) & CheckFlags.ReadonlyType ? getReadonlyType(type) : type;
                 }
             }
             return links.type;
@@ -5666,6 +5671,23 @@ namespace ts {
             }
         }
 
+        function createReadonlyIndexInfo(indexInfo: IndexInfo): IndexInfo {
+            return indexInfo && !indexInfo.isReadonly ? createIndexInfo(indexInfo.type, true, indexInfo.declaration) : indexInfo;
+        }
+
+        function resolveReadonlyTypeMembers(type: ReadonlyObjectType) {
+            const target = type.type;
+            const members = createMap<Symbol>() as SymbolTable;
+            for (const symbol of getPropertiesOfObjectType(target)) {
+                members.set(symbol.name, instantiateSymbol(symbol, identityMapper, /*readonly*/ true));
+            }
+            const callSignatures = getSignaturesOfType(target, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(target, SignatureKind.Construct);
+            const stringIndexInfo = createReadonlyIndexInfo(getIndexInfoOfType(target, IndexKind.String));
+            const numberIndexInfo = createReadonlyIndexInfo(getIndexInfoOfType(target, IndexKind.Number));
+            setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+        }
+
         /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
@@ -5747,7 +5769,7 @@ namespace ts {
         function getModifiersTypeFromMappedType(type: MappedType) {
             if (!type.modifiersType) {
                 const constraintDeclaration = type.declaration.typeParameter.constraint;
-                if (constraintDeclaration.kind === SyntaxKind.TypeOperator) {
+                if (constraintDeclaration.kind === SyntaxKind.TypeOperator && (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                     // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
                     // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
                     // 'keyof T' to a literal union type and we can't recover T from that type.
@@ -5777,16 +5799,20 @@ namespace ts {
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
             if (!(<ResolvedType>type).members) {
                 if (type.flags & TypeFlags.Object) {
-                    if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
+                    const objectFlags = (<ObjectType>type).objectFlags;
+                    if (objectFlags & ObjectFlags.Reference) {
                         resolveTypeReferenceMembers(<TypeReference>type);
                     }
-                    else if ((<ObjectType>type).objectFlags & ObjectFlags.ClassOrInterface) {
+                    else if (objectFlags & ObjectFlags.ClassOrInterface) {
                         resolveClassOrInterfaceMembers(<InterfaceType>type);
                     }
-                    else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
+                    else if (objectFlags & ObjectFlags.Anonymous) {
                         resolveAnonymousTypeMembers(<AnonymousType>type);
                     }
-                    else if ((<MappedType>type).objectFlags & ObjectFlags.Mapped) {
+                    else if (objectFlags & ObjectFlags.Readonly) {
+                        resolveReadonlyTypeMembers(<ReadonlyObjectType>type);
+                    }
+                    else if (objectFlags & ObjectFlags.Mapped) {
                         resolveMappedTypeMembers(<MappedType>type);
                     }
                 }
@@ -5875,7 +5901,8 @@ namespace ts {
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
             return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) :
                 type.flags & TypeFlags.IndexedAccess ? getConstraintOfIndexedAccess(<IndexedAccessType>type) :
-                    getBaseConstraintOfType(type);
+                type.flags & TypeFlags.Readonly ? getConstraintOfReadonlyTypeVariable(<ReadonlyTypeVariable>type) :
+                getBaseConstraintOfType(type);
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
@@ -5886,6 +5913,11 @@ namespace ts {
             const baseObjectType = getBaseConstraintOfType(type.objectType);
             const baseIndexType = getBaseConstraintOfType(type.indexType);
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
+        }
+
+        function getConstraintOfReadonlyTypeVariable(type: ReadonlyTypeVariable) {
+            const baseType = getBaseConstraintOfType(type.type);
+            return baseType ? getReadonlyType(baseType) : undefined;
         }
 
         function getBaseConstraintOfType(type: Type): Type {
@@ -5958,6 +5990,10 @@ namespace ts {
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
+                }
+                if (t.flags & TypeFlags.Readonly) {
+                    const baseConstraint = getBaseConstraint((<ReadonlyTypeVariable>t).type);
+                    return baseConstraint ? getReadonlyType(baseConstraint) : undefined;
                 }
                 return t;
             }
@@ -7478,10 +7514,36 @@ namespace ts {
             return indexType !== neverType ? indexType : stringType;
         }
 
+        function createReadonlyObjectType(type: ObjectType): ReadonlyObjectType {
+            const result = <ReadonlyObjectType>createObjectType(ObjectFlags.Readonly, type.symbol);
+            result.type = type;
+            return result;
+        }
+
+        function createReadonlyTypeVariable(type: TypeVariable): ReadonlyTypeVariable {
+            const result = <ReadonlyTypeVariable>createType(TypeFlags.Readonly);
+            result.type = type;
+            return result;
+        }
+
+        function getReadonlyType(type: Type): Type {
+            if (!(type.flags & TypeFlags.HasReadonlyForm)) {
+                return type;
+            }
+            if (!type.readonlyType) {
+                type.readonlyType = type.flags & TypeFlags.Object ? createReadonlyObjectType(<ObjectType>type) :
+                    type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getReadonlyType)) :
+                    type.flags & TypeFlags.Intersection ? getIntersectionType(sameMap((<IntersectionType>type).types, getReadonlyType)) :
+                    createReadonlyTypeVariable(<TypeVariable>type);
+            }
+            return type.readonlyType;
+        }
+
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
+                const type = getTypeFromTypeNode(node.type);
+                links.resolvedType = node.operator === SyntaxKind.KeyOfKeyword ? getIndexType(type) : getReadonlyType(type);
             }
             return links.resolvedType;
         }
@@ -8006,6 +8068,8 @@ namespace ts {
         }
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
+            if (mapper1 === identityMapper) return mapper2;
+            if (mapper2 === identityMapper) return mapper1;
             const mapper: TypeMapper = t => instantiateType(mapper1(t), mapper2);
             mapper.mappedTypes = concatenate(mapper1.mappedTypes, mapper2.mappedTypes);
             return mapper;
@@ -8068,8 +8132,9 @@ namespace ts {
             return result;
         }
 
-        function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
-            if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
+        function instantiateSymbol(symbol: Symbol, mapper: TypeMapper, readonly?: boolean): Symbol {
+            const checkFlags = getCheckFlags(symbol);
+            if (checkFlags & CheckFlags.Instantiated) {
                 const links = getSymbolLinks(symbol);
                 // If symbol being instantiated is itself a instantiation, fetch the original target and combine the
                 // type mappers. This ensures that original type identities are properly preserved and that aliases
@@ -8080,7 +8145,7 @@ namespace ts {
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
             const result = createSymbol(symbol.flags, symbol.name);
-            result.checkFlags = CheckFlags.Instantiated;
+            result.checkFlags = CheckFlags.Instantiated | (readonly || checkFlags & CheckFlags.ReadonlyType ? CheckFlags.Readonly | CheckFlags.ReadonlyType : 0);
             result.declarations = symbol.declarations;
             result.parent = symbol.parent;
             result.target = symbol;

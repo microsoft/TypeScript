@@ -986,7 +986,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.ReadonlyKeyword;
         type: TypeNode;
     }
 
@@ -3023,6 +3023,7 @@ namespace ts {
         ContainsProtected = 1 << 7,         // Synthetic property with protected constituent(s)
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
+        ReadonlyType      = 1 << 10,        // Obtain readonly form of type
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
@@ -3157,17 +3158,18 @@ namespace ts {
         Intersection            = 1 << 17,  // Intersection (T & U)
         Index                   = 1 << 18,  // keyof T
         IndexedAccess           = 1 << 19,  // T[K]
+        Readonly                = 1 << 20,  // readonly T
         /* @internal */
-        FreshLiteral            = 1 << 20,  // Fresh literal type
+        FreshLiteral            = 1 << 21,  // Fresh literal type
         /* @internal */
-        ContainsWideningType    = 1 << 21,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 23,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
-        NonPrimitive            = 1 << 24,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 24,  // Type is or contains object literal type
+        NonPrimitive            = 1 << 25,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 25,  // Jsx attributes type
+        JsxAttributes           = 1 << 26,  // Jsx attributes type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3186,12 +3188,13 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
-        TypeVariable = TypeParameter | IndexedAccess,
+        TypeVariable = TypeParameter | IndexedAccess | Readonly,
+        StructuredOrTypeVariable = StructuredType | TypeVariable | Index,
+        HasReadonlyForm = Object | Union | Intersection | TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredOrTypeVariable | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -3210,6 +3213,7 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        readonlyType?: Type;             // Readonly instance of type
     }
 
     /* @internal */
@@ -3245,9 +3249,10 @@ namespace ts {
         Tuple            = 1 << 3,  // Synthesized generic tuple type
         Anonymous        = 1 << 4,  // Anonymous
         Mapped           = 1 << 5,  // Mapped
-        Instantiated     = 1 << 6,  // Instantiated anonymous or mapped type
-        ObjectLiteral    = 1 << 7,  // Originates in an object literal
-        EvolvingArray    = 1 << 8,  // Evolving array type
+        Readonly         = 1 << 6,  // Readonly
+        Instantiated     = 1 << 7,  // Instantiated anonymous or mapped type
+        ObjectLiteral    = 1 << 8,  // Originates in an object literal
+        EvolvingArray    = 1 << 9,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ClassOrInterface = Class | Interface
     }
@@ -3339,6 +3344,16 @@ namespace ts {
         templateType?: Type;
         modifiersType?: Type;
         mapper?: TypeMapper;  // Instantiation mapper
+    }
+
+    // Readonly object type (ObjectFlags.Readonly)
+    export interface ReadonlyObjectType extends ObjectType {
+        type: ObjectType;
+    }
+
+    // Readonly type variable (TypeFlags.Readonly)
+    export interface ReadonlyTypeVariable extends Type {
+        type: TypeVariable;
     }
 
     export interface EvolvingArrayType extends ObjectType {
