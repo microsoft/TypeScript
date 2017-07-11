@@ -26,7 +26,7 @@
 
 goTo.marker("3");
 verify.currentParameterHelpArgumentNameIs("a");
-verify.currentParameterSpanIs("a: T");
+verify.currentParameterSpanIs("a: any");
 
 goTo.marker("4");
 verify.currentParameterHelpArgumentNameIs("M");

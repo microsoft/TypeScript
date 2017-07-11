@@ -22,8 +22,7 @@ namespace RWC {
     }
 
     function isTsConfigFile(file: { path: string }): boolean {
-        const tsConfigFileName = "tsconfig.json";
-        return file.path.substr(file.path.length - tsConfigFileName.length).toLowerCase() === tsConfigFileName;
+        return file.path.indexOf("tsconfig") !== -1 && file.path.indexOf("json") !== -1;
     }
 
     export function runRWCTest(jsonPath: string) {
@@ -213,12 +212,12 @@ namespace RWC {
             it("has the expected errors in generated declaration files", () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
                     Harness.Baseline.runBaseline(`${baseName}.dts.errors.txt`, () => {
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
-
-                        if (declFileCompilationResult.declResult.errors.length === 0) {
+                        if (compilerResult.errors.length === 0) {
                             return null;
                         }
+
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
 
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
                             Harness.IO.newLine() + Harness.IO.newLine() +

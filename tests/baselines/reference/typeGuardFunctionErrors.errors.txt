@@ -27,7 +27,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(74,46)
     Type 'C' is not assignable to type 'B'.
       Property 'propB' is missing in type 'C'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(78,1): error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
-  Signature '(p1: any, p2: any): boolean' must have a type predicate.
+  Signature '(p1: any, p2: any): boolean' must be a type predicate.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1): error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
@@ -194,7 +194,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(136,39
     assign1 = function(p1, p2): boolean {
     ~~~~~~~
 !!! error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
-!!! error TS2322:   Signature '(p1: any, p2: any): boolean' must have a type predicate.
+!!! error TS2322:   Signature '(p1: any, p2: any): boolean' must be a type predicate.
         return true;
     };
     

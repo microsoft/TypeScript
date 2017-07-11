@@ -270,6 +270,7 @@ namespace ts {
                     nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<PropertyDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName),
+                    visitNode((<PropertyDeclaration>node).questionToken, tokenVisitor, isToken),
                     visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression));
 
@@ -1146,10 +1147,6 @@ namespace ts {
             case SyntaxKind.AsExpression:
                 result = reduceNode((<AsExpression>node).expression, cbNode, result);
                 result = reduceNode((<AsExpression>node).type, cbNode, result);
-                break;
-
-            case SyntaxKind.NonNullExpression:
-                result = reduceNode((<NonNullExpression>node).expression, cbNode, result);
                 break;
 
             // Misc

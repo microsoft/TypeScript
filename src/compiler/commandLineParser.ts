@@ -105,7 +105,7 @@ namespace ts {
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_es2015_or_ESNext,
+            description: Diagnostics.Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_or_ESNext,
         },
         {
             name: "lib",
@@ -1047,7 +1047,7 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, Diagnostics.String_literal_with_double_quotes_expected));
                 }
 
-                const keyText = getTextOfPropertyName(element.name);
+                const keyText = unescapeLeadingUnderscores(getTextOfPropertyName(element.name));
                 const option = knownOptions ? knownOptions.get(keyText) : undefined;
                 if (extraKeyDiagnosticMessage && !option) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
@@ -1290,7 +1290,7 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return arrayFrom((<CommandLineOptionOfCustomType>option).type.keys())[0];
+                    return (option as CommandLineOptionOfCustomType).type.keys().next().value;
             }
         }
 
@@ -1992,7 +1992,7 @@ namespace ts {
         }
 
         if (include && include.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include)) {
+            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include, /*depth*/ undefined)) {
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //
