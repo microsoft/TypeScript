@@ -36,6 +36,13 @@ namespace ts {
         end: number;
     }
 
+    export const enum SignatureContext {
+        Yield = 1 << 1,
+        Await = 1 << 2,
+        Type  = 1 << 3,
+        RequireCompleteParameterList = 1 << 4,
+    }
+
     // token > SyntaxKind.Identifer => token is a keyword
     // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {

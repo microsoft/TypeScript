@@ -2218,15 +2218,12 @@ namespace ts {
 
         function fillSignature(
             returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken,
-            yieldContext: boolean,
-            awaitContext: boolean,
-            requireCompleteParameterList: boolean,
+            context: SignatureContext,
             signature: SignatureDeclaration): void {
+            signature.typeParameters = parseTypeParameters();
+            signature.parameters = parseParameterList(context);
 
             const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
-            signature.typeParameters = parseTypeParameters();
-            signature.parameters = parseParameterList(yieldContext, awaitContext, requireCompleteParameterList);
-
             if (returnTokenRequired) {
                 parseExpected(returnToken);
                 signature.type = parseTypeOrTypePredicate();
@@ -2236,7 +2233,7 @@ namespace ts {
             }
         }
 
-        function parseParameterList(yieldContext: boolean, awaitContext: boolean, requireCompleteParameterList: boolean) {
+        function parseParameterList(context: SignatureContext) {
             // FormalParameters [Yield,Await]: (modified)
             //      [empty]
             //      FormalParameterList[?Yield,Await]
@@ -2254,15 +2251,15 @@ namespace ts {
                 const savedYieldContext = inYieldContext();
                 const savedAwaitContext = inAwaitContext();
 
-                setYieldContext(yieldContext);
-                setAwaitContext(awaitContext);
+                setYieldContext(!!(context & SignatureContext.Yield));
+                setAwaitContext(!!(context & SignatureContext.Await));
 
                 const result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
 
                 setYieldContext(savedYieldContext);
                 setAwaitContext(savedAwaitContext);
 
-                if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
+                if (!parseExpected(SyntaxKind.CloseParenToken) && (context & SignatureContext.RequireCompleteParameterList)) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
                     // undefined here.
                     return undefined;
@@ -2274,7 +2271,7 @@ namespace ts {
             // We didn't even have an open paren.  If the caller requires a complete parameter list,
             // we definitely can't provide that.  However, if they're ok with an incomplete one,
             // then just return an empty set of parameters.
-            return requireCompleteParameterList ? undefined : createMissingList<ParameterDeclaration>();
+            return (context & SignatureContext.RequireCompleteParameterList) ? undefined : createMissingList<ParameterDeclaration>();
         }
 
         function parseTypeMemberSemicolon() {
@@ -2293,7 +2290,7 @@ namespace ts {
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, SignatureContext.Type, node);
             parseTypeMemberSemicolon();
             return addJSDocComment(finishNode(node));
         }
@@ -2383,7 +2380,7 @@ namespace ts {
 
                 // Method signatures don't exist in expression contexts.  So they have neither
                 // [Yield] nor [Await]
-                fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, method);
+                fillSignature(SyntaxKind.ColonToken, SignatureContext.Type, method);
                 parseTypeMemberSemicolon();
                 return addJSDocComment(finishNode(method));
             }
@@ -2527,7 +2524,7 @@ namespace ts {
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureContext.Type, node);
             return finishNode(node);
         }
 
@@ -3254,7 +3251,7 @@ namespace ts {
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
             const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             node.modifiers = parseModifiersForArrowFunction();
-            const isAsync = !!(getModifierFlags(node) & ModifierFlags.Async);
+            const isAsync = (getModifierFlags(node) & ModifierFlags.Async) ? SignatureContext.Await : 0;
 
             // Arrow functions are never generators.
             //
@@ -3263,7 +3260,7 @@ namespace ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ !allowAmbiguity, node);
+            fillSignature(SyntaxKind.ColonToken, isAsync | (allowAmbiguity ? 0 : SignatureContext.RequireCompleteParameterList), node);
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {
@@ -4386,16 +4383,16 @@ namespace ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
 
-            const isGenerator = !!node.asteriskToken;
-            const isAsync = !!(getModifierFlags(node) & ModifierFlags.Async);
+            const isGenerator = node.asteriskToken ? SignatureContext.Yield : 0;
+            const isAsync = (getModifierFlags(node) & ModifierFlags.Async) ? SignatureContext.Await : 0;
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
                     isGenerator ? doInYieldContext(parseOptionalIdentifier) :
                         isAsync ? doInAwaitContext(parseOptionalIdentifier) :
                             parseOptionalIdentifier();
 
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
-            node.body = parseFunctionBlock(/*allowYield*/ isGenerator, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ false);
+            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
+            node.body = parseFunctionBlock(/*allowYield*/ !!isGenerator, /*allowAwait*/ !!isAsync, /*ignoreMissingOpenBrace*/ false);
 
             if (saveDecoratorContext) {
                 setDecoratorContext(/*val*/ true);
@@ -5146,10 +5143,10 @@ namespace ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = hasModifier(node, ModifierFlags.Default) ? parseOptionalIdentifier() : parseIdentifier();
-            const isGenerator = !!node.asteriskToken;
-            const isAsync = hasModifier(node, ModifierFlags.Async);
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, Diagnostics.or_expected);
+            const isGenerator = node.asteriskToken ? SignatureContext.Yield : 0;
+            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureContext.Await : 0;
+            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
+            node.body = parseFunctionBlockOrSemicolon(!!isGenerator, !!isAsync, Diagnostics.or_expected);
             return addJSDocComment(finishNode(node));
         }
 
@@ -5158,7 +5155,7 @@ namespace ts {
             node.decorators = decorators;
             node.modifiers = modifiers;
             parseExpected(SyntaxKind.ConstructorKeyword);
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*context*/ 0, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false, Diagnostics.or_expected);
             return addJSDocComment(finishNode(node));
         }
@@ -5170,10 +5167,10 @@ namespace ts {
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
-            const isGenerator = !!asteriskToken;
-            const isAsync = hasModifier(method, ModifierFlags.Async);
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, method);
-            method.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, diagnosticMessage);
+            const isGenerator = asteriskToken ? SignatureContext.Yield : 0;
+            const isAsync = hasModifier(method, ModifierFlags.Async) ? SignatureContext.Await : 0;
+            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, method);
+            method.body = parseFunctionBlockOrSemicolon(!!isGenerator, !!isAsync, diagnosticMessage);
             return addJSDocComment(finishNode(method));
         }
 
@@ -5226,7 +5223,7 @@ namespace ts {
             node.decorators = decorators;
             node.modifiers = modifiers;
             node.name = parsePropertyName();
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*context*/ 0, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false);
             return addJSDocComment(finishNode(node));
         }
