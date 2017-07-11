@@ -2,7 +2,7 @@
 namespace ts.SymbolDisplay {
     // TODO(drosen): use contextual SemanticMeaning.
     export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
-        const { flags } = symbol;
+        const flags = getCombinedLocalAndExportSymbolFlags(symbol);
 
         if (flags & SymbolFlags.Class) {
             return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
@@ -34,7 +34,7 @@ namespace ts.SymbolDisplay {
         if (location.kind === SyntaxKind.ThisKeyword && isExpression(location)) {
             return ScriptElementKind.parameterElement;
         }
-        const { flags } = symbol;
+        const flags = getCombinedLocalAndExportSymbolFlags(symbol);
         if (flags & SymbolFlags.Variable) {
             if (isFirstDeclarationOfSymbolParameter(symbol)) {
                 return ScriptElementKind.parameterElement;
@@ -96,7 +96,7 @@ namespace ts.SymbolDisplay {
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
         let tags: JSDocTagInfo[];
-        const symbolFlags = symbol.flags;
+        const symbolFlags = ts.getCombinedLocalAndExportSymbolFlags(symbol);
         let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
         let hasAddedSymbolInfo: boolean;
         const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
@@ -110,7 +110,7 @@ namespace ts.SymbolDisplay {
             }
 
             let signature: Signature;
-            type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+            type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol.exportSymbol || symbol, location);
             if (type) {
                 if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                     const right = (<PropertyAccessExpression>location.parent).name;
@@ -198,7 +198,7 @@ namespace ts.SymbolDisplay {
                         hasAddedSymbolInfo = true;
                     }
                 }
-                else if ((isNameOfFunctionDeclaration(location) && !(symbol.flags & SymbolFlags.Accessor)) || // name of function declaration
+                else if ((isNameOfFunctionDeclaration(location) && !(symbolFlags & SymbolFlags.Accessor)) || // name of function declaration
                     (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                     // get the signature from the declaration and write it
                     const functionDeclaration = <FunctionLike>location.parent;
@@ -429,7 +429,7 @@ namespace ts.SymbolDisplay {
         if (!documentation) {
             documentation = symbol.getDocumentationComment();
             tags = symbol.getJsDocTags();
-            if (documentation.length === 0 && symbol.flags & SymbolFlags.Property) {
+            if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
                 // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
                 // there documentation comments might be attached to the right hand side symbol of their declarations.
                 // The pattern of such special property access is that the parent symbol is the symbol of the file.
