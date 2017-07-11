@@ -52,7 +52,7 @@ function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: st
 
     const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
-    ts.Debug.assert(patchMatch !== null, "The file seems to no longer have a string matching", () => `'${versionRgx}'`);
+    ts.Debug.assert(patchMatch !== null, "The file seems to no longer have a string matching", () => versionRgx.toString());
     const parsedPatch = patchMatch[1];
     if (parsedPatch !== patch) {
         throw new Error(`patch does not match. ${tsFilePath}: '${parsedPatch}; package.json: '${patch}'`);
@@ -62,24 +62,10 @@ function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: st
 }
 
 function parsePackageJsonVersion(versionString: string): { majorMinor: string, patch: string } {
-    const parts = versionString.split(".");
-    ts.Debug.assert(parts.length === 3, "Unexpected version string", () => versionString);
-
-    const majorMinor = parts[0] + "." + parts[1];
-
-    let patch = parts[2];
-    // If the version string already contains "-dev",
-    // then get the base string and update based on that.
-    const dashDevPos = patch.indexOf("-dev");
-    if (dashDevPos !== -1) {
-        patch = patch.slice(0, dashDevPos);
-    }
-
-    for (const part of [parts[0], parts[1], patch]) {
-        ts.Debug.assert(/\d+/.test(part), "Bad version part", () => part);
-    }
-
-    return { majorMinor, patch };
+    const versionRgx = /(\d+\.\d+)\.(\d+)($|\-)/;
+    const match = versionString.match(versionRgx);
+    ts.Debug.assert(match !== null, "package.json 'version' should match", () => versionRgx.toString());
+    return { majorMinor: match[1], patch: match[2] };
 }
 
 /** e.g. 0-dev.20170707 */
