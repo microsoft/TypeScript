@@ -25,15 +25,15 @@ namespace ts.codefix {
                     return [deleteNode(token.parent)];
 
                 default:
-                    return [deleteDefault()];
+                    return deleteDefault();
             }
 
-            function deleteDefault() {
+            function deleteDefault(): CodeAction[] | undefined {
                 if (isDeclarationName(token)) {
-                    return deleteNode(token.parent);
+                    return [deleteNode(token.parent)];
                 }
                 else if (isLiteralComputedPropertyDeclarationName(token)) {
-                    return deleteNode(token.parent.parent);
+                    return [deleteNode(token.parent.parent)];
                 }
                 else {
                     return undefined;
@@ -117,7 +117,7 @@ namespace ts.codefix {
                         return deleteNamedImportBinding(<NamespaceImport>parent);
 
                     default:
-                        return [deleteDefault()];
+                        return deleteDefault();
                 }
             }
 
