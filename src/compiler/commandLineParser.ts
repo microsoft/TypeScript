@@ -1421,7 +1421,7 @@ namespace ts {
         const options = extend(existingOptions, parsedConfig.options || {});
         options.configFilePath = configFileName;
         setConfigFileInOptions(options, sourceFile);
-        const { fileNames, wildcardDirectories } = getFileNames();
+        const { fileNames, wildcardDirectories, spec } = getFileNames();
         return {
             options,
             fileNames,
@@ -1429,15 +1429,16 @@ namespace ts {
             raw,
             errors,
             wildcardDirectories,
-            compileOnSave: !!raw.compileOnSave
+            compileOnSave: !!raw.compileOnSave,
+            configFileSpecs: spec
         };
 
         function getFileNames(): ExpandResult {
-            let fileNames: string[];
+            let filesSpecs: string[];
             if (hasProperty(raw, "files")) {
                 if (isArray(raw["files"])) {
-                    fileNames = <string[]>raw["files"];
-                    if (fileNames.length === 0) {
+                    filesSpecs = <string[]>raw["files"];
+                    if (filesSpecs.length === 0) {
                         createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
                     }
                 }
@@ -1475,19 +1476,14 @@ namespace ts {
                 }
             }
 
-            if (fileNames === undefined && includeSpecs === undefined) {
+            if (filesSpecs === undefined && includeSpecs === undefined) {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors, extraFileExtensions, sourceFile);
+            const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, basePath, options, host, errors, extraFileExtensions, sourceFile);
 
             if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0) {
-                errors.push(
-                    createCompilerDiagnostic(
-                        Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                        configFileName || "tsconfig.json",
-                        JSON.stringify(includeSpecs || []),
-                        JSON.stringify(excludeSpecs || [])));
+                errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
             return result;
@@ -1498,6 +1494,14 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(message, arg0, arg1));
             }
         }
+    }
+
+    export function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName?: string) {
+        return createCompilerDiagnostic(
+            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+            configFileName || "tsconfig.json",
+            JSON.stringify(includeSpecs || []),
+            JSON.stringify(excludeSpecs || []));
     }
 
     interface ParsedTsconfig {
@@ -1946,7 +1950,40 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], extraFileExtensions: JsFileExtensionInfo[], jsonSourceFile: JsonSourceFile): ExpandResult {
+    function matchFileNames(filesSpecs: string[], includeSpecs: string[], excludeSpecs: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], extraFileExtensions: JsFileExtensionInfo[], jsonSourceFile: JsonSourceFile): ExpandResult {
+        basePath = normalizePath(basePath);
+        let validatedIncludeSpecs: string[], validatedExcludeSpecs: string[];
+
+        if (includeSpecs) {
+            validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*allowTrailingRecursion*/ false, jsonSourceFile, "include");
+        }
+
+        if (excludeSpecs) {
+            validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*allowTrailingRecursion*/ true, jsonSourceFile, "exclude");
+        }
+
+        // Wildcard directories (provided as part of a wildcard path) are stored in a
+        // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
+        // or a recursive directory. This information is used by filesystem watchers to monitor for
+        // new entries in these paths.
+        const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
+
+        const spec: ConfigFileSpecs = { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
+        return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
+    }
+
+    /**
+     * Expands an array of file specifications.
+     *
+     * @param fileNames The literal file names to include.
+     * @param include The wildcard file specifications to include.
+     * @param exclude The wildcard file specifications to exclude.
+     * @param basePath The base path for any relative file specifications.
+     * @param options Compiler options.
+     * @param host The host used to resolve files and directories.
+     * @param errors An array for diagnostic reporting.
+     */
+    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: JsFileExtensionInfo[]): ExpandResult {
         basePath = normalizePath(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -1964,19 +2001,7 @@ namespace ts {
         // via wildcard, and to handle extension priority.
         const wildcardFileMap = createMap<string>();
 
-        if (include) {
-            include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false, jsonSourceFile, "include");
-        }
-
-        if (exclude) {
-            exclude = validateSpecs(exclude, errors, /*allowTrailingRecursion*/ true, jsonSourceFile, "exclude");
-        }
-
-        // Wildcard directories (provided as part of a wildcard path) are stored in a
-        // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
-        // or a recursive directory. This information is used by filesystem watchers to monitor for
-        // new entries in these paths.
-        const wildcardDirectories = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
+        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -1984,15 +2009,15 @@ namespace ts {
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
-        if (fileNames) {
-            for (const fileName of fileNames) {
+        if (filesSpecs) {
+            for (const fileName of filesSpecs) {
                 const file = combinePaths(basePath, fileName);
                 literalFileMap.set(keyMapper(file), file);
             }
         }
 
-        if (include && include.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include, /*depth*/ undefined)) {
+        if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
+            for (const file of host.readDirectory(basePath, supportedExtensions, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //
@@ -2020,7 +2045,8 @@ namespace ts {
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
         return {
             fileNames: literalFiles.concat(wildcardFiles),
-            wildcardDirectories
+            wildcardDirectories,
+            spec
         };
     }
 

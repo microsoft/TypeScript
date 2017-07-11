@@ -3731,6 +3731,7 @@ namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
+        configFileSpecs?: ConfigFileSpecs;
     }
 
     export const enum WatchDirectoryFlags {
@@ -3738,9 +3739,19 @@ namespace ts {
         Recursive = 1 << 0,
     }
 
+    export interface ConfigFileSpecs {
+        filesSpecs: string[];
+        includeSpecs: string[];
+        excludeSpecs: string[];
+        validatedIncludeSpecs: string[];
+        validatedExcludeSpecs: string[];
+        wildcardDirectories: MapLike<WatchDirectoryFlags>;
+    }
+
     export interface ExpandResult {
         fileNames: string[];
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
+        spec: ConfigFileSpecs;
     }
 
     /* @internal */

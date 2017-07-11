@@ -1774,8 +1774,7 @@ namespace ts.projectSystem {
 
             host.reloadFS([file1, file2, configFile]);
 
-            host.checkTimeoutQueueLength(1);
-            host.runQueuedTimeoutCallbacks(); // to execute throttled requests
+            host.checkTimeoutQueueLength(0); // TODO: update graph scheduling (instead of instant update graph)
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);

@@ -617,33 +617,30 @@ namespace ts.server {
             }
 
             this.logger.info(`Detected source file changes: ${fileName}`);
-            this.throttledOperations.schedule(
-                project.getConfigFilePath(),
-                /*delay*/250,
-                () => this.handleFileAddOrRemoveInWatchedDirectoryOfProject(project, fileName));
-        }
 
-        private handleFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, triggerFile: string) {
-            // TODO: (sheetalkamat) this actually doesnt need to re-read the config file from the disk
-            // it just needs to update the file list of file names
-            // We might be able to do that by caching the info from first parse and add reusing this with the change in the file path
-            const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath());
-            this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors, triggerFile);
-
-            const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
-            const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
-
-            // We check if the project file list has changed. If so, we update the project.
-            if (!arrayIsEqualTo(currentRootFiles.sort(), newRootFiles.sort())) {
-                // For configured projects, the change is made outside the tsconfig file, and
-                // it is not likely to affect the project for other files opened by the client. We can
-                // just update the current project.
-
-                this.logger.info("Updating configured project");
-                this.updateConfiguredProject(project, projectOptions, configFileErrors);
-
-                // Call refreshInferredProjects to clean up inferred projects we may have
-                // created for the new files
+            const configFileSpecs = project.configFileSpecs;
+            const configFilename = normalizePath(project.getConfigFilePath());
+            // TODO: (sheetalkamat) use the host that caches - so we dont do file exists and read directory call
+            const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilerOptions(), this.host, this.hostConfiguration.extraFileExtensions);
+            const errors = project.getAllProjectErrors();
+            if (result.fileNames.length === 0) {
+                if (!configFileSpecs.filesSpecs) {
+                    if (!some(errors, error => error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code)) {
+                        errors.push(getErrorForNoInputFiles(configFileSpecs, configFilename));
+                    }
+                    if (!some(errors, error => error.code === Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files.code)) {
+                        errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
+                    }
+                }
+            }
+            else {
+                filterMutate(errors, error =>
+                    error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code &&
+                    error.code !== Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files.code);
+            }
+            this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader);
+            // TODO: (sheetalkamat) schedule the update graph
+            if (!project.updateGraph()) {
                 this.refreshInferredProjects();
             }
         }
@@ -682,11 +679,6 @@ namespace ts.server {
             // 3. We should use this watcher to answer questions to findConfigFile rather than calling host everytime
             this.logger.info(`Detected newly added tsconfig file: ${fileName}`);
             this.reloadProjects();
-        }
-
-        private getCanonicalFileName(fileName: string) {
-            const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-            return normalizePath(name);
         }
 
         private removeProject(project: Project) {
@@ -1009,7 +1001,7 @@ namespace ts.server {
                 };
             }
 
-            return { success, projectOptions, configFileErrors: errors };
+            return { success, projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
         }
 
         private exceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>) {
@@ -1113,7 +1105,7 @@ namespace ts.server {
             });
         }
 
-        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], clientFileName?: string) {
+        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], configFileSpecs: ConfigFileSpecs, clientFileName?: string) {
             const sizeLimitExceeded = this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
                 configFileName,
@@ -1126,6 +1118,7 @@ namespace ts.server {
 
             this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
+            project.configFileSpecs = configFileSpecs;
             project.watchConfigFile((project, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind));
             project.watchWildcards(projectOptions.wildcardDirectories);
             project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
@@ -1156,15 +1149,15 @@ namespace ts.server {
         }
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string) {
-            const { success, projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(configFileName);
+            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName);
             if (success) {
                 this.logger.info(`Opened configuration file ${configFileName}`);
             }
 
-            return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, clientFileName);
+            return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, configFileSpecs, clientFileName);
         }
 
-        private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
+        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap: Map<ProjectRoot> = createMap<ProjectRoot>();
 
@@ -1219,7 +1212,10 @@ namespace ts.server {
                     }
                 });
             }
+        }
 
+        private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
+            this.updateNonInferredProjectFiles(project, newUncheckedFiles, propertyReader);
             project.setCompilerOptions(newOptions);
             project.setTypeAcquisition(newTypeAcquisition);
 
@@ -1243,7 +1239,8 @@ namespace ts.server {
             // note: the returned "success" is true does not mean the "configFileErrors" is empty.
             // because we might have tolerated the errors and kept going. So always return the configFileErrors
             // regardless the "success" here is true or not.
-            const { success, projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath());
+            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath());
+            project.configFileSpecs = configFileSpecs;
             if (!success) {
                 // reset project settings to default
                 this.updateNonInferredProject(project, [], fileNamePropertyReader, {}, {}, /*compileOnSave*/ false, configFileErrors);

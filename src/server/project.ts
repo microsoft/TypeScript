@@ -971,6 +971,9 @@ namespace ts.server {
         private typeRootsWatchers: FileWatcher[];
         readonly canonicalConfigFilePath: NormalizedPath;
 
+        /*@internal*/
+        configFileSpecs: ConfigFileSpecs;
+
         private plugins: PluginModule[] = [];
 
         /** Used for configured projects which may have multiple open roots */
