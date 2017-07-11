@@ -5,17 +5,34 @@
 namespace ts.server {
     type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
 
-    export class CachedParseConfigHost implements ParseConfigHost {
+    export class CachedServerHost implements ServerHost {
+        args: string[];
+        newLine: string;
         useCaseSensitiveFileNames: boolean;
+
+        readonly trace: (s: string) => void;
+        readonly realpath?: (path: string) => string;
+
         private getCanonicalFileName: (fileName: string) => string;
         private cachedReadDirectoryResult = createMap<FileSystemEntries>();
+        private readonly currentDirectory: string;
+
         constructor(private readonly host: ServerHost) {
+            this.args = host.args;
+            this.newLine = host.newLine;
             this.useCaseSensitiveFileNames = host.useCaseSensitiveFileNames;
             this.getCanonicalFileName = createGetCanonicalFileName(this.useCaseSensitiveFileNames);
+            if (host.trace) {
+                this.trace = s => host.trace(s);
+            }
+            if (this.host.realpath) {
+                this.realpath = path => this.host.realpath(path);
+            }
+            this.currentDirectory = this.host.getCurrentDirectory();
         }
 
         private getFileSystemEntries(rootDir: string) {
-            const path = ts.toPath(rootDir, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = ts.toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
             const cachedResult = this.cachedReadDirectoryResult.get(path);
             if (cachedResult) {
                 return cachedResult;
@@ -23,52 +40,148 @@ namespace ts.server {
 
             const resultFromHost: FileSystemEntries = {
                 files: this.host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]) || [],
-                directories: this.host.getDirectories(rootDir)
+                directories: this.host.getDirectories(rootDir) || []
             };
 
             this.cachedReadDirectoryResult.set(path, resultFromHost);
             return resultFromHost;
         }
 
+        write(s: string) {
+            return this.host.write(s);
+        }
+
+        writeFile(fileName: string, data: string, writeByteOrderMark?: boolean) {
+            const path = ts.toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+            const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
+            const baseFileName = getBaseFileName(toNormalizedPath(fileName));
+            if (result && !some(result.files, file => this.fileNameEqual(file, baseFileName))) {
+                result.files.push(baseFileName);
+            }
+            return this.host.writeFile(fileName, data, writeByteOrderMark);
+        }
+
+        resolvePath(path: string) {
+            return this.host.resolvePath(path);
+        }
+
+        createDirectory(path: string) {
+            Debug.fail(`Why is createDirectory called on the cached server for ${path}`);
+        }
+
+        getExecutingFilePath() {
+            return this.host.getExecutingFilePath();
+        }
+
+        getCurrentDirectory() {
+            return this.currentDirectory;
+        }
+
+        exit(exitCode?: number) {
+            Debug.fail(`Why is exit called on the cached server: ${exitCode}`);
+        }
+
+        getEnvironmentVariable(name: string) {
+            Debug.fail(`Why is getEnvironmentVariable called on the cached server: ${name}`);
+            return this.host.getEnvironmentVariable(name);
+        }
+
+        getDirectories(path: string) {
+            return this.getFileSystemEntries(path).directories;
+        }
+
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-            return matchFiles(rootDir, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.host.getCurrentDirectory(), depth, path => this.getFileSystemEntries(path));
+            return matchFiles(rootDir, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, path => this.getFileSystemEntries(path));
         }
 
         fileExists(fileName: string): boolean {
-            const path = ts.toPath(fileName, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const result = this.getFileSystemEntries(getDirectoryPath(path));
-            return contains(result.files, fileName);
+            const path = ts.toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+            const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
+            const baseName = getBaseFileName(toNormalizedPath(fileName));
+            return (result && some(result.files, file => this.fileNameEqual(file, baseName))) || this.host.fileExists(fileName);
         }
 
-        readFile(path: string): string {
-            return this.host.readFile(path);
+        directoryExists(dirPath: string) {
+            const path = ts.toPath(dirPath, this.currentDirectory, this.getCanonicalFileName);
+            return this.cachedReadDirectoryResult.has(path) || this.host.directoryExists(dirPath);
         }
 
-        clearCacheForFile(fileName: Path) {
-            this.cachedReadDirectoryResult.delete(fileName);
-            this.cachedReadDirectoryResult.delete(getDirectoryPath(fileName));
+        readFile(path: string, encoding?: string): string {
+            return this.host.readFile(path, encoding);
+        }
+
+        private fileNameEqual(name1: string, name2: string) {
+            return this.getCanonicalFileName(name1) === this.getCanonicalFileName(name2);
+        }
+
+        private updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
+            if (some(entries, entry => this.fileNameEqual(entry, baseName))) {
+                if (!isValid) {
+                    filterMutate(entries, entry => !this.fileNameEqual(entry, baseName));
+                }
+            }
+            else if (isValid) {
+                entries.push(baseName);
+            }
+        }
+
+        addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath) {
+            const path = toPath(fileOrFolder, this.currentDirectory, this.getCanonicalFileName);
+            const existingResult = this.cachedReadDirectoryResult.get(path);
+            if (existingResult) {
+                if (!this.host.directoryExists(fileOrFolder)) {
+                    this.cachedReadDirectoryResult.delete(path);
+                }
+            }
+            else {
+                // Was this earlier file
+                const parentResult = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
+                if (parentResult) {
+                    const baseName = getBaseFileName(fileOrFolder);
+                    if (parentResult) {
+                        this.updateFileSystemEntry(parentResult.files, baseName, this.host.fileExists(path));
+                        this.updateFileSystemEntry(parentResult.directories, baseName, this.host.directoryExists(path));
+                    }
+                }
+            }
         }
 
         clearCache() {
             this.cachedReadDirectoryResult = createMap<FileSystemEntries>();
         }
 
-        // TODO: (sheetalkamat) to cache getFileSize as well as fileExists and readFile
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]) {
+            return this.host.setTimeout(callback, ms, ...args);
+        }
+        clearTimeout(timeoutId: any)  {
+            return this.host.clearTimeout(timeoutId);
+        }
+        setImmediate(callback: (...args: any[]) => void, ...args: any[]) {
+            this.host.setImmediate(callback, ...args);
+        }
+        clearImmediate(timeoutId: any) {
+            this.host.clearImmediate(timeoutId);
+        }
+
     }
 
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
         private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
-        private readonly getCanonicalFileName: (fileName: string) => string;
+        /* @internal */
+        readonly getCanonicalFileName: (fileName: string) => string;
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
 
         private resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
+        /*@internal*/
+        host: ServerHost;
 
-        constructor(private readonly host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
+        constructor(host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
+            this.host = host;
             this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
 
@@ -103,6 +216,7 @@ namespace ts.server {
         dispose() {
             this.project = undefined;
             this.resolveModuleName = undefined;
+            this.host = undefined;
         }
 
         public startRecordingFilesWithChangedResolutions() {

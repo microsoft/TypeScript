@@ -593,8 +593,9 @@ namespace ts.server {
             this.printProjects();
         }
 
-        private onTypeRootFileChanged(project: ConfiguredProject, fileName: string) {
+        private onTypeRootFileChanged(project: ConfiguredProject, fileName: NormalizedPath) {
             this.logger.info(`Type root file ${fileName} changed`);
+            project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
             project.updateTypes();
             this.throttledOperations.schedule(project.getConfigFilePath() + " * type root", /*delay*/ 250, () => {
                 this.reloadConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
@@ -608,8 +609,8 @@ namespace ts.server {
          * @param fileName the absolute file name that changed in watched directory
          */
         /* @internal */
-        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileName: Path) {
-            project.cachedParseConfigHost.clearCacheForFile(fileName);
+        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileName: NormalizedPath) {
+            project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
 
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
@@ -623,7 +624,7 @@ namespace ts.server {
             const configFileSpecs = project.configFileSpecs;
             const configFilename = normalizePath(project.getConfigFilePath());
             // TODO: (sheetalkamat) use the host that caches - so we dont do file exists and read directory call
-            const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilerOptions(), project.cachedParseConfigHost, this.hostConfiguration.extraFileExtensions);
+            const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilerOptions(), project.getCachedServerHost(), this.hostConfiguration.extraFileExtensions);
             const errors = project.getAllProjectErrors();
             if (result.fileNames.length === 0) {
                 if (!configFileSpecs.filesSpecs) {
@@ -947,7 +948,7 @@ namespace ts.server {
             return findProjectByName(projectFileName, this.externalProjects);
         }
 
-        private convertConfigFileContentToProjectOptions(configFilename: string, cachedParseConfigHost: CachedParseConfigHost)  {
+        private convertConfigFileContentToProjectOptions(configFilename: string, cachedServerHost: CachedServerHost)  {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
@@ -959,7 +960,7 @@ namespace ts.server {
             const errors = result.parseDiagnostics;
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,
-                cachedParseConfigHost,
+                cachedServerHost,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
                 configFilename,
@@ -1107,7 +1108,7 @@ namespace ts.server {
             });
         }
 
-        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], configFileSpecs: ConfigFileSpecs, cachedParseConfigHost: CachedParseConfigHost, clientFileName?: string) {
+        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], configFileSpecs: ConfigFileSpecs, cachedServerHost: CachedServerHost, clientFileName?: string) {
             const sizeLimitExceeded = this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
                 configFileName,
@@ -1116,8 +1117,8 @@ namespace ts.server {
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
-                projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
-            project.cachedParseConfigHost = cachedParseConfigHost;
+                projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
+                cachedServerHost);
             this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
             project.configFileSpecs = configFileSpecs;
@@ -1136,7 +1137,7 @@ namespace ts.server {
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 const fileName = toNormalizedPath(rootFilename);
-                if (this.host.fileExists(rootFilename)) {
+                if (project.lsHost.host.fileExists(rootFilename)) {
                     const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
                 }
@@ -1151,13 +1152,13 @@ namespace ts.server {
         }
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string) {
-            const cachedParseConfigHost = new CachedParseConfigHost(this.host);
-            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedParseConfigHost);
+            const cachedServerHost = new CachedServerHost(this.host);
+            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedServerHost);
             if (success) {
                 this.logger.info(`Opened configuration file ${configFileName}`);
             }
 
-            return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, configFileSpecs, cachedParseConfigHost, clientFileName);
+            return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, configFileSpecs, cachedServerHost, clientFileName);
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>) {
@@ -1169,7 +1170,7 @@ namespace ts.server {
                 const normalizedPath = toNormalizedPath(newRootFile);
                 let scriptInfo: ScriptInfo | NormalizedPath;
                 let path: Path;
-                if (!this.host.fileExists(newRootFile)) {
+                if (!project.lsHost.fileExists(newRootFile)) {
                     path = normalizedPathToPath(normalizedPath, this.host.getCurrentDirectory(), this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path);
                     if (isScriptInfo(existingValue)) {
@@ -1242,8 +1243,9 @@ namespace ts.server {
             // note: the returned "success" is true does not mean the "configFileErrors" is empty.
             // because we might have tolerated the errors and kept going. So always return the configFileErrors
             // regardless the "success" here is true or not.
-            project.cachedParseConfigHost.clearCache();
-            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath(), project.cachedParseConfigHost);
+            const host = project.getCachedServerHost();
+            host.clearCache();
+            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath(), host);
             project.configFileSpecs = configFileSpecs;
             if (!success) {
                 // reset project settings to default

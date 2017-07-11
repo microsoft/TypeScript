@@ -254,6 +254,9 @@ namespace ts.server {
 
         detachAllProjects() {
             for (const p of this.containingProjects) {
+                if (p.projectKind === ProjectKind.Configured) {
+                    (p.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(this.fileName);
+                }
                 const isInfoRoot = p.isRoot(this);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*detachFromProjects*/ false);

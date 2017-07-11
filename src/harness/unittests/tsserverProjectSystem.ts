@@ -261,10 +261,11 @@ namespace ts.projectSystem {
         return s && typeof (<File>s).content === "string";
     }
 
-    function invokeDirectoryWatcher(callbacks: DirectoryWatcherCallback[], fileName: string) {
+    function invokeDirectoryWatcher(callbacks: DirectoryWatcherCallback[], getRelativeFilePath: () => string) {
         if (callbacks) {
             const cbs = callbacks.slice();
             for (const cb of cbs) {
+                const fileName = getRelativeFilePath();
                 cb(fileName);
             }
         }
@@ -407,7 +408,7 @@ namespace ts.projectSystem {
                             // Update file
                             if (currentEntry.content !== fileOrFolder.content) {
                                 currentEntry.content = fileOrFolder.content;
-                                this.invokeFileWatcher(currentEntry.path, FileWatcherEventKind.Changed);
+                                this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
                             }
                         }
                         else {
@@ -481,9 +482,9 @@ namespace ts.projectSystem {
             this.fs.set(fileOrFolder.path, fileOrFolder);
 
             if (isFile(fileOrFolder)) {
-                this.invokeFileWatcher(fileOrFolder.path, FileWatcherEventKind.Created);
+                this.invokeFileWatcher(fileOrFolder.fullPath, FileWatcherEventKind.Created);
             }
-            this.invokeDirectoryWatcher(folder.path, fileOrFolder.path);
+            this.invokeDirectoryWatcher(folder.fullPath, fileOrFolder.fullPath);
         }
 
         private removeFileOrFolder(fileOrFolder: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean) {
@@ -496,12 +497,12 @@ namespace ts.projectSystem {
             this.fs.delete(fileOrFolder.path);
 
             if (isFile(fileOrFolder)) {
-                this.invokeFileWatcher(fileOrFolder.path, FileWatcherEventKind.Deleted);
+                this.invokeFileWatcher(fileOrFolder.fullPath, FileWatcherEventKind.Deleted);
             }
             else {
                 Debug.assert(fileOrFolder.entries.length === 0);
-                invokeDirectoryWatcher(this.watchedDirectories.get(fileOrFolder.path), fileOrFolder.path);
-                invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(fileOrFolder.path), fileOrFolder.path);
+                invokeDirectoryWatcher(this.watchedDirectories.get(fileOrFolder.path), () => this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath));
+                invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(fileOrFolder.path), () => this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath));
             }
 
             if (basePath !== fileOrFolder.path) {
@@ -509,25 +510,29 @@ namespace ts.projectSystem {
                     this.removeFileOrFolder(baseFolder, isRemovableLeafFolder);
                 }
                 else {
-                    this.invokeRecursiveDirectoryWatcher(baseFolder.path, fileOrFolder.path);
+                    this.invokeRecursiveDirectoryWatcher(baseFolder.fullPath, fileOrFolder.fullPath);
                 }
             }
         }
 
-        private invokeFileWatcher(filePath: Path, eventId: FileWatcherEventKind) {
-            const callbacks = this.watchedFiles.get(filePath);
-            invokeFileWatcher(callbacks, filePath, eventId);
+        private invokeFileWatcher(fileFullPath: string, eventId: FileWatcherEventKind) {
+            const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
+            invokeFileWatcher(callbacks, getBaseFileName(fileFullPath), eventId);
         }
 
-        private invokeDirectoryWatcher(folderPath: Path, fileName: string) {
-            invokeDirectoryWatcher(this.watchedDirectories.get(folderPath), fileName);
-            this.invokeRecursiveDirectoryWatcher(folderPath, fileName);
+        private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
+            return getRelativePathToDirectoryOrUrl(directoryFullPath, fileFullPath, this.currentDirectory, this.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         }
 
-        private invokeRecursiveDirectoryWatcher(path: Path, fileName: string) {
-            invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(path), fileName);
-            const basePath = getDirectoryPath(path);
-            if (path !== basePath) {
+        private invokeDirectoryWatcher(folderFullPath: string, fileName: string) {
+            invokeDirectoryWatcher(this.watchedDirectories.get(this.toPath(folderFullPath)), () => this.getRelativePathToDirectory(folderFullPath, fileName));
+            this.invokeRecursiveDirectoryWatcher(folderFullPath, fileName);
+        }
+
+        private invokeRecursiveDirectoryWatcher(fullPath: string, fileName: string) {
+            invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), () => this.getRelativePathToDirectory(fullPath, fileName));
+            const basePath = getDirectoryPath(fullPath);
+            if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
                 this.invokeRecursiveDirectoryWatcher(basePath, fileName);
             }
         }

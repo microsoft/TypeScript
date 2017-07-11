@@ -127,7 +127,8 @@ namespace ts.server {
 
         public languageServiceEnabled = true;
 
-        protected lsHost: LSHost;
+        /*@internal*/
+        lsHost: LSHost;
 
         builder: Builder;
         /**
@@ -194,7 +195,8 @@ namespace ts.server {
             hasExplicitListOfFiles: boolean,
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
-            public compileOnSaveEnabled: boolean) {
+            public compileOnSaveEnabled: boolean,
+            host: ServerHost) {
 
             if (!this.compilerOptions) {
                 this.compilerOptions = ts.getDefaultCompilerOptions();
@@ -208,7 +210,7 @@ namespace ts.server {
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
 
-            this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
+            this.lsHost = new LSHost(host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(this.compilerOptions);
 
             this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry);
@@ -647,10 +649,15 @@ namespace ts.server {
                 // Missing files that are not yet watched should be added to the map.
                 for (const missingFilePath of missingFilePaths) {
                     if (!this.missingFilesMap.has(missingFilePath)) {
-                        const fileWatcher = this.projectService.host.watchFile(missingFilePath, (_filename: string, eventKind: FileWatcherEventKind) => {
+                        const fileWatcher = this.projectService.host.watchFile(missingFilePath, (filename: string, eventKind: FileWatcherEventKind) => {
                             if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
                                 fileWatcher.close();
                                 this.missingFilesMap.delete(missingFilePath);
+
+                                if (this.projectKind === ProjectKind.Configured) {
+                                    const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
+                                    (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(absoluteNormalizedPath));
+                                }
 
                                 // When a missing file is created, we should update the graph.
                                 this.markAsDirty();
@@ -849,7 +856,7 @@ namespace ts.server {
             }
 
             const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
-            return filter(allFileNames, file => this.projectService.host.fileExists(file));
+            return filter(allFileNames, file => this.lsHost.host.fileExists(file));
         }
 
         // remove a root file from project
@@ -911,7 +918,8 @@ namespace ts.server {
                 /*files*/ undefined,
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
-                /*compileOnSaveEnabled*/ false);
+                /*compileOnSaveEnabled*/ false,
+                projectService.host);
         }
 
         addRoot(info: ScriptInfo) {
@@ -972,7 +980,6 @@ namespace ts.server {
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs;
-        cachedParseConfigHost: CachedParseConfigHost;
 
         private plugins: PluginModule[] = [];
 
@@ -985,10 +992,15 @@ namespace ts.server {
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
-            public compileOnSaveEnabled: boolean) {
-            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+            public compileOnSaveEnabled: boolean,
+            cachedServerHost: CachedServerHost) {
+            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, cachedServerHost);
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
             this.enablePlugins();
+        }
+
+        getCachedServerHost() {
+            return this.lsHost.host as CachedServerHost;
         }
 
         getConfigFilePath() {
@@ -1104,24 +1116,24 @@ namespace ts.server {
             this.configFileWatcher = this.projectService.host.watchFile(this.getConfigFilePath(), (_fileName, eventKind) => callback(this, eventKind));
         }
 
-        watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void) {
+        watchTypeRoots(callback: (project: ConfiguredProject, path: NormalizedPath) => void) {
             const roots = this.getEffectiveTypeRoots();
             const watchers: FileWatcher[] = [];
             for (const root of roots) {
                 this.projectService.logger.info(`Add type root watcher for: ${root}`);
-                watchers.push(this.projectService.host.watchDirectory(root, path => callback(this, path), /*recursive*/ false));
+                watchers.push(this.projectService.host.watchDirectory(root, path => callback(this, toNormalizedPath(getNormalizedAbsolutePath(path, root))), /*recursive*/ false));
             }
             this.typeRootsWatchers = watchers;
         }
 
-        private addWatcherForDirectory(flag: WatchDirectoryFlags, directory: string, getCanonicalFileName: (fileName: string) => string, replaceExisting: boolean) {
+        private addWatcherForDirectory(flag: WatchDirectoryFlags, directory: string, replaceExisting: boolean) {
             if (replaceExisting || !this.directoriesWatchedForWildcards.has(directory)) {
                 const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                 this.projectService.logger.info(`Add ${recursive ? "recursive " : ""} watcher for: ${directory}`);
                 this.directoriesWatchedForWildcards.set(directory, {
                     watcher: this.projectService.host.watchDirectory(
                         directory,
-                        path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, toPath(path, directory, getCanonicalFileName)),
+                        path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, toNormalizedPath(getNormalizedAbsolutePath(path, directory))),
                         recursive
                     ),
                     recursive
@@ -1130,7 +1142,6 @@ namespace ts.server {
         }
 
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
-            const getCanonicalFileName = createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
             if (wildcardDirectories) {
                 if (this.directoriesWatchedForWildcards) {
                     this.directoriesWatchedForWildcards.forEach(({ watcher, recursive }, directory) => {
@@ -1147,7 +1158,7 @@ namespace ts.server {
                             if (currentRecursive !== recursive) {
                                 this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
                                 watcher.close();
-                                this.addWatcherForDirectory(currentFlag, directory, getCanonicalFileName, /*replaceExisting*/ true);
+                                this.addWatcherForDirectory(currentFlag, directory, /*replaceExisting*/ true);
                             }
                         }
                     });
@@ -1156,7 +1167,7 @@ namespace ts.server {
                     this.directoriesWatchedForWildcards = createMap<WildCardDirectoryWatchers>();
                 }
                 wildcardDirectories.forEach((flag, directory) =>
-                    this.addWatcherForDirectory(flag, directory, getCanonicalFileName, /*replaceExisting*/ false));
+                    this.addWatcherForDirectory(flag, directory, /*replaceExisting*/ false));
             }
             else {
                 this.stopWatchingWildCards();
@@ -1201,7 +1212,7 @@ namespace ts.server {
         }
 
         getEffectiveTypeRoots() {
-            return ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host) || [];
+            return ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.lsHost.host) || [];
         }
     }
 
@@ -1218,7 +1229,7 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
             private readonly projectFilePath?: string) {
-            super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+            super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, projectService.host);
         }
 
         getProjectRootPath() {
