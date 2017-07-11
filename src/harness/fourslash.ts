@@ -1790,15 +1790,18 @@ namespace FourSlash {
                 this.editScriptAndUpdateMarkers(fileName, offsetStart, offsetEnd, edit.newText);
                 const editDelta = edit.newText.length - edit.span.length;
                 if (offsetStart <= this.currentCaretPosition) {
-                    this.currentCaretPosition += editDelta;
+                    if (offsetEnd <= this.currentCaretPosition) {
+                        // The entirety of the edit span falls before the caret position, shift the caret accordingly
+                        this.currentCaretPosition += editDelta;
+                    }
+                    else {
+                        // The span being replaced includes the caret position, place the caret at the beginning of the span
+                        this.currentCaretPosition = offsetStart;
+                    }
                 }
                 runningOffset += editDelta;
                 // TODO: Consider doing this at least some of the time for higher fidelity. Currently causes a failure (bug 707150)
                 // this.languageService.getScriptLexicalStructure(fileName);
-            }
-
-            if (this.currentCaretPosition < 0) {
-                this.currentCaretPosition = 0;
             }
 
             if (isFormattingEdit) {
