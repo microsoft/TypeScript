@@ -2355,7 +2355,7 @@ namespace FourSlash {
         private applyCodeActions(actions: ts.CodeAction[], index?: number): void {
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
-                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `\r\n "${a.description}"`) : "" }`);
+                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : "" }`);
                 }
                 index = 0;
             }
