@@ -46,15 +46,13 @@ function main(): void {
 function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: string, patch: string, nightlyPatch: string): string {
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
-    if (!majorMinorMatch) throw new Error(`The file seems to no longer have a string matching '${majorMinorRgx}'.`);
+    ts.Debug.assert(majorMinorMatch !== null, "", () => `The file seems to no longer have a string matching '${majorMinorRgx}'.`);
     const parsedMajorMinor = majorMinorMatch[1];
-    if (parsedMajorMinor !== majorMinor) {
-        throw new Error(`versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
-    }
+    ts.Debug.assert(parsedMajorMinor === majorMinor, "versionMajorMinor does not match.", () => `${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
 
     const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
-    if (!patchMatch) throw new Error(`The file seems to no longer have a string matching '${versionRgx}'.`);
+    ts.Debug.assert(patchMatch !== null, "The file seems to no longer have a string matching", () => `'${versionRgx}'`);
     const parsedPatch = patchMatch[1];
     if (parsedPatch !== patch) {
         throw new Error(`patch does not match. ${tsFilePath}: '${parsedPatch}; package.json: '${patch}'`);
@@ -65,7 +63,7 @@ function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: st
 
 function parsePackageJsonVersion(versionString: string): { majorMinor: string, patch: string } {
     const parts = versionString.split(".");
-    if (parts.length < 3) throw new Error(`Unexpected version string: '${versionString}'`);
+    ts.Debug.assert(parts.length === 3, "Unexpected version string", () => versionString);
 
     const majorMinor = parts[0] + "." + parts[1];
 
@@ -78,9 +76,7 @@ function parsePackageJsonVersion(versionString: string): { majorMinor: string, p
     }
 
     for (const part of [parts[0], parts[1], patch]) {
-        if (!/\d+/.test(part)) {
-            throw new Error(`Bad version part: ${part}`);
-        }
+        ts.Debug.assert(/\d+/.test(part), "Bad version part", () => part);
     }
 
     return { majorMinor, patch };
