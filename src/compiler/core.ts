@@ -703,7 +703,8 @@ namespace ts {
     export function sum<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
         let result = 0;
         for (const v of array) {
-            result += (v[prop] as number);
+            // Note: we need the following type assertion because of GH #17069
+            result += v[prop] as number;
         }
         return result;
     }
