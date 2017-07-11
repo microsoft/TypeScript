@@ -2231,6 +2231,16 @@ namespace ts {
             else if (parseOptional(returnToken)) {
                 signature.type = parseTypeOrTypePredicate();
             }
+            else if (context === SignatureContext.Type) {
+                const start = scanner.getTokenPos();
+                const length = scanner.getTextPos() - start;
+                const backwardToken = parseOptional(returnToken === SyntaxKind.ColonToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken);
+                if (backwardToken) {
+                    // This is easy to get backward, especially in type contexts, so parse the type anyway
+                    signature.type = parseTypeOrTypePredicate();
+                    parseErrorAtPosition(start, length, Diagnostics._0_expected, tokenToString(returnToken));
+                }
+            }
         }
 
         function parseParameterList(context: SignatureContext) {
