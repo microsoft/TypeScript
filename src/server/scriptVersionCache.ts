@@ -531,16 +531,12 @@ namespace ts.server {
                 const interiorNode = interiorNodes[i] = new LineNode();
                 let charCount = 0;
                 let lineCount = 0;
-                for (let j = 0; j < lineCollectionCapacity; j++) {
-                    if (nodeIndex >= nodes.length) {
-                        break;
-                    }
-
+                const end = Math.min(nodeIndex + lineCollectionCapacity, nodes.length);
+                for (; nodeIndex < end; nodeIndex++) {
                     const node = nodes[nodeIndex];
                     interiorNode.add(node);
                     charCount += node.charCount();
                     lineCount += node.lineCount();
-                    nodeIndex++;
                 }
                 interiorNode.totalChars = charCount;
                 interiorNode.totalLines = lineCount;
