@@ -2,6 +2,13 @@
 /// <reference path="scanner.ts"/>
 
 namespace ts {
+    const enum SignatureContext {
+        Yield = 1 << 0,
+        Await = 1 << 1,
+        Type  = 1 << 2,
+        RequireCompleteParameterList = 1 << 3,
+    }
+
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -2231,7 +2238,7 @@ namespace ts {
             else if (parseOptional(returnToken)) {
                 signature.type = parseTypeOrTypePredicate();
             }
-            else if (context === SignatureContext.Type) {
+            else if (context & SignatureContext.Type) {
                 const start = scanner.getTokenPos();
                 const length = scanner.getTextPos() - start;
                 const backwardToken = parseOptional(returnToken === SyntaxKind.ColonToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken);
