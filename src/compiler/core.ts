@@ -162,50 +162,6 @@ namespace ts {
         };
     }
 
-    export function createFileMap<T>(keyMapper: (key: string) => string): FileMap<T> {
-        const files = createMap<T>();
-        return {
-            get,
-            set,
-            contains,
-            remove,
-            forEachValue: forEachValueInMap,
-            getKeys,
-            clear,
-        };
-
-        function forEachValueInMap(f: (key: Path, value: T) => void) {
-            files.forEach((file, key) => {
-                f(<Path>key, file);
-            });
-        }
-
-        function getKeys() {
-            return arrayFrom(files.keys()) as Path[];
-        }
-
-        // path should already be well-formed so it does not need to be normalized
-        function get(path: Path): T {
-            return files.get(keyMapper(path));
-        }
-
-        function set(path: Path, value: T) {
-            files.set(keyMapper(path), value);
-        }
-
-        function contains(path: Path) {
-            return files.has(keyMapper(path));
-        }
-
-        function remove(path: Path) {
-            files.delete(keyMapper(path));
-        }
-
-        function clear() {
-            files.clear();
-        }
-    }
-
     export function toPath(fileName: string, basePath: string, getCanonicalFileName: (path: string) => string): Path {
         const nonCanonicalizedPath = isRootedDiskPath(fileName)
             ? normalizePath(fileName)
@@ -744,7 +700,7 @@ namespace ts {
         return result;
     }
 
-    export function sum(array: any[], prop: string): number {
+    export function sum<K extends string>(array: { [x in K]: number }[], prop: K): number {
         let result = 0;
         for (const v of array) {
             result += v[prop];

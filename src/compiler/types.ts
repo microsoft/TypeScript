@@ -31,17 +31,6 @@ namespace ts {
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
 
-    export interface FileMap<T> {
-        get(fileName: Path): T;
-        set(fileName: Path, value: T): void;
-        contains(fileName: Path): boolean;
-        remove(fileName: Path): void;
-
-        forEachValue(f: (key: Path, v: T) => void): void;
-        getKeys(): Path[];
-        clear(): void;
-    }
-
     export interface TextRange {
         pos: number;
         end: number;
@@ -527,7 +516,7 @@ namespace ts {
         /* @internal */ original?: Node;                // The original node if this is an updated node.
         /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
         /* @internal */ jsDoc?: JSDoc[];                // JSDoc that directly precedes this node
-        /* @internal */ jsDocCache?: (JSDoc | JSDocTag)[]; // All JSDoc that applies to the node, including parent docs and @param tags
+        /* @internal */ jsDocCache?: JSDocTag[];        // Cache for getJSDocTags
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
@@ -4350,7 +4339,7 @@ namespace ts {
      */
     export type Visitor = (node: Node) => VisitResult<Node>;
 
-    export type VisitResult<T extends Node> = T | T[];
+    export type VisitResult<T extends Node> = T | T[] | undefined;
 
     export interface Printer {
         /**

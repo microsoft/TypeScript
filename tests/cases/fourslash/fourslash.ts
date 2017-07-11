@@ -116,6 +116,7 @@ declare namespace FourSlashInterface {
         ranges(): Range[];
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
+        symbolsInScope(range: Range): any[];
     }
     class goTo {
         marker(name?: string | Marker): void;
@@ -192,6 +193,7 @@ declare namespace FourSlashInterface {
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
+        typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
         /**
          * @deprecated, prefer 'referenceGroups'
          * Like `referencesAre`, but goes to `start` first.
