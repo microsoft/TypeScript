@@ -128,8 +128,7 @@ namespace ts.codefix {
                     // import d|, { a }| from './file'
                     const previousToken = getTokenAtPosition(sourceFile, namedBindings.pos - 1, /*includeJsDocComment*/ false);
                     if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
-                        const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
-                        return [deleteRange({ pos: startPosition, end: namedBindings.end })];
+                        return [deleteRange({ pos: previousToken.getStart(), end: namedBindings.end })];
                     }
                     return undefined;
                 }
