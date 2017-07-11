@@ -94,8 +94,6 @@ namespace ts.codefix {
                             return [deleteNodeInList(parent)];
                         }
 
-                    // handle case where "import d, * as ns from './file'"
-                    // or "'import {a, b as ns} from './file'"
                     case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
                         const importClause = <ImportClause>parent;
                         if (!importClause.namedBindings) { // |import d from './file'|
