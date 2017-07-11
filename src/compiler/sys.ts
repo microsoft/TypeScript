@@ -39,7 +39,7 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -100,7 +100,7 @@ namespace ts {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], basePaths?: string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, basePaths?: ReadonlyArray<string>, excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
@@ -287,7 +287,7 @@ namespace ts {
                 }
             }
 
-            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[], depth?: number): string[] {
+            function readDirectory(path: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
                 return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
             }
 

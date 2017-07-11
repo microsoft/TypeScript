@@ -1377,7 +1377,7 @@ namespace ts {
 
             const decoratorExpressions: Expression[] = [];
             addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
-            addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
+            addRange(decoratorExpressions, flatMap<Decorator[], Expression>(allDecorators.parameters, transformDecoratorsOfParameter));
             addTypeMetadata(node, container, decoratorExpressions);
             return decoratorExpressions;
         }

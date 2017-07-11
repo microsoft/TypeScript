@@ -3334,7 +3334,7 @@ namespace ts {
             }
         }
 
-        return stableSort(result, (x, y) => compareValues(x[0], y[0]));
+        return stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
     }
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
