@@ -605,7 +605,7 @@ namespace FourSlash {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {
-                const pairs: [string | string[], string | string[]][] = arg0;
+                const pairs: ReadonlyArray<[string | string[], string | string[]]> = arg0;
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
                 }

@@ -433,7 +433,7 @@ namespace ts {
                         addRange(result, v);
                     }
                     else {
-                        result.push(v as T);
+                        result.push(v);
                     }
                 }
             }
@@ -459,7 +459,7 @@ namespace ts {
                         addRange(result, v);
                     }
                     else {
-                        result.push(v as U);
+                        result.push(v);
                     }
                 }
             }
@@ -1170,7 +1170,7 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
-    export function isArray(value: any): value is any[] {
+    export function isArray(value: any): value is ReadonlyArray<any> {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
