@@ -526,12 +526,18 @@ namespace ts.server {
                 if (err) {
                     watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
                 }
-                else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                    watchedFile.mtime = stats.mtime;
-                    const eventKind = watchedFile.mtime.getTime() === 0
-                        ? FileWatcherEventKind.Deleted
-                        : FileWatcherEventKind.Changed;
-                    watchedFile.callback(watchedFile.fileName, eventKind);
+                else {
+                    const oldTime = watchedFile.mtime.getTime();
+                    const newTime = stats.mtime.getTime();
+                    if (oldTime !== newTime) {
+                        watchedFile.mtime = stats.mtime;
+                        const eventKind = oldTime === 0
+                            ? FileWatcherEventKind.Created
+                            : newTime === 0
+                                ? FileWatcherEventKind.Deleted
+                                : FileWatcherEventKind.Changed;
+                        watchedFile.callback(watchedFile.fileName, eventKind);
+                    }
                 }
             });
         }
