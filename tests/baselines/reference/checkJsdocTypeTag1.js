@@ -30,6 +30,16 @@ x1(0);
 const x2 = (a) => a + 1;
 x2(0);
 
+/**
+ * @type {object}
+ */
+var props = {};
+
+/**
+ * @type {Object}
+ */
+var props = {};
+
 //// [0.js]
 // @ts-check
 /** @type {String} */
@@ -54,3 +64,11 @@ x1(0);
 /** @type {function (number): number} */
 var x2 = function (a) { return a + 1; };
 x2(0);
+/**
+ * @type {object}
+ */
+var props = {};
+/**
+ * @type {Object}
+ */
+var props = {};

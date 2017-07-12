@@ -35,7 +35,6 @@ namespace ts.server {
     } = require("os");
 
     function getGlobalTypingsCacheLocation() {
-        const versionMajorMinor = ts.version.match(/\d+\.\d+/)[0];
         switch (process.platform) {
             case "win32": {
                 const basePath = process.env.LOCALAPPDATA ||
@@ -511,6 +510,7 @@ namespace ts.server {
         const watchedFiles: WatchedFile[] = [];
         let nextFileToCheck = 0;
         let watchTimer: any;
+        return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
             return fs.statSync(fileName).mtime;
@@ -524,11 +524,20 @@ namespace ts.server {
 
             fs.stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
-                    watchedFile.callback(watchedFile.fileName);
+                    watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
                 }
-                else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                    watchedFile.mtime = stats.mtime;
-                    watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
+                else {
+                    const oldTime = watchedFile.mtime.getTime();
+                    const newTime = stats.mtime.getTime();
+                    if (oldTime !== newTime) {
+                        watchedFile.mtime = stats.mtime;
+                        const eventKind = oldTime === 0
+                            ? FileWatcherEventKind.Created
+                            : newTime === 0
+                                ? FileWatcherEventKind.Deleted
+                                : FileWatcherEventKind.Changed;
+                        watchedFile.callback(watchedFile.fileName, eventKind);
+                    }
                 }
             });
         }
@@ -560,7 +569,9 @@ namespace ts.server {
             const file: WatchedFile = {
                 fileName,
                 callback,
-                mtime: getModifiedTime(fileName)
+                mtime: sys.fileExists(fileName)
+                    ? getModifiedTime(fileName)
+                    : new Date(0) // Any subsequent modification will occur after this time
             };
 
             watchedFiles.push(file);
@@ -573,14 +584,6 @@ namespace ts.server {
         function removeFile(file: WatchedFile) {
             unorderedRemoveItem(watchedFiles, file);
         }
-
-        return {
-            getModifiedTime: getModifiedTime,
-            poll: poll,
-            startWatchTimer: startWatchTimer,
-            addFile: addFile,
-            removeFile: removeFile
-        };
     }
 
     // REVIEW: for now this implementation uses polling.

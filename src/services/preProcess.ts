@@ -41,13 +41,9 @@ namespace ts {
         }
 
         function getFileReference() {
-            const file = scanner.getTokenValue();
+            const fileName = scanner.getTokenValue();
             const pos = scanner.getTokenPos();
-            return {
-                fileName: file,
-                pos: pos,
-                end: pos + file.length
-            };
+            return { fileName, pos, end: pos + fileName.length };
         }
 
         function recordAmbientExternalModule(): void {

@@ -12,7 +12,7 @@ namespace ts.JsTyping {
         directoryExists: (path: string) => boolean;
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
-        readDirectory: (rootDir: string, extensions: string[], excludes: string[], includes: string[], depth?: number) => string[];
+        readDirectory: (rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth?: number) => string[];
     }
 
     interface PackageJson {
@@ -28,8 +28,6 @@ namespace ts.JsTyping {
     // A map of loose file names to library names
     // that we are confident require typings
     let safeList: Map<string>;
-
-    const EmptySafeList: Map<string> = createMap<string>();
 
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
@@ -71,8 +69,7 @@ namespace ts.JsTyping {
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
             const path = normalizePath(fileName);
-            const kind = ensureScriptKind(path, getScriptKindFromFileName(path));
-            if (kind === ScriptKind.JS || kind === ScriptKind.JSX) {
+            if (hasJavaScriptFileExtension(path)) {
                 return path;
             }
         });
@@ -178,20 +175,18 @@ namespace ts.JsTyping {
          * @param fileNames are the names for source files in the project
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
-            if (safeList !== EmptySafeList) {
-                for (const j of fileNames) {
-                    if (!hasJavaScriptFileExtension(j)) continue;
+            for (const j of fileNames) {
+                if (!hasJavaScriptFileExtension(j)) continue;
 
-                    const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
-                    const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
-                    const safe = safeList.get(cleanedTypingName);
-                    if (safe !== undefined) {
-                        addInferredTyping(safe);
-                    }
+                const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
+                const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+                const safe = safeList.get(cleanedTypingName);
+                if (safe !== undefined) {
+                    addInferredTyping(safe);
                 }
             }
 
-            const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
+            const hasJsxFile = some(fileNames, f => fileExtensionIs(f, Extension.Jsx));
             if (hasJsxFile) {
                 addInferredTyping("react");
             }
@@ -209,6 +204,7 @@ namespace ts.JsTyping {
                 return;
             }
 
+            // depth of 2, so we access `node_modules/foo` but not `node_modules/foo/bar`
             const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
