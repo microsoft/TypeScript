@@ -1,6 +1,5 @@
-﻿// @module: amd
-// @target: es5
-// @lib: es6
+﻿// @module: system
+// @target: es6
 // @filename: 0.ts
 export function foo() { return "foo"; }
 
@@ -16,6 +15,12 @@ function foo() {
 }
 
 class C {
+    method() {
+        const loadAsync = import ("./0");
+    }
+}
+
+export class D {
     method() {
         const loadAsync = import ("./0");
     }

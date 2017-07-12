@@ -14,3 +14,9 @@ p1.then(zero => {
 function foo() {
     const p2 = import("./0");
 }
+
+class C {
+    method() {
+        const loadAsync = import ("./0");
+    }
+}
