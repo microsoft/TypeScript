@@ -88,7 +88,7 @@ namespace ts {
             else {
                 // Map spans of JsxAttribute nodes into object literals and spans
                 // of JsxSpreadAttribute nodes into expressions.
-                const segments = flatten(
+                const segments = flatten<Expression | ObjectLiteralExpression>(
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
                         : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))

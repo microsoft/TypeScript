@@ -438,24 +438,22 @@ namespace ts.projectSystem {
             }
         }
 
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
             return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
-                const result: FileSystemEntries = {
-                    directories: [],
-                    files: []
-                };
+                const directories: string[] = [];
+                const files: string[] = [];
                 const dirEntry = this.fs.get(this.toPath(dir));
                 if (isFolder(dirEntry)) {
                     dirEntry.entries.forEach((entry) => {
                         if (isFolder(entry)) {
-                            result.directories.push(entry.fullPath);
+                            directories.push(entry.fullPath);
                         }
                         else if (isFile(entry)) {
-                            result.files.push(entry.fullPath);
+                            files.push(entry.fullPath);
                         }
                     });
                 }
-                return result;
+                return { directories, files };
             });
         }
 
