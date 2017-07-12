@@ -24,6 +24,15 @@ function walk(ctx: Lint.WalkContext<void>): void {
         if (!ts.isStringLiteral(message)) {
             ctx.addFailureAtNode(message, "Second argument to 'Debug.assert' should be a string literal.");
         }
+
+        if (node.arguments.length < 3) {
+            return;
+        }
+
+        const message2 = node.arguments[2];
+        if (!ts.isStringLiteral(message2) && !ts.isArrowFunction(message2)) {
+            ctx.addFailureAtNode(message, "Third argument to 'Debug.assert' should be a string literal or arrow function.");
+        }
     }
 
     function isDebugAssert(expr: ts.Node): boolean {

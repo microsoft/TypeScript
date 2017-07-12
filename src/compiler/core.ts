@@ -1285,8 +1285,8 @@ namespace ts {
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
         const end = start + length;
 
-        Debug.assertLessThanOrEqual(0, start);
-        Debug.assertLessThanOrEqual(0, length);
+        Debug.assertGreaterThanOrEqual(start, 0);
+        Debug.assertGreaterThanOrEqual(length, 0);
 
         if (file) {
             Debug.assertLessThanOrEqual(start, file.text.length);
@@ -2343,22 +2343,28 @@ namespace ts {
             }
         }
 
-        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string) {
+        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
             if (a !== b) {
                 const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
                 fail(`Expected ${a} === ${b}. ${message}`);
             }
         }
 
-        export function assertLessThan(a: number, b: number, msg?: string) {
+        export function assertLessThan(a: number, b: number, msg?: string): void {
             if (a >= b) {
                 fail(`Expected ${a} < ${b}. ${msg || ""}`);
             }
         }
 
-        export function assertLessThanOrEqual(a: number, b: number) {
+        export function assertLessThanOrEqual(a: number, b: number): void {
             if (a > b) {
                 fail(`Expected ${a} <= ${b}`);
+            }
+        }
+
+        export function assertGreaterThanOrEqual(a: number, b: number): void {
+            if (a < b) {
+                fail(`Expected ${a} >= ${b}`);
             }
         }
 
