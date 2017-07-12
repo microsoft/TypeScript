@@ -2061,8 +2061,10 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
+                    return bindVariableDeclarationOrBindingElement(<VariableDeclaration>node);
                 case SyntaxKind.BindingElement:
-                    return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
+                    node.flowNode = currentFlow;
+                    return bindVariableDeclarationOrBindingElement(<BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return bindPropertyWorker(node as PropertyDeclaration | PropertySignature);

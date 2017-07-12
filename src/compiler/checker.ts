@@ -4088,8 +4088,8 @@ namespace ts {
 
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
-            const pattern = <BindingPattern>declaration.parent;
-            const parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
+            const pattern = declaration.parent;
+            const parentType = getTypeForBindingElementParent(pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -4134,7 +4134,8 @@ namespace ts {
                     // or otherwise the type of the string index signature.
                     const text = getTextOfPropertyName(name);
 
-                    type = getTypeOfPropertyOfType(parentType, text) ||
+                    const declaredType = getTypeOfPropertyOfType(parentType, text);
+                    type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
                     if (!type) {
@@ -10668,6 +10669,11 @@ namespace ts {
                 const key = getFlowCacheKey((<PropertyAccessExpression>node).expression);
                 return key && key + "." + (<PropertyAccessExpression>node).name.text;
             }
+            if (node.kind === SyntaxKind.BindingElement) {
+                const key = node.parent.parent.kind === SyntaxKind.BindingElement ? getFlowCacheKey(node.parent.parent) : isApparentTypePosition(node.parent.parent) ? "@<initializer>" : "<initializer>";
+                const text = getBindingElementNameText(node as BindingElement);
+                return key && text && key + "." + text;
+            }
             return undefined;
         }
 
@@ -10680,6 +10686,28 @@ namespace ts {
                     return getLeftmostIdentifierOrThis((<PropertyAccessExpression>node).expression);
             }
             return undefined;
+        }
+
+        function getBindingElementNameText(element: BindingElement): string | undefined {
+            if (element.parent.kind === SyntaxKind.ObjectBindingPattern) {
+                const name = element.propertyName || element.name;
+                if (isComputedNonLiteralName(name as PropertyName)) return undefined;
+                switch (name.kind) {
+                    case SyntaxKind.Identifier:
+                        return unescapeLeadingUnderscores(name.text);
+                    case SyntaxKind.ComputedPropertyName:
+                        return (name.expression as LiteralExpression).text;
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NumericLiteral:
+                        return name.text;
+                    default:
+                        // Per types, array and object binding patterns remain, however they should never be present if propertyName is not defined
+                        Debug.fail("Unexpected name kind for binding element name");
+                }
+            }
+            else {
+                 return "" + element.parent.elements.indexOf(element);
+            }
         }
 
         function isMatchingReference(source: Node, target: Node): boolean {
@@ -10696,6 +10724,10 @@ namespace ts {
                     return target.kind === SyntaxKind.PropertyAccessExpression &&
                         (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
                         isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
+                case SyntaxKind.BindingElement:
+                    if (target.kind !== SyntaxKind.PropertyAccessExpression) return false;
+                    const t = target as PropertyAccessExpression;
+                    return t.name.text === getBindingElementNameText(source as BindingElement) && source.parent.parent.kind === SyntaxKind.BindingElement ? isMatchingReference(source.parent.parent, t.expression) : true;
             }
             return false;
         }
