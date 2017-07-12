@@ -6892,6 +6892,7 @@ namespace ts {
                     case "Null":
                         return nullType;
                     case "Object":
+                    case "object":
                         return anyType;
                     case "Function":
                     case "function":
