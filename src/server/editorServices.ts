@@ -623,7 +623,6 @@ namespace ts.server {
 
             const configFileSpecs = project.configFileSpecs;
             const configFilename = normalizePath(project.getConfigFilePath());
-            // TODO: (sheetalkamat) use the host that caches - so we dont do file exists and read directory call
             const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilerOptions(), project.getCachedServerHost(), this.hostConfiguration.extraFileExtensions);
             const errors = project.getAllProjectErrors();
             if (result.fileNames.length === 0) {
@@ -1137,7 +1136,7 @@ namespace ts.server {
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 const fileName = toNormalizedPath(rootFilename);
-                if (project.lsHost.host.fileExists(rootFilename)) {
+                if (project.lsHost.fileExists(rootFilename)) {
                     const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
                 }
