@@ -686,7 +686,7 @@ namespace ts {
         const { resolvedModule, failedLookupLocations } =
             nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
         if (!resolvedModule) {
-            throw new Error(`Could not resolve JS module ${moduleName} starting at ${initialDir}. Looked in: ${failedLookupLocations.join(", ")}`);
+            throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations.join(", ")}`);
         }
         return resolvedModule.resolvedFileName;
     }

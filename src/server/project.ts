@@ -170,7 +170,8 @@ namespace ts.server {
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
             if (result.error) {
-                log(`Failed to load module: ${JSON.stringify(result.error)}`);
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                log(`Failed to load module '${moduleName}': ${err}`);
                 return undefined;
             }
             return result.module;
