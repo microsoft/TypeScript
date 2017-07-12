@@ -47,6 +47,20 @@ namespace ts.server {
             return resultFromHost;
         }
 
+        private canWorkWithCacheForDir(rootDir: string) {
+            // Some of the hosts might not be able to handle read directory or getDirectories
+            const path = ts.toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
+            if (this.cachedReadDirectoryResult.get(path)) {
+                return true;
+            }
+            try {
+                return this.getFileSystemEntries(rootDir);
+            }
+            catch (_e) {
+                return false;
+            }
+        }
+
         write(s: string) {
             return this.host.write(s);
         }
@@ -86,12 +100,18 @@ namespace ts.server {
             return this.host.getEnvironmentVariable(name);
         }
 
-        getDirectories(path: string) {
-            return this.getFileSystemEntries(path).directories;
+        getDirectories(rootDir: string) {
+            if (this.canWorkWithCacheForDir(rootDir)) {
+                return this.getFileSystemEntries(rootDir).directories;
+            }
+            return this.host.getDirectories(rootDir);
         }
 
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-            return matchFiles(rootDir, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, path => this.getFileSystemEntries(path));
+            if (this.canWorkWithCacheForDir(rootDir)) {
+                return matchFiles(rootDir, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, path => this.getFileSystemEntries(path));
+            }
+            return this.host.readDirectory(rootDir, extensions, excludes, includes, depth);
         }
 
         fileExists(fileName: string): boolean {
