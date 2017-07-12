@@ -524,29 +524,18 @@ namespace ts.server {
         }
 
         private static buildTreeFromBottom(nodes: LineCollection[]): LineNode {
-            const interiorNodeCount = Math.ceil(nodes.length / lineCollectionCapacity);
-            const interiorNodes: LineNode[] = new Array(interiorNodeCount);
+            if (nodes.length < lineCollectionCapacity) {
+                return new LineNode(nodes);
+            }
+
+            const interiorNodes = new Array<LineNode>(Math.ceil(nodes.length / lineCollectionCapacity));
             let nodeIndex = 0;
-            for (let i = 0; i < interiorNodeCount; i++) {
-                const interiorNode = interiorNodes[i] = new LineNode();
-                let charCount = 0;
-                let lineCount = 0;
+            for (let i = 0; i < interiorNodes.length; i++) {
                 const end = Math.min(nodeIndex + lineCollectionCapacity, nodes.length);
-                for (; nodeIndex < end; nodeIndex++) {
-                    const node = nodes[nodeIndex];
-                    interiorNode.add(node);
-                    charCount += node.charCount();
-                    lineCount += node.lineCount();
-                }
-                interiorNode.totalChars = charCount;
-                interiorNode.totalLines = lineCount;
+                interiorNodes[i] = new LineNode(nodes.slice(nodeIndex, end));
+                nodeIndex = end;
             }
-            if (interiorNodes.length === 1) {
-                return interiorNodes[0];
-            }
-            else {
-                return this.buildTreeFromBottom(interiorNodes);
-            }
+            return this.buildTreeFromBottom(interiorNodes);
         }
 
         static linesFromText(text: string) {
@@ -575,7 +564,10 @@ namespace ts.server {
     export class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
-        private children: LineCollection[] = [];
+
+        constructor(private readonly children: LineCollection[] = []) {
+            if (children.length) this.updateCounts();
+        }
 
         isLeaf() {
             return false;
