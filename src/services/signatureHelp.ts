@@ -138,7 +138,7 @@ namespace ts.SignatureHelp {
 
             const kind = invocation.typeArguments && invocation.typeArguments.pos === list.pos ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments;
             const argumentCount = getArgumentCount(list);
-            Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+            Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, "argumentCount < argumentIndex", () => `${argumentCount} < ${argumentIndex}`);
             const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
             return { kind, invocation, argumentsSpan, argumentIndex, argumentCount };
         }
@@ -272,7 +272,7 @@ namespace ts.SignatureHelp {
             ? 1
             : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
 
-        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, "argumentCount < argumentIndex", () => `${argumentCount} < ${argumentIndex}`);
         return {
             kind: ArgumentListKind.TaggedTemplateArguments,
             invocation: tagExpression,
@@ -404,7 +404,7 @@ namespace ts.SignatureHelp {
             };
         });
 
-        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, "argumentCount < argumentIndex", () => `${argumentCount} < ${argumentIndex}`);
 
         const selectedItemIndex = candidates.indexOf(resolvedSignature);
         Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.

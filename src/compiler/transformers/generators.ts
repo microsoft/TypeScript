@@ -2448,7 +2448,7 @@ namespace ts {
          * @param location An optional source map location for the statement.
          */
         function createInlineBreak(label: Label, location?: TextRange): ReturnStatement {
-            Debug.assert(label > 0, `Invalid label: ${label}`);
+            Debug.assert(label > 0, "Invalid label", () => label.toString());
             return setTextRange(
                 createReturn(
                     createArrayLiteral([

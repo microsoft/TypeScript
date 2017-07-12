@@ -1250,7 +1250,7 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + path);
+                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind should match new script kind.", () => `Registered: ${oldSourceFile.scriptKind}, new: ${hostFileInformation.scriptKind}, file: ${path}`);
 
                         return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
