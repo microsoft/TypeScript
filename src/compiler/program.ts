@@ -447,7 +447,7 @@ namespace ts {
         let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -460,16 +460,16 @@ namespace ts {
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x));
             const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache).resolvedModule;
-            resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache(moduleNames, containingFile, loader);
+            resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache(checkAllDefined(moduleNames), containingFile, loader);
         }
 
         let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
+            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives(checkAllDefined(typeDirectiveNames), containingFile);
         }
         else {
             const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective;
-            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(typeReferenceDirectiveNames, containingFile, loader);
+            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(checkAllDefined(typeReferenceDirectiveNames), containingFile, loader);
         }
 
         const filesByName = createMap<SourceFile | undefined>();
@@ -2126,5 +2126,10 @@ namespace ts {
         function needAllowJs() {
             return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
         }
+    }
+
+    function checkAllDefined(names: string[]): string[] {
+        Debug.assert(names.every(name => name !== undefined), "A name is undefined.", () => JSON.stringify(names));
+        return names;
     }
 }
