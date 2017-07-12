@@ -690,7 +690,7 @@ namespace ts.server {
             }
             let strBuilder = "";
             for (const file of this.program.getSourceFiles()) {
-                strBuilder += `${file.fileName}\n`;
+                strBuilder += `\t${file.fileName}\n`;
             }
             return strBuilder;
         }
