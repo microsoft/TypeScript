@@ -1116,6 +1116,7 @@ namespace ts {
                 const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
                 return ts.JsTyping.discoverTypings(
                     this.host,
+                    msg => this.logger.log(msg),
                     info.fileNames,
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
