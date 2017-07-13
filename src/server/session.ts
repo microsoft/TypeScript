@@ -163,10 +163,9 @@ namespace ts.server {
      * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed.
      */
     class MultistepOperation {
-        private requestId: number;
+        private requestId: number | undefined;
         private timerHandle: any;
-        private immediateId: any;
-        private completed = true;
+        private immediateId: number | undefined;
         private readonly next: NextStep;
 
         constructor(private readonly operationHost: MultistepOperationHost) {
@@ -179,16 +178,13 @@ namespace ts.server {
         public startNew(action: (next: NextStep) => void) {
             this.complete();
             this.requestId = this.operationHost.getCurrentRequestId();
-            this.completed = false;
             this.executeAction(action);
         }
 
         private complete() {
-            if (!this.completed) {
-                if (this.requestId) {
-                    this.operationHost.sendRequestCompletedEvent(this.requestId);
-                }
-                this.completed = true;
+            if (this.requestId) {
+                this.operationHost.sendRequestCompletedEvent(this.requestId);
+                this.requestId = undefined;
             }
             this.setTimerHandle(undefined);
             this.setImmediateId(undefined);
