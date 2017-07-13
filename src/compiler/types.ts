@@ -2330,12 +2330,12 @@ namespace ts {
          */
         /* @internal */ redirect?: {
             /** Source file this redirects to. */
-            readonly redirectTo: SourceFile,
+            readonly redirectTarget: SourceFile,
             /**
              * Source file for the duplicate package. This will not be used by the Program,
              * but we need to keep this around so we can watch for changes in underlying.
              */
-            readonly underlying: SourceFile,
+            readonly unredirected: SourceFile,
         } | undefined;
 
         amdDependencies: AmdDependency[];
@@ -2511,8 +2511,8 @@ namespace ts {
 
         /** Given a source file, get the name of the package it was imported from. */
         /* @internal */ sourceFileToPackageName: Map<string>;
-        /** True if some other source file redirects to this one. */
-        /* @internal */ isSourceFileTargetOfRedirect: Map<true>;
+        /** Set of all source files that some other source file redirects to. */
+        /* @internal */ redirectTargetsSet: Map<true>;
     }
 
     /* @internal */

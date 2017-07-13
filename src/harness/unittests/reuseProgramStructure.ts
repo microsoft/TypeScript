@@ -110,7 +110,7 @@ namespace ts {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
-                if (oldFile && oldFile.redirect) oldFile = oldFile.redirect.underlying;
+                if (oldFile && oldFile.redirect) oldFile = oldFile.redirect.unredirected;
                 if (oldFile && oldFile.sourceText.getVersion() === t.text.getVersion()) {
                     return oldFile;
                 }

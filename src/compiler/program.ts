@@ -479,7 +479,7 @@ namespace ts {
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
         let sourceFileToPackageName = createMap<string>();
         // See `sourceFileIsRedirectedTo`.
-        let isSourceFileTargetOfRedirect = createMap<true>();
+        let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();
         // stores 'filename -> file association' ignoring case
@@ -558,7 +558,7 @@ namespace ts {
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
-            isSourceFileTargetOfRedirect,
+            redirectTargetsSet,
         };
 
         verifyCompilerOptions();
@@ -797,12 +797,12 @@ namespace ts {
                 if (oldSourceFile.redirect) {
                     // We got `newSourceFile` by path, so it is actually for the underlying file.
                     // This lets us know if the underlying file has changed. If it has we should break the redirect.
-                    if (newSourceFile !== oldSourceFile.redirect.underlying) {
+                    if (newSourceFile !== oldSourceFile.redirect.unredirected) {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
                 }
-                else if (oldProgram.isSourceFileTargetOfRedirect.has(oldSourceFile.path)) {
+                else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
                     // This is similar to the above case. If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -941,7 +941,7 @@ namespace ts {
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
-            isSourceFileTargetOfRedirect = oldProgram.isSourceFileTargetOfRedirect;
+            redirectTargetsSet = oldProgram.redirectTargetsSet;
 
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
@@ -1597,19 +1597,19 @@ namespace ts {
             }
         }
 
-        function createRedirectSourceFile(redirectTo: SourceFile, underlying: SourceFile, fileName: string, path: Path): SourceFile {
-            const redirect: SourceFile = Object.create(redirectTo);
+        function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path): SourceFile {
+            const redirect: SourceFile = Object.create(redirectTarget);
             redirect.fileName = fileName;
             redirect.path = path;
-            redirect.redirect = { redirectTo, underlying };
+            redirect.redirect = { redirectTarget, unredirected };
             Object.defineProperties(redirect, {
                 id: {
-                    get(this: SourceFile) { return this.redirect.redirectTo.id; },
-                    set(this: SourceFile, value: SourceFile["id"]) { this.redirect.redirectTo.id = value; },
+                    get(this: SourceFile) { return this.redirect.redirectTarget.id; },
+                    set(this: SourceFile, value: SourceFile["id"]) { this.redirect.redirectTarget.id = value; },
                 },
                 symbol: {
-                    get(this: SourceFile) { return this.redirect.redirectTo.symbol; },
-                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirect.redirectTo.symbol = value; },
+                    get(this: SourceFile) { return this.redirect.redirectTarget.symbol; },
+                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirect.redirectTarget.symbol = value; },
                 },
             });
             return redirect;
@@ -1666,7 +1666,7 @@ namespace ts {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
                     const dupFile = createRedirectSourceFile(fileFromPackageId, file, fileName, path);
-                    isSourceFileTargetOfRedirect.set(fileFromPackageId.path, true);
+                    redirectTargetsSet.set(fileFromPackageId.path, true);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageName.set(path, packageId.name);
                     files.push(dupFile);
