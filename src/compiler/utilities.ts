@@ -3604,6 +3604,10 @@ namespace ts {
         return previous[previous.length - 1];
     }
 
+    export function skipAlias(symbol: Symbol, checker: TypeChecker) {
+        return symbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
+    }
+
     /** See comment on `declareModuleMember` in `binder.ts`. */
     export function getCombinedLocalAndExportSymbolFlags(symbol: Symbol): SymbolFlags {
         return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
