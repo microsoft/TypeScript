@@ -77,7 +77,7 @@ namespace ts.server {
             tabSize: 4,
             newLineCharacter: host.newLine || "\n",
             convertTabsToSpaces: true,
-            indentStyle: ts.IndentStyle.Smart,
+            indentStyle: IndentStyle.Smart,
             insertSpaceAfterConstructor: false,
             insertSpaceAfterCommaDelimiter: true,
             insertSpaceAfterSemicolonInForStatements: true,
@@ -196,7 +196,7 @@ namespace ts.server {
     }
 
     export function enumerateInsertsAndDeletes<T>(a: SortedReadonlyArray<T>, b: SortedReadonlyArray<T>, inserted: (item: T) => void, deleted: (item: T) => void, compare?: (a: T, b: T) => Comparison) {
-        compare = compare || ts.compareValues;
+        compare = compare || compareValues;
         let aIndex = 0;
         let bIndex = 0;
         const aLen = a.length;
