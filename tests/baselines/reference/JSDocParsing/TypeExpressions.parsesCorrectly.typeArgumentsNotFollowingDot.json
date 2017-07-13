@@ -6,9 +6,13 @@
     "typeName": {
         "kind": "Identifier",
         "pos": 1,
-        "end": 4,
+        "end": 2,
         "flags": "JSDoc",
-        "originalKeywordKind": "VarKeyword",
-        "text": "var"
+        "text": "a"
+    },
+    "typeArguments": {
+        "length": 0,
+        "pos": 3,
+        "end": 3
     }
 }

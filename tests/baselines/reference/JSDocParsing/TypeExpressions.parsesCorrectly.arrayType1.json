@@ -1,15 +1,18 @@
 {
-    "kind": "JSDocArrayType",
+    "kind": "ArrayType",
     "pos": 1,
     "end": 4,
+    "flags": "JSDoc",
     "elementType": {
-        "kind": "JSDocTypeReference",
+        "kind": "TypeReference",
         "pos": 1,
         "end": 2,
-        "name": {
+        "flags": "JSDoc",
+        "typeName": {
             "kind": "Identifier",
             "pos": 1,
             "end": 2,
+            "flags": "JSDoc",
             "text": "a"
         }
     }

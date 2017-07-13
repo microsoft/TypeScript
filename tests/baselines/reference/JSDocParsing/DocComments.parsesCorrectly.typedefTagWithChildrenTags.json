@@ -54,10 +54,10 @@
                         "pos": 34,
                         "end": 42,
                         "type": {
-                            "kind": "JSDocTypeReference",
+                            "kind": "TypeReference",
                             "pos": 35,
                             "end": 41,
-                            "name": {
+                            "typeName": {
                                 "kind": "Identifier",
                                 "pos": 35,
                                 "end": 41,

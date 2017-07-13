@@ -1,25 +1,30 @@
 {
     "kind": "JSDocThisType",
-    "pos": 1,
+    "pos": 5,
     "end": 9,
+    "flags": "JSDoc",
     "type": {
-        "kind": "JSDocTypeReference",
+        "kind": "TypeReference",
         "pos": 6,
         "end": 9,
-        "name": {
+        "flags": "JSDoc",
+        "typeName": {
             "kind": "FirstNode",
             "pos": 6,
             "end": 9,
+            "flags": "JSDoc",
             "left": {
                 "kind": "Identifier",
                 "pos": 6,
                 "end": 7,
+                "flags": "JSDoc",
                 "text": "a"
             },
             "right": {
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 9,
+                "flags": "JSDoc",
                 "text": "b"
             }
         }
