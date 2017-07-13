@@ -606,7 +606,7 @@ namespace ts.server {
 
             const definitions = project.getLanguageService().getDefinitionAtPosition(file, position);
             if (!definitions) {
-                return undefined;
+                return [];
             }
 
             if (simplifiedResult) {
@@ -674,7 +674,7 @@ namespace ts.server {
             const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
 
             if (!occurrences) {
-                return undefined;
+                return [];
             }
 
             return occurrences.map(occurrence => {
@@ -917,7 +917,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
                 if (!nameInfo) {
-                    return undefined;
+                    return [];
                 }
 
                 const displayString = ts.displayPartsToString(nameInfo.displayParts);
@@ -995,7 +995,7 @@ namespace ts.server {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
         }
 
-        private getFileAndProject(args: protocol.FileRequestArgs, errorOnMissingProject = true) {
+        private getFileAndProject(args: protocol.FileRequestArgs, errorOnMissingProject = true): { file: NormalizedPath, project: Project } {
             return this.getFileAndProjectWorker(args.file, args.projectFileName, /*refreshInferredProjects*/ true, errorOnMissingProject);
         }
 
@@ -1180,7 +1180,7 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
             if (!completions) {
-                return undefined;
+                return [];
             }
             if (simplifiedResult) {
                 return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
