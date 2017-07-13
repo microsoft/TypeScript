@@ -1240,10 +1240,13 @@ namespace ts {
     }
 
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
-        writeDisplayParts(displayPartWriter);
-        const result = displayPartWriter.displayParts();
-        displayPartWriter.clear();
-        return result;
+        try {
+            writeDisplayParts(displayPartWriter);
+            return displayPartWriter.displayParts();
+        }
+        finally {
+            displayPartWriter.clear();
+        }
     }
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
