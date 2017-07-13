@@ -45,7 +45,7 @@ namespace ts.server {
          * Any compiler options that might contain paths will be taken out.
          * Enum compiler options will be converted to strings.
          */
-        readonly compilerOptions: ts.CompilerOptions;
+        readonly compilerOptions: CompilerOptions;
         // "extends", "files", "include", or "exclude" will be undefined if an external config is used.
         // Otherwise, we will use "true" if the property is present and "false" if it is missing.
         readonly extends: boolean | undefined;
@@ -201,7 +201,7 @@ namespace ts.server {
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
     export function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
-        const result = projects.reduce<T[]>((previous, current) => concatenate(previous, action(current)), []).sort(comparer);
+        const result = flatMap(projects, action).sort(comparer);
         return projects.length > 1 ? deduplicate(result, areEqual) : result;
     }
 
@@ -240,7 +240,7 @@ namespace ts.server {
         getFileName: x => x,
         getScriptKind: _ => undefined,
         hasMixedContent: (fileName, extraFileExtensions) => {
-            const mixedContentExtensions = ts.map(ts.filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
+            const mixedContentExtensions = map(filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
             return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension));
         }
     };
@@ -633,7 +633,7 @@ namespace ts.server {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
+            if (fileName && !isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
                 return;
             }
 
@@ -1082,7 +1082,7 @@ namespace ts.server {
                 configFileName: configFileName(),
                 projectType: project instanceof server.ExternalProject ? "external" : "configured",
                 languageServiceEnabled: project.languageServiceEnabled,
-                version: ts.version,
+                version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 
@@ -1092,7 +1092,7 @@ namespace ts.server {
                 }
 
                 const configFilePath = project instanceof server.ConfiguredProject && project.getConfigFilePath();
-                const base = ts.getBaseFileName(configFilePath);
+                const base = getBaseFileName(configFilePath);
                 return base === "tsconfig.json" || base === "jsconfig.json" ? base : "other";
             }
 

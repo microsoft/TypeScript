@@ -416,9 +416,8 @@ namespace ts {
                 }
             }
             else {
-                // Exported module members are given 2 symbols: A local symbol that is classified with an ExportValue,
-                // ExportType, or ExportContainer flag, and an associated export symbol with all the correct flags set
-                // on it. There are 2 main reasons:
+                // Exported module members are given 2 symbols: A local symbol that is classified with an ExportValue flag,
+                // and an associated export symbol with all the correct flags set on it. There are 2 main reasons:
                 //
                 //   1. We treat locals and exports of the same name as mutually exclusive within a container.
                 //      That means the binder will issue a Duplicate Identifier error if you mix locals and exports
@@ -438,10 +437,7 @@ namespace ts {
                     (node as JSDocTypedefTag).name.kind === SyntaxKind.Identifier &&
                     ((node as JSDocTypedefTag).name as Identifier).isInJSDocNamespace;
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
-                    const exportKind =
-                        (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
-                        (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
-                        (symbolFlags & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
+                    const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                     const local = declareSymbol(container.locals, /*parent*/ undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
@@ -2288,7 +2284,7 @@ namespace ts {
             // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
             // expression is the declaration
             setCommonJsModuleIndicator(node);
-            declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.Export, SymbolFlags.None);
+            declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
         }
 
         function isExportsOrModuleExportsOrAlias(node: Node): boolean {
@@ -2329,7 +2325,7 @@ namespace ts {
 
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
-            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.Export | SymbolFlags.ValueModule, SymbolFlags.None);
+            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {

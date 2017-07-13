@@ -164,7 +164,7 @@ namespace ts {
          * LS host can optionally implement these methods to support completions for module specifiers.
          * Without these methods, only completions for ambient modules will be provided.
          */
-        readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[];
+        readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         readFile?(path: string, encoding?: string): string;
         fileExists?(path: string): boolean;
 

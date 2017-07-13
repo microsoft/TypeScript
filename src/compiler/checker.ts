@@ -83,9 +83,9 @@ namespace ts {
         // extra cost of calling `getParseTreeNode` when calling these functions from inside the
         // checker.
         const checker: TypeChecker = {
-            getNodeCount: () => sum<"nodeCount">(host.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum<"identifierCount">(host.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum<"symbolCount">(host.getSourceFiles(), "symbolCount") + symbolCount,
+            getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
             getTypeCount: () => typeCount,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
@@ -2010,7 +2010,7 @@ namespace ts {
             }
 
             function getAccessibleSymbolChainFromSymbolTableWorker(symbols: SymbolTable, visitedSymbolTables: SymbolTable[]): Symbol[] {
-                if (contains(visitedSymbolTables, symbols)) {
+                if (contains<SymbolTable>(visitedSymbolTables, symbols)) {
                     return undefined;
                 }
                 visitedSymbolTables.push(symbols);
@@ -2285,21 +2285,15 @@ namespace ts {
         }
 
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
-            const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
-            const result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
+            return usingSingleLineStringWriter(writer => {
+                getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
+            });
         }
 
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
-            const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
-            const result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
+            return usingSingleLineStringWriter(writer => {
+                getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
+            });
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
@@ -2996,12 +2990,9 @@ namespace ts {
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
-            const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
-            const result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
+            return usingSingleLineStringWriter(writer => {
+                getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
+            });
         }
 
         function formatUnionTypes(types: Type[]): Type[] {
@@ -4239,7 +4230,7 @@ namespace ts {
                 return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
-            if ((noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
+            if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !isInAmbientContext(declaration)) {
                 // If --noImplicitAny is on or the declaration is in a Javascript file,
@@ -4493,7 +4484,7 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
-                if (declaration.flags & NodeFlags.JavaScriptFile && declaration.kind === SyntaxKind.JSDocPropertyTag && (<JSDocPropertyTag>declaration).typeExpression) {
+                if (isInJavaScriptFile(declaration) && declaration.kind === SyntaxKind.JSDocPropertyTag && (<JSDocPropertyTag>declaration).typeExpression) {
                     return links.type = getTypeFromTypeNode((<JSDocPropertyTag>declaration).typeExpression.type);
                 }
                 // Handle variable, parameter or property
@@ -4552,7 +4543,7 @@ namespace ts {
                 const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
                 const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
-                if (getter && getter.flags & NodeFlags.JavaScriptFile) {
+                if (getter && isInJavaScriptFile(getter)) {
                     const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
                     if (jsDocType) {
                         return links.type = jsDocType;
@@ -6206,7 +6197,7 @@ namespace ts {
         }
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
-            if (node.flags & NodeFlags.JavaScriptFile) {
+            if (isInJavaScriptFile(node)) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
@@ -6892,6 +6883,7 @@ namespace ts {
                     case "Null":
                         return nullType;
                     case "Object":
+                    case "object":
                         return anyType;
                     case "Function":
                     case "function":
@@ -11065,8 +11057,14 @@ namespace ts {
             if (!links.switchTypes) {
                 // If all case clauses specify expressions that have unit types, we return an array
                 // of those unit types. Otherwise we return an empty array.
-                const types = map(switchStatement.caseBlock.clauses, getTypeOfSwitchClause);
-                links.switchTypes = !contains(types, undefined) ? types : emptyArray;
+                links.switchTypes = [];
+                for (const clause of switchStatement.caseBlock.clauses) {
+                    const type = getTypeOfSwitchClause(clause);
+                    if (type === undefined) {
+                        return links.switchTypes = emptyArray;
+                    }
+                    links.switchTypes.push(type);
+                }
             }
             return links.switchTypes;
         }
@@ -11875,6 +11873,8 @@ namespace ts {
         }
 
         function getTypeOfSymbolAtLocation(symbol: Symbol, location: Node) {
+            symbol = symbol.exportSymbol || symbol;
+
             // If we have an identifier or a property access at the given location, if the location is
             // an dotted name expression, and if the location is not an assignment target, obtain the type
             // of the expression (which will reflect control flow analysis). If the expression indeed
@@ -18800,7 +18800,7 @@ namespace ts {
                 // local symbol is undefined => this declaration is non-exported.
                 // however symbol might contain other declarations that are exported
                 symbol = getSymbolOfNode(node);
-                if (!(symbol.flags & SymbolFlags.Export)) {
+                if (!symbol.exportSymbol) {
                     // this is a pure local symbol (all declarations are non-exported) - no need to check anything
                     return;
                 }
@@ -18811,11 +18811,9 @@ namespace ts {
                 return;
             }
 
-            // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace
-            // to denote disjoint declarationSpaces (without making new enum type).
-            let exportedDeclarationSpaces = SymbolFlags.None;
-            let nonExportedDeclarationSpaces = SymbolFlags.None;
-            let defaultExportedDeclarationSpaces = SymbolFlags.None;
+            let exportedDeclarationSpaces = DeclarationSpaces.None;
+            let nonExportedDeclarationSpaces = DeclarationSpaces.None;
+            let defaultExportedDeclarationSpaces = DeclarationSpaces.None;
             for (const d of symbol.declarations) {
                 const declarationSpaces = getDeclarationSpaces(d);
                 const effectiveDeclarationFlags = getEffectiveDeclarationFlags(d, ModifierFlags.Export | ModifierFlags.Default);
@@ -18855,24 +18853,36 @@ namespace ts {
                 }
             }
 
-            function getDeclarationSpaces(d: Declaration): SymbolFlags {
+            const enum DeclarationSpaces {
+                None = 0,
+                ExportValue = 1 << 0,
+                ExportType = 1 << 1,
+                ExportNamespace = 1 << 2,
+            }
+            function getDeclarationSpaces(d: Declaration): DeclarationSpaces {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
-                        return SymbolFlags.ExportType;
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d) || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
-                            ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
-                            : SymbolFlags.ExportNamespace;
+                            ? DeclarationSpaces.ExportNamespace | DeclarationSpaces.ExportValue
+                            : DeclarationSpaces.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
-                        return SymbolFlags.ExportType | SymbolFlags.ExportValue;
+                        return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
                     case SyntaxKind.ImportEqualsDeclaration:
-                        let result: SymbolFlags = 0;
+                        let result = DeclarationSpaces.None;
                         const target = resolveAlias(getSymbolOfNode(d));
                         forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
                         return result;
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ImportSpecifier: // https://github.com/Microsoft/TypeScript/pull/7591
+                        return DeclarationSpaces.ExportValue;
                     default:
-                        return SymbolFlags.ExportValue;
+                        Debug.fail((ts as any).SyntaxKind[d.kind]);
                 }
             }
         }
@@ -20909,7 +20919,7 @@ namespace ts {
             }
         }
 
-        function areTypeParametersIdentical(declarations: (ClassDeclaration | InterfaceDeclaration)[], typeParameters: TypeParameter[]) {
+        function areTypeParametersIdentical(declarations: ReadonlyArray<ClassDeclaration | InterfaceDeclaration>, typeParameters: TypeParameter[]) {
             const maxTypeArgumentCount = length(typeParameters);
             const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
 
@@ -22281,11 +22291,6 @@ namespace ts {
                     }
 
                     switch (location.kind) {
-                        case SyntaxKind.SourceFile:
-                            if (!isExternalOrCommonJsModule(<SourceFile>location)) {
-                                break;
-                            }
-                            // falls through
                         case SyntaxKind.ModuleDeclaration:
                             copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.ModuleMember);
                             break;
@@ -22337,7 +22342,7 @@ namespace ts {
              * @param meaning meaning of symbol to filter by before adding to symbol table
              */
             function copySymbol(symbol: Symbol, meaning: SymbolFlags): void {
-                if (symbol.flags & meaning) {
+                if (getCombinedLocalAndExportSymbolFlags(symbol) & meaning) {
                     const id = symbol.name;
                     // We will copy all symbol regardless of its reserved name because
                     // symbolsToArray will check whether the key is a reserved name and

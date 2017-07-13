@@ -326,13 +326,20 @@ namespace ts {
     }
 
     export function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character);
+        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
     }
 
     /* @internal */
-    export function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number {
+    export function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number, debugText?: string): number {
         Debug.assert(line >= 0 && line < lineStarts.length);
-        return lineStarts[line] + character;
+        const res = lineStarts[line] + character;
+        if (line < lineStarts.length - 1) {
+            Debug.assert(res < lineStarts[line + 1]);
+        }
+        else if (debugText !== undefined) {
+            Debug.assert(res < debugText.length);
+        }
+        return res;
     }
 
     /* @internal */

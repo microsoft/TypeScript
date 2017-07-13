@@ -6,8 +6,8 @@
 /////*3*/
 
 goTo.marker("0");
-verify.not.completionListContains("B");
-verify.not.completionListContains("\u0042");
+verify.completionListContains("B");
+verify.completionListContains("\u0042");
 
 goTo.marker("2");
 verify.not.completionListContains("C");
@@ -18,10 +18,9 @@ verify.not.completionListContains("A");
 verify.not.completionListContains("\u0041");
 
 goTo.marker("3");
-verify.not.completionListContains("B");
-verify.not.completionListContains("\u0042");
-verify.not.completionListContains("A");
-verify.not.completionListContains("\u0041");
-verify.not.completionListContains("C");
-verify.not.completionListContains("\u0043");
-
+verify.completionListContains("B");
+verify.completionListContains("\u0042");
+verify.completionListContains("A");
+verify.completionListContains("\u0041");
+verify.completionListContains("C");
+verify.completionListContains("\u0043");

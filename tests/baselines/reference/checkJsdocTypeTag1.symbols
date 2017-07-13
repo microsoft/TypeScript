@@ -58,3 +58,15 @@ const x2 = (a) => a + 1;
 x2(0);
 >x2 : Symbol(x2, Decl(0.js, 28, 5))
 
+/**
+ * @type {object}
+ */
+var props = {};
+>props : Symbol(props, Decl(0.js, 34, 3), Decl(0.js, 39, 3))
+
+/**
+ * @type {Object}
+ */
+var props = {};
+>props : Symbol(props, Decl(0.js, 34, 3), Decl(0.js, 39, 3))
+

@@ -2,6 +2,15 @@
 /// <reference path="scanner.ts"/>
 
 namespace ts {
+    const enum SignatureFlags {
+        None = 0,
+        Yield = 1 << 0,
+        Await = 1 << 1,
+        Type  = 1 << 2,
+        RequireCompleteParameterList = 1 << 3,
+        IgnoreMissingOpenBrace = 1 << 4,
+    }
+
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -2218,15 +2227,12 @@ namespace ts {
 
         function fillSignature(
             returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken,
-            yieldContext: boolean,
-            awaitContext: boolean,
-            requireCompleteParameterList: boolean,
+            flags: SignatureFlags,
             signature: SignatureDeclaration): void {
+            signature.typeParameters = parseTypeParameters();
+            signature.parameters = parseParameterList(flags);
 
             const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
-            signature.typeParameters = parseTypeParameters();
-            signature.parameters = parseParameterList(yieldContext, awaitContext, requireCompleteParameterList);
-
             if (returnTokenRequired) {
                 parseExpected(returnToken);
                 signature.type = parseTypeOrTypePredicate();
@@ -2234,9 +2240,19 @@ namespace ts {
             else if (parseOptional(returnToken)) {
                 signature.type = parseTypeOrTypePredicate();
             }
+            else if (flags & SignatureFlags.Type) {
+                const start = scanner.getTokenPos();
+                const length = scanner.getTextPos() - start;
+                const backwardToken = parseOptional(returnToken === SyntaxKind.ColonToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken);
+                if (backwardToken) {
+                    // This is easy to get backward, especially in type contexts, so parse the type anyway
+                    signature.type = parseTypeOrTypePredicate();
+                    parseErrorAtPosition(start, length, Diagnostics._0_expected, tokenToString(returnToken));
+                }
+            }
         }
 
-        function parseParameterList(yieldContext: boolean, awaitContext: boolean, requireCompleteParameterList: boolean) {
+        function parseParameterList(flags: SignatureFlags) {
             // FormalParameters [Yield,Await]: (modified)
             //      [empty]
             //      FormalParameterList[?Yield,Await]
@@ -2254,15 +2270,15 @@ namespace ts {
                 const savedYieldContext = inYieldContext();
                 const savedAwaitContext = inAwaitContext();
 
-                setYieldContext(yieldContext);
-                setAwaitContext(awaitContext);
+                setYieldContext(!!(flags & SignatureFlags.Yield));
+                setAwaitContext(!!(flags & SignatureFlags.Await));
 
                 const result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
 
                 setYieldContext(savedYieldContext);
                 setAwaitContext(savedAwaitContext);
 
-                if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
+                if (!parseExpected(SyntaxKind.CloseParenToken) && (flags & SignatureFlags.RequireCompleteParameterList)) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
                     // undefined here.
                     return undefined;
@@ -2274,7 +2290,7 @@ namespace ts {
             // We didn't even have an open paren.  If the caller requires a complete parameter list,
             // we definitely can't provide that.  However, if they're ok with an incomplete one,
             // then just return an empty set of parameters.
-            return requireCompleteParameterList ? undefined : createMissingList<ParameterDeclaration>();
+            return (flags & SignatureFlags.RequireCompleteParameterList) ? undefined : createMissingList<ParameterDeclaration>();
         }
 
         function parseTypeMemberSemicolon() {
@@ -2293,7 +2309,7 @@ namespace ts {
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, SignatureFlags.Type, node);
             parseTypeMemberSemicolon();
             return addJSDocComment(finishNode(node));
         }
@@ -2383,7 +2399,7 @@ namespace ts {
 
                 // Method signatures don't exist in expression contexts.  So they have neither
                 // [Yield] nor [Await]
-                fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, method);
+                fillSignature(SyntaxKind.ColonToken, SignatureFlags.Type, method);
                 parseTypeMemberSemicolon();
                 return addJSDocComment(finishNode(method));
             }
@@ -2527,7 +2543,7 @@ namespace ts {
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
+            fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type, node);
             return finishNode(node);
         }
 
@@ -3254,7 +3270,7 @@ namespace ts {
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
             const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             node.modifiers = parseModifiersForArrowFunction();
-            const isAsync = !!(getModifierFlags(node) & ModifierFlags.Async);
+            const isAsync = (getModifierFlags(node) & ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
 
             // Arrow functions are never generators.
             //
@@ -3263,7 +3279,7 @@ namespace ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ !allowAmbiguity, node);
+            fillSignature(SyntaxKind.ColonToken, isAsync | (allowAmbiguity ? SignatureFlags.None : SignatureFlags.RequireCompleteParameterList), node);
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {
@@ -3288,7 +3304,7 @@ namespace ts {
 
         function parseArrowFunctionExpressionBody(isAsync: boolean): Block | Expression {
             if (token() === SyntaxKind.OpenBraceToken) {
-                return parseFunctionBlock(/*allowYield*/ false, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ false);
+                return parseFunctionBlock(isAsync ? SignatureFlags.Await : SignatureFlags.None);
             }
 
             if (token() !== SyntaxKind.SemicolonToken &&
@@ -3309,8 +3325,8 @@ namespace ts {
                 // try to recover better.  If we don't do this, then the next close curly we see may end
                 // up preemptively closing the containing construct.
                 //
-                // Note: even when 'ignoreMissingOpenBrace' is passed as true, parseBody will still error.
-                return parseFunctionBlock(/*allowYield*/ false, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ true);
+                // Note: even when 'IgnoreMissingOpenBrace' is passed, parseBody will still error.
+                return parseFunctionBlock(SignatureFlags.IgnoreMissingOpenBrace | (isAsync ? SignatureFlags.Await : SignatureFlags.None));
             }
 
             return isAsync
@@ -4386,16 +4402,16 @@ namespace ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
 
-            const isGenerator = !!node.asteriskToken;
-            const isAsync = !!(getModifierFlags(node) & ModifierFlags.Async);
+            const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
+            const isAsync = (getModifierFlags(node) & ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
                     isGenerator ? doInYieldContext(parseOptionalIdentifier) :
                         isAsync ? doInAwaitContext(parseOptionalIdentifier) :
                             parseOptionalIdentifier();
 
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
-            node.body = parseFunctionBlock(/*allowYield*/ isGenerator, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ false);
+            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
+            node.body = parseFunctionBlock(isGenerator | isAsync);
 
             if (saveDecoratorContext) {
                 setDecoratorContext(/*val*/ true);
@@ -4444,12 +4460,12 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseFunctionBlock(allowYield: boolean, allowAwait: boolean, ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+        function parseFunctionBlock(flags: SignatureFlags, diagnosticMessage?: DiagnosticMessage): Block {
             const savedYieldContext = inYieldContext();
-            setYieldContext(allowYield);
+            setYieldContext(!!(flags & SignatureFlags.Yield));
 
             const savedAwaitContext = inAwaitContext();
-            setAwaitContext(allowAwait);
+            setAwaitContext(!!(flags & SignatureFlags.Await));
 
             // We may be in a [Decorator] context when parsing a function expression or
             // arrow function. The body of the function is not in [Decorator] context.
@@ -4458,7 +4474,7 @@ namespace ts {
                 setDecoratorContext(/*val*/ false);
             }
 
-            const block = parseBlock(ignoreMissingOpenBrace, diagnosticMessage);
+            const block = parseBlock(!!(flags & SignatureFlags.IgnoreMissingOpenBrace), diagnosticMessage);
 
             if (saveDecoratorContext) {
                 setDecoratorContext(/*val*/ true);
@@ -5005,13 +5021,13 @@ namespace ts {
             return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
         }
 
-        function parseFunctionBlockOrSemicolon(isGenerator: boolean, isAsync: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+        function parseFunctionBlockOrSemicolon(flags: SignatureFlags, diagnosticMessage?: DiagnosticMessage): Block {
             if (token() !== SyntaxKind.OpenBraceToken && canParseSemicolon()) {
                 parseSemicolon();
                 return;
             }
 
-            return parseFunctionBlock(isGenerator, isAsync, /*ignoreMissingOpenBrace*/ false, diagnosticMessage);
+            return parseFunctionBlock(flags, diagnosticMessage);
         }
 
         // DECLARATIONS
@@ -5146,10 +5162,10 @@ namespace ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = hasModifier(node, ModifierFlags.Default) ? parseOptionalIdentifier() : parseIdentifier();
-            const isGenerator = !!node.asteriskToken;
-            const isAsync = hasModifier(node, ModifierFlags.Async);
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, Diagnostics.or_expected);
+            const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
+            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
+            node.body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
             return addJSDocComment(finishNode(node));
         }
 
@@ -5158,8 +5174,8 @@ namespace ts {
             node.decorators = decorators;
             node.modifiers = modifiers;
             parseExpected(SyntaxKind.ConstructorKeyword);
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false, Diagnostics.or_expected);
+            fillSignature(SyntaxKind.ColonToken, SignatureFlags.None, node);
+            node.body = parseFunctionBlockOrSemicolon(SignatureFlags.None, Diagnostics.or_expected);
             return addJSDocComment(finishNode(node));
         }
 
@@ -5170,10 +5186,10 @@ namespace ts {
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
-            const isGenerator = !!asteriskToken;
-            const isAsync = hasModifier(method, ModifierFlags.Async);
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, method);
-            method.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, diagnosticMessage);
+            const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
+            const isAsync = hasModifier(method, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+            fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, method);
+            method.body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, diagnosticMessage);
             return addJSDocComment(finishNode(method));
         }
 
@@ -5226,8 +5242,8 @@ namespace ts {
             node.decorators = decorators;
             node.modifiers = modifiers;
             node.name = parsePropertyName();
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false);
+            fillSignature(SyntaxKind.ColonToken, SignatureFlags.None, node);
+            node.body = parseFunctionBlockOrSemicolon(SignatureFlags.None);
             return addJSDocComment(finishNode(node));
         }
 

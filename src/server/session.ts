@@ -72,12 +72,12 @@ namespace ts.server {
         }
     }
 
-    function formatDiag(fileName: NormalizedPath, project: Project, diag: ts.Diagnostic): protocol.Diagnostic {
+    function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic): protocol.Diagnostic {
         const scriptInfo = project.getScriptInfoForNormalizedPath(fileName);
         return {
             start: scriptInfo.positionToLineOffset(diag.start),
             end: scriptInfo.positionToLineOffset(diag.start + diag.length),
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
+            text: flattenDiagnosticMessageText(diag.messageText, "\n"),
             code: diag.code,
             category: DiagnosticCategory[diag.category].toLowerCase(),
             source: diag.source
@@ -88,12 +88,12 @@ namespace ts.server {
         return { line: lineAndCharacter.line + 1, offset: lineAndCharacter.character + 1 };
     }
 
-    function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
-    function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: false): protocol.Diagnostic;
-    function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
+    function formatConfigFileDiag(diag: Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
+    function formatConfigFileDiag(diag: Diagnostic, includeFileName: false): protocol.Diagnostic;
+    function formatConfigFileDiag(diag: Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
         const start = diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start));
         const end = diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length));
-        const text = ts.flattenDiagnosticMessageText(diag.messageText, "\n");
+        const text = flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
         const category = DiagnosticCategory[diag.category].toLowerCase();
         return includeFileName ? { start, end, text, code, category, source, fileName: diag.file && diag.file.fileName } :
@@ -389,8 +389,8 @@ namespace ts.server {
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
         }
 
-        public configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]) {
-            const bakedDiags = ts.map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
+        public configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: Diagnostic[]) {
+            const bakedDiags = map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
             const ev: protocol.ConfigFileDiagnosticEvent = {
                 seq: 0,
                 type: "event",
@@ -615,7 +615,7 @@ namespace ts.server {
                     return {
                         file: def.fileName,
                         start: defScriptInfo.positionToLineOffset(def.textSpan.start),
-                        end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
+                        end: defScriptInfo.positionToLineOffset(textSpanEnd(def.textSpan))
                     };
                 });
             }
@@ -639,7 +639,7 @@ namespace ts.server {
                 return {
                     file: def.fileName,
                     start: defScriptInfo.positionToLineOffset(def.textSpan.start),
-                    end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
+                    end: defScriptInfo.positionToLineOffset(textSpanEnd(def.textSpan))
                 };
             });
         }
@@ -657,7 +657,7 @@ namespace ts.server {
                     return {
                         file: fileName,
                         start: scriptInfo.positionToLineOffset(textSpan.start),
-                        end: scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan))
+                        end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
                     };
                 });
             }
@@ -681,7 +681,7 @@ namespace ts.server {
                 const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
                 const scriptInfo = project.getScriptInfo(fileName);
                 const start = scriptInfo.positionToLineOffset(textSpan.start);
-                const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
+                const end = scriptInfo.positionToLineOffset(textSpanEnd(textSpan));
                 const result: protocol.OccurrencesResponseItem = {
                     start,
                     end,
@@ -731,7 +731,7 @@ namespace ts.server {
                 return documentHighlights;
             }
 
-            function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
+            function convertToDocumentHighlightsItem(documentHighlights: DocumentHighlights): protocol.DocumentHighlightsItem {
                 const { fileName, highlightSpans } = documentHighlights;
 
                 const scriptInfo = project.getScriptInfo(fileName);
@@ -740,10 +740,10 @@ namespace ts.server {
                     highlightSpans: highlightSpans.map(convertHighlightSpan)
                 };
 
-                function convertHighlightSpan(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
+                function convertHighlightSpan(highlightSpan: HighlightSpan): protocol.HighlightSpan {
                     const { textSpan, kind } = highlightSpan;
                     const start = scriptInfo.positionToLineOffset(textSpan.start);
-                    const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
+                    const end = scriptInfo.positionToLineOffset(textSpanEnd(textSpan));
                     return { start, end, kind };
                 }
             }
@@ -786,7 +786,7 @@ namespace ts.server {
                 const scriptInfo = this.projectService.getScriptInfo(args.file);
                 projects = scriptInfo.containingProjects;
             }
-            // ts.filter handles case when 'projects' is undefined
+            // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled);
             if (!projects || !projects.length) {
                 return Errors.ThrowNoProject();
@@ -839,28 +839,29 @@ namespace ts.server {
                             return <protocol.FileSpan>{
                                 file: location.fileName,
                                 start: locationScriptInfo.positionToLineOffset(location.textSpan.start),
-                                end: locationScriptInfo.positionToLineOffset(ts.textSpanEnd(location.textSpan)),
+                                end: locationScriptInfo.positionToLineOffset(textSpanEnd(location.textSpan)),
                             };
                         });
                     },
                     compareRenameLocation,
                     (a, b) => a.file === b.file && a.start.line === b.start.line && a.start.offset === b.start.offset
                 );
-                const locs = fileSpans.reduce<protocol.SpanGroup[]>((accum, cur) => {
+
+                const locs: protocol.SpanGroup[] = [];
+                for (const cur of fileSpans) {
                     let curFileAccum: protocol.SpanGroup;
-                    if (accum.length > 0) {
-                        curFileAccum = accum[accum.length - 1];
+                    if (locs.length > 0) {
+                        curFileAccum = locs[locs.length - 1];
                         if (curFileAccum.file !== cur.file) {
                             curFileAccum = undefined;
                         }
                     }
                     if (!curFileAccum) {
                         curFileAccum = { file: cur.file, locs: [] };
-                        accum.push(curFileAccum);
+                        locs.push(curFileAccum);
                     }
                     curFileAccum.locs.push({ start: cur.start, end: cur.end });
-                    return accum;
-                }, []);
+                }
 
                 return { info: renameInfo, locs };
             }
@@ -920,10 +921,10 @@ namespace ts.server {
                     return undefined;
                 }
 
-                const displayString = ts.displayPartsToString(nameInfo.displayParts);
+                const displayString = displayPartsToString(nameInfo.displayParts);
                 const nameSpan = nameInfo.textSpan;
                 const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
-                const nameText = scriptInfo.getSnapshot().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+                const nameText = scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan));
                 const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
                     projects,
                     (project: Project) => {
@@ -936,12 +937,12 @@ namespace ts.server {
                             const refScriptInfo = project.getScriptInfo(ref.fileName);
                             const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
                             const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
-                            const lineText = refScriptInfo.getSnapshot().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                            const lineText = refScriptInfo.getSnapshot().getText(refLineSpan.start, textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                             return {
                                 file: ref.fileName,
                                 start,
                                 lineText,
-                                end: refScriptInfo.positionToLineOffset(ts.textSpanEnd(ref.textSpan)),
+                                end: refScriptInfo.positionToLineOffset(textSpanEnd(ref.textSpan)),
                                 isWriteAccess: ref.isWriteAccess,
                                 isDefinition: ref.isDefinition
                             };
@@ -1064,14 +1065,14 @@ namespace ts.server {
             }
 
             if (simplifiedResult) {
-                const displayString = ts.displayPartsToString(quickInfo.displayParts);
-                const docString = ts.displayPartsToString(quickInfo.documentation);
+                const displayString = displayPartsToString(quickInfo.displayParts);
+                const docString = displayPartsToString(quickInfo.documentation);
 
                 return {
                     kind: quickInfo.kind,
                     kindModifiers: quickInfo.kindModifiers,
                     start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
-                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
                     documentation: docString,
                     tags: quickInfo.tags || []
@@ -1151,7 +1152,7 @@ namespace ts.server {
                     if (preferredIndent !== hasIndent) {
                         const firstNoWhiteSpacePosition = absolutePosition + i;
                         edits.push({
-                            span: ts.createTextSpanFromBounds(absolutePosition, firstNoWhiteSpacePosition),
+                            span: createTextSpanFromBounds(absolutePosition, firstNoWhiteSpacePosition),
                             newText: formatting.getIndentationString(preferredIndent, formatOptions)
                         });
                     }
@@ -1165,7 +1166,7 @@ namespace ts.server {
             return edits.map((edit) => {
                 return {
                     start: scriptInfo.positionToLineOffset(edit.span.start),
-                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(edit.span)),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(edit.span)),
                     newText: edit.newText ? edit.newText : ""
                 };
             });
@@ -1183,15 +1184,13 @@ namespace ts.server {
                 return undefined;
             }
             if (simplifiedResult) {
-                return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
+                return mapDefined(completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                         const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
-                        const convertedSpan: protocol.TextSpan =
-                            replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
+                        const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
                     }
-                    return result;
-                }, []).sort((a, b) => ts.compareStrings(a.name, b.name));
+                }).sort((a, b) => compareStrings(a.name, b.name));
             }
             else {
                 return completions;
@@ -1203,13 +1202,8 @@ namespace ts.server {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
 
-            return args.entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName);
-                if (details) {
-                    accum.push(details);
-                }
-                return accum;
-            }, []);
+            return mapDefined(args.entryNames, entryName =>
+                project.getLanguageService().getCompletionEntryDetails(file, position, entryName));
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): protocol.CompileOnSaveAffectedFileListSingleProject[] {
@@ -1274,14 +1268,11 @@ namespace ts.server {
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
-            const checkList = fileNames.reduce((accum: PendingErrorCheck[], uncheckedFileName: string) => {
+            const checkList = mapDefined(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
                 const project = this.projectService.getDefaultProjectForFile(fileName, /*refreshInferredProjects*/ true);
-                if (project) {
-                    accum.push({ fileName, project });
-                }
-                return accum;
-            }, []);
+                return project && { fileName, project };
+            });
 
             if (checkList.length > 0) {
                 this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n === this.changeSeq, delay);
@@ -1326,11 +1317,11 @@ namespace ts.server {
             if (!fileName) {
                 return;
             }
-            const file = ts.normalizePath(fileName);
+            const file = normalizePath(fileName);
             this.projectService.closeClientFile(file);
         }
 
-        private decorateNavigationBarItems(items: ts.NavigationBarItem[], scriptInfo: ScriptInfo): protocol.NavigationBarItem[] {
+        private decorateNavigationBarItems(items: NavigationBarItem[], scriptInfo: ScriptInfo): protocol.NavigationBarItem[] {
             return map(items, item => ({
                 text: item.text,
                 kind: item.kind,
@@ -1351,7 +1342,7 @@ namespace ts.server {
                     : items;
         }
 
-        private decorateNavigationTree(tree: ts.NavigationTree, scriptInfo: ScriptInfo): protocol.NavigationTree {
+        private decorateNavigationTree(tree: NavigationTree, scriptInfo: ScriptInfo): protocol.NavigationTree {
             return {
                 text: tree.text,
                 kind: tree.kind,
@@ -1364,7 +1355,7 @@ namespace ts.server {
         private decorateSpan(span: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
             return {
                 start: scriptInfo.positionToLineOffset(span.start),
-                end: scriptInfo.positionToLineOffset(ts.textSpanEnd(span))
+                end: scriptInfo.positionToLineOffset(textSpanEnd(span))
             };
         }
 
@@ -1394,7 +1385,7 @@ namespace ts.server {
                         return navItems.map((navItem) => {
                             const scriptInfo = project.getScriptInfo(navItem.fileName);
                             const start = scriptInfo.positionToLineOffset(navItem.textSpan.start);
-                            const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(navItem.textSpan));
+                            const end = scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan));
                             const bakedItem: protocol.NavtoItem = {
                                 name: navItem.name,
                                 kind: navItem.kind,
@@ -1459,7 +1450,7 @@ namespace ts.server {
         }
 
         private getSupportedCodeFixes(): string[] {
-            return ts.getSupportedCodeFixes();
+            return getSupportedCodeFixes();
         }
 
         private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
@@ -1490,7 +1481,7 @@ namespace ts.server {
             return project.getLanguageService().getApplicableRefactors(file, position || textRange);
         }
 
-        private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): ts.RefactorEditInfo | protocol.RefactorEditInfo {
+        private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
@@ -1659,7 +1650,7 @@ namespace ts.server {
 
         getCanonicalFileName(fileName: string) {
             const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-            return ts.normalizePath(name);
+            return normalizePath(name);
         }
 
         exit() {

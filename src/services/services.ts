@@ -1770,19 +1770,12 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
+            const rulesProvider = getRuleProvider(formatOptions);
 
-            let allFixes: CodeAction[] = [];
-
-            forEach(deduplicate(errorCodes), errorCode => {
+            return flatMap(deduplicate(errorCodes), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                const rulesProvider = getRuleProvider(formatOptions);
-                const fixes = codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
-                if (fixes) {
-                    allFixes = allFixes.concat(fixes);
-                }
+                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
             });
-
-            return allFixes;
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
@@ -2063,42 +2056,33 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createUnderscoreEscapedMap<number>();
-
-        walk(sourceFile);
-        sourceFile.nameTable = nameTable;
-
-        function walk(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    setNameTable((<Identifier>node).text, node);
-                    break;
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    // We want to store any numbers/strings if they were a name that could be
-                    // related to a declaration.  So, if we have 'import x = require("something")'
-                    // then we want 'something' to be in the name table.  Similarly, if we have
-                    // "a['propname']" then we want to store "propname" in the name table.
-                    if (isDeclarationName(node) ||
-                        node.parent.kind === SyntaxKind.ExternalModuleReference ||
-                        isArgumentOfElementAccessExpression(node) ||
-                        isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable(getEscapedTextOfIdentifierOrLiteral((<LiteralExpression>node)), node);
-                    }
-                    break;
-                default:
-                    forEachChild(node, walk);
-                    if (node.jsDoc) {
-                        for (const jsDoc of node.jsDoc) {
-                            forEachChild(jsDoc, walk);
-                        }
-                    }
+        const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
+        sourceFile.forEachChild(function walk(node) {
+            if ((isIdentifier(node) || isStringOrNumericLiteral(node) && literalIsName(node)) && node.text) {
+                const text = getEscapedTextOfIdentifierOrLiteral(node);
+                nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
-        }
 
-        function setNameTable(text: __String, node: ts.Node): void {
-            nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
-        }
+            forEachChild(node, walk);
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    forEachChild(jsDoc, walk);
+                }
+            }
+        });
+    }
+
+    /**
+     * We want to store any numbers/strings if they were a name that could be
+     * related to a declaration.  So, if we have 'import x = require("something")'
+     * then we want 'something' to be in the name table.  Similarly, if we have
+     * "a['propname']" then we want to store "propname" in the name table.
+     */
+    function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
+        return isDeclarationName(node) ||
+            node.parent.kind === SyntaxKind.ExternalModuleReference ||
+            isArgumentOfElementAccessExpression(node) ||
+            isLiteralComputedPropertyDeclarationName(node);
     }
 
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {

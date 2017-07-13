@@ -72,12 +72,12 @@ namespace ts.server {
                 const lineMap = this.getLineMap();
                 const start = lineMap[line]; // -1 since line is 1-based
                 const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text.length;
-                return ts.createTextSpanFromBounds(start, end);
+                return createTextSpanFromBounds(start, end);
             }
             const index = this.svc.getSnapshot().index;
             const { lineText, absolutePosition } = index.lineNumberToInfo(line + 1);
             const len = lineText !== undefined ? lineText.length : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
-            return ts.createTextSpan(absolutePosition, len);
+            return createTextSpan(absolutePosition, len);
         }
 
         /**
@@ -86,7 +86,7 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number {
             if (!this.svc) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1);
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
             }
 
             // TODO: assert this offset is actually on the line
@@ -147,7 +147,7 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: ts.FormatCodeSettings;
+        private formatCodeSettings: FormatCodeSettings;
         readonly path: Path;
 
         private fileWatcher: FileWatcher;
