@@ -846,21 +846,22 @@ namespace ts.server {
                     compareRenameLocation,
                     (a, b) => a.file === b.file && a.start.line === b.start.line && a.start.offset === b.start.offset
                 );
-                const locs = fileSpans.reduce<protocol.SpanGroup[]>((accum, cur) => {
+
+                const locs: protocol.SpanGroup[] = [];
+                for (const cur of fileSpans) {
                     let curFileAccum: protocol.SpanGroup;
-                    if (accum.length > 0) {
-                        curFileAccum = accum[accum.length - 1];
+                    if (locs.length > 0) {
+                        curFileAccum = locs[locs.length - 1];
                         if (curFileAccum.file !== cur.file) {
                             curFileAccum = undefined;
                         }
                     }
                     if (!curFileAccum) {
                         curFileAccum = { file: cur.file, locs: [] };
-                        accum.push(curFileAccum);
+                        locs.push(curFileAccum);
                     }
                     curFileAccum.locs.push({ start: cur.start, end: cur.end });
-                    return accum;
-                }, []);
+                }
 
                 return { info: renameInfo, locs };
             }
@@ -1183,15 +1184,13 @@ namespace ts.server {
                 return undefined;
             }
             if (simplifiedResult) {
-                return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
+                return mapDefined(completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                         const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
-                        const convertedSpan: protocol.TextSpan =
-                            replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
+                        const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
+                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
                     }
-                    return result;
-                }, []).sort((a, b) => ts.compareStrings(a.name, b.name));
+                }).sort((a, b) => ts.compareStrings(a.name, b.name));
             }
             else {
                 return completions;
@@ -1203,13 +1202,8 @@ namespace ts.server {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
 
-            return args.entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName);
-                if (details) {
-                    accum.push(details);
-                }
-                return accum;
-            }, []);
+            return mapDefined(args.entryNames, entryName =>
+                project.getLanguageService().getCompletionEntryDetails(file, position, entryName));
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): protocol.CompileOnSaveAffectedFileListSingleProject[] {
@@ -1274,14 +1268,11 @@ namespace ts.server {
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
-            const checkList = fileNames.reduce((accum: PendingErrorCheck[], uncheckedFileName: string) => {
+            const checkList = mapDefined(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
                 const project = this.projectService.getDefaultProjectForFile(fileName, /*refreshInferredProjects*/ true);
-                if (project) {
-                    accum.push({ fileName, project });
-                }
-                return accum;
-            }, []);
+                return project && { fileName, project };
+            });
 
             if (checkList.length > 0) {
                 this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n === this.changeSeq, delay);
