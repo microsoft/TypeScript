@@ -459,15 +459,6 @@ namespace ts.server {
             }
         }
 
-        private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
-            this.host.setTimeout(() => {
-                if (matchSeq(seq)) {
-                    // TODO: (sheetalkamat) is this ensureRefereshedProjects instead ?
-                    this.projectService.refreshInferredProjects();
-                }
-            }, ms);
-        }
-
         private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], seq: number, matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200, requireOpen = true) {
             if (followMs > ms) {
                 followMs = ms;
@@ -1302,7 +1293,7 @@ namespace ts.server {
                     scriptInfo.editContent(start, end, args.insertString);
                     this.changeSeq++;
                 }
-                this.updateProjectStructure(this.changeSeq, n => n === this.changeSeq);
+                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
             }
         }
 

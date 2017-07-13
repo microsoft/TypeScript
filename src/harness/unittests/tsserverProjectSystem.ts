@@ -639,6 +639,11 @@ namespace ts.projectSystem {
             this.timeoutCallbacks.unregister(timeoutId);
         }
 
+        checkTimeoutQueueLengthAndRun(expected: number) {
+            this.checkTimeoutQueueLength(expected);
+            this.runQueuedTimeoutCallbacks();
+        }
+
         checkTimeoutQueueLength(expected: number) {
             const callbacksCount = this.timeoutCallbacks.count();
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
@@ -899,6 +904,9 @@ namespace ts.projectSystem {
             // remove the tsconfig file
             host.reloadFS(filesWithoutConfig);
 
+            checkNumberOfInferredProjects(projectService, 1);
+            host.checkTimeoutQueueLengthAndRun(1); // Refresh inferred projects
+
             checkNumberOfInferredProjects(projectService, 2);
             checkNumberOfConfiguredProjects(projectService, 0);
             checkWatchedDirectories(host, ["/a/b", "/a"]);
@@ -920,7 +928,7 @@ namespace ts.projectSystem {
 
             // add a new ts file
             host.reloadFS([commonFile1, commonFile2, libFile, configFile]);
-            host.runQueuedTimeoutCallbacks();
+            host.checkTimeoutQueueLengthAndRun(2);
             // project service waits for 250ms to update the project structure, therefore the assertion needs to wait longer.
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
         });
@@ -1022,12 +1030,12 @@ namespace ts.projectSystem {
 
             // delete commonFile2
             host.reloadFS([commonFile1, configFile]);
-            host.runQueuedTimeoutCallbacks();
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectRootFiles(project, [commonFile1.path]);
 
             // re-add commonFile2
             host.reloadFS([commonFile1, commonFile2, configFile]);
-            host.runQueuedTimeoutCallbacks();
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
         });
 
@@ -1086,6 +1094,9 @@ namespace ts.projectSystem {
             }`;
             host.reloadFS(files);
 
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
+            host.checkTimeoutQueueLengthAndRun(2); // Update the configured project + refresh inferred projects
             checkNumberOfConfiguredProjects(projectService, 1);
             checkProjectRootFiles(project, [commonFile1.path]);
 
@@ -1158,6 +1169,7 @@ namespace ts.projectSystem {
                 "files": ["${file1.path}"]
             }`;
             host.reloadFS(files);
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(project, [file1.path, classicModuleFile.path, configFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
         });
@@ -1587,7 +1599,7 @@ namespace ts.projectSystem {
             };
 
             host.reloadFS([file1, modifiedFile2, file3]);
-
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfInferredProjects(projectService, 1);
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, modifiedFile2.path, file3.path]);
         });
@@ -1618,6 +1630,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
 
             host.reloadFS([file1, file3]);
+            host.checkTimeoutQueueLengthAndRun(2);
 
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
 
@@ -1779,7 +1792,7 @@ namespace ts.projectSystem {
 
             host.reloadFS([file1, file2, configFile]);
 
-            host.checkTimeoutQueueLength(0); // TODO: update graph scheduling (instead of instant update graph)
+            host.checkTimeoutQueueLengthAndRun(2);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
@@ -1814,6 +1827,7 @@ namespace ts.projectSystem {
             host.reloadFS([file1, file2, modifiedConfigFile]);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
         });
 
@@ -1923,7 +1937,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
 
             host.reloadFS([file1, file2]);
-
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
@@ -2217,6 +2231,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
 
             projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ModuleResolutionKind.Classic });
+            host.checkTimeoutQueueLengthAndRun(3);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
         });
 
@@ -2406,7 +2421,7 @@ namespace ts.projectSystem {
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
 
             host.reloadFS([f1, f2, configWithExclude]);
-
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.isTrue(project.languageServiceEnabled, "Language service enabled");
             assert.equal(lastEvent.data.project, project, "project");
@@ -2783,6 +2798,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, app.path, config1.path]);
 
             host.reloadFS([libES5, libES2015Promise, app, config2]);
+            host.checkTimeoutQueueLengthAndRun(2);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, libES2015Promise.path, app.path, config2.path]);

@@ -303,7 +303,11 @@ namespace ts.server {
                 // if we have a program - release all files that are enlisted in program
                 for (const f of this.program.getSourceFiles()) {
                     const info = this.projectService.getScriptInfo(f.fileName);
-                    info.detachFromProject(this);
+                    // We might not find the script info in case its not associated with the project any more
+                    // and project graph was not updated (eg delayed update graph in case of files changed/deleted on the disk)
+                    if (info) {
+                        info.detachFromProject(this);
+                    }
                 }
             }
             if (!this.program || !this.languageServiceEnabled) {
@@ -555,7 +559,6 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            // TODO: (sheetalkamat) If reload scheduled do that before updating the graph
             this.lsHost.startRecordingFilesWithChangedResolutions();
 
             let hasChanges = this.updateGraphWorker();
@@ -662,8 +665,7 @@ namespace ts.server {
 
                                 // When a missing file is created, we should update the graph.
                                 this.markAsDirty();
-                                // TODO: (sheetalkamat) schedule the update graph instead of doing it right away
-                                this.updateGraph();
+                                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
                             }
                         });
                         this.missingFilesMap.set(missingFilePath, fileWatcher);
@@ -980,6 +982,9 @@ namespace ts.server {
         private typeRootsWatchers: FileWatcher[];
         readonly canonicalConfigFilePath: NormalizedPath;
 
+        /* @internal */
+        pendingReload: boolean;
+
         /*@internal*/
         configFileSpecs: ConfigFileSpecs;
 
@@ -999,6 +1004,19 @@ namespace ts.server {
             super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, cachedServerHost);
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
             this.enablePlugins();
+        }
+
+        /**
+         * Checks if the project has reload from disk pending, if thats pending, it reloads (and then updates graph as part of that) instead of just updating the graph
+         * @returns: true if set of files in the project stays the same and false - otherwise.
+         */
+        updateGraph(): boolean {
+            if (this.pendingReload) {
+                this.pendingReload = false;
+                this.projectService.reloadConfiguredProject(this);
+                return true;
+            }
+            return super.updateGraph();
         }
 
         getCachedServerHost() {
