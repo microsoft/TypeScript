@@ -585,27 +585,25 @@ namespace ts.projectSystem {
             return [];
         }
 
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
             return ts.matchFiles(this.toFullPath(path), extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
-                const result: FileSystemEntries = {
-                    directories: [],
-                    files: []
-                };
+                const directories: string[] = [];
+                const files: string[] = [];
                 const dirEntry = this.fs.get(this.toPath(dir));
                 if (isFolder(dirEntry)) {
                     dirEntry.entries.forEach((entry) => {
                         if (isFolder(entry)) {
-                            result.directories.push(getBaseFileName(entry.fullPath));
+                            directories.push(getBaseFileName(entry.fullPath));
                         }
                         else if (isFile(entry)) {
-                            result.files.push(getBaseFileName(entry.fullPath));
+                            files.push(getBaseFileName(entry.fullPath));
                         }
                         else {
                             Debug.fail("Unknown entry");
                         }
                     });
                 }
-                return result;
+                return { directories, files };
             });
         }
 

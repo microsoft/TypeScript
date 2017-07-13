@@ -61,7 +61,7 @@ namespace ts.server {
                 : ScriptSnapshot.fromString(this.getOrLoadText());
         }
 
-        public getLineInfo(line: number) {
+        public getLineInfo(line: number): AbsolutePositionAndLineText {
             return this.switchToScriptVersionCache().getSnapshot().index.lineNumberToInfo(line);
         }
         /**
@@ -72,19 +72,12 @@ namespace ts.server {
                 const lineMap = this.getLineMap();
                 const start = lineMap[line]; // -1 since line is 1-based
                 const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text.length;
-                return ts.createTextSpanFromBounds(start, end);
+                return createTextSpanFromBounds(start, end);
             }
             const index = this.svc.getSnapshot().index;
-            const lineInfo = index.lineNumberToInfo(line + 1);
-            let len: number;
-            if (lineInfo.leaf) {
-                len = lineInfo.leaf.text.length;
-            }
-            else {
-                const nextLineInfo = index.lineNumberToInfo(line + 2);
-                len = nextLineInfo.offset - lineInfo.offset;
-            }
-            return ts.createTextSpan(lineInfo.offset, len);
+            const { lineText, absolutePosition } = index.lineNumberToInfo(line + 1);
+            const len = lineText !== undefined ? lineText.length : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
+            return createTextSpan(absolutePosition, len);
         }
 
         /**
@@ -93,27 +86,19 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number {
             if (!this.svc) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1);
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
             }
-            const index = this.svc.getSnapshot().index;
 
-            const lineInfo = index.lineNumberToInfo(line);
             // TODO: assert this offset is actually on the line
-            return (lineInfo.offset + offset - 1);
+            return this.svc.getSnapshot().index.absolutePositionOfStartOfLine(line) + (offset - 1);
         }
 
-        /**
-         * @param line 1-based index
-         * @param offset 1-based index
-         */
-        positionToLineOffset(position: number): ILineInfo {
+        positionToLineOffset(position: number): protocol.Location {
             if (!this.svc) {
                 const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
                 return { line: line + 1, offset: character + 1 };
             }
-            const index = this.svc.getSnapshot().index;
-            const lineOffset = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+            return this.svc.getSnapshot().index.positionToLineOffset(position);
         }
 
         private getFileText(tempFileName?: string) {
@@ -162,7 +147,7 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: ts.FormatCodeSettings;
+        private formatCodeSettings: FormatCodeSettings;
         readonly path: Path;
 
         private fileWatcher: FileWatcher;
@@ -343,7 +328,7 @@ namespace ts.server {
             }
         }
 
-        getLineInfo(line: number) {
+        getLineInfo(line: number): AbsolutePositionAndLineText {
             return this.textStorage.getLineInfo(line);
         }
 
@@ -373,11 +358,7 @@ namespace ts.server {
             return this.textStorage.lineOffsetToPosition(line, offset);
         }
 
-        /**
-         * @param line 1-based index
-         * @param offset 1-based index
-         */
-        positionToLineOffset(position: number): ILineInfo {
+        positionToLineOffset(position: number): protocol.Location {
             return this.textStorage.positionToLineOffset(position);
         }
 

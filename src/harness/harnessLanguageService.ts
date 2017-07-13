@@ -208,7 +208,7 @@ namespace Harness.LanguageService {
             const script = this.getScriptSnapshot(fileName);
             return script !== undefined;
         }
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
                 /*useCaseSensitiveFileNames*/ false,
                 this.getCurrentDirectory(),

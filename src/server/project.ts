@@ -115,7 +115,7 @@ namespace ts.server {
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
-        private program: ts.Program;
+        private program: Program;
         private externalFiles: SortedReadonlyArray<string>;
         private missingFilesMap: Map<FileWatcher> = createMap<FileWatcher>();
 
@@ -191,7 +191,7 @@ namespace ts.server {
             private readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
-            private documentRegistry: ts.DocumentRegistry,
+            private documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
@@ -199,7 +199,7 @@ namespace ts.server {
             host: ServerHost) {
 
             if (!this.compilerOptions) {
-                this.compilerOptions = ts.getDefaultCompilerOptions();
+                this.compilerOptions = getDefaultCompilerOptions();
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
@@ -213,7 +213,7 @@ namespace ts.server {
             this.lsHost = new LSHost(host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(this.compilerOptions);
 
-            this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry);
+            this.languageService = createLanguageService(this.lsHost, this.documentRegistry);
 
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
@@ -729,7 +729,7 @@ namespace ts.server {
             }
             let strBuilder = "";
             for (const file of this.program.getSourceFiles()) {
-                strBuilder += `${file.fileName}\n`;
+                strBuilder += `\t${file.fileName}\n`;
             }
             return strBuilder;
         }
@@ -914,7 +914,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -995,7 +995,7 @@ namespace ts.server {
 
         constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
-            documentRegistry: ts.DocumentRegistry,
+            documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
@@ -1232,7 +1232,7 @@ namespace ts.server {
         }
 
         getEffectiveTypeRoots() {
-            return ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.lsHost.host) || [];
+            return getEffectiveTypeRoots(this.getCompilerOptions(), this.lsHost.host) || [];
         }
     }
 
@@ -1244,7 +1244,7 @@ namespace ts.server {
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
-            documentRegistry: ts.DocumentRegistry,
+            documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,

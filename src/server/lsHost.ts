@@ -3,8 +3,6 @@
 /// <reference path="scriptInfo.ts" />
 
 namespace ts.server {
-    type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
-
     export class CachedServerHost implements ServerHost {
         args: string[];
         newLine: string;
@@ -32,7 +30,7 @@ namespace ts.server {
         }
 
         private getFileSystemEntries(rootDir: string) {
-            const path = ts.toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
+            const path = toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
             const cachedResult = this.cachedReadDirectoryResult.get(path);
             if (cachedResult) {
                 return cachedResult;
@@ -49,7 +47,7 @@ namespace ts.server {
 
         private canWorkWithCacheForDir(rootDir: string) {
             // Some of the hosts might not be able to handle read directory or getDirectories
-            const path = ts.toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
+            const path = toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
             if (this.cachedReadDirectoryResult.get(path)) {
                 return true;
             }
@@ -66,11 +64,11 @@ namespace ts.server {
         }
 
         writeFile(fileName: string, data: string, writeByteOrderMark?: boolean) {
-            const path = ts.toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
             const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
             const baseFileName = getBaseFileName(toNormalizedPath(fileName));
-            if (result && !some(result.files, file => this.fileNameEqual(file, baseFileName))) {
-                result.files.push(baseFileName);
+            if (result) {
+                result.files = this.updateFileSystemEntry(result.files, baseFileName, /*isValid*/ true);
             }
             return this.host.writeFile(fileName, data, writeByteOrderMark);
         }
@@ -102,7 +100,7 @@ namespace ts.server {
 
         getDirectories(rootDir: string) {
             if (this.canWorkWithCacheForDir(rootDir)) {
-                return this.getFileSystemEntries(rootDir).directories;
+                return this.getFileSystemEntries(rootDir).directories.slice();
             }
             return this.host.getDirectories(rootDir);
         }
@@ -115,14 +113,14 @@ namespace ts.server {
         }
 
         fileExists(fileName: string): boolean {
-            const path = ts.toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
             const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
             const baseName = getBaseFileName(toNormalizedPath(fileName));
-            return (result && some(result.files, file => this.fileNameEqual(file, baseName))) || this.host.fileExists(fileName);
+            return (result && this.hasEntry(result.files, baseName)) || this.host.fileExists(fileName);
         }
 
         directoryExists(dirPath: string) {
-            const path = ts.toPath(dirPath, this.currentDirectory, this.getCanonicalFileName);
+            const path = toPath(dirPath, this.currentDirectory, this.getCanonicalFileName);
             return this.cachedReadDirectoryResult.has(path) || this.host.directoryExists(dirPath);
         }
 
@@ -134,15 +132,20 @@ namespace ts.server {
             return this.getCanonicalFileName(name1) === this.getCanonicalFileName(name2);
         }
 
-        private updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
-            if (some(entries, entry => this.fileNameEqual(entry, baseName))) {
+        private hasEntry(entries: ReadonlyArray<string>, name: string) {
+            return some(entries, file => this.fileNameEqual(file, name));
+        }
+
+        private updateFileSystemEntry(entries: ReadonlyArray<string>, baseName: string, isValid: boolean) {
+            if (this.hasEntry(entries, baseName)) {
                 if (!isValid) {
-                    filterMutate(entries, entry => !this.fileNameEqual(entry, baseName));
+                    return filter(entries, entry => !this.fileNameEqual(entry, baseName));
                 }
             }
             else if (isValid) {
-                entries.push(baseName);
+                return entries.concat(baseName);
             }
+            return entries;
         }
 
         addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath) {
@@ -159,8 +162,8 @@ namespace ts.server {
                 if (parentResult) {
                     const baseName = getBaseFileName(fileOrFolder);
                     if (parentResult) {
-                        this.updateFileSystemEntry(parentResult.files, baseName, this.host.fileExists(path));
-                        this.updateFileSystemEntry(parentResult.directories, baseName, this.host.directoryExists(path));
+                        parentResult.files = this.updateFileSystemEntry(parentResult.files, baseName, this.host.fileExists(path));
+                        parentResult.directories = this.updateFileSystemEntry(parentResult.directories, baseName, this.host.directoryExists(path));
                     }
                 }
             }
@@ -185,8 +188,9 @@ namespace ts.server {
 
     }
 
-    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
-        private compilationSettings: ts.CompilerOptions;
+    type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
+    export class LSHost implements LanguageServiceHost, ModuleResolutionHost {
+        private compilationSettings: CompilerOptions;
         private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         /* @internal */
@@ -203,7 +207,7 @@ namespace ts.server {
         constructor(host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.host = host;
             this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
-            this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
+            this.getCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
 
             if (host.trace) {
                 this.trace = s => host.trace(s);
@@ -285,7 +289,7 @@ namespace ts.server {
                     }
                 }
 
-                ts.Debug.assert(resolution !== undefined);
+                Debug.assert(resolution !== undefined);
 
                 resolvedModules.push(getResult(resolution));
             }
@@ -363,7 +367,7 @@ namespace ts.server {
             return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilationSettings));
         }
 
-        getScriptSnapshot(filename: string): ts.IScriptSnapshot {
+        getScriptSnapshot(filename: string): IScriptSnapshot {
             const scriptInfo = this.project.getScriptInfoLSHost(filename);
             if (scriptInfo) {
                 return scriptInfo.getSnapshot();
@@ -411,7 +415,7 @@ namespace ts.server {
             return this.host.directoryExists(path);
         }
 
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
             return this.host.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -450,7 +454,7 @@ namespace ts.server {
             });
         }
 
-        setCompilationSettings(opt: ts.CompilerOptions) {
+        setCompilationSettings(opt: CompilerOptions) {
             if (changesAffectModuleResolution(this.compilationSettings, opt)) {
                 this.resolvedModuleNames.clear();
                 this.resolvedTypeReferenceDirectives.clear();

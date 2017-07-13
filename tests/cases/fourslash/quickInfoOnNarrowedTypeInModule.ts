@@ -7,7 +7,7 @@
 ////    var num: number;
 ////    var str: string;
 ////    if (typeof /*1*/nonExportedStrOrNum === "number") {
-////        num = /*2*/nonExportedStrOrNum; 
+////        num = /*2*/nonExportedStrOrNum;
 ////    }
 ////    else {
 ////        str = /*3*/nonExportedStrOrNum.length;
@@ -40,15 +40,15 @@ verify.completionListContains("nonExportedStrOrNum", "var nonExportedStrOrNum: s
 
 goTo.marker('4');
 verify.quickInfoIs('var m.exportedStrOrNum: string | number');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: string | number");
+verify.completionListContains("exportedStrOrNum", "var exportedStrOrNum: string | number");
 
 goTo.marker('5');
 verify.quickInfoIs('var m.exportedStrOrNum: number');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: number");
+verify.completionListContains("exportedStrOrNum", "var exportedStrOrNum: number");
 
 goTo.marker('6');
 verify.quickInfoIs('var m.exportedStrOrNum: string');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: string");
+verify.completionListContains("exportedStrOrNum", "var exportedStrOrNum: string");
 
 goTo.marker('7');
 verify.quickInfoIs('var m.exportedStrOrNum: string | number');
