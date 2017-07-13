@@ -86,7 +86,7 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number {
             if (!this.svc) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1);
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
             }
 
             // TODO: assert this offset is actually on the line
