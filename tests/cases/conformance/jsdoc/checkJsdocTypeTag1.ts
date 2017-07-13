@@ -32,3 +32,13 @@ x1(0);
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
 x2(0);
+
+/**
+ * @type {object}
+ */
+var props = {};
+
+/**
+ * @type {Object}
+ */
+var props = {};

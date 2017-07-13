@@ -129,6 +129,7 @@
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
         "./unittests/textChanges.ts",
-        "./unittests/telemetry.ts"
+        "./unittests/telemetry.ts",
+        "./unittests/programMissingFiles.ts"
     ]
 }
