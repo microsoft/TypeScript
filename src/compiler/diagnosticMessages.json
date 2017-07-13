@@ -3475,7 +3475,7 @@
         "category": "Message",
         "code": 8019
     },
-    "JSDoc types can only used inside documentation comments.": {
+    "JSDoc types can only be used inside documentation comments.": {
         "category": "Error",
         "code": 8020
     },
