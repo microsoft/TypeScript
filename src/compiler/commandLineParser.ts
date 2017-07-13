@@ -1416,7 +1416,8 @@ namespace ts {
         Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
         const errors: Diagnostic[] = [];
 
-        const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors);
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, getCanonicalFileName, resolutionStack, errors);
         const { raw } = parsedConfig;
         const options = extend(existingOptions, parsedConfig.options || {});
         options.configFilePath = configFileName;
@@ -1525,11 +1526,11 @@ namespace ts {
             host: ParseConfigHost,
             basePath: string,
             configFileName: string,
+            getCanonicalFileName: (fileName: string) => string,
             resolutionStack: Path[],
             errors: Diagnostic[],
     ): ParsedTsconfig {
         basePath = normalizeSlashes(basePath);
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
 
         if (resolutionStack.indexOf(resolvedPath) >= 0) {
@@ -1711,7 +1712,7 @@ namespace ts {
 
         const extendedDirname = getDirectoryPath(extendedConfigPath);
         const extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
-            getBaseFileName(extendedConfigPath), resolutionStack, errors);
+            getBaseFileName(extendedConfigPath), getCanonicalFileName, resolutionStack, errors);
         if (sourceFile) {
             sourceFile.extendedSourceFiles.push(...extendedResult.extendedSourceFiles);
         }
@@ -1954,6 +1955,10 @@ namespace ts {
         basePath = normalizePath(basePath);
         let validatedIncludeSpecs: string[], validatedExcludeSpecs: string[];
 
+        // The exclude spec list is converted into a regular expression, which allows us to quickly
+        // test whether a file or directory should be excluded before recursively traversing the
+        // file system.
+
         if (includeSpecs) {
             validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*allowTrailingRecursion*/ false, jsonSourceFile, "include");
         }
@@ -1986,9 +1991,6 @@ namespace ts {
     export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: JsFileExtensionInfo[]): ExpandResult {
         basePath = normalizePath(basePath);
 
-        // The exclude spec list is converted into a regular expression, which allows us to quickly
-        // test whether a file or directory should be excluded before recursively traversing the
-        // file system.
         const keyMapper = host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper;
 
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a

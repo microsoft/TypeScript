@@ -495,7 +495,7 @@ namespace ts.server {
         // add a root file to project
         addMissingFileRoot(fileName: NormalizedPath) {
             const path = toPath(fileName, this.projectService.host.getCurrentDirectory(),
-                createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames));
+                this.projectService.toCanonicalFileName);
             this.rootFilesMap.set(path, fileName);
             this.markAsDirty();
         }
@@ -837,11 +837,10 @@ namespace ts.server {
             }
 
             const currentDirectory = getDirectoryPath(path);
-            const getCanonicalFileName = createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
             // Handle triple slash references
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
+                    const referencedPath = toPath(referencedFile.fileName, currentDirectory, this.projectService.toCanonicalFileName);
                     referencedFiles.set(referencedPath, true);
                 }
             }
@@ -854,7 +853,7 @@ namespace ts.server {
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    const typeFilePath = toPath(fileName, currentDirectory, this.projectService.toCanonicalFileName);
                     referencedFiles.set(typeFilePath, true);
                 });
             }

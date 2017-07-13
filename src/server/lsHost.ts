@@ -11,15 +11,13 @@ namespace ts.server {
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
 
-        private getCanonicalFileName: (fileName: string) => string;
         private cachedReadDirectoryResult = createMap<FileSystemEntries>();
         private readonly currentDirectory: string;
 
-        constructor(private readonly host: ServerHost) {
+        constructor(private readonly host: ServerHost, private getCanonicalFileName: (fileName: string) => string) {
             this.args = host.args;
             this.newLine = host.newLine;
             this.useCaseSensitiveFileNames = host.useCaseSensitiveFileNames;
-            this.getCanonicalFileName = createGetCanonicalFileName(this.useCaseSensitiveFileNames);
             if (host.trace) {
                 this.trace = s => host.trace(s);
             }
@@ -193,21 +191,23 @@ namespace ts.server {
         private compilationSettings: CompilerOptions;
         private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
-        /* @internal */
-        readonly getCanonicalFileName: (fileName: string) => string;
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
 
         private resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
+        /**
+         * This is the host that is associated with the project. This is normally same as projectService's host
+         * except in Configured projects where it is CachedServerHost so that we can cache the results of the
+         * file system entries as we would anyways be watching files in the project (so safe to cache)
+         */
         /*@internal*/
         host: ServerHost;
 
         constructor(host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.host = host;
             this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
-            this.getCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
 
             if (host.trace) {
                 this.trace = s => host.trace(s);
@@ -262,7 +262,7 @@ namespace ts.server {
             getResultFileName: (result: R) => string | undefined,
             logChanges: boolean): R[] {
 
-            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.project.projectService.toCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
             const newResolutions: Map<T> = createMap<T>();
@@ -403,7 +403,7 @@ namespace ts.server {
         fileExists(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
-            const path = toPath(file, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = toPath(file, this.host.getCurrentDirectory(), this.project.projectService.toCanonicalFileName);
             return !this.project.isWatchedMissingFile(path) && this.host.fileExists(file);
         }
 

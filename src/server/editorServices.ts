@@ -1198,7 +1198,7 @@ namespace ts.server {
         }
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string) {
-            const cachedServerHost = new CachedServerHost(this.host);
+            const cachedServerHost = new CachedServerHost(this.host, this.toCanonicalFileName);
             const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedServerHost);
             if (success) {
                 this.logger.info(`Opened configuration file ${configFileName}`);
@@ -1366,10 +1366,11 @@ namespace ts.server {
         }
 
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
-            let info = this.getScriptInfoForNormalizedPath(fileName);
+            const path = toPath(fileName, this.host.getCurrentDirectory(), this.toCanonicalFileName);
+            let info = this.getScriptInfoForPath(path);
             if (!info) {
                 if (openedByClient || this.host.fileExists(fileName)) {
-                    info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent);
+                    info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent, path);
 
                     this.filenameToScriptInfo.set(info.path, info);
 

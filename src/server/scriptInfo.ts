@@ -148,7 +148,6 @@ namespace ts.server {
          */
         readonly containingProjects: Project[] = [];
         private formatCodeSettings: FormatCodeSettings;
-        readonly path: Path;
 
         private fileWatcher: FileWatcher;
         private textStorage: TextStorage;
@@ -159,9 +158,9 @@ namespace ts.server {
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
-            public hasMixedContent = false) {
+            public hasMixedContent: boolean,
+            readonly path: Path) {
 
-            this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.textStorage = new TextStorage(host, fileName);
             if (hasMixedContent) {
                 this.textStorage.reload("");
