@@ -443,6 +443,8 @@ namespace ts.server {
                     this.typingsCache.deleteTypingsForProject(response.projectName);
                     break;
             }
+            project.markAsDirty();
+            // TODO: (sheetalkamat) Schedule Update graph instead of immediate
             project.updateGraph();
         }
 
@@ -456,6 +458,7 @@ namespace ts.server {
                 proj.setCompilerOptions(this.compilerOptionsForInferredProjects);
                 proj.compileOnSaveEnabled = projectCompilerOptions.compileOnSave;
             }
+            // TODO: (sheetalkamat) (ensure updated projects)
             this.updateProjectGraphs(this.inferredProjects);
         }
 
@@ -476,6 +479,7 @@ namespace ts.server {
 
         getDefaultProjectForFile(fileName: NormalizedPath, refreshInferredProjects: boolean) {
             if (refreshInferredProjects) {
+                // TODO: (sheetalkamat) needs to update inferred projects too ?
                 this.ensureInferredProjectsUpToDate();
             }
             const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
@@ -498,6 +502,7 @@ namespace ts.server {
                 this.updateProjectGraphs(projectsToUpdate);
                 this.changedFiles = undefined;
             }
+            // TODO: (sheetalkamat) should also refresh inferred projects here since we are postponing the changes in closed files
         }
 
         private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
@@ -554,7 +559,7 @@ namespace ts.server {
                         // file has been changed which might affect the set of referenced files in projects that include
                         // this file and set of inferred projects
                         info.reloadFromFile();
-                        this.updateProjectGraphs(info.containingProjects);
+                        this.recordChangedFile(info);
                     }
                 }
             }
@@ -575,6 +580,7 @@ namespace ts.server {
 
                 info.detachAllProjects();
 
+                // TODO: (sheetalkamat) Schedule this too ?
                 // update projects to make sure that set of referenced files is correct
                 this.updateProjectGraphs(containingProjects);
 
@@ -597,10 +603,13 @@ namespace ts.server {
             this.logger.info(`Type root file ${fileName} changed`);
             project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
             project.updateTypes();
-            this.throttledOperations.schedule(project.getConfigFilePath() + " * type root", /*delay*/ 250, () => {
-                this.reloadConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
+            // TODO: (sheetalkamat) schedule project update and referesh inferred projects instead
+
+            //this.throttledOperations.schedule(project.getConfigFilePath() + " * type root", /*delay*/ 250, () => {
+            //    this.reloadConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
+            project.updateGraph();
                 this.refreshInferredProjects();
-            });
+            //});
         }
 
         /**
@@ -655,10 +664,12 @@ namespace ts.server {
                 // Reload the configured projects for these open files in the project as
                 // they could be held up by another config file somewhere in the parent directory
                 const openFilesInProject = this.getOrphanFiles();
+                // TODO: (sheetalkamat) can this be scheduled too
                 this.reloadConfiguredProjectForFiles(openFilesInProject);
             }
             else {
                 this.logger.info(`Config file changed: ${configFileName}`);
+                // TODO: (sheetalkamat) This should be scheduled and marked for reload of configured project since we dont want to updating this on every change
                 this.reloadConfiguredProject(project);
                 this.reportConfigFileDiagnostics(configFileName, project.getGlobalProjectErrors(), /*triggerFile*/ configFileName);
             }
@@ -923,7 +934,7 @@ namespace ts.server {
 
             function printProjects(logger: Logger, projects: Project[], counter: number) {
                 for (const project of projects) {
-                    project.updateGraph();
+                    // Print shouldnt update the graph. It should emit whatever state the project is currently in
                     logger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
                     logger.info(project.filesToString());
                     logger.info("-----------------------------------------------");
@@ -1215,6 +1226,7 @@ namespace ts.server {
                     }
                 });
             }
+            project.markAsDirty(); // Just to ensure that even if root files dont change, the changes to the non root file are picked up
         }
 
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
@@ -1229,6 +1241,7 @@ namespace ts.server {
             }
             project.setProjectErrors(configFileErrors);
 
+            // This doesnt need scheduling since its either creation or reload of the project
             project.updateGraph();
         }
 
@@ -1261,20 +1274,14 @@ namespace ts.server {
          */
         private updateConfiguredProject(project: ConfiguredProject, projectOptions: ProjectOptions, configFileErrors: Diagnostic[]) {
             if (this.exceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader)) {
-                project.setCompilerOptions(projectOptions.compilerOptions);
-                if (!project.languageServiceEnabled) {
-                    // language service is already disabled
-                    project.setProjectErrors(configFileErrors);
-                }
                 project.disableLanguageService();
                 project.stopWatchingWildCards();
-                project.setProjectErrors(configFileErrors);
             }
             else {
                 project.enableLanguageService();
                 project.watchWildcards(projectOptions.wildcardDirectories);
-                this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
             }
+            this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
         }
 
         createInferredProjectWithRootFileIfNecessary(root: ScriptInfo) {
@@ -1540,9 +1547,19 @@ namespace ts.server {
             return files;
         }
 
+        private recordChangedFile(scriptInfo: ScriptInfo) {
+            if (!this.changedFiles) {
+                this.changedFiles = [scriptInfo];
+            }
+            else if (this.changedFiles.indexOf(scriptInfo) < 0) {
+                this.changedFiles.push(scriptInfo);
+            }
+            // TODO: (sheetalkamat) Schedule the project update graphs
+            this.updateProjectGraphs(scriptInfo.containingProjects);
+        }
+
         /* @internal */
         applyChangesInOpenFiles(openFiles: protocol.ExternalFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void {
-            const recordChangedFiles = changedFiles && !openFiles && !closedFiles;
             if (openFiles) {
                 for (const file of openFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
@@ -1561,14 +1578,7 @@ namespace ts.server {
                         const change = file.changes[i];
                         scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
                     }
-                    if (recordChangedFiles) {
-                        if (!this.changedFiles) {
-                            this.changedFiles = [scriptInfo];
-                        }
-                        else if (this.changedFiles.indexOf(scriptInfo) < 0) {
-                            this.changedFiles.push(scriptInfo);
-                        }
-                    }
+                    this.recordChangedFile(scriptInfo);
                 }
             }
 
@@ -1580,6 +1590,7 @@ namespace ts.server {
             // if files were open or closed then explicitly refresh list of inferred projects
             // otherwise if there were only changes in files - record changed files in `changedFiles` and defer the update
             if (openFiles || closedFiles) {
+                // TODO: (sheetalkamat) is this ensureRefereshedProjects instead ?
                 this.refreshInferredProjects();
             }
         }
@@ -1603,6 +1614,7 @@ namespace ts.server {
                 }
                 this.externalProjectToConfiguredProjectMap.delete(fileName);
                 if (shouldRefreshInferredProjects && !suppressRefresh) {
+                    // TODO: (sheetalkamat) is this ensureRefereshedProjects instead ?
                     this.refreshInferredProjects();
                 }
             }
@@ -1612,6 +1624,7 @@ namespace ts.server {
                 if (externalProject) {
                     this.removeProject(externalProject);
                     if (!suppressRefresh) {
+                        // TODO: (sheetalkamat) is this ensureRefereshedProjects instead ?
                         this.refreshInferredProjects();
                     }
                 }
@@ -1636,6 +1649,7 @@ namespace ts.server {
                 this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true);
             });
 
+            // TODO: (sheetalkamat) is this ensureRefereshedProjects instead ?
             this.refreshInferredProjects();
         }
 
@@ -1830,6 +1844,7 @@ namespace ts.server {
                 this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
             }
             if (!suppressRefreshOfInferredProjects) {
+                // TODO: (sheetalkamat) is this ensureRefereshedProjects instead ?
                 this.refreshInferredProjects();
             }
         }

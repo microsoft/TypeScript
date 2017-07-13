@@ -555,6 +555,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            // TODO: (sheetalkamat) If reload scheduled do that before updating the graph
             this.lsHost.startRecordingFilesWithChangedResolutions();
 
             let hasChanges = this.updateGraphWorker();
@@ -661,6 +662,7 @@ namespace ts.server {
 
                                 // When a missing file is created, we should update the graph.
                                 this.markAsDirty();
+                                // TODO: (sheetalkamat) schedule the update graph instead of doing it right away
                                 this.updateGraph();
                             }
                         });

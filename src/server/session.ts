@@ -462,6 +462,7 @@ namespace ts.server {
         private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
             this.host.setTimeout(() => {
                 if (matchSeq(seq)) {
+                    // TODO: (sheetalkamat) is this ensureRefereshedProjects instead ?
                     this.projectService.refreshInferredProjects();
                 }
             }, ms);
