@@ -647,10 +647,13 @@ namespace ts.FindAllReferences.Core {
             return undefined;
         }
 
-        // If the symbol has a parent, it's globally visible.
-        // (Private properties handled above.)
-        // Unless that parent is an external module, then we should only search in the module (and recurse on the export later).
-        // But if the parent is a module that has `export as namespace`, then the symbol *is* globally visible.
+        /*
+        If the symbol has a parent, it's globally visible unless:
+        - It's a private property (handled above).
+        - It's a type parameter.
+        - The parent is an external module: then we should only search in the module (and recurse on the export later).
+          - But if the parent has `export as namespace`, the symbol is globally visible through that namespace.
+        */
         const exposedByParent = parent && !(symbol.flags & SymbolFlags.TypeParameter);
         if (exposedByParent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
             return undefined;
