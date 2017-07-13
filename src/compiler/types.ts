@@ -347,14 +347,8 @@ namespace ts {
         JSDocAllType,
         // The ? type
         JSDocUnknownType,
-        JSDocArrayType,
-        JSDocUnionType,
-        JSDocTupleType,
         JSDocNullableType,
         JSDocNonNullableType,
-        JSDocRecordType,
-        JSDocRecordMember,
-        JSDocTypeReference,
         JSDocOptionalType,
         JSDocFunctionType,
         JSDocVariadicType,
@@ -371,7 +365,6 @@ namespace ts {
         JSDocTypedefTag,
         JSDocPropertyTag,
         JSDocTypeLiteral,
-        JSDocLiteralType,
 
         // Synthesized list
         SyntaxList,
@@ -413,9 +406,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocLiteralType,
+        LastJSDocNode = JSDocTypeLiteral,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocLiteralType
+        LastJSDocTagNode = JSDocTypeLiteral
     }
 
     export const enum NodeFlags {
@@ -450,6 +443,7 @@ namespace ts {
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
         /* @internal */
         PossiblyContainsDynamicImport = 1 << 19,
+        JSDoc =          1 << 20, // If node was parsed inside jsdoc
 
         BlockScoped = Let | Const,
 
@@ -584,6 +578,7 @@ namespace ts {
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode>;        // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics.
+        /*@internal*/ jsdocDot?: boolean;                         // Identifier occurs in JSDoc-style generic: Id.<T>
     }
 
     // Transient identifier node (marked by id === -1)
@@ -603,6 +598,7 @@ namespace ts {
         kind: SyntaxKind.QualifiedName;
         left: EntityName;
         right: Identifier;
+        /*@internal*/ jsdocDot?: boolean; // Identifier occurs in JSDoc-style generic: Id1.Id2.<T>
     }
 
     export type EntityName = Identifier | QualifiedName;
@@ -694,23 +690,13 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface TSPropertySignature extends TypeElement {
+    export interface PropertySignature extends TypeElement {
         kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
         questionToken?: QuestionToken;      // Present on optional property
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
-
-    export interface JSDocPropertySignature extends TypeElement {
-        kind: SyntaxKind.JSDocRecordMember;
-        name: PropertyName;                 // Declared property name
-        questionToken?: QuestionToken;      // Present on optional property
-        type?: TypeNode;                    // Optional type annotation
-        initializer?: Expression;           // Optional initializer
-    }
-
-    export type PropertySignature = TSPropertySignature | JSDocPropertySignature;
 
     export interface PropertyDeclaration extends ClassElement {
         kind: SyntaxKind.PropertyDeclaration;
@@ -921,7 +907,7 @@ namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
 
-    export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference;
+    export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
 
     export interface TypeReferenceNode extends TypeNode {
         kind: SyntaxKind.TypeReference;
@@ -2042,7 +2028,7 @@ namespace ts {
     // represents a top level: { type } expression in a JSDoc comment.
     export interface JSDocTypeExpression extends Node {
         kind: SyntaxKind.JSDocTypeExpression;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocType extends TypeNode {
@@ -2057,80 +2043,41 @@ namespace ts {
         kind: SyntaxKind.JSDocUnknownType;
     }
 
-    export interface JSDocArrayType extends JSDocType {
-        kind: SyntaxKind.JSDocArrayType;
-        elementType: JSDocType;
-    }
-
-    export interface JSDocUnionType extends JSDocType {
-        kind: SyntaxKind.JSDocUnionType;
-        types: NodeArray<JSDocType>;
-    }
-
-    export interface JSDocTupleType extends JSDocType {
-        kind: SyntaxKind.JSDocTupleType;
-        types: NodeArray<JSDocType>;
-    }
-
     export interface JSDocNonNullableType extends JSDocType {
         kind: SyntaxKind.JSDocNonNullableType;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocNullableType extends JSDocType {
         kind: SyntaxKind.JSDocNullableType;
-        type: JSDocType;
-    }
-
-    export interface JSDocRecordType extends JSDocType {
-        kind: SyntaxKind.JSDocRecordType;
-        literal: TypeLiteralNode;
-    }
-
-    export interface JSDocTypeReference extends JSDocType {
-        kind: SyntaxKind.JSDocTypeReference;
-        name: EntityName;
-        typeArguments: NodeArray<JSDocType>;
+        type: TypeNode;
     }
 
     export interface JSDocOptionalType extends JSDocType {
         kind: SyntaxKind.JSDocOptionalType;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
         kind: SyntaxKind.JSDocFunctionType;
-        parameters: NodeArray<ParameterDeclaration>;
-        type: JSDocType;
     }
 
     export interface JSDocVariadicType extends JSDocType {
         kind: SyntaxKind.JSDocVariadicType;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocConstructorType extends JSDocType {
         kind: SyntaxKind.JSDocConstructorType;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocThisType extends JSDocType {
         kind: SyntaxKind.JSDocThisType;
-        type: JSDocType;
-    }
-
-    export interface JSDocLiteralType extends JSDocType {
-        kind: SyntaxKind.JSDocLiteralType;
-        literal: LiteralTypeNode;
+        type: TypeNode;
     }
 
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
-
-    export interface JSDocRecordMember extends JSDocPropertySignature {
-        kind: SyntaxKind.JSDocRecordMember;
-        name: Identifier | StringLiteral | NumericLiteral;
-        type?: JSDocType;
-    }
 
     export interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;

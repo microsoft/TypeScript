@@ -176,7 +176,6 @@ namespace ts {
 
         switch (node.parent.kind) {
             case SyntaxKind.TypeReference:
-            case SyntaxKind.JSDocTypeReference:
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);

@@ -62,6 +62,12 @@ namespace ts {
                 parsesCorrectly("tupleType1", "{[number]}");
                 parsesCorrectly("tupleType2", "{[number,string]}");
                 parsesCorrectly("tupleType3", "{[number,string,boolean]}");
+                parsesCorrectly("tupleTypeWithTrailingComma", "{[number,]}");
+                parsesCorrectly("typeOfType", "{typeof M}");
+                parsesCorrectly("tsConstructoType", "{new () => string}");
+                parsesCorrectly("tsFunctionType", "{() => string}");
+                parsesCorrectly("typeArgumentsNotFollowingDot", "{a<>}");
+                parsesCorrectly("functionTypeWithTrailingComma", "{function(a,)}");
            });
 
             describe("parsesIncorrectly", () => {
@@ -69,21 +75,13 @@ namespace ts {
                 parsesIncorrectly("unionTypeWithTrailingBar", "{(a|)}");
                 parsesIncorrectly("unionTypeWithoutTypes", "{()}");
                 parsesIncorrectly("nullableTypeWithoutType", "{!}");
-                parsesIncorrectly("functionTypeWithTrailingComma", "{function(a,)}");
                 parsesIncorrectly("thisWithoutType", "{this:}");
                 parsesIncorrectly("newWithoutType", "{new:}");
                 parsesIncorrectly("variadicWithoutType", "{...}");
                 parsesIncorrectly("optionalWithoutType", "{=}");
                 parsesIncorrectly("allWithType", "{*foo}");
-                parsesIncorrectly("typeArgumentsNotFollowingDot", "{a<>}");
-                parsesIncorrectly("emptyTypeArguments", "{a.<>}");
-                parsesIncorrectly("typeArgumentsWithTrailingComma", "{a.<a,>}");
-                parsesIncorrectly("tsFunctionType", "{() => string}");
-                parsesIncorrectly("tsConstructoType", "{new () => string}");
-                parsesIncorrectly("typeOfType", "{typeof M}");
                 parsesIncorrectly("namedParameter", "{function(a: number)}");
                 parsesIncorrectly("tupleTypeWithComma", "{[,]}");
-                parsesIncorrectly("tupleTypeWithTrailingComma", "{[number,]}");
                 parsesIncorrectly("tupleTypeWithLeadingComma", "{[,number]}");
             });
         });

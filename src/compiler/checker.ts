@@ -6339,7 +6339,7 @@ namespace ts {
                         const resolvedSymbol = resolveName(param, paramSymbol.name, SymbolFlags.Value, undefined, undefined);
                         paramSymbol = resolvedSymbol;
                     }
-                    if (i === 0 && paramSymbol.name === "this") {
+                    if (i === 0 && paramSymbol.name === "this" || (param.type && param.type.kind === SyntaxKind.JSDocThisType)) {
                         hasThisParameter = true;
                         thisParameter = param.symbol;
                     }
@@ -6798,8 +6798,6 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
                     return (<TypeReferenceNode>node).typeName;
-                case SyntaxKind.JSDocTypeReference:
-                    return (<JSDocTypeReference>node).name;
                 case SyntaxKind.ExpressionWithTypeArguments:
                     // We only support expressions that are simple qualified names. For other
                     // expressions this produces undefined.
@@ -6807,7 +6805,6 @@ namespace ts {
                     if (isEntityNameExpression(expr)) {
                         return expr;
                     }
-
                 // fall through;
             }
 
@@ -6833,8 +6830,8 @@ namespace ts {
                 return type;
             }
 
-            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
-                // A JSDocTypeReference may have resolved to a value (as opposed to a type). If
+            if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
+                // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
                 // the symbol is a constructor function, return the inferred class type; otherwise,
                 // the type of this reference is just the type of the value we resolved to.
                 const valueType = getTypeOfSymbol(symbol);
@@ -6862,14 +6859,16 @@ namespace ts {
                 return getTypeFromTypeAliasReference(node, symbol, typeArguments);
             }
 
-            if (symbol.flags & SymbolFlags.Function && node.kind === SyntaxKind.JSDocTypeReference && (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
+            if (symbol.flags & SymbolFlags.Function &&
+                isJSDocTypeReference(node) &&
+                (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
                 return getInferredClassType(symbol);
             }
         }
 
-        function getPrimitiveTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
-            if (isIdentifier(node.name)) {
-                switch (node.name.text) {
+        function getPrimitiveTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
+            if (isIdentifier(node.typeName)) {
+                switch (node.typeName.text) {
                     case "String":
                         return stringType;
                     case "Number":
@@ -6909,7 +6908,7 @@ namespace ts {
                 let symbol: Symbol;
                 let type: Type;
                 let meaning = SymbolFlags.Type;
-                if (node.kind === SyntaxKind.JSDocTypeReference) {
+                if (isJSDocTypeReference(node)) {
                     type = getPrimitiveTypeFromJSDocTypeReference(node);
                     meaning |= SymbolFlags.Value;
                 }
@@ -7799,15 +7798,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromJSDocTupleType(node: JSDocTupleType): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                const types = map(node.types, getTypeFromTypeNode);
-                links.resolvedType = createTupleType(types);
-            }
-            return links.resolvedType;
-        }
-
         function getThisType(node: Node): Type {
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             const parent = container && container.parent;
@@ -7852,16 +7842,18 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
-                    return nonPrimitiveType;
+                    if (node.flags & NodeFlags.JavaScriptFile) {
+                        return anyType;
+                    }
+                    else {
+                        return nonPrimitiveType;
+                    }
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
-                case SyntaxKind.JSDocLiteralType:
-                    return getTypeFromLiteralTypeNode((<JSDocLiteralType>node).literal);
                 case SyntaxKind.TypeReference:
-                case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
                     return booleanType;
@@ -7870,12 +7862,10 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
-                case SyntaxKind.JSDocArrayType:
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return getTypeFromTupleTypeNode(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
-                case SyntaxKind.JSDocUnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
@@ -7887,8 +7877,6 @@ namespace ts {
                 case SyntaxKind.JSDocThisType:
                 case SyntaxKind.JSDocOptionalType:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
-                case SyntaxKind.JSDocRecordType:
-                    return getTypeFromTypeNode((node as JSDocRecordType).literal);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -7907,8 +7895,6 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     const symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
-                case SyntaxKind.JSDocTupleType:
-                    return getTypeFromJSDocTupleType(<JSDocTupleType>node);
                 case SyntaxKind.JSDocVariadicType:
                     return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
                 default:
@@ -18474,6 +18460,9 @@ namespace ts {
 
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
+            if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDot && !isInJavaScriptFile(node) && !findAncestor(node, n => n.kind === SyntaxKind.JSDocTypeExpression)) {
+                grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_used_inside_documentation_comments);
+            }
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
                 if (node.typeArguments) {
@@ -19372,7 +19361,17 @@ namespace ts {
             }
         }
 
+        function checkJsDoc(node: FunctionDeclaration | MethodDeclaration) {
+            if (!node.jsDoc) {
+                return;
+            }
+            for (const doc of node.jsDoc) {
+                checkSourceElement(doc);
+            }
+        }
+
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
+            checkJsDoc(node);
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const functionFlags = getFunctionFlags(node);
@@ -21971,6 +21970,22 @@ namespace ts {
             }
         }
 
+        function checkJSDocComment(node: JSDoc) {
+            if (isInJavaScriptFile(node) && (node as JSDoc).tags) {
+                for (const tag of (node as JSDoc).tags) {
+                    checkSourceElement(tag);
+                }
+            }
+        }
+
+        function checkJSDocFunctionType(node: JSDocFunctionType) {
+            for (const p of node.parameters) {
+                // don't bother with normal parameter checking since jsdoc function parameters only consist of a type
+                checkSourceElement(p.type);
+            }
+            checkSourceElement(node.type);
+        }
+
         function checkSourceElement(node: Node): void {
             if (!node) {
                 return;
@@ -22030,6 +22045,26 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TypeOperator:
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                case SyntaxKind.JSDocComment:
+                    return checkJSDocComment(node as JSDoc);
+                case SyntaxKind.JSDocParameterTag:
+                    return checkSourceElement((node as JSDocParameterTag).typeExpression);
+                case SyntaxKind.JSDocFunctionType:
+                    checkJSDocFunctionType(node as JSDocFunctionType);
+                    // falls through
+                case SyntaxKind.JSDocConstructorType:
+                case SyntaxKind.JSDocThisType:
+                case SyntaxKind.JSDocVariadicType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
+                    if (!isInJavaScriptFile(node) && !findAncestor(node, n => n.kind === SyntaxKind.JSDocTypeExpression)) {
+                        grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_used_inside_documentation_comments);
+                    }
+                    return;
+                case SyntaxKind.JSDocTypeExpression:
+                    return checkSourceElement((node as JSDocTypeExpression).type);
                 case SyntaxKind.IndexedAccessType:
                     return checkIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
@@ -22386,7 +22421,7 @@ namespace ts {
                 node = node.parent;
             }
 
-            return node.parent && (node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.JSDocTypeReference) ;
+            return node.parent && node.parent.kind === SyntaxKind.TypeReference ;
         }
 
         function isHeritageClauseElementIdentifier(entityName: Node): boolean {
@@ -22540,7 +22575,7 @@ namespace ts {
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
-                const meaning = (entityName.parent.kind === SyntaxKind.TypeReference || entityName.parent.kind === SyntaxKind.JSDocTypeReference) ? SymbolFlags.Type : SymbolFlags.Namespace;
+                const meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(<EntityName>entityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
             }
             else if (entityName.parent.kind === SyntaxKind.JsxAttribute) {

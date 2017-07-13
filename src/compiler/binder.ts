@@ -280,7 +280,14 @@ namespace ts {
                     Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
                     const functionType = <JSDocFunctionType>node.parent;
                     const index = indexOf(functionType.parameters, node);
-                    return "arg" + index as __String;
+                    switch ((node as ParameterDeclaration).type.kind) {
+                        case SyntaxKind.JSDocThisType:
+                            return "this" as __String;
+                        case SyntaxKind.JSDocConstructorType:
+                            return "new" as __String;
+                        default:
+                            return "arg" + index as __String;
+                    }
                 case SyntaxKind.JSDocTypedefTag:
                     const parentNode = node.parent && node.parent.parent;
                     let nameFromParentNode: __String;
@@ -1395,14 +1402,12 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
-                case SyntaxKind.JSDocRecordType:
                 case SyntaxKind.JsxAttributes:
                     return ContainerFlags.IsContainer;
 
                 case SyntaxKind.InterfaceDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsInterface;
 
-                case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
@@ -1422,9 +1427,10 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
@@ -1502,7 +1508,6 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.JSDocRecordType:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JsxAttributes:
                     // Interface/Object-types always have their children added to the 'members' of
@@ -2095,6 +2100,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:
+                case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.ConstructorType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
@@ -2157,18 +2163,13 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
-                case SyntaxKind.JSDocRecordMember:
-                    return bindPropertyWorker(node as JSDocRecordMember);
                 case SyntaxKind.JSDocPropertyTag:
                     return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag,
                         (node as JSDocPropertyTag).isBracketed || ((node as JSDocPropertyTag).typeExpression && (node as JSDocPropertyTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) ?
                             SymbolFlags.Property | SymbolFlags.Optional : SymbolFlags.Property,
                         SymbolFlags.PropertyExcludes);
-                case SyntaxKind.JSDocFunctionType:
-                    return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.JSDocTypeLiteral:
-                case SyntaxKind.JSDocRecordType:
-                    return bindAnonymousTypeWorker(node as JSDocTypeLiteral | JSDocRecordType);
+                    return bindAnonymousTypeWorker(node as JSDocTypeLiteral);
                 case SyntaxKind.JSDocTypedefTag: {
                     const { fullName } = node as JSDocTypedefTag;
                     if (!fullName || fullName.kind === SyntaxKind.Identifier) {
@@ -2183,7 +2184,7 @@ namespace ts {
             return bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
         }
 
-        function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral | JSDocRecordType) {
+        function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral) {
             return bindAnonymousDeclaration(<Declaration>node, SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         }
 

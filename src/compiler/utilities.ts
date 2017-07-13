@@ -1082,7 +1082,6 @@ namespace ts {
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
-            case SyntaxKind.JSDocTypeReference:
                 return (<TypeReferenceNode>node).typeName;
 
             case SyntaxKind.ExpressionWithTypeArguments:
@@ -1582,7 +1581,7 @@ namespace ts {
         return find(typeParameters, p => p.name.text === name);
     }
 
-    export function getJSDocType(node: Node): JSDocType {
+    export function getJSDocType(node: Node): TypeNode {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
             const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
@@ -1606,7 +1605,7 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
     }
 
-    export function getJSDocReturnType(node: Node): JSDocType {
+    export function getJSDocReturnType(node: Node): TypeNode {
         const returnTag = getJSDocReturnTag(node);
         return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
     }
@@ -3298,6 +3297,10 @@ namespace ts {
         return false;
     }
 
+    export function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
+        return node.kind === SyntaxKind.TypeReference && !!findAncestor(node, n => n.kind === SyntaxKind.JSDocTypeExpression);
+    }
+
     /**
      * Formats an enum value as a string for debugging and debug assertions.
      */
@@ -4664,36 +4667,12 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocUnknownType;
     }
 
-    export function isJSDocArrayType(node: Node): node is JSDocArrayType {
-        return node.kind === SyntaxKind.JSDocArrayType;
-    }
-
-    export function isJSDocUnionType(node: Node): node is JSDocUnionType {
-        return node.kind === SyntaxKind.JSDocUnionType;
-    }
-
-    export function isJSDocTupleType(node: Node): node is JSDocTupleType {
-        return node.kind === SyntaxKind.JSDocTupleType;
-    }
-
     export function isJSDocNullableType(node: Node): node is JSDocNullableType {
         return node.kind === SyntaxKind.JSDocNullableType;
     }
 
     export function isJSDocNonNullableType(node: Node): node is JSDocNonNullableType {
         return node.kind === SyntaxKind.JSDocNonNullableType;
-    }
-
-    export function isJSDocRecordType(node: Node): node is JSDocRecordType {
-        return node.kind === SyntaxKind.JSDocRecordType;
-    }
-
-    export function isJSDocRecordMember(node: Node): node is JSDocRecordMember {
-        return node.kind === SyntaxKind.JSDocRecordMember;
-    }
-
-    export function isJSDocTypeReference(node: Node): node is JSDocTypeReference {
-        return node.kind === SyntaxKind.JSDocTypeReference;
     }
 
     export function isJSDocOptionalType(node: Node): node is JSDocOptionalType {
@@ -4750,10 +4729,6 @@ namespace ts {
 
     export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral {
         return node.kind === SyntaxKind.JSDocTypeLiteral;
-    }
-
-    export function isJSDocLiteralType(node: Node): node is JSDocLiteralType {
-        return node.kind === SyntaxKind.JSDocLiteralType;
     }
 }
 
