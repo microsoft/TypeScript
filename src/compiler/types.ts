@@ -352,8 +352,6 @@ namespace ts {
         JSDocOptionalType,
         JSDocFunctionType,
         JSDocVariadicType,
-        JSDocConstructorType,
-        JSDocThisType,
         JSDocComment,
         JSDocTag,
         JSDocAugmentsTag,
@@ -2067,17 +2065,7 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface JSDocConstructorType extends JSDocType {
-        kind: SyntaxKind.JSDocConstructorType;
-        type: TypeNode;
-    }
-
-    export interface JSDocThisType extends JSDocType {
-        kind: SyntaxKind.JSDocThisType;
-        type: TypeNode;
-    }
-
-    export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
+    export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
     export interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;

@@ -1447,8 +1447,9 @@ namespace ts {
 
     export function isJSDocConstructSignature(node: Node) {
         return node.kind === SyntaxKind.JSDocFunctionType &&
-            (<JSDocFunctionType>node).parameters.length > 0 &&
-            (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
+            (node as JSDocFunctionType).parameters.length > 0 &&
+            (node as JSDocFunctionType).parameters[0].name &&
+            ((node as JSDocFunctionType).parameters[0].name as Identifier).text === "new";
     }
 
     export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
@@ -4685,14 +4686,6 @@ namespace ts {
 
     export function isJSDocVariadicType(node: Node): node is JSDocVariadicType {
         return node.kind === SyntaxKind.JSDocVariadicType;
-    }
-
-    export function isJSDocConstructorType(node: Node): node is JSDocConstructorType {
-        return node.kind === SyntaxKind.JSDocConstructorType;
-    }
-
-    export function isJSDocThisType(node: Node): node is JSDocThisType {
-        return node.kind === SyntaxKind.JSDocThisType;
     }
 
     export function isJSDoc(node: Node): node is JSDoc {

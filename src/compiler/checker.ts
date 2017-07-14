@@ -6339,7 +6339,7 @@ namespace ts {
                         const resolvedSymbol = resolveName(param, paramSymbol.name, SymbolFlags.Value, undefined, undefined);
                         paramSymbol = resolvedSymbol;
                     }
-                    if (i === 0 && paramSymbol.name === "this" || (param.type && param.type.kind === SyntaxKind.JSDocThisType)) {
+                    if (i === 0 && paramSymbol.name === "this") {
                         hasThisParameter = true;
                         thisParameter = param.symbol;
                     }
@@ -6882,7 +6882,6 @@ namespace ts {
                     case "Null":
                         return nullType;
                     case "Object":
-                    case "object":
                         return anyType;
                     case "Function":
                     case "function":
@@ -7842,12 +7841,7 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
-                    if (node.flags & NodeFlags.JavaScriptFile) {
-                        return anyType;
-                    }
-                    else {
-                        return nonPrimitiveType;
-                    }
+                    return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
@@ -7873,8 +7867,6 @@ namespace ts {
                     return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocConstructorType:
-                case SyntaxKind.JSDocThisType:
                 case SyntaxKind.JSDocOptionalType:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
                 case SyntaxKind.FunctionType:
@@ -12367,7 +12359,9 @@ namespace ts {
             const jsdocType = getJSDocType(node);
             if (jsdocType && jsdocType.kind === SyntaxKind.JSDocFunctionType) {
                 const jsDocFunctionType = <JSDocFunctionType>jsdocType;
-                if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
+                if (jsDocFunctionType.parameters.length > 0 &&
+                    jsDocFunctionType.parameters[0].name &&
+                    (jsDocFunctionType.parameters[0].name as Identifier).text === "this") {
                     return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
                 }
             }
@@ -19361,17 +19355,31 @@ namespace ts {
             }
         }
 
-        function checkJsDoc(node: FunctionDeclaration | MethodDeclaration) {
-            if (!node.jsDoc) {
+        function checkJSDoc(node: FunctionDeclaration | MethodDeclaration) {
+            if (!isInJavaScriptFile(node)) {
                 return;
             }
-            for (const doc of node.jsDoc) {
-                checkSourceElement(doc);
+            forEach(node.jsDoc, checkSourceElement);
+        }
+
+        function checkJSDocComment(node: JSDoc) {
+            if ((node as JSDoc).tags) {
+                for (const tag of (node as JSDoc).tags) {
+                    checkSourceElement(tag);
+                }
             }
         }
 
+        function checkJSDocFunctionType(node: JSDocFunctionType) {
+            for (const p of node.parameters) {
+                // don't bother with normal parameter checking since jsdoc function parameters only consist of a type
+                checkSourceElement(p.type);
+            }
+            checkSourceElement(node.type);
+        }
+
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
-            checkJsDoc(node);
+            checkJSDoc(node);
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const functionFlags = getFunctionFlags(node);
@@ -21970,22 +21978,6 @@ namespace ts {
             }
         }
 
-        function checkJSDocComment(node: JSDoc) {
-            if (isInJavaScriptFile(node) && (node as JSDoc).tags) {
-                for (const tag of (node as JSDoc).tags) {
-                    checkSourceElement(tag);
-                }
-            }
-        }
-
-        function checkJSDocFunctionType(node: JSDocFunctionType) {
-            for (const p of node.parameters) {
-                // don't bother with normal parameter checking since jsdoc function parameters only consist of a type
-                checkSourceElement(p.type);
-            }
-            checkSourceElement(node.type);
-        }
-
         function checkSourceElement(node: Node): void {
             if (!node) {
                 return;
@@ -22052,8 +22044,6 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     checkJSDocFunctionType(node as JSDocFunctionType);
                     // falls through
-                case SyntaxKind.JSDocConstructorType:
-                case SyntaxKind.JSDocThisType:
                 case SyntaxKind.JSDocVariadicType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocNullableType:

@@ -404,10 +404,6 @@ namespace ts {
                     visitNode(cbNode, (<JSDocFunctionType>node).type);
             case SyntaxKind.JSDocVariadicType:
                 return visitNode(cbNode, (<JSDocVariadicType>node).type);
-            case SyntaxKind.JSDocConstructorType:
-                return visitNode(cbNode, (<JSDocConstructorType>node).type);
-            case SyntaxKind.JSDocThisType:
-                return visitNode(cbNode, (<JSDocThisType>node).type);
             case SyntaxKind.JSDocComment:
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
             case SyntaxKind.JSDocParameterTag:
@@ -2134,13 +2130,17 @@ namespace ts {
         }
 
         function parseJSDocParameter(): ParameterDeclaration {
-            const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            const parameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
+            if (token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword) {
+                parameter.name = parseIdentifierName();
+                parseExpected(SyntaxKind.ColonToken);
+            }
             parameter.type = parseType();
             return finishNode(parameter);
         }
 
         function parseJSDocNodeWithType(kind: SyntaxKind): TypeNode {
-            const result = createNode(kind) as JSDocVariadicType | JSDocNonNullableType | JSDocThisType | JSDocConstructorType;
+            const result = createNode(kind) as JSDocVariadicType | JSDocNonNullableType;
             nextToken();
             result.type = parseType();
             return finishNode(result);
@@ -2567,14 +2567,10 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode | JSDocConstructorType {
+        function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode {
             const node = <FunctionOrConstructorTypeNode>createNode(kind);
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
-                if (token() === SyntaxKind.ColonToken) {
-                    // JSDoc -- `new:T` as in `function(new:T, string, string)`; an infix constructor-return-type
-                    return parseJSDocNodeWithType(SyntaxKind.JSDocConstructorType) as JSDocConstructorType;
-                }
             }
             fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type, node);
             return finishNode(node);
@@ -2632,9 +2628,6 @@ namespace ts {
                     const thisKeyword = parseThisTypeNode();
                     if (token() === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
                         return parseThisTypePredicate(thisKeyword);
-                    }
-                    else if (token() === SyntaxKind.ColonToken) {
-                        return parseJSDocNodeWithType(SyntaxKind.JSDocThisType);
                     }
                     else {
                         return thisKeyword;
