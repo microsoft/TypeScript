@@ -2064,7 +2064,7 @@
         "category": "Error",
         "code": 2679
     },
-    "A 'this' parameter must be the first parameter.": {
+    "A '{0}' parameter must be the first parameter.": {
         "category": "Error",
         "code": 2680
     },

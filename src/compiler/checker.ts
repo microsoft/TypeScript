@@ -17863,9 +17863,9 @@ namespace ts {
             if (node.questionToken && isBindingPattern(node.name) && (func as FunctionLikeDeclaration).body) {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
-            if ((<Identifier>node.name).text === "this") {
+            if (node.name && ((node.name as Identifier).text === "this" || (node.name as Identifier).text === "new")) {
                 if (indexOf(func.parameters, node) !== 0) {
-                    error(node, Diagnostics.A_this_parameter_must_be_the_first_parameter);
+                    error(node, Diagnostics.A_0_parameter_must_be_the_first_parameter, (node.name as Identifier).text as string);
                 }
                 if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature || func.kind === SyntaxKind.ConstructorType) {
                     error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
@@ -19370,14 +19370,6 @@ namespace ts {
             }
         }
 
-        function checkJSDocFunctionType(node: JSDocFunctionType) {
-            for (const p of node.parameters) {
-                // don't bother with normal parameter checking since jsdoc function parameters only consist of a type
-                checkSourceElement(p.type);
-            }
-            checkSourceElement(node.type);
-        }
-
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
             checkJSDoc(node);
             checkDecorators(node);
@@ -19923,6 +19915,11 @@ namespace ts {
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkDecorators(node);
             checkSourceElement(node.type);
+
+            // JSDoc `function(string, string): string` syntax results in parameters with no name
+            if (!node.name) {
+                return;
+            }
             // For a computed property, just check the initializer and exit
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including
@@ -22042,7 +22039,7 @@ namespace ts {
                 case SyntaxKind.JSDocParameterTag:
                     return checkSourceElement((node as JSDocParameterTag).typeExpression);
                 case SyntaxKind.JSDocFunctionType:
-                    checkJSDocFunctionType(node as JSDocFunctionType);
+                    checkSignatureDeclaration(node as JSDocFunctionType);
                     // falls through
                 case SyntaxKind.JSDocVariadicType:
                 case SyntaxKind.JSDocNonNullableType:

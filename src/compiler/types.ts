@@ -441,7 +441,7 @@ namespace ts {
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
         /* @internal */
         PossiblyContainsDynamicImport = 1 << 19,
-        JSDoc =          1 << 20, // If node was parsed inside jsdoc
+        JSDoc =              1 << 20, // If node was parsed inside jsdoc
 
         BlockScoped = Let | Const,
 

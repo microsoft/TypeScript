@@ -4873,6 +4873,7 @@ namespace ts {
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
             case SyntaxKind.FunctionType:
+            case SyntaxKind.JSDocFunctionType:
             case SyntaxKind.ConstructorType:
                 return true;
         }
