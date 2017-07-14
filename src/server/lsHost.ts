@@ -3,8 +3,8 @@
 /// <reference path="scriptInfo.ts" />
 
 namespace ts.server {
-    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
-        private compilationSettings: ts.CompilerOptions;
+    export class LSHost implements LanguageServiceHost, ModuleResolutionHost {
+        private compilationSettings: CompilerOptions;
         private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
@@ -17,7 +17,7 @@ namespace ts.server {
 
         constructor(private readonly host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
-            this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
+            this.getCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
 
             if (host.trace) {
                 this.trace = s => host.trace(s);
@@ -29,7 +29,7 @@ namespace ts.server {
                     : undefined;
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
                 // return result immediately only if it is .ts, .tsx or .d.ts
-                if (moduleHasNonRelativeName(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
+                if (!isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
                     // otherwise try to load typings from @types
 
                     // create different collection of failed lookup locations for second pass
@@ -99,7 +99,7 @@ namespace ts.server {
                     }
                 }
 
-                ts.Debug.assert(resolution !== undefined);
+                Debug.assert(resolution !== undefined);
 
                 resolvedModules.push(getResult(resolution));
             }
@@ -177,7 +177,7 @@ namespace ts.server {
             return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilationSettings));
         }
 
-        getScriptSnapshot(filename: string): ts.IScriptSnapshot {
+        getScriptSnapshot(filename: string): IScriptSnapshot {
             const scriptInfo = this.project.getScriptInfoLSHost(filename);
             if (scriptInfo) {
                 return scriptInfo.getSnapshot();
@@ -238,7 +238,7 @@ namespace ts.server {
             this.resolvedTypeReferenceDirectives.delete(info.path);
         }
 
-        setCompilationSettings(opt: ts.CompilerOptions) {
+        setCompilationSettings(opt: CompilerOptions) {
             if (changesAffectModuleResolution(this.compilationSettings, opt)) {
                 this.resolvedModuleNames.clear();
                 this.resolvedTypeReferenceDirectives.clear();

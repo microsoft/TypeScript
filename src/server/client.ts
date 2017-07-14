@@ -227,7 +227,7 @@ namespace ts.server {
             }));
         }
 
-        getFormattingEditsForRange(file: string, start: number, end: number, _options: ts.FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): ts.TextChange[] {
             const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
 
 

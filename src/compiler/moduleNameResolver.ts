@@ -54,10 +54,6 @@ namespace ts {
         };
     }
 
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
-    }
-
     interface ModuleResolutionState {
         host: ModuleResolutionHost;
         compilerOptions: CompilerOptions;
@@ -318,7 +314,7 @@ namespace ts {
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string) {
-            if (!moduleHasNonRelativeName(nonRelativeModuleName)) {
+            if (isExternalModuleNameRelative(nonRelativeModuleName)) {
                 return undefined;
             }
             let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
@@ -535,7 +531,7 @@ namespace ts {
     function tryLoadModuleUsingOptionalResolutionSettings(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader,
         failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
 
-        if (moduleHasNonRelativeName(moduleName)) {
+        if (!isExternalModuleNameRelative(moduleName)) {
             return tryLoadModuleUsingBaseUrl(extensions, moduleName, loader, failedLookupLocations, state);
         }
         else {
@@ -711,7 +707,7 @@ namespace ts {
                 return toSearchResult({ resolved, isExternalLibraryImport: false });
             }
 
-            if (moduleHasNonRelativeName(moduleName)) {
+            if (!isExternalModuleNameRelative(moduleName)) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, Extensions[extensions]);
                 }
@@ -1024,7 +1020,7 @@ namespace ts {
             }
             const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
 
-            if (moduleHasNonRelativeName(moduleName)) {
+            if (!isExternalModuleNameRelative(moduleName)) {
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
                     const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, traceEnabled, host);

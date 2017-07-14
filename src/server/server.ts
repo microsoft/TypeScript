@@ -138,7 +138,7 @@ namespace ts.server {
         terminal: false,
     });
 
-    class Logger implements ts.server.Logger {
+    class Logger implements server.Logger {
         private fd = -1;
         private seq = 0;
         private inGroup = false;

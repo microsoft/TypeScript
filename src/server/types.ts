@@ -31,9 +31,9 @@ declare namespace ts.server {
 
     export interface DiscoverTypings extends TypingInstallerRequest {
         readonly fileNames: string[];
-        readonly projectRootPath: ts.Path;
-        readonly compilerOptions: ts.CompilerOptions;
-        readonly typeAcquisition: ts.TypeAcquisition;
+        readonly projectRootPath: Path;
+        readonly compilerOptions: CompilerOptions;
+        readonly typeAcquisition: TypeAcquisition;
         readonly unresolvedImports: SortedReadonlyArray<string>;
         readonly cachePath?: string;
         readonly kind: "discover";
@@ -63,8 +63,8 @@ declare namespace ts.server {
     }
 
     export interface SetTypings extends ProjectResponse {
-        readonly typeAcquisition: ts.TypeAcquisition;
-        readonly compilerOptions: ts.CompilerOptions;
+        readonly typeAcquisition: TypeAcquisition;
+        readonly compilerOptions: CompilerOptions;
         readonly typings: string[];
         readonly unresolvedImports: SortedReadonlyArray<string>;
         readonly kind: ActionSet;
