@@ -1,29 +1,35 @@
 {
     "kind": "JSDocOptionalType",
     "pos": 1,
-    "end": 7,
+    "end": 9,
     "flags": "JSDoc",
     "type": {
-        "kind": "ArrayType",
+        "kind": "ParenthesizedType",
         "pos": 1,
-        "end": 6,
+        "end": 8,
         "flags": "JSDoc",
-        "elementType": {
+        "type": {
             "kind": "ArrayType",
-            "pos": 1,
-            "end": 4,
+            "pos": 2,
+            "end": 7,
             "flags": "JSDoc",
             "elementType": {
-                "kind": "TypeReference",
-                "pos": 1,
-                "end": 2,
+                "kind": "ArrayType",
+                "pos": 2,
+                "end": 5,
                 "flags": "JSDoc",
-                "typeName": {
-                    "kind": "Identifier",
-                    "pos": 1,
-                    "end": 2,
+                "elementType": {
+                    "kind": "TypeReference",
+                    "pos": 2,
+                    "end": 3,
                     "flags": "JSDoc",
-                    "text": "a"
+                    "typeName": {
+                        "kind": "Identifier",
+                        "pos": 2,
+                        "end": 3,
+                        "flags": "JSDoc",
+                        "text": "a"
+                    }
                 }
             }
         }

@@ -54,7 +54,7 @@ namespace ts {
                 parsesCorrectly("typeReference3", "{a.function}");
                 parsesCorrectly("arrayType1", "{a[]}");
                 parsesCorrectly("arrayType2", "{a[][]}");
-                parsesCorrectly("arrayType3", "{a[][]=}");
+                parsesCorrectly("arrayType3", "{(a[][])=}");
                 parsesCorrectly("keyword1", "{var}");
                 parsesCorrectly("keyword2", "{null}");
                 parsesCorrectly("keyword3", "{undefined}");
