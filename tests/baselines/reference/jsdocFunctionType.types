@@ -68,3 +68,15 @@ z.length;
 >z : { length: number; }
 >length : number
 
+/** @type {function ("a" | "b"): 1 | 2} */
+var f = function (s) { return s === "a" ? 1 : 2;  }
+>f : (arg0: "a" | "b") => 1 | 2
+>function (s) { return s === "a" ? 1 : 2;  } : (s: "a" | "b") => 1 | 2
+>s : "a" | "b"
+>s === "a" ? 1 : 2 : 1 | 2
+>s === "a" : boolean
+>s : "a" | "b"
+>"a" : "a"
+>1 : 1
+>2 : 2
+

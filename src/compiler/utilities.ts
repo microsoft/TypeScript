@@ -3302,10 +3302,6 @@ namespace ts {
         return false;
     }
 
-    export function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
-        return node.flags & NodeFlags.JSDoc && node.kind === SyntaxKind.TypeReference;
-    }
-
     /**
      * Formats an enum value as a string for debugging and debug assertions.
      */

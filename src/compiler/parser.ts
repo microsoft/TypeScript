@@ -2199,7 +2199,11 @@ namespace ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token() === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token()) || token() === SyntaxKind.AtToken || token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword;
+            return token() === SyntaxKind.DotDotDotToken ||
+                isIdentifierOrPattern() ||
+                isModifierKind(token()) ||
+                token() === SyntaxKind.AtToken || token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword ||
+                token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral;
         }
 
         function parseParameter(): ParameterDeclaration {

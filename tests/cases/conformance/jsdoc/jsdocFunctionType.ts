@@ -33,3 +33,6 @@ class C {
 var y = id2(C);
 var z = new y(12);
 z.length;
+
+/** @type {function ("a" | "b"): 1 | 2} */
+var f = function (s) { return s === "a" ? 1 : 2;  }

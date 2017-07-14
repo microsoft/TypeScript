@@ -6866,6 +6866,10 @@ namespace ts {
             }
         }
 
+        function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
+            return node.flags & NodeFlags.JSDoc && node.kind === SyntaxKind.TypeReference;
+        }
+
         function getPrimitiveTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
             if (isIdentifier(node.typeName)) {
                 switch (node.typeName.text) {
