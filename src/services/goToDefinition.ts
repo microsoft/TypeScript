@@ -191,7 +191,7 @@ namespace ts.GoToDefinition {
             return false;
         }
 
-        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddSignature(signatureDeclarations: ReadonlyArray<Declaration> | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             if (!signatureDeclarations) {
                 return false;
             }

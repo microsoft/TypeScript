@@ -298,21 +298,20 @@ namespace ts.DocumentHighlights {
         const keywords: Node[] = [];
         const modifierFlag: ModifierFlags = getFlagFromModifier(modifier);
 
-        let nodes: Node[];
+        let nodes: ReadonlyArray<Node>;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
                 // Container is either a class declaration or the declaration is a classDeclaration
                 if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = (<Node[]>(<ClassDeclaration>declaration).members).concat(declaration);
+                    nodes = [...(<ClassDeclaration>declaration).members, declaration];
                 }
                 else {
                     nodes = (<Block>container).statements;
                 }
                 break;
             case SyntaxKind.Constructor:
-                nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
-                    (<ClassDeclaration>container.parent).members);
+                nodes = [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
                 break;
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
@@ -326,11 +325,11 @@ namespace ts.DocumentHighlights {
                     });
 
                     if (constructor) {
-                        nodes = nodes.concat(constructor.parameters);
+                        nodes = [...nodes, ...constructor.parameters];
                     }
                 }
                 else if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = nodes.concat(container);
+                    nodes = [...nodes, container];
                 }
                 break;
             default:

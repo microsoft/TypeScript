@@ -67,12 +67,12 @@ namespace ts {
             }
 
             function flattenNodes(n: Node) {
-                const data: (Node | NodeArray<any>)[] = [];
+                const data: (Node | NodeArray<Node>)[] = [];
                 walk(n);
                 return data;
 
-                function walk(n: Node | Node[]): void {
-                    data.push(<any>n);
+                function walk(n: Node | NodeArray<Node>): void {
+                    data.push(n);
                     return isArray(n) ? forEach(n, walk) : forEachChild(n, walk, walk);
                 }
             }
@@ -100,9 +100,9 @@ namespace ts {
 
         {
             const text = `
-namespace M 
+namespace M
 {
-    namespace M2 
+    namespace M2
     {
         function foo() {
             // comment 1
@@ -550,7 +550,7 @@ const x = 1;`;
         }
         {
             const text = `
-const x = 1, 
+const x = 1,
     y = 2;`;
             runSingleFileTest("insertNodeInListAfter6", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
@@ -561,7 +561,7 @@ const x = 1,
         }
         {
             const text = `
-const /*x*/ x = 1, 
+const /*x*/ x = 1,
     /*y*/ y = 2;`;
             runSingleFileTest("insertNodeInListAfter8", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
