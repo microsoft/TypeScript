@@ -795,8 +795,8 @@ namespace ts {
                 Debug.assert(!(newSourceFile && newSourceFile.redirect), "Host should not return a redirect source file from `getSourceFile`");
 
                 if (oldSourceFile.redirect) {
-                    // We got `newSourceFile` by path, so it is actually for the underlying file.
-                    // This lets us know if the underlying file has changed. If it has we should break the redirect.
+                    // We got `newSourceFile` by path, so it is actually for the unredirected file.
+                    // This lets us know if the unredirected file has changed. If it has we should break the redirect.
                     if (newSourceFile !== oldSourceFile.redirect.unredirected) {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -822,7 +822,7 @@ namespace ts {
                     // they might become redirects. So we must rebuild the program.
                     const prevKind = seenPackageNames.get(packageName);
                     const newKind = oldSourceFile === newSourceFile ? SeenPackageName.Exists : SeenPackageName.Modified;
-                    if (prevKind !== undefined && newKind === SeenPackageName.Modified || prevKind === SeenPackageName.Modified) {
+                    if ((prevKind !== undefined && newKind === SeenPackageName.Modified) || prevKind === SeenPackageName.Modified) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
                     seenPackageNames.set(packageName, newKind);

@@ -120,11 +120,11 @@ namespace ts {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
             oldResolution.extension === newResolution.extension &&
             oldResolution.resolvedFileName === newResolution.resolvedFileName &&
-            (oldResolution.packageId === newResolution.packageId || oldResolution.packageId && newResolution.packageId && packageIdIsEqual(oldResolution.packageId, newResolution.packageId));
+            packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
     }
 
-    function packageIdIsEqual(a: PackageId, b: PackageId): boolean {
-        return a.name === b.name && a.version === b.version;
+    function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
+        return a === b || a && b && a.name === b.name && a.version === b.version;
     }
 
     /* @internal */

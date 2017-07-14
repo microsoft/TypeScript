@@ -811,9 +811,19 @@ namespace ts {
                 return updateProgram(program, [root], compilerOptions, updater);
             }
 
+            it("No changes -> redirect not broken", () => {
+                const program_1 = createRedirectProgram();
+
+                const program_2 = updateRedirectProgram(program_1, files => {
+                    updateProgramText(files, root, "const x = 1;");
+                });
+                assert.equal(program_1.structureIsReused, StructureIsReused.Completely);
+                assert.deepEqual(program_2.getSemanticDiagnostics(), emptyArray);
+            });
+
             it("Target changes -> redirect broken", () => {
                 const program_1 = createRedirectProgram();
-                assert.lengthOf(program_1.getSemanticDiagnostics(), 0);
+                assert.deepEqual(program_1.getSemanticDiagnostics(), emptyArray);
 
                 const program_2 = updateRedirectProgram(program_1, files => {
                     updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
@@ -842,7 +852,7 @@ namespace ts {
                     updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
                 });
                 assert.equal(program_1.structureIsReused, StructureIsReused.Not);
-                assert.lengthOf(program_2.getSemanticDiagnostics(), 0);
+                assert.deepEqual(program_2.getSemanticDiagnostics(), []);
             });
         });
     });
