@@ -3921,7 +3921,7 @@ namespace ts {
      */
     export function validateLocaleAndSetLanguage(
         locale: string,
-        sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string },
+        sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
         errors?: Diagnostic[]) {
         const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 

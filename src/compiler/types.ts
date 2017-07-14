@@ -2414,7 +2414,7 @@ namespace ts {
          */
         fileExists(path: string): boolean;
 
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
     }
 
     export interface WriteFileCallback {
@@ -3921,7 +3921,7 @@ namespace ts {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module
-        readFile(fileName: string): string;
+        readFile(fileName: string): string | undefined;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;

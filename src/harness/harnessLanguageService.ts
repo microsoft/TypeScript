@@ -215,7 +215,7 @@ namespace Harness.LanguageService {
                 depth,
                 (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
-        readFile(path: string): string {
+        readFile(path: string): string | undefined {
             const snapshot = this.getScriptSnapshot(path);
             return snapshot.getText(0, snapshot.getLength());
         }
@@ -619,7 +619,7 @@ namespace Harness.LanguageService {
             this.writeMessage(message);
         }
 
-        readFile(fileName: string): string {
+        readFile(fileName: string): string | undefined {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
                 fileName = Harness.Compiler.defaultLibFileName;
             }
