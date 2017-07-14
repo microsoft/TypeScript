@@ -789,11 +789,17 @@ namespace ts {
             const seenPackageNames = createMap<SeenPackageName>();
 
             for (const oldSourceFile of oldSourceFiles) {
-                const newSourceFile = host.getSourceFileByPath
+                let newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
-                Debug.assert(!(newSourceFile && newSourceFile.redirect), "Host should not return a redirect source file from `getSourceFile`");
 
+                if (!newSourceFile) {
+                    return oldProgram.structureIsReused = StructureIsReused.Not;
+                }
+
+                Debug.assert(!newSourceFile.redirect, "Host should not return a redirect source file from `getSourceFile`");
+
+                let fileChanged: boolean;
                 if (oldSourceFile.redirect) {
                     // We got `newSourceFile` by path, so it is actually for the unredirected file.
                     // This lets us know if the unredirected file has changed. If it has we should break the redirect.
@@ -801,16 +807,18 @@ namespace ts {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
+                    fileChanged = false;
+                    newSourceFile = oldSourceFile; // Use the redirect.
                 }
                 else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
                     // This is similar to the above case. If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
+                    fileChanged = false;
                 }
-
-                if (!newSourceFile) {
-                    return oldProgram.structureIsReused = StructureIsReused.Not;
+                else {
+                    fileChanged = newSourceFile !== oldSourceFile;
                 }
 
                 newSourceFile.path = oldSourceFile.path;
@@ -821,14 +829,14 @@ namespace ts {
                     // If there are 2 different source files for the same package name and at least one of them changes,
                     // they might become redirects. So we must rebuild the program.
                     const prevKind = seenPackageNames.get(packageName);
-                    const newKind = oldSourceFile === newSourceFile ? SeenPackageName.Exists : SeenPackageName.Modified;
+                    const newKind = fileChanged ? SeenPackageName.Modified : SeenPackageName.Exists;
                     if ((prevKind !== undefined && newKind === SeenPackageName.Modified) || prevKind === SeenPackageName.Modified) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
                     seenPackageNames.set(packageName, newKind);
                 }
 
-                if (oldSourceFile !== newSourceFile) {
+                if (fileChanged) {
                     // The `newSourceFile` object was created for the new program.
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
