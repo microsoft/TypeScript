@@ -453,7 +453,7 @@ namespace ts.FindAllReferences {
                 }
             }
             else {
-                const exportNode = getExportNode(parent);
+                const exportNode = getExportNode(parent, node);
                 if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
                     if (isImportEqualsDeclaration(exportNode) && exportNode.moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
@@ -558,10 +558,11 @@ namespace ts.FindAllReferences {
 
     // If a reference is a class expression, the exported node would be its parent.
     // If a reference is a variable declaration, the exported node would be the variable statement.
-    function getExportNode(parent: Node): Node | undefined {
+    function getExportNode(parent: Node, node: Node): Node | undefined {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
             const p = parent as ts.VariableDeclaration;
-            return p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+            return p.name !== node ? undefined :
+                p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
         else {
             return parent;
