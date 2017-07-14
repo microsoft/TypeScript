@@ -674,7 +674,10 @@ compileFile(word2mdJs,
     [word2mdTs],
     [word2mdTs],
     [],
-            /*useBuiltCompiler*/ false);
+    /*useBuiltCompiler*/ false,
+    {
+        lib: "scripthost,es5"
+    });
 
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
