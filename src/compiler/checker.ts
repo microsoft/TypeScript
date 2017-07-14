@@ -16256,15 +16256,19 @@ namespace ts {
         }
 
         function checkAssertion(node: AssertionExpression) {
-            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(node.expression)));
+            return checkAssertionWorker(node, node.type, node.expression);
+        }
 
-            checkSourceElement(node.type);
-            const targetType = getTypeFromTypeNode(node.type);
+        function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
+            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression, checkMode)));
+
+            checkSourceElement(type);
+            const targetType = getTypeFromTypeNode(type);
 
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
-                    checkTypeComparableTo(exprType, targetType, node, Diagnostics.Type_0_cannot_be_converted_to_type_1);
+                    checkTypeComparableTo(exprType, targetType, errNode, Diagnostics.Type_0_cannot_be_converted_to_type_1);
                 }
             }
             return targetType;
@@ -17735,6 +17739,20 @@ namespace ts {
             return type;
         }
 
+        function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
+            if (isInJavaScriptFile(node)) {
+                if (node.jsDoc) {
+                    const typecasts = flatten<JSDocTag>(map(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag)));
+                    if (typecasts && typecasts.length) {
+                        // We should have already issued an error if there were multiple type jsdocs
+                        const cast = typecasts[0] as JSDocTypeTag;
+                        return checkAssertionWorker(cast, cast.typeExpression.type, node.expression, checkMode);
+                    }
+                }
+            }
+            return checkExpression(node.expression, checkMode);
+        }
+
         function checkExpressionWorker(node: Expression, checkMode: CheckMode): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
@@ -17774,7 +17792,7 @@ namespace ts {
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return checkExpression((<ParenthesizedExpression>node).expression, checkMode);
+                    return checkParenthesizedExpression(<ParenthesizedExpression>node, checkMode);
                 case SyntaxKind.ClassExpression:
                     return checkClassExpression(<ClassExpression>node);
                 case SyntaxKind.FunctionExpression:

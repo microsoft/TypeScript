@@ -4342,7 +4342,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         function parseSpreadElement(): Expression {
