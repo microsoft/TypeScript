@@ -384,6 +384,10 @@ namespace ts {
         array.length = outIndex;
     }
 
+    export function clear(array: {}[]): void {
+        array.length = 0;
+    }
+
     export function map<T, U>(array: ReadonlyArray<T>, f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {

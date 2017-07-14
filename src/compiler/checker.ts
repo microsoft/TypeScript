@@ -22159,8 +22159,8 @@ namespace ts {
                 // Grammar checking
                 checkGrammarSourceFile(node);
 
-                potentialThisCollisions.length = 0;
-                potentialNewTargetCollisions.length = 0;
+                clear(potentialThisCollisions);
+                clear(potentialNewTargetCollisions);
 
                 deferredNodes = [];
                 deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
@@ -22186,12 +22186,12 @@ namespace ts {
 
                 if (potentialThisCollisions.length) {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
-                    potentialThisCollisions.length = 0;
+                    clear(potentialThisCollisions);
                 }
 
                 if (potentialNewTargetCollisions.length) {
                     forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope);
-                    potentialNewTargetCollisions.length = 0;
+                    clear(potentialNewTargetCollisions);
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;
