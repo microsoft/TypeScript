@@ -298,7 +298,6 @@ namespace ts {
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
         let globalThisType: GenericType;
-        let anyPromiseType: Type;
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
@@ -6894,7 +6893,7 @@ namespace ts {
                         return !node.typeArguments || !node.typeArguments.length ? anyArrayType : undefined;
                     case "Promise":
                     case "promise":
-                        return !node.typeArguments || !node.typeArguments.length ? anyPromiseType : undefined;
+                        return !node.typeArguments || !node.typeArguments.length ? createPromiseType(anyType) : undefined;
                 }
             }
         }
@@ -23487,7 +23486,6 @@ namespace ts {
             globalNumberType = getGlobalType("Number" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalRegExpType = getGlobalType("RegExp" as __String, /*arity*/ 0, /*reportErrors*/ true);
-            anyPromiseType = createPromiseType(anyType);
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
