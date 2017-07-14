@@ -207,46 +207,16 @@ namespace ts.server {
         referencedBy: ModuleBuilderFileInfo[] = [];
         scriptVersionForReferences: string;
 
-        static compareFileInfos(lf: ModuleBuilderFileInfo, rf: ModuleBuilderFileInfo): number {
-            const l = lf.scriptInfo.fileName;
-            const r = rf.scriptInfo.fileName;
-            return (l < r ? -1 : (l > r ? 1 : 0));
-        }
-
-        static addToReferenceList(array: ModuleBuilderFileInfo[], fileInfo: ModuleBuilderFileInfo) {
-            if (array.length === 0) {
-                array.push(fileInfo);
-                return;
-            }
-
-            const insertIndex = binarySearch(array, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
-            if (insertIndex < 0) {
-                array.splice(~insertIndex, 0, fileInfo);
-            }
-        }
-
-        static removeFromReferenceList(array: ModuleBuilderFileInfo[], fileInfo: ModuleBuilderFileInfo) {
-            if (!array || array.length === 0) {
-                return;
-            }
-
-            if (array[0] === fileInfo) {
-                array.splice(0, 1);
-                return;
-            }
-
-            const removeIndex = binarySearch(array, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
-            if (removeIndex >= 0) {
-                array.splice(removeIndex, 1);
-            }
+        static compareFileInfos(lf: ModuleBuilderFileInfo, rf: ModuleBuilderFileInfo): Comparison {
+            return compareStrings(lf.scriptInfo.fileName, rf.scriptInfo.fileName);
         }
 
         addReferencedBy(fileInfo: ModuleBuilderFileInfo): void {
-            ModuleBuilderFileInfo.addToReferenceList(this.referencedBy, fileInfo);
+            insertSorted(this.referencedBy, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
         }
 
         removeReferencedBy(fileInfo: ModuleBuilderFileInfo): void {
-            ModuleBuilderFileInfo.removeFromReferenceList(this.referencedBy, fileInfo);
+            removeSorted(this.referencedBy, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
         }
 
         removeFileReferences() {
@@ -276,10 +246,7 @@ namespace ts.server {
             }
 
             const referencedFilePaths = this.project.getReferencedFiles(fileInfo.scriptInfo.path);
-            if (referencedFilePaths.length > 0) {
-                return map<Path, ModuleBuilderFileInfo>(referencedFilePaths, f => this.getOrCreateFileInfo(f)).sort(ModuleBuilderFileInfo.compareFileInfos);
-            }
-            return [];
+            return referencedFilePaths.map(f => this.getOrCreateFileInfo(f)).sort(ModuleBuilderFileInfo.compareFileInfos);
         }
 
         protected ensureFileInfoIfInProject(_scriptInfo: ScriptInfo) {
@@ -326,22 +293,24 @@ namespace ts.server {
                 const oldReference = oldReferences[oldIndex];
                 const newReference = newReferences[newIndex];
                 const compare = ModuleBuilderFileInfo.compareFileInfos(oldReference, newReference);
-                if (compare < 0) {
-                    // New reference is greater then current reference. That means
-                    // the current reference doesn't exist anymore after parsing. So delete
-                    // references.
-                    oldReference.removeReferencedBy(fileInfo);
-                    oldIndex++;
-                }
-                else if (compare > 0) {
-                    // A new reference info. Add it.
-                    newReference.addReferencedBy(fileInfo);
-                    newIndex++;
-                }
-                else {
-                    // Equal. Go to next
-                    oldIndex++;
-                    newIndex++;
+                switch (compare) {
+                    case Comparison.LessThan:
+                        // New reference is greater then current reference. That means
+                        // the current reference doesn't exist anymore after parsing. So delete
+                        // references.
+                        oldReference.removeReferencedBy(fileInfo);
+                        oldIndex++;
+                        break;
+                    case Comparison.GreaterThan:
+                        // A new reference info. Add it.
+                        newReference.addReferencedBy(fileInfo);
+                        newIndex++;
+                        break;
+                    case Comparison.EqualTo:
+                        // Equal. Go to next
+                        oldIndex++;
+                        newIndex++;
+                        break;
                 }
             }
             // Clean old references

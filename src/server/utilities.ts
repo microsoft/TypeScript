@@ -273,4 +273,32 @@ namespace ts.server {
             }
         }
     }
+
+    export function insertSorted<T>(array: T[], insert: T, compare: Comparer<T>): void {
+        if (array.length === 0) {
+            array.push(insert);
+            return;
+        }
+
+        const insertIndex = binarySearch(array, insert, compare);
+        if (insertIndex < 0) {
+            array.splice(~insertIndex, 0, insert);
+        }
+    }
+
+    export function removeSorted<T>(array: T[], remove: T, compare: Comparer<T>): void {
+        if (!array || array.length === 0) {
+            return;
+        }
+
+        if (array[0] === remove) {
+            array.splice(0, 1);
+            return;
+        }
+
+        const removeIndex = binarySearch(array, remove, compare);
+        if (removeIndex >= 0) {
+            array.splice(removeIndex, 1);
+        }
+    }
 }
