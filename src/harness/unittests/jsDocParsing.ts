@@ -44,8 +44,8 @@ namespace ts {
                 parsesCorrectly("functionType1", "{function()}");
                 parsesCorrectly("functionType2", "{function(string, boolean)}");
                 parsesCorrectly("functionReturnType1", "{function(string, boolean)}");
-                parsesCorrectly("thisType1", "{this:a.b}");
-                parsesCorrectly("newType1", "{new:a.b}");
+                parsesCorrectly("thisType1", "{function(this:a.b)}");
+                parsesCorrectly("newType1", "{function(new:a.b)}");
                 parsesCorrectly("variadicType", "{...number}");
                 parsesCorrectly("optionalType", "{number=}");
                 parsesCorrectly("optionalNullable", "{?=}");
@@ -64,7 +64,7 @@ namespace ts {
                 parsesCorrectly("tupleType3", "{[number,string,boolean]}");
                 parsesCorrectly("tupleTypeWithTrailingComma", "{[number,]}");
                 parsesCorrectly("typeOfType", "{typeof M}");
-                parsesCorrectly("tsConstructoType", "{new () => string}");
+                parsesCorrectly("tsConstructorType", "{new () => string}");
                 parsesCorrectly("tsFunctionType", "{() => string}");
                 parsesCorrectly("typeArgumentsNotFollowingDot", "{a<>}");
                 parsesCorrectly("functionTypeWithTrailingComma", "{function(a,)}");

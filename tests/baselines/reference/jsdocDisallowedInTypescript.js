@@ -1,4 +1,4 @@
-//// [jsdocInTypescript.ts]
+//// [jsdocDisallowedInTypescript.ts]
 // grammar error from checker
 var ara: Array.<number> = [1,2,3];
 
@@ -16,13 +16,11 @@ var ques: ? = 'what';
 var g: function(number, number): number = (n,m) => n + m;
 var variadic: ...boolean = [true, false, true];
 var most: !string = 'definite';
-var weird1: new:string = {};
-var weird2: this:string = {};
 var postfixdef: number! = 101;
 var postfixopt: number? = undefined;
 
 
-//// [jsdocInTypescript.js]
+//// [jsdocDisallowedInTypescript.js]
 "use strict";
 // grammar error from checker
 var ara = [1, 2, 3];
@@ -40,7 +38,5 @@ var ques = 'what';
 var g = function (n, m) { return n + m; };
 var variadic = [true, false, true];
 var most = 'definite';
-var weird1 = {};
-var weird2 = {};
 var postfixdef = 101;
 var postfixopt = undefined;
