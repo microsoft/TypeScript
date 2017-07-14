@@ -576,7 +576,7 @@ namespace ts {
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode>;        // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics.
-        /*@internal*/ jsdocDot?: boolean;                         // Identifier occurs in JSDoc-style generic: Id.<T>
+        /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
     }
 
     // Transient identifier node (marked by id === -1)
@@ -596,7 +596,7 @@ namespace ts {
         kind: SyntaxKind.QualifiedName;
         left: EntityName;
         right: Identifier;
-        /*@internal*/ jsdocDot?: boolean; // Identifier occurs in JSDoc-style generic: Id1.Id2.<T>
+        /*@internal*/ jsdocDotPos?: number;                      // QualifiedName occurs in JSDoc-style generic: Id1.Id2.<T>
     }
 
     export type EntityName = Identifier | QualifiedName;

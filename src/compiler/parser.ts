@@ -1925,10 +1925,11 @@ namespace ts {
         // The allowReservedWords parameter controls whether reserved words are permitted after the first dot
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             let entity: EntityName = allowReservedWords ? parseIdentifierName() : parseIdentifier(diagnosticMessage);
+            let dotPos = scanner.getStartPos();
             while (parseOptional(SyntaxKind.DotToken)) {
                 if (token() === SyntaxKind.LessThanToken) {
-                    // the entity is part of a JSDoc-style generic, so record this for later in case it's an error
-                    entity.jsdocDot = true;
+                    // the entity is part of a JSDoc-style generic, so record the trailing dot for later error reporting
+                    entity.jsdocDotPos = dotPos;
                     break;
                 }
                 const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);

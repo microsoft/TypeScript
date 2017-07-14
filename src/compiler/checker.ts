@@ -18454,8 +18454,9 @@ namespace ts {
 
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
-            if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDot && !isInJavaScriptFile(node) && !findAncestor(node, n => n.kind === SyntaxKind.JSDocTypeExpression)) {
-                grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJavaScriptFile(node) && !isInJSDoc(node)) {
+                grammarErrorAtPos(getSourceFileOfNode(node), node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+
             }
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
@@ -22046,7 +22047,7 @@ namespace ts {
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocAllType:
                 case SyntaxKind.JSDocUnknownType:
-                    if (!isInJavaScriptFile(node) && !findAncestor(node, n => n.kind === SyntaxKind.JSDocTypeExpression)) {
+                    if (!isInJavaScriptFile(node) && !isInJSDoc(node)) {
                         grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
                     }
                     return;

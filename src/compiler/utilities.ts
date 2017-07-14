@@ -1292,6 +1292,10 @@ namespace ts {
         return node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
+    export function isInJSDoc(node: Node): boolean {
+        return node && !!(node.flags & NodeFlags.JSDoc);
+    }
+
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
      * exactly one argument (of the form 'require("name")').
@@ -3299,7 +3303,7 @@ namespace ts {
     }
 
     export function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
-        return node.kind === SyntaxKind.TypeReference && !!findAncestor(node, n => n.kind === SyntaxKind.JSDocTypeExpression);
+        return node.flags & NodeFlags.JSDoc && node.kind === SyntaxKind.TypeReference;
     }
 
     /**
