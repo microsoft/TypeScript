@@ -28,7 +28,7 @@ namespace ts.projectSystem {
         })
     };
 
-    export interface PostExecAction {
+    interface PostExecAction {
         readonly success: boolean;
         readonly callback: TI.RequestCompletedAction;
     }
@@ -45,7 +45,7 @@ namespace ts.projectSystem {
         getLogFileName: (): string => undefined
     };
 
-    export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
+    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
         content: libFileContent
@@ -118,7 +118,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function getExecutingFilePathFromLibFile(): string {
+    function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
@@ -130,7 +130,7 @@ namespace ts.projectSystem {
         return map(fileNames, toExternalFile);
     }
 
-    export class TestServerEventManager {
+    class TestServerEventManager {
         public events: server.ProjectServiceEvent[] = [];
 
         handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
@@ -143,7 +143,7 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface TestServerHostCreationParameters {
+    interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
@@ -205,7 +205,7 @@ namespace ts.projectSystem {
         return new TestSession(opts);
     }
 
-    export interface CreateProjectServiceParameters {
+    interface CreateProjectServiceParameters {
         cancellationToken?: HostCancellationToken;
         logger?: server.Logger;
         useSingleInferredProject?: boolean;
@@ -253,15 +253,15 @@ namespace ts.projectSystem {
         entries: FSEntry[];
     }
 
-    export function isFolder(s: FSEntry): s is Folder {
+    function isFolder(s: FSEntry): s is Folder {
         return isArray((<Folder>s).entries);
     }
 
-    export function isFile(s: FSEntry): s is File {
+    function isFile(s: FSEntry): s is File {
         return typeof (<File>s).content === "string";
     }
 
-    export function addFolder(fullPath: string, toPath: (s: string) => Path, fs: Map<FSEntry>): Folder {
+    function addFolder(fullPath: string, toPath: (s: string) => Path, fs: Map<FSEntry>): Folder {
         const path = toPath(fullPath);
         if (fs.has(path)) {
             Debug.assert(isFolder(fs.get(path)));
@@ -279,29 +279,29 @@ namespace ts.projectSystem {
         return entry;
     }
 
-    export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
-    export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
+    function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
         assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${JSON.stringify(expectedFileNames)}, got ${actualFileNames}`);
         for (const f of expectedFileNames) {
             assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${JSON.stringify(actualFileNames)}`);
         }
     }
 
-    export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
+    function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.configuredProjects.length, expected, `expected ${expected} configured project(s)`);
     }
 
-    export function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
+    function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.externalProjects.length, expected, `expected ${expected} external project(s)`);
     }
 
-    export function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
+    function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.inferredProjects.length, expected, `expected ${expected} inferred project(s)`);
     }
 
@@ -315,7 +315,7 @@ namespace ts.projectSystem {
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[]) {
+    function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[]) {
         checkMapKeys("watchedDirectories", host.watchedDirectories, expectedDirectories);
     }
 
@@ -323,11 +323,11 @@ namespace ts.projectSystem {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    export function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
+    function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
-    export class Callbacks {
+    class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
 
@@ -363,7 +363,7 @@ namespace ts.projectSystem {
         }
     }
 
-    export type TimeOutCallback = () => any;
+    type TimeOutCallback = () => any;
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
