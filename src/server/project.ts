@@ -117,7 +117,7 @@ namespace ts.server {
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
         private program: Program;
         private externalFiles: SortedReadonlyArray<string>;
-        private missingFilesMap: Map<FileWatcher> = createMap<FileWatcher>();
+        private missingFilesMap: Map<FileWatcher>;
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
@@ -327,7 +327,9 @@ namespace ts.server {
             this.lsHost = undefined;
 
             // Clean up file watchers waiting for missing files
-            this.missingFilesMap.forEach(fileWatcher => fileWatcher.close());
+            cleanExistingMap(this.missingFilesMap, (missingFilePath, fileWatcher) => {
+                this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.ProjectClose);
+            });
             this.missingFilesMap = undefined;
 
             // signal language service to release source files acquired from document registry
@@ -639,38 +641,38 @@ namespace ts.server {
                 }
 
                 const missingFilePaths = this.program.getMissingFilePaths();
-                const missingFilePathsSet = arrayToSet(missingFilePaths);
+                const newMissingFilePathMap = arrayToSet(missingFilePaths);
+                // Update the missing file paths watcher
+                this.missingFilesMap = mutateExistingMapWithNewSet(
+                    this.missingFilesMap, newMissingFilePathMap,
+                    // Watch the missing files
+                    missingFilePath => {
+                        const fileWatcher = this.projectService.addFileWatcher(
+                            WatchType.MissingFilePath, this, missingFilePath,
+                            (filename: string, eventKind: FileWatcherEventKind) => {
+                                if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
+                                    this.missingFilesMap.delete(missingFilePath);
+                                    this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
 
-                // Files that are no longer missing (e.g. because they are no longer required)
-                // should no longer be watched.
-                this.missingFilesMap.forEach((fileWatcher, missingFilePath) => {
-                    if (!missingFilePathsSet.has(missingFilePath)) {
-                        this.missingFilesMap.delete(missingFilePath);
-                        fileWatcher.close();
-                    }
-                });
+                                    if (this.projectKind === ProjectKind.Configured) {
+                                        const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
+                                        (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(absoluteNormalizedPath));
+                                    }
 
-                // Missing files that are not yet watched should be added to the map.
-                for (const missingFilePath of missingFilePaths) {
-                    if (!this.missingFilesMap.has(missingFilePath)) {
-                        const fileWatcher = this.projectService.host.watchFile(missingFilePath, (filename: string, eventKind: FileWatcherEventKind) => {
-                            if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
-                                fileWatcher.close();
-                                this.missingFilesMap.delete(missingFilePath);
-
-                                if (this.projectKind === ProjectKind.Configured) {
-                                    const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
-                                    (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(absoluteNormalizedPath));
+                                    // When a missing file is created, we should update the graph.
+                                    this.markAsDirty();
+                                    this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
                                 }
-
-                                // When a missing file is created, we should update the graph.
-                                this.markAsDirty();
-                                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
                             }
-                        });
-                        this.missingFilesMap.set(missingFilePath, fileWatcher);
+                        );
+                        return fileWatcher;
+                    },
+                    // Files that are no longer missing (e.g. because they are no longer required)
+                    // should no longer be watched.
+                    (missingFilePath, fileWatcher) => {
+                        this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.NotNeeded);
                     }
-                }
+                );
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
@@ -694,7 +696,7 @@ namespace ts.server {
         }
 
         isWatchedMissingFile(path: Path) {
-            return this.missingFilesMap.has(path);
+            return this.missingFilesMap && this.missingFilesMap.has(path);
         }
 
         getScriptInfoLSHost(fileName: string) {
@@ -976,9 +978,10 @@ namespace ts.server {
      */
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
-        private configFileWatcher: FileWatcher;
+        /* @internal */
+        configFileWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<WildCardDirectoryWatchers>;
-        private typeRootsWatchers: FileWatcher[];
+        private typeRootsWatchers: Map<FileWatcher>;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
@@ -1023,7 +1026,7 @@ namespace ts.server {
         }
 
         getConfigFilePath() {
-            return this.getProjectName();
+            return asNormalizedPath(this.getProjectName());
         }
 
         enablePlugins() {
@@ -1131,94 +1134,83 @@ namespace ts.server {
             }));
         }
 
-        watchConfigFile(callback: (project: ConfiguredProject, eventKind: FileWatcherEventKind) => void) {
-            this.configFileWatcher = this.projectService.host.watchFile(this.getConfigFilePath(), (_fileName, eventKind) => callback(this, eventKind));
-        }
-
-        watchTypeRoots(callback: (project: ConfiguredProject, path: NormalizedPath) => void) {
-            const roots = this.getEffectiveTypeRoots();
-            const watchers: FileWatcher[] = [];
-            for (const root of roots) {
-                this.projectService.logger.info(`Add type root watcher for: ${root}`);
-                watchers.push(this.projectService.host.watchDirectory(root, path => callback(this, toNormalizedPath(getNormalizedAbsolutePath(path, root))), /*recursive*/ false));
-            }
-            this.typeRootsWatchers = watchers;
-        }
-
-        private addWatcherForDirectory(flag: WatchDirectoryFlags, directory: string, replaceExisting: boolean) {
-            if (replaceExisting || !this.directoriesWatchedForWildcards.has(directory)) {
-                const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                this.projectService.logger.info(`Add ${recursive ? "recursive " : ""} watcher for: ${directory}`);
-                this.directoriesWatchedForWildcards.set(directory, {
-                    watcher: this.projectService.host.watchDirectory(
-                        directory,
-                        path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, toNormalizedPath(getNormalizedAbsolutePath(path, directory))),
-                        recursive
-                    ),
-                    recursive
-                });
-            }
-        }
-
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
-            if (wildcardDirectories) {
-                if (this.directoriesWatchedForWildcards) {
-                    this.directoriesWatchedForWildcards.forEach(({ watcher, recursive }, directory) => {
-                        const currentFlag = wildcardDirectories.get(directory);
-                        // Remove already watching wild card if it isnt in updated map
-                        if (currentFlag === undefined) {
-                            this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
-                            watcher.close();
-                            this.directoriesWatchedForWildcards.delete(directory);
-                        }
-                        // Or if the recursive doesnt match (add the updated one here)
-                        else {
-                            const currentRecursive = (currentFlag & WatchDirectoryFlags.Recursive) !== 0;
-                            if (currentRecursive !== recursive) {
-                                this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
-                                watcher.close();
-                                this.addWatcherForDirectory(currentFlag, directory, /*replaceExisting*/ true);
-                            }
-                        }
-                    });
-                }
-                else {
-                    this.directoriesWatchedForWildcards = createMap<WildCardDirectoryWatchers>();
-                }
-                wildcardDirectories.forEach((flag, directory) =>
-                    this.addWatcherForDirectory(flag, directory, /*replaceExisting*/ false));
-            }
-            else {
-                this.stopWatchingWildCards();
-            }
+            this.directoriesWatchedForWildcards = mutateExistingMap(
+                this.directoriesWatchedForWildcards, wildcardDirectories,
+                // Watcher is same if the recursive flags match
+                ({ recursive: existingRecursive }, flag) => {
+                    // If the recursive dont match, it needs update
+                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                    return existingRecursive !== recursive;
+                },
+                // Create new watch
+                (directory, flag) => {
+                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                    return {
+                        watcher: this.projectService.addDirectoryWatcher(
+                            WatchType.WildCardDirectories, this, directory,
+                            path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
+                            recursive
+                        ),
+                        recursive
+                    };
+                },
+                // Close existing watch thats not needed any more
+                (directory, { watcher, recursive }) => this.projectService.closeDirectoryWatcher(
+                    WatchType.WildCardDirectories, this, directory, watcher, recursive, WatcherCloseReason.NotNeeded
+                ),
+                // Close existing watch that doesnt match in recursive flag
+                (directory, { watcher, recursive }) => this.projectService.closeDirectoryWatcher(
+                    WatchType.WildCardDirectories, this, directory, watcher, recursive, WatcherCloseReason.RecursiveChanged
+                )
+            );
         }
 
-        stopWatchingWildCards() {
-            if (this.directoriesWatchedForWildcards) {
-                this.directoriesWatchedForWildcards.forEach(({ watcher, recursive }, directory) => {
-                    this.projectService.logger.info(`Removing ${recursive ? "recursive " : ""} watcher for: ${directory}`);
-                    watcher.close();
-                });
-                this.directoriesWatchedForWildcards = undefined;
-            }
+        stopWatchingWildCards(reason: WatcherCloseReason) {
+            cleanExistingMap(
+                this.directoriesWatchedForWildcards,
+                (directory, { watcher, recursive }) =>
+                    this.projectService.closeDirectoryWatcher(WatchType.WildCardDirectories, this,
+                        directory, watcher, recursive, reason)
+            );
+            this.directoriesWatchedForWildcards = undefined;
+        }
+
+        watchTypeRoots() {
+            const newTypeRoots = arrayToSet(this.getEffectiveTypeRoots(), dir => this.projectService.toCanonicalFileName(dir));
+            this.typeRootsWatchers = mutateExistingMapWithNewSet(
+                this.typeRootsWatchers, newTypeRoots,
+                // Create new watch
+                root => this.projectService.addDirectoryWatcher(WatchType.TypeRoot, this, root,
+                    path => this.projectService.onTypeRootFileChanged(this, path), /*recursive*/ false
+                ),
+                // Close existing watch thats not needed any more
+                (directory, watcher) => this.projectService.closeDirectoryWatcher(
+                    WatchType.TypeRoot, this, directory, watcher, /*recursive*/ false, WatcherCloseReason.NotNeeded
+                )
+            );
+        }
+
+        stopWatchingTypeRoots(reason: WatcherCloseReason) {
+            cleanExistingMap(
+                this.typeRootsWatchers,
+                (directory, watcher) =>
+                    this.projectService.closeDirectoryWatcher(WatchType.TypeRoot, this,
+                        directory, watcher, /*recursive*/ false, reason)
+            );
+            this.typeRootsWatchers = undefined;
         }
 
         close() {
             super.close();
 
             if (this.configFileWatcher) {
-                this.configFileWatcher.close();
+                this.projectService.closeFileWatcher(WatchType.ConfigFilePath, this, this.getConfigFilePath(), this.configFileWatcher, WatcherCloseReason.ProjectClose);
                 this.configFileWatcher = undefined;
             }
 
-            if (this.typeRootsWatchers) {
-                for (const watcher of this.typeRootsWatchers) {
-                    watcher.close();
-                }
-                this.typeRootsWatchers = undefined;
-            }
-
-            this.stopWatchingWildCards();
+            this.stopWatchingTypeRoots(WatcherCloseReason.ProjectClose);
+            this.stopWatchingWildCards(WatcherCloseReason.ProjectClose);
         }
 
         addOpenRef() {

@@ -149,7 +149,8 @@ namespace ts.server {
         readonly containingProjects: Project[] = [];
         private formatCodeSettings: FormatCodeSettings;
 
-        private fileWatcher: FileWatcher;
+        /* @internal */
+        fileWatcher: FileWatcher;
         private textStorage: TextStorage;
 
         private isOpen: boolean;
@@ -288,18 +289,6 @@ namespace ts.server {
                     this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
                 }
                 mergeMapLikes(this.formatCodeSettings, formatSettings);
-            }
-        }
-
-        setWatcher(watcher: FileWatcher): void {
-            this.stopWatcher();
-            this.fileWatcher = watcher;
-        }
-
-        stopWatcher() {
-            if (this.fileWatcher) {
-                this.fileWatcher.close();
-                this.fileWatcher = undefined;
             }
         }
 

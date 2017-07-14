@@ -226,6 +226,79 @@ namespace ts.server {
         }
     }
 
+    export function cleanExistingMap<T>(
+        existingMap: Map<T>,
+        onDeleteExistingValue: (key: string, existingValue: T) => void) {
+        if (existingMap) {
+            // Remove all
+            existingMap.forEach((existingValue, key) => {
+                existingMap.delete(key);
+                onDeleteExistingValue(key, existingValue);
+            });
+        }
+    }
+
+    export function mutateExistingMapWithNewSet<T>(
+        existingMap: Map<T>, newMap: Map<true>,
+        createNewValue: (key: string) => T,
+        onDeleteExistingValue: (key: string, existingValue: T) => void
+    ): Map<T> {
+        return mutateExistingMap(
+            existingMap, newMap,
+            // Same value if the value is set in the map
+            /*isSameValue*/(_existingValue, _valueInNewMap) => true,
+            /*createNewValue*/(key, _valueInNewMap) => createNewValue(key),
+            onDeleteExistingValue,
+            // Should never be called since we say yes to same values all the time
+            /*OnDeleteExistingMismatchValue*/(_key, _existingValue) => notImplemented()
+        );
+    }
+
+    export function mutateExistingMap<T, U>(
+        existingMap: Map<T>, newMap: Map<U>,
+        isSameValue: (existingValue: T, valueInNewMap: U) => boolean,
+        createNewValue: (key: string, valueInNewMap: U) => T,
+        onDeleteExistingValue: (key: string, existingValue: T) => void,
+        OnDeleteExistingMismatchValue: (key: string, existingValue: T) => void
+    ): Map<T> {
+        // If there are new values update them
+        if (newMap) {
+            if (existingMap) {
+                // Needs update
+                existingMap.forEach((existingValue, key) => {
+                    const valueInNewMap = newMap.get(key);
+                    // Existing value - remove it
+                    if (valueInNewMap === undefined) {
+                        existingMap.delete(key);
+                        onDeleteExistingValue(key, existingValue);
+                    }
+                    // different value - remove it
+                    else if (!isSameValue(existingValue, valueInNewMap)) {
+                        existingMap.delete(key);
+                        OnDeleteExistingMismatchValue(key, existingValue);
+                    }
+                });
+            }
+            else {
+                // Create new
+                existingMap = createMap<T>();
+            }
+
+            // Add new values that are not already present
+            newMap.forEach((valueInNewMap, key) => {
+                if (!existingMap.has(key)) {
+                    // New values
+                    existingMap.set(key, createNewValue(key, valueInNewMap));
+                }
+            });
+
+            return existingMap;
+        }
+
+        cleanExistingMap(existingMap, onDeleteExistingValue);
+        return undefined;
+    }
+
     export class ThrottledOperations {
         private pendingTimeouts: Map<any> = createMap<any>();
         constructor(private readonly host: ServerHost) {
