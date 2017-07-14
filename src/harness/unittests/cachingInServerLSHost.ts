@@ -75,7 +75,7 @@ namespace ts {
         const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */ true, /*containingProject*/ undefined);
 
         const project = projectService.createInferredProjectWithRootFileIfNecessary(rootScriptInfo);
-        project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
+        project.setCompilerOptions({ module: ts.ModuleKind.AMD, noLib: true } );
         return {
             project,
             rootScriptInfo
@@ -158,7 +158,7 @@ namespace ts {
                 // setting compiler options discards module resolution cache
                 fileExistsCalled = false;
 
-                const compilerOptions = ts.clone(project.getCompilerOptions());
+                const compilerOptions = ts.cloneCompilerOptions(project.getCompilerOptions());
                 compilerOptions.target = ts.ScriptTarget.ES5;
                 project.setCompilerOptions(compilerOptions);
 

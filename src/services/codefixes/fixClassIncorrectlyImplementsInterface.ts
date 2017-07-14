@@ -58,11 +58,7 @@ namespace ts.codefix {
         }
 
         function pushAction(result: CodeAction[], newNodes: Node[], description: string): void {
-            const newAction: CodeAction = {
-                description: description,
-                changes: newNodesToChanges(newNodes, openBrace, context)
-            };
-            result.push(newAction);
+            result.push({ description, changes: newNodesToChanges(newNodes, openBrace, context) });
         }
     }
 }

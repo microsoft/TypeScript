@@ -22,4 +22,18 @@
 
 ////class bar10{ constructor(...a/*constructorParamter6*/
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+for (let i = 1; i <= 4; i++) {
+    goTo.marker("parameterName" + i.toString());
+    verify.completionListIsEmpty();
+}
+
+for (let i = 1; i <= 4; i++) {
+    goTo.marker("constructorParamter" + i.toString());
+    verify.completionListContainsConstructorParameterKeywords();
+    verify.completionListCount(verify.allowedConstructorParameterKeywords.length);
+}
+
+for (let i = 5; i <= 6; i++) {
+    goTo.marker("constructorParamter" + i.toString());
+    verify.completionListIsEmpty();
+}
