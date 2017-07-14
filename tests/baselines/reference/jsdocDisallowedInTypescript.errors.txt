@@ -1,6 +1,6 @@
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(2,10): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(2,15): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,15): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,27): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(4,32): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(7,20): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(10,18): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(11,12): error TS2554: Expected 1 arguments, but got 2.
@@ -17,13 +17,13 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,17): error TS802
 ==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (14 errors) ====
     // grammar error from checker
     var ara: Array.<number> = [1,2,3];
-             ~~~~~~~~~~~~~~
+                  ~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
     
     function f(x: ?number, y: Array.<number>) {
                   ~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
-                              ~~~~~~~~~~~~~~
+                                   ~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
         return x ? x + y[1] : y[0];
     }

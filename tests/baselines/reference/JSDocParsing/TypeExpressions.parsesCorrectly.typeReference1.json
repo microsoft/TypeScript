@@ -9,7 +9,7 @@
         "end": 2,
         "flags": "JSDoc",
         "text": "a",
-        "jsdocDot": true
+        "jsdocDotPos": 2
     },
     "typeArguments": {
         "0": {
