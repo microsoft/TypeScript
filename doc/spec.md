@@ -84,10 +84,13 @@ TypeScript is a trademark of Microsoft Corporation.
     * [3.11.2 Type and Member Identity](#3.11.2)
     * [3.11.3 Subtypes and Supertypes](#3.11.3)
     * [3.11.4 Assignment Compatibility](#3.11.4)
-    * [3.11.5 Excess Properties](#3.11.5)
-    * [3.11.6 Contextual Signature Instantiation](#3.11.6)
-    * [3.11.7 Type Inference](#3.11.7)
-    * [3.11.8 Recursive Types](#3.11.8)
+    * [3.11.5 Comparability](#3.11.5)
+    * [3.11.6 Equality Comparison](#3.11.6)
+    * [3.11.7 Weak Types](#3.11.7)
+    * [3.11.8 Excess Properties](#3.11.8)
+    * [3.11.9 Contextual Signature Instantiation](#3.11.9)
+    * [3.11.10 Type Inference](#3.11.10)
+    * [3.11.11 Recursive Types](#3.11.11)
   * [3.12 Widened Types](#3.12)
 * [4 Expressions](#4)
   * [4.1 Values and References](#4.1)
@@ -2262,7 +2265,7 @@ the variables 'a' and 'b' are of identical types because the two type references
 
 ### <a name="3.11.3"/>3.11.3 Subtypes and Supertypes
 
-*S* is a ***subtype*** of a type *T*, and *T* is a ***supertype*** of *S*, if *S* has no excess properties with respect to *T* ([3.11.5](#3.11.5)) and one of the following is true:
+*S* is a ***subtype*** of a type *T*, and *T* is a ***supertype*** of *S*, if *S* has no excess properties with respect to *T* ([3.11.8](#3.11.8)) and one of the following is true:
 
 * *S* and *T* are identical types.
 * *T* is the Any type.
@@ -2297,9 +2300,13 @@ Also note that type parameters are not considered object types. Thus, the only s
 
 ### <a name="3.11.4"/>3.11.4 Assignment Compatibility
 
+*TODO: Document weak type checks.
+
+TODO: Document signature instantiation*
+
 Types are required to be assignment compatible in certain circumstances, such as expression and variable types in assignment statements and argument and parameter types in function calls.
 
-*S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if *S* has no excess properties with respect to *T* ([3.11.5](#3.11.5)) and one of the following is true:
+*S* is ***assignable to*** a type *T*, and *T* is ***assignable from*** *S*, if *S* has no excess properties with respect to *T* ([3.11.8](#3.11.8)) and one of the following is true:
 
 * *S* and *T* are identical types.
 * *S* or *T* is the Any type.
@@ -2348,7 +2355,62 @@ foo({ id: 1234, name: false });    // Error, name of wrong type
 foo({ name: "hello" });            // Error, id required but missing
 ```
 
-### <a name="3.11.5"/>3.11.5 Excess Properties
+### <a name="3.11.5"/>3.11.5 Comparability
+
+*TODO: Document the base primitive type.
+
+*Types are required to be *comparable* in certain circumstances, such as part of when checking whether two values of given types might be equal at runtime using operators like '===', or when using a type assertion.
+
+*S* is ***comparable to*** a type *T*, and *T* is ***comparable from*** *S*, if one of the following is true:
+
+* *S* and *T* are identical types.
+* *S* or *T* is the Any type.
+* *S* or *T* is an enum type and the other is the primitive type Number.
+* *S* is a literal type and *T* is the base primitive type of S.
+* *S* is a union type and some constituent type of *S* is comparable to *T*.
+* *S* is an intersection type and at least one constituent type of *S* is comparable to *T*.
+* *T* is a union type and *S* is comparable to at least one constituent type of *T*.
+* *T* is an intersection type and *S* is comparable to each constituent type of *T*.
+* *S* is a type parameter and the constraint of *S* is comparable to *T*.
+* *S* is an object type, an intersection type, an enum type, or the Number, Boolean, or String primitive type, *T* is an object type, and for each member *M* in *T*, one of the following is true:
+  * *M* is a property and *S* has an apparent property *N* where
+    * *M* and *N* have the same name,
+    * the type of *N* is comparable to that of *M*,
+    * *M* and *N* are both public, *M* and *N* are both private and originate in the same declaration, *M* and *N* are both protected and originate in the same declaration, or *M* is protected and *N* is declared in a class derived from the class in which *M* is declared.
+  * *M* is an optional property and *S* has no apparent property of the same name as *M*.
+  * *M* is a non-specialized call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
+    * the signatures are of the same kind (call or construct),
+    * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
+    * for parameter positions that are present in both signatures, each parameter type in *N* is comparable to or from the corresponding parameter type in *M*, and
+    * the result type of *M* is Void, or the result type of *N* is comparable to that of *M*.
+  * *M* is a string index signature of type *U*, and *U* is the Any type or *S* has an apparent string index signature of a type that is comparable to *U*.
+  * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is comparable to *U*.
+
+When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+
+Note that specialized call and construct signatures (section [3.9.2.4](#3.9.2.4)) are not significant when determining assignment compatibility.
+
+The comparability and assignment compatibility rules differ only in that
+
+* a union type is comparable to a target type if any of its constituents, rather than all of its constituents, are comparable to that target type,
+* whether a type is considered weak ([3.11.7](#3.11.7)) has no bearing on whether two types are comparable,
+* whether an object type has excess properties ([3.11.8](#3.11.8)) has no bearing on whether two types are comparable,
+* an object type with some optional property is comparable to an object type containing a property of the same name if it has a compatible type, regardless of whether that property is optional, and
+* when relating any two signatures, each signature is always instantiated using type Any for all type arguments.
+
+While the comparable relation is often applied bidirectionally on a pair of types, it is not a symmetric relationship.
+
+*TODO: Give an example of the comparable relation.*
+
+### <a name="3.11.6"/>3.11.6 Equality Comparison
+
+*TODO: Document cases where '===' etc. permit targets of Null and Undefined.*
+
+### <a name="3.11.7"/>3.11.7 Weak Types
+
+*TODO*
+
+### <a name="3.11.8"/>3.11.8 Excess Properties
 
 The subtype and assignment compatibility relationships require that source types have no excess properties with respect to their target types. The purpose of this check is to detect excess or misspelled properties in object literals.
 
@@ -2404,14 +2466,14 @@ var address: InputElement = {
 };
 ```
 
-### <a name="3.11.6"/>3.11.6 Contextual Signature Instantiation
+### <a name="3.11.9"/>3.11.9 Contextual Signature Instantiation
 
 During type argument inference in a function call (section [4.15.2](#4.15.2)) it is in certain circumstances necessary to instantiate a generic call signature of an argument expression in the context of a non-generic call signature of a parameter such that further inferences can be made. A generic call signature *A* is ***instantiated in the context of*** non-generic call signature *B* as follows:
 
-* Using the process described in [3.11.7](#3.11.7), inferences for *A*'s type parameters are made from each parameter type in *B* to the corresponding parameter type in *A* for those parameter positions that are present in both signatures, where rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+* Using the process described in [3.11.10](#3.11.10), inferences for *A*'s type parameters are made from each parameter type in *B* to the corresponding parameter type in *A* for those parameter positions that are present in both signatures, where rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 * The inferred type argument for each type parameter is the union type of the set of inferences made for that type parameter. However, if the union type does not satisfy the constraint of the type parameter, the inferred type argument is instead the constraint.
 
-### <a name="3.11.7"/>3.11.7 Type Inference
+### <a name="3.11.10"/>3.11.10 Type Inference
 
 In certain contexts, inferences for a given set of type parameters are made *from* a type *S*, in which those type parameters do not occur, *to* another type *T*, in which those type parameters do occur. Inferences consist of a set of candidate type arguments collected for each of the type parameters. The inference process recursively relates *S* and *T* to gather as many inferences as possible:
 
@@ -2434,7 +2496,7 @@ When comparing call or construct signatures, signatures in *S* correspond to sig
 
 *TODO: Update to reflect [improved union and intersection type inference](https://github.com/Microsoft/TypeScript/pull/5738)*.
 
-### <a name="3.11.8"/>3.11.8 Recursive Types
+### <a name="3.11.11"/>3.11.11 Recursive Types
 
 Classes and interfaces can reference themselves in their internal structure, in effect creating recursive types with infinite nesting. For example, the type
 
@@ -2469,6 +2531,8 @@ interface List<T> {
 'List&lt;T>' has a member 'owner' of type 'List&lt;List&lt;T>>', which has a member 'owner' of type 'List&lt;List&lt;List&lt;T>>>', which has a member 'owner' of type 'List&lt;List&lt;List&lt;List&lt;T>>>>' and so on, ad infinitum. Since type relationships are determined structurally, possibly exploring the constituent types to their full depth, in order to determine type relationships involving infinitely expanding generic types it may be necessary for the compiler to terminate the recursion at some point with the assumption that no further exploration will change the outcome.
 
 ## <a name="3.12"/>3.12 Widened Types
+
+*TODO: Update for literal type widening.*
 
 In several situations TypeScript infers types from context, alleviating the need for the programmer to explicitly specify types that appear obvious. For example
 
@@ -2534,6 +2598,8 @@ When an expression is an *IdentifierReference*, the expression refers to the mos
 An identifier expression that references a variable or parameter is classified as a reference. An identifier expression that references any other kind of entity is classified as a value (and therefore cannot be the target of an assignment).
 
 ## <a name="4.4"/>4.4 Literals
+
+*TODO: Update to account for literal types and widening.*
 
 Literals are typed as follows:
 
@@ -2968,13 +3034,13 @@ Type argument inference produces a set of candidate types for each type paramete
 In order to compute candidate types, the argument list is processed as follows:
 
 * Initially all inferred type arguments are considered ***unfixed*** with an empty set of candidate types.
-* Proceeding from left to right, each argument expression *e* is ***inferentially typed*** by its corresponding parameter type *P*, possibly causing some inferred type arguments to become ***fixed***, and candidate type inferences (section [3.11.7](#3.11.7)) are made for unfixed inferred type arguments from the type computed for *e* to *P*.
+* Proceeding from left to right, each argument expression *e* is ***inferentially typed*** by its corresponding parameter type *P*, possibly causing some inferred type arguments to become ***fixed***, and candidate type inferences (section [3.11.10](#3.11.10)) are made for unfixed inferred type arguments from the type computed for *e* to *P*.
 
 The process of inferentially typing an expression *e* by a type *T* is the same as that of contextually typing *e* by *T*, with the following exceptions:
 
 * Where expressions contained within *e* would be contextually typed, they are instead inferentially typed.
 * When a function expression is inferentially typed (section [4.10](#4.10)) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, the corresponding inferred type arguments to become ***fixed*** and no further candidate inferences are made for them.
-* If *e* is an expression of a function type that contains exactly one generic call signature and no other members, and *T* is a function type with exactly one non-generic call signature and no other members, then any inferences made for type parameters referenced by the parameters of *T*'s call signature are ***fixed***, and *e*'s type is changed to a function type with *e*'s call signature instantiated in the context of *T*'s call signature (section [3.11.6](#3.11.6)).
+* If *e* is an expression of a function type that contains exactly one generic call signature and no other members, and *T* is a function type with exactly one non-generic call signature and no other members, then any inferences made for type parameters referenced by the parameters of *T*'s call signature are ***fixed***, and *e*'s type is changed to a function type with *e*'s call signature instantiated in the context of *T*'s call signature (section [3.11.9](#3.11.9)).
 
 An example:
 
