@@ -496,8 +496,7 @@ namespace ts.server {
 
         // add a root file to project
         addMissingFileRoot(fileName: NormalizedPath) {
-            const path = toPath(fileName, this.projectService.host.getCurrentDirectory(),
-                this.projectService.toCanonicalFileName);
+            const path = this.projectService.toPath(fileName);
             this.rootFilesMap.set(path, fileName);
             this.markAsDirty();
         }
@@ -842,7 +841,7 @@ namespace ts.server {
             // Handle triple slash references
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = toPath(referencedFile.fileName, currentDirectory, this.projectService.toCanonicalFileName);
+                    const referencedPath = this.projectService.toPath(referencedFile.fileName, currentDirectory);
                     referencedFiles.set(referencedPath, true);
                 }
             }
@@ -855,7 +854,7 @@ namespace ts.server {
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = toPath(fileName, currentDirectory, this.projectService.toCanonicalFileName);
+                    const typeFilePath = this.projectService.toPath(fileName, currentDirectory);
                     referencedFiles.set(typeFilePath, true);
                 });
             }
@@ -941,6 +940,12 @@ namespace ts.server {
                     this.toggleJsInferredProject(/*isJsInferredProject*/ false);
                 }
             }
+        }
+
+        isProjectWithSingleRoot() {
+            // - when useSingleInferredProject is not set, we can guarantee that this will be the only root
+            // - other wise it has single root if it has single root script info
+            return !this.projectService.useSingleInferredProject || this.getRootScriptInfos().length === 1;
         }
 
         getProjectRootPath() {
@@ -1143,7 +1148,7 @@ namespace ts.server {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     return existingRecursive !== recursive;
                 },
-                // Create new watch
+                // Create new watch and recursive info
                 (directory, flag) => {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     return {

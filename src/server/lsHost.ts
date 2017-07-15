@@ -27,8 +27,12 @@ namespace ts.server {
             this.currentDirectory = this.host.getCurrentDirectory();
         }
 
+        private toPath(fileName: string) {
+            return toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+        }
+
         private getFileSystemEntries(rootDir: string) {
-            const path = toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
+            const path = this.toPath(rootDir);
             const cachedResult = this.cachedReadDirectoryResult.get(path);
             if (cachedResult) {
                 return cachedResult;
@@ -45,7 +49,7 @@ namespace ts.server {
 
         private canWorkWithCacheForDir(rootDir: string) {
             // Some of the hosts might not be able to handle read directory or getDirectories
-            const path = toPath(rootDir, this.currentDirectory, this.getCanonicalFileName);
+            const path = this.toPath(rootDir);
             if (this.cachedReadDirectoryResult.get(path)) {
                 return true;
             }
@@ -62,7 +66,7 @@ namespace ts.server {
         }
 
         writeFile(fileName: string, data: string, writeByteOrderMark?: boolean) {
-            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+            const path = this.toPath(fileName);
             const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
             const baseFileName = getBaseFileName(toNormalizedPath(fileName));
             if (result) {
@@ -111,14 +115,14 @@ namespace ts.server {
         }
 
         fileExists(fileName: string): boolean {
-            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+            const path = this.toPath(fileName);
             const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
             const baseName = getBaseFileName(toNormalizedPath(fileName));
             return (result && this.hasEntry(result.files, baseName)) || this.host.fileExists(fileName);
         }
 
         directoryExists(dirPath: string) {
-            const path = toPath(dirPath, this.currentDirectory, this.getCanonicalFileName);
+            const path = this.toPath(dirPath);
             return this.cachedReadDirectoryResult.has(path) || this.host.directoryExists(dirPath);
         }
 
@@ -147,7 +151,7 @@ namespace ts.server {
         }
 
         addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath) {
-            const path = toPath(fileOrFolder, this.currentDirectory, this.getCanonicalFileName);
+            const path = this.toPath(fileOrFolder);
             const existingResult = this.cachedReadDirectoryResult.get(path);
             if (existingResult) {
                 if (!this.host.directoryExists(fileOrFolder)) {
@@ -262,7 +266,7 @@ namespace ts.server {
             getResultFileName: (result: R) => string | undefined,
             logChanges: boolean): R[] {
 
-            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.project.projectService.toCanonicalFileName);
+            const path = this.project.projectService.toPath(containingFile);
             const currentResolutionsInFile = cache.get(path);
 
             const newResolutions: Map<T> = createMap<T>();
@@ -403,7 +407,7 @@ namespace ts.server {
         fileExists(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
-            const path = toPath(file, this.host.getCurrentDirectory(), this.project.projectService.toCanonicalFileName);
+            const path = this.project.projectService.toPath(file);
             return !this.project.isWatchedMissingFile(path) && this.host.fileExists(file);
         }
 

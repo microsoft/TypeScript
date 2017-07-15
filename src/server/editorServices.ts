@@ -245,20 +245,6 @@ namespace ts.server {
         }
     }
 
-    /**
-     * TODO: enforce invariants:
-     *  - script info can be never migrate to state - root file in inferred project, this is only a starting point
-     *  - if script info has more that one containing projects - it is not a root file in inferred project because:
-     *    - references in inferred project supercede the root part
-     *    - root/reference in non-inferred project beats root in inferred project
-     */
-    function isRootFileInInferredProject(info: ScriptInfo): boolean {
-        if (info.containingProjects.length === 0) {
-            return false;
-        }
-        return info.containingProjects[0].projectKind === ProjectKind.Inferred && info.containingProjects[0].isRoot(info);
-    }
-
     class DirectoryWatchers {
         /**
          * a path to directory watcher map that detects added tsconfig files
@@ -386,6 +372,7 @@ namespace ts.server {
         private pendingProjectUpdates = createMap<Project>();
         private pendingInferredProjectUpdate: boolean;
 
+        readonly currentDirectory: string;
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
@@ -417,6 +404,7 @@ namespace ts.server {
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
+            this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(this.host);
@@ -431,7 +419,11 @@ namespace ts.server {
                 extraFileExtensions: []
             };
 
-            this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.host.getCurrentDirectory());
+            this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.currentDirectory);
+        }
+
+        toPath(fileName: string, basePath = this.currentDirectory) {
+            return toPath(fileName, basePath, this.toCanonicalFileName);
         }
 
         /* @internal */
@@ -721,7 +713,7 @@ namespace ts.server {
                 this.removeProject(project);
                 // Reload the configured projects for these open files in the project as
                 // they could be held up by another config file somewhere in the parent directory
-                const openFilesInProject = this.getOrphanFiles();
+                const openFilesInProject = filter(this.openFiles, file => file.containingProjects.length === 0);
                 this.reloadConfiguredProjectForFiles(openFilesInProject, project => { project.pendingReload = true; this.delayUpdateProjectGraph(project); });
                 this.delayInferredProjectsRefresh();
             }
@@ -762,6 +754,7 @@ namespace ts.server {
                     this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
                     break;
                 case ProjectKind.Configured:
+                    // Update the map of mapOfKnownTsConfigFiles
                     removeItemFromSet(this.configuredProjects, <ConfiguredProject>project);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
@@ -772,59 +765,38 @@ namespace ts.server {
         }
 
         private assignScriptInfoToInferredProjectIfNecessary(info: ScriptInfo, addToListOfOpenFiles: boolean): void {
-            const externalProject = this.findContainingExternalProject(info.fileName);
-            if (externalProject) {
-                // file is already included in some external project - do nothing
-                if (addToListOfOpenFiles) {
-                    this.openFiles.push(info);
-                }
-                return;
-            }
-
-            let foundConfiguredProject = false;
-            for (const p of info.containingProjects) {
-                // file is the part of configured project
-                if (p.projectKind === ProjectKind.Configured) {
-                    foundConfiguredProject = true;
-                    if (addToListOfOpenFiles) {
-                        ((<ConfiguredProject>p)).addOpenRef();
-                    }
-                }
-            }
-            if (foundConfiguredProject) {
-                if (addToListOfOpenFiles) {
-                    this.openFiles.push(info);
-                }
-                return;
-            }
-
             if (info.containingProjects.length === 0) {
                 // create new inferred project p with the newly opened file as root
                 // or add root to existing inferred project if 'useOneInferredProject' is true
-                const inferredProject = this.createInferredProjectWithRootFileIfNecessary(info);
-                if (!this.useSingleInferredProject) {
-                    // if useOneInferredProject is not set then try to fixup ownership of open files
-                    // check 'defaultProject !== inferredProject' is necessary to handle cases
-                    // when creation inferred project for some file has added other open files into this project (i.e. as referenced files)
-                    // we definitely don't want to delete the project that was just created
-                    for (const f of this.openFiles) {
-                        if (f.containingProjects.length === 0 || !inferredProject.containsScriptInfo(f)) {
-                            // this is orphaned file that we have not processed yet - skip it
-                            continue;
-                        }
+                this.createInferredProjectWithRootFileIfNecessary(info);
 
-                        for (const fContainingProject of f.containingProjects) {
-                            if (fContainingProject.projectKind === ProjectKind.Inferred &&
-                                fContainingProject.isRoot(f) &&
-                                fContainingProject !== inferredProject) {
-
-                                // open file used to be root in inferred project,
-                                // this inferred project is different from the one we've just created for current file
-                                // and new inferred project references this open file.
-                                // We should delete old inferred project and attach open file to the new one
-                                this.removeProject(fContainingProject);
-                                f.attachToProject(inferredProject);
-                            }
+                // if useOneInferredProject is not set then try to fixup ownership of open files
+                // check 'defaultProject !== inferredProject' is necessary to handle cases
+                // when creation inferred project for some file has added other open files into this project
+                // (i.e.as referenced files)
+                // we definitely don't want to delete the project that was just created
+                // Also note that we need to create a copy of the array since the list of project will change
+                for (const inferredProject of this.inferredProjects.slice(0, this.inferredProjects.length - 1)) {
+                    Debug.assert(!this.useSingleInferredProject);
+                    // Remove this file from the root of inferred project if its part of more than 2 projects
+                    // This logic is same as iterating over all open files and calling
+                    // this.removRootOfInferredProjectIfNowPartOfOtherProject(f);
+                    // Since this is also called from refreshInferredProject and closeOpen file
+                    // to update inferred projects of the open file, this iteration might be faster
+                    // instead of scanning all open files
+                    const root = inferredProject.getRootScriptInfos();
+                    Debug.assert(root.length === 1);
+                    if (root[0].containingProjects.length > 1) {
+                        this.removeProject(inferredProject);
+                    }
+                }
+            }
+            else {
+                for (const p of info.containingProjects) {
+                    // file is the part of configured project
+                    if (p.projectKind === ProjectKind.Configured) {
+                        if (addToListOfOpenFiles) {
+                            ((<ConfiguredProject>p)).addOpenRef();
                         }
                     }
                 }
@@ -833,17 +805,6 @@ namespace ts.server {
             if (addToListOfOpenFiles) {
                 this.openFiles.push(info);
             }
-        }
-
-        private getOrphanFiles() {
-            let orphanFiles: ScriptInfo[];
-            // for all open files
-            for (const f of this.openFiles) {
-                if (f.containingProjects.length === 0) {
-                    (orphanFiles || (orphanFiles = [])).push(f);
-                }
-            }
-            return orphanFiles;
         }
 
         /**
@@ -871,8 +832,15 @@ namespace ts.server {
                     }
                 }
                 else if (p.projectKind === ProjectKind.Inferred && p.isRoot(info)) {
-                    // open file in inferred project
-                    (projectsToRemove || (projectsToRemove = [])).push(p);
+                    // If this was the open root file of inferred project
+                    if ((p as InferredProject).isProjectWithSingleRoot()) {
+                        // - when useSingleInferredProject is not set, we can guarantee that this will be the only root
+                        // - other wise remove the project if it is the only root
+                        (projectsToRemove || (projectsToRemove = [])).push(p);
+                    }
+                    else {
+                        p.removeFile(info);
+                    }
                 }
 
                 if (!p.languageServiceEnabled) {
@@ -888,11 +856,10 @@ namespace ts.server {
                 }
 
                 // collect orphanted files and try to re-add them as newly opened
-                const orphanFiles = this.getOrphanFiles();
-
                 // treat orphaned files as newly opened
-                if (orphanFiles) {
-                    for (const f of orphanFiles) {
+                // for all open files
+                for (const f of this.openFiles) {
+                    if (f.containingProjects.length === 0) {
                         this.assignScriptInfoToInferredProjectIfNecessary(f, /*addToListOfOpenFiles*/ false);
                     }
                 }
@@ -1003,9 +970,9 @@ namespace ts.server {
 
         private findConfiguredProjectByProjectName(configFileName: NormalizedPath) {
             // make sure that casing of config file name is consistent
-            configFileName = asNormalizedPath(this.toCanonicalFileName(configFileName));
+            const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
             for (const proj of this.configuredProjects) {
-                if (proj.canonicalConfigFilePath === configFileName) {
+                if (proj.canonicalConfigFilePath === canonicalConfigFilePath) {
                     return proj;
                 }
             }
@@ -1186,7 +1153,6 @@ namespace ts.server {
                 languageServiceEnabled,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
                 cachedServerHost);
-            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
             project.configFileSpecs = configFileSpecs;
             project.configFileWatcher = this.addFileWatcher(WatchType.ConfigFilePath, project,
@@ -1196,6 +1162,8 @@ namespace ts.server {
                 project.watchWildcards(projectOptions.wildcardDirectories);
                 project.watchTypeRoots();
             }
+
+            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
             this.configuredProjects.push(project);
             this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
@@ -1242,7 +1210,7 @@ namespace ts.server {
                 let scriptInfo: ScriptInfo | NormalizedPath;
                 let path: Path;
                 if (!project.lsHost.fileExists(newRootFile)) {
-                    path = normalizedPathToPath(normalizedPath, this.host.getCurrentDirectory(), this.toCanonicalFileName);
+                    path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path);
                     if (isScriptInfo(existingValue)) {
                         project.removeFile(existingValue);
@@ -1257,16 +1225,12 @@ namespace ts.server {
                     path = scriptInfo.path;
                     // If this script info is not already a root add it
                     if (!project.isRoot(scriptInfo)) {
-                        if (scriptInfo.isScriptOpen() && isRootFileInInferredProject(scriptInfo)) {
+                        project.addRoot(scriptInfo);
+                        if (scriptInfo.isScriptOpen()) {
                             // if file is already root in some inferred project
                             // - remove the file from that project and delete the project if necessary
-                            const inferredProject = scriptInfo.containingProjects[0];
-                            inferredProject.removeFile(scriptInfo);
-                            if (!inferredProject.hasRoots()) {
-                                this.removeProject(inferredProject);
-                            }
+                            this.removRootOfInferredProjectIfNowPartOfOtherProject(scriptInfo);
                         }
-                        project.addRoot(scriptInfo);
                     }
                 }
                 newRootScriptInfoMap.set(path, scriptInfo);
@@ -1362,7 +1326,6 @@ namespace ts.server {
                 root.fileName,
                 project,
                 fileName => this.onConfigFileAddedForInferredProject(fileName));
-
             project.updateGraph();
 
             if (!useExistingProject) {
@@ -1403,7 +1366,7 @@ namespace ts.server {
         }
 
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
-            const path = toPath(fileName, this.host.getCurrentDirectory(), this.toCanonicalFileName);
+            const path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
                 if (openedByClient || this.host.fileExists(fileName)) {
@@ -1438,7 +1401,7 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            return this.getScriptInfoForPath(normalizedPathToPath(fileName, this.host.getCurrentDirectory(), this.toCanonicalFileName));
+            return this.getScriptInfoForPath(normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName));
         }
 
         getScriptInfoForPath(fileName: Path) {
@@ -1540,6 +1503,26 @@ namespace ts.server {
         }
 
         /**
+         *  - script info can be never migrate to state - root file in inferred project, this is only a starting point
+         *  - if script info has more that one containing projects - it is not a root file in inferred project because:
+         *    - references in inferred project supercede the root part
+         *    - root/reference in non-inferred project beats root in inferred project
+         */
+        private removRootOfInferredProjectIfNowPartOfOtherProject(info: ScriptInfo) {
+            if (info.containingProjects.length > 1 &&
+                info.containingProjects[0].projectKind === ProjectKind.Inferred &&
+                info.containingProjects[0].isRoot(info)) {
+                const inferredProject = info.containingProjects[0] as InferredProject;
+                if (inferredProject.isProjectWithSingleRoot()) {
+                    this.removeProject(inferredProject);
+                }
+                else {
+                    inferredProject.removeFile(info);
+                }
+            }
+        }
+
+        /**
          * This function is to update the project structure for every projects.
          * It is called on the premise that all the configured projects are
          * up to date.
@@ -1548,25 +1531,15 @@ namespace ts.server {
             this.logger.info("updating project structure from ...");
             this.printProjects();
 
-            const orphantedFiles: ScriptInfo[] = [];
-            // collect all orphanted script infos from open files
             for (const info of this.openFiles) {
+                // collect all orphanted script infos from open files
                 if (info.containingProjects.length === 0) {
-                    orphantedFiles.push(info);
+                    this.assignScriptInfoToInferredProjectIfNecessary(info, /*addToListOfOpenFiles*/ false);
                 }
+                // Or remove the root of inferred project if is referenced in more than one projects
                 else {
-                    if (isRootFileInInferredProject(info) && info.containingProjects.length > 1) {
-                        const inferredProject = info.containingProjects[0];
-                        Debug.assert(inferredProject.projectKind === ProjectKind.Inferred);
-                        inferredProject.removeFile(info);
-                        if (!inferredProject.hasRoots()) {
-                            this.removeProject(inferredProject);
-                        }
-                    }
+                    this.removRootOfInferredProjectIfNowPartOfOtherProject(info);
                 }
-            }
-            for (const f of orphantedFiles) {
-                this.assignScriptInfoToInferredProjectIfNecessary(f, /*addToListOfOpenFiles*/ false);
             }
 
             for (const p of this.inferredProjects) {
