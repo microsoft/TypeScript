@@ -696,7 +696,7 @@ namespace ts.server {
             else if (!configFileSpecs.filesSpecs && !some(errors, isErrorNoInputFiles)) {
                 errors.push(getErrorForNoInputFiles(configFileSpecs, configFilename));
             }
-            this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader);
+            this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader, /*clientFileName*/ undefined);
             this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
         }
 
@@ -1050,7 +1050,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typeAcquisition, /*configFileErrors*/ undefined);
+            this.addFilesToNonInferredProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typeAcquisition, /*configFileErrors*/ undefined);
             this.externalProjects.push(project);
             this.sendProjectTelemetry(project.externalProjectName, project);
             return project;
@@ -1122,30 +1122,17 @@ namespace ts.server {
                 project.watchTypeRoots();
             }
 
-            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
-
+            this.addFilesToNonInferredProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
             this.configuredProjects.push(project);
             this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
             return project;
         }
 
-        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: Diagnostic[]): void {
-           for (const f of files) {
-                const rootFilename = propertyReader.getFileName(f);
-                const scriptKind = propertyReader.getScriptKind(f);
-                const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                const fileName = toNormalizedPath(rootFilename);
-                if (project.lsHost.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
-                    project.addRoot(info);
-                }
-                else {
-                    // Create the file root with just the filename so that LS will have correct set of roots
-                    project.addMissingFileRoot(fileName);
-                }
-            }
+        private addFilesToNonInferredProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: Diagnostic[]): void {
             project.setProjectErrors(configFileErrors);
+            this.updateNonInferredProjectFiles(project, files, propertyReader, clientFileName);
             project.setTypeAcquisition(typeAcquisition);
+            // This doesnt need scheduling since its either creation or reload of the project
             project.updateGraph();
         }
 
@@ -1156,7 +1143,7 @@ namespace ts.server {
             return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, configFileSpecs, cachedServerHost, clientFileName);
         }
 
-        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>) {
+        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, clientFileName?: string) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap: Map<ProjectRoot> = createMap<ProjectRoot>();
 
@@ -1170,14 +1157,14 @@ namespace ts.server {
                     const existingValue = projectRootFilesMap.get(path);
                     if (isScriptInfo(existingValue)) {
                         project.removeFile(existingValue);
-                        projectRootFilesMap.set(path, normalizedPath);
                     }
+                    projectRootFilesMap.set(path, normalizedPath);
                     scriptInfo = normalizedPath;
                 }
                 else {
                     const scriptKind = propertyReader.getScriptKind(f);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ clientFileName === newRootFile, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     path = scriptInfo.path;
                     // If this script info is not already a root add it
                     if (!project.isRoot(scriptInfo)) {
@@ -1211,19 +1198,13 @@ namespace ts.server {
         }
 
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
-            this.updateNonInferredProjectFiles(project, newUncheckedFiles, propertyReader);
             project.setCompilerOptions(newOptions);
-            project.setTypeAcquisition(newTypeAcquisition);
-
             // VS only set the CompileOnSaveEnabled option in the request if the option was changed recently
             // therefore if it is undefined, it should not be updated.
             if (compileOnSave !== undefined) {
                 project.compileOnSaveEnabled = compileOnSave;
             }
-            project.setProjectErrors(configFileErrors);
-
-            // This doesnt need scheduling since its either creation or reload of the project
-            project.updateGraph();
+            this.addFilesToNonInferredProjectAndUpdateGraph(project, newUncheckedFiles, propertyReader, /*clientFileName*/ undefined, newTypeAcquisition, configFileErrors);
         }
 
         /**
