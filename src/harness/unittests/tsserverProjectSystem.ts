@@ -817,18 +817,19 @@ namespace ts.projectSystem {
 
             const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
             const service = createProjectService(host);
+            const upperCaseConfigFilePath = combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path));
             service.openExternalProject(<protocol.ExternalProject>{
                 projectFileName: "/a/b/project.csproj",
-                rootFiles: toExternalFiles([f1.path, combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path))]),
+                rootFiles: toExternalFiles([f1.path, upperCaseConfigFilePath]),
                 options: {}
             });
             service.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects[0], []);
+            checkProjectActualFiles(service.configuredProjects[0], [upperCaseConfigFilePath]);
 
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
 
-            checkProjectActualFiles(service.configuredProjects[0], []);
+            checkProjectActualFiles(service.configuredProjects[0], [upperCaseConfigFilePath]);
             checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
         });
 
@@ -3495,7 +3496,7 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 1);
 
             const configuredProject = projectService.configuredProjects[0];
-            assert.isTrue(configuredProject.getFileNames().length === 0);
+            checkProjectActualFiles(configuredProject, [configFile.path]);
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));

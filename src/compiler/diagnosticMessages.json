@@ -3062,10 +3062,6 @@
         "category": "Message",
         "code": 6128
     },
-    "The config file '{0}' found doesn't contain any source files.": {
-        "category": "Error",
-        "code": 6129
-    },
     "Resolving real path for '{0}', result '{1}'.": {
         "category": "Message",
         "code": 6130

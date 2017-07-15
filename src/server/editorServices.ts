@@ -363,6 +363,7 @@ namespace ts.server {
         private compileOnSaveForInferredProjects: boolean;
         private readonly projectToSizeMap: Map<number> = createMap<number>();
         private readonly directoryWatchers: DirectoryWatchers;
+        private readonly mapOfTsConfigPresence: Map<Project>;
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
@@ -407,6 +408,7 @@ namespace ts.server {
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
+            this.mapOfTsConfigPresence = createMap<Project>();
             this.throttledOperations = new ThrottledOperations(this.host);
 
             this.typingsInstaller.attach(this);
@@ -661,7 +663,6 @@ namespace ts.server {
 
         /* @internal  */
         onTypeRootFileChanged(project: ConfiguredProject, fileName: NormalizedPath) {
-            this.logger.info(`Type root file ${fileName} changed`);
             project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
             project.updateTypes();
             this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
@@ -675,34 +676,25 @@ namespace ts.server {
         /* @internal */
         onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileName: NormalizedPath) {
             project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
+            const configFilename = project.getConfigFilePath();
 
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
             if (fileName && !isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
+                this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileName}`);
                 return;
             }
-
-            const configFilename = project.getConfigFilePath();
-            this.logger.info(`Project: ${configFilename} Detected source file add/remove: ${fileName}`);
 
             const configFileSpecs = project.configFileSpecs;
             const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilerOptions(), project.getCachedServerHost(), this.hostConfiguration.extraFileExtensions);
             const errors = project.getAllProjectErrors();
-            if (result.fileNames.length === 0) {
-                if (!configFileSpecs.filesSpecs) {
-                    if (!some(errors, error => error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code)) {
-                        errors.push(getErrorForNoInputFiles(configFileSpecs, configFilename));
-                    }
-                    if (!some(errors, error => error.code === Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files.code)) {
-                        errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
-                    }
-                }
+            const isErrorNoInputFiles = (error: Diagnostic) => error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
+            if (result.fileNames.length !== 0) {
+                filterMutate(errors, error => !isErrorNoInputFiles(error));
             }
-            else {
-                filterMutate(errors, error =>
-                    error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code &&
-                    error.code !== Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files.code);
+            else if (!configFileSpecs.filesSpecs && !some(errors, isErrorNoInputFiles)) {
+                errors.push(getErrorForNoInputFiles(configFileSpecs, configFilename));
             }
             this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader);
             this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
@@ -888,6 +880,15 @@ namespace ts.server {
             });
         }
 
+        private configFileExists(configFileName: NormalizedPath) {
+            const canonicalConfigFilePath = normalizedPathToPath(configFileName, this.currentDirectory, this.toCanonicalFileName);
+            const cachedResult = this.mapOfTsConfigPresence.get(canonicalConfigFilePath);
+            if (cachedResult) {
+                // Use the information here to answer the question
+            }
+            return this.host.fileExists(configFileName);
+        }
+
         /**
          * This function tries to search for a tsconfig.json for the given file.
          * This is different from the method the compiler uses because
@@ -897,34 +898,20 @@ namespace ts.server {
          * the newly opened file.
          */
         private getConfigFileNameForFile(fileName: NormalizedPath, projectRootPath?: NormalizedPath) {
-            const searchPath = getDirectoryPath(fileName);
+            let searchPath = getDirectoryPath(fileName);
             this.logger.info(`Search path: ${searchPath}`);
 
             // check if this file is already included in one of external projects
-            const configFileName = this.findConfigFile(asNormalizedPath(searchPath), projectRootPath);
-            if (configFileName) {
-                this.logger.info(`Config file name: ${configFileName}`);
-            }
-            else {
-                this.logger.info("No config files found.");
-            }
-            return configFileName;
-        }
-
-        // This is different from the method the compiler uses because
-        // the compiler can assume it will always start searching in the
-        // current directory (the directory in which tsc was invoked).
-        // The server must start searching from the directory containing
-        // the newly opened file.
-        private findConfigFile(searchPath: NormalizedPath, projectRootPath?: NormalizedPath): NormalizedPath {
             while (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0) {
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                if (this.host.fileExists(tsconfigFileName)) {
+                if (this.configFileExists(tsconfigFileName)) {
+                    this.logger.info(`Config file name: ${tsconfigFileName}`);
                     return tsconfigFileName;
                 }
 
                 const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                if (this.host.fileExists(jsconfigFileName)) {
+                if (this.configFileExists(jsconfigFileName)) {
+                    this.logger.info(`Config file name: ${jsconfigFileName}`);
                     return jsconfigFileName;
                 }
 
@@ -934,6 +921,7 @@ namespace ts.server {
                 }
                 searchPath = parentPath;
             }
+            this.logger.info("No config files found.");
             return undefined;
         }
 
@@ -982,7 +970,7 @@ namespace ts.server {
             return findProjectByName(projectFileName, this.externalProjects);
         }
 
-        private convertConfigFileContentToProjectOptions(configFilename: string, cachedServerHost: CachedServerHost)  {
+        private convertConfigFileContentToProjectOptions(configFilename: string, cachedServerHost: CachedServerHost) {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
@@ -1007,38 +995,19 @@ namespace ts.server {
 
             Debug.assert(!!parsedCommandLine.fileNames);
 
-            let success: boolean;
-            let projectOptions: ProjectOptions;
+            const projectOptions: ProjectOptions = {
+                files: parsedCommandLine.fileNames,
+                compilerOptions: parsedCommandLine.options,
+                configHasExtendsProperty: parsedCommandLine.raw["extends"] !== undefined,
+                configHasFilesProperty: parsedCommandLine.raw["files"] !== undefined,
+                configHasIncludeProperty: parsedCommandLine.raw["include"] !== undefined,
+                configHasExcludeProperty: parsedCommandLine.raw["exclude"] !== undefined,
+                wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
+                typeAcquisition: parsedCommandLine.typeAcquisition,
+                compileOnSave: parsedCommandLine.compileOnSave
+            };
 
-            if (parsedCommandLine.fileNames.length === 0) {
-                errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
-                success = false;
-                projectOptions = {
-                    files: [],
-                    compilerOptions: {},
-                    configHasExtendsProperty: false,
-                    configHasFilesProperty: false,
-                    configHasIncludeProperty: false,
-                    configHasExcludeProperty: false,
-                    typeAcquisition: { enable: false }
-                };
-            }
-            else {
-                success = true;
-                projectOptions = {
-                    files: parsedCommandLine.fileNames,
-                    compilerOptions: parsedCommandLine.options,
-                    configHasExtendsProperty: parsedCommandLine.raw["extends"] !== undefined,
-                    configHasFilesProperty: parsedCommandLine.raw["files"] !== undefined,
-                    configHasIncludeProperty: parsedCommandLine.raw["include"] !== undefined,
-                    configHasExcludeProperty: parsedCommandLine.raw["exclude"] !== undefined,
-                    wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
-                    typeAcquisition: parsedCommandLine.typeAcquisition,
-                    compileOnSave: parsedCommandLine.compileOnSave
-                };
-            }
-
-            return { success, projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
+            return { projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
         }
 
         private exceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>) {
@@ -1131,17 +1100,6 @@ namespace ts.server {
             }
         }
 
-        private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
-            if (!this.eventHandler) {
-                return;
-            }
-
-            this.eventHandler(<ConfigFileDiagEvent>{
-                eventName: ConfigFileDiagEvent,
-                data: { configFileName, diagnostics: diagnostics || [], triggerFile }
-            });
-        }
-
         private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], configFileSpecs: ConfigFileSpecs, cachedServerHost: CachedServerHost, clientFileName?: string) {
             const languageServiceEnabled = !this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
@@ -1155,6 +1113,7 @@ namespace ts.server {
                 cachedServerHost);
 
             project.configFileSpecs = configFileSpecs;
+            // TODO: (sheetalkamat) We should also watch the configFiles that are extended
             project.configFileWatcher = this.addFileWatcher(WatchType.ConfigFilePath, project,
                 configFileName, (_fileName, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind)
             );
@@ -1192,11 +1151,8 @@ namespace ts.server {
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string) {
             const cachedServerHost = new CachedServerHost(this.host, this.toCanonicalFileName);
-            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedServerHost);
-            if (success) {
-                this.logger.info(`Opened configuration file ${configFileName}`);
-            }
-
+            const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedServerHost);
+            this.logger.info(`Opened configuration file ${configFileName}`);
             return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, configFileSpecs, cachedServerHost, clientFileName);
         }
 
@@ -1284,16 +1240,19 @@ namespace ts.server {
             const host = project.getCachedServerHost();
             host.clearCache();
             const configFileName = project.getConfigFilePath();
-            const { success, projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, host);
+            this.logger.info(`Reloading configured project ${configFileName}`);
+            const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, host);
             project.configFileSpecs = configFileSpecs;
-            if (!success) {
-                // reset project settings to default
-                this.updateNonInferredProject(project, [], fileNamePropertyReader, {}, {}, /*compileOnSave*/ false, configFileErrors);
+            this.updateConfiguredProject(project, projectOptions, configFileErrors);
+
+            if (!this.eventHandler) {
+                return;
             }
-            else {
-                this.updateConfiguredProject(project, projectOptions, configFileErrors);
-            }
-            this.reportConfigFileDiagnostics(configFileName, project.getGlobalProjectErrors(), /*triggerFile*/ configFileName);
+
+            this.eventHandler(<ConfigFileDiagEvent>{
+                eventName: ConfigFileDiagEvent,
+                data: { configFileName, diagnostics: project.getGlobalProjectErrors() || [], triggerFile: configFileName }
+            });
         }
 
         /**
@@ -1528,7 +1487,7 @@ namespace ts.server {
          * up to date.
          */
         private refreshInferredProjects() {
-            this.logger.info("updating project structure from ...");
+            this.logger.info("refreshInferredProjects: updating project structure from ...");
             this.printProjects();
 
             for (const info of this.openFiles) {
@@ -1546,6 +1505,7 @@ namespace ts.server {
                 p.updateGraph();
             }
 
+            this.logger.info("refreshInferredProjects: updated project structure ...");
             this.printProjects();
         }
 
