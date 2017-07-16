@@ -295,7 +295,7 @@ namespace ts.projectSystem {
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
-        assert.equal(projectService.configuredProjects.length, expected, `expected ${expected} configured project(s)`);
+        assert.equal(projectService.configuredProjects.size, expected, `expected ${expected} configured project(s)`);
     }
 
     export function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
@@ -310,6 +310,15 @@ namespace ts.projectSystem {
         checkNumberOfConfiguredProjects(projectService, count.configuredProjects || 0);
         checkNumberOfExternalProjects(projectService, count.externalProjects || 0);
         checkNumberOfInferredProjects(projectService, count.inferredProjects || 0);
+    }
+
+    export function configuredProjectAt(projectService: server.ProjectService, index: number) {
+        const values = projectService.configuredProjects.values();
+        while (index > 0) {
+            values.next();
+            index--;
+        }
+        return values.next().value;
     }
 
     export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[]) {
@@ -824,12 +833,12 @@ namespace ts.projectSystem {
                 options: {}
             });
             service.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects[0], [upperCaseConfigFilePath]);
+            checkProjectActualFiles(configuredProjectAt(service, 0), [upperCaseConfigFilePath]);
 
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
 
-            checkProjectActualFiles(service.configuredProjects[0], [upperCaseConfigFilePath]);
+            checkProjectActualFiles(configuredProjectAt(service, 0), [upperCaseConfigFilePath]);
             checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
         });
 
@@ -866,7 +875,7 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 0);
             checkNumberOfConfiguredProjects(projectService, 1);
 
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(project, [file1.path, libFile.path, file2.path, configFile.path]);
             checkProjectRootFiles(project, [file1.path, file2.path]);
             // watching all files except one that was open
@@ -922,7 +931,7 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, ["/a/b"], /*recursive*/ true);
             checkNumberOfConfiguredProjects(projectService, 1);
 
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             checkProjectRootFiles(project, [commonFile1.path]);
 
             // add a new ts file
@@ -949,7 +958,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(commonFile2.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             checkProjectRootFiles(project, [commonFile1.path]);
             checkNumberOfInferredProjects(projectService, 1);
         });
@@ -1024,7 +1033,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(commonFile1.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
 
             // delete commonFile2
@@ -1085,7 +1094,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(commonFile1.path);
 
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
             configFile.content = `{
                 "compilerOptions": {},
@@ -1121,7 +1130,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(commonFile1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
             projectService.openClientFile(excludedFile1.path);
             checkNumberOfInferredProjects(projectService, 1);
@@ -1157,7 +1166,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(classicModuleFile.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(project, [file1.path, nodeModuleFile.path, configFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
 
@@ -1241,7 +1250,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(commonFile1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
-            checkProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
+            checkProjectRootFiles(configuredProjectAt(projectService, 0), [commonFile1.path, commonFile2.path]);
         });
 
         it("should disable features when the files are too large", () => {
@@ -1730,7 +1739,7 @@ namespace ts.projectSystem {
             host.reloadFS([file1, file2, file3, configFile]);
             host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, file3.path, configFile.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, file3.path, configFile.path]);
         });
 
         it("correctly migrate files between projects", () => {
@@ -1788,14 +1797,14 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, configFile.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, configFile.path]);
 
             host.reloadFS([file1, file2, configFile]);
 
             host.checkTimeoutQueueLengthAndRun(2);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectRootFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path]);
         });
 
         it("can correctly update configured project when set of root files has changed (new file in list of files)", () => {
@@ -1817,7 +1826,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, configFile.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, configFile.path]);
 
             const modifiedConfigFile = {
                 path: configFile.path,
@@ -1828,7 +1837,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectRootFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path]);
         });
 
         it("can update configured project when set of root files was not changed", () => {
@@ -1850,7 +1859,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, configFile.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, configFile.path]);
 
             const modifiedConfigFile = {
                 path: configFile.path,
@@ -1860,7 +1869,7 @@ namespace ts.projectSystem {
             host.reloadFS([file1, file2, modifiedConfigFile]);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectRootFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path]);
         });
 
         it("can correctly update external project when set of root files has changed", () => {
@@ -1930,11 +1939,11 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             projectService.openClientFile(file2.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             host.reloadFS([file1, file2]);
             host.checkTimeoutQueueLengthAndRun(1);
@@ -1968,13 +1977,13 @@ namespace ts.projectSystem {
             });
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, config.path]);
 
             projectService.closeClientFile(f1.path);
 
             projectService.openClientFile(f2.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, config.path]);
             checkProjectActualFiles(projectService.inferredProjects[0], [f2.path]);
         });
 
@@ -1998,7 +2007,7 @@ namespace ts.projectSystem {
 
             // HTML file will not be included in any projects yet
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const configuredProj = projectService.configuredProjects[0];
+            const configuredProj = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(configuredProj, [file1.path, config.path]);
 
             // Specify .html extension as mixed content
@@ -2008,8 +2017,8 @@ namespace ts.projectSystem {
 
             // The configured project should now be updated to include html file
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            assert.strictEqual(projectService.configuredProjects[0], configuredProj, "Same configured project should be updated");
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
+            assert.strictEqual(configuredProjectAt(projectService, 0), configuredProj, "Same configured project should be updated");
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
@@ -2019,10 +2028,10 @@ namespace ts.projectSystem {
 
             // Now HTML file is included in the project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are available in .ts file
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1);
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
@@ -2034,7 +2043,7 @@ namespace ts.projectSystem {
 
             // HTML file is still included in project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
             completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5);
@@ -2070,7 +2079,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
-            let diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            let diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
 
             //  #2. Ensure no errors when allowJs is false
@@ -2089,7 +2098,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
-            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
 
             //  #3. Ensure no errors when compiler options aren't specified
@@ -2108,7 +2117,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
-            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
 
             //  #4. Ensure no errors when files are explicitly specified in tsconfig
@@ -2127,7 +2136,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
-            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
 
             //  #4. Ensure no errors when files are explicitly excluded in tsconfig
@@ -2146,7 +2155,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
-            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
         });
 
@@ -2273,7 +2282,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file2.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const project1 = projectService.configuredProjects[0];
+            const project1 = configuredProjectAt(projectService, 0);
             assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 1");
             assert.equal(project1.getScriptInfo(file2.path).containingProjects.length, 1, "containing projects count");
 
@@ -2281,7 +2290,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 2 });
             assert.equal(project1.openRefCount, 2, "Open ref count in project1 - 2");
 
-            const project2 = projectService.configuredProjects[1];
+            const project2 = configuredProjectAt(projectService, 1);
             assert.equal(project2.openRefCount, 1, "Open ref count in project2 - 2");
 
             assert.equal(project1.getScriptInfo(file1.path).containingProjects.length, 2, `${file1.path} containing projects count`);
@@ -2413,7 +2422,7 @@ namespace ts.projectSystem {
             });
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
             assert.isTrue(!!lastEvent, "should receive event");
             assert.equal(lastEvent.data.project, project, "project name");
@@ -2462,7 +2471,7 @@ namespace ts.projectSystem {
 
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
             assert.isTrue(!!lastEvent, "should receive event");
             assert.equal(lastEvent.data.project, project, "project name");
@@ -2650,7 +2659,7 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, tsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
 
             // rename tsconfig.json back to lib.ts
             host.reloadFS([f1, f2]);
@@ -2707,8 +2716,8 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ configuredProjects: 2 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path, cTsconfig.path]);
-            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path, dTsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [cLib.path, cTsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 1), [dLib.path, dTsconfig.path]);
 
             // remove one config file
             projectService.openExternalProject({
@@ -2718,7 +2727,7 @@ namespace ts.projectSystem {
             });
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [dLib.path, dTsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [dLib.path, dTsconfig.path]);
 
             // remove second config file
             projectService.openExternalProject({
@@ -2738,8 +2747,8 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ configuredProjects: 2 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path, cTsconfig.path]);
-            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path, dTsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [cLib.path, cTsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 1), [dLib.path, dTsconfig.path]);
 
             // close all projects - no projects should be opened
             projectService.closeExternalProject(projectName);
@@ -2795,13 +2804,13 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, app.path, config1.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [libES5.path, app.path, config1.path]);
 
             host.reloadFS([libES5, libES2015Promise, app, config2]);
             host.checkTimeoutQueueLengthAndRun(2);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, libES2015Promise.path, app.path, config2.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [libES5.path, libES2015Promise.path, app.path, config2.path]);
         });
 
         it("should handle non-existing directories in config file", () => {
@@ -2856,7 +2865,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, barTypings.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, barTypings.path, config.path]);
         });
     });
 
@@ -2927,7 +2936,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t1.path, tsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t1.path, tsconfig.path]);
 
             // delete t1
             host.reloadFS([f1, tsconfig]);
@@ -2935,7 +2944,7 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, tsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
 
             // create t2
             host.reloadFS([f1, tsconfig, t2]);
@@ -2943,7 +2952,7 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t2.path, tsconfig.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t2.path, tsconfig.path]);
         });
     });
 
@@ -3120,7 +3129,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, node.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, node.path, config.path]);
         });
     });
 
@@ -3496,7 +3505,7 @@ namespace ts.projectSystem {
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 1);
 
-            const configuredProject = projectService.configuredProjects[0];
+            const configuredProject = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(configuredProject, [configFile.path]);
 
             const inferredProject = projectService.inferredProjects[0];
@@ -4157,7 +4166,7 @@ namespace ts.projectSystem {
 
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const projectName = projectService.configuredProjects[0].getProjectName();
+            const projectName = configuredProjectAt(projectService, 0).getProjectName();
 
             const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
                 type: "request",

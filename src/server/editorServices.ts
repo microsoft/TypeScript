@@ -325,7 +325,7 @@ namespace ts.server {
         /**
          * projects specified by a tsconfig.json file
          */
-        readonly configuredProjects: ConfiguredProject[] = [];
+        readonly configuredProjects = createMap<ConfiguredProject>();
         /**
          * list of open files
          */
@@ -730,7 +730,7 @@ namespace ts.server {
                     break;
                 case ProjectKind.Configured:
                     // Update the map of mapOfKnownTsConfigFiles
-                    removeItemFromSet(this.configuredProjects, <ConfiguredProject>project);
+                    this.configuredProjects.delete((<ConfiguredProject>project).canonicalConfigFilePath);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
                 case ProjectKind.Inferred:
@@ -1035,7 +1035,7 @@ namespace ts.server {
 
             let counter = 0;
             counter = printProjects(this.logger, this.externalProjects, counter);
-            counter = printProjects(this.logger, this.configuredProjects, counter);
+            counter = printProjects(this.logger, arrayFrom(this.configuredProjects.values()), counter);
             counter = printProjects(this.logger, this.inferredProjects, counter);
 
             this.logger.info("Open files: ");
@@ -1060,11 +1060,7 @@ namespace ts.server {
         private findConfiguredProjectByProjectName(configFileName: NormalizedPath) {
             // make sure that casing of config file name is consistent
             const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
-            for (const proj of this.configuredProjects) {
-                if (proj.canonicalConfigFilePath === canonicalConfigFilePath) {
-                    return proj;
-                }
-            }
+            return this.configuredProjects.get(canonicalConfigFilePath);
         }
 
         private findExternalProjectByProjectName(projectFileName: string) {
@@ -1224,7 +1220,7 @@ namespace ts.server {
             }
 
             this.addFilesToNonInferredProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
-            this.configuredProjects.push(project);
+            this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFilePresenceByNewConfiguredProject(project);
             this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
             return project;
@@ -1678,7 +1674,7 @@ namespace ts.server {
         synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[]): ProjectFilesWithTSDiagnostics[] {
             const files: ProjectFilesWithTSDiagnostics[] = [];
             this.collectChanges(knownProjects, this.externalProjects, files);
-            this.collectChanges(knownProjects, this.configuredProjects, files);
+            this.collectChanges(knownProjects, arrayFrom(this.configuredProjects.values()), files);
             this.collectChanges(knownProjects, this.inferredProjects, files);
             return files;
         }

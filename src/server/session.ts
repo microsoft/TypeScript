@@ -498,7 +498,7 @@ namespace ts.server {
 
         private cleanup() {
             this.cleanProjects("inferred projects", this.projectService.inferredProjects);
-            this.cleanProjects("configured projects", this.projectService.configuredProjects);
+            this.cleanProjects("configured projects", arrayFrom(this.projectService.configuredProjects.values()));
             this.cleanProjects("external projects", this.projectService.externalProjects);
             if (this.host.gc) {
                 this.logger.info(`host.gc()`);

@@ -92,7 +92,7 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path, config.path]);
+            checkProjectActualFiles(configuredProjectAt(service, 0), [f1.path, f2.path, config.path]);
             installer.installAll(0);
         });
     });
@@ -144,7 +144,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
@@ -706,7 +706,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
@@ -753,7 +753,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
             checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
 
@@ -801,7 +801,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const p = projectService.configuredProjects[0];
+            const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);

@@ -98,7 +98,7 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             openFilesForSession([file1], session);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const project = projectService.configuredProjects[0];
+            const project = configuredProjectAt(projectService, 0);
             const compilerOptionsRequest = <server.protocol.CompilerOptionsDiagnosticsRequest>{
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
@@ -141,7 +141,7 @@ namespace ts.projectSystem {
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
-                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
                 checkProjectErrorsWorker(projectErrors, [
                     "'{' expected."
                 ]);
@@ -155,7 +155,7 @@ namespace ts.projectSystem {
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
-                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
                 checkProjectErrorsWorker(projectErrors, []);
             }
         });
@@ -186,7 +186,7 @@ namespace ts.projectSystem {
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
-                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
                 checkProjectErrorsWorker(projectErrors, []);
             }
             // break config and trigger watcher
@@ -196,7 +196,7 @@ namespace ts.projectSystem {
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
-                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                const projectErrors = configuredProjectAt(projectService, 0).getAllProjectErrors();
                 checkProjectErrorsWorker(projectErrors, [
                     "'{' expected."
                 ]);
