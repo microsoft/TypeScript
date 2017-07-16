@@ -3351,11 +3351,6 @@ namespace ts {
         type: ObjectType;
     }
 
-    // Readonly type variable (TypeFlags.Readonly)
-    export interface ReadonlyTypeVariable extends Type {
-        type: TypeVariable;
-    }
-
     export interface EvolvingArrayType extends ObjectType {
         elementType: Type;      // Element expressions of evolving array type
         finalArrayType?: Type;  // Final array type of evolving array type
@@ -3423,6 +3418,11 @@ namespace ts {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
+    }
+
+    // Readonly type variable (TypeFlags.Readonly)
+    export interface ReadonlyTypeVariable extends TypeVariable {
+        type: TypeVariable;
     }
 
     // keyof T types (TypeFlags.Index)

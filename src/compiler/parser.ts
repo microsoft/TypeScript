@@ -2153,8 +2153,16 @@ namespace ts {
             }
         }
 
-        function parseParameterType(): TypeNode {
+        function nextTokenIsStartOfType() {
+            nextToken();
+            return isStartOfType();
+        }
+
+        function parseParameterType(allowReadonly: boolean): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
+                if (allowReadonly && token() === SyntaxKind.ReadonlyKeyword && !lookAhead(nextTokenIsStartOfType)) {
+                    return parseTokenNode<TypeNode>();
+                }
                 return parseType();
             }
 
@@ -2169,7 +2177,7 @@ namespace ts {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
                 node.name = createIdentifier(/*isIdentifier*/ true);
-                node.type = parseParameterType();
+                node.type = parseParameterType(/*allowReadonly*/ true);
                 return finishNode(node);
             }
 
@@ -2193,7 +2201,7 @@ namespace ts {
             }
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
-            node.type = parseParameterType();
+            node.type = parseParameterType(/*allowReadonly*/ false);
             node.initializer = parseBindingElementInitializer(/*inParameter*/ true);
 
             // Do not check for initializers in an ambient context for parameters. This is not

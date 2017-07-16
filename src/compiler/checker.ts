@@ -256,6 +256,7 @@ namespace ts {
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
+        const readonlyThisType = createIntrinsicType(TypeFlags.Any, "readonly");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -5675,11 +5676,37 @@ namespace ts {
             return indexInfo && !indexInfo.isReadonly ? createIndexInfo(indexInfo.type, true, indexInfo.declaration) : indexInfo;
         }
 
+        function hasReadonlyThisParameter(sig: SignatureDeclaration) {
+            const param = firstOrUndefined(sig.parameters);
+            return param &&
+                param.name.kind === SyntaxKind.Identifier &&
+                (<Identifier>param.name).text === "this" &&
+                param.type &&
+                param.type.kind === SyntaxKind.ReadonlyKeyword;
+        }
+
+        function isReadonlyThisMethod(symbol: Symbol) {
+            if (symbol.flags & SymbolFlags.Method) {
+                for (let i = 0; i < symbol.declarations.length; i++) {
+                    const node = symbol.declarations[i];
+                    if (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
+                        if (!hasReadonlyThisParameter(<SignatureDeclaration>node)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
         function resolveReadonlyTypeMembers(type: ReadonlyObjectType) {
             const target = type.type;
             const members = createMap<Symbol>() as SymbolTable;
             for (const symbol of getPropertiesOfObjectType(target)) {
-                members.set(symbol.name, instantiateSymbol(symbol, identityMapper, /*readonly*/ true));
+                if (!(symbol.flags & SymbolFlags.Method) || isReadonlyThisMethod(symbol)) {
+                    members.set(symbol.name, instantiateSymbol(symbol, identityMapper, /*readonly*/ true));
+                }
             }
             const callSignatures = getSignaturesOfType(target, SignatureKind.Call);
             const constructSignatures = getSignaturesOfType(target, SignatureKind.Construct);
@@ -6546,7 +6573,8 @@ namespace ts {
 
         function getThisTypeOfSignature(signature: Signature): Type | undefined {
             if (signature.thisParameter) {
-                return getTypeOfSymbol(signature.thisParameter);
+                const type = getTypeOfSymbol(signature.thisParameter);
+                return type !== readonlyThisType ? type : undefined;
             }
         }
 
@@ -7924,6 +7952,8 @@ namespace ts {
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
                     return nonPrimitiveType;
+                case SyntaxKind.ReadonlyKeyword:
+                    return readonlyThisType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
@@ -12410,9 +12440,9 @@ namespace ts {
             }
 
             if (isClassLike(container.parent)) {
-                const symbol = getSymbolOfNode(container.parent);
-                const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type);
+                const classSymbol = getSymbolOfNode(container.parent);
+                const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(classSymbol) : (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType;
+                return getFlowTypeOfReference(node, isReadonlyThisMethod(getSymbolOfNode(container)) ? getReadonlyType(type) : type);
             }
 
             if (isInJavaScriptFile(node)) {
