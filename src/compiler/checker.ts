@@ -10307,7 +10307,6 @@ namespace ts {
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
-                if (source === target) return;
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
@@ -10387,6 +10386,7 @@ namespace ts {
                     }
                 }
                 else if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                    if (source === target) return;
                     // If source and target are references to the same generic type, infer from type arguments
                     const sourceTypes = (<TypeReference>source).typeArguments || emptyArray;
                     const targetTypes = (<TypeReference>target).typeArguments || emptyArray;
