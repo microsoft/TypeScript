@@ -10307,6 +10307,7 @@ namespace ts {
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
+                if (source === target) return;
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
