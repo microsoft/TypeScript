@@ -10727,7 +10727,14 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     if (target.kind !== SyntaxKind.PropertyAccessExpression) return false;
                     const t = target as PropertyAccessExpression;
-                    return t.name.text === getBindingElementNameText(source as BindingElement) && source.parent.parent.kind === SyntaxKind.BindingElement ? isMatchingReference(source.parent.parent, t.expression) : true;
+                    if (t.name.text !== getBindingElementNameText(source as BindingElement)) return false;
+                    if (source.parent.parent.kind === SyntaxKind.BindingElement && isMatchingReference(source.parent.parent, t.expression)) {
+                            return true;
+                    }
+                    if (source.parent.parent.kind === SyntaxKind.VariableDeclaration) {
+                        const maybeId = (source.parent.parent as VariableDeclaration).initializer;
+                        return maybeId && isMatchingReference(maybeId, t.expression);
+                    }
             }
             return false;
         }
