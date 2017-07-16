@@ -648,7 +648,7 @@ namespace ts.server {
                     missingFilePath => {
                         const fileWatcher = this.projectService.addFileWatcher(
                             WatchType.MissingFilePath, this, missingFilePath,
-                            (filename: string, eventKind: FileWatcherEventKind) => {
+                            (filename, eventKind) => {
                                 if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
                                     this.missingFilesMap.delete(missingFilePath);
                                     this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
@@ -911,9 +911,6 @@ namespace ts.server {
             super.setCompilerOptions(newOptions);
         }
 
-        // Used to keep track of what directories are watched for this project
-        directoriesWatchedForTsconfig: string[] = [];
-
         constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
@@ -927,6 +924,7 @@ namespace ts.server {
         }
 
         addRoot(info: ScriptInfo) {
+            this.projectService.startWatchingRootOfInferredProject(info);
             if (!this._isJsInferredProject && info.isJavaScript()) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }
@@ -934,6 +932,7 @@ namespace ts.server {
         }
 
         removeRoot(info: ScriptInfo) {
+            this.projectService.stopWatchingRootOfInferredProject(info, WatcherCloseReason.NotNeeded);
             super.removeRoot(info);
             if (this._isJsInferredProject && info.isJavaScript()) {
                 if (!some(this.getRootScriptInfos(), info => info.isJavaScript())) {
@@ -958,11 +957,8 @@ namespace ts.server {
         }
 
         close() {
+            forEach(this.getRootScriptInfos(), root => this.projectService.stopWatchingRootOfInferredProject(root, WatcherCloseReason.ProjectClose));
             super.close();
-
-            for (const directory of this.directoriesWatchedForTsconfig) {
-                this.projectService.stopWatchingDirectory(directory);
-            }
         }
 
         getTypeAcquisition(): TypeAcquisition {
@@ -1212,6 +1208,7 @@ namespace ts.server {
             if (this.configFileWatcher) {
                 this.projectService.closeFileWatcher(WatchType.ConfigFilePath, this, this.getConfigFilePath(), this.configFileWatcher, WatcherCloseReason.ProjectClose);
                 this.configFileWatcher = undefined;
+                this.projectService.setConfigFilePresenceByClosedConfigFile(this);
             }
 
             this.stopWatchingTypeRoots(WatcherCloseReason.ProjectClose);
