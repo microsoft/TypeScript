@@ -809,7 +809,9 @@ namespace ts.projectSystem {
             const project = projectService.inferredProjects[0];
 
             checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
-            checkWatchedFiles(host, ["/a/b/c/tsconfig.json", "/a/b/tsconfig.json", "/a/tsconfig.json", libFile.path, moduleFile.path]);
+            const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
+            const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
+            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -879,7 +881,8 @@ namespace ts.projectSystem {
             checkProjectActualFiles(project, [file1.path, libFile.path, file2.path, configFile.path]);
             checkProjectRootFiles(project, [file1.path, file2.path]);
             // watching all files except one that was open
-            checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
+            // And also tsconfig files for the open files
+            checkWatchedFiles(host, [configFile.path, file2.path, libFile.path, "/a/b/c/tsconfig.json", "/a/b/c/jsconfig.json"]);
             checkWatchedDirectories(host, [getDirectoryPath(configFile.path)], /*recursive*/ true);
         });
 
@@ -899,15 +902,16 @@ namespace ts.projectSystem {
             projectService.openClientFile(commonFile2.path);
 
             checkNumberOfInferredProjects(projectService, 2);
-            checkWatchedFiles(host, [configFile.path, "/a/tsconfig.json", libFile.path]);
+            const configFileLocations = ["/", "/a/", "/a/b/"];
+            const watchedFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]).concat(libFile.path);
+            checkWatchedFiles(host, watchedFiles);
 
             // Add a tsconfig file
             host.reloadFS(filesWithConfig);
             host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfInferredProjects(projectService, 1);
             checkNumberOfConfiguredProjects(projectService, 1);
-            // watching all files except one that was open
-            checkWatchedFiles(host, [libFile.path, configFile.path, "/a/tsconfig.json"]);
+            checkWatchedFiles(host, watchedFiles);
 
             // remove the tsconfig file
             host.reloadFS(filesWithoutConfig);
@@ -917,7 +921,7 @@ namespace ts.projectSystem {
 
             checkNumberOfInferredProjects(projectService, 2);
             checkNumberOfConfiguredProjects(projectService, 0);
-            checkWatchedFiles(host, ["/a/b/tsconfig.json", "/a/tsconfig.json", libFile.path]);
+            checkWatchedFiles(host, watchedFiles);
         });
 
         it("add new files to a configured project without file list", () => {

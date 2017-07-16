@@ -252,7 +252,7 @@ namespace ts.server {
         WildCardDirectories = "Wild card directory",
         TypeRoot = "Type root of the project",
         ClosedScriptInfo = "Closed Script info",
-        ConfigFileForInferredRoot = "Config file for the root script info of the inferred project"
+        ConfigFileForOpenFile = "Config file changes for the open script info"
     }
 
     /* @internal */
@@ -266,12 +266,12 @@ namespace ts.server {
         OrphanScriptInfo = "Removing Orphan script info as part of cleanup",
         FileDeleted = "File was deleted",
         FileOpened = "File opened",
-        ConfigProjectCreated = "Config file project created"
+        ConfigProjectCreated = "Config file project created",
+        FileClosed = "File is closed"
     }
 
     const enum ConfigFileWatcherStatus {
         ReloadingFiles = "Reloading configured projects files",
-        NoAction = "No action on files",
         UpdatedCallback = "Updated the callback",
         TrackingFileAdded = "Tracking file added",
         TrackingFileRemoved = "Tracking file removed"
@@ -282,7 +282,7 @@ namespace ts.server {
 
     type ConfigFileExistence = {
         exists: boolean;
-        trackingOpenFiles?: ScriptInfo[];
+        trackingOpenFileSet?: Map<true>;
         configFileWatcher?: FileWatcher;
     };
 
@@ -672,48 +672,31 @@ namespace ts.server {
                 // Update the cached status
                 // No action needed on tracking open files since the existing config file anyways didnt affect the tracking file
                 configFilePresenceInfo.exists = false;
-                this.logTrackingFiles(project.getConfigFilePath(), configFilePresenceInfo, ConfigFileWatcherStatus.NoAction);
                 this.removeProject(project);
 
-                // Reload the configured projects for these open files in the project as
-                // they could be held up by another config file somewhere in the parent directory
-                const orphanFiles = filter(this.openFiles, file => file.containingProjects.length === 0);
-                this.delayReloadConfiguredProjectForFiles(orphanFiles);
+                // Reload the configured projects for the open files in the map as they are affectected by this config file
+                this.logConfigFileWatch(project.getConfigFilePath(), configFilePresenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
+                this.delayReloadConfiguredProjectForFiles(configFilePresenceInfo.trackingOpenFileSet);
             }
             else {
+                this.logConfigFileWatch(project.getConfigFilePath(), configFilePresenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
                 project.pendingReload = true;
-                this.logTrackingFiles(project.getConfigFilePath(), configFilePresenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
-                if (configFilePresenceInfo.trackingOpenFiles) {
-                    this.delayUpdateProjectGraph(project);
-                    this.delayReloadConfiguredProjectForFiles(configFilePresenceInfo.trackingOpenFiles);
-                }
-                else {
-                    this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
-                }
+                this.delayUpdateProjectGraph(project);
+                this.delayReloadConfiguredProjectForFiles(configFilePresenceInfo.trackingOpenFileSet);
             }
         }
 
         /**
-         * This is the callback function for the config file add/remove/change for the root in the inferred project
+         * This is the callback function for the config file add/remove/change at any location that matters to open
+         * script info but doesnt have configured project open for the config file
          */
-        private onConfigFileAddedForInferredProject(configFileName: NormalizedPath, eventKind: FileWatcherEventKind) {
+        private onConfigFileChangeForOpenScriptInfo(configFileName: NormalizedPath, eventKind: FileWatcherEventKind) {
             // This callback is called only if we dont have config file project for this config file
             const cononicalConfigPath = normalizedPathToPath(configFileName, this.currentDirectory, this.toCanonicalFileName);
             const configFilePresenceInfo = this.mapOfConfigFilePresence.get(cononicalConfigPath);
-
-            if (eventKind === FileWatcherEventKind.Deleted) {
-                // No action needed if the event was for deletion of the file
-                // - because the existing config file didnt affect the inferred project roots anyways
-                configFilePresenceInfo.exists = false;
-                this.logTrackingFiles(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.NoAction);
-            }
-            else {
-                // Either the config file was created or changed
-                // Reload the projects
-                configFilePresenceInfo.exists = true;
-                this.logTrackingFiles(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
-                this.delayReloadConfiguredProjectForFiles(configFilePresenceInfo.trackingOpenFiles);
-            }
+            configFilePresenceInfo.exists = (eventKind !== FileWatcherEventKind.Deleted);
+            this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
+            this.delayReloadConfiguredProjectForFiles(configFilePresenceInfo.trackingOpenFileSet);
         }
 
         private removeProject(project: Project) {
@@ -729,7 +712,7 @@ namespace ts.server {
                     this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
                     break;
                 case ProjectKind.Configured:
-                    // Update the map of mapOfKnownTsConfigFiles
+                    this.setConfigFilePresenceByClosedConfigFile(<ConfiguredProject>project);
                     this.configuredProjects.delete((<ConfiguredProject>project).canonicalConfigFilePath);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
@@ -791,6 +774,7 @@ namespace ts.server {
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
             info.close();
+            this.stopWatchingConfigFileForScriptInfo(info);
 
             removeItemFromSet(this.openFiles, info);
 
@@ -863,28 +847,24 @@ namespace ts.server {
             });
         }
 
-        private configFileExists(configFileName: NormalizedPath) {
+        private configFileExists(configFileName: NormalizedPath, info: ScriptInfo) {
             const canonicalConfigFilePath = normalizedPathToPath(configFileName, this.currentDirectory, this.toCanonicalFileName);
-            const configFilePresenceInfo = this.mapOfConfigFilePresence.get(canonicalConfigFilePath);
-            if (configFilePresenceInfo) {
-                return configFilePresenceInfo.exists;
-            }
-            return this.host.fileExists(configFileName);
+            return this.watchConfigFileForScriptInfo(configFileName, canonicalConfigFilePath, info).exists;
         }
 
         private setConfigFilePresenceByNewConfiguredProject(project: ConfiguredProject) {
             const configFilePresenceInfo = this.mapOfConfigFilePresence.get(project.canonicalConfigFilePath);
             if (configFilePresenceInfo) {
-                configFilePresenceInfo.exists = true;
+                Debug.assert(configFilePresenceInfo.exists);
                 // close existing watcher
                 if (configFilePresenceInfo.configFileWatcher) {
                     const configFileName = project.getConfigFilePath();
                     this.closeFileWatcher(
-                        WatchType.ConfigFileForInferredRoot, /*project*/ undefined, configFileName,
+                        WatchType.ConfigFileForOpenFile, /*project*/ undefined, configFileName,
                         configFilePresenceInfo.configFileWatcher, WatcherCloseReason.ConfigProjectCreated
                     );
                     configFilePresenceInfo.configFileWatcher = undefined;
-                    this.logTrackingFiles(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
+                    this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
                 }
             }
             else {
@@ -893,17 +873,16 @@ namespace ts.server {
             }
         }
 
-        /* @internal */
-        setConfigFilePresenceByClosedConfigFile(closedProject: ConfiguredProject) {
+        private setConfigFilePresenceByClosedConfigFile(closedProject: ConfiguredProject) {
             const configFilePresenceInfo = this.mapOfConfigFilePresence.get(closedProject.canonicalConfigFilePath);
             Debug.assert(!!configFilePresenceInfo);
-            if (configFilePresenceInfo.trackingOpenFiles) {
+            if (configFilePresenceInfo.trackingOpenFileSet) {
                 const configFileName = closedProject.getConfigFilePath();
                 configFilePresenceInfo.configFileWatcher = this.addFileWatcher(
-                    WatchType.ConfigFileForInferredRoot, /*project*/ undefined, configFileName,
-                    (_filename, eventKind) => this.onConfigFileAddedForInferredProject(configFileName, eventKind)
+                    WatchType.ConfigFileForOpenFile, /*project*/ undefined, configFileName,
+                    (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind)
                 );
-                this.logTrackingFiles(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
+                this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
             }
             else {
                 // There is no one tracking anymore. Remove the status
@@ -911,83 +890,81 @@ namespace ts.server {
             }
         }
 
-        private logTrackingFiles(configFileName: NormalizedPath, configFilePresenceInfo: ConfigFileExistence, status: ConfigFileWatcherStatus) {
-            const watchType = configFilePresenceInfo.configFileWatcher ? WatchType.ConfigFileForInferredRoot : WatchType.ConfigFilePath;
-            const files = map(configFilePresenceInfo.trackingOpenFiles, info => info.fileName);
+        private logConfigFileWatch(configFileName: NormalizedPath, configFilePresenceInfo: ConfigFileExistence, status: ConfigFileWatcherStatus) {
+            const watchType = configFilePresenceInfo.configFileWatcher ? WatchType.ConfigFileForOpenFile : WatchType.ConfigFilePath;
+            const files = configFilePresenceInfo.trackingOpenFileSet ?
+                arrayFrom(configFilePresenceInfo.trackingOpenFileSet.keys(), key =>
+                    this.getScriptInfoForPath(key as Path).fileName) :
+                [];
             this.logger.info(`FileWatcher:: ${watchType}: File: ${configFileName} Currently Tracking for files: ${files} Status: ${status}`);
         }
 
-        private watchConfigFileForInferredRoot(configFileName: NormalizedPath, canonicalConfigFilePath: string, root: ScriptInfo) {
+        private watchConfigFileForScriptInfo(configFileName: NormalizedPath, canonicalConfigFilePath: string, info: ScriptInfo) {
             let configFilePresenceInfo = this.mapOfConfigFilePresence.get(canonicalConfigFilePath);
             if (configFilePresenceInfo) {
                 // Existing information - just add to tracking files
-                (configFilePresenceInfo.trackingOpenFiles || (configFilePresenceInfo.trackingOpenFiles = [])).push(root);
-            }
-            else {
-                // Add new callback
-                configFilePresenceInfo = {
-                    exists: this.host.fileExists(configFileName),
-                    trackingOpenFiles: [root],
-                    configFileWatcher: this.addFileWatcher(
-                        WatchType.ConfigFileForInferredRoot, /*project*/ undefined, configFileName,
-                        (_fileName, eventKind) => this.onConfigFileAddedForInferredProject(configFileName, eventKind)
-                    )
-                };
-                this.mapOfConfigFilePresence.set(canonicalConfigFilePath, configFilePresenceInfo);
-            }
-            this.logTrackingFiles(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileAdded);
-        }
-
-        private closeWatchConfigFileForInferredRoot(configFileName: NormalizedPath, canonicalConfigFilePath: string, root: ScriptInfo, reason: WatcherCloseReason) {
-            const configFilePresenceInfo = this.mapOfConfigFilePresence.get(canonicalConfigFilePath);
-            Debug.assert(!!configFilePresenceInfo);
-            if (configFilePresenceInfo.trackingOpenFiles.length === 1) {
-                configFilePresenceInfo.trackingOpenFiles = undefined;
-                this.logTrackingFiles(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileRemoved);
-                if (configFilePresenceInfo.configFileWatcher) {
-                    this.closeFileWatcher(
-                        WatchType.ConfigFileForInferredRoot, /*project*/ undefined,
-                        configFileName, configFilePresenceInfo.configFileWatcher, reason
-                    );
-                    this.mapOfConfigFilePresence.delete(canonicalConfigFilePath);
+                if (!configFilePresenceInfo.trackingOpenFileSet) {
+                    configFilePresenceInfo.trackingOpenFileSet = createMap<true>();
+                    configFilePresenceInfo.trackingOpenFileSet.set(info.path, true);
+                    this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileAdded);
+                }
+                else if (!configFilePresenceInfo.trackingOpenFileSet.has(info.path)) {
+                    configFilePresenceInfo.trackingOpenFileSet.set(info.path, true);
+                    this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileAdded);
                 }
             }
             else {
-                removeItemFromSet(configFilePresenceInfo.trackingOpenFiles, root);
-                this.logTrackingFiles(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileRemoved);
+                // Add new callback
+                const trackingOpenFileSet = createMap<true>();
+                trackingOpenFileSet.set(info.path, true);
+                const exists = this.host.fileExists(configFileName);
+                configFilePresenceInfo = {
+                    exists,
+                    trackingOpenFileSet,
+                    configFileWatcher: this.addFileWatcher(
+                        WatchType.ConfigFileForOpenFile, /*project*/ undefined, configFileName,
+                        (_fileName, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind)
+                    )
+                };
+                this.mapOfConfigFilePresence.set(canonicalConfigFilePath, configFilePresenceInfo);
+                this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileAdded);
+            }
+            return configFilePresenceInfo;
+        }
+
+        private closeConfigFileWatchForScriptInfo(configFileName: NormalizedPath, canonicalConfigFilePath: string, info: ScriptInfo) {
+            const configFilePresenceInfo = this.mapOfConfigFilePresence.get(canonicalConfigFilePath);
+            if (configFilePresenceInfo) {
+                if (configFilePresenceInfo.trackingOpenFileSet.size === 1) {
+                    configFilePresenceInfo.trackingOpenFileSet = undefined;
+                    this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileRemoved);
+                    if (configFilePresenceInfo.configFileWatcher) {
+                        this.closeFileWatcher(
+                            WatchType.ConfigFileForOpenFile, /*project*/ undefined, configFileName,
+                            configFilePresenceInfo.configFileWatcher, WatcherCloseReason.FileClosed
+                        );
+                        this.mapOfConfigFilePresence.delete(canonicalConfigFilePath);
+                    }
+                }
+                else {
+                    configFilePresenceInfo.trackingOpenFileSet.delete(info.path);
+                    this.logConfigFileWatch(configFileName, configFilePresenceInfo, ConfigFileWatcherStatus.TrackingFileRemoved);
+                }
             }
         }
 
-        private enumerateWatchingRootOfInferredProject(root: ScriptInfo,
-            action: (configFileName: NormalizedPath, canonicalConfigFilePath: string, root: ScriptInfo) => void) {
-            let current = root.fileName;
-            let currentPath = getDirectoryPath(root.path);
+        private stopWatchingConfigFileForScriptInfo(info: ScriptInfo) {
+            Debug.assert(!info.isScriptOpen());
+            let current = info.fileName;
+            let currentPath = getDirectoryPath(info.path);
             let parentPath = getDirectoryPath(currentPath);
             while (currentPath !== parentPath) {
                 current = asNormalizedPath(getDirectoryPath(current));
-                action(asNormalizedPath(combinePaths(current, "tsconfig.json")), combinePaths(currentPath, "tsconfig.json"), root);
-                //if (root.isJavaScript()) {
-                //    this.watchConfigFileForInferredRoot(asNormalizedPath(combinePaths(current, "jsconfig.json")), combinePaths(currentPath, "jsconfig.json"), root);
-                //}
+                this.closeConfigFileWatchForScriptInfo(asNormalizedPath(combinePaths(current, "tsconfig.json")), combinePaths(currentPath, "tsconfig.json"), info);
+                this.closeConfigFileWatchForScriptInfo(asNormalizedPath(combinePaths(current, "jsconfig.json")), combinePaths(currentPath, "jsconfig.json"), info);
                 currentPath = parentPath;
                 parentPath = getDirectoryPath(parentPath);
             }
-        }
-
-        /*@internal*/
-        startWatchingRootOfInferredProject(root: ScriptInfo) {
-            this.enumerateWatchingRootOfInferredProject(root,
-                (configFileName, canonicalConfigFilePath, root) =>
-                    this.watchConfigFileForInferredRoot(configFileName, canonicalConfigFilePath, root)
-            );
-        }
-
-        /*@internal*/
-        stopWatchingRootOfInferredProject(root: ScriptInfo, reason: WatcherCloseReason) {
-            this.enumerateWatchingRootOfInferredProject(root,
-                (configFileName, canonicalConfigFilePath, root) =>
-                    this.closeWatchConfigFileForInferredRoot(configFileName, canonicalConfigFilePath, root, reason)
-            );
         }
 
         /**
@@ -998,20 +975,21 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private getConfigFileNameForFile(fileName: NormalizedPath, projectRootPath?: NormalizedPath) {
-            let searchPath = getDirectoryPath(fileName);
+        private getConfigFileNameForFile(info: ScriptInfo, projectRootPath?: NormalizedPath) {
+            Debug.assert(info.isScriptOpen());
+            let searchPath = getDirectoryPath(info.fileName);
             this.logger.info(`Search path: ${searchPath}`);
 
             // check if this file is already included in one of external projects
             while (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0) {
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                if (this.configFileExists(tsconfigFileName)) {
+                if (this.configFileExists(tsconfigFileName, info)) {
                     this.logger.info(`Config file name: ${tsconfigFileName}`);
                     return tsconfigFileName;
                 }
 
                 const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                if (this.configFileExists(jsconfigFileName)) {
+                if (this.configFileExists(jsconfigFileName, info)) {
                     this.logger.info(`Config file name: ${jsconfigFileName}`);
                     return jsconfigFileName;
                 }
@@ -1359,7 +1337,6 @@ namespace ts.server {
                 : new InferredProject(this, this.documentRegistry, this.compilerOptionsForInferredProjects);
 
             project.addRoot(root);
-            this.startWatchingRootOfInferredProject(root);
             project.updateGraph();
 
             if (!useExistingProject) {
@@ -1513,8 +1490,11 @@ namespace ts.server {
             this.refreshInferredProjects();
         }
 
-        delayReloadConfiguredProjectForFiles(openFiles: ScriptInfo[]) {
-            this.reloadConfiguredProjectForFiles(openFiles, /*delayReload*/ true);
+        delayReloadConfiguredProjectForFiles(openFileSet: Map<true>) {
+            if (openFileSet) {
+                const openFiles = arrayFrom(openFileSet.keys(), path => this.getScriptInfoForPath(path as Path));
+                this.reloadConfiguredProjectForFiles(openFiles, /*delayReload*/ true);
+            }
             this.delayInferredProjectsRefresh();
         }
 
@@ -1532,7 +1512,7 @@ namespace ts.server {
                 // we first detect if there is already a configured project created for it: if so,
                 // we re- read the tsconfig file content and update the project only if we havent already done so
                 // otherwise we create a new one.
-                const configFileName = this.getConfigFileNameForFile(info.fileName);
+                const configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     let project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
@@ -1614,9 +1594,10 @@ namespace ts.server {
             let configFileName: NormalizedPath;
             let configFileErrors: Diagnostic[];
 
+            const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
             let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
             if (!project) {
-                configFileName = this.getConfigFileNameForFile(fileName, projectRootPath);
+                configFileName = this.getConfigFileNameForFile(info, projectRootPath);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
@@ -1640,7 +1621,6 @@ namespace ts.server {
             }
 
             // at this point if file is the part of some configured/external project then this project should be created
-            const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
             this.assignScriptInfoToInferredProjectIfNecessary(info, /*addToListOfOpenFiles*/ true);
             // Delete the orphan files here because there might be orphan script infos (which are not part of project)
             // when some file/s were closed which resulted in project removal.
