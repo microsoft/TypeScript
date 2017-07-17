@@ -1,21 +1,25 @@
 {
-    "kind": "JSDocTypeReference",
+    "kind": "TypeReference",
     "pos": 1,
     "end": 11,
-    "name": {
+    "flags": "JSDoc",
+    "typeName": {
         "kind": "FirstNode",
         "pos": 1,
         "end": 11,
+        "flags": "JSDoc",
         "left": {
             "kind": "Identifier",
             "pos": 1,
             "end": 2,
+            "flags": "JSDoc",
             "text": "a"
         },
         "right": {
             "kind": "Identifier",
             "pos": 3,
             "end": 11,
+            "flags": "JSDoc",
             "originalKeywordKind": "FunctionKeyword",
             "text": "function"
         }

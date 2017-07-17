@@ -1,27 +1,25 @@
 {
-    "kind": "JSDocRecordType",
+    "kind": "TypeLiteral",
     "pos": 1,
     "end": 11,
-    "literal": {
-        "kind": "TypeLiteral",
-        "pos": 1,
-        "end": 11,
-        "members": {
-            "0": {
-                "kind": "PropertySignature",
+    "flags": "JSDoc",
+    "members": {
+        "0": {
+            "kind": "PropertySignature",
+            "pos": 2,
+            "end": 10,
+            "flags": "JSDoc",
+            "name": {
+                "kind": "Identifier",
                 "pos": 2,
                 "end": 10,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 2,
-                    "end": 10,
-                    "originalKeywordKind": "FunctionKeyword",
-                    "text": "function"
-                }
-            },
-            "length": 1,
-            "pos": 2,
-            "end": 10
-        }
+                "flags": "JSDoc",
+                "originalKeywordKind": "FunctionKeyword",
+                "text": "function"
+            }
+        },
+        "length": 1,
+        "pos": 2,
+        "end": 10
     }
 }

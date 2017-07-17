@@ -20,7 +20,7 @@ x(1);
 
 /** @type {function} */
 const y = (a) => a + 1;
-x(1);
+y(1);
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
@@ -40,6 +40,7 @@ var props = {};
  */
 var props = {};
 
+
 //// [0.js]
 // @ts-check
 /** @type {String} */
@@ -57,7 +58,7 @@ var x = function (a) { return a + 1; };
 x(1);
 /** @type {function} */
 var y = function (a) { return a + 1; };
-x(1);
+y(1);
 /** @type {function (number)} */
 var x1 = function (a) { return a + 1; };
 x1(0);
