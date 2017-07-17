@@ -15,11 +15,11 @@ namespace ts.codefix {
         const jsdocType = (decl as VariableDeclaration).type;
         const original = getTextOfNode(jsdocType);
         const type = checker.getTypeFromTypeNode(jsdocType);
-        const actions = [createAction(jsdocType, sourceFile.fileName, original, checker.typeToString(type))];
+        const actions = [createAction(jsdocType, sourceFile.fileName, original, checker.typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTruncation))];
         if (jsdocType.kind === SyntaxKind.JSDocNullableType) {
             // for nullable types, suggest the flow-compatible `T | null | undefined`
             // in addition to the jsdoc/closure-compatible `T | null`
-            const replacementWithUndefined = checker.typeToString(checker.getNullableType(type, TypeFlags.Undefined));
+            const replacementWithUndefined = checker.typeToString(checker.getNullableType(type, TypeFlags.Undefined), /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTruncation);
             actions.push(createAction(jsdocType, sourceFile.fileName, original, replacementWithUndefined));
         }
         return actions;
