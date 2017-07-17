@@ -1093,14 +1093,14 @@ namespace ts.Completions {
                         }
                     }
                     const implementedInterfaceTypePropertySymbols = (classElementModifierFlags & ModifierFlags.Static) ?
-                        undefined :
-                        flatMap(implementsTypeNodes, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
+                        emptyArray :
+                        flatMap(implementsTypeNodes || emptyArray, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
 
                     // List of property symbols of base type that are not private and already implemented
                     symbols = filterClassMembersList(
                         baseClassTypeToGetPropertiesFrom ?
                             typeChecker.getPropertiesOfType(baseClassTypeToGetPropertiesFrom) :
-                            undefined,
+                            emptyArray,
                         implementedInterfaceTypePropertySymbols,
                         classLikeDeclaration.members,
                         classElementModifierFlags);
@@ -1557,10 +1557,18 @@ namespace ts.Completions {
                 }
             }
 
-            return [
-                ...filter(baseSymbols, baseProperty => isValidProperty(baseProperty, ModifierFlags.Private)),
-                ...filter(implementingTypeSymbols, implementingProperty => isValidProperty(implementingProperty, ModifierFlags.NonPublicAccessibilityModifier))
-            ];
+            const result: Symbol[] = [];
+            addPropertySymbols(baseSymbols, ModifierFlags.Private);
+            addPropertySymbols(implementingTypeSymbols, ModifierFlags.NonPublicAccessibilityModifier);
+            return result;
+
+            function addPropertySymbols(properties: ReadonlyArray<Symbol>, inValidModifierFlags: ModifierFlags) {
+                for (const property of properties) {
+                    if (isValidProperty(property, inValidModifierFlags)) {
+                        result.push(property);
+                    }
+                }
+            }
 
             function isValidProperty(propertySymbol: Symbol, inValidModifierFlags: ModifierFlags) {
                 return !existingMemberNames.get(propertySymbol.name) &&
