@@ -9265,6 +9265,13 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Readonly) {
+                    // A type S or readonly S is related to a readonly T if S is related to T.
+                    const nonReadonlySource = source.flags & TypeFlags.Readonly ? (<ReadonlyTypeVariable>source).type : source;
+                    if (result = isRelatedTo(nonReadonlySource, (<ReadonlyTypeVariable>target).type, reportErrors)) {
+                        return result;
+                    }
+                }
                 else if (target.flags & TypeFlags.Index) {
                     // A keyof S is related to a keyof T if T is related to S.
                     if (source.flags & TypeFlags.Index) {
