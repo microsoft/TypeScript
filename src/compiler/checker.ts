@@ -6872,6 +6872,17 @@ namespace ts {
 
         function getPrimitiveTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
             if (isIdentifier(node.typeName)) {
+                if (node.typeName.text === "Object") {
+                    if (node.typeArguments && node.typeArguments.length === 2) {
+                        const from = getTypeFromTypeNode(node.typeArguments[0]);
+                        const to = getTypeFromTypeNode(node.typeArguments[1]);
+                        let index = createIndexInfo(to, /*isReadonly*/ false);
+                        if (from === stringType || from === numberType) {
+                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, from === stringType ? index : undefined, from === numberType ? index : undefined)
+                        }
+                    }
+                    return anyType;
+                }
                 switch (node.typeName.text) {
                     case "String":
                         return stringType;
@@ -6885,8 +6896,6 @@ namespace ts {
                         return undefinedType;
                     case "Null":
                         return nullType;
-                    case "Object":
-                        return anyType;
                     case "Function":
                     case "function":
                         return globalFunctionType;
