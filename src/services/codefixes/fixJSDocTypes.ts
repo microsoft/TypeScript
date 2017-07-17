@@ -11,42 +11,40 @@ namespace ts.codefix {
         const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
         if (node.kind !== SyntaxKind.VariableDeclaration) return;
 
-        const type = (node as VariableDeclaration).type;
-        if (containsJSDocType(type)) {
-            const tsType = getTypeFromJSDocType(type);
-            return [{
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_0_to_1), [getTextOfNode(type), tsType]),
-                changes: [{
-                    fileName: sourceFile.fileName,
-                    textChanges: [{
-                        span: { start: type.getStart(), length: type.getWidth() },
-                        newText: tsType
-                    }],
-                }],
-            }];
-        }
+        const trk = textChanges.ChangeTracker.fromCodeFixContext(context);
+        const jsdocType = (node as VariableDeclaration).type;
+        // TODO: Only if get(jsdoctype) !== jsdoctype
+        trk.replaceNode(sourceFile, jsdocType, getTypeFromJSDocType(jsdocType));
+        return [{
+            // TODO: This seems like the LEAST SAFE way to get the new text
+            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_0_to_1), [getTextOfNode(jsdocType), trk.getChanges()[0].textChanges[0].newText]),
+            changes: trk.getChanges(),
+        }];
     }
 
-    function containsJSDocType(type: TypeNode): boolean {
+    function getTypeFromJSDocType(type: TypeNode): TypeNode {
         switch (type.kind) {
             case SyntaxKind.JSDocUnknownType:
             case SyntaxKind.JSDocAllType:
+                return createToken(SyntaxKind.AnyKeyword) as TypeNode;
             case SyntaxKind.JSDocVariadicType:
-                return true;
-            // TODO: Of course you can put JSDoc types inside normal types, like number?[] and so on
+                return createArrayTypeNode(getTypeFromJSDocType((type as JSDocVariadicType).type));
+            case SyntaxKind.ArrayType:
+                // TODO: Only create an error if the get(type.type) !== type.type.
+                return createArrayTypeNode(getTypeFromJSDocType((type as ArrayTypeNode).elementType));
+            case SyntaxKind.TypeReference:
+                return getTypeReferenceFromJSDocType(type as TypeReferenceNode);
+            case SyntaxKind.Identifier:
+                return type;
         }
+        // TODO: Need to recur on all relevant nodes. Is a call to visit enough?
+        return type;
     }
 
-    function getTypeFromJSDocType(type: TypeNode): string {
-        switch (type.kind) {
-            case SyntaxKind.JSDocUnknownType:
-            case SyntaxKind.JSDocAllType:
-                return "any";
-            case SyntaxKind.JSDocVariadicType:
-                // this will surely work!
-                return getTypeFromJSDocType((type as JSDocVariadicType).type) + "[]";
-            // TODO: Of course you can put JSDoc types inside normal types, like number?[] and so on
+    function getTypeReferenceFromJSDocType(type: TypeReferenceNode) {
+        if (type.typeArguments && type.typeName.jsdocDotPos) {
+            return createTypeReferenceNode(type.typeName, map(type.typeArguments, getTypeFromJSDocType));
         }
-        return getTextOfNode(type);
+        return getTypeFromJSDocType(type);
     }
 }
