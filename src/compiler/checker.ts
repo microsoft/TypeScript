@@ -10670,7 +10670,7 @@ namespace ts {
                 return key && key + "." + (<PropertyAccessExpression>node).name.text;
             }
             if (node.kind === SyntaxKind.BindingElement) {
-                const key = node.parent.parent.kind === SyntaxKind.BindingElement ? getFlowCacheKey(node.parent.parent) : isApparentTypePosition(node.parent.parent) ? "@<initializer>" : "<initializer>";
+                const key = node.parent.parent.kind === SyntaxKind.VariableDeclaration ? getFlowCacheKey((node.parent.parent as VariableDeclaration).initializer) : getFlowCacheKey(node.parent.parent);
                 const text = getBindingElementNameText(node as BindingElement);
                 return key && text && key + "." + text;
             }
@@ -10691,11 +10691,11 @@ namespace ts {
         function getBindingElementNameText(element: BindingElement): string | undefined {
             if (element.parent.kind === SyntaxKind.ObjectBindingPattern) {
                 const name = element.propertyName || element.name;
-                if (isComputedNonLiteralName(name as PropertyName)) return undefined;
                 switch (name.kind) {
                     case SyntaxKind.Identifier:
                         return unescapeLeadingUnderscores(name.text);
                     case SyntaxKind.ComputedPropertyName:
+                        if (isComputedNonLiteralName(name as PropertyName)) return undefined;
                         return (name.expression as LiteralExpression).text;
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
