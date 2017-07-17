@@ -34,5 +34,5 @@ var y = id2(C);
 var z = new y(12);
 z.length;
 
-/** @type {function ("a" | "b"): 1 | 2} */
-var f = function (s) { return s === "a" ? 1 : 2;  }
+/** @type {function ("a" | "b", 1 | 2): 3 | 4} */
+var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }

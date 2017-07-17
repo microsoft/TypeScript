@@ -61,9 +61,10 @@ z.length;
 >z : Symbol(z, Decl(functions.js, 26, 3))
 >length : Symbol(length, Decl(functions.js, 12, 27))
 
-/** @type {function ("a" | "b"): 1 | 2} */
-var f = function (s) { return s === "a" ? 1 : 2;  }
+/** @type {function ("a" | "b", 1 | 2): 3 | 4} */
+var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
 >f : Symbol(f, Decl(functions.js, 30, 3))
->s : Symbol(s, Decl(functions.js, 30, 18))
->s : Symbol(s, Decl(functions.js, 30, 18))
+>ab : Symbol(ab, Decl(functions.js, 30, 18))
+>onetwo : Symbol(onetwo, Decl(functions.js, 30, 21))
+>ab : Symbol(ab, Decl(functions.js, 30, 18))
 
