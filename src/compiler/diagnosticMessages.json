@@ -2064,7 +2064,7 @@
         "category": "Error",
         "code": 2679
     },
-    "A 'this' parameter must be the first parameter.": {
+    "A '{0}' parameter must be the first parameter.": {
         "category": "Error",
         "code": 2680
     },
@@ -3463,6 +3463,22 @@
         "category": "Error",
         "code": 8016
     },
+    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8017
+    },
+    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8018
+    },
+    "Report errors in .js files.": {
+        "category": "Message",
+        "code": 8019
+    },
+    "JSDoc types can only be used inside documentation comments.": {
+        "category": "Error",
+        "code": 8020
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3645,18 +3661,5 @@
     "Convert function '{0}' to class": {
         "category": "Message",
         "code": 95002
-    },
-
-    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8017
-    },
-    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8018
-    },
-    "Report errors in .js files.": {
-        "category": "Message",
-        "code": 8019
     }
 }

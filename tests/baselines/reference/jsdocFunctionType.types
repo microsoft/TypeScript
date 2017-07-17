@@ -1,0 +1,83 @@
+=== tests/cases/conformance/jsdoc/functions.js ===
+/**
+ * @param {function(this: string, number): number} c is just passing on through
+ * @return {function(this: string, number): number}
+ */
+function id1(c) {
+>id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
+>c : (this: string, arg1: number) => number
+
+    return c
+>c : (this: string, arg1: number) => number
+}
+
+var x = id1(function (n) { return this.length + n });
+>x : (this: string, arg1: number) => number
+>id1(function (n) { return this.length + n }) : (this: string, arg1: number) => number
+>id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
+>function (n) { return this.length + n } : (this: string, n: number) => number
+>n : number
+>this.length + n : number
+>this.length : number
+>this : string
+>length : number
+>n : number
+
+/**
+ * @param {function(new: { length: number }, number): number} c is just passing on through
+ * @return {function(new: { length: number }, number): number}
+ */
+function id2(c) {
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>c : new (arg1: number) => { length: number; }
+
+    return c
+>c : new (arg1: number) => { length: number; }
+}
+
+class C {
+>C : C
+
+    /** @param {number} n */
+    constructor(n) {
+>n : number
+
+        this.length = n;
+>this.length = n : number
+>this.length : number
+>this : this
+>length : number
+>n : number
+    }
+}
+
+var y = id2(C);
+>y : new (arg1: number) => { length: number; }
+>id2(C) : new (arg1: number) => { length: number; }
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>C : typeof C
+
+var z = new y(12);
+>z : { length: number; }
+>new y(12) : { length: number; }
+>y : new (arg1: number) => { length: number; }
+>12 : 12
+
+z.length;
+>z.length : number
+>z : { length: number; }
+>length : number
+
+/** @type {function ("a" | "b", 1 | 2): 3 | 4} */
+var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
+>f : (arg0: "a" | "b", arg1: 1 | 2) => 3 | 4
+>function (ab, onetwo) { return ab === "a" ? 3 : 4;  } : (ab: "a" | "b", onetwo: 1 | 2) => 3 | 4
+>ab : "a" | "b"
+>onetwo : 1 | 2
+>ab === "a" ? 3 : 4 : 3 | 4
+>ab === "a" : boolean
+>ab : "a" | "b"
+>"a" : "a"
+>3 : 3
+>4 : 4
+

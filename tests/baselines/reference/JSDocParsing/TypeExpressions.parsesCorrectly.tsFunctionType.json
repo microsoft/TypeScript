@@ -1,0 +1,17 @@
+{
+    "kind": "FunctionType",
+    "pos": 1,
+    "end": 13,
+    "flags": "JSDoc",
+    "parameters": {
+        "length": 0,
+        "pos": 2,
+        "end": 2
+    },
+    "type": {
+        "kind": "StringKeyword",
+        "pos": 6,
+        "end": 13,
+        "flags": "JSDoc"
+    }
+}

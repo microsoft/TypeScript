@@ -350,10 +350,8 @@ function decorated(, C) {
     if ( === void 0) {  = this; }
     return this.n;
 }
-function initializer() { }
-new C();
-number;
-{
+function initializer() {
+    if ( === void 0) {  = new C(); }
     return this.n;
 }
 // can't name parameters 'this' in a lambda.
