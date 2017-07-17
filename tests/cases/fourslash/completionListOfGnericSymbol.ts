@@ -7,5 +7,5 @@
 
 goTo.marker();
 verify.completionListContains('length', "(property) Array<number>.length: number", /*docComments*/ undefined, /*kind*/ "property");
-verify.completionListContains('toString', "(method) Array<number>.toString(): string", /*docComments*/ undefined, /*kind*/ "method");
+verify.completionListContains('toString', "(method) Array<number>.toString(this: readonly): string", /*docComments*/ undefined, /*kind*/ "method");
 
