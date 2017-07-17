@@ -7,13 +7,14 @@ namespace ts.codefix {
 
     function getActionsForJSDocTypes(context: CodeFixContext): CodeAction[] | undefined {
         const sourceFile = context.sourceFile;
-
         const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
-        if (node.kind !== SyntaxKind.VariableDeclaration) return;
+        const decl = ts.findAncestor(node, n => n.kind === SyntaxKind.VariableDeclaration);
+        if (!decl) return;
+        const jsdocType = (decl as VariableDeclaration).type;
+
+        // TODO: Only if get(jsdoctype) !== jsdoctype
 
         const trk = textChanges.ChangeTracker.fromCodeFixContext(context);
-        const jsdocType = (node as VariableDeclaration).type;
-        // TODO: Only if get(jsdoctype) !== jsdoctype
         trk.replaceNode(sourceFile, jsdocType, getTypeFromJSDocType(jsdocType));
         return [{
             // TODO: This seems like the LEAST SAFE way to get the new text

@@ -1,4 +1,4 @@
 /// <reference path='fourslash.ts' />
-//// var x: [|...number|] = 12;
+//// var x: [|......number[][]|] = 12;
 
-verify.rangeAfterCodeFix("number[]");
+verify.rangeAfterCodeFix("number[][][][]");
