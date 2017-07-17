@@ -17740,14 +17740,12 @@ namespace ts {
         }
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
-            if (isInJavaScriptFile(node)) {
-                if (node.jsDoc) {
-                    const typecasts = flatten<JSDocTag>(map(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag)));
-                    if (typecasts && typecasts.length) {
-                        // We should have already issued an error if there were multiple type jsdocs
-                        const cast = typecasts[0] as JSDocTypeTag;
-                        return checkAssertionWorker(cast, cast.typeExpression.type, node.expression, checkMode);
-                    }
+            if (isInJavaScriptFile(node) && node.jsDoc) {
+                const typecasts = flatMap(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag));
+                if (typecasts && typecasts.length) {
+                    // We should have already issued an error if there were multiple type jsdocs
+                    const cast = typecasts[0] as JSDocTypeTag;
+                    return checkAssertionWorker(cast, cast.typeExpression.type, node.expression, checkMode);
                 }
             }
             return checkExpression(node.expression, checkMode);
