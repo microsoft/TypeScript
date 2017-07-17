@@ -913,7 +913,7 @@ namespace ts {
         catch (e) {
             return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
         }
-        return text === undefined ? createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, "File does not exist.") : text;
+        return text === undefined ? createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, fileName) : text;
     }
 
     function commandLineOptionsToMap(options: CommandLineOption[]) {
