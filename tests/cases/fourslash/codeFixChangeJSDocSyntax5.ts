@@ -1,3 +1,4 @@
+// @strict: true
 /// <reference path='fourslash.ts' />
 //// var x: [|?number|] = 12;
 
