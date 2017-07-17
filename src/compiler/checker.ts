@@ -6876,9 +6876,9 @@ namespace ts {
                     if (node.typeArguments && node.typeArguments.length === 2) {
                         const indexed = getTypeFromTypeNode(node.typeArguments[0]);
                         const target = getTypeFromTypeNode(node.typeArguments[1]);
-                        let index = createIndexInfo(target, /*isReadonly*/ false);
+                        const index = createIndexInfo(target, /*isReadonly*/ false);
                         if (indexed === stringType || indexed === numberType) {
-                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index)
+                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index);
                         }
                     }
                     return anyType;
