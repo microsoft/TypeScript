@@ -117,6 +117,7 @@ namespace ts {
             },
             getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
+            getNullableType,
             getNonNullableType,
             typeToTypeNode: nodeBuilder.typeToTypeNode,
             indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
