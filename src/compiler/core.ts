@@ -780,7 +780,7 @@ namespace ts {
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: (x: T, y: T) => Comparison = compareValues) {
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T> = compareValues) {
         return array
             .map((_, i) => i) // create array of indices
             .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
@@ -852,6 +852,8 @@ namespace ts {
         return result;
     }
 
+    export type Comparer<T> = (a: T, b: T) => Comparison;
+
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
      * If no such index is found, returns the 2's-complement of first index at which
@@ -859,7 +861,7 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number {
+    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: Comparer<T>, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }

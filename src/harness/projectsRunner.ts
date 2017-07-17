@@ -289,7 +289,7 @@ class ProjectRunner extends RunnerBase {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
             }
 
-            function readFile(fileName: string): string {
+            function readFile(fileName: string): string | undefined {
                 return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
