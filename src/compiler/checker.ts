@@ -2395,7 +2395,7 @@ namespace ts {
                 }
 
                 if (type.flags & TypeFlags.Any) {
-                    return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    return createKeywordTypeNode(type !== readonlyThisType ? SyntaxKind.AnyKeyword : SyntaxKind.ReadonlyKeyword);
                 }
                 if (type.flags & TypeFlags.String) {
                     return createKeywordTypeNode(SyntaxKind.StringKeyword);
@@ -3212,7 +3212,7 @@ namespace ts {
                     // Write undefined/null type as any
                     if (type.flags & TypeFlags.Intrinsic) {
                         // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
+                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type) && type !== readonlyThisType
                             ? "any"
                             : (<IntrinsicType>type).intrinsicName);
                     }
@@ -5515,8 +5515,8 @@ namespace ts {
                             // Union the result types when more than one signature matches
                             if (unionSignatures.length > 1) {
                                 s = cloneSignature(signature);
-                                if (forEach(unionSignatures, sig => sig.thisParameter)) {
-                                    const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType), /*subtypeReduction*/ true);
+                                if (forEach(unionSignatures, sig => getThisTypeOfSignature(sig))) {
+                                    const thisType = getUnionType(map(unionSignatures, sig => getThisTypeOfSignature(sig)), /*subtypeReduction*/ true);
                                     s.thisParameter = createSymbolWithType(signature.thisParameter, thisType);
                                 }
                                 // Clear resolved return type we possibly got from cloneSignature

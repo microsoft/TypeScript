@@ -915,7 +915,8 @@ namespace ts {
             | SyntaxKind.VoidKeyword
             | SyntaxKind.UndefinedKeyword
             | SyntaxKind.NullKeyword
-            | SyntaxKind.NeverKeyword;
+            | SyntaxKind.NeverKeyword
+            | SyntaxKind.ReadonlyKeyword;
     }
 
     export interface ThisTypeNode extends TypeNode {
