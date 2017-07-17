@@ -6870,7 +6870,7 @@ namespace ts {
             return node.flags & NodeFlags.JSDoc && node.kind === SyntaxKind.TypeReference;
         }
 
-        function getPrimitiveTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
+        function getIntendedTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
             if (isIdentifier(node.typeName)) {
                 if (node.typeName.text === "Object") {
                     if (node.typeArguments && node.typeArguments.length === 2) {
@@ -6921,7 +6921,7 @@ namespace ts {
                 let type: Type;
                 let meaning = SymbolFlags.Type;
                 if (isJSDocTypeReference(node)) {
-                    type = getPrimitiveTypeFromJSDocTypeReference(node);
+                    type = getIntendedTypeFromJSDocTypeReference(node);
                     meaning |= SymbolFlags.Value;
                 }
                 if (!type) {
