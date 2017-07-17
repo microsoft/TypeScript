@@ -554,7 +554,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedReadonlyArray(result);
+                this.lastCachedUnresolvedImportsList = toSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 
@@ -1057,7 +1057,7 @@ namespace ts.server {
         }
 
         getExternalFiles(): SortedReadonlyArray<string> {
-            return toSortedReadonlyArray(flatMap(this.plugins, plugin => {
+            return toSortedArray(flatMap(this.plugins, plugin => {
                 if (typeof plugin.getExternalFiles !== "function") return;
                 try {
                     return plugin.getExternalFiles(this);

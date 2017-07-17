@@ -9,7 +9,7 @@ namespace ts.server {
         verbose
     }
 
-    export const emptyArray: ReadonlyArray<any> = [];
+    export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
 
     export interface Logger {
         close(): void;
@@ -190,39 +190,45 @@ namespace ts.server {
         return `/dev/null/inferredProject${counter}*`;
     }
 
-    export function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string> {
-        arr.sort();
-        return <any>arr;
+    export function createSortedArray<T>(): SortedArray<T> {
+        return [] as SortedArray<T>;
     }
 
-    export function enumerateInsertsAndDeletes<T>(a: SortedReadonlyArray<T>, b: SortedReadonlyArray<T>, inserted: (item: T) => void, deleted: (item: T) => void, compare?: (a: T, b: T) => Comparison) {
+    export function toSortedArray(arr: string[]): SortedArray<string>;
+    export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
+    export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
+        arr.sort(comparer);
+        return arr as SortedArray<T>;
+    }
+
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
         compare = compare || compareValues;
-        let aIndex = 0;
-        let bIndex = 0;
-        const aLen = a.length;
-        const bLen = b.length;
-        while (aIndex < aLen && bIndex < bLen) {
-            const aItem = a[aIndex];
-            const bItem = b[bIndex];
-            const compareResult = compare(aItem, bItem);
+        let newIndex = 0;
+        let oldIndex = 0;
+        const newLen = newItems.length;
+        const oldLen = oldItems.length;
+        while (newIndex < newLen && oldIndex < oldLen) {
+            const newItem = newItems[newIndex];
+            const oldItem = oldItems[oldIndex];
+            const compareResult = compare(newItem, oldItem);
             if (compareResult === Comparison.LessThan) {
-                inserted(aItem);
-                aIndex++;
+                inserted(newItem);
+                newIndex++;
             }
             else if (compareResult === Comparison.GreaterThan) {
-                deleted(bItem);
-                bIndex++;
+                deleted(oldItem);
+                oldIndex++;
             }
             else {
-                aIndex++;
-                bIndex++;
+                newIndex++;
+                oldIndex++;
             }
         }
-        while (aIndex < aLen) {
-            inserted(a[aIndex++]);
+        while (newIndex < newLen) {
+            inserted(newItems[newIndex++]);
         }
-        while (bIndex < bLen) {
-            deleted(b[bIndex++]);
+        while (oldIndex < oldLen) {
+            deleted(oldItems[oldIndex++]);
         }
     }
 
@@ -274,7 +280,7 @@ namespace ts.server {
         }
     }
 
-    export function insertSorted<T>(array: T[], insert: T, compare: Comparer<T>): void {
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
         if (array.length === 0) {
             array.push(insert);
             return;
@@ -286,7 +292,7 @@ namespace ts.server {
         }
     }
 
-    export function removeSorted<T>(array: T[], remove: T, compare: Comparer<T>): void {
+    export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
         if (!array || array.length === 0) {
             return;
         }

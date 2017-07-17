@@ -203,8 +203,8 @@ namespace ts.server {
     }
 
     class ModuleBuilderFileInfo extends BuilderFileInfo {
-        references: ModuleBuilderFileInfo[] = [];
-        referencedBy: ModuleBuilderFileInfo[] = [];
+        references = createSortedArray<ModuleBuilderFileInfo>();
+        readonly referencedBy = createSortedArray<ModuleBuilderFileInfo>();
         scriptVersionForReferences: string;
 
         static compareFileInfos(lf: ModuleBuilderFileInfo, rf: ModuleBuilderFileInfo): Comparison {
@@ -223,7 +223,7 @@ namespace ts.server {
             for (const reference of this.references) {
                 reference.removeReferencedBy(this);
             }
-            this.references = [];
+            this.references = createSortedArray<ModuleBuilderFileInfo>();
         }
     }
 
@@ -240,13 +240,13 @@ namespace ts.server {
             super.clear();
         }
 
-        private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): ModuleBuilderFileInfo[] {
+        private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): SortedArray<ModuleBuilderFileInfo> {
             if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return [];
+                return createSortedArray();
             }
 
             const referencedFilePaths = this.project.getReferencedFiles(fileInfo.scriptInfo.path);
-            return referencedFilePaths.map(f => this.getOrCreateFileInfo(f)).sort(ModuleBuilderFileInfo.compareFileInfos);
+            return toSortedArray(referencedFilePaths.map(f => this.getOrCreateFileInfo(f)), ModuleBuilderFileInfo.compareFileInfos);
         }
 
         protected ensureFileInfoIfInProject(_scriptInfo: ScriptInfo) {
@@ -286,41 +286,15 @@ namespace ts.server {
 
             const newReferences = this.getReferencedFileInfos(fileInfo);
             const oldReferences = fileInfo.references;
-
-            let oldIndex = 0;
-            let newIndex = 0;
-            while (oldIndex < oldReferences.length && newIndex < newReferences.length) {
-                const oldReference = oldReferences[oldIndex];
-                const newReference = newReferences[newIndex];
-                const compare = ModuleBuilderFileInfo.compareFileInfos(oldReference, newReference);
-                switch (compare) {
-                    case Comparison.LessThan:
-                        // New reference is greater then current reference. That means
-                        // the current reference doesn't exist anymore after parsing. So delete
-                        // references.
-                        oldReference.removeReferencedBy(fileInfo);
-                        oldIndex++;
-                        break;
-                    case Comparison.GreaterThan:
-                        // A new reference info. Add it.
-                        newReference.addReferencedBy(fileInfo);
-                        newIndex++;
-                        break;
-                    case Comparison.EqualTo:
-                        // Equal. Go to next
-                        oldIndex++;
-                        newIndex++;
-                        break;
-                }
-            }
-            // Clean old references
-            for (let i = oldIndex; i < oldReferences.length; i++) {
-                oldReferences[i].removeReferencedBy(fileInfo);
-            }
-            // Update new references
-            for (let i = newIndex; i < newReferences.length; i++) {
-                newReferences[i].addReferencedBy(fileInfo);
-            }
+            enumerateInsertsAndDeletes(newReferences, oldReferences,
+                /*inserted*/ newReference => newReference.addReferencedBy(fileInfo),
+                /*deleted*/ oldReference => {
+                    // New reference is greater then current reference. That means
+                    // the current reference doesn't exist anymore after parsing. So delete
+                    // references.
+                    oldReference.removeReferencedBy(fileInfo);
+                },
+                /*compare*/ ModuleBuilderFileInfo.compareFileInfos);
 
             fileInfo.references = newReferences;
             fileInfo.scriptVersionForReferences = fileInfo.scriptInfo.getLatestVersion();
