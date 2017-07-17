@@ -38,7 +38,7 @@ namespace ts.JsTyping {
         "crypto", "stream", "util", "assert", "tty", "domain",
         "constants", "process", "v8", "timers", "console"];
 
-    const nodeCoreModules = arrayToMap(<string[]>nodeCoreModuleList, x => x);
+    const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
     /**
      * @param host is the object providing I/O related operations.
@@ -108,9 +108,9 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const x = unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId);
-            if (x.length && log) log(`Inferred typings from unresolved imports: ${JSON.stringify(x)}`);
-            for (const typingName of x) {
+            const module = unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId);
+            if (module.length && log) log(`Inferred typings from unresolved imports: ${JSON.stringify(module)}`);
+            for (const typingName of module) {
                 if (!inferredTypings.has(typingName)) {
                     inferredTypings.set(typingName, undefined);
                 }
