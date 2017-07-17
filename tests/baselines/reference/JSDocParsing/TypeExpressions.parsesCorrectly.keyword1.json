@@ -1,11 +1,13 @@
 {
-    "kind": "JSDocTypeReference",
+    "kind": "TypeReference",
     "pos": 1,
     "end": 4,
-    "name": {
+    "flags": "JSDoc",
+    "typeName": {
         "kind": "Identifier",
         "pos": 1,
         "end": 4,
+        "flags": "JSDoc",
         "originalKeywordKind": "VarKeyword",
         "text": "var"
     }

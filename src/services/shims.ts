@@ -69,7 +69,7 @@ namespace ts {
 
         getTypeRootsVersion?(): number;
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
-        readFile(path: string, encoding?: string): string;
+        readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
@@ -95,7 +95,7 @@ namespace ts {
         /**
          * Read arbitary text files on disk, i.e. when resolution procedure needs the content of 'package.json' to determine location of bundled typings for node modules
          */
-        readFile(fileName: string): string;
+        readFile(fileName: string): string | undefined;
         realpath?(path: string): string;
         trace(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
@@ -458,7 +458,7 @@ namespace ts {
             ));
         }
 
-        public readFile(path: string, encoding?: string): string {
+        public readFile(path: string, encoding?: string): string | undefined {
             return this.shimHost.readFile(path, encoding);
         }
 
@@ -501,7 +501,7 @@ namespace ts {
             return this.shimHost.fileExists(fileName);
         }
 
-        public readFile(fileName: string): string {
+        public readFile(fileName: string): string | undefined {
             return this.shimHost.readFile(fileName);
         }
 
@@ -1006,7 +1006,7 @@ namespace ts {
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
         private logPerformance = false;
 
-        constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
+        constructor(factory: ShimFactory, public readonly logger: Logger, private readonly host: CoreServicesShimHostAdapter) {
             super(factory);
         }
 

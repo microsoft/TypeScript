@@ -12,7 +12,11 @@ namespace ts.refactor {
 
     registerRefactor(convertFunctionToES6Class);
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] {
+    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+        if (!isInJavaScriptFile(context.file)) {
+            return undefined;
+        }
+
         const start = context.startPosition;
         const node = getTokenAtPosition(context.file, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();

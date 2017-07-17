@@ -787,7 +787,7 @@ namespace ts {
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: (x: T, y: T) => Comparison = compareValues) {
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T> = compareValues) {
         return array
             .map((_, i) => i) // create array of indices
             .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
@@ -859,6 +859,8 @@ namespace ts {
         return result;
     }
 
+    export type Comparer<T> = (a: T, b: T) => Comparison;
+
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
      * If no such index is found, returns the 2's-complement of first index at which
@@ -866,7 +868,7 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number {
+    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: Comparer<T>, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
@@ -1587,10 +1589,21 @@ namespace ts {
         return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
     }
 
+    /* @internal */
+    export function pathIsRelative(path: string): boolean {
+        return /^\.\.?($|[\\/])/.test(path);
+    }
+
     export function isExternalModuleNameRelative(moduleName: string): boolean {
         // TypeScript 1.0 spec (April 2014): 11.2.1
         // An external module name is "relative" if the first term is "." or "..".
-        return /^\.\.?($|[\\/])/.test(moduleName);
+        // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
+        return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
+    }
+
+    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
+    export function moduleHasNonRelativeName(moduleName: string): boolean {
+        return !isExternalModuleNameRelative(moduleName);
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {

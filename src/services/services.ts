@@ -1141,7 +1141,7 @@ namespace ts {
                         !!hostCache.getEntryByPath(path) :
                         (host.fileExists && host.fileExists(fileName));
                 },
-                readFile: (fileName): string => {
+                readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     if (hostCache.containsEntryByPath(path)) {

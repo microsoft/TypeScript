@@ -1082,7 +1082,6 @@ namespace ts {
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
-            case SyntaxKind.JSDocTypeReference:
                 return (<TypeReferenceNode>node).typeName;
 
             case SyntaxKind.ExpressionWithTypeArguments:
@@ -1293,6 +1292,10 @@ namespace ts {
         return node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
+    export function isInJSDoc(node: Node): boolean {
+        return node && !!(node.flags & NodeFlags.JSDoc);
+    }
+
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
      * exactly one argument (of the form 'require("name")').
@@ -1448,8 +1451,9 @@ namespace ts {
 
     export function isJSDocConstructSignature(node: Node) {
         return node.kind === SyntaxKind.JSDocFunctionType &&
-            (<JSDocFunctionType>node).parameters.length > 0 &&
-            (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
+            (node as JSDocFunctionType).parameters.length > 0 &&
+            (node as JSDocFunctionType).parameters[0].name &&
+            ((node as JSDocFunctionType).parameters[0].name as Identifier).text === "new";
     }
 
     export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
@@ -1582,7 +1586,7 @@ namespace ts {
         return find(typeParameters, p => p.name.text === name);
     }
 
-    export function getJSDocType(node: Node): JSDocType {
+    export function getJSDocType(node: Node): TypeNode {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
             const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
@@ -1606,7 +1610,7 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
     }
 
-    export function getJSDocReturnType(node: Node): JSDocType {
+    export function getJSDocReturnType(node: Node): TypeNode {
         const returnTag = getJSDocReturnTag(node);
         return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
     }
@@ -3921,7 +3925,7 @@ namespace ts {
      */
     export function validateLocaleAndSetLanguage(
         locale: string,
-        sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string },
+        sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
         errors?: Diagnostic[]) {
         const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
@@ -4664,36 +4668,12 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocUnknownType;
     }
 
-    export function isJSDocArrayType(node: Node): node is JSDocArrayType {
-        return node.kind === SyntaxKind.JSDocArrayType;
-    }
-
-    export function isJSDocUnionType(node: Node): node is JSDocUnionType {
-        return node.kind === SyntaxKind.JSDocUnionType;
-    }
-
-    export function isJSDocTupleType(node: Node): node is JSDocTupleType {
-        return node.kind === SyntaxKind.JSDocTupleType;
-    }
-
     export function isJSDocNullableType(node: Node): node is JSDocNullableType {
         return node.kind === SyntaxKind.JSDocNullableType;
     }
 
     export function isJSDocNonNullableType(node: Node): node is JSDocNonNullableType {
         return node.kind === SyntaxKind.JSDocNonNullableType;
-    }
-
-    export function isJSDocRecordType(node: Node): node is JSDocRecordType {
-        return node.kind === SyntaxKind.JSDocRecordType;
-    }
-
-    export function isJSDocRecordMember(node: Node): node is JSDocRecordMember {
-        return node.kind === SyntaxKind.JSDocRecordMember;
-    }
-
-    export function isJSDocTypeReference(node: Node): node is JSDocTypeReference {
-        return node.kind === SyntaxKind.JSDocTypeReference;
     }
 
     export function isJSDocOptionalType(node: Node): node is JSDocOptionalType {
@@ -4706,14 +4686,6 @@ namespace ts {
 
     export function isJSDocVariadicType(node: Node): node is JSDocVariadicType {
         return node.kind === SyntaxKind.JSDocVariadicType;
-    }
-
-    export function isJSDocConstructorType(node: Node): node is JSDocConstructorType {
-        return node.kind === SyntaxKind.JSDocConstructorType;
-    }
-
-    export function isJSDocThisType(node: Node): node is JSDocThisType {
-        return node.kind === SyntaxKind.JSDocThisType;
     }
 
     export function isJSDoc(node: Node): node is JSDoc {
@@ -4750,10 +4722,6 @@ namespace ts {
 
     export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral {
         return node.kind === SyntaxKind.JSDocTypeLiteral;
-    }
-
-    export function isJSDocLiteralType(node: Node): node is JSDocLiteralType {
-        return node.kind === SyntaxKind.JSDocLiteralType;
     }
 }
 
@@ -4905,6 +4873,7 @@ namespace ts {
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
             case SyntaxKind.FunctionType:
+            case SyntaxKind.JSDocFunctionType:
             case SyntaxKind.ConstructorType:
                 return true;
         }

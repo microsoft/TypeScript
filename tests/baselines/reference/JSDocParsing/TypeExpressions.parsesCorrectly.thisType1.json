@@ -1,27 +1,51 @@
 {
-    "kind": "JSDocThisType",
+    "kind": "JSDocFunctionType",
     "pos": 1,
-    "end": 9,
-    "type": {
-        "kind": "JSDocTypeReference",
-        "pos": 6,
-        "end": 9,
-        "name": {
-            "kind": "FirstNode",
-            "pos": 6,
-            "end": 9,
-            "left": {
+    "end": 19,
+    "flags": "JSDoc",
+    "parameters": {
+        "0": {
+            "kind": "Parameter",
+            "pos": 10,
+            "end": 18,
+            "flags": "JSDoc",
+            "name": {
                 "kind": "Identifier",
-                "pos": 6,
-                "end": 7,
-                "text": "a"
+                "pos": 10,
+                "end": 14,
+                "flags": "JSDoc",
+                "originalKeywordKind": "ThisKeyword",
+                "text": "this"
             },
-            "right": {
-                "kind": "Identifier",
-                "pos": 8,
-                "end": 9,
-                "text": "b"
+            "type": {
+                "kind": "TypeReference",
+                "pos": 15,
+                "end": 18,
+                "flags": "JSDoc",
+                "typeName": {
+                    "kind": "FirstNode",
+                    "pos": 15,
+                    "end": 18,
+                    "flags": "JSDoc",
+                    "left": {
+                        "kind": "Identifier",
+                        "pos": 15,
+                        "end": 16,
+                        "flags": "JSDoc",
+                        "text": "a"
+                    },
+                    "right": {
+                        "kind": "Identifier",
+                        "pos": 17,
+                        "end": 18,
+                        "flags": "JSDoc",
+                        "text": "b"
+                    }
+                }
             }
-        }
+        },
+        "length": 1,
+        "pos": 10,
+        "end": 18
     }
 }

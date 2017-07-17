@@ -37,8 +37,8 @@ const y = (a) => a + 1;
 >a : Symbol(a, Decl(0.js, 20, 11))
 >a : Symbol(a, Decl(0.js, 20, 11))
 
-x(1);
->x : Symbol(x, Decl(0.js, 16, 5))
+y(1);
+>y : Symbol(y, Decl(0.js, 20, 5))
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;

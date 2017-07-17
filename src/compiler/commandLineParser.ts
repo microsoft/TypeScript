@@ -752,7 +752,7 @@ namespace ts {
         }
     }
 
-    export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
+    export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
         const errors: Diagnostic[] = [];
@@ -878,15 +878,9 @@ namespace ts {
      * Read tsconfig.json file
      * @param fileName The path to the config file
      */
-    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic } {
-        let text = "";
-        try {
-            text = readFile(fileName);
-        }
-        catch (e) {
-            return { config: {}, error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
-        }
-        return parseConfigFileTextToJson(fileName, text);
+    export function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): { config?: any; error?: Diagnostic } {
+        const textOrDiagnostic = tryReadFile(fileName, readFile);
+        return typeof textOrDiagnostic === "string" ? parseConfigFileTextToJson(fileName, textOrDiagnostic) : { config: {}, error: textOrDiagnostic };
     }
 
     /**
@@ -906,15 +900,20 @@ namespace ts {
      * Read tsconfig.json file
      * @param fileName The path to the config file
      */
-    export function readJsonConfigFile(fileName: string, readFile: (path: string) => string): JsonSourceFile {
-        let text = "";
+    export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): JsonSourceFile {
+        const textOrDiagnostic = tryReadFile(fileName, readFile);
+        return typeof textOrDiagnostic === "string" ? parseJsonText(fileName, textOrDiagnostic) : <JsonSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
+    }
+
+    function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {
+        let text: string | undefined;
         try {
             text = readFile(fileName);
         }
         catch (e) {
-            return <JsonSourceFile>{ parseDiagnostics: [createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message)] };
+            return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
         }
-        return parseJsonText(fileName, text);
+        return text === undefined ? createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, fileName) : text;
     }
 
     function commandLineOptionsToMap(options: CommandLineOption[]) {
