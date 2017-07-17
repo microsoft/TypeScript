@@ -924,6 +924,7 @@ namespace ts.server {
         }
 
         addRoot(info: ScriptInfo) {
+            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info);
             if (!this._isJsInferredProject && info.isJavaScript()) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }
@@ -931,6 +932,7 @@ namespace ts.server {
         }
 
         removeRoot(info: ScriptInfo) {
+            this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info, WatcherCloseReason.NotNeeded);
             super.removeRoot(info);
             if (this._isJsInferredProject && info.isJavaScript()) {
                 if (!some(this.getRootScriptInfos(), info => info.isJavaScript())) {
@@ -955,6 +957,7 @@ namespace ts.server {
         }
 
         close() {
+            forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info, WatcherCloseReason.ProjectClose));
             super.close();
         }
 

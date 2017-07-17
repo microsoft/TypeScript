@@ -881,8 +881,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(project, [file1.path, libFile.path, file2.path, configFile.path]);
             checkProjectRootFiles(project, [file1.path, file2.path]);
             // watching all files except one that was open
-            // And also tsconfig files for the open files
-            checkWatchedFiles(host, [configFile.path, file2.path, libFile.path, "/a/b/c/tsconfig.json", "/a/b/c/jsconfig.json"]);
+            checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
             checkWatchedDirectories(host, [getDirectoryPath(configFile.path)], /*recursive*/ true);
         });
 

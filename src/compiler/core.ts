@@ -467,13 +467,20 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | undefined): U[] {
+    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
         const result: U[] = [];
         while (true) {
             const { value, done } = iter.next();
             if (done) break;
             const res = mapfn(value);
-            if (res) result.push(...res);
+            if (res) {
+                if (isArray(res)) {
+                    result.push(...res);
+                }
+                else {
+                    result.push(res);
+                }
+            }
         }
         return result;
     }
