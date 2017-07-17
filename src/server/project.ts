@@ -554,7 +554,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedReadonlyArray(result);
+                this.lastCachedUnresolvedImportsList = toSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 
@@ -783,7 +783,7 @@ namespace ts.server {
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            const referencedFiles = createMap<boolean>();
+            const referencedFiles = createMap<true>();
             if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = this.program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
@@ -1057,7 +1057,7 @@ namespace ts.server {
         }
 
         getExternalFiles(): SortedReadonlyArray<string> {
-            return toSortedReadonlyArray(flatMap(this.plugins, plugin => {
+            return toSortedArray(flatMap(this.plugins, plugin => {
                 if (typeof plugin.getExternalFiles !== "function") return;
                 try {
                     return plugin.getExternalFiles(this);
