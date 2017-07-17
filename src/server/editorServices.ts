@@ -849,6 +849,13 @@ namespace ts.server {
 
         private configFileExists(configFileName: NormalizedPath, info: ScriptInfo) {
             const canonicalConfigFilePath = normalizedPathToPath(configFileName, this.currentDirectory, this.toCanonicalFileName);
+            // TODO: (sheetalkamat) Need to reduce the number of watches by not watching directories right here.
+            // Theorotically current approach is correct but in practice there will be very few scenarios where
+            // the config file gets added somewhere inside the another config file. And technically we could handle that case in configDirectory watcher in some cases
+            // But given that its a rare scenario it seems like too much overhead.
+            // So what we want to be watching is: configFile if the project is open
+            // And the whole chain only for the inferred project roots
+            // instead create the cache and send it across, and put watches only if info gets added to the inferred project root?
             return this.watchConfigFileForScriptInfo(configFileName, canonicalConfigFilePath, info).exists;
         }
 
