@@ -136,9 +136,9 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of getMultiRob
 }
 for (let { skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 43, 86))
->primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 10, 13))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 43, 96))
 >primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 43, 20))
->secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 11, 24))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 43, 115))
 >secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 43, 39))
 >name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 43, 71))
 >skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 43, 86))
@@ -236,9 +236,9 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 83))
 >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 10))
 >skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 98))
->primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 10, 13))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 108))
 >primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 32))
->secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 11, 24))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 127))
 >secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 51))
 >name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 83))
 >skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern.ts, 63, 98))
