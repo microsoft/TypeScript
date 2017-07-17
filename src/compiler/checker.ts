@@ -6892,7 +6892,7 @@ namespace ts {
                         return globalFunctionType;
                     case "Array":
                     case "array":
-                        return !node.typeArguments || !node.typeArguments.length ? createArrayType(anyType) : undefined;
+                        return !node.typeArguments || !node.typeArguments.length ? anyArrayType : undefined;
                     case "Promise":
                     case "promise":
                         return !node.typeArguments || !node.typeArguments.length ? createPromiseType(anyType) : undefined;
