@@ -6874,11 +6874,11 @@ namespace ts {
             if (isIdentifier(node.typeName)) {
                 if (node.typeName.text === "Object") {
                     if (node.typeArguments && node.typeArguments.length === 2) {
-                        const from = getTypeFromTypeNode(node.typeArguments[0]);
-                        const to = getTypeFromTypeNode(node.typeArguments[1]);
-                        let index = createIndexInfo(to, /*isReadonly*/ false);
-                        if (from === stringType || from === numberType) {
-                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, from === stringType ? index : undefined, from === numberType ? index : undefined)
+                        const indexed = getTypeFromTypeNode(node.typeArguments[0]);
+                        const target = getTypeFromTypeNode(node.typeArguments[1]);
+                        let index = createIndexInfo(target, /*isReadonly*/ false);
+                        if (indexed === stringType || indexed === numberType) {
+                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index)
                         }
                     }
                     return anyType;
