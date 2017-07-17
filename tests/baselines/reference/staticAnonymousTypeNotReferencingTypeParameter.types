@@ -39,9 +39,9 @@ class ListWrapper2 {
 >T : T
 >T : T
 >array.slice(0) : T[]
->array.slice : (start?: number, end?: number) => T[]
+>array.slice : (this: readonly, start?: number, end?: number) => T[]
 >array : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : (this: readonly, start?: number, end?: number) => T[]
 >0 : 0
 
   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
@@ -168,9 +168,9 @@ class ListWrapper {
 >T : T
 >T : T
 >array.slice(0) : T[]
->array.slice : (start?: number, end?: number) => T[]
+>array.slice : (this: readonly, start?: number, end?: number) => T[]
 >array : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : (this: readonly, start?: number, end?: number) => T[]
 >0 : 0
 
   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
@@ -267,9 +267,9 @@ class ListWrapper {
 
     return array.indexOf(value, startIndex);
 >array.indexOf(value, startIndex) : number
->array.indexOf : (searchElement: T, fromIndex?: number) => number
+>array.indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >array : T[]
->indexOf : (searchElement: T, fromIndex?: number) => number
+>indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >value : T
 >startIndex : number
   }
@@ -284,9 +284,9 @@ class ListWrapper {
 >T : T
 >list.indexOf(el) !== -1 : boolean
 >list.indexOf(el) : number
->list.indexOf : (searchElement: T, fromIndex?: number) => number
+>list.indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >list : T[]
->indexOf : (searchElement: T, fromIndex?: number) => number
+>indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >el : T
 >-1 : -1
 >1 : 1
@@ -348,9 +348,9 @@ class ListWrapper {
 >a : any[]
 >b : any[]
 >a.concat(b) : any[]
->a.concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
+>a.concat : { (this: readonly, ...items: any[][]): any[]; (this: readonly, ...items: any[]): any[]; }
 >a : any[]
->concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
+>concat : { (this: readonly, ...items: any[][]): any[]; (this: readonly, ...items: any[]): any[]; }
 >b : any[]
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }
@@ -422,9 +422,9 @@ class ListWrapper {
       var index = list.indexOf(items[i]);
 >index : number
 >list.indexOf(items[i]) : number
->list.indexOf : (searchElement: T, fromIndex?: number) => number
+>list.indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >list : T[]
->indexOf : (searchElement: T, fromIndex?: number) => number
+>indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >items[i] : T
 >items : T[]
 >i : number
@@ -451,9 +451,9 @@ class ListWrapper {
     var index = list.indexOf(el);
 >index : number
 >list.indexOf(el) : number
->list.indexOf : (searchElement: T, fromIndex?: number) => number
+>list.indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >list : T[]
->indexOf : (searchElement: T, fromIndex?: number) => number
+>indexOf : (this: readonly, searchElement: T, fromIndex?: number) => number
 >el : T
 
     if (index > -1) {
@@ -581,9 +581,9 @@ class ListWrapper {
 
     return l.slice(from, to === null ? undefined : to);
 >l.slice(from, to === null ? undefined : to) : T[]
->l.slice : (start?: number, end?: number) => T[]
+>l.slice : (this: readonly, start?: number, end?: number) => T[]
 >l : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : (this: readonly, start?: number, end?: number) => T[]
 >from : number
 >to === null ? undefined : to : number
 >to === null : boolean
@@ -650,9 +650,9 @@ class ListWrapper {
 >l : T[]
 >T : T
 >l.toString() : string
->l.toString : () => string
+>l.toString : (this: readonly) => string
 >l : T[]
->toString : () => string
+>toString : (this: readonly) => string
 
   static toJSON<T>(dit: typeof ListWrapper, l: T[]): string { return JSON.stringify(l); }
 >toJSON : <T>(dit: typeof ListWrapper, l: T[]) => string

@@ -24,9 +24,9 @@ class A {
         }
         options.forEach(function (item) {
 >options.forEach(function (item) {            this.options.push(item);        }, this) : void
->options.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >options : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >function (item) {            this.options.push(item);        } : (item: string) => void
 >item : string
 
@@ -57,9 +57,9 @@ class A {
 
         options.forEach(function () {
 >options.forEach(function () {            undefinedArr.push(this);        }) : void
->options.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >options : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >function () {            undefinedArr.push(this);        } : () => void
 
             undefinedArr.push(this);
@@ -72,9 +72,9 @@ class A {
         }); // case1
         options.forEach(function () {
 >options.forEach(function () {            undefinedArr.push(this);        }, undefined) : void
->options.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >options : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >function () {            undefinedArr.push(this);        } : () => void
 
             undefinedArr.push(this);
@@ -89,9 +89,9 @@ class A {
 
         options.forEach(function () {
 >options.forEach(function () {            undefinedArr.push(this);        }, null) : void
->options.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >options : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >function () {            undefinedArr.push(this);        } : () => void
 
             undefinedArr.push(this);
@@ -216,9 +216,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >options : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -237,9 +237,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >options : string[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: string, index: number) => any
 >val : string
 >index : number
@@ -265,9 +265,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >options : string[]
->some : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -286,9 +286,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : string[]
->options.filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>options.filter : { <S extends string>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >options : string[]
->filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>filter : { <S extends string>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -307,9 +307,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >options : string[]
->every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -441,9 +441,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >options : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -462,9 +462,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >options : string[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: string, index: number) => any
 >val : string
 >index : number
@@ -490,9 +490,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >options : string[]
->some : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -511,9 +511,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : string[]
->options.filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>options.filter : { <S extends string>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >options : string[]
->filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>filter : { <S extends string>(this: readonly, callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -532,9 +532,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >options : string[]
->every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -613,9 +613,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => void, thisArg?: any) => void
 >options : Int8Array[]
->forEach : (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Int8Array, index: number) => boolean
 >val : Int8Array
 >index : number
@@ -634,9 +634,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => U, thisArg?: any) => U[]
 >options : Int8Array[]
->map : <U>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Int8Array, index: number) => any
 >val : Int8Array
 >index : number
@@ -662,9 +662,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
 >options : Int8Array[]
->some : (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Int8Array, index: number) => boolean
 >val : Int8Array
 >index : number
@@ -683,9 +683,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Int8Array[]
->options.filter : { <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
+>options.filter : { <S extends Int8Array>(this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
 >options : Int8Array[]
->filter : { <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
+>filter : { <S extends Int8Array>(this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Int8Array, index: number) => boolean
 >val : Int8Array
 >index : number
@@ -704,9 +704,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
 >options : Int8Array[]
->every : (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Int8Array, index: number) => boolean
 >val : Int8Array
 >index : number
@@ -785,9 +785,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => void, thisArg?: any) => void
 >options : Uint8Array[]
->forEach : (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8Array, index: number) => boolean
 >val : Uint8Array
 >index : number
@@ -806,9 +806,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => U, thisArg?: any) => U[]
 >options : Uint8Array[]
->map : <U>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Uint8Array, index: number) => any
 >val : Uint8Array
 >index : number
@@ -834,9 +834,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
 >options : Uint8Array[]
->some : (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8Array, index: number) => boolean
 >val : Uint8Array
 >index : number
@@ -855,9 +855,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint8Array[]
->options.filter : { <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
+>options.filter : { <S extends Uint8Array>(this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
 >options : Uint8Array[]
->filter : { <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
+>filter : { <S extends Uint8Array>(this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8Array, index: number) => boolean
 >val : Uint8Array
 >index : number
@@ -876,9 +876,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
 >options : Uint8Array[]
->every : (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8Array, index: number) => boolean
 >val : Uint8Array
 >index : number
@@ -957,9 +957,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => void, thisArg?: any) => void
 >options : Float32Array[]
->forEach : (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Float32Array, index: number) => boolean
 >val : Float32Array
 >index : number
@@ -978,9 +978,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => U, thisArg?: any) => U[]
 >options : Float32Array[]
->map : <U>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Float32Array, index: number) => any
 >val : Float32Array
 >index : number
@@ -1006,9 +1006,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
 >options : Float32Array[]
->some : (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Float32Array, index: number) => boolean
 >val : Float32Array
 >index : number
@@ -1027,9 +1027,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Float32Array[]
->options.filter : { <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
+>options.filter : { <S extends Float32Array>(this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
 >options : Float32Array[]
->filter : { <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
+>filter : { <S extends Float32Array>(this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Float32Array, index: number) => boolean
 >val : Float32Array
 >index : number
@@ -1048,9 +1048,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
 >options : Float32Array[]
->every : (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Float32Array, index: number) => boolean
 >val : Float32Array
 >index : number
@@ -1129,9 +1129,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => void, thisArg?: any) => void
 >options : Uint8ClampedArray[]
->forEach : (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8ClampedArray, index: number) => boolean
 >val : Uint8ClampedArray
 >index : number
@@ -1150,9 +1150,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => U, thisArg?: any) => U[]
 >options : Uint8ClampedArray[]
->map : <U>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Uint8ClampedArray, index: number) => any
 >val : Uint8ClampedArray
 >index : number
@@ -1178,9 +1178,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
 >options : Uint8ClampedArray[]
->some : (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8ClampedArray, index: number) => boolean
 >val : Uint8ClampedArray
 >index : number
@@ -1199,9 +1199,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint8ClampedArray[]
->options.filter : { <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
+>options.filter : { <S extends Uint8ClampedArray>(this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
 >options : Uint8ClampedArray[]
->filter : { <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
+>filter : { <S extends Uint8ClampedArray>(this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8ClampedArray, index: number) => boolean
 >val : Uint8ClampedArray
 >index : number
@@ -1220,9 +1220,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
 >options : Uint8ClampedArray[]
->every : (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8ClampedArray, index: number) => boolean
 >val : Uint8ClampedArray
 >index : number
@@ -1301,9 +1301,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => void, thisArg?: any) => void
 >options : Int16Array[]
->forEach : (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Int16Array, index: number) => boolean
 >val : Int16Array
 >index : number
@@ -1322,9 +1322,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => U, thisArg?: any) => U[]
 >options : Int16Array[]
->map : <U>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Int16Array, index: number) => any
 >val : Int16Array
 >index : number
@@ -1350,9 +1350,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
 >options : Int16Array[]
->some : (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Int16Array, index: number) => boolean
 >val : Int16Array
 >index : number
@@ -1371,9 +1371,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Int16Array[]
->options.filter : { <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
+>options.filter : { <S extends Int16Array>(this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
 >options : Int16Array[]
->filter : { <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
+>filter : { <S extends Int16Array>(this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Int16Array, index: number) => boolean
 >val : Int16Array
 >index : number
@@ -1392,9 +1392,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
 >options : Int16Array[]
->every : (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Int16Array, index: number) => boolean
 >val : Int16Array
 >index : number
@@ -1473,9 +1473,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => void, thisArg?: any) => void
 >options : Uint16Array[]
->forEach : (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Uint16Array, index: number) => boolean
 >val : Uint16Array
 >index : number
@@ -1494,9 +1494,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => U, thisArg?: any) => U[]
 >options : Uint16Array[]
->map : <U>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Uint16Array, index: number) => any
 >val : Uint16Array
 >index : number
@@ -1522,9 +1522,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
 >options : Uint16Array[]
->some : (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint16Array, index: number) => boolean
 >val : Uint16Array
 >index : number
@@ -1543,9 +1543,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint16Array[]
->options.filter : { <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
+>options.filter : { <S extends Uint16Array>(this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
 >options : Uint16Array[]
->filter : { <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
+>filter : { <S extends Uint16Array>(this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint16Array, index: number) => boolean
 >val : Uint16Array
 >index : number
@@ -1564,9 +1564,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
 >options : Uint16Array[]
->every : (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint16Array, index: number) => boolean
 >val : Uint16Array
 >index : number
@@ -1645,9 +1645,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => void, thisArg?: any) => void
 >options : Uint32Array[]
->forEach : (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Uint32Array, index: number) => boolean
 >val : Uint32Array
 >index : number
@@ -1666,9 +1666,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => U, thisArg?: any) => U[]
 >options : Uint32Array[]
->map : <U>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Uint32Array, index: number) => any
 >val : Uint32Array
 >index : number
@@ -1694,9 +1694,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
 >options : Uint32Array[]
->some : (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint32Array, index: number) => boolean
 >val : Uint32Array
 >index : number
@@ -1715,9 +1715,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint32Array[]
->options.filter : { <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
+>options.filter : { <S extends Uint32Array>(this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
 >options : Uint32Array[]
->filter : { <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
+>filter : { <S extends Uint32Array>(this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint32Array, index: number) => boolean
 >val : Uint32Array
 >index : number
@@ -1736,9 +1736,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
 >options : Uint32Array[]
->every : (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Uint32Array, index: number) => boolean
 >val : Uint32Array
 >index : number
@@ -1817,9 +1817,9 @@ class A {
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
->options.forEach : (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => void, thisArg?: any) => void
+>options.forEach : (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => void, thisArg?: any) => void
 >options : Float64Array[]
->forEach : (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => void, thisArg?: any) => void
+>forEach : (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => void, thisArg?: any) => void
 >function (val, index) {            return val === this.options[index];        } : (val: Float64Array, index: number) => boolean
 >val : Float64Array
 >index : number
@@ -1838,9 +1838,9 @@ class A {
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
->options.map : <U>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => U, thisArg?: any) => U[]
+>options.map : <U>(this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => U, thisArg?: any) => U[]
 >options : Float64Array[]
->map : <U>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => U, thisArg?: any) => U[]
 >function (val, index) {            if (val === this.options[index])                return this.options[index];        } : (val: Float64Array, index: number) => any
 >val : Float64Array
 >index : number
@@ -1866,9 +1866,9 @@ class A {
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.some : (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
+>options.some : (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
 >options : Float64Array[]
->some : (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
+>some : (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Float64Array, index: number) => boolean
 >val : Float64Array
 >index : number
@@ -1887,9 +1887,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Float64Array[]
->options.filter : { <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
+>options.filter : { <S extends Float64Array>(this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
 >options : Float64Array[]
->filter : { <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
+>filter : { <S extends Float64Array>(this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Float64Array, index: number) => boolean
 >val : Float64Array
 >index : number
@@ -1908,9 +1908,9 @@ class A {
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
->options.every : (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
+>options.every : (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
 >options : Float64Array[]
->every : (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
+>every : (this: readonly, callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => boolean, thisArg?: any) => boolean
 >function (val, index) {            return val === this.options[index];        } : (val: Float64Array, index: number) => boolean
 >val : Float64Array
 >index : number

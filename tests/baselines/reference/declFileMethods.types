@@ -28,9 +28,9 @@ export class c1 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
 
@@ -77,9 +77,9 @@ export class c1 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
     private privateFooWithOverloads(a: string): string;
@@ -125,9 +125,9 @@ export class c1 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
     static staticFooWithOverloads(a: string): string;
@@ -173,9 +173,9 @@ export class c1 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
     private static privateStaticFooWithOverloads(a: string): string;
@@ -255,9 +255,9 @@ class c2 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
 
@@ -304,9 +304,9 @@ class c2 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
     private privateFooWithOverloads(a: string): string;
@@ -352,9 +352,9 @@ class c2 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
     static staticFooWithOverloads(a: string): string;
@@ -400,9 +400,9 @@ class c2 {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: readonly, separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >"" : ""
     }
     private static privateStaticFooWithOverloads(a: string): string;

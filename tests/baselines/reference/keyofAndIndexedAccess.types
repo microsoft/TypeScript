@@ -522,9 +522,9 @@ function pluck<T, K extends keyof T>(array: T[], key: K) {
 
     return array.map(x => x[key]);
 >array.map(x => x[key]) : T[K][]
->array.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>array.map : <U>(this: readonly, callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
 >array : T[]
->map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>map : <U>(this: readonly, callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
 >x => x[key] : (x: T) => T[K]
 >x : T
 >x[key] : T[K]

@@ -27,9 +27,9 @@ class D {
 >"string" : "string"
 >data : string
 >data.join(" ") : string
->data.join : (separator?: string) => string
+>data.join : (this: readonly, separator?: string) => string
 >data : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >" " : " "
     }
 
@@ -48,11 +48,11 @@ class D {
 >this : this
 >data : string
 >this.data.join(" ") : string
->this.data.join : (separator?: string) => string
+>this.data.join : (this: readonly, separator?: string) => string
 >this.data : string[]
 >this : this
 >data : string[]
->join : (separator?: string) => string
+>join : (this: readonly, separator?: string) => string
 >" " : " "
     }
 }

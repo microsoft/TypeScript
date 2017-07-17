@@ -34,8 +34,8 @@ const helper = function<T>(t: T[]) {
 >helper(t.slice(1)) : void
 >helper : <T>(t: T[]) => void
 >t.slice(1) : T[]
->t.slice : (start?: number | undefined, end?: number | undefined) => T[]
+>t.slice : (this: readonly, start?: number | undefined, end?: number | undefined) => T[]
 >t : T[]
->slice : (start?: number | undefined, end?: number | undefined) => T[]
+>slice : (this: readonly, start?: number | undefined, end?: number | undefined) => T[]
 >1 : 1
 }
