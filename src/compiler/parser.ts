@@ -6927,7 +6927,7 @@ namespace ts {
                                 if (!parentTag.jsDocPropertyTags) {
                                     parentTag.jsDocPropertyTags = <MutableNodeArray<JSDocPropertyTag>>[];
                                 }
-                                parentTag.jsDocPropertyTags.push(propertyTag);
+                                (parentTag.jsDocPropertyTags as MutableNodeArray<JSDocPropertyTag>).push(propertyTag);
                                 return true;
                             }
                             // Error parsing property tag

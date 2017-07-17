@@ -2199,7 +2199,7 @@ namespace ts {
 
     export interface JSDocTypeLiteral extends JSDocType {
         kind: SyntaxKind.JSDocTypeLiteral;
-        jsDocPropertyTags?: MutableNodeArray<JSDocPropertyTag>;
+        jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
         jsDocTypeTag?: JSDocTypeTag;
     }
 
