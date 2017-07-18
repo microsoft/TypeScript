@@ -8,5 +8,6 @@ const obj = {
         this;
         this.prop;
         this.method;
+        this.unknown; // ok, obj has a string indexer
     }
 }

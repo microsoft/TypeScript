@@ -20,6 +20,9 @@ const obj = {
 >this.method : Symbol(method, Decl(context.js, 1, 12))
 >this : Symbol(obj, Decl(context.js, 0, 11))
 >method : Symbol(method, Decl(context.js, 1, 12))
+
+        this.unknown; // ok, obj has a string indexer
+>this : Symbol(obj, Decl(context.js, 0, 11))
     }
 }
 
