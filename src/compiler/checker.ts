@@ -4089,8 +4089,8 @@ namespace ts {
 
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
-            const pattern = <BindingPattern>declaration.parent;
-            const parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
+            const pattern = declaration.parent;
+            const parentType = getTypeForBindingElementParent(pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -4135,7 +4135,8 @@ namespace ts {
                     // or otherwise the type of the string index signature.
                     const text = getTextOfPropertyName(name);
 
-                    type = getTypeOfPropertyOfType(parentType, text) ||
+                    const declaredType = getTypeOfPropertyOfType(parentType, text);
+                    type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
                     if (!type) {
@@ -10671,7 +10672,7 @@ namespace ts {
         // The result is undefined if the reference isn't a dotted name. We prefix nodes
         // occurring in an apparent type position with '@' because the control flow type
         // of such nodes may be based on the apparent type instead of the declared type.
-        function getFlowCacheKey(node: Node): string {
+        function getFlowCacheKey(node: Node): string | undefined {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
                 return symbol !== unknownSymbol ? (isApparentTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
@@ -10681,7 +10682,14 @@ namespace ts {
             }
             if (node.kind === SyntaxKind.PropertyAccessExpression) {
                 const key = getFlowCacheKey((<PropertyAccessExpression>node).expression);
-                return key && key + "." + (<PropertyAccessExpression>node).name.text;
+                return key && key + "." + unescapeLeadingUnderscores((<PropertyAccessExpression>node).name.text);
+            }
+            if (node.kind === SyntaxKind.BindingElement) {
+                const container = (node as BindingElement).parent.parent;
+                const key = container.kind === SyntaxKind.BindingElement ? getFlowCacheKey(container) : (container.initializer && getFlowCacheKey(container.initializer));
+                const text = getBindingElementNameText(node as BindingElement);
+                const result =  key && text && (key + "." + text);
+                return result;
             }
             return undefined;
         }
@@ -10695,6 +10703,28 @@ namespace ts {
                     return getLeftmostIdentifierOrThis((<PropertyAccessExpression>node).expression);
             }
             return undefined;
+        }
+
+        function getBindingElementNameText(element: BindingElement): string | undefined {
+            if (element.parent.kind === SyntaxKind.ObjectBindingPattern) {
+                const name = element.propertyName || element.name;
+                switch (name.kind) {
+                    case SyntaxKind.Identifier:
+                        return unescapeLeadingUnderscores(name.text);
+                    case SyntaxKind.ComputedPropertyName:
+                        if (isComputedNonLiteralName(name as PropertyName)) return undefined;
+                        return (name.expression as LiteralExpression).text;
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NumericLiteral:
+                        return name.text;
+                    default:
+                        // Per types, array and object binding patterns remain, however they should never be present if propertyName is not defined
+                        Debug.fail("Unexpected name kind for binding element name");
+                }
+            }
+            else {
+                 return "" + element.parent.elements.indexOf(element);
+            }
         }
 
         function isMatchingReference(source: Node, target: Node): boolean {
@@ -10711,6 +10741,17 @@ namespace ts {
                     return target.kind === SyntaxKind.PropertyAccessExpression &&
                         (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
                         isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
+                case SyntaxKind.BindingElement:
+                    if (target.kind !== SyntaxKind.PropertyAccessExpression) return false;
+                    const t = target as PropertyAccessExpression;
+                    if (t.name.text !== getBindingElementNameText(source as BindingElement)) return false;
+                    if (source.parent.parent.kind === SyntaxKind.BindingElement && isMatchingReference(source.parent.parent, t.expression)) {
+                            return true;
+                    }
+                    if (source.parent.parent.kind === SyntaxKind.VariableDeclaration) {
+                        const maybeId = (source.parent.parent as VariableDeclaration).initializer;
+                        return maybeId && isMatchingReference(maybeId, t.expression);
+                    }
             }
             return false;
         }
@@ -11501,6 +11542,10 @@ namespace ts {
                 const cache = flowLoopCaches[id] || (flowLoopCaches[id] = createMap<Type>());
                 if (!key) {
                     key = getFlowCacheKey(reference);
+                    // No cache key is generated when binding patterns are in unnarrowable situations
+                    if (!key) {
+                        return declaredType;
+                    }
                 }
                 const cached = cache.get(key);
                 if (cached) {
