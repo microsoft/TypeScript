@@ -117,6 +117,7 @@ namespace ts {
             },
             getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
+            getNullableType,
             getNonNullableType,
             typeToTypeNode: nodeBuilder.typeToTypeNode,
             indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
@@ -9963,6 +9964,11 @@ namespace ts {
                 neverType;
         }
 
+        /**
+         * Add undefined or null or both to a type if they are missing.
+         * @param type - type to add undefined and/or null to if not present
+         * @param flags - Either TypeFlags.Undefined or TypeFlags.Null, or both
+         */
         function getNullableType(type: Type, flags: TypeFlags): Type {
             const missing = (flags & ~type.flags) & (TypeFlags.Undefined | TypeFlags.Null);
             return missing === 0 ? type :
