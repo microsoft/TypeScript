@@ -1532,7 +1532,7 @@ namespace ts {
     export function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] | undefined {
         if (param.name && isIdentifier(param.name)) {
             const name = param.name.text;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && tag.name.text === name);
+            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && tag.name.text === name) as JSDocParameterTag[];
         }
         else {
             // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
