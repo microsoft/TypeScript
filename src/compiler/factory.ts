@@ -664,7 +664,7 @@ namespace ts {
 
     export function createArrayTypeNode(elementType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-        node.elementType = parenthesizeElementTypeMember(elementType);
+        node.elementType = parenthesizeArrayTypeMember(elementType);
         return node;
     }
 
@@ -3896,6 +3896,15 @@ namespace ts {
                 return createParenthesizedType(member);
         }
         return member;
+    }
+
+    export function parenthesizeArrayTypeMember(member: TypeNode) {
+        switch (member.kind) {
+            case SyntaxKind.TypeQuery:
+            case SyntaxKind.TypeOperator:
+                return createParenthesizedType(member);
+        }
+        return parenthesizeElementTypeMember(member);
     }
 
     export function parenthesizeElementTypeMembers(members: ReadonlyArray<TypeNode>) {
