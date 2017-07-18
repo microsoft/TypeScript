@@ -482,7 +482,7 @@ namespace ts.refactor.extractMethod {
                 /*dotDotDotToken*/ undefined,
                 /*name*/ key,
                 /*questionToken*/ undefined,
-                createTypeReferenceNode(checker.typeToString(type, node, TypeFormatFlags.NoTruncation), [])
+                checker.typeToTypeNode(type, node, NodeBuilderFlags.NoTruncation)
             );
             parameters.push(paramDecl);
             if (value.usage === Usage.Write) {
