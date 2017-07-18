@@ -2023,9 +2023,8 @@ namespace ts {
         };
     }
 
-    function validateSpecs(specs: string[], errors: Diagnostic[], allowTrailingRecursion: boolean, jsonSourceFile: JsonSourceFile, specKey: string) {
-        const validSpecs: string[] = [];
-        for (const spec of specs) {
+    function validateSpecs(specs: string[], errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: JsonSourceFile, specKey: string) {
+        return specs.filter(spec => {
             if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
                 errors.push(createDiagnostic(Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec));
             }
@@ -2036,22 +2035,17 @@ namespace ts {
                 errors.push(createDiagnostic(Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec));
             }
             else {
-                validSpecs.push(spec);
+                return true;
             }
-        }
-
-        return validSpecs;
+        });
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
             if (jsonSourceFile && jsonSourceFile.jsonObject) {
-                for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
-                    if (isArrayLiteralExpression(property.initializer)) {
-                        for (const element of property.initializer.elements) {
-                            if (element.kind === SyntaxKind.StringLiteral && (<StringLiteral>element).text === spec) {
-                                return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
-                            }
-                        }
-                    }
+                const element = forEach(getPropertyAssignment(jsonSourceFile.jsonObject, specKey), property =>
+                    isArrayLiteralExpression(property.initializer) && find(property.initializer.elements, element =>
+                        element.kind === SyntaxKind.StringLiteral && (<StringLiteral>element).text === spec));
+                if (element) {
+                    return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
                 }
             }
             return createCompilerDiagnostic(message, spec);
