@@ -12662,7 +12662,7 @@ namespace ts {
                     }
                 }
             }
-            if (noImplicitThis) {
+            if (noImplicitThis || isInJavaScriptFile(func)) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
                     // We have an object literal method. Check if the containing object literal has a contextual type
