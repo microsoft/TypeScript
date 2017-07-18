@@ -6870,8 +6870,19 @@ namespace ts {
             return node.flags & NodeFlags.JSDoc && node.kind === SyntaxKind.TypeReference;
         }
 
-        function getPrimitiveTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
+        function getIntendedTypeFromJSDocTypeReference(node: TypeReferenceNode): Type {
             if (isIdentifier(node.typeName)) {
+                if (node.typeName.text === "Object") {
+                    if (node.typeArguments && node.typeArguments.length === 2) {
+                        const indexed = getTypeFromTypeNode(node.typeArguments[0]);
+                        const target = getTypeFromTypeNode(node.typeArguments[1]);
+                        const index = createIndexInfo(target, /*isReadonly*/ false);
+                        if (indexed === stringType || indexed === numberType) {
+                            return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index);
+                        }
+                    }
+                    return anyType;
+                }
                 switch (node.typeName.text) {
                     case "String":
                         return stringType;
@@ -6885,8 +6896,6 @@ namespace ts {
                         return undefinedType;
                     case "Null":
                         return nullType;
-                    case "Object":
-                        return anyType;
                     case "Function":
                     case "function":
                         return globalFunctionType;
@@ -6912,7 +6921,7 @@ namespace ts {
                 let type: Type;
                 let meaning = SymbolFlags.Type;
                 if (isJSDocTypeReference(node)) {
-                    type = getPrimitiveTypeFromJSDocTypeReference(node);
+                    type = getIntendedTypeFromJSDocTypeReference(node);
                     meaning |= SymbolFlags.Value;
                 }
                 if (!type) {
