@@ -1834,7 +1834,7 @@ namespace ts {
             const fileContents = sourceFile.text;
             const result: TodoComment[] = [];
 
-            if (descriptors.length > 0) {
+            if (descriptors.length > 0 && !isNodeModulesFile(fileName)) {
                 const regExp = getTodoCommentsRegExp();
 
                 let matchArray: RegExpExecArray;
@@ -1957,6 +1957,12 @@ namespace ts {
                 return (char >= CharacterCodes.a && char <= CharacterCodes.z) ||
                     (char >= CharacterCodes.A && char <= CharacterCodes.Z) ||
                     (char >= CharacterCodes._0 && char <= CharacterCodes._9);
+            }
+
+            function isNodeModulesFile(path: string): boolean {
+                const node_modulesFolderName = "/node_modules/";
+
+                return path.indexOf(node_modulesFolderName) !== -1;
             }
         }
 
