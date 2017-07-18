@@ -755,7 +755,7 @@ namespace ts {
      * Gets the actual offset into an array for a relative offset. Negative offsets indicate a
      * position offset from the end of the array.
      */
-    function toOffset(array: any[], offset: number) {
+    function toOffset(array: ReadonlyArray<any>, offset: number) {
         return offset < 0 ? array.length + offset : offset;
     }
 
@@ -807,7 +807,7 @@ namespace ts {
      * Returns the element at a specific offset in an array if non-empty, `undefined` otherwise.
      * A negative offset indicates the element should be retrieved from the end of the array.
      */
-    export function elementAt<T>(array: T[] | undefined, offset: number): T | undefined {
+    export function elementAt<T>(array: ReadonlyArray<T> | undefined, offset: number): T | undefined {
         if (array) {
             offset = toOffset(array, offset);
             if (offset < array.length) {
@@ -820,14 +820,14 @@ namespace ts {
     /**
      * Returns the first element of an array if non-empty, `undefined` otherwise.
      */
-    export function firstOrUndefined<T>(array: T[]): T | undefined {
+    export function firstOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
         return elementAt(array, 0);
     }
 
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
-    export function lastOrUndefined<T>(array: T[]): T | undefined {
+    export function lastOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
         return elementAt(array, -1);
     }
 
@@ -1176,6 +1176,8 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
+    export function isArray<T>(value: T | ReadonlyArray<any>): value is ReadonlyArray<any>;
+    export function isArray(value: any): value is any[];
     export function isArray(value: any): value is any[] {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }

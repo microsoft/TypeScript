@@ -575,7 +575,7 @@ namespace A {
                 };
                 const result = refactor.extractMethod.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
                 assert.equal(result.errors, undefined, "expect no errors");
-                const results = refactor.extractMethod.extractRange(result.targetRange, sourceFile, context);
+                const results = refactor.extractMethod.extractRange(result.targetRange, context);
                 const data: string[] = [];
                 data.push(`==ORIGINAL==`);
                 data.push(sourceFile.text);

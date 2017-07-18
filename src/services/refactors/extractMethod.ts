@@ -22,7 +22,7 @@ namespace ts.refactor.extractMethod {
             return undefined;
         }
 
-        const extractions = extractRange(targetRange, context.file, context);
+        const extractions = extractRange(targetRange, context);
         if (extractions.length === 0) {
             // No extractions possible
             return undefined;
@@ -51,7 +51,7 @@ namespace ts.refactor.extractMethod {
         const length = context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
         const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length });
         const targetRange: TargetRange = rangeToExtract.targetRange;
-        const extractions = extractRange(targetRange, context.file, context);
+        const extractions = extractRange(targetRange, context);
 
         let i = 0;
         for (const extr of extractions) {
@@ -374,7 +374,9 @@ namespace ts.refactor.extractMethod {
      * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
      * or an error explaining why we can't extract into that scope.
      */
-    export function extractRange(targetRange: TargetRange, sourceFile: SourceFile, context: RefactorContext): ReadonlyArray<ExtractResultForScope> {
+    export function extractRange(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<ExtractResultForScope> {
+        const { file: sourceFile } = context;
+
         if (targetRange === undefined) {
             return [];
         }
@@ -570,14 +572,16 @@ namespace ts.refactor.extractMethod {
                 newNodes.push(call);
             }
         }
-        changeTracker.replaceNodes(
-            context.file,
-            range.range,
-            newNodes,
-            {
-                nodesSeparator: context.newLineCharacter,
-                suffix: isArray(range.range) ? context.newLineCharacter : undefined // insert newline only when replacing statements
+
+        if (isArray(range.range)) {
+            changeTracker.replaceNodesWithNodes(context.file, range.range, newNodes, {
+                nodeSeparator: context.newLineCharacter,
+                suffix: context.newLineCharacter // insert newline only when replacing statements
             });
+        }
+        else {
+            changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes, { nodeSeparator: context.newLineCharacter });
+        }
 
         return {
             scope,
