@@ -77,7 +77,7 @@ namespace ts {
             return visitJsxOpeningLikeElement(node, /*children*/ undefined, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: JsxChild[], isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
             let objectProperties: Expression;
             const attrs = node.attributes.properties;
