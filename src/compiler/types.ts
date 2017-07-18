@@ -2685,6 +2685,7 @@ namespace ts {
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
+        InArrayType                     = 1 << 15,  // Writing an array element type
     }
 
     export const enum SymbolFormatFlags {

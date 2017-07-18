@@ -3302,7 +3302,7 @@ namespace ts {
                 function writeTypeReference(type: TypeReference, flags: TypeFormatFlags) {
                     const typeArguments = type.typeArguments || emptyArray;
                     if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
-                        writeType(typeArguments[0], TypeFormatFlags.InElementType);
+                        writeType(typeArguments[0], TypeFormatFlags.InElementType | TypeFormatFlags.InArrayType);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
@@ -3427,9 +3427,15 @@ namespace ts {
                 }
 
                 function writeTypeOfSymbol(type: ObjectType, typeFormatFlags?: TypeFormatFlags) {
+                    if (typeFormatFlags & TypeFormatFlags.InArrayType) {
+                        writePunctuation(writer, SyntaxKind.OpenParenToken);
+                    }
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
                     buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
+                    if (typeFormatFlags & TypeFormatFlags.InArrayType) {
+                        writePunctuation(writer, SyntaxKind.CloseParenToken);
+                    }
                 }
 
                 function writePropertyWithModifiers(prop: Symbol) {
