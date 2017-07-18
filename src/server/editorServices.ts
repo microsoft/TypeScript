@@ -931,30 +931,28 @@ namespace ts.server {
                 return;
             }
 
-            this.logger.startGroup();
+            this.logger.group(info => {
+                let counter = 0;
+                printProjects(this.externalProjects);
+                printProjects(this.configuredProjects);
+                printProjects(this.inferredProjects);
 
-            let counter = 0;
-            counter = printProjects(this.logger, this.externalProjects, counter);
-            counter = printProjects(this.logger, this.configuredProjects, counter);
-            counter = printProjects(this.logger, this.inferredProjects, counter);
-
-            this.logger.info("Open files: ");
-            for (const rootFile of this.openFiles) {
-                this.logger.info(rootFile.fileName);
-            }
-
-            this.logger.endGroup();
-
-            function printProjects(logger: Logger, projects: Project[], counter: number) {
-                for (const project of projects) {
-                    project.updateGraph();
-                    logger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
-                    logger.info(project.filesToString());
-                    logger.info("-----------------------------------------------");
-                    counter++;
+                info("Open files: ");
+                for (const rootFile of this.openFiles) {
+                    info(rootFile.fileName);
                 }
-                return counter;
-            }
+
+                function printProjects(projects: Project[]) {
+                    for (const project of projects) {
+                        project.updateGraph();
+                        info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
+                        info(project.filesToString());
+                        info("-----------------------------------------------");
+                        counter++;
+                    }
+                }
+            });
+
         }
 
         private findConfiguredProjectByProjectName(configFileName: NormalizedPath) {
