@@ -548,8 +548,8 @@ namespace ts.server {
                 );
         }
 
-        private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: Diagnostic[]) {
-            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
+        private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: Diagnostic[]): protocol.DiagnosticWithLinePosition[] {
+            return diagnostics.map(d => ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
@@ -557,7 +557,7 @@ namespace ts.server {
                 code: d.code,
                 startLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start)),
                 endLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start + d.length))
-            });
+            }));
         }
 
         private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
@@ -836,7 +836,7 @@ namespace ts.server {
 
                         return renameLocations.map(location => {
                             const locationScriptInfo = project.getScriptInfo(location.fileName);
-                            return <protocol.FileSpan>{
+                            return {
                                 file: location.fileName,
                                 start: locationScriptInfo.positionToLineOffset(location.textSpan.start),
                                 end: locationScriptInfo.positionToLineOffset(textSpanEnd(location.textSpan)),

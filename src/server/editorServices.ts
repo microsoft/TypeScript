@@ -444,10 +444,10 @@ namespace ts.server {
             if (!this.eventHandler) {
                 return;
             }
-            this.eventHandler(<ProjectLanguageServiceStateEvent>{
+            this.eventHandler(id<ProjectLanguageServiceStateEvent>({
                 eventName: ProjectLanguageServiceStateEvent,
                 data: { project, languageServiceEnabled }
-            });
+            }));
         }
 
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
@@ -605,10 +605,10 @@ namespace ts.server {
                 }
 
                 for (const openFile of this.openFiles) {
-                    this.eventHandler(<ContextEvent>{
+                    this.eventHandler(id<ContextEvent>({
                         eventName: ContextEvent,
                         data: { project: openFile.getDefaultProject(), fileName: openFile.fileName }
-                    });
+                    }));
                 }
             }
 
@@ -1110,10 +1110,10 @@ namespace ts.server {
                 return;
             }
 
-            this.eventHandler(<ConfigFileDiagEvent>{
+            this.eventHandler(id<ConfigFileDiagEvent>({
                 eventName: ConfigFileDiagEvent,
                 data: { configFileName, diagnostics: diagnostics || [], triggerFile }
-            });
+            }));
         }
 
         private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], clientFileName?: string) {

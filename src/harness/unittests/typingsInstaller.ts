@@ -935,25 +935,25 @@ namespace ts.projectSystem {
                 import * as cmd from "commander
                 `
             };
-            session.executeCommand(<server.protocol.OpenRequest>{
+            session.executeCommand(id<server.protocol.OpenRequest>({
                 seq: 1,
                 type: "request",
-                command: "open",
+                command: server.protocol.CommandTypes.Open,
                 arguments: {
                     file: f.path,
                     fileContent: f.content
                 }
-            });
+            }));
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const proj = projectService.inferredProjects[0];
             const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
 
             // make a change that should not affect the structure of the program
-            session.executeCommand(<server.protocol.ChangeRequest>{
+            session.executeCommand(id<server.protocol.ChangeRequest>({
                 seq: 2,
                 type: "request",
-                command: "change",
+                command: server.protocol.CommandTypes.Change,
                 arguments: {
                     file: f.path,
                     insertString: "\nlet x = 1;",
@@ -962,7 +962,7 @@ namespace ts.projectSystem {
                     endLine: 2,
                     endOffset: 0
                 }
-            });
+            }));
             host.checkTimeoutQueueLength(1);
             host.runQueuedTimeoutCallbacks();
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();

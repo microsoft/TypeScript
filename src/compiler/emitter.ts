@@ -1195,7 +1195,7 @@ namespace ts {
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
-                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd }; // tslint:disable-line no-object-literal-type-assertion
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }

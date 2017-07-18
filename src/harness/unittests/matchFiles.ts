@@ -109,23 +109,21 @@ namespace ts {
         }
         {
             const actual = ts.parseJsonConfigFileContent(json, host, basePath, existingOptions, configFileName, resolutionStack);
-            expected.errors = map(expected.errors, error => {
-                return <Diagnostic>{
-                    category: error.category,
-                    code: error.code,
-                    file: undefined,
-                    length: undefined,
-                    messageText: error.messageText,
-                    start: undefined,
-                };
-            });
+            expected.errors = expected.errors.map<Diagnostic>(error => ({
+                category: error.category,
+                code: error.code,
+                file: undefined,
+                length: undefined,
+                messageText: error.messageText,
+                start: undefined,
+            }));
             assertParsed(actual, expected);
         }
     }
 
     function createDiagnosticForConfigFile(json: any, start: number, length: number, diagnosticMessage: DiagnosticMessage, arg0: string) {
         const text = JSON.stringify(json);
-        const file = <SourceFile>{
+        const file = <SourceFile>{ // tslint:disable-line no-object-literal-type-assertion
             fileName: caseInsensitiveTsconfigPath,
             kind: SyntaxKind.SourceFile,
             text

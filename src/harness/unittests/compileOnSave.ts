@@ -518,18 +518,18 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([f], { newLine });
                 const session = createSession(host);
-                session.executeCommand(<server.protocol.OpenRequest>{
+                session.executeCommand(id<server.protocol.OpenRequest>({
                     seq: 1,
                     type: "request",
-                    command: "open",
+                    command: server.protocol.CommandTypes.Open,
                     arguments: { file: f.path }
-                });
-                session.executeCommand(<server.protocol.CompileOnSaveEmitFileRequest>{
+                }));
+                session.executeCommand(id<server.protocol.CompileOnSaveEmitFileRequest>({
                     seq: 2,
                     type: "request",
-                    command: "compileOnSaveEmitFile",
+                    command: server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: f.path }
-                });
+                }));
                 const emitOutput = host.readFile(path + ts.Extension.Js);
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }

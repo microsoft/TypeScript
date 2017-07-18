@@ -93,14 +93,14 @@ namespace ts.server {
 
                 session.executeCommand(req);
 
-                expect(lastSent).to.deep.equal(<protocol.Response>{
+                expect(lastSent).to.deep.equal(id<protocol.Response>({
                     command: CommandNames.Unknown,
                     type: "response",
                     seq: 0,
                     message: "Unrecognized JSON command: foobar",
                     request_seq: 0,
                     success: false
-                });
+                }));
             });
             it("should return a tuple containing the response and if a response is required on success", () => {
                 const req: protocol.ConfigureRequest = {

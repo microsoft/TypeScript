@@ -2015,7 +2015,7 @@ namespace ts {
          *
          * @param block Information about the block.
          */
-        function beginBlock(block: CodeBlock): number {
+        function beginBlock<T extends CodeBlock>(block: T): number {
             if (!blocks) {
                 blocks = [];
                 blockActions = [];
@@ -2070,7 +2070,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock(<WithBlock>{
+            beginBlock<WithBlock>({
                 kind: CodeBlockKind.With,
                 expression,
                 startLabel,
@@ -2098,7 +2098,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock(<ExceptionBlock>{
+            beginBlock<ExceptionBlock>({
                 kind: CodeBlockKind.Exception,
                 state: ExceptionBlockState.Try,
                 startLabel,
@@ -2199,7 +2199,7 @@ namespace ts {
          * @param labelText Names from containing labeled statements.
          */
         function beginScriptLoopBlock(): void {
-            beginBlock(<LoopBlock>{
+            beginBlock<LoopBlock>({
                 kind: CodeBlockKind.Loop,
                 isScript: true,
                 breakLabel: -1,
@@ -2217,7 +2217,7 @@ namespace ts {
          */
         function beginLoopBlock(continueLabel: Label): Label {
             const breakLabel = defineLabel();
-            beginBlock(<LoopBlock>{
+            beginBlock<LoopBlock>({
                 kind: CodeBlockKind.Loop,
                 isScript: false,
                 breakLabel,
@@ -2245,7 +2245,7 @@ namespace ts {
          *
          */
         function beginScriptSwitchBlock(): void {
-            beginBlock(<SwitchBlock>{
+            beginBlock<SwitchBlock>({
                 kind: CodeBlockKind.Switch,
                 isScript: true,
                 breakLabel: -1
@@ -2259,7 +2259,7 @@ namespace ts {
          */
         function beginSwitchBlock(): Label {
             const breakLabel = defineLabel();
-            beginBlock(<SwitchBlock>{
+            beginBlock<SwitchBlock>({
                 kind: CodeBlockKind.Switch,
                 isScript: false,
                 breakLabel,
@@ -2280,7 +2280,7 @@ namespace ts {
         }
 
         function beginScriptLabeledBlock(labelText: string) {
-            beginBlock(<LabeledBlock>{
+            beginBlock<LabeledBlock>({
                 kind: CodeBlockKind.Labeled,
                 isScript: true,
                 labelText,
@@ -2290,7 +2290,7 @@ namespace ts {
 
         function beginLabeledBlock(labelText: string) {
             const breakLabel = defineLabel();
-            beginBlock(<LabeledBlock>{
+            beginBlock<LabeledBlock>({
                 kind: CodeBlockKind.Labeled,
                 isScript: false,
                 labelText,
