@@ -8,18 +8,22 @@ namespace ts {
         [index: string]: T;
     }
 
-    /** ES6 Map interface. */
-    export interface Map<T> {
+    /** ES6 Map interface, only read methods included. */
+    export interface ReadonlyMap<T> {
         get(key: string): T | undefined;
         has(key: string): boolean;
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
         forEach(action: (value: T, key: string) => void): void;
         readonly size: number;
         keys(): Iterator<string>;
         values(): Iterator<T>;
         entries(): Iterator<[string, T]>;
+    }
+
+    /** ES6 Map interface. */
+    export interface Map<T> extends ReadonlyMap<T> {
+        set(key: string, value: T): this;
+        delete(key: string): boolean;
+        clear(): void;
     }
 
     /** ES6 Iterator type. */
@@ -2983,18 +2987,22 @@ namespace ts {
      */
     export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
-    /** EscapedStringMap based on ES6 Map interface. */
-    export interface UnderscoreEscapedMap<T> {
+    /** ReadonlyMap where keys are `__String`s. */
+    export interface ReadonlyUnderscoreEscapedMap<T> {
         get(key: __String): T | undefined;
         has(key: __String): boolean;
-        set(key: __String, value: T): this;
-        delete(key: __String): boolean;
-        clear(): void;
         forEach(action: (value: T, key: __String) => void): void;
         readonly size: number;
         keys(): Iterator<__String>;
         values(): Iterator<T>;
         entries(): Iterator<[__String, T]>;
+    }
+
+    /** Map where keys are `__String`s. */
+    export interface UnderscoreEscapedMap<T> extends ReadonlyUnderscoreEscapedMap<T> {
+        set(key: __String, value: T): this;
+        delete(key: __String): boolean;
+        clear(): void;
     }
 
     /** SymbolTable based on ES6 Map interface. */

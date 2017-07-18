@@ -585,7 +585,7 @@ namespace ts {
         return result;
     }
 
-    export function mapEntries<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
+    export function mapEntries<T, U>(map: ReadonlyMap<T>, f: (key: string, value: T) => [string, U]): Map<U> {
         if (!map) {
             return undefined;
         }
@@ -998,9 +998,9 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T> | Map<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: ReadonlyMap<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T> | ReadonlyMap<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
@@ -1013,9 +1013,9 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}> | Map<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
+    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: ReadonlyMap<{}>, callback: (key: string) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}> | ReadonlyMap<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
             const result = callback(key as string & __String);
@@ -1027,8 +1027,8 @@ namespace ts {
     }
 
     /** Copy entries from `source` to `target`. */
-    export function copyEntries<T>(source: UnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
-    export function copyEntries<T>(source: Map<T>, target: Map<T>): void;
+    export function copyEntries<T>(source: ReadonlyUnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
+    export function copyEntries<T>(source: ReadonlyMap<T>, target: Map<T>): void;
     export function copyEntries<T, U extends UnderscoreEscapedMap<T> | Map<T>>(source: U, target: U): void {
         (source as Map<T>).forEach((value, key) => {
             (target as Map<T>).set(key, value);
@@ -1106,8 +1106,8 @@ namespace ts {
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;
-    export function cloneMap<T>(map: Map<T>): Map<T>;
-    export function cloneMap<T>(map: Map<T> | SymbolTable): Map<T> | SymbolTable {
+    export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
+    export function cloneMap<T>(map: ReadonlyMap<T> | SymbolTable): Map<T> | SymbolTable {
         const clone = createMap<T>();
         copyEntries(map as Map<T>, clone);
         return clone;
