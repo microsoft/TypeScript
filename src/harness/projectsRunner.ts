@@ -426,7 +426,7 @@ class ProjectRunner extends RunnerBase {
                 compilerResult.program ?
                     ts.filter(compilerResult.program.getSourceFiles(), sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)) :
                     []),
-                sourceFile => ts.id<Harness.Compiler.TestFile>({
+                (sourceFile): Harness.Compiler.TestFile => ({
                     unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
                         RunnerBase.removeFullPaths(sourceFile.fileName) :
                         sourceFile.fileName,

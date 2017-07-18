@@ -109,7 +109,7 @@ namespace ts {
         }
         {
             const actual = ts.parseJsonConfigFileContent(json, host, basePath, existingOptions, configFileName, resolutionStack);
-            expected.errors = expected.errors.map<Diagnostic>(error => ({
+            expected.errors = expected.errors.map((error): Diagnostic => ({
                 category: error.category,
                 code: error.code,
                 file: undefined,

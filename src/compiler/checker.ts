@@ -6254,10 +6254,10 @@ namespace ts {
                 const parameterName = node.parameterName as Identifier;
                 return {
                     kind: TypePredicateKind.Identifier,
-                    parameterName: parameterName ? <string>parameterName.text : undefined,
+                    parameterName: parameterName ? parameterName.text : undefined,
                     parameterIndex: parameterName ? getTypePredicateParameterIndex((node.parent as SignatureDeclaration).parameters, parameterName) : undefined,
                     type: getTypeFromTypeNode(node.type)
-                };
+                } as IdentifierTypePredicate;
             }
             else {
                 return {
