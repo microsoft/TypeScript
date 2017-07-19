@@ -1193,11 +1193,11 @@ namespace ts.server {
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): protocol.CompileOnSaveAffectedFileListSingleProject[] {
-            const info = this.projectService.getScriptInfo(args.file);
+            const info = this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file);
             const result: protocol.CompileOnSaveAffectedFileListSingleProject[] = [];
 
             if (!info) {
-                return [];
+                return result;
             }
 
             // if specified a project, we only return affected file list in this project

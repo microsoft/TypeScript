@@ -1394,6 +1394,10 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
+    export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
+        return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
+    }
+
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;
@@ -1407,8 +1411,8 @@ namespace ts {
         if (node.kind === SyntaxKind.ExportDeclaration) {
             return (<ExportDeclaration>node).moduleSpecifier;
         }
-        if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-            return (<ModuleDeclaration>node).name;
+        if (isModuleWithStringLiteralName(node)) {
+            return node.name;
         }
     }
 

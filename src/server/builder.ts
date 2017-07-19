@@ -3,24 +3,130 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-
     export function shouldEmitFile(scriptInfo: ScriptInfo) {
         return !scriptInfo.hasMixedContent;
     }
 
-    /**
-     * An abstract file info that maintains a shape signature.
-     */
-    export class BuilderFileInfo {
+    export interface Builder {
+        /**
+         * This is the callback when file infos in the builder are updated
+         */
+        onProjectUpdateGraph(): void;
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
+        /**
+         * @returns {boolean} whether the emit was conducted or not
+         */
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
+        clear(): void;
+    }
 
-        private lastCheckedShapeSignature: string;
+    interface EmitHandler {
+        addScriptInfo(scriptInfo: ScriptInfo): void;
+        removeScriptInfo(path: Path): void;
+        updateScriptInfo(scriptInfo: ScriptInfo): void;
+        /**
+         * Gets the files affected by the script info which has updated shape from the known one
+         */
+        getFilesAffectedByUpdatedShape(scriptInfo: ScriptInfo, singleFileResult: string[]): string[];
+    }
 
-        constructor(public readonly scriptInfo: ScriptInfo, public readonly project: Project) {
+    export function createBuilder(project: Project): Builder {
+        let isModuleEmit: boolean | undefined;
+        let projectVersionForDependencyGraph: string;
+        // Last checked shape signature for the file info
+        let fileInfos: Map<string>;
+        let emitHandler: EmitHandler;
+        return {
+            onProjectUpdateGraph,
+            getFilesAffectedBy,
+            emitFile,
+            clear
+        };
+
+        function createProjectGraph() {
+            const currentIsModuleEmit = project.getCompilerOptions().module !== ModuleKind.None;
+            if (isModuleEmit !== currentIsModuleEmit) {
+                isModuleEmit = currentIsModuleEmit;
+                emitHandler = isModuleEmit ? getModuleEmitHandler() : getNonModuleEmitHandler();
+                fileInfos = undefined;
+            }
+
+            fileInfos = mutateExistingMap(
+                fileInfos, arrayToMap(project.getScriptInfos(), info => info.path),
+                (_path, info) => {
+                    emitHandler.addScriptInfo(info);
+                    return "";
+                },
+                (path: Path, _value) => emitHandler.removeScriptInfo(path),
+                    /*isSameValue*/ undefined,
+                    /*OnDeleteExistingMismatchValue*/ undefined,
+                (_prevValue, scriptInfo) => emitHandler.updateScriptInfo(scriptInfo)
+            );
+            projectVersionForDependencyGraph = project.getProjectVersion();
         }
 
-        public isExternalModuleOrHasOnlyAmbientExternalModules() {
-            const sourceFile = this.getSourceFile();
-            return isExternalModule(sourceFile) || this.containsOnlyAmbientModules(sourceFile);
+        function ensureFileInfos() {
+            if (!emitHandler) {
+                createProjectGraph();
+            }
+            Debug.assert(projectVersionForDependencyGraph === project.getProjectVersion());
+        }
+
+        function onProjectUpdateGraph() {
+            if (emitHandler) {
+                createProjectGraph();
+            }
+        }
+
+        function getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
+            ensureFileInfos();
+
+            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
+            const path = scriptInfo.path;
+            if (!fileInfos || !fileInfos.has(path) || !updateShapeSignature(scriptInfo)) {
+                return singleFileResult;
+            }
+
+            return emitHandler.getFilesAffectedByUpdatedShape(scriptInfo, singleFileResult);
+        }
+
+        /**
+         * @returns {boolean} whether the emit was conducted or not
+         */
+        function emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+            ensureFileInfos();
+            if (!fileInfos || !fileInfos.has(scriptInfo.path)) {
+                return false;
+            }
+
+            const { emitSkipped, outputFiles } = project.getFileEmitOutput(scriptInfo, /*emitOnlyDtsFiles*/ false);
+            if (!emitSkipped) {
+                const projectRootPath = project.getProjectRootPath();
+                for (const outputFile of outputFiles) {
+                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, projectRootPath ? projectRootPath : getDirectoryPath(scriptInfo.fileName));
+                    writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
+                }
+            }
+            return !emitSkipped;
+        }
+
+        function clear() {
+            isModuleEmit = undefined;
+            emitHandler = undefined;
+            fileInfos = undefined;
+            projectVersionForDependencyGraph = undefined;
+        }
+
+        function getSourceFile(path: Path) {
+            return project.getSourceFile(path);
+        }
+
+        function getScriptInfo(path: Path) {
+            return project.projectService.getScriptInfoForPath(path);
+        }
+
+        function isExternalModuleOrHasOnlyAmbientExternalModules(sourceFile: SourceFile) {
+            return sourceFile && (isExternalModule(sourceFile) || containsOnlyAmbientModules(sourceFile));
         }
 
         /**
@@ -29,331 +135,149 @@ namespace ts.server {
          * there are no point to rebuild all script files if these special files have changed. However, if any statement
          * in the file is not ambient external module, we treat it as a regular script file.
          */
-        private containsOnlyAmbientModules(sourceFile: SourceFile) {
+        function containsOnlyAmbientModules(sourceFile: SourceFile) {
             for (const statement of sourceFile.statements) {
-                if (statement.kind !== SyntaxKind.ModuleDeclaration || (<ModuleDeclaration>statement).name.kind !== SyntaxKind.StringLiteral) {
+                if (!isModuleWithStringLiteralName(statement)) {
                     return false;
                 }
             }
             return true;
         }
 
-        private computeHash(text: string): string {
-            return this.project.projectService.host.createHash(text);
-        }
-
-        private getSourceFile(): SourceFile {
-            return this.project.getSourceFile(this.scriptInfo.path);
-        }
-
         /**
          * @return {boolean} indicates if the shape signature has changed since last update.
          */
-        public updateShapeSignature() {
-            const sourceFile = this.getSourceFile();
+        function updateShapeSignature(scriptInfo: ScriptInfo) {
+            const path = scriptInfo.path;
+            const sourceFile = getSourceFile(path);
             if (!sourceFile) {
                 return true;
             }
 
-            const lastSignature = this.lastCheckedShapeSignature;
+            const prevSignature = fileInfos.get(path);
+            let latestSignature = prevSignature;
             if (sourceFile.isDeclarationFile) {
-                this.lastCheckedShapeSignature = this.computeHash(sourceFile.text);
+                latestSignature = computeHash(sourceFile.text);
+                fileInfos.set(path, latestSignature);
             }
             else {
-                const emitOutput = this.project.getFileEmitOutput(this.scriptInfo, /*emitOnlyDtsFiles*/ true);
+                const emitOutput = project.getFileEmitOutput(scriptInfo, /*emitOnlyDtsFiles*/ true);
                 if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
-                    this.lastCheckedShapeSignature = this.computeHash(emitOutput.outputFiles[0].text);
+                    latestSignature = computeHash(emitOutput.outputFiles[0].text);
+                    fileInfos.set(path, latestSignature);
                 }
             }
-            return !lastSignature || this.lastCheckedShapeSignature !== lastSignature;
-        }
-    }
 
-    export interface Builder {
-        readonly project: Project;
-        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
-        onProjectUpdateGraph(): void;
-        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
-        clear(): void;
-    }
-
-    abstract class AbstractBuilder<T extends BuilderFileInfo> implements Builder {
-
-        /**
-         * stores set of files from the project.
-         * NOTE: this field is created on demand and should not be accessed directly.
-         * Use 'getFileInfos' instead.
-         */
-        private fileInfos_doNotAccessDirectly: Map<T>;
-
-        constructor(public readonly project: Project, private ctor: { new (scriptInfo: ScriptInfo, project: Project): T }) {
+            return !prevSignature || latestSignature !== prevSignature;
         }
 
-        private getFileInfos() {
-            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createMap<T>());
+        function computeHash(text: string) {
+            return project.projectService.host.createHash(text);
         }
 
-        protected hasFileInfos() {
-            return !!this.fileInfos_doNotAccessDirectly;
-        }
+        function noop() { }
 
-        public clear() {
-            // drop the existing list - it will be re-created as necessary
-            this.fileInfos_doNotAccessDirectly = undefined;
-        }
+        function getNonModuleEmitHandler(): EmitHandler {
+            return {
+                addScriptInfo: noop,
+                removeScriptInfo: noop,
+                updateScriptInfo: noop,
+                getFilesAffectedByUpdatedShape
+            };
 
-        protected getFileInfo(path: Path): T {
-            return this.getFileInfos().get(path);
-        }
-
-        protected getOrCreateFileInfo(path: Path): T {
-            let fileInfo = this.getFileInfo(path);
-            if (!fileInfo) {
-                const scriptInfo = this.project.getScriptInfo(path);
-                fileInfo = new this.ctor(scriptInfo, this.project);
-                this.setFileInfo(path, fileInfo);
-            }
-            return fileInfo;
-        }
-
-        protected getFileInfoPaths(): Path[] {
-            return arrayFrom(this.getFileInfos().keys() as Iterator<Path>);
-        }
-
-        protected setFileInfo(path: Path, info: T) {
-            this.getFileInfos().set(path, info);
-        }
-
-        protected removeFileInfo(path: Path) {
-            this.getFileInfos().delete(path);
-        }
-
-        protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.getFileInfos().forEach(action);
-        }
-
-        abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
-        abstract onProjectUpdateGraph(): void;
-        protected abstract ensureFileInfoIfInProject(scriptInfo: ScriptInfo): void;
-
-        /**
-         * @returns {boolean} whether the emit was conducted or not
-         */
-        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
-            this.ensureFileInfoIfInProject(scriptInfo);
-            const fileInfo = this.getFileInfo(scriptInfo.path);
-            if (!fileInfo) {
-                return false;
-            }
-
-            const { emitSkipped, outputFiles } = this.project.getFileEmitOutput(fileInfo.scriptInfo, /*emitOnlyDtsFiles*/ false);
-            if (!emitSkipped) {
-                const projectRootPath = this.project.getProjectRootPath();
-                for (const outputFile of outputFiles) {
-                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, projectRootPath ? projectRootPath : getDirectoryPath(scriptInfo.fileName));
-                    writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
-                }
-            }
-            return !emitSkipped;
-        }
-    }
-
-    class NonModuleBuilder extends AbstractBuilder<BuilderFileInfo> {
-
-        constructor(public readonly project: Project) {
-            super(project, BuilderFileInfo);
-        }
-
-        protected ensureFileInfoIfInProject(scriptInfo: ScriptInfo) {
-            if (this.project.containsScriptInfo(scriptInfo)) {
-                this.getOrCreateFileInfo(scriptInfo.path);
-            }
-        }
-
-        onProjectUpdateGraph() {
-            if (this.hasFileInfos()) {
-                this.forEachFileInfo(fileInfo => {
-                    if (!this.project.containsScriptInfo(fileInfo.scriptInfo)) {
-                        // This file was deleted from this project
-                        this.removeFileInfo(fileInfo.scriptInfo.path);
-                    }
-                });
-            }
-        }
-
-        /**
-         * Note: didn't use path as parameter because the returned file names will be directly
-         * consumed by the API user, which will use it to interact with file systems. Path
-         * should only be used internally, because the case sensitivity is not trustable.
-         */
-        getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
-            const info = this.getOrCreateFileInfo(scriptInfo.path);
-            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
-            if (info.updateShapeSignature()) {
-                const options = this.project.getCompilerOptions();
+            function getFilesAffectedByUpdatedShape(_scriptInfo: ScriptInfo, singleFileResult: string[]): string[] {
+                const options = project.getCompilerOptions();
                 // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
                 // so returning the file itself is good enough.
                 if (options && (options.out || options.outFile)) {
                     return singleFileResult;
                 }
-                return this.project.getAllEmittableFiles();
-            }
-            return singleFileResult;
-        }
-    }
-
-    class ModuleBuilderFileInfo extends BuilderFileInfo {
-        references = createSortedArray<ModuleBuilderFileInfo>();
-        readonly referencedBy = createSortedArray<ModuleBuilderFileInfo>();
-        scriptVersionForReferences: string;
-
-        static compareFileInfos(lf: ModuleBuilderFileInfo, rf: ModuleBuilderFileInfo): Comparison {
-            return compareStrings(lf.scriptInfo.fileName, rf.scriptInfo.fileName);
-        }
-
-        addReferencedBy(fileInfo: ModuleBuilderFileInfo): void {
-            insertSorted(this.referencedBy, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
-        }
-
-        removeReferencedBy(fileInfo: ModuleBuilderFileInfo): void {
-            removeSorted(this.referencedBy, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
-        }
-
-        removeFileReferences() {
-            for (const reference of this.references) {
-                reference.removeReferencedBy(this);
-            }
-            clear(this.references);
-        }
-    }
-
-    class ModuleBuilder extends AbstractBuilder<ModuleBuilderFileInfo> {
-
-        constructor(public readonly project: Project) {
-            super(project, ModuleBuilderFileInfo);
-        }
-
-        private projectVersionForDependencyGraph: string;
-
-        public clear() {
-            this.projectVersionForDependencyGraph = undefined;
-            super.clear();
-        }
-
-        private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): SortedArray<ModuleBuilderFileInfo> {
-            if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return createSortedArray();
-            }
-
-            const referencedFilePaths = this.project.getReferencedFiles(fileInfo.scriptInfo.path);
-            return toSortedArray(referencedFilePaths.map(f => this.getOrCreateFileInfo(f)), ModuleBuilderFileInfo.compareFileInfos);
-        }
-
-        protected ensureFileInfoIfInProject(_scriptInfo: ScriptInfo) {
-            this.ensureProjectDependencyGraphUpToDate();
-        }
-
-        onProjectUpdateGraph() {
-            // Update the graph only if we have computed graph earlier
-            if (this.hasFileInfos()) {
-                this.ensureProjectDependencyGraphUpToDate();
+                return project.getAllEmittableFiles();
             }
         }
 
-        private ensureProjectDependencyGraphUpToDate() {
-            if (!this.projectVersionForDependencyGraph || this.project.getProjectVersion() !== this.projectVersionForDependencyGraph) {
-                const currentScriptInfos = this.project.getScriptInfos();
-                for (const scriptInfo of currentScriptInfos) {
-                    const fileInfo = this.getOrCreateFileInfo(scriptInfo.path);
-                    this.updateFileReferences(fileInfo);
+        function getModuleEmitHandler(): EmitHandler {
+            const references = createMap<Map<true>>();
+            const referencedBy = createMultiMap<Path>();
+            const scriptVersionForReferences = createMap<string>();
+            return {
+                addScriptInfo,
+                removeScriptInfo,
+                updateScriptInfo,
+                getFilesAffectedByUpdatedShape
+            };
+
+            function setReferences(path: Path, latestVersion: string, existingMap: Map<true>) {
+                existingMap = mutateExistingMapWithNewSet<true>(existingMap, project.getReferencedFiles(path),
+                    // Creating new Reference: Also add referenced by
+                    key => { referencedBy.add(key, path); return true; },
+                    // Remove existing reference
+                    (key, _existingValue) => { referencedBy.remove(key, path); }
+                );
+                references.set(path, existingMap);
+                scriptVersionForReferences.set(path, latestVersion);
+            }
+
+            function addScriptInfo(info: ScriptInfo) {
+                setReferences(info.path, info.getLatestVersion(), undefined);
+            }
+
+            function removeScriptInfo(path: Path) {
+                references.delete(path);
+                scriptVersionForReferences.delete(path);
+            }
+
+            function updateScriptInfo(scriptInfo: ScriptInfo) {
+                const path = scriptInfo.path;
+                const lastUpdatedVersion = scriptVersionForReferences.get(path);
+                const latestVersion = scriptInfo.getLatestVersion();
+                if (lastUpdatedVersion !== latestVersion) {
+                    setReferences(path, latestVersion, references.get(path));
                 }
-                this.forEachFileInfo(fileInfo => {
-                    if (!this.project.containsScriptInfo(fileInfo.scriptInfo)) {
-                        // This file was deleted from this project
-                        fileInfo.removeFileReferences();
-                        this.removeFileInfo(fileInfo.scriptInfo.path);
-                    }
-                });
-                this.projectVersionForDependencyGraph = this.project.getProjectVersion();
-            }
-        }
-
-        private updateFileReferences(fileInfo: ModuleBuilderFileInfo) {
-            // Only need to update if the content of the file changed.
-            if (fileInfo.scriptVersionForReferences === fileInfo.scriptInfo.getLatestVersion()) {
-                return;
             }
 
-            const newReferences = this.getReferencedFileInfos(fileInfo);
-            const oldReferences = fileInfo.references;
-            enumerateInsertsAndDeletes(newReferences, oldReferences,
-                /*inserted*/ newReference => newReference.addReferencedBy(fileInfo),
-                /*deleted*/ oldReference => {
-                    // New reference is greater then current reference. That means
-                    // the current reference doesn't exist anymore after parsing. So delete
-                    // references.
-                    oldReference.removeReferencedBy(fileInfo);
-                },
-                /*compare*/ ModuleBuilderFileInfo.compareFileInfos);
-
-            fileInfo.references = newReferences;
-            fileInfo.scriptVersionForReferences = fileInfo.scriptInfo.getLatestVersion();
-        }
-
-        getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
-            this.ensureProjectDependencyGraphUpToDate();
-
-            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
-            const fileInfo = this.getFileInfo(scriptInfo.path);
-            if (!fileInfo || !fileInfo.updateShapeSignature()) {
-                return singleFileResult;
+            function getReferencedByPaths(path: Path) {
+                return referencedBy.get(path) || [];
             }
 
-            if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return this.project.getAllEmittableFiles();
-            }
+            function getFilesAffectedByUpdatedShape(scriptInfo: ScriptInfo, singleFileResult: string[]): string[] {
+                const path = scriptInfo.path;
+                const sourceFile = getSourceFile(path);
+                if (!isExternalModuleOrHasOnlyAmbientExternalModules(sourceFile)) {
+                    return project.getAllEmittableFiles();
+                }
 
-            const options = this.project.getCompilerOptions();
-            if (options && (options.isolatedModules || options.out || options.outFile)) {
-                return singleFileResult;
-            }
+                const options = project.getCompilerOptions();
+                if (options && (options.isolatedModules || options.out || options.outFile)) {
+                    return singleFileResult;
+                }
 
-            // Now we need to if each file in the referencedBy list has a shape change as well.
-            // Because if so, its own referencedBy files need to be saved as well to make the
-            // emitting result consistent with files on disk.
+                // Now we need to if each file in the referencedBy list has a shape change as well.
+                // Because if so, its own referencedBy files need to be saved as well to make the
+                // emitting result consistent with files on disk.
 
-            // Use slice to clone the array to avoid manipulating in place
-            const queue = fileInfo.referencedBy.slice(0);
-            const fileNameSet = createMap<ScriptInfo>();
-            fileNameSet.set(scriptInfo.fileName, scriptInfo);
-            while (queue.length > 0) {
-                const processingFileInfo = queue.pop();
-                if (processingFileInfo.updateShapeSignature() && processingFileInfo.referencedBy.length > 0) {
-                    for (const potentialFileInfo of processingFileInfo.referencedBy) {
-                        if (!fileNameSet.has(potentialFileInfo.scriptInfo.fileName)) {
-                            queue.push(potentialFileInfo);
+                const fileNamesMap = createMap<NormalizedPath>();
+                const setFileName = (path: Path, scriptInfo: ScriptInfo) => {
+                    fileNamesMap.set(path, scriptInfo && shouldEmitFile(scriptInfo) ? scriptInfo.fileName : undefined);
+                };
+
+                // Start with the paths this file was referenced by
+                setFileName(path, scriptInfo);
+                const queue = getReferencedByPaths(path).slice();
+                while (queue.length > 0) {
+                    const currentPath = queue.pop();
+                    if (!fileNamesMap.has(currentPath)) {
+                        const currentScriptInfo = getScriptInfo(currentPath);
+                        if (currentScriptInfo && updateShapeSignature(currentScriptInfo)) {
+                            queue.push(...getReferencedByPaths(currentPath));
                         }
+                        setFileName(currentPath, currentScriptInfo);
                     }
                 }
-                fileNameSet.set(processingFileInfo.scriptInfo.fileName, processingFileInfo.scriptInfo);
-            }
-            const result: string[] = [];
-            fileNameSet.forEach((scriptInfo, fileName) => {
-                if (shouldEmitFile(scriptInfo)) {
-                    result.push(fileName);
-                }
-            });
-            return result;
-        }
-    }
 
-    export function createBuilder(project: Project): Builder {
-        const moduleKind = project.getCompilerOptions().module;
-        switch (moduleKind) {
-            case ModuleKind.None:
-                return new NonModuleBuilder(project);
-            default:
-                return new ModuleBuilder(project);
+                // Return array of values that needs emit
+                return flatMapIter(fileNamesMap.values(), value => value);
+            }
         }
     }
 }

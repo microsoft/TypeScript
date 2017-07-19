@@ -312,21 +312,18 @@ namespace ts.server {
     ): Map<T> {
         return mutateExistingMap(
             existingMap, newMap,
-            // Same value if the value is set in the map
-            /*isSameValue*/(_existingValue, _valueInNewMap) => true,
             /*createNewValue*/(key, _valueInNewMap) => createNewValue(key),
             onDeleteExistingValue,
-            // Should never be called since we say yes to same values all the time
-            /*OnDeleteExistingMismatchValue*/(_key, _existingValue) => notImplemented()
         );
     }
 
     export function mutateExistingMap<T, U>(
         existingMap: Map<T>, newMap: Map<U>,
-        isSameValue: (existingValue: T, valueInNewMap: U) => boolean,
         createNewValue: (key: string, valueInNewMap: U) => T,
         onDeleteExistingValue: (key: string, existingValue: T) => void,
-        OnDeleteExistingMismatchValue: (key: string, existingValue: T) => void
+        isSameValue?: (existingValue: T, valueInNewMap: U) => boolean,
+        OnDeleteExistingMismatchValue?: (key: string, existingValue: T) => void,
+        onSameExistingValue?: (existingValue: T, valueInNewMap: U) => void
     ): Map<T> {
         // If there are new values update them
         if (newMap) {
@@ -340,9 +337,12 @@ namespace ts.server {
                         onDeleteExistingValue(key, existingValue);
                     }
                     // different value - remove it
-                    else if (!isSameValue(existingValue, valueInNewMap)) {
+                    else if (isSameValue && !isSameValue(existingValue, valueInNewMap)) {
                         existingMap.delete(key);
                         OnDeleteExistingMismatchValue(key, existingValue);
+                    }
+                    else if (onSameExistingValue) {
+                        onSameExistingValue(existingValue, valueInNewMap);
                     }
                 });
             }

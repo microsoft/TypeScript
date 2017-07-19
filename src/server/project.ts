@@ -811,19 +811,19 @@ namespace ts.server {
             }
         }
 
-        getReferencedFiles(path: Path): Path[] {
+        getReferencedFiles(path: Path): Map<true> {
+            const referencedFiles = createMap<true>();
             if (!this.languageServiceEnabled) {
-                return [];
+                return referencedFiles;
             }
 
             const sourceFile = this.getSourceFile(path);
             if (!sourceFile) {
-                return [];
+                return referencedFiles;
             }
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            const referencedFiles = createMap<true>();
             if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = this.program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
@@ -859,8 +859,7 @@ namespace ts.server {
                 });
             }
 
-            const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
-            return filter(allFileNames, file => this.lsHost.host.fileExists(file));
+            return referencedFiles;
         }
 
         // remove a root file from project
@@ -1138,12 +1137,6 @@ namespace ts.server {
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
             this.directoriesWatchedForWildcards = mutateExistingMap(
                 this.directoriesWatchedForWildcards, wildcardDirectories,
-                // Watcher is same if the recursive flags match
-                ({ recursive: existingRecursive }, flag) => {
-                    // If the recursive dont match, it needs update
-                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                    return existingRecursive !== recursive;
-                },
                 // Create new watch and recursive info
                 (directory, flag) => {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
@@ -1160,6 +1153,12 @@ namespace ts.server {
                 (directory, { watcher, recursive }) => this.projectService.closeDirectoryWatcher(
                     WatchType.WildCardDirectories, this, directory, watcher, recursive, WatcherCloseReason.NotNeeded
                 ),
+                // Watcher is same if the recursive flags match
+                ({ recursive: existingRecursive }, flag) => {
+                    // If the recursive dont match, it needs update
+                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                    return existingRecursive !== recursive;
+                },
                 // Close existing watch that doesnt match in recursive flag
                 (directory, { watcher, recursive }) => this.projectService.closeDirectoryWatcher(
                     WatchType.WildCardDirectories, this, directory, watcher, recursive, WatcherCloseReason.RecursiveChanged

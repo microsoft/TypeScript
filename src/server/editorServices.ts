@@ -519,6 +519,11 @@ namespace ts.server {
             return scriptInfo && scriptInfo.getDefaultProject();
         }
 
+        getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
+            this.ensureInferredProjectsUpToDate();
+            return this.getScriptInfo(uncheckedFileName);
+        }
+
         /**
          * Ensures the project structures are upto date
          * @param refreshInferredProjects when true updates the inferred projects even if there is no pending work
