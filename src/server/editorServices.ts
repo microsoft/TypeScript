@@ -239,10 +239,7 @@ namespace ts.server {
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: (fileName, extraFileExtensions) => {
-            const mixedContentExtensions = map(filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
-            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension));
-        }
+        hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
