@@ -90,6 +90,7 @@ namespace ts.refactor.extractMethod {
         export const TypeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
         export const FunctionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
         export const InsufficientSelection = createMessage("Select more than a single identifier.");
+        export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
     }
 
     export enum RangeFacts {
@@ -106,6 +107,11 @@ namespace ts.refactor.extractMethod {
     export interface TargetRange {
         readonly range: Expression | Statement[];
         readonly facts: RangeFacts;
+        /**
+         * A list of symbols that are declared in the selected range.
+         * Used to ensure we don't turn something used outside the range free (or worse, resolve to a different entity).
+         */
+        readonly declarations: Symbol[];
     }
 
     /**
@@ -148,6 +154,8 @@ namespace ts.refactor.extractMethod {
         let start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
         // Do the same for the ending position
         let end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
+
+        const declarations: Symbol[] = [];
 
         // We'll modify these flags as we walk the tree to collect data
         // about what things need to be done as part of the extraction.
@@ -202,7 +210,7 @@ namespace ts.refactor.extractMethod {
                     break;
                 }
             }
-            return { targetRange: { range: statements, facts: rangeFacts } };
+            return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
         else {
             const errors = checkRootNode(start) || checkNode(start);
@@ -212,7 +220,7 @@ namespace ts.refactor.extractMethod {
             const range = isStatement(start)
                 ? [start]
                 : <Expression>start;
-            return { targetRange: { range, facts: rangeFacts } };
+            return { targetRange: { range, facts: rangeFacts, declarations } };
         }
 
         function createErrorResult(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage): RangeToExtract {
@@ -236,6 +244,13 @@ namespace ts.refactor.extractMethod {
             }
             if (!isStatement(nodeToCheck) && !isExpression(nodeToCheck)) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
+            }
+
+            if (isDeclaration(nodeToCheck)) {
+                if (hasModifier(nodeToCheck, ModifierFlags.Export)) {
+                    return [createDiagnosticForNode(nodeToCheck, Messages.CannotExtractExportedEntity)];
+                }
+                declarations.push(nodeToCheck.symbol);
             }
 
             let errors: Diagnostic[];
