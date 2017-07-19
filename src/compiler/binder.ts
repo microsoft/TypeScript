@@ -308,7 +308,7 @@ namespace ts {
          * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
          * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations.
          */
-        function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
+        function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean): Symbol {
             Debug.assert(!hasDynamicName(node));
 
             const isDefaultExport = hasModifier(node, ModifierFlags.Default);
@@ -345,15 +345,20 @@ namespace ts {
                 // you have multiple 'vars' with the same name in the same container).  In this case
                 // just add this node into the declarations list of the symbol.
                 symbol = symbolTable.get(name);
-                if (!symbol) {
-                    symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
-                }
 
-                if (name && (includes & SymbolFlags.Classifiable)) {
+                if (includes & SymbolFlags.Classifiable) {
                     classifiableNames.set(name, true);
                 }
 
-                if (symbol.flags & excludes) {
+                if (!symbol) {
+                    symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
+                    if (isReplaceableByMethod) symbol.isReplaceableByMethod = true;
+                }
+                else if (isReplaceableByMethod && !symbol.isReplaceableByMethod) {
+                    // A symbol already exists, so don't add this as a declaration.
+                    return symbol;
+                }
+                else if (symbol.flags & excludes) {
                     if (symbol.isReplaceableByMethod) {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
@@ -2344,11 +2349,8 @@ namespace ts {
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = container.parent;
-                    const symbol = declareSymbol(hasModifier(container, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None);
-                    if (symbol) {
-                        // symbols declared through 'this' property assignements can be overwritten by subsequent method declarations
-                        (symbol as Symbol).isReplaceableByMethod = true;
-                    }
+                    const symbolTable = hasModifier(container, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members;
+                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
             }
         }
