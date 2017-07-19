@@ -28,12 +28,19 @@ namespace ts.refactor.extractMethod {
         }
 
         const actions: RefactorActionInfo[] = [];
+        const usedNames: Map<boolean> = createMap();
+
         let i = 0;
         for (const extr of extractions) {
-            actions.push({
-                description: formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [extr.scopeDescription]),
-                name: `scope_${i}`
-            });
+            // Don't issue refactorings with duplicated names
+            const description = formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [extr.scopeDescription]);
+            if (!usedNames.get(description)) {
+                usedNames.set(description, true);
+                actions.push({
+                    description,
+                    name: `scope_${i}`
+                });
+            }
             i++;
         }
 
@@ -245,6 +252,16 @@ namespace ts.refactor.extractMethod {
                     return true;
                 }
                 if (!node || isFunctionLike(node) || isClassLike(node)) {
+                    switch (node.kind) {
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ClassDeclaration:
+                            if (node.parent.kind === SyntaxKind.SourceFile && (node.parent as ts.SourceFile).externalModuleIndicator === undefined) {
+                                // You cannot extract global declarations
+                                (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.FunctionWillNotBeVisibleInTheNewScope));
+                            }
+                            break;
+                    }
+
                     // do not dive into functions or classes
                     return false;
                 }
@@ -371,7 +388,16 @@ namespace ts.refactor.extractMethod {
             if ((current.kind === SyntaxKind.FunctionDeclaration) || isSourceFile(current) || isModuleBlock(current) || isClassLike(current)) {
                 (scopes = scopes || []).push(current as FunctionLikeDeclaration);
             }
-            current = current.parent;
+
+            // A function parameter's initializer is actually in the outer scope, not the function declaration
+            if (current && current.parent && current.parent.kind === SyntaxKind.Parameter) {
+                // Skip all the way to the outer scope of the function that declared this parameter
+                current = current.parent.parent.parent;
+            }
+            else {
+                current = current.parent;
+            }
+
         }
         return scopes;
     }

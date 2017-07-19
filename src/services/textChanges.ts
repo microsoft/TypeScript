@@ -566,7 +566,7 @@ namespace ts.textChanges {
                 options.delta !== undefined
                     ? options.delta
                     : formatting.SmartIndenter.shouldIndentChildNode(node)
-                        ? formatOptions.indentSize
+                        ? (formatOptions.indentSize || 0)
                         : 0;
 
             return applyFormatting(nonformattedText, sourceFile, initialIndentation, delta, this.rulesProvider);
