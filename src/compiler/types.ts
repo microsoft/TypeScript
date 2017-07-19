@@ -2321,10 +2321,10 @@ namespace ts {
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: StringLiteral[];
-        /* @internal */ moduleAugmentations: StringLiteral[];
+        /* @internal */ imports: ReadonlyArray<StringLiteral>;
+        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        /* @internal */ ambientModuleNames: string[];
+        /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
