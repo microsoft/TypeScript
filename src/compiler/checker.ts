@@ -2625,7 +2625,7 @@ namespace ts {
                             context.encounteredError = true;
                             return undefined;
                         }
-                        return createTupleTypeNode([]);;
+                        return createTupleTypeNode([]);
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
