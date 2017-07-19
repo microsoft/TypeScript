@@ -17996,6 +17996,8 @@ namespace ts {
                 return;
             }
 
+            checkSourceElement(node.type);
+
             const { parameterName } = node;
             if (isThisTypePredicate(typePredicate)) {
                 getTypeFromThisTypeNode(parameterName as ThisTypeNode);
