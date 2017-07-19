@@ -232,7 +232,7 @@ namespace ts.server {
                     }
                     break;
                 default:
-                    removeItemFromSet(this.containingProjects, project);
+                    unorderedRemoveItem(this.containingProjects, project);
                     break;
             }
         }
