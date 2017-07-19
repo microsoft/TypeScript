@@ -88,18 +88,13 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,24): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,28): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,32): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,30): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,32): error TS1138: Parameter declaration expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,39): error TS1005: ';' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,40): error TS1128: Declaration or statement expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,42): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,49): error TS1005: ';' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,1): error TS7027: Unreachable code detected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,32): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,29): error TS2304: Cannot find name 'm'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,32): error TS1005: ';' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): error TS2304: Cannot find name 'm'.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (65 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (60 errors) ====
     class C {
         n: number;
         explicitThis(this: this, m: number): number {
@@ -419,20 +414,10 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): e
                                  ~
 !!! error TS1005: ',' expected.
                                    ~~~
-!!! error TS1138: Parameter declaration expected.
-                                          ~
-!!! error TS1005: ';' expected.
-                                           ~
-!!! error TS1128: Declaration or statement expected.
-                                             ~~~~~~
-!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
-                                                    ~
-!!! error TS1005: ';' expected.
+!!! error TS1003: Identifier expected.
     
     // can't name parameters 'this' in a lambda.
     c.explicitProperty = (this, m) => m + this.n;
-    ~
-!!! error TS7027: Unreachable code detected.
                                 ~
 !!! error TS2304: Cannot find name 'm'.
                                    ~~

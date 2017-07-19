@@ -1,37 +1,37 @@
 {
-    "kind": "JSDocRecordType",
+    "kind": "TypeLiteral",
     "pos": 1,
     "end": 11,
-    "literal": {
-        "kind": "TypeLiteral",
-        "pos": 1,
-        "end": 11,
-        "members": {
-            "0": {
-                "kind": "PropertySignature",
+    "flags": "JSDoc",
+    "members": {
+        "0": {
+            "kind": "PropertySignature",
+            "pos": 2,
+            "end": 6,
+            "flags": "JSDoc",
+            "name": {
+                "kind": "Identifier",
                 "pos": 2,
-                "end": 6,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 2,
-                    "end": 5,
-                    "text": "foo"
-                }
-            },
-            "1": {
-                "kind": "PropertySignature",
+                "end": 5,
+                "flags": "JSDoc",
+                "text": "foo"
+            }
+        },
+        "1": {
+            "kind": "PropertySignature",
+            "pos": 6,
+            "end": 10,
+            "flags": "JSDoc",
+            "name": {
+                "kind": "Identifier",
                 "pos": 6,
                 "end": 10,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 6,
-                    "end": 10,
-                    "text": "bar"
-                }
-            },
-            "length": 2,
-            "pos": 2,
-            "end": 10
-        }
+                "flags": "JSDoc",
+                "text": "bar"
+            }
+        },
+        "length": 2,
+        "pos": 2,
+        "end": 10
     }
 }

@@ -148,7 +148,7 @@ namespace ts.codefix {
             else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
                 symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), token.parent.tagName, SymbolFlags.Value));
-                symbolName = symbol.name;
+                symbolName = symbol.getUnescapedName();
             }
             else {
                 Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
@@ -222,10 +222,7 @@ namespace ts.codefix {
         }
 
         function getUniqueSymbolId(symbol: Symbol) {
-            if (symbol.flags & SymbolFlags.Alias) {
-                return getSymbolId(checker.getAliasedSymbol(symbol));
-            }
-            return getSymbolId(symbol);
+            return getSymbolId(skipAlias(symbol, checker));
         }
 
         function checkSymbolHasMeaning(symbol: Symbol, meaning: SemanticMeaning) {
@@ -568,7 +565,7 @@ namespace ts.codefix {
 
                 function getRelativePath(path: string, directoryPath: string) {
                     const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-                    return moduleHasNonRelativeName(relativePath) ? "./" + relativePath : relativePath;
+                    return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
                 }
             }
 

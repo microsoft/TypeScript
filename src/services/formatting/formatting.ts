@@ -146,7 +146,7 @@ namespace ts.formatting {
         // format from the beginning of the line
         const span = {
             pos: getLineStartPositionForPosition(start, sourceFile),
-            end: end
+            end,
         };
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection);
     }
@@ -1152,7 +1152,7 @@ namespace ts.formatting {
         }
     }
 
-    function getOpenTokenForList(node: Node, list: Node[]) {
+    function getOpenTokenForList(node: Node, list: ReadonlyArray<Node>) {
         switch (node.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionDeclaration:

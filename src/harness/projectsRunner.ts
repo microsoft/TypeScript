@@ -289,7 +289,7 @@ class ProjectRunner extends RunnerBase {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
             }
 
-            function readFile(fileName: string): string {
+            function readFile(fileName: string): string | undefined {
                 return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
@@ -354,7 +354,7 @@ class ProjectRunner extends RunnerBase {
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
                 Harness.IO.writeFile(outputFilePath, data);
 
-                outputFiles.push({ emittedFileName: fileName, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
+                outputFiles.push({ emittedFileName: fileName, code: data, fileName: diskRelativeName, writeByteOrderMark });
             }
         }
 

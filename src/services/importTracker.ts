@@ -440,7 +440,7 @@ namespace ts.FindAllReferences {
 
         function getExport(): ExportedSymbol | ImportedSymbol | undefined {
             const parent = node.parent!;
-            if (symbol.flags & SymbolFlags.Export) {
+            if (symbol.exportSymbol) {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
                     // So check that we are at the declaration.
@@ -449,13 +449,11 @@ namespace ts.FindAllReferences {
                         : undefined;
                 }
                 else {
-                    const { exportSymbol } = symbol;
-                    Debug.assert(!!exportSymbol);
-                    return exportInfo(exportSymbol, getExportKindForDeclaration(parent));
+                    return exportInfo(symbol.exportSymbol, getExportKindForDeclaration(parent));
                 }
             }
             else {
-                const exportNode = getExportNode(parent);
+                const exportNode = getExportNode(parent, node);
                 if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
                     if (isImportEqualsDeclaration(exportNode) && exportNode.moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
@@ -560,10 +558,11 @@ namespace ts.FindAllReferences {
 
     // If a reference is a class expression, the exported node would be its parent.
     // If a reference is a variable declaration, the exported node would be the variable statement.
-    function getExportNode(parent: Node): Node | undefined {
+    function getExportNode(parent: Node, node: Node): Node | undefined {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
             const p = parent as ts.VariableDeclaration;
-            return p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+            return p.name !== node ? undefined :
+                p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
         else {
             return parent;
@@ -595,9 +594,9 @@ namespace ts.FindAllReferences {
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
     }
 
-    function symbolName(symbol: Symbol): string | undefined {
+    function symbolName(symbol: Symbol): __String | undefined {
         if (symbol.name !== "default") {
-            return symbol.name;
+            return symbol.getName();
         }
 
         return forEach(symbol.declarations, decl => {

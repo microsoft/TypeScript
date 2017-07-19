@@ -234,7 +234,7 @@ namespace ts.refactor.extractMethod {
 
             let errors: Diagnostic[];
             let permittedJumps = PermittedJumps.Return;
-            let seenLabels: string[];
+            let seenLabels: Array<__String>;
 
             visit(nodeToCheck);
 
@@ -474,15 +474,15 @@ namespace ts.refactor.extractMethod {
         const checker = context.program.getTypeChecker();
 
         // Make a unique name for the extracted function
-        let functionNameText = "newFunction";
+        let functionNameText = "newFunction" as __String;
         if (scope.locals && scope.locals.has(functionNameText)) {
             let i = 1;
-            while (scope.locals.has(functionNameText = `newFunction_${i}`)) {
+            while (scope.locals.has(functionNameText = `newFunction_${i}` as __String)) {
                 i++;
             }
         }
 
-        const functionName = createIdentifier(functionNameText);
+        const functionName = createIdentifier(functionNameText as string);
         // Currently doesn't get populated, but we might try to infer from this at some point
         const returnType: TypeNode = undefined;
         const parameters: ParameterDeclaration[] = [];
@@ -607,7 +607,7 @@ namespace ts.refactor.extractMethod {
         };
 
         function getPropertyAssignmentsForWrites(writes: UsageEntry[]) {
-            return writes.map(w => createShorthandPropertyAssignment(w.symbol.name));
+            return writes.map(w => createShorthandPropertyAssignment(w.symbol.getUnescapedName()));
         }
 
         function generateReturnValueProperty() {
@@ -617,19 +617,19 @@ namespace ts.refactor.extractMethod {
         function transformFunctionBody(body: Node) {
             if (isBlock(body) && !writes && substitutions.size === 0) {
                 // already block, no writes to propagate back, no substitutions - can use node as is
-                return { body: body, returnValueProperty: undefined };
+                return { body, returnValueProperty: undefined };
             }
             let returnValueProperty: string;
             const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : createReturn(<Expression>body)]);
             // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
             if (writes || substitutions.size) {
-                const rewrittenStatements = visitNodes(statements, visitor);
+                const rewrittenStatements = visitNodes(statements, visitor).slice();
                 if (writes && !(range.facts & RangeFacts.HasReturn)) {
                     // add return at the end to propagate writes back in case if control flow falls out of the function body
                     // it is ok to know that range has at least one return since it we only allow unconditional returns
                     rewrittenStatements.push(createReturn(createObjectLiteral(getPropertyAssignmentsForWrites(writes))));
                 }
-                return { body: createBlock(rewrittenStatements), returnValueProperty: returnValueProperty };
+                return { body: createBlock(rewrittenStatements), returnValueProperty };
             }
             else {
                 return { body: createBlock(statements), returnValueProperty: undefined };
@@ -782,9 +782,9 @@ namespace ts.refactor.extractMethod {
                 // if we get here this means that we are trying to handle 'write' and 'read' was already processed
                 // walk scopes and update existing records.
                 for (const perScope of usagesPerScope) {
-                    const prevEntry = perScope.usages.get(identifier.text);
+                    const prevEntry = perScope.usages.get(identifier.text as string);
                     if (prevEntry) {
-                        perScope.usages.set(identifier.text, { usage, symbol, node: identifier });
+                        perScope.usages.set(identifier.text as string, { usage, symbol, node: identifier });
                     }
                 }
                 return symbolId;
@@ -807,7 +807,7 @@ namespace ts.refactor.extractMethod {
             }
             for (let i = 0; i < scopes.length; i++) {
                 const scope = scopes[i];
-                const resolvedSymbol = checker.resolveName(symbol.name, scope, symbol.flags);
+                const resolvedSymbol = checker.resolveName(symbol.getUnescapedName(), scope, symbol.flags);
                 if (resolvedSymbol === symbol) {
                     continue;
                 }
@@ -820,7 +820,7 @@ namespace ts.refactor.extractMethod {
                         errorsPerScope[i].push(createDiagnosticForNode(identifier, Messages.TypeWillNotBeVisibleInTheNewScope));
                     }
                     else {
-                        usagesPerScope[i].usages.set(identifier.text, { usage, symbol, node: identifier });
+                        usagesPerScope[i].usages.set(identifier.text as string, { usage, symbol, node: identifier });
                     }
                 }
             }
@@ -832,13 +832,13 @@ namespace ts.refactor.extractMethod {
                 return undefined;
             }
             if (symbol.getDeclarations().some(d => d.parent === scopeDecl)) {
-                return createIdentifier(symbol.name);
+                return createIdentifier(symbol.getUnescapedName());
             }
             const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);
             if (prefix === undefined) {
                 return undefined;
             }
-            return isTypeNode ? createQualifiedName(<EntityName>prefix, createIdentifier(symbol.name)) : createPropertyAccess(<Expression>prefix, symbol.name);
+            return isTypeNode ? createQualifiedName(<EntityName>prefix, createIdentifier(symbol.getUnescapedName())) : createPropertyAccess(<Expression>prefix, symbol.getUnescapedName());
         }
     }
 

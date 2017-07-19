@@ -1,0 +1,25 @@
+=== tests/cases/conformance/jsdoc/prefixPostfix.js ===
+/**
+ * @param {number![]} x - number[]
+ * @param {!number[]} y - number[]
+ * @param {(number[])!} z - number[]
+ * @param {number?[]} a - (number | null)[]
+ * @param {?number[]} b - number[] | null
+ * @param {(number[])?} c - number[] | null
+ * @param {?...number} d - number[] | null
+ * @param {...?number} e - (number | null)[]
+ * @param {...number?} f - (number | null)[]
+ */
+function f(x, y, z, a, b, c, d, e, f) {
+>f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, d: number[] | null, ...e: (number | null)[], ...f: (number | null)[]) => void
+>x : number[]
+>y : number[]
+>z : number[]
+>a : (number | null)[]
+>b : number[] | null
+>c : number[] | null
+>d : number[] | null
+>e : (number | null)[]
+>f : (number | null)[]
+}
+

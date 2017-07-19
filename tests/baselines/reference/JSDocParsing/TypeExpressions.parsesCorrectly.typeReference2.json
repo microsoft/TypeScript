@@ -1,23 +1,28 @@
 {
-    "kind": "JSDocTypeReference",
+    "kind": "TypeReference",
     "pos": 1,
     "end": 18,
-    "name": {
+    "flags": "JSDoc",
+    "typeName": {
         "kind": "Identifier",
         "pos": 1,
         "end": 2,
-        "text": "a"
+        "flags": "JSDoc",
+        "text": "a",
+        "jsdocDotPos": 2
     },
     "typeArguments": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 4,
-            "end": 10
+            "end": 10,
+            "flags": "JSDoc"
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 11,
-            "end": 17
+            "end": 17,
+            "flags": "JSDoc"
         },
         "length": 2,
         "pos": 4,

@@ -1,0 +1,18 @@
+{
+    "kind": "TypeReference",
+    "pos": 1,
+    "end": 4,
+    "flags": "JSDoc",
+    "typeName": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 2,
+        "flags": "JSDoc",
+        "text": "a"
+    },
+    "typeArguments": {
+        "length": 0,
+        "pos": 3,
+        "end": 3
+    }
+}

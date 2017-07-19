@@ -18,5 +18,5 @@ function foo() { return "foo"; }
 exports.foo = foo;
 //// [1.js]
 "use strict";
-var p1 = (import)("./0"); // error
-var p2 = (import)("./0"); // error
+var p1 = Promise.resolve().then(function () { return require("./0"); }); // error
+var p2 = Promise.resolve().then(function () { return require("./0"); }); // error

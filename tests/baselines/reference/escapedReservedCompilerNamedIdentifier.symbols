@@ -11,7 +11,6 @@ var o = {
 var b = o["__proto__"];
 >b : Symbol(b, Decl(escapedReservedCompilerNamedIdentifier.ts, 5, 3))
 >o : Symbol(o, Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 3))
->"__proto__" : Symbol("__proto__", Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 9))
 
 var o1 = {
 >o1 : Symbol(o1, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 3))
@@ -23,7 +22,6 @@ var o1 = {
 var b1 = o1["__proto__"];
 >b1 : Symbol(b1, Decl(escapedReservedCompilerNamedIdentifier.ts, 9, 3))
 >o1 : Symbol(o1, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 3))
->"__proto__" : Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 10))
 
 // Triple underscores
 var ___proto__ = 10;
@@ -37,7 +35,6 @@ var o2 = {
 var b2 = o2["___proto__"];
 >b2 : Symbol(b2, Decl(escapedReservedCompilerNamedIdentifier.ts, 15, 3))
 >o2 : Symbol(o2, Decl(escapedReservedCompilerNamedIdentifier.ts, 12, 3))
->"___proto__" : Symbol("___proto__", Decl(escapedReservedCompilerNamedIdentifier.ts, 12, 10))
 
 var o3 = {
 >o3 : Symbol(o3, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 3))
@@ -49,7 +46,6 @@ var o3 = {
 var b3 = o3["___proto__"];
 >b3 : Symbol(b3, Decl(escapedReservedCompilerNamedIdentifier.ts, 19, 3))
 >o3 : Symbol(o3, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 3))
->"___proto__" : Symbol(___proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 10))
 
 // One underscore
 var _proto__ = 10;

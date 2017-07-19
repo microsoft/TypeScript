@@ -1,0 +1,28 @@
+=== tests/cases/conformance/types/thisType/context.js ===
+const obj = {
+>obj : Symbol(obj, Decl(context.js, 0, 5))
+
+    prop: 2,
+>prop : Symbol(prop, Decl(context.js, 0, 13))
+
+    method() {
+>method : Symbol(method, Decl(context.js, 1, 12))
+
+        this;
+>this : Symbol(obj, Decl(context.js, 0, 11))
+
+        this.prop;
+>this.prop : Symbol(prop, Decl(context.js, 0, 13))
+>this : Symbol(obj, Decl(context.js, 0, 11))
+>prop : Symbol(prop, Decl(context.js, 0, 13))
+
+        this.method;
+>this.method : Symbol(method, Decl(context.js, 1, 12))
+>this : Symbol(obj, Decl(context.js, 0, 11))
+>method : Symbol(method, Decl(context.js, 1, 12))
+
+        this.unknown; // ok, obj has a string indexer
+>this : Symbol(obj, Decl(context.js, 0, 11))
+    }
+}
+
