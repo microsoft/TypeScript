@@ -108,9 +108,9 @@ namespace ts.refactor.extractMethod {
         readonly targetRange?: never;
         readonly errors: ReadonlyArray<Diagnostic>;
     } | {
-        readonly targetRange: TargetRange;
-        readonly errors?: never;
-    };
+            readonly targetRange: TargetRange;
+            readonly errors?: never;
+        };
 
     /*
      * Scopes that can store newly extracted method
@@ -480,17 +480,21 @@ namespace ts.refactor.extractMethod {
                 i++;
             }
         }
+        const isJS = isInJavaScriptFile(node);
 
         const functionName = createIdentifier(functionNameText as string);
-        // Currently doesn't get populated, but we might try to infer from this at some point
-        const returnType: TypeNode = undefined;
+        let returnType: TypeNode = undefined;
         const parameters: ParameterDeclaration[] = [];
         const callArguments: Identifier[] = [];
         let writes: UsageEntry[];
         usagesInScope.forEach((usage, name) => {
-            let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
-            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-            type = checker.getBaseTypeOfLiteralType(type);
+            let typeNode: TypeNode = undefined;
+            if (!isJS) {
+                let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
+                // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+                type = checker.getBaseTypeOfLiteralType(type);
+                typeNode = checker.typeToTypeNode(type, node, NodeBuilderFlags.NoTruncation);
+            }
 
             const paramDecl = createParameter(
                 /*decorators*/ undefined,
@@ -498,7 +502,7 @@ namespace ts.refactor.extractMethod {
                 /*dotDotDotToken*/ undefined,
                 /*name*/ name,
                 /*questionToken*/ undefined,
-                checker.typeToTypeNode(type, node, NodeBuilderFlags.NoTruncation)
+                typeNode
             );
             parameters.push(paramDecl);
             if (usage.usage === Usage.Write) {
@@ -507,12 +511,19 @@ namespace ts.refactor.extractMethod {
             callArguments.push(createIdentifier(name));
         });
 
+        // Provide explicit return types for contexutally-typed functions
+        // to avoid problems when there are literal types present
+        if (isExpression(node) && !isInJavaScriptFile(node)) {
+            const contextualType = checker.getContextualType(node);
+            returnType = checker.typeToTypeNode(contextualType);
+        }
+
         const { body, returnValueProperty } = transformFunctionBody(node);
         let newFunction: MethodDeclaration | FunctionDeclaration;
 
         if (isClassLike(scope)) {
-            // always create private method
-            const modifiers: Modifier[] = [createToken(SyntaxKind.PrivateKeyword)];
+            // always create private method in TypeScript files
+            const modifiers: Modifier[] = isInJavaScriptFile(node) ? [] : [createToken(SyntaxKind.PrivateKeyword)];
             if (range.facts & RangeFacts.IsAsyncFunction) {
                 modifiers.push(createToken(SyntaxKind.AsyncKeyword));
             }
@@ -522,7 +533,7 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
                 /*questionToken*/ undefined,
-                /*typeParameters*/ [],
+                /*typeParameters*/[],
                 parameters,
                 returnType,
                 body
@@ -534,7 +545,7 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsAsyncFunction ? [createToken(SyntaxKind.AsyncKeyword)] : undefined,
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
-                /*typeParameters*/ [],
+                /*typeParameters*/[],
                 parameters,
                 returnType,
                 body
