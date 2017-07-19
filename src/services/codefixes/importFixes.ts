@@ -504,42 +504,60 @@ namespace ts.codefix {
                             return undefined;
                         }
 
-                        const indexOfNodeModules = moduleFileName.indexOf("node_modules");
-                        if (indexOfNodeModules < 0) {
+                        const indexOfTopNodeModules = moduleFileName.indexOf("node_modules");
+                        if (indexOfTopNodeModules < 0) {
                             return undefined;
                         }
 
-                        let relativeFileName: string;
-                        if (sourceDirectory.indexOf(moduleFileName.substring(0, indexOfNodeModules - 1)) === 0) {
-                            // if node_modules folder is in this folder or any of its parent folder, no need to keep it.
-                            relativeFileName = moduleFileName.substring(indexOfNodeModules + 13 /* "node_modules\".length */);
-                        }
-                        else {
-                            relativeFileName = getRelativePath(moduleFileName, sourceDirectory);
-                        }
+                        // Simplify the full file path to something that can be resolved by Node.
+                        // First remove the extension
+                        let moduleSpecifier = removeFileExtension(moduleFileName);
+                        // If the module could be imported by a directory name, use that directory's name
+                        moduleSpecifier = getDirectoryOrFileName(moduleSpecifier);
+                        // Get a path that's relative to node_modules or the importing file's path
+                        moduleSpecifier = getNodeResolvablePath(moduleSpecifier);
+                        // If the module was found in @types, get the actual node package name
+                        return getPackageNameFromAtTypesDirectory(moduleSpecifier);
 
-                        relativeFileName = removeFileExtension(relativeFileName);
-                        if (endsWith(relativeFileName, "/index")) {
-                            relativeFileName = getDirectoryPath(relativeFileName);
-                        }
-                        else {
-                            try {
-                                const moduleDirectory = getDirectoryPath(moduleFileName);
-                                const packageJsonContent = JSON.parse(context.host.readFile(combinePaths(moduleDirectory, "package.json")));
+                        function getDirectoryOrFileName(fullModulePathWithoutExtension: string): string {
+                            // If the file is the main module, it can be imported by the package name
+                            const indexOfLastNodeModules = moduleFileName.lastIndexOf("node_modules");
+                            const indexOfSlashAtPackageRoot = moduleFileName.indexOf("/", indexOfLastNodeModules + 13 /* "node_modules\".length */);
+                            const packageRootPath = moduleFileName.substring(0, indexOfSlashAtPackageRoot);
+                            const packageJsonPath = combinePaths(packageRootPath, "package.json");
+                            if (context.host.fileExists(packageJsonPath)) {
+                                const packageJsonContent = JSON.parse(context.host.readFile(packageJsonPath));
                                 if (packageJsonContent) {
-                                    const mainFile = packageJsonContent.main || packageJsonContent.typings;
-                                    if (mainFile) {
-                                        const mainExportFile = toPath(mainFile, moduleDirectory, getCanonicalFileName);
+                                    const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
+                                    if (mainFileRelative) {
+                                        const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
                                         if (removeFileExtension(mainExportFile) === removeFileExtension(moduleFileName)) {
-                                            relativeFileName = getDirectoryPath(relativeFileName);
+                                            return packageRootPath;
                                         }
                                     }
                                 }
                             }
-                            catch (e) { }
+
+                            // If the file is index.js, it can be imported by its directory name
+                            if (endsWith(fullModulePathWithoutExtension, "/index")) {
+                                return getDirectoryPath(fullModulePathWithoutExtension);
+                            }
+
+                            return fullModulePathWithoutExtension;
                         }
 
-                        return getPackageNameFromAtTypesDirectory(relativeFileName);
+                        function getNodeResolvablePath(path: string): string {
+                            const fullPathUptoNodeModules = moduleFileName.substring(0, indexOfTopNodeModules - 1);
+                            if (sourceDirectory.indexOf(fullPathUptoNodeModules) === 0) {
+                                const indexOfTopPackageName = indexOfTopNodeModules + 13 /* "node_modules\".length */;
+                                // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
+                                const relativeToTopNodeModules = path.substring(indexOfTopPackageName);
+                                return relativeToTopNodeModules;
+                            }
+                            else {
+                                return getRelativePath(path, sourceDirectory);
+                            }
+                        }
                     }
                 }
 
