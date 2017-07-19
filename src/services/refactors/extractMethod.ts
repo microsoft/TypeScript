@@ -117,7 +117,6 @@ namespace ts.refactor.extractMethod {
      */
     export type Scope = FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration;
 
-
     /**
      * Result of 'extractRange' operation for a specific scope.
      * Stores either a list of changes that should be applied to extract a range or a list of errors
