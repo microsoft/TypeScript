@@ -391,7 +391,7 @@ namespace FourSlash {
 
         // Entry points from fourslash.ts
         public goToMarker(name: string | Marker = "") {
-            const marker = typeof name === "string" ? this.getMarkerByName(name) : name;
+            const marker = ts.isString(name) ? this.getMarkerByName(name) : name;
             if (this.activeFile.fileName !== marker.fileName) {
                 this.openFile(marker.fileName);
             }
@@ -400,7 +400,7 @@ namespace FourSlash {
             if (marker.position === -1 || marker.position > content.length) {
                 throw new Error(`Marker "${name}" has been invalidated by unrecoverable edits to the file.`);
             }
-            const mName = typeof name === "string" ? name : this.markerName(marker);
+            const mName = ts.isString(name) ? name : this.markerName(marker);
             this.lastKnownMarker = mName;
             this.goToPosition(marker.position);
         }
@@ -1028,7 +1028,7 @@ namespace FourSlash {
 
         public verifyNoReferences(markerNameOrRange?: string | Range) {
             if (markerNameOrRange) {
-                if (typeof markerNameOrRange === "string") {
+                if (ts.isString(markerNameOrRange)) {
                     this.goToMarker(markerNameOrRange);
                 }
                 else {
@@ -1524,7 +1524,7 @@ namespace FourSlash {
                             resultString += "Diagnostics:" + Harness.IO.newLine();
                             const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (const diagnostic of diagnostics) {
-                                if (typeof diagnostic.messageText !== "string") {
+                                if (!ts.isString(diagnostic.messageText)) {
                                     let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
                                     let indentation = " ";
                                     while (chainedMessage) {
@@ -2858,7 +2858,7 @@ namespace FourSlash {
                     result = this.testData.files[index];
                 }
             }
-            else if (typeof indexOrName === "string") {
+            else if (ts.isString(indexOrName)) {
                 let name = <string>indexOrName;
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName

@@ -225,7 +225,7 @@ namespace Utils {
         return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
 
         function getKindName(k: number | string): string {
-            if (typeof k === "string") {
+            if (ts.isString(k)) {
                 return k;
             }
 

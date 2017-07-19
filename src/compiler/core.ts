@@ -1201,6 +1201,13 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
+    /**
+     * Tests whether a value is string
+     */
+    export function isString(text: any): text is string {
+        return typeof text === "string";
+    }
+
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
         return value !== undefined && test(value) ? value : undefined;
     }
@@ -1454,16 +1461,16 @@ namespace ts {
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
         while (text1 && text2) {
             // We still have both chains.
-            const string1 = typeof text1 === "string" ? text1 : text1.messageText;
-            const string2 = typeof text2 === "string" ? text2 : text2.messageText;
+            const string1 = isString(text1) ? text1 : text1.messageText;
+            const string2 = isString(text2) ? text2 : text2.messageText;
 
             const res = compareValues(string1, string2);
             if (res) {
                 return res;
             }
 
-            text1 = typeof text1 === "string" ? undefined : text1.next;
-            text2 = typeof text2 === "string" ? undefined : text2.next;
+            text1 = isString(text1) ? undefined : text1.next;
+            text2 = isString(text2) ? undefined : text2.next;
         }
 
         if (!text1 && !text2) {

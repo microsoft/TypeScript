@@ -101,7 +101,7 @@ namespace ts.projectSystem {
         }
 
         addPostExecAction(stdout: string | string[], cb: TI.RequestCompletedAction) {
-            const out = typeof stdout === "string" ? stdout : createNpmPackageJsonString(stdout);
+            const out = isString(stdout) ? stdout : createNpmPackageJsonString(stdout);
             const action: PostExecAction = {
                 success: !!out,
                 callback: cb
@@ -258,7 +258,7 @@ namespace ts.projectSystem {
     }
 
     export function isFile(s: FSEntry): s is File {
-        return s && typeof (<File>s).content === "string";
+        return s && isString((<File>s).content);
     }
 
     function invokeDirectoryWatcher(callbacks: DirectoryWatcherCallback[], getRelativeFilePath: () => string) {
@@ -413,7 +413,7 @@ namespace ts.projectSystem {
                 const currentEntry = this.fs.get(path);
                 if (currentEntry) {
                     if (isFile(currentEntry)) {
-                        if (typeof fileOrFolder.content === "string") {
+                        if (isString(fileOrFolder.content)) {
                             // Update file
                             if (currentEntry.content !== fileOrFolder.content) {
                                 currentEntry.content = fileOrFolder.content;
@@ -426,7 +426,7 @@ namespace ts.projectSystem {
                     }
                     else {
                         // Folder
-                        if (typeof fileOrFolder.content === "string") {
+                        if (isString(fileOrFolder.content)) {
                             // TODO: Changing from folder => file
                         }
                         else {
@@ -453,7 +453,7 @@ namespace ts.projectSystem {
         }
 
         ensureFileOrFolder(fileOrFolder: FileOrFolder) {
-            if (typeof fileOrFolder.content === "string") {
+            if (isString(fileOrFolder.content)) {
                 const file = this.toFile(fileOrFolder);
                 Debug.assert(!this.fs.get(file.path));
                 const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));

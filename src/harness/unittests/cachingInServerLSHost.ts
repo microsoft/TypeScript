@@ -199,7 +199,8 @@ namespace ts {
             let diags = project.getLanguageService().getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             assert.isTrue(diags.length === 1, "one diagnostic expected");
-            assert.isTrue(typeof diags[0].messageText === "string" && ((<string>diags[0].messageText).indexOf("Cannot find module") === 0), "should be 'cannot find module' message");
+            const messageText = diags[0].messageText;
+            assert.isTrue(isString(messageText) && messageText.indexOf("Cannot find module") === 0, "should be 'cannot find module' message");
 
             fileMap.set(imported.name, imported);
             fileExistsCalledForBar = false;

@@ -282,7 +282,7 @@ namespace ts.projectSystem {
     }
 
     function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
-        return { path, content: typeof content === "string" ? "" : JSON.stringify(content) };
+        return { path, content: isString(content) ? "" : JSON.stringify(content) };
     }
 
     function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {

@@ -812,18 +812,21 @@ namespace ts {
         return codefix.getSupportedErrorCodes();
     }
 
+    // Either it will be file name if host doesnt have file or it will be the host's file information
+    type CachedHostFileInformation = HostFileInformation | string;
+
     // Cache host information about script Should be refreshed
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: Map<HostFileInformation>;
+        private fileNameToEntry: Map<CachedHostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
-            this.fileNameToEntry = createMap<HostFileInformation>();
+            this.fileNameToEntry = createMap<CachedHostFileInformation>();
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
@@ -840,7 +843,7 @@ namespace ts {
         }
 
         private createEntry(fileName: string, path: Path) {
-            let entry: HostFileInformation;
+            let entry: CachedHostFileInformation;
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
                 entry = {
@@ -850,36 +853,41 @@ namespace ts {
                     scriptKind: getScriptKind(fileName, this.host)
                 };
             }
+            else {
+                entry = fileName;
+            }
 
             this.fileNameToEntry.set(path, entry);
             return entry;
         }
 
-        public getEntryByPath(path: Path): HostFileInformation {
+        public getEntryByPath(path: Path): CachedHostFileInformation | undefined {
             return this.fileNameToEntry.get(path);
         }
 
-        public containsEntryByPath(path: Path): boolean {
-            return this.fileNameToEntry.has(path);
+        public getHostFileInformation(path: Path): HostFileInformation | undefined {
+            const entry = this.fileNameToEntry.get(path);
+            return !isString(entry) ? entry : undefined;
         }
 
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            return this.containsEntryByPath(path)
-                ? this.getEntryByPath(path)
-                : this.createEntry(fileName, path);
+            const info = this.getEntryByPath(path) || this.createEntry(fileName, path);
+            return isString(info) ? undefined : info;
         }
 
         public getRootFileNames(): string[] {
-            return this.host.getScriptFileNames();
+            return arrayFrom(this.fileNameToEntry.values(), entry => {
+                return isString(entry) ? entry : entry.hostFileName;
+            });
         }
 
         public getVersion(path: Path): string {
-            const file = this.getEntryByPath(path);
+            const file = this.getHostFileInformation(path);
             return file && file.version;
         }
 
         public getScriptSnapshot(path: Path): IScriptSnapshot {
-            const file = this.getEntryByPath(path);
+            const file = this.getHostFileInformation(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1145,16 +1153,17 @@ namespace ts {
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    return hostCache.containsEntryByPath(path) ?
-                        !!hostCache.getEntryByPath(path) :
+                    const entry = hostCache.getEntryByPath(path);
+                    return entry ?
+                        !isString(entry) :
                         (host.fileExists && host.fileExists(fileName));
                 },
                 readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    if (hostCache.containsEntryByPath(path)) {
-                        const entry = hostCache.getEntryByPath(path);
-                        return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    const entry = hostCache.getEntryByPath(path);
+                    if (entry) {
+                        return isString(entry) ? undefined : entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                     }
                     return host.readFile && host.readFile(fileName);
                 },

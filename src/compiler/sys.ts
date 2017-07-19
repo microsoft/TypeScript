@@ -184,7 +184,7 @@ namespace ts {
 
                 function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    const fileName = typeof relativeFileName !== "string"
+                    const fileName = !isString(relativeFileName)
                         ? undefined
                         : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations

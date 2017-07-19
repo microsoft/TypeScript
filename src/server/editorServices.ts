@@ -159,7 +159,7 @@ namespace ts.server {
     };
 
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings {
-        if (typeof protocolOptions.indentStyle === "string") {
+        if (isString(protocolOptions.indentStyle)) {
             protocolOptions.indentStyle = indentStyle.get(protocolOptions.indentStyle.toLowerCase());
             Debug.assert(protocolOptions.indentStyle !== undefined);
         }
@@ -169,7 +169,7 @@ namespace ts.server {
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin {
         compilerOptionConverters.forEach((mappedValues, id) => {
             const propertyValue = protocolOptions[id];
-            if (typeof propertyValue === "string") {
+            if (isString(propertyValue)) {
                 protocolOptions[id] = mappedValues.get(propertyValue.toLowerCase());
             }
         });
@@ -177,9 +177,7 @@ namespace ts.server {
     }
 
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {
-        return typeof scriptKindName === "string"
-            ? convertScriptKindName(scriptKindName)
-            : scriptKindName;
+        return isString(scriptKindName) ? convertScriptKindName(scriptKindName) : scriptKindName;
     }
 
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName) {
@@ -1947,7 +1945,7 @@ namespace ts.server {
                                         // RegExp group numbers are 1-based, but the first element in groups
                                         // is actually the original string, so it all works out in the end.
                                         if (typeof groupNumberOrString === "number") {
-                                            if (typeof groups[groupNumberOrString] !== "string") {
+                                            if (!isString(groups[groupNumberOrString])) {
                                                 // Specification was wrong - exclude nothing!
                                                 this.logger.info(`Incorrect RegExp specification in safelist rule ${name} - not enough groups`);
                                                 // * can't appear in a filename; escape it because it's feeding into a RegExp

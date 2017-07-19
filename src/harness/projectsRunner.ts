@@ -254,7 +254,7 @@ class ProjectRunner extends RunnerBase {
                         if (option) {
                             const optType = option.type;
                             let value = <any>testCase[name];
-                            if (typeof optType !== "string") {
+                            if (!ts.isString(optType)) {
                                 const key = value.toLowerCase();
                                 const optTypeValue = optType.get(key);
                                 if (optTypeValue) {

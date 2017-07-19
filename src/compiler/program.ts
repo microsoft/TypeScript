@@ -337,7 +337,7 @@ namespace ts {
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
-        if (typeof messageText === "string") {
+        if (isString(messageText)) {
             return messageText;
         }
         else {
