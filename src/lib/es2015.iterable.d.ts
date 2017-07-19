@@ -34,17 +34,17 @@ interface Array<T> {
     /**
      * Returns an iterable of key, value pairs for every entry in the array
      */
-    entries(): IterableIterator<[number, T]>;
+    entries(this: readonly): IterableIterator<[number, T]>;
 
     /**
      * Returns an iterable of keys in the array
      */
-    keys(): IterableIterator<number>;
+    keys(this: readonly): IterableIterator<number>;
 
     /**
      * Returns an iterable of values in the array
      */
-    values(): IterableIterator<T>;
+    values(this: readonly): IterableIterator<T>;
 }
 
 interface ArrayConstructor {
@@ -63,26 +63,6 @@ interface ArrayConstructor {
      * @param iterable An iterable object to convert to an array.
      */
     from<T>(iterable: Iterable<T>): Array<T>;
-}
-
-interface ReadonlyArray<T> {
-    /** Iterator of values in the array. */
-    [Symbol.iterator](): IterableIterator<T>;
-
-    /**
-     * Returns an iterable of key, value pairs for every entry in the array
-     */
-    entries(): IterableIterator<[number, T]>;
-
-    /**
-     * Returns an iterable of keys in the array
-     */
-    keys(): IterableIterator<number>;
-
-    /**
-     * Returns an iterable of values in the array
-     */
-    values(): IterableIterator<T>;
 }
 
 interface IArguments {

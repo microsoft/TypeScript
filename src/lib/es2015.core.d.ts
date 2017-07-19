@@ -10,9 +10,9 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): T | undefined;
-    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): T | undefined;
-    find<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): T | undefined;
+    find(this: readonly, predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): T | undefined;
+    find(this: readonly, predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): T | undefined;
+    find<Z>(this: readonly, predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -23,9 +23,9 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
-    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
+    findIndex(this: readonly, predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
+    findIndex(this: readonly, predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(this: readonly, predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -351,34 +351,6 @@ interface ObjectConstructor {
      *  property.
      */
     defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
-}
-
-interface ReadonlyArray<T> {
-    /**
-     * Returns the value of the first element in the array where predicate is true, and undefined
-     * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
-     * order, until it finds one where predicate returns true. If such an element is found, find
-     * immediately returns that element value. Otherwise, find returns undefined.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
-     * predicate. If it is not provided, undefined is used instead.
-     */
-    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean): T | undefined;
-    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: undefined): T | undefined;
-    find<Z>(predicate: (this: Z, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: Z): T | undefined;
-
-    /**
-     * Returns the index of the first element in the array where predicate is true, and -1
-     * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
-     * order, until it finds one where predicate returns true. If such an element is found,
-     * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
-     * predicate. If it is not provided, undefined is used instead.
-     */
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
-    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
 }
 
 interface RegExp {
