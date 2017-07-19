@@ -594,7 +594,7 @@ namespace ts.server {
 
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
-            if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled && this.compileOnSaveEnabled) {
                 this.builder.onProjectUpdateGraph();
             }
             else {
