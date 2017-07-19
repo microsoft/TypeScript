@@ -1,4 +1,6 @@
-// @Filename: dir1/node_modules/todotest0.ts
+/// <reference path='fourslash.ts' />
+
+// @Filename: dir1/node_modules/todoTest0.ts
 //// // TODO
 
 verify.todoCommentsInCurrentFile(["TODO"]);

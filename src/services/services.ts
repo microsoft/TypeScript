@@ -1834,7 +1834,8 @@ namespace ts {
             const fileContents = sourceFile.text;
             const result: TodoComment[] = [];
 
-            if (descriptors.length > 0 && !isNodeModulesFile(fileName)) {
+            // Exclude node_modules files as we don't want to show the todos of external libraries.
+            if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
                 const regExp = getTodoCommentsRegExp();
 
                 let matchArray: RegExpExecArray;

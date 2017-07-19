@@ -1,6 +1,11 @@
+/// <reference path='fourslash.ts' />
+
 // Tests that todos are not found in node_modules folder.
 
-// @Filename: /node_modules/todotest0.ts
+// @Filename: todoTest0.ts
+//// import * as foo1 from "fake-module";
+
+// @Filename: node_modules/fake-module/ts.ts
 //// // TODO
 
 verify.todoCommentsInCurrentFile(["TODO"]);
