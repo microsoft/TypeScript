@@ -278,7 +278,7 @@ namespace ts.textChanges {
             this.changes.push({
                 kind: ChangeKind.ReplaceWithSingleNode,
                 sourceFile,
-                options: { ...options, useIndentationFromFile: true },
+                options,
                 node: newNode,
                 range: { pos: startPosition, end: endPosition }
             });
@@ -289,7 +289,7 @@ namespace ts.textChanges {
             this.changes.push({
                 kind: ChangeKind.ReplaceWithMultipleNodes,
                 sourceFile,
-                options: { ...options, useIndentationFromFile: true },
+                options,
                 nodes: newNodes,
                 range: { pos: startPosition, end: endPosition }
             });
@@ -420,7 +420,6 @@ namespace ts.textChanges {
                         range: { pos: startPos, end: containingList[index + 1].getStart(sourceFile) },
                         node: newNode,
                         options: {
-                            useIndentationFromFile: true,
                             prefix,
                             // write separator and leading trivia of the next element as suffix
                             suffix: `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`
@@ -560,7 +559,7 @@ namespace ts.textChanges {
             const initialIndentation =
                 options.indentation !== undefined
                     ? options.indentation
-                    : options.useIndentationFromFile
+                    : (options.useIndentationFromFile !== false)
                         ? formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, posStartsLine || (options.prefix === this.newLineCharacter))
                         : 0;
             const delta =
