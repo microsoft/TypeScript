@@ -294,7 +294,6 @@ namespace ts {
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
         let globalArrayType: GenericType;
-        let globalReadonlyArrayType: GenericType;
         let globalStringType: ObjectType;
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
@@ -3259,7 +3258,7 @@ namespace ts {
                         }
                         writer.writeKeyword(type.flags & TypeFlags.Index ? "keyof" : "readonly");
                         writeSpace(writer);
-                        writeType((<IndexType | ReadonlyTypeVariable>type).type, TypeFormatFlags.InElementType);
+                        writeType((<IndexType | ReadonlyTypeVariable | ReadonlyObjectType>type).type, TypeFormatFlags.InElementType);
                         if (flags & TypeFormatFlags.InElementType) {
                             writePunctuation(writer, SyntaxKind.CloseParenToken);
                         }
@@ -4682,7 +4681,7 @@ namespace ts {
                     if (!popTypeResolution()) {
                         type = reportCircularityError(symbol);
                     }
-                    links.type = getCheckFlags(symbol) & CheckFlags.ReadonlyType ? getReadonlyType(type) : type;
+                    links.type = type;
                 }
             }
             return links.type;
@@ -5673,7 +5672,7 @@ namespace ts {
         }
 
         function createReadonlyIndexInfo(indexInfo: IndexInfo): IndexInfo {
-            return indexInfo && !indexInfo.isReadonly ? createIndexInfo(indexInfo.type, true, indexInfo.declaration) : indexInfo;
+            return indexInfo && !indexInfo.isReadonly ? createIndexInfo(indexInfo.type, /*readonly*/ true, indexInfo.declaration) : indexInfo;
         }
 
         function hasReadonlyThisParameter(sig: SignatureDeclaration) {
@@ -5705,7 +5704,7 @@ namespace ts {
             const members = createMap<Symbol>() as SymbolTable;
             for (const symbol of getPropertiesOfObjectType(target)) {
                 if (!(symbol.flags & SymbolFlags.Method) || isReadonlyThisMethod(symbol)) {
-                    members.set(symbol.name, instantiateSymbol(symbol, identityMapper, /*readonly*/ true));
+                    members.set(symbol.name, isReadonlySymbol(symbol) ? symbol : instantiateSymbol(symbol, identityMapper, /*readonly*/ true));
                 }
             }
             const callSignatures = getSignaturesOfType(target, SignatureKind.Call);
@@ -7555,7 +7554,7 @@ namespace ts {
         }
 
         function getReadonlyType(type: Type): Type {
-            if (!(type.flags & TypeFlags.HasReadonlyForm)) {
+            if (!(type.flags & TypeFlags.HasReadonlyForm) || getObjectFlags(type) & ObjectFlags.Readonly) {
                 return type;
             }
             if (!type.readonlyType) {
@@ -8175,7 +8174,7 @@ namespace ts {
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
             const result = createSymbol(symbol.flags, symbol.name);
-            result.checkFlags = CheckFlags.Instantiated | (readonly || checkFlags & CheckFlags.ReadonlyType ? CheckFlags.Readonly | CheckFlags.ReadonlyType : 0);
+            result.checkFlags = CheckFlags.Instantiated | (readonly ? CheckFlags.Readonly : 0);
             result.declarations = symbol.declarations;
             result.parent = symbol.parent;
             result.target = symbol;
@@ -8333,11 +8332,13 @@ namespace ts {
         }
 
         function instantiateTypeNoAlias(type: Type, mapper: TypeMapper): Type {
-            if (type.flags & TypeFlags.TypeParameter) {
+            const typeFlags = type.flags;
+            if (typeFlags & TypeFlags.TypeParameter) {
                 return mapper(<TypeParameter>type);
             }
-            if (type.flags & TypeFlags.Object) {
-                if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
+            if (typeFlags & TypeFlags.Object) {
+                const objectFlags = (<ObjectType>type).objectFlags;
+                if (objectFlags & ObjectFlags.Anonymous) {
                     // If the anonymous type originates in a declaration of a function, method, class, or
                     // interface, in an object type literal, or in an object literal expression, we may need
                     // to instantiate the type because it might reference a type parameter. We skip instantiation
@@ -8346,26 +8347,32 @@ namespace ts {
                     // instantiation.
                     return type.symbol &&
                         type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
-                        ((<ObjectType>type).objectFlags & ObjectFlags.Instantiated || isSymbolInScopeOfMappedTypeParameter(type.symbol, mapper)) ?
+                        (objectFlags & ObjectFlags.Instantiated || isSymbolInScopeOfMappedTypeParameter(type.symbol, mapper)) ?
                         instantiateCached(type, mapper, instantiateAnonymousType) : type;
                 }
-                if ((<ObjectType>type).objectFlags & ObjectFlags.Mapped) {
+                if (objectFlags & ObjectFlags.Mapped) {
                     return instantiateCached(type, mapper, instantiateMappedType);
                 }
-                if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
+                if (objectFlags & ObjectFlags.Reference) {
                     return createTypeReference((<TypeReference>type).target, instantiateTypes((<TypeReference>type).typeArguments, mapper));
                 }
+                if (objectFlags & ObjectFlags.Readonly) {
+                    return getReadonlyType(instantiateType((<ReadonlyTypeVariable>type).type, mapper));
+                }
             }
-            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
+            if (typeFlags & TypeFlags.Union && !(typeFlags & TypeFlags.Primitive)) {
                 return getUnionType(instantiateTypes((<UnionType>type).types, mapper), /*subtypeReduction*/ false, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
             }
-            if (type.flags & TypeFlags.Intersection) {
+            if (typeFlags & TypeFlags.Intersection) {
                 return getIntersectionType(instantiateTypes((<IntersectionType>type).types, mapper), type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
             }
-            if (type.flags & TypeFlags.Index) {
+            if (typeFlags & TypeFlags.Readonly) {
+                return getReadonlyType(instantiateType((<ReadonlyTypeVariable>type).type, mapper));
+            }
+            if (typeFlags & TypeFlags.Index) {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
             }
-            if (type.flags & TypeFlags.IndexedAccess) {
+            if (typeFlags & TypeFlags.IndexedAccess) {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
             return type;
@@ -9265,10 +9272,11 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.Readonly) {
-                    // A type S or readonly S is related to a readonly T if S is related to T.
-                    const nonReadonlySource = source.flags & TypeFlags.Readonly ? (<ReadonlyTypeVariable>source).type : source;
-                    if (result = isRelatedTo(nonReadonlySource, (<ReadonlyTypeVariable>target).type, reportErrors)) {
+                else if (target.flags & TypeFlags.Readonly || getObjectFlags(target) & ObjectFlags.Readonly) {
+                    // Given types S and T, S and readonly S are related to readonly T if S is related to T.
+                    const nonReadonlySource = source.flags & TypeFlags.Readonly || getObjectFlags(source) & ObjectFlags.Readonly ?
+                        (<ReadonlyTypeVariable | ReadonlyObjectType>source).type : source;
+                    if (result = isRelatedTo(nonReadonlySource, (<ReadonlyTypeVariable | ReadonlyObjectType>target).type, reportErrors)) {
                         return result;
                     }
                 }
@@ -9998,9 +10006,10 @@ namespace ts {
         }
 
         function isArrayLikeType(type: Type): boolean {
-            // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
-            // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
-            return getObjectFlags(type) & ObjectFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType) ||
+            // A type is array-like if it is an Array<T>, a readonly Array<T>, or if it is not undefined
+            // or null and it is assignable to readonly Array<any>.
+            return isArrayType(type) ||
+                getObjectFlags(type) & ObjectFlags.Readonly && isArrayType((<ReadonlyObjectType>type).type) ||
                 !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
@@ -10353,6 +10362,7 @@ namespace ts {
             return !!(type.flags & TypeFlags.TypeVariable ||
                 objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
+                objectFlags & ObjectFlags.Readonly && couldContainTypeVariables((<ReadonlyObjectType>type).type) ||
                 objectFlags & ObjectFlags.Mapped ||
                 type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
         }
@@ -10468,6 +10478,13 @@ namespace ts {
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
                     }
                 }
+                if (target.flags & TypeFlags.Readonly || getObjectFlags(target) & ObjectFlags.Readonly) {
+                    target = (<ReadonlyTypeVariable | ReadonlyObjectType>target).type;
+                    if (source.flags & TypeFlags.Readonly || getObjectFlags(source) & ObjectFlags.Readonly) {
+                        source = (<ReadonlyTypeVariable | ReadonlyObjectType>source).type;
+                    }
+                }
+
                 if (target.flags & TypeFlags.TypeVariable) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
@@ -23573,8 +23590,7 @@ namespace ts {
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
-            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
-            anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
+            anyReadonlyArrayType = getReadonlyType(anyArrayType);
             globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
         }
 

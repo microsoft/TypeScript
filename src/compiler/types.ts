@@ -3024,7 +3024,6 @@ namespace ts {
         ContainsProtected = 1 << 7,         // Synthetic property with protected constituent(s)
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
-        ReadonlyType      = 1 << 10,        // Obtain readonly form of type
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
