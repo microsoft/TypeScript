@@ -580,8 +580,9 @@ namespace A {
                 data.push(`==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
+                    const changes = refactor.extractMethod.extractRange(result.targetRange, context, results.indexOf(r))[0].changes;
                     data.push(`==SCOPE::${r.scopeDescription}==`);
-                    data.push(textChanges.applyChanges(sourceFile.text, r.changes[0].textChanges));
+                    data.push(textChanges.applyChanges(sourceFile.text, changes[0].textChanges));
                 }
                 return data.join(newLineCharacter);
             });

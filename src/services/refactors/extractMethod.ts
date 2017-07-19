@@ -23,11 +23,10 @@ namespace ts.refactor.extractMethod {
         }
 
         const extractions = extractRange(targetRange, context);
-        if (extractions.length === 0) {
+        if (extractions === undefined) {
             // No extractions possible
             return undefined;
         }
-
 
         const actions: RefactorActionInfo[] = [];
         let i = 0;
@@ -51,20 +50,23 @@ namespace ts.refactor.extractMethod {
         const length = context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
         const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length });
         const targetRange: TargetRange = rangeToExtract.targetRange;
-        const extractions = extractRange(targetRange, context);
 
-        let i = 0;
-        for (const extr of extractions) {
-            const name = `scope_${i}`;
-            if (name === actionName) {
-                return ({
-                    edits: extr.changes
-                });
-            }
-            i++;
+        const parsedIndexMatch = /scope_(\d+)/.exec(actionName);
+        if (!parsedIndexMatch) {
+            throw new Error("Expected to match the regexp");
         }
-        // ?
-        return undefined;
+        const index = +parsedIndexMatch[1];
+        if (!isFinite(index)) {
+            throw new Error("Expected to parse a number from the scope index");
+        }
+
+        const extractions = extractRange(targetRange, context, index);
+        if (extractions === undefined) {
+            // Scope is no longer valid from when the user issued the refactor
+            // return undefined;
+            return undefined;
+        }
+        return ({ edits: extractions[0].changes });
     }
 
     // Move these into diagnostic messages if they become user-facing
@@ -103,10 +105,13 @@ namespace ts.refactor.extractMethod {
     /**
      * Result of 'getRangeToExtract' operation: contains either a range or a list of errors
      */
-    export interface RangeToExtract {
-        readonly targetRange?: TargetRange;
-        readonly errors?: Diagnostic[];
-    }
+    export type RangeToExtract = {
+        readonly targetRange?: never;
+        readonly errors: ReadonlyArray<Diagnostic>;
+    } | {
+        readonly targetRange: TargetRange;
+        readonly errors?: never;
+    };
 
     /*
      * Scopes that can store newly extracted method
@@ -162,7 +167,7 @@ namespace ts.refactor.extractMethod {
             //    1   2
             // in this case there is no such one node that covers ends of selection and is located inside the selection
             // to handle this we check if both start and end of the selection belong to some binary operation
-            // and start node is parented by the parent of the end node (because binary operators are left associative)
+            // and start node is parented by the parent of the end node
             // if this is the case - expand the selection to the entire parent of end node (in this case it will be [1 + 2 + 3] + 4)
             const startParent = skipParentheses(start.parent);
             const endParent = skipParentheses(end.parent);
@@ -232,49 +237,49 @@ namespace ts.refactor.extractMethod {
 
             return errors;
 
-            function visit(n: Node) {
+            function visit(node: Node) {
                 if (errors) {
                     // already found an error - can stop now
                     return true;
                 }
-                if (!n || isFunctionLike(n) || isClassLike(n)) {
+                if (!node || isFunctionLike(node) || isClassLike(node)) {
                     // do not dive into functions or classes
                     return false;
                 }
                 const savedPermittedJumps = permittedJumps;
-                if (n.parent) {
-                    switch (n.parent.kind) {
+                if (node.parent) {
+                    switch (node.parent.kind) {
                         case SyntaxKind.IfStatement:
-                            if ((<IfStatement>n.parent).thenStatement === n || (<IfStatement>n.parent).elseStatement === n) {
+                            if ((<IfStatement>node.parent).thenStatement === node || (<IfStatement>node.parent).elseStatement === node) {
                                 // forbid all jumps inside thenStatement or elseStatement
                                 permittedJumps = PermittedJumps.None;
                             }
                             break;
                         case SyntaxKind.TryStatement:
-                            if ((<TryStatement>n.parent).tryBlock === n) {
+                            if ((<TryStatement>node.parent).tryBlock === node) {
                                 // forbid all jumps inside try blocks
                                 permittedJumps = PermittedJumps.None;
                             }
-                            else if ((<TryStatement>n.parent).finallyBlock === n) {
+                            else if ((<TryStatement>node.parent).finallyBlock === node) {
                                 // allow unconditional returns from finally blocks
                                 permittedJumps = PermittedJumps.Return;
                             }
                             break;
                         case SyntaxKind.CatchClause:
-                            if ((<CatchClause>n.parent).block === n) {
+                            if ((<CatchClause>node.parent).block === node) {
                                 // forbid all jumps inside the block of catch clause
                                 permittedJumps = PermittedJumps.None;
                             }
                             break;
                         case SyntaxKind.CaseClause:
-                            if ((<CaseClause>n).expression !== n) {
+                            if ((<CaseClause>node).expression !== node) {
                                 // allow unlabeled break inside case clauses
                                 permittedJumps |= PermittedJumps.Break;
                             }
                             break;
                         default:
-                            if (isIterationStatement(n.parent, /*lookInLabeledStatements*/ false)) {
-                                if ((<IterationStatement>n.parent).statement === n) {
+                            if (isIterationStatement(node.parent, /*lookInLabeledStatements*/ false)) {
+                                if ((<IterationStatement>node.parent).statement === node) {
                                     // allow unlabeled break/continue inside loops
                                     permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
                                 }
@@ -283,33 +288,33 @@ namespace ts.refactor.extractMethod {
                     }
                 }
 
-                switch (n.kind) {
+                switch (node.kind) {
                     case SyntaxKind.ThisType:
                     case SyntaxKind.ThisKeyword:
                         facts |= RangeFacts.UsesThis;
                         break;
                     case SyntaxKind.LabeledStatement:
                         {
-                            const label = (<LabeledStatement>n).label;
+                            const label = (<LabeledStatement>node).label;
                             (seenLabels || (seenLabels = [])).push(label.text);
-                            forEachChild(n, visit);
+                            forEachChild(node, visit);
                             seenLabels.pop();
                             break;
                         }
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement:
                         {
-                            const label = (<BreakStatement | ContinueStatement>n).label;
+                            const label = (<BreakStatement | ContinueStatement>node).label;
                             if (label) {
                                 if (!contains(seenLabels, label.text)) {
                                     // attempts to jump to label that is not in range to be extracted
-                                    (errors || (errors = [])).push(createDiagnosticForNode(n, Messages.CannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
+                                    (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
                                 }
                             }
                             else {
                                 if (!(permittedJumps & (SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
                                     // attempt to break or continue in a forbidden context
-                                    (errors || (errors = [])).push(createDiagnosticForNode(n, Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements));
+                                    (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements));
                                 }
                             }
                             break;
@@ -325,11 +330,11 @@ namespace ts.refactor.extractMethod {
                             facts |= RangeFacts.HasReturn;
                         }
                         else {
-                            (errors || (errors = [])).push(createDiagnosticForNode(n, Messages.CannotExtractRangeContainingConditionalReturnStatement));
+                            (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractRangeContainingConditionalReturnStatement));
                         }
                         break;
                     default:
-                        forEachChild(n, visit);
+                        forEachChild(node, visit);
                         break;
                 }
 
@@ -359,7 +364,7 @@ namespace ts.refactor.extractMethod {
             // Walk up to the closest parent of a place where we can logically put a sibling:
             //  * Function declaration
             //  * Class declaration or expression
-            //  * Module or source file
+            //  * Module/namespace or source file
             // Note that we don't use isFunctionLike because we don't want to put the extracted closure *inside* a method
             if ((current.kind === SyntaxKind.FunctionDeclaration) || isSourceFile(current) || isModuleBlock(current) || isClassLike(current)) {
                 scopes.push(current as FunctionLikeDeclaration);
@@ -374,17 +379,18 @@ namespace ts.refactor.extractMethod {
      * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
      * or an error explaining why we can't extract into that scope.
      */
-    export function extractRange(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<ExtractResultForScope> {
+    export function extractRange(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number = undefined): ReadonlyArray<ExtractResultForScope> | undefined {
         const { file: sourceFile } = context;
 
         if (targetRange === undefined) {
-            return [];
+            return undefined;
         }
 
         const scopes = collectEnclosingScopes(targetRange);
         if (scopes.length === 0) {
-            return [];
+            return undefined;
         }
+
         const enclosingTextRange = getEnclosingTextRange(targetRange, sourceFile);
         const { target, usagesPerScope, errorsPerScope } = collectReadsAndWrites(
             targetRange,
@@ -394,17 +400,26 @@ namespace ts.refactor.extractMethod {
             context.program.getTypeChecker());
 
         context.cancellationToken.throwIfCancellationRequested();
-        return scopes.map((scope, i) => {
-            const errors = errorsPerScope[i];
-            if (errors.length) {
-                return {
-                    scope,
-                    scopeDescription: getDescriptionForScope(scope),
-                    errors
-                };
+
+        if (requestedChangesIndex !== undefined) {
+            if (errorsPerScope[requestedChangesIndex].length) {
+                return undefined;
             }
-            return extractFunctionInScope(target, scope, usagesPerScope[i], targetRange, context);
-        });
+            return [extractFunctionInScope(target, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange, context)];
+        }
+        else {
+            return scopes.map((scope, i) => {
+                const errors = errorsPerScope[i];
+                if (errors.length) {
+                    return {
+                        scope,
+                        scopeDescription: getDescriptionForScope(scope),
+                        errors
+                    };
+                }
+                return { scope, scopeDescription: getDescriptionForScope(scope) };
+            });
+        }
     }
 
     function getDescriptionForScope(s: Scope) {
