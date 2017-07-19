@@ -130,7 +130,7 @@ namespace FourSlash {
         // 0 - cancelled
         // >0 - not cancelled
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
-        private static NotCanceled: number = -1;
+        private static readonly NotCanceled: number = -1;
         private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
 
         public isCancellationRequested(): boolean {
