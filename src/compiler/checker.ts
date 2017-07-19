@@ -2623,8 +2623,9 @@ namespace ts {
                         }
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
                             context.encounteredError = true;
+                            return undefined;
                         }
-                        return undefined;
+                        return createTupleTypeNode([]);;
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
