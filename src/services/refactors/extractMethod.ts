@@ -539,7 +539,7 @@ namespace ts.refactor.extractMethod {
 
         // Provide explicit return types for contexutally-typed functions
         // to avoid problems when there are literal types present
-        if (isExpression(node) && !isInJavaScriptFile(node)) {
+        if (isExpression(node) && !isJS) {
             const contextualType = checker.getContextualType(node);
             returnType = checker.typeToTypeNode(contextualType);
         }
@@ -549,7 +549,7 @@ namespace ts.refactor.extractMethod {
 
         if (isClassLike(scope)) {
             // always create private method in TypeScript files
-            const modifiers: Modifier[] = isInJavaScriptFile(node) ? [] : [createToken(SyntaxKind.PrivateKeyword)];
+            const modifiers: Modifier[] = isJS ? [] : [createToken(SyntaxKind.PrivateKeyword)];
             if (range.facts & RangeFacts.IsAsyncFunction) {
                 modifiers.push(createToken(SyntaxKind.AsyncKeyword));
             }
