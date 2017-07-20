@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpressionES5UMD.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpressionES6UMD.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
@@ -58,28 +58,22 @@ export class D {
     Object.defineProperty(exports, "__esModule", { value: true });
     __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); });
     var p1 = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_2, reject_2) { require(["./0"], resolve_2, reject_2); });
-    p1.then(function (zero) {
+    p1.then(zero => {
         return zero.foo();
     });
     exports.p2 = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_3, reject_3) { require(["./0"], resolve_3, reject_3); });
     function foo() {
-        var p2 = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
+        const p2 = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
     }
-    var C = (function () {
-        function C() {
+    class C {
+        method() {
+            const loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); });
         }
-        C.prototype.method = function () {
-            var loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); });
-        };
-        return C;
-    }());
-    var D = (function () {
-        function D() {
+    }
+    class D {
+        method() {
+            const loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); });
         }
-        D.prototype.method = function () {
-            var loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); });
-        };
-        return D;
-    }());
+    }
     exports.D = D;
 });

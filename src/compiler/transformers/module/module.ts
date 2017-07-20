@@ -924,7 +924,7 @@ namespace ts {
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, importCallExpressionVisitor),
-                                node.members
+                                visitNodes(node.members, importCallExpressionVisitor)
                             ),
                             node
                         ),

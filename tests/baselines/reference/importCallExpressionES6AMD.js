@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpressionInAMD1.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpressionES6AMD.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
@@ -14,6 +14,18 @@ export var p2 = import("./0");
 
 function foo() {
     const p2 = import("./0");
+}
+
+class C {
+    method() {
+        const loadAsync = import ("./0");
+    }
+}
+
+export class D {
+    method() {
+        const loadAsync = import ("./0");
+    }
 }
 
 //// [0.js]
@@ -36,4 +48,15 @@ define(["require", "exports"], function (require, exports) {
     function foo() {
         const p2 = new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
     }
+    class C {
+        method() {
+            const loadAsync = new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); });
+        }
+    }
+    class D {
+        method() {
+            const loadAsync = new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); });
+        }
+    }
+    exports.D = D;
 });
