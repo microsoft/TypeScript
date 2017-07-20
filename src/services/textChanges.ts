@@ -547,7 +547,7 @@ namespace ts.textChanges {
             return (options.prefix || "") + text + (options.suffix || "");
         }
 
-        private getFormattedTextOfNode(node: Node, sourceFile: SourceFile, pos: number, options: ChangeNodeOptions) {
+        private getFormattedTextOfNode(node: Node, sourceFile: SourceFile, pos: number, options: ChangeNodeOptions): string {
             const nonformattedText = getNonformattedText(node, sourceFile, this.newLine);
             if (this.validator) {
                 this.validator(nonformattedText);
