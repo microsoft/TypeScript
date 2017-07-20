@@ -31,6 +31,11 @@ namespace ts {
         next(): { value: T, done: false } | { value: never, done: true };
     }
 
+    /** Array that is only intended to be pushed to, never read. */
+    export interface Push<T> {
+        push(...values: T[]): void;
+    }
+
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
