@@ -7530,6 +7530,9 @@ namespace ts {
         }
 
         function getIndexType(type: Type): Type {
+            if (type.flags & TypeFlags.Readonly || getObjectFlags(type) & ObjectFlags.Readonly) {
+                type = (<ReadonlyTypeVariable | ReadonlyObjectType>type).type;
+            }
             return maybeTypeOfKind(type, TypeFlags.TypeVariable) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                     type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
