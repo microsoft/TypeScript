@@ -1,7 +1,7 @@
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(7,11): error TS2430: Interface 'I1' incorrectly extends interface 'T1'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(8,11): error TS2430: Interface 'I2' incorrectly extends interface 'T2'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(8,11): error TS2430: Interface 'I2' incorrectly extends interface 'T1 & { b: number; }'.
   Type 'I2' is not assignable to type '{ b: number; }'.
     Types of property 'b' are incompatible.
       Type 'string' is not assignable to type 'number'.
@@ -17,7 +17,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(16,7): error TS2415: Class 'C1' incorrectly extends base class 'T1'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,7): error TS2415: Class 'C2' incorrectly extends base class 'T2'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,7): error TS2415: Class 'C2' incorrectly extends base class 'T1 & { b: number; }'.
   Type 'C2' is not assignable to type '{ b: number; }'.
     Types of property 'b' are incompatible.
       Type 'string' is not assignable to type 'number'.
@@ -49,11 +49,11 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(40,11): error TS2430: Interface 'I21' incorrectly extends interface 'Readonly<T1>'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(41,11): error TS2430: Interface 'I22' incorrectly extends interface 'Identifiable<T1>'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(41,11): error TS2430: Interface 'I22' incorrectly extends interface '{ _id: string; } & T1'.
   Type 'I22' is not assignable to type 'T1'.
     Types of property 'a' are incompatible.
       Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(42,11): error TS2430: Interface 'I23' incorrectly extends interface 'Identifiable<T1 & { b: number; }>'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(42,11): error TS2430: Interface 'I23' incorrectly extends interface '{ _id: string; } & T1 & { b: number; }'.
   Type 'I23' is not assignable to type 'T1'.
     Types of property 'a' are incompatible.
       Type 'string' is not assignable to type 'number'.
@@ -75,7 +75,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 !!! error TS2430:     Type 'string' is not assignable to type 'number'.
     interface I2 extends T2 { b: string }
               ~~
-!!! error TS2430: Interface 'I2' incorrectly extends interface 'T2'.
+!!! error TS2430: Interface 'I2' incorrectly extends interface 'T1 & { b: number; }'.
 !!! error TS2430:   Type 'I2' is not assignable to type '{ b: number; }'.
 !!! error TS2430:     Types of property 'b' are incompatible.
 !!! error TS2430:       Type 'string' is not assignable to type 'number'.
@@ -105,7 +105,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 !!! error TS2415:     Type 'string' is not assignable to type 'number'.
     class C2 extends Constructor<T2>() { b: string }
           ~~
-!!! error TS2415: Class 'C2' incorrectly extends base class 'T2'.
+!!! error TS2415: Class 'C2' incorrectly extends base class 'T1 & { b: number; }'.
 !!! error TS2415:   Type 'C2' is not assignable to type '{ b: number; }'.
 !!! error TS2415:     Types of property 'b' are incompatible.
 !!! error TS2415:       Type 'string' is not assignable to type 'number'.
@@ -174,13 +174,13 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 !!! error TS2430:     Type 'string' is not assignable to type 'number'.
     interface I22 extends Identifiable<T1> { a: string }
               ~~~
-!!! error TS2430: Interface 'I22' incorrectly extends interface 'Identifiable<T1>'.
+!!! error TS2430: Interface 'I22' incorrectly extends interface '{ _id: string; } & T1'.
 !!! error TS2430:   Type 'I22' is not assignable to type 'T1'.
 !!! error TS2430:     Types of property 'a' are incompatible.
 !!! error TS2430:       Type 'string' is not assignable to type 'number'.
     interface I23 extends Identifiable<T1 & { b: number}> { a: string }
               ~~~
-!!! error TS2430: Interface 'I23' incorrectly extends interface 'Identifiable<T1 & { b: number; }>'.
+!!! error TS2430: Interface 'I23' incorrectly extends interface '{ _id: string; } & T1 & { b: number; }'.
 !!! error TS2430:   Type 'I23' is not assignable to type 'T1'.
 !!! error TS2430:     Types of property 'a' are incompatible.
 !!! error TS2430:       Type 'string' is not assignable to type 'number'.

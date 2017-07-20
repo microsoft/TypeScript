@@ -24,7 +24,7 @@ if (x === "") {
 
 if (x !== "") {
 >x !== "" : boolean
->x : T
+>x : "" | "foo"
 >"" : ""
 
     let b = x;
@@ -34,7 +34,7 @@ if (x !== "") {
 
 if (x == "") {
 >x == "" : boolean
->x : T
+>x : "" | "foo"
 >"" : ""
 
     let c = x;
@@ -44,7 +44,7 @@ if (x == "") {
 
 if (x != "") {
 >x != "" : boolean
->x : T
+>x : "" | "foo"
 >"" : ""
 
     let d = x;
@@ -53,7 +53,7 @@ if (x != "") {
 }
 
 if (x) {
->x : T
+>x : "" | "foo"
 
     let e = x;
 >e : "foo"
@@ -62,17 +62,17 @@ if (x) {
 
 if (!x) {
 >!x : boolean
->x : T
+>x : "" | "foo"
 
     let f = x;
->f : T
->x : T
+>f : "" | "foo"
+>x : "" | "foo"
 }
 
 if (!!x) {
 >!!x : boolean
 >!x : boolean
->x : T
+>x : "" | "foo"
 
     let g = x;
 >g : "foo"
@@ -83,9 +83,9 @@ if (!!!x) {
 >!!!x : boolean
 >!!x : boolean
 >!x : boolean
->x : T
+>x : "" | "foo"
 
     let h = x;
->h : T
->x : T
+>h : "" | "foo"
+>x : "" | "foo"
 }

@@ -7344,17 +7344,27 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
+            if (aliasSymbol) {
+                // Don't reuse types that would have different `aliasSymbol`s.
+                return create();
+            }
+
             const id = getTypeListId(types);
             let type = unionTypes.get(id);
             if (!type) {
-                const propagatedFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-                type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
+                type = create();
                 unionTypes.set(id, type);
+            }
+            return type;
+
+            function create() {
+                const propagatedFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
+                const type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
                 type.types = types;
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
+                return type;
             }
-            return type;
         }
 
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
@@ -7437,17 +7447,27 @@ namespace ts {
                 return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
                     /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
+            if (aliasSymbol) {
+                // Don't reuse types that would have different `aliasSymbol`s.
+                return create();
+            }
+
             const id = getTypeListId(typeSet);
             let type = intersectionTypes.get(id);
             if (!type) {
-                const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Nullable);
-                type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
+                type = create();
                 intersectionTypes.set(id, type);
+            }
+            return type;
+
+            function create(): IntersectionType {
+                const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Nullable);
+                const type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
                 type.types = typeSet;
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
+                return type;
             }
-            return type;
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {

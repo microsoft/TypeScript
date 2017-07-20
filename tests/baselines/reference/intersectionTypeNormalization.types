@@ -24,7 +24,7 @@ type X1 = (A | B) & (C | D);
 >D : D
 
 type X2 = A & (C | D) | B & (C | D)
->X2 : X1
+>X2 : X2
 >A : A
 >C : C
 >D : D
@@ -33,7 +33,7 @@ type X2 = A & (C | D) | B & (C | D)
 >D : D
 
 type X3 = A & C | A & D | B & C | B & D;
->X3 : X1
+>X3 : X3
 >A : A
 >C : C
 >A : A
@@ -49,11 +49,11 @@ var x: X1;
 
 var x: X2;
 >x : X1
->X2 : X1
+>X2 : X2
 
 var x: X3;
 >x : X1
->X3 : X1
+>X3 : X3
 
 interface X { x: string }
 >X : X
@@ -73,7 +73,7 @@ type Y1 = (A | X & Y) & (C | D);
 >D : D
 
 type Y2 = A & (C | D) | X & Y & (C | D)
->Y2 : Y1
+>Y2 : Y2
 >A : A
 >C : C
 >D : D
@@ -83,7 +83,7 @@ type Y2 = A & (C | D) | X & Y & (C | D)
 >D : D
 
 type Y3 = A & C | A & D | X & Y & C | X & Y & D;
->Y3 : Y1
+>Y3 : Y3
 >A : A
 >C : C
 >A : A
@@ -101,11 +101,11 @@ var y: Y1;
 
 var y: Y2;
 >y : Y1
->Y2 : Y1
+>Y2 : Y2
 
 var y: Y3;
 >y : Y1
->Y3 : Y1
+>Y3 : Y3
 
 interface M { m: string }
 >M : M
@@ -126,7 +126,7 @@ type Z1 = (A | X & (M | N)) & (C | D);
 >D : D
 
 type Z2 = A & (C | D) | X & (M | N) & (C | D)
->Z2 : Z1
+>Z2 : Z2
 >A : A
 >C : C
 >D : D
@@ -137,7 +137,7 @@ type Z2 = A & (C | D) | X & (M | N) & (C | D)
 >D : D
 
 type Z3 = A & C | A & D | X & (M | N) & C | X & (M | N) & D;
->Z3 : Z1
+>Z3 : Z3
 >A : A
 >C : C
 >A : A
@@ -152,7 +152,7 @@ type Z3 = A & C | A & D | X & (M | N) & C | X & (M | N) & D;
 >D : D
 
 type Z4 = A & C | A & D | X & M & C | X & N & C | X & M & D | X & N & D;
->Z4 : Z1
+>Z4 : Z4
 >A : A
 >C : C
 >A : A
@@ -176,15 +176,15 @@ var z: Z1;
 
 var z: Z2;
 >z : Z1
->Z2 : Z1
+>Z2 : Z2
 
 var z: Z3;
 >z : Z1
->Z3 : Z1
+>Z3 : Z3
 
 var z: Z4;
 >z : Z1
->Z4 : Z1
+>Z4 : Z4
 
 // Repro from #9919
 

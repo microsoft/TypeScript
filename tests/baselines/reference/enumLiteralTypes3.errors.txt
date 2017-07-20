@@ -1,8 +1,10 @@
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(10,5): error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
   Type 'Choice.No' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/enumLiteralTypes3.ts(11,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(11,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.
+  Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(12,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/enumLiteralTypes3.ts(18,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(18,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'YesNo'.
+  Type 'Choice.Unknown' is not assignable to type 'YesNo'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(19,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
@@ -31,7 +33,8 @@ tests/cases/conformance/types/literal/enumLiteralTypes3.ts(96,14): error TS2678:
 !!! error TS2322:   Type 'Choice.No' is not assignable to type 'Choice.Yes'.
         a = c;
         ~
-!!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+!!! error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.
+!!! error TS2322:   Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
         a = d;
         ~
 !!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
@@ -42,7 +45,8 @@ tests/cases/conformance/types/literal/enumLiteralTypes3.ts(96,14): error TS2678:
         b = b;
         b = c;
         ~
-!!! error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
+!!! error TS2322: Type 'UnknownYesNo' is not assignable to type 'YesNo'.
+!!! error TS2322:   Type 'Choice.Unknown' is not assignable to type 'YesNo'.
         b = d;
         ~
 !!! error TS2322: Type 'Choice' is not assignable to type 'YesNo'.

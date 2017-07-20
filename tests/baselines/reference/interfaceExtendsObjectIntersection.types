@@ -224,7 +224,7 @@ class C21 extends Constructor<Readonly<T1>>() { x: string }
 
 class C22 extends Constructor<Identifiable<T1>>() { x: string }
 >C22 : C22
->Constructor<Identifiable<T1>>() : Identifiable<T1>
+>Constructor<Identifiable<T1>>() : { _id: string; } & T1
 >Constructor : <T>() => Constructor<T>
 >Identifiable : Identifiable<T>
 >T1 : T1
@@ -232,7 +232,7 @@ class C22 extends Constructor<Identifiable<T1>>() { x: string }
 
 class C23 extends Constructor<Identifiable<T1 & { b: number}>>() { x: string }
 >C23 : C23
->Constructor<Identifiable<T1 & { b: number}>>() : Identifiable<T1 & { b: number; }>
+>Constructor<Identifiable<T1 & { b: number}>>() : { _id: string; } & T1 & { b: number; }
 >Constructor : <T>() => Constructor<T>
 >Identifiable : Identifiable<T>
 >T1 : T1
