@@ -23552,7 +23552,7 @@ namespace ts {
             }
 
             // Initialize global symbol table
-            let augmentations: LiteralExpression[][];
+            let augmentations: ReadonlyArray<StringLiteral>[];
             for (const file of host.getSourceFiles()) {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
