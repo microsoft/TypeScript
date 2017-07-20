@@ -991,9 +991,9 @@ namespace FourSlash {
             }
 
             for (const reference of expectedReferences) {
-                const {fileName, start, end} = reference;
+                const { fileName, start, end } = reference;
                 if (reference.marker && reference.marker.data) {
-                    const {isWriteAccess, isDefinition} = reference.marker.data;
+                    const { isWriteAccess, isDefinition } = reference.marker.data;
                     this.verifyReferencesWorker(actualReferences, fileName, start, end, isWriteAccess, isDefinition);
                 }
                 else {
@@ -1204,7 +1204,7 @@ namespace FourSlash {
             displayParts: ts.SymbolDisplayPart[],
             documentation: ts.SymbolDisplayPart[],
             tags: ts.JSDocTagInfo[]
-            ) {
+        ) {
 
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
@@ -1800,19 +1800,16 @@ namespace FourSlash {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
             // of the incremental offset from each edit to the next. We assume these edit ranges don't overlap
 
-            edits = edits.sort((a, b) => a.span.start - b.span.start);
-            for (let i = 0; i < edits.length - 1; i++) {
-                const firstEditSpan = edits[i].span;
-                const firstEditEnd = firstEditSpan.start + firstEditSpan.length;
-                assert.isTrue(firstEditEnd <= edits[i + 1].span.start);
-            }
+            // Copy this so we don't ruin someone else's copy
+            edits = JSON.parse(JSON.stringify(edits));
 
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
             const oldContent = this.getFileContent(fileName);
             let runningOffset = 0;
 
-            for (const edit of edits) {
-                const offsetStart = edit.span.start + runningOffset;
+            for (let i = 0; i < edits.length; i++) {
+                const edit = edits[i];
+                const offsetStart = edit.span.start;
                 const offsetEnd = offsetStart + edit.span.length;
                 this.editScriptAndUpdateMarkers(fileName, offsetStart, offsetEnd, edit.newText);
                 const editDelta = edit.newText.length - edit.span.length;
@@ -1827,8 +1824,13 @@ namespace FourSlash {
                     }
                 }
                 runningOffset += editDelta;
-                // TODO: Consider doing this at least some of the time for higher fidelity. Currently causes a failure (bug 707150)
-                // this.languageService.getScriptLexicalStructure(fileName);
+
+                // Update positions of any future edits affected by this change
+                for (let j = i + 1; j < edits.length; j++) {
+                    if (edits[j].span.start >= edits[i].span.start) {
+                        edits[j].span.start += editDelta;
+                    }
+                }
             }
 
             if (isFormattingEdit) {
@@ -1912,7 +1914,7 @@ namespace FourSlash {
             this.goToPosition(len);
         }
 
-        public goToRangeStart({fileName, start}: Range) {
+        public goToRangeStart({ fileName, start }: Range) {
             this.openFile(fileName);
             this.goToPosition(start);
         }
@@ -2086,7 +2088,7 @@ namespace FourSlash {
             return result;
         }
 
-        private rangeText({fileName, start, end}: Range): string {
+        private rangeText({ fileName, start, end }: Range): string {
             return this.getFileContent(fileName).slice(start, end);
         }
 
@@ -2372,7 +2374,7 @@ namespace FourSlash {
         private applyCodeActions(actions: ts.CodeAction[], index?: number): void {
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
-                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : "" }`);
+                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
                 }
                 index = 0;
             }
@@ -2785,7 +2787,7 @@ namespace FourSlash {
         public applyRefactor(refactorName: string, actionName: string) {
             const range = { pos: this.currentCaretPosition, end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd };
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
-            const refactor = ts.find(refactors, r  => r.name === refactorName);
+            const refactor = ts.find(refactors, r => r.name === refactorName);
             if (!refactor) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.`);
             }
