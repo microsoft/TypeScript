@@ -186,7 +186,7 @@ namespace ts.codefix {
         return parameters;
     }
 
-    function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
+    function createMethodImplementingSignatures(signatures: ReadonlyArray<Signature>, name: PropertyName, optional: boolean, modifiers: ReadonlyArray<Modifier> | undefined): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
          * this is one of them.
@@ -231,7 +231,13 @@ namespace ts.codefix {
             /*returnType*/ undefined);
     }
 
-    export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
+    export function createStubbedMethod(
+        modifiers: ReadonlyArray<Modifier>,
+        name: PropertyName,
+        optional: boolean,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        returnType: TypeNode | undefined) {
         return createMethod(
             /*decorators*/ undefined,
             modifiers,

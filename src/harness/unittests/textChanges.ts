@@ -67,12 +67,12 @@ namespace ts {
             }
 
             function flattenNodes(n: Node) {
-                const data: (Node | NodeArray<any>)[] = [];
+                const data: (Node | NodeArray<Node>)[] = [];
                 walk(n);
                 return data;
 
-                function walk(n: Node | Node[]): void {
-                    data.push(<any>n);
+                function walk(n: Node | NodeArray<Node>): void {
+                    data.push(n);
                     return isArray(n) ? forEach(n, walk) : forEachChild(n, walk, walk);
                 }
             }

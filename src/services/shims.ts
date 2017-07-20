@@ -1176,7 +1176,7 @@ namespace ts {
 
         public close(): void {
             // Forget all the registered shims
-            this._shims = [];
+            clear(this._shims);
             this.documentRegistry = undefined;
         }
 

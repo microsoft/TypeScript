@@ -162,19 +162,13 @@ namespace ts.server {
      * Represents operation that can schedule its next step to be executed later.
      * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed.
      */
-    class MultistepOperation {
+    class MultistepOperation implements NextStep {
         private requestId: number;
         private timerHandle: any;
         private immediateId: any;
         private completed = true;
-        private readonly next: NextStep;
 
-        constructor(private readonly operationHost: MultistepOperationHost) {
-            this.next = {
-                immediate: action => this.immediate(action),
-                delay: (ms, action) => this.delay(ms, action)
-            };
-        }
+        constructor(private readonly operationHost: MultistepOperationHost) {}
 
         public startNew(action: (next: NextStep) => void) {
             this.complete();
@@ -194,7 +188,7 @@ namespace ts.server {
             this.setImmediateId(undefined);
         }
 
-        private immediate(action: () => void) {
+        public immediate(action: () => void) {
             const requestId = this.requestId;
             Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id");
             this.setImmediateId(this.operationHost.getServerHost().setImmediate(() => {
@@ -203,7 +197,7 @@ namespace ts.server {
             }));
         }
 
-        private delay(ms: number, action: () => void) {
+        public delay(ms: number, action: () => void) {
             const requestId = this.requestId;
             Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id");
             this.setTimerHandle(this.operationHost.getServerHost().setTimeout(() => {
@@ -219,7 +213,7 @@ namespace ts.server {
                     stop = true;
                 }
                 else {
-                    action(this.next);
+                    action(this);
                 }
             }
             catch (e) {

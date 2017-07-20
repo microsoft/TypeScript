@@ -241,7 +241,7 @@ namespace ts.JsDoc {
         return { newText: result, caretOffset: preamble.length };
     }
 
-    function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
+    function getParametersForJsDocOwningNode(commentOwner: Node): ReadonlyArray<ParameterDeclaration> {
         if (isFunctionLike(commentOwner)) {
             return commentOwner.parameters;
         }
@@ -266,7 +266,7 @@ namespace ts.JsDoc {
      * @param rightHandSide the expression which may contain an appropriate set of parameters
      * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
      */
-    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ParameterDeclaration[] {
+    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ReadonlyArray<ParameterDeclaration> {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
             rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
         }

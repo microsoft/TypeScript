@@ -8,18 +8,22 @@ namespace ts {
         [index: string]: T;
     }
 
-    /** ES6 Map interface. */
-    export interface Map<T> {
+    /** ES6 Map interface, only read methods included. */
+    export interface ReadonlyMap<T> {
         get(key: string): T | undefined;
         has(key: string): boolean;
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
         forEach(action: (value: T, key: string) => void): void;
         readonly size: number;
         keys(): Iterator<string>;
         values(): Iterator<T>;
         entries(): Iterator<[string, T]>;
+    }
+
+    /** ES6 Map interface. */
+    export interface Map<T> extends ReadonlyMap<T> {
+        set(key: string, value: T): this;
+        delete(key: string): boolean;
+        clear(): void;
     }
 
     /** ES6 Iterator type. */
@@ -519,7 +523,10 @@ namespace ts {
         /* @internal */ contextualMapper?: TypeMapper;  // Mapper for contextual type
     }
 
-    export interface NodeArray<T extends Node> extends Array<T>, TextRange {
+    /* @internal */
+    export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
+
+    export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
         hasTrailingComma?: boolean;
         /* @internal */ transformFlags?: TransformFlags;
     }
@@ -673,7 +680,7 @@ namespace ts {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
-        name: BindingName;                  // Declared parameter name
+        name?: BindingName;                 // Declared parameter name. Missing if this is a parameter in a JSDocFunctionType.
         questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
@@ -751,7 +758,7 @@ namespace ts {
     export interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
+        name?: DeclarationName; // May be missing for ParameterDeclaration, see comment there
         questionToken?: QuestionToken;
         type?: TypeNode;
         initializer?: Expression;
@@ -2314,10 +2321,10 @@ namespace ts {
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: StringLiteral[];
-        /* @internal */ moduleAugmentations: StringLiteral[];
+        /* @internal */ imports: ReadonlyArray<StringLiteral>;
+        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        /* @internal */ ambientModuleNames: string[];
+        /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
@@ -2520,6 +2527,7 @@ namespace ts {
          * Returns `any` if the index is not valid.
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
+        getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
@@ -2677,6 +2685,7 @@ namespace ts {
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
+        InArrayType                     = 1 << 15,  // Writing an array element type
     }
 
     export const enum SymbolFormatFlags {
@@ -2982,18 +2991,22 @@ namespace ts {
      */
     export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
-    /** EscapedStringMap based on ES6 Map interface. */
-    export interface UnderscoreEscapedMap<T> {
+    /** ReadonlyMap where keys are `__String`s. */
+    export interface ReadonlyUnderscoreEscapedMap<T> {
         get(key: __String): T | undefined;
         has(key: __String): boolean;
-        set(key: __String, value: T): this;
-        delete(key: __String): boolean;
-        clear(): void;
         forEach(action: (value: T, key: __String) => void): void;
         readonly size: number;
         keys(): Iterator<__String>;
         values(): Iterator<T>;
         entries(): Iterator<[__String, T]>;
+    }
+
+    /** Map where keys are `__String`s. */
+    export interface UnderscoreEscapedMap<T> extends ReadonlyUnderscoreEscapedMap<T> {
+        set(key: __String, value: T): this;
+        delete(key: __String): boolean;
+        clear(): void;
     }
 
     /** SymbolTable based on ES6 Map interface. */

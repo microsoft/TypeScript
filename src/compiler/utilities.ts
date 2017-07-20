@@ -640,7 +640,8 @@ namespace ts {
         const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
-            node.kind === SyntaxKind.ArrowFunction) ?
+            node.kind === SyntaxKind.ArrowFunction ||
+            node.kind === SyntaxKind.ParenthesizedExpression) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRangesOfNodeFromText(node, text);
         // True if the comment starts with '/**' but not if it is '/**/'
@@ -1539,27 +1540,9 @@ namespace ts {
     }
 
     export function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] | undefined {
-        const func = param.parent;
-        const tags = getJSDocTags(func);
-        if (!tags) return undefined;
-
-        if (!param.name) {
-            // this is an anonymous jsdoc param from a `function(type1, type2): type3` specification
-            const paramIndex = func.parameters.indexOf(param);
-            Debug.assert(paramIndex !== -1);
-            let curParamIndex = 0;
-            for (const tag of tags) {
-                if (isJSDocParameterTag(tag)) {
-                    if (curParamIndex === paramIndex) {
-                        return [tag];
-                    }
-                    curParamIndex++;
-                }
-            }
-        }
-        else if (param.name.kind === SyntaxKind.Identifier) {
-            const name = (param.name as Identifier).text;
-            return tags.filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && tag.name.text === name) as JSDocParameterTag[];
+        if (param.name && isIdentifier(param.name)) {
+            const name = param.name.text;
+            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && tag.name.text === name) as JSDocParameterTag[];
         }
         else {
             // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
@@ -2748,7 +2731,7 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): TypeParameterDeclaration[] {
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
         if (node.typeParameters) {
             return node.typeParameters;
         }
@@ -4756,7 +4739,7 @@ namespace ts {
     // Node Arrays
 
     /* @internal */
-    export function isNodeArray<T extends Node>(array: T[]): array is NodeArray<T> {
+    export function isNodeArray<T extends Node>(array: ReadonlyArray<T>): array is NodeArray<T> {
         return array.hasOwnProperty("pos")
             && array.hasOwnProperty("end");
     }

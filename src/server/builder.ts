@@ -223,7 +223,7 @@ namespace ts.server {
             for (const reference of this.references) {
                 reference.removeReferencedBy(this);
             }
-            this.references = createSortedArray<ModuleBuilderFileInfo>();
+            clear(this.references);
         }
     }
 

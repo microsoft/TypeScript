@@ -232,7 +232,7 @@ namespace ts.server {
                     }
                     break;
                 default:
-                    removeItemFromSet(this.containingProjects, project);
+                    unorderedRemoveItem(this.containingProjects, project);
                     break;
             }
         }
@@ -251,7 +251,7 @@ namespace ts.server {
                     p.addMissingFileRoot(this.fileName);
                 }
             }
-            this.containingProjects.length = 0;
+            clear(this.containingProjects);
         }
 
         getDefaultProject() {

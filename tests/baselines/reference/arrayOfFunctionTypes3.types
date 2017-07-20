@@ -22,8 +22,8 @@ class C {
 >foo : string
 }
 var y = [C, C];
->y : typeof C[]
->[C, C] : typeof C[]
+>y : (typeof C)[]
+>[C, C] : (typeof C)[]
 >C : typeof C
 >C : typeof C
 
@@ -31,7 +31,7 @@ var r3 = new y[0]();
 >r3 : C
 >new y[0]() : C
 >y[0] : typeof C
->y : typeof C[]
+>y : (typeof C)[]
 >0 : 0
 
 var a: { (x: number): number; (x: string): string; };

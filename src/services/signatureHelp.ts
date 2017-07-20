@@ -1,8 +1,6 @@
 ///<reference path='services.ts' />
 /* @internal */
 namespace ts.SignatureHelp {
-    const emptyArray: any[] = [];
-
     export const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
