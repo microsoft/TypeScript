@@ -1204,15 +1204,7 @@ namespace ts {
     /* @internal */
     export function generateTSConfig(options: CompilerOptions, fileNames: string[], newLine: string): string {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
-        const configurations: { compilerOptions: MapLike<CompilerOptionsValue>; files?: string[] } = {
-            compilerOptions: serializeCompilerOptions(compilerOptions)
-        };
-        if (fileNames && fileNames.length) {
-            // only set the files property if we have at least one file
-            configurations.files = fileNames;
-        }
-
-
+        const compilerOptionsMap = serializeCompilerOptions(compilerOptions);
         return writeConfigurations();
 
         function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
@@ -1314,7 +1306,7 @@ namespace ts {
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
             const descriptionColumn: string[] = [];
-            const knownKeysCount = getOwnKeys(configurations.compilerOptions).length;
+            const knownKeysCount = getOwnKeys(compilerOptionsMap).length;
             for (const category in categorizedOptions) {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
@@ -1324,8 +1316,8 @@ namespace ts {
                 descriptionColumn.push("");
                 for (const option of categorizedOptions[category]) {
                     let optionName;
-                    if (hasProperty(configurations.compilerOptions, option.name)) {
-                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
+                    if (hasProperty(compilerOptionsMap, option.name)) {
+                        optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap[option.name])}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
                     }
                     else {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
@@ -1347,11 +1339,11 @@ namespace ts {
                 const description = descriptionColumn[i];
                 result.push(optionName && `${tab}${tab}${optionName}${ description && (makePadding(marginLength - optionName.length + 2) + description)}`);
             }
-            if (configurations.files && configurations.files.length) {
+            if (fileNames.length) {
                 result.push(`${tab}},`);
                 result.push(`${tab}"files": [`);
-                for (let i = 0; i < configurations.files.length; i++) {
-                    result.push(`${tab}${tab}${JSON.stringify(configurations.files[i])}${i === configurations.files.length - 1 ? "" : ","}`);
+                for (let i = 0; i < fileNames.length; i++) {
+                    result.push(`${tab}${tab}${JSON.stringify(fileNames[i])}${i === fileNames.length - 1 ? "" : ","}`);
                 }
                 result.push(`${tab}]`);
             }
