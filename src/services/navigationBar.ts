@@ -442,7 +442,7 @@ namespace ts.NavigationBar {
 
     function getJSDocTypedefTagName(node: JSDocTypedefTag): string {
         if (node.name) {
-            return node.name.name;
+            return node.name.unescapedText;
         }
         else {
             const parentNode = node.parent && node.parent.parent;
@@ -450,7 +450,7 @@ namespace ts.NavigationBar {
                 if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                     const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
                     if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return nameIdentifier.name;
+                        return nameIdentifier.unescapedText;
                     }
                 }
             }

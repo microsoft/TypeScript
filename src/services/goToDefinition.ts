@@ -26,7 +26,7 @@ namespace ts.GoToDefinition {
 
         // Labels
         if (isJumpStatementTarget(node)) {
-            const labelName = (<Identifier>node).name;
+            const labelName = (<Identifier>node).unescapedText;
             const label = getTargetLabel((<BreakOrContinueStatement>node.parent), labelName);
             return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
         }

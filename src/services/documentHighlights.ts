@@ -248,7 +248,7 @@ namespace ts.DocumentHighlights {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.DoStatement:
-                    if (!statement.label || isLabeledBy(node, statement.label.name)) {
+                    if (!statement.label || isLabeledBy(node, statement.label.unescapedText)) {
                         return node;
                     }
                     break;

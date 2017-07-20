@@ -376,7 +376,7 @@ namespace ts {
             super(pos, end);
         }
 
-        get name(): string {
+        get unescapedText(): string {
             return unescapeLeadingUnderscores(this.text);
         }
     }
@@ -605,7 +605,7 @@ namespace ts {
                     if (name.kind === SyntaxKind.ComputedPropertyName) {
                         const expr = (<ComputedPropertyName>name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return (<PropertyAccessExpression>expr).name.name;
+                            return (<PropertyAccessExpression>expr).name.unescapedText;
                         }
 
                         return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
