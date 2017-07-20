@@ -392,6 +392,9 @@ namespace ts.refactor.extractMethod {
             }
         }
 
+        // The scope can't be the initial node itself
+        current = current && current.parent;
+
         let scopes: Scope[] | undefined = undefined;
         while (current) {
             // We want to find the nearest parent where we can place an "equivalent" sibling to the node we're extracting out of.
@@ -552,6 +555,20 @@ namespace ts.refactor.extractMethod {
             callArguments.push(createIdentifier(name));
         });
 
+        // Verify no usages of declarations originating in the extracted range are used in
+        // the extracted-to scope (since they will no longer be visible)
+        const declarations = range.declarations;
+        if (declarations.length) {
+            const stranded = getStrandedReferences(scope);
+            if (stranded) {
+                return {
+                    scope,
+                    scopeDescription: getDescriptionForScope(scope),
+                    errors: [createDiagnosticForNode(stranded.declarations[0], Messages.FunctionWillNotBeVisibleInTheNewScope, stranded.getUnescapedName())]
+                };
+            }
+        }
+
         // Provide explicit return types for contexutally-typed functions
         // to avoid problems when there are literal types present
         if (isExpression(node) && !isJS) {
@@ -656,6 +673,26 @@ namespace ts.refactor.extractMethod {
             scopeDescription: getDescriptionForScope(scope),
             changes: changeTracker.getChanges()
         };
+
+        function getStrandedReferences(node: Node): Symbol | undefined {
+            if (node.getStart() < context.startPosition || node.getEnd() > context.endPosition) {
+                let foundDeclaration: Symbol | undefined = undefined;
+                ts.forEachChild(node, reference => {
+                    const ref = reference.symbol;
+                    if (ref) {
+                        for (const decl of declarations) {
+                            if (decl === ref) {
+                                foundDeclaration = decl;
+                                return true;
+                            }
+                        }
+                    }
+                    return getStrandedReferences(reference);
+                });
+                return foundDeclaration;
+            }
+            return undefined;
+        }
 
         function getPropertyAssignmentsForWrites(writes: UsageEntry[]) {
             return writes.map(w => createShorthandPropertyAssignment(w.symbol.getUnescapedName()));
