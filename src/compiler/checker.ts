@@ -2621,11 +2621,11 @@ namespace ts {
                                 return createTupleTypeNode(tupleConstituentNodes);
                             }
                         }
-                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            context.encounteredError = true;
-                            return undefined;
+                        if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
+                            return createTupleTypeNode([]);
                         }
-                        return createTupleTypeNode([]);
+                        context.encounteredError = true;
+                        return undefined;
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
