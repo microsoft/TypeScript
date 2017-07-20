@@ -284,7 +284,33 @@ namespace ts {
             return getTokenPosOfNode((<SyntaxList>node)._children[0], sourceFile, includeJsDoc);
         }
 
+        // For a source file, it is possible there are detached comments we should not skip
+        if (node.kind === SyntaxKind.SourceFile && includeJsDoc) {
+            const text = (node as SourceFile).text;
+            let ranges = getLeadingCommentRanges(text, 0);
+            if (!ranges) return 0;
+            let position = 0;
+            // However we should still skip a pinned comment at the top
+            if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+                position = ranges[0].end + 1;
+                ranges = ranges.slice(1);
+            }
+            // As well as any triple slash references
+            for (const range of ranges) {
+                if (range.kind === SyntaxKind.SingleLineCommentTrivia && (node as SourceFile).text.substring(range.pos, range.pos + 3) === "///") {
+                    position = range.end + 1;
+                    continue;
+                }
+                break;
+            }
+            return position;
+        }
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+
+        function isPinnedComment(text: string, comment: CommentRange) {
+            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+        }
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {

@@ -393,7 +393,7 @@ namespace ts.codefix {
                         : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
                 const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
                 if (!lastImportDeclaration) {
-                    changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
+                    changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(sourceFile, /*includeJsDoc*/ true), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
                 }
                 else {
                     changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: context.newLineCharacter });
