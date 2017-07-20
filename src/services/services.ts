@@ -375,6 +375,10 @@ namespace ts {
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
         }
+
+        get name(): string {
+            return unescapeLeadingUnderscores(this.text);
+        }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 
@@ -601,7 +605,7 @@ namespace ts {
                     if (name.kind === SyntaxKind.ComputedPropertyName) {
                         const expr = (<ComputedPropertyName>name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return unescapeLeadingUnderscores((<PropertyAccessExpression>expr).name.text);
+                            return (<PropertyAccessExpression>expr).name.name;
                         }
 
                         return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));

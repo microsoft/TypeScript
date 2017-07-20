@@ -72,7 +72,7 @@ namespace ts.SignatureHelp {
         const typeChecker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = nameToDeclarations.get(unescapeLeadingUnderscores(name.text));
+            const declarations = nameToDeclarations.get(name.name);
 
             if (declarations) {
                 for (const declaration of declarations) {
