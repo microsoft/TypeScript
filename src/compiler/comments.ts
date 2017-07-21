@@ -415,17 +415,7 @@ namespace ts {
          * @return true if the comment is a triple-slash comment else false
          */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
-            // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
-            // so that we don't end up computing comment string and doing match for all // comments
-            if (currentText.charCodeAt(commentPos + 1) === CharacterCodes.slash &&
-                commentPos + 2 < commentEnd &&
-                currentText.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
-                const textSubStr = currentText.substring(commentPos, commentEnd);
-                return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
-                    textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
-                    true : false;
-            }
-            return false;
+            return isRecognizedTripleSlashComment(currentText, commentPos, commentEnd);
         }
     }
 }

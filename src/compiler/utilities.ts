@@ -261,6 +261,30 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
+    /**
+     * Determine if the given comment is a triple-slash
+     *
+     * @return true if the comment is a triple-slash comment else false
+     */
+    export function isRecognizedTripleSlashComment(text: string, commentPos: number, commentEnd: number) {
+        // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+        // so that we don't end up computing comment string and doing match for all // comments
+        if (text.charCodeAt(commentPos + 1) === CharacterCodes.slash &&
+            commentPos + 2 < commentEnd &&
+            text.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
+            const textSubStr = text.substring(commentPos, commentEnd);
+            return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
+                textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
+                true : false;
+        }
+        return false;
+    }
+
+    export function isPinnedComment(text: string, comment: CommentRange) {
+        return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+    }
+
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
@@ -297,7 +321,7 @@ namespace ts {
             }
             // As well as any triple slash references
             for (const range of ranges) {
-                if (range.kind === SyntaxKind.SingleLineCommentTrivia && (node as SourceFile).text.substring(range.pos, range.pos + 3) === "///") {
+                if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment((node as SourceFile).text, range.pos, range.end)) {
                     position = range.end + 1;
                     continue;
                 }
@@ -306,11 +330,6 @@ namespace ts {
             return position;
         }
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
-
-        function isPinnedComment(text: string, comment: CommentRange) {
-            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
-        }
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
@@ -2841,7 +2860,7 @@ namespace ts {
             //
             //      var x = 10;
             if (node.pos === 0) {
-                leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedComment);
+                leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedCommentLocal);
             }
         }
         else {
@@ -2887,9 +2906,8 @@ namespace ts {
 
         return currentDetachedCommentInfo;
 
-        function isPinnedComment(comment: CommentRange) {
-            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+        function isPinnedCommentLocal(comment: CommentRange) {
+            return isPinnedComment(text, comment);
         }
 
     }
