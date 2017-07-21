@@ -501,43 +501,111 @@ namespace ts.codefix {
                             return undefined;
                         }
 
-                        const indexOfNodeModules = moduleFileName.indexOf("node_modules");
-                        if (indexOfNodeModules < 0) {
+                        const parts = getNodeModulePathParts(moduleFileName);
+
+                        if (!parts) {
                             return undefined;
                         }
 
-                        let relativeFileName: string;
-                        if (sourceDirectory.indexOf(moduleFileName.substring(0, indexOfNodeModules - 1)) === 0) {
-                            // if node_modules folder is in this folder or any of its parent folder, no need to keep it.
-                            relativeFileName = moduleFileName.substring(indexOfNodeModules + 13 /* "node_modules\".length */);
-                        }
-                        else {
-                            relativeFileName = getRelativePath(moduleFileName, sourceDirectory);
-                        }
+                        // Simplify the full file path to something that can be resolved by Node.
 
-                        relativeFileName = removeFileExtension(relativeFileName);
-                        if (endsWith(relativeFileName, "/index")) {
-                            relativeFileName = getDirectoryPath(relativeFileName);
-                        }
-                        else {
-                            try {
-                                const moduleDirectory = getDirectoryPath(moduleFileName);
-                                const packageJsonContent = JSON.parse(context.host.readFile(combinePaths(moduleDirectory, "package.json")));
+                        // If the module could be imported by a directory name, use that directory's name
+                        let moduleSpecifier = getDirectoryOrExtensionlessFileName(moduleFileName);
+                        // Get a path that's relative to node_modules or the importing file's path
+                        moduleSpecifier = getNodeResolvablePath(moduleSpecifier);
+                        // If the module was found in @types, get the actual Node package name
+                        return getPackageNameFromAtTypesDirectory(moduleSpecifier);
+
+                        function getDirectoryOrExtensionlessFileName(path: string): string {
+                            // If the file is the main module, it can be imported by the package name
+                            const packageRootPath = path.substring(0, parts.packageRootIndex);
+                            const packageJsonPath = combinePaths(packageRootPath, "package.json");
+                            if (context.host.fileExists(packageJsonPath)) {
+                                const packageJsonContent = JSON.parse(context.host.readFile(packageJsonPath));
                                 if (packageJsonContent) {
-                                    const mainFile = packageJsonContent.main || packageJsonContent.typings;
-                                    if (mainFile) {
-                                        const mainExportFile = toPath(mainFile, moduleDirectory, getCanonicalFileName);
-                                        if (removeFileExtension(mainExportFile) === removeFileExtension(moduleFileName)) {
-                                            relativeFileName = getDirectoryPath(relativeFileName);
+                                    const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
+                                    if (mainFileRelative) {
+                                        const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
+                                        if (mainExportFile === getCanonicalFileName(path)) {
+                                            return packageRootPath;
                                         }
                                     }
                                 }
                             }
-                            catch (e) { }
+
+                            // We still have a file name - remove the extension
+                            const fullModulePathWithoutExtension = removeFileExtension(path);
+
+                            // If the file is /index, it can be imported by its directory name
+                            if (getCanonicalFileName(fullModulePathWithoutExtension.substring(parts.fileNameIndex)) === "/index") {
+                                return fullModulePathWithoutExtension.substring(0, parts.fileNameIndex);
+                            }
+
+                            return fullModulePathWithoutExtension;
                         }
 
-                        return getPackageNameFromAtTypesDirectory(relativeFileName);
+                        function getNodeResolvablePath(path: string): string {
+                            const basePath = path.substring(0, parts.topLevelNodeModulesIndex);
+                            if (sourceDirectory.indexOf(basePath) === 0) {
+                                // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
+                                return path.substring(parts.topLevelPackageNameIndex + 1);
+                            }
+                            else {
+                                return getRelativePath(path, sourceDirectory);
+                            }
+                        }
                     }
+                }
+
+                function getNodeModulePathParts(fullPath: string) {
+                    // If fullPath can't be valid module file within node_modules, returns undefined.
+                    // Example of expected pattern: /base/path/node_modules/[otherpackage/node_modules/]package/[subdirectory/]file.js
+                    // Returns indices:                       ^            ^                                   ^             ^
+
+                    let topLevelNodeModulesIndex = 0;
+                    let topLevelPackageNameIndex = 0;
+                    let packageRootIndex = 0;
+                    let fileNameIndex = 0;
+
+                    const enum States {
+                        BeforeNodeModules,
+                        NodeModules,
+                        PackageContent
+                    }
+
+                    let partStart = 0;
+                    let partEnd = 0;
+                    let state = States.BeforeNodeModules;
+
+                    while (partEnd >= 0) {
+                        partStart = partEnd;
+                        partEnd = fullPath.indexOf("/", partStart + 1);
+                        switch (state) {
+                            case States.BeforeNodeModules:
+                                if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
+                                    topLevelNodeModulesIndex = partStart;
+                                    topLevelPackageNameIndex = partEnd;
+                                    state = States.NodeModules;
+                                }
+                                break;
+                            case States.NodeModules:
+                                packageRootIndex = partEnd;
+                                state = States.PackageContent;
+                                break;
+                            case States.PackageContent:
+                                if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
+                                    state = States.NodeModules;
+                                }
+                                else {
+                                    state = States.PackageContent;
+                                }
+                                break;
+                        }
+                    }
+
+                    fileNameIndex = partStart;
+
+                    return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
                 }
 
                 function getPathRelativeToRootDirs(path: string, rootDirs: string[]) {
