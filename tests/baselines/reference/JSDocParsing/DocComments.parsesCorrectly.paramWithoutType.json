@@ -18,7 +18,7 @@
                 "end": 14,
                 "text": "param"
             },
-            "preParameterName": {
+            "fullName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 18,
@@ -30,6 +30,7 @@
                 "end": 18,
                 "text": "foo"
             },
+            "isParameterNameFirst": true,
             "isBracketed": false,
             "comment": ""
         },

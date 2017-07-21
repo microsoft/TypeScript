@@ -18,12 +18,6 @@
                 "end": 14,
                 "text": "param"
             },
-            "preParameterName": {
-                "kind": "Identifier",
-                "pos": 15,
-                "end": 20,
-                "text": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 21,
@@ -34,12 +28,24 @@
                     "end": 28
                 }
             },
+            "type": {
+                "kind": "NumberKeyword",
+                "pos": 22,
+                "end": 28
+            },
+            "fullName": {
+                "kind": "Identifier",
+                "pos": 15,
+                "end": 20,
+                "text": "name1"
+            },
             "name": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
                 "text": "name1"
             },
+            "isParameterNameFirst": true,
             "isBracketed": false,
             "comment": "Description"
         },

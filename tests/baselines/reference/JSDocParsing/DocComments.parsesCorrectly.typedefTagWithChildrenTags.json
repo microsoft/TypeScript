@@ -30,7 +30,7 @@
                 "end": 23,
                 "text": "People"
             },
-            "jsDocTypeLiteral": {
+            "typeExpression": {
                 "kind": "JSDocTypeLiteral",
                 "pos": 26,
                 "end": 98,
@@ -92,7 +92,12 @@
                                 "end": 64
                             }
                         },
-                        "postParameterName": {
+                        "type": {
+                            "kind": "NumberKeyword",
+                            "pos": 58,
+                            "end": 64
+                        },
+                        "fullName": {
                             "kind": "Identifier",
                             "pos": 66,
                             "end": 69,
@@ -104,6 +109,7 @@
                             "end": 69,
                             "text": "age"
                         },
+                        "isParameterNameFirst": false,
                         "isBracketed": false
                     },
                     {
@@ -131,7 +137,12 @@
                                 "end": 91
                             }
                         },
-                        "postParameterName": {
+                        "type": {
+                            "kind": "StringKeyword",
+                            "pos": 85,
+                            "end": 91
+                        },
+                        "fullName": {
                             "kind": "Identifier",
                             "pos": 93,
                             "end": 97,
@@ -143,6 +154,7 @@
                             "end": 97,
                             "text": "name"
                         },
+                        "isParameterNameFirst": false,
                         "isBracketed": false
                     }
                 ]

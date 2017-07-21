@@ -28,7 +28,12 @@
                     "end": 25
                 }
             },
-            "postParameterName": {
+            "type": {
+                "kind": "NumberKeyword",
+                "pos": 19,
+                "end": 25
+            },
+            "fullName": {
                 "kind": "Identifier",
                 "pos": 27,
                 "end": 32,
@@ -40,6 +45,7 @@
                 "end": 32,
                 "text": "name1"
             },
+            "isParameterNameFirst": false,
             "isBracketed": false,
             "comment": "Description"
         },

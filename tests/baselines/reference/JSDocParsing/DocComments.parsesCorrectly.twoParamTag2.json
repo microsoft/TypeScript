@@ -28,7 +28,12 @@
                     "end": 22
                 }
             },
-            "postParameterName": {
+            "type": {
+                "kind": "NumberKeyword",
+                "pos": 16,
+                "end": 22
+            },
+            "fullName": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
@@ -40,6 +45,7 @@
                 "end": 29,
                 "text": "name1"
             },
+            "isParameterNameFirst": false,
             "isBracketed": false,
             "comment": ""
         },
@@ -68,7 +74,12 @@
                     "end": 48
                 }
             },
-            "postParameterName": {
+            "type": {
+                "kind": "NumberKeyword",
+                "pos": 42,
+                "end": 48
+            },
+            "fullName": {
                 "kind": "Identifier",
                 "pos": 50,
                 "end": 55,
@@ -80,6 +91,7 @@
                 "end": 55,
                 "text": "name2"
             },
+            "isParameterNameFirst": false,
             "isBracketed": false,
             "comment": ""
         },
