@@ -338,7 +338,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], options, noop, newTexts);
             assert.deepEqual(emptyArray, program_2.getMissingFilePaths());
 
-            assert.equal(StructureIsReused.SafeModules, program_1.structureIsReused);
+            assert.equal(StructureIsReused.Not, program_1.structureIsReused);
         });
 
         it("resolution cache follows imports", () => {

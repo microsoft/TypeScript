@@ -473,6 +473,7 @@ namespace ts {
         }
 
         const filesByName = createMap<SourceFile | undefined>();
+        let missingFilePaths: Path[];
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
@@ -511,9 +512,9 @@ namespace ts {
                     });
                 }
             }
-        }
 
-        const missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
+            missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
+        }
 
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;
@@ -773,6 +774,13 @@ namespace ts {
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
             oldProgram.structureIsReused = StructureIsReused.Completely;
 
+            // If the missing file paths are now present, it can change the progam structure,
+            // and hence cant reuse the structure.
+            // This is same as how we dont reuse the structure if one of the file from old program is now missing
+            if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
+                return oldProgram.structureIsReused = StructureIsReused.Not;
+            }
+
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
                 const newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
@@ -869,20 +877,7 @@ namespace ts {
                 return oldProgram.structureIsReused;
             }
 
-            // If a file has ceased to be missing, then we need to discard some of the old
-            // structure in order to pick it up.
-            // Caution: if the file has created and then deleted between since it was discovered to
-            // be missing, then the corresponding file watcher will have been closed and no new one
-            // will be created until we encounter a change that prevents complete structure reuse.
-            // During this interval, creation of the file will go unnoticed.  We expect this to be
-            // both rare and low-impact.
-            if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
-                return oldProgram.structureIsReused = StructureIsReused.SafeModules;
-            }
-
-            for (const p of oldProgram.getMissingFilePaths()) {
-                filesByName.set(p, undefined);
-            }
+            missingFilePaths = oldProgram.getMissingFilePaths();
 
             // update fileName -> file mapping
             for (let i = 0; i < newSourceFiles.length; i++) {
