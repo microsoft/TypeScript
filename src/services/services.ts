@@ -364,7 +364,7 @@ namespace ts {
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
-        public text: __String;
+        public escapedText: __String;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -377,7 +377,7 @@ namespace ts {
         }
 
         get unescapedText(): string {
-            return unescapeLeadingUnderscores(this.text);
+            return unescapeLeadingUnderscores(this.escapedText);
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
@@ -2062,7 +2062,7 @@ namespace ts {
     function initializeNameTable(sourceFile: SourceFile): void {
         const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
         sourceFile.forEachChild(function walk(node) {
-            if ((isIdentifier(node) || isStringOrNumericLiteral(node) && literalIsName(node)) && node.text) {
+            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteral(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
                 nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }

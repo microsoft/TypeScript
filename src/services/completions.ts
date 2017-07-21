@@ -1453,7 +1453,7 @@ namespace ts.Completions {
                 }
 
                 const name = element.propertyName || element.name;
-                existingImportsOrExports.set(name.text, true);
+                existingImportsOrExports.set(name.escapedText, true);
             }
 
             if (existingImportsOrExports.size === 0) {
@@ -1496,7 +1496,7 @@ namespace ts.Completions {
                 if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
                     // include only identifiers in completion list
                     if ((<BindingElement>m).propertyName.kind === SyntaxKind.Identifier) {
-                        existingName = (<Identifier>(<BindingElement>m).propertyName).text;
+                        existingName = (<Identifier>(<BindingElement>m).propertyName).escapedText;
                     }
                 }
                 else {
@@ -1592,7 +1592,7 @@ namespace ts.Completions {
                 }
 
                 if (attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames.set((<JsxAttribute>attr).name.text, true);
+                    seenNames.set((<JsxAttribute>attr).name.escapedText, true);
                 }
             }
 

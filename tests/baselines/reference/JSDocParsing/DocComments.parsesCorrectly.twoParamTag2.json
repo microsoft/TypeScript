@@ -16,7 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "text": "param"
+                "escapedText": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
@@ -32,13 +32,13 @@
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
-                "text": "name1"
+                "escapedText": "name1"
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
-                "text": "name1"
+                "escapedText": "name1"
             },
             "isBracketed": false,
             "comment": ""
@@ -56,7 +56,7 @@
                 "kind": "Identifier",
                 "pos": 35,
                 "end": 40,
-                "text": "param"
+                "escapedText": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
@@ -72,13 +72,13 @@
                 "kind": "Identifier",
                 "pos": 50,
                 "end": 55,
-                "text": "name2"
+                "escapedText": "name2"
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 50,
                 "end": 55,
-                "text": "name2"
+                "escapedText": "name2"
             },
             "isBracketed": false,
             "comment": ""

@@ -606,7 +606,7 @@ namespace ts.DocumentHighlights {
      */
     function isLabeledBy(node: Node, labelName: string) {
         for (let owner = node.parent; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent) {
-            if ((<LabeledStatement>owner).label.text === labelName) {
+            if ((<LabeledStatement>owner).label.escapedText === labelName) {
                 return true;
             }
         }

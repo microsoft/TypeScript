@@ -65,7 +65,7 @@ namespace ts.SignatureHelp {
                 ? (<PropertyAccessExpression>expression).name
                 : undefined;
 
-        if (!name || !name.text) {
+        if (!name || !name.escapedText) {
             return undefined;
         }
 

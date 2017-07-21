@@ -129,7 +129,7 @@ namespace ts.JsDoc {
             if (!isIdentifier(param.name)) return undefined;
 
             const name = param.name.unescapedText;
-            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.text === name)
+            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.escapedText === name)
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
             }
@@ -213,7 +213,7 @@ namespace ts.JsDoc {
         for (let i = 0; i < parameters.length; i++) {
             const currentName = parameters[i].name;
             const paramName = currentName.kind === SyntaxKind.Identifier ?
-                (<Identifier>currentName).text :
+                (<Identifier>currentName).escapedText :
                 "param" + i;
             if (isJavaScriptFile) {
                 docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;

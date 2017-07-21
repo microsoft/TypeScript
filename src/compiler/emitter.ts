@@ -2761,7 +2761,7 @@ namespace ts {
                 return generateName(node);
             }
             else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return unescapeLeadingUnderscores(node.text);
+                return unescapeLeadingUnderscores(node.escapedText);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
@@ -2917,8 +2917,8 @@ namespace ts {
          */
         function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
             const expr = getExternalModuleName(node);
-            const baseName = expr.kind === SyntaxKind.StringLiteral ?
-                makeIdentifierFromModuleName((<LiteralExpression>expr).text) : "module";
+            const baseName = isStringLiteral(expr) ?
+                makeIdentifierFromModuleName(expr.text) : "module";
             return makeUniqueName(baseName);
         }
 
@@ -2981,7 +2981,7 @@ namespace ts {
                 case GeneratedIdentifierKind.Loop:
                     return makeTempVariableName(TempFlags._i);
                 case GeneratedIdentifierKind.Unique:
-                    return makeUniqueName(unescapeLeadingUnderscores(name.text));
+                    return makeUniqueName(unescapeLeadingUnderscores(name.escapedText));
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");
