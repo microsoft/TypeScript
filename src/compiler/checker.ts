@@ -7594,8 +7594,8 @@ namespace ts {
                 }
                 // If the object type is a mapped type { [P in K]: E }, we instantiate E using a mapper that substitutes
                 // the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the
-                // type Box<T[X]>.
-                if (isGenericMappedType(objectType)) {
+                // type Box<T[X]>. Note: this substitution is applied only if K is not and indexing operation iself.
+                if (isGenericMappedType(objectType) && ((<MappedType>objectType).constraintType.flags & TypeFlags.IndexedAccess) === 0) {
                     return getIndexedAccessForMappedType(<MappedType>objectType, indexType, accessNode);
                 }
                 // Otherwise we defer the operation by creating an indexed access type.
