@@ -6168,6 +6168,11 @@ namespace ts {
                 SavingComments,
             }
 
+            const enum PropertyLikeParse {
+                Property,
+                Parameter,
+            }
+
             export function parseJSDocCommentWorker(start: number, length: number): JSDoc {
                 const content = sourceText;
                 start = start || 0;
@@ -6347,7 +6352,7 @@ namespace ts {
                             case "arg":
                             case "argument":
                             case "param":
-                                tag = parseParameterOrPropertyTag(atToken, tagName, /*shouldParseParamTag*/ true);
+                                tag = parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter);
                                 break;
                             case "return":
                             case "returns":
@@ -6494,9 +6499,9 @@ namespace ts {
                         node.kind === SyntaxKind.ArrayType && isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
                 }
 
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, shouldParseParamTag: true): JSDocParameterTag;
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, shouldParseParamTag: false): JSDocPropertyTag;
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, shouldParseParamTag: boolean): JSDocPropertyLikeTag {
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse.Parameter): JSDocParameterTag;
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse.Property): JSDocPropertyTag;
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse): JSDocPropertyLikeTag {
                     let typeExpression = tryParseTypeExpression();
                     skipWhitespace();
 
@@ -6512,14 +6517,14 @@ namespace ts {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const result: JSDocPropertyLikeTag = shouldParseParamTag ?
+                    const result: JSDocPropertyLikeTag = target ?
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
                     if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         let child: JSDocPropertyLikeTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         const start = scanner.getStartPos();
-                        while (child = tryParse(() => parseChildParameterOrPropertyTag(/*shouldParseParamTag*/ true, fullName))) {
+                        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Parameter, fullName))) {
                             if (!jsdocTypeLiteral) {
                                 jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
                                 jsdocTypeLiteral.jsDocPropertyTags = [] as MutableNodeArray<JSDocPropertyTag>;
@@ -6616,7 +6621,7 @@ namespace ts {
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         let alreadyHasTypeTag = false;
                         const start = scanner.getStartPos();
-                        while (child = tryParse(() => parseChildParameterOrPropertyTag(/*shouldParseParamTag*/ false))) {
+                        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Property))) {
                             if (!jsdocTypeLiteral) {
                                 jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
                             }
@@ -6679,9 +6684,9 @@ namespace ts {
                     return parent.text === name.text;
                 }
 
-                function parseChildParameterOrPropertyTag(shouldParseParamTag: false): JSDocTypeTag | JSDocPropertyTag | false;
-                function parseChildParameterOrPropertyTag(shouldParseParamTag: true, fullName: EntityName): JSDocPropertyTag | JSDocParameterTag | false;
-                function parseChildParameterOrPropertyTag(shouldParseParamTag: boolean, fullName?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+                function parseChildParameterOrPropertyTag(target: PropertyLikeParse.Property): JSDocTypeTag | JSDocPropertyTag | false;
+                function parseChildParameterOrPropertyTag(target: PropertyLikeParse.Parameter, fullName: EntityName): JSDocPropertyTag | JSDocParameterTag | false;
+                function parseChildParameterOrPropertyTag(target: PropertyLikeParse, fullName?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     let resumePos = scanner.getStartPos();
                     let canParseTag = true;
                     let seenAsterisk = false;
@@ -6690,7 +6695,7 @@ namespace ts {
                         switch (token()) {
                         case SyntaxKind.AtToken:
                             if (canParseTag) {
-                                const child = tryParseChildTag(shouldParseParamTag);
+                                const child = tryParseChildTag(target);
                                 if (child && child.kind === SyntaxKind.JSDocParameterTag &&
                                     (ts.isIdentifier(child.fullName) || !textsEqual(fullName, child.fullName.left))) {
                                     break;
@@ -6720,7 +6725,7 @@ namespace ts {
                     scanner.setTextPos(resumePos);
                 }
 
-                function tryParseChildTag(shouldParseParamTag: boolean, alreadyHasTypeTag?: boolean): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+                function tryParseChildTag(target: PropertyLikeParse, alreadyHasTypeTag?: boolean): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const atToken = <AtToken>createNode(SyntaxKind.AtToken, scanner.getStartPos());
                     atToken.end = scanner.getTextPos();
@@ -6733,14 +6738,14 @@ namespace ts {
                     }
                     switch (tagName.text) {
                         case "type":
-                            return !alreadyHasTypeTag && !shouldParseParamTag && parseTypeTag(atToken, tagName);
+                            return !alreadyHasTypeTag && target === PropertyLikeParse.Property && parseTypeTag(atToken, tagName);
                         case "prop":
                         case "property":
-                            return !shouldParseParamTag && parseParameterOrPropertyTag(atToken, tagName, /*shouldParseParamTag*/ false);
+                            return target === PropertyLikeParse.Property && parseParameterOrPropertyTag(atToken, tagName, target);
                         case "arg":
                         case "argument":
                         case "param":
-                            return shouldParseParamTag && parseParameterOrPropertyTag(atToken, tagName, /*shouldParseParamTag*/ true);
+                            return target === PropertyLikeParse.Parameter && parseParameterOrPropertyTag(atToken, tagName, target);
                     }
                     return false;
                 }
