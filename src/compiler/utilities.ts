@@ -1553,6 +1553,10 @@ namespace ts {
 
     /** Does the opposite of `getJSDocParameterTags`: given a JSDoc parameter, finds the parameter corresponding to it. */
     export function getParameterFromJSDoc(node: JSDocParameterTag): ParameterDeclaration | undefined {
+        if (!isIdentifier(node.fullName)) {
+            // `@param {T} obj.prop` is not a top-level param, so it doesn't map to a top-level parameter
+            return undefined;
+        }
         const name = node.name.text;
         const grandParent = node.parent!.parent!;
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);

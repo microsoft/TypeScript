@@ -5074,20 +5074,9 @@ namespace ts {
                     return unknownType;
                 }
 
-                let declaration: JSDocTypedefTag | TypeAliasDeclaration = getDeclarationOfKind<JSDocTypedefTag>(symbol, SyntaxKind.JSDocTypedefTag);
-                let type: Type;
-                if (declaration) {
-                    if (declaration.jsDocTypeLiteral) {
-                        type = getTypeFromTypeNode(declaration.jsDocTypeLiteral);
-                    }
-                    else {
-                        type = getTypeFromTypeNode(declaration.typeExpression.type);
-                    }
-                }
-                else {
-                    declaration = getDeclarationOfKind<TypeAliasDeclaration>(symbol, SyntaxKind.TypeAliasDeclaration);
-                    type = getTypeFromTypeNode(declaration.type);
-                }
+                const declaration = getDeclarationOfKind<JSDocTypedefTag>(symbol, SyntaxKind.JSDocTypedefTag) ||
+                    getDeclarationOfKind<TypeAliasDeclaration>(symbol, SyntaxKind.TypeAliasDeclaration);
+                let type = getTypeFromTypeNode(declaration.kind === SyntaxKind.JSDocTypedefTag ? declaration.typeExpression : declaration.type);
 
                 if (popTypeResolution()) {
                     const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
@@ -7654,9 +7643,12 @@ namespace ts {
                     links.resolvedType = emptyTypeLiteralType;
                 }
                 else {
-                    const type = createObjectType(ObjectFlags.Anonymous, node.symbol);
+                    let type = createObjectType(ObjectFlags.Anonymous, node.symbol);
                     type.aliasSymbol = aliasSymbol;
                     type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                    if (isJSDocTypeLiteral(node) && node.isArrayType) {
+                        type = createArrayType(type);
+                    }
                     links.resolvedType = type;
                 }
             }
@@ -7890,7 +7882,8 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocOptionalType:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
+                case SyntaxKind.JSDocTypeExpression:
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:

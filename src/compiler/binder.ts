@@ -1504,9 +1504,9 @@ namespace ts {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JsxAttributes:
                     // Interface/Object-types always have their children added to the 'members' of
                     // their container. They are only accessible through an instance of their
@@ -2104,8 +2104,9 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.MappedType:
-                    return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode);
+                    return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral);
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
@@ -2163,13 +2164,16 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
+                case SyntaxKind.JSDocParameterTag:
+                    if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
+                        break;
+                    }
+                    // falls through
                 case SyntaxKind.JSDocPropertyTag:
-                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag,
-                        (node as JSDocPropertyTag).isBracketed || ((node as JSDocPropertyTag).typeExpression && (node as JSDocPropertyTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) ?
+                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyLikeTag,
+                        (node as JSDocPropertyLikeTag).isBracketed || ((node as JSDocPropertyLikeTag).typeExpression && (node as JSDocPropertyLikeTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) ?
                             SymbolFlags.Property | SymbolFlags.Optional : SymbolFlags.Property,
                         SymbolFlags.PropertyExcludes);
-                case SyntaxKind.JSDocTypeLiteral:
-                    return bindAnonymousTypeWorker(node as JSDocTypeLiteral);
                 case SyntaxKind.JSDocTypedefTag: {
                     const { fullName } = node as JSDocTypedefTag;
                     if (!fullName || fullName.kind === SyntaxKind.Identifier) {
