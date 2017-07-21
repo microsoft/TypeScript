@@ -23,7 +23,7 @@ namespace ts {
     }
 
     export interface Identifier {
-        readonly unescapedText: string;
+        readonly text: string;
     }
 
     export interface Symbol {
