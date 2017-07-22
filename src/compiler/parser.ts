@@ -1881,6 +1881,11 @@ namespace ts {
                     if (considerSemicolonAsDelimiter && token() === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
                         nextToken();
                     }
+                    else if (isJSDocParameterStart() && parsingContext & (1 << ParsingContext.Parameters)) {
+                        // If the token was a jsdoc parameter start and we're parsing parameter lists,
+                        // we need to consume the (mostly erroneous) parameter token
+                        nextToken();
+                    }
                     continue;
                 }
 
@@ -2202,7 +2207,11 @@ namespace ts {
             return token() === SyntaxKind.DotDotDotToken ||
                 isIdentifierOrPattern() ||
                 isModifierKind(token()) ||
-                token() === SyntaxKind.AtToken || token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword ||
+                token() === SyntaxKind.AtToken || token() === SyntaxKind.ThisKeyword || isJSDocParameterStart();
+        }
+
+        function isJSDocParameterStart(): boolean {
+            return token() === SyntaxKind.NewKeyword ||
                 token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral;
         }
 
