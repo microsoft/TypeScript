@@ -363,11 +363,11 @@ namespace ts {
     }
 
     /**
-     * @deprecated
+     * @deprecated Use `id.escapedText` to get the escaped text of an Identifier.
      * @param identifier The identifier to escape
      */
     export function escapeIdentifier(identifier: string): string {
-        return escapeLeadingUnderscores(identifier) as string;
+        return identifier;
     }
 
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
@@ -4038,12 +4038,12 @@ namespace ts {
 
     /**
      * Remove extra underscore from escaped identifier text content.
-     * @deprecated
+     * @deprecated Use `id.text` for the unescaped text.
      * @param identifier The escaped identifier text.
      * @returns The unescaped identifier text.
      */
     export function unescapeIdentifier(id: string): string {
-        return unescapeLeadingUnderscores(id as __String);
+        return id;
     }
 
     export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
