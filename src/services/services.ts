@@ -1114,9 +1114,9 @@ namespace ts {
 
             // Get a fresh cache of the host information
             let hostCache = new HostCache(host, getCanonicalFileName);
-
+            const rootFileNames = hostCache.getRootFileNames();
             // If the program is already up-to-date, we can reuse it
-            if (programUpToDate()) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (path) => hostCache.getVersion(path))) {
                 return;
             }
 
@@ -1126,18 +1126,7 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const oldSettings = program && program.getCompilerOptions();
             const newSettings = hostCache.compilationSettings();
-            const shouldCreateNewSourceFiles = oldSettings &&
-                (oldSettings.target !== newSettings.target ||
-                 oldSettings.module !== newSettings.module ||
-                 oldSettings.moduleResolution !== newSettings.moduleResolution ||
-                 oldSettings.noResolve !== newSettings.noResolve ||
-                 oldSettings.jsx !== newSettings.jsx ||
-                 oldSettings.allowJs !== newSettings.allowJs ||
-                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
-                 oldSettings.baseUrl !== newSettings.baseUrl ||
-                 !equalOwnProperties(oldSettings.paths, newSettings.paths));
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -1172,7 +1161,8 @@ namespace ts {
                 },
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
-                }
+                },
+                onReleaseOldSourceFile
             };
             if (host.trace) {
                 compilerHost.trace = message => host.trace(message);
@@ -1188,36 +1178,29 @@ namespace ts {
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
-
-            // Release any files we have acquired in the old program but are
-            // not part of the new program.
-            if (program) {
-                const oldSourceFiles = program.getSourceFiles();
-                const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldSettings);
-                for (const oldSourceFile of oldSourceFiles) {
-                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || shouldCreateNewSourceFiles) {
-                        documentRegistry.releaseDocumentWithKey(oldSourceFile.path, oldSettingsKey);
-                    }
-                }
-            }
+            program = createProgram(rootFileNames, newSettings, compilerHost, program);
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
-
-            program = newProgram;
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
             program.getTypeChecker();
             return;
 
-            function getOrCreateSourceFile(fileName: string): SourceFile {
-                return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName));
+            // Release any files we have acquired in the old program but are
+            // not part of the new program.
+            function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
+                const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.path, oldSettingsKey);
             }
 
-            function getOrCreateSourceFileByPath(fileName: string, path: Path): SourceFile {
+            function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
+                return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersion, onError, shouldCreateNewSourceFile);
+            }
+
+            function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
                 Debug.assert(hostCache !== undefined);
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
@@ -1230,7 +1213,7 @@ namespace ts {
                 // Check if the language version has changed since we last created a program; if they are the same,
                 // it is safe to reuse the sourceFiles; if not, then the shape of the AST can change, and the oldSourceFile
                 // can not be reused. we have to dump all syntax trees and create new ones.
-                if (!shouldCreateNewSourceFiles) {
+                if (!shouldCreateNewSourceFile) {
                     // Check if the old program had this file already
                     const oldSourceFile = program && program.getSourceFileByPath(path);
                     if (oldSourceFile) {
@@ -1269,49 +1252,6 @@ namespace ts {
 
                 // Could not find this file in the old program, create a new SourceFile for it.
                 return documentRegistry.acquireDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
-            }
-
-            function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-                if (!sourceFile) {
-                    return false;
-                }
-                const path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
-                return sourceFile.version === hostCache.getVersion(path);
-            }
-
-            function programUpToDate(): boolean {
-                // If we haven't create a program yet, then it is not up-to-date
-                if (!program) {
-                    return false;
-                }
-
-                // If number of files in the program do not match, it is not up-to-date
-                const rootFileNames = hostCache.getRootFileNames();
-                if (program.getSourceFiles().length !== rootFileNames.length) {
-                    return false;
-                }
-
-                // If any file is not up-to-date, then the whole program is not up-to-date
-                for (const fileName of rootFileNames) {
-                    if (!sourceFileUpToDate(program.getSourceFile(fileName))) {
-                        return false;
-                    }
-                }
-
-                const currentOptions = program.getCompilerOptions();
-                const newOptions = hostCache.compilationSettings();
-                // If the compilation settings do no match, then the program is not up-to-date
-                if (!compareDataObjects(currentOptions, newOptions)) {
-                    return false;
-                }
-
-                // If everything matches but the text of config file is changed,
-                // error locations can change for program options, so update the program
-                if (currentOptions.configFile && newOptions.configFile) {
-                    return currentOptions.configFile.text === newOptions.configFile.text;
-                }
-
-                return true;
             }
         }
 

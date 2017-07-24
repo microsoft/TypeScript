@@ -8,13 +8,12 @@ namespace ts.server {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
 
+        private readonly cachedHost: CachedHost;
+
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
 
-        private cachedReadDirectoryResult = createMap<FileSystemEntries>();
-        private readonly currentDirectory: string;
-
-        constructor(private readonly host: ServerHost, private getCanonicalFileName: (fileName: string) => string) {
+        constructor(private readonly host: ServerHost) {
             this.args = host.args;
             this.newLine = host.newLine;
             this.useCaseSensitiveFileNames = host.useCaseSensitiveFileNames;
@@ -24,41 +23,7 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpath = path => this.host.realpath(path);
             }
-            this.currentDirectory = this.host.getCurrentDirectory();
-        }
-
-        private toPath(fileName: string) {
-            return toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
-        }
-
-        private getFileSystemEntries(rootDir: string) {
-            const path = this.toPath(rootDir);
-            const cachedResult = this.cachedReadDirectoryResult.get(path);
-            if (cachedResult) {
-                return cachedResult;
-            }
-
-            const resultFromHost: FileSystemEntries = {
-                files: this.host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]) || [],
-                directories: this.host.getDirectories(rootDir) || []
-            };
-
-            this.cachedReadDirectoryResult.set(path, resultFromHost);
-            return resultFromHost;
-        }
-
-        private canWorkWithCacheForDir(rootDir: string) {
-            // Some of the hosts might not be able to handle read directory or getDirectories
-            const path = this.toPath(rootDir);
-            if (this.cachedReadDirectoryResult.get(path)) {
-                return true;
-            }
-            try {
-                return this.getFileSystemEntries(rootDir);
-            }
-            catch (_e) {
-                return false;
-            }
+            this.cachedHost = createCachedHost(host);
         }
 
         write(s: string) {
@@ -66,13 +31,7 @@ namespace ts.server {
         }
 
         writeFile(fileName: string, data: string, writeByteOrderMark?: boolean) {
-            const path = this.toPath(fileName);
-            const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
-            const baseFileName = getBaseFileName(toNormalizedPath(fileName));
-            if (result) {
-                result.files = this.updateFileSystemEntry(result.files, baseFileName, /*isValid*/ true);
-            }
-            return this.host.writeFile(fileName, data, writeByteOrderMark);
+            this.cachedHost.writeFile(fileName, data, writeByteOrderMark);
         }
 
         resolvePath(path: string) {
@@ -88,7 +47,7 @@ namespace ts.server {
         }
 
         getCurrentDirectory() {
-            return this.currentDirectory;
+            return this.cachedHost.getCurrentDirectory();
         }
 
         exit(exitCode?: number) {
@@ -101,78 +60,32 @@ namespace ts.server {
         }
 
         getDirectories(rootDir: string) {
-            if (this.canWorkWithCacheForDir(rootDir)) {
-                return this.getFileSystemEntries(rootDir).directories.slice();
-            }
-            return this.host.getDirectories(rootDir);
+            return this.cachedHost.getDirectories(rootDir);
         }
 
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-            if (this.canWorkWithCacheForDir(rootDir)) {
-                return matchFiles(rootDir, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, path => this.getFileSystemEntries(path));
-            }
-            return this.host.readDirectory(rootDir, extensions, excludes, includes, depth);
+            return this.cachedHost.readDirectory(rootDir, extensions, excludes, includes, depth);
         }
 
         fileExists(fileName: string): boolean {
-            const path = this.toPath(fileName);
-            const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
-            const baseName = getBaseFileName(toNormalizedPath(fileName));
-            return (result && this.hasEntry(result.files, baseName)) || this.host.fileExists(fileName);
+            return this.cachedHost.fileExists(fileName);
         }
 
         directoryExists(dirPath: string) {
-            const path = this.toPath(dirPath);
-            return this.cachedReadDirectoryResult.has(path) || this.host.directoryExists(dirPath);
+            return this.cachedHost.directoryExists(dirPath);
         }
 
         readFile(path: string, encoding?: string): string {
             return this.host.readFile(path, encoding);
         }
 
-        private fileNameEqual(name1: string, name2: string) {
-            return this.getCanonicalFileName(name1) === this.getCanonicalFileName(name2);
-        }
-
-        private hasEntry(entries: ReadonlyArray<string>, name: string) {
-            return some(entries, file => this.fileNameEqual(file, name));
-        }
-
-        private updateFileSystemEntry(entries: ReadonlyArray<string>, baseName: string, isValid: boolean) {
-            if (this.hasEntry(entries, baseName)) {
-                if (!isValid) {
-                    return filter(entries, entry => !this.fileNameEqual(entry, baseName));
-                }
-            }
-            else if (isValid) {
-                return entries.concat(baseName);
-            }
-            return entries;
-        }
 
         addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath) {
-            const path = this.toPath(fileOrFolder);
-            const existingResult = this.cachedReadDirectoryResult.get(path);
-            if (existingResult) {
-                if (!this.host.directoryExists(fileOrFolder)) {
-                    this.cachedReadDirectoryResult.delete(path);
-                }
-            }
-            else {
-                // Was this earlier file
-                const parentResult = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
-                if (parentResult) {
-                    const baseName = getBaseFileName(fileOrFolder);
-                    if (parentResult) {
-                        parentResult.files = this.updateFileSystemEntry(parentResult.files, baseName, this.host.fileExists(path));
-                        parentResult.directories = this.updateFileSystemEntry(parentResult.directories, baseName, this.host.directoryExists(path));
-                    }
-                }
-            }
+            return this.cachedHost.addOrDeleteFileOrFolder(fileOrFolder);
         }
 
         clearCache() {
-            this.cachedReadDirectoryResult = createMap<FileSystemEntries>();
+            return this.cachedHost.clearCache();
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]) {

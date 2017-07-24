@@ -3611,6 +3611,99 @@ namespace ts {
     export function getCombinedLocalAndExportSymbolFlags(symbol: Symbol): SymbolFlags {
         return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
     }
+
+    export function compareDataObjects(dst: any, src: any): boolean {
+        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
+            return false;
+        }
+
+        for (const e in dst) {
+            if (typeof dst[e] === "object") {
+                if (!compareDataObjects(dst[e], src[e])) {
+                    return false;
+                }
+            }
+            else if (typeof dst[e] !== "function") {
+                if (dst[e] !== src[e]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    export function cleanExistingMap<T>(
+        existingMap: Map<T>,
+        onDeleteExistingValue: (key: string, existingValue: T) => void) {
+        if (existingMap) {
+            // Remove all
+            existingMap.forEach((existingValue, key) => {
+                existingMap.delete(key);
+                onDeleteExistingValue(key, existingValue);
+            });
+        }
+    }
+
+    export function mutateExistingMapWithNewSet<T>(
+        existingMap: Map<T>, newMap: Map<true>,
+        createNewValue: (key: string) => T,
+        onDeleteExistingValue: (key: string, existingValue: T) => void
+    ): Map<T> {
+        return mutateExistingMap(
+            existingMap, newMap,
+            /*createNewValue*/(key, _valueInNewMap) => createNewValue(key),
+            onDeleteExistingValue,
+        );
+    }
+
+    export function mutateExistingMap<T, U>(
+        existingMap: Map<T>, newMap: Map<U>,
+        createNewValue: (key: string, valueInNewMap: U) => T,
+        onDeleteExistingValue: (key: string, existingValue: T) => void,
+        isSameValue?: (existingValue: T, valueInNewMap: U) => boolean,
+        OnDeleteExistingMismatchValue?: (key: string, existingValue: T) => void,
+        onSameExistingValue?: (existingValue: T, valueInNewMap: U) => void
+    ): Map<T> {
+        // If there are new values update them
+        if (newMap) {
+            if (existingMap) {
+                // Needs update
+                existingMap.forEach((existingValue, key) => {
+                    const valueInNewMap = newMap.get(key);
+                    // Existing value - remove it
+                    if (valueInNewMap === undefined) {
+                        existingMap.delete(key);
+                        onDeleteExistingValue(key, existingValue);
+                    }
+                    // different value - remove it
+                    else if (isSameValue && !isSameValue(existingValue, valueInNewMap)) {
+                        existingMap.delete(key);
+                        OnDeleteExistingMismatchValue(key, existingValue);
+                    }
+                    else if (onSameExistingValue) {
+                        onSameExistingValue(existingValue, valueInNewMap);
+                    }
+                });
+            }
+            else {
+                // Create new
+                existingMap = createMap<T>();
+            }
+
+            // Add new values that are not already present
+            newMap.forEach((valueInNewMap, key) => {
+                if (!existingMap.has(key)) {
+                    // New values
+                    existingMap.set(key, createNewValue(key, valueInNewMap));
+                }
+            });
+
+            return existingMap;
+        }
+
+        cleanExistingMap(existingMap, onDeleteExistingValue);
+        return undefined;
+    }
 }
 
 namespace ts {

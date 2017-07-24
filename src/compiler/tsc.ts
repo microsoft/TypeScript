@@ -98,22 +98,9 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         const commandLine = parseCommandLine(args);
-        let configFileName: string;                                 // Configuration file name (if any)
-        let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
-        let configFileWatcher: FileWatcher;                         // Configuration file watcher
-        let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
-        let cachedProgram: Program;                                 // Program cached from last compilation
-        let rootFileNames: string[];                                // Root fileNames for compilation
-        let compilerOptions: CompilerOptions;                       // Compiler options for compilation
-        let compilerHost: CompilerHost;                             // Compiler host
-        let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
-        let timerHandleForRecompilation: any;                    // Handle for 0.25s wait timer to trigger recompilation
-        let timerHandleForDirectoryChanges: any;                 // Handle for 0.25s wait timer to trigger directory change handler
 
-        // This map stores and reuses results of fileExists check that happen inside 'createProgram'
-        // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: Map<boolean>;
-        let hostFileExists: typeof compilerHost.fileExists;
+        // Configuration file name (if any)
+        let configFileName: string;
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
@@ -126,7 +113,7 @@ namespace ts {
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            reportDiagnostics(commandLine.errors, compilerHost);
+            reportDiagnostics(commandLine.errors, /*host*/ undefined);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
@@ -183,232 +170,570 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        if (isWatchSet(commandLine.options)) {
-            if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
-            if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
-            }
-            if (sys.watchDirectory && configFileName) {
-                const directory = ts.getDirectoryPath(configFileName);
-                directoryWatcher = sys.watchDirectory(
-                    // When the configFileName is just "tsconfig.json", the watched directory should be
-                    // the current directory; if there is a given "project" parameter, then the configFileName
-                    // is an absolute file name.
-                    directory === "" ? "." : directory,
-                    watchedDirectoryChanged, /*recursive*/ true);
-            }
-        }
-
-        performCompilation();
-
-        function parseConfigFile(): ParsedCommandLine {
-            if (!cachedConfigFileText) {
-                try {
-                    cachedConfigFileText = sys.readFile(configFileName);
-                }
-                catch (e) {
-                    const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
-                    reportWatchDiagnostic(error);
-                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    return;
-                }
-            }
-            if (!cachedConfigFileText) {
-                const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
-                reportDiagnostics([error], /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
-
-            const result = parseJsonText(configFileName, cachedConfigFileText);
-            reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
-
-            const cwd = sys.getCurrentDirectory();
-            const configParseResult = parseJsonSourceFileConfigFileContent(result, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
-            reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
-
+        if (configFileName) {
+            const configParseResult = parseConfigFile(configFileName, commandLine, sys);
+            const { fileNames, options } = configParseResult;
             if (isWatchSet(configParseResult.options)) {
-                if (!sys.watchFile) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
-                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                }
-
-                if (!directoryWatcher && sys.watchDirectory && configFileName) {
-                    const directory = ts.getDirectoryPath(configFileName);
-                    directoryWatcher = sys.watchDirectory(
-                        // When the configFileName is just "tsconfig.json", the watched directory should be
-                        // the current directory; if there is a given "project" parameter, then the configFileName
-                        // is an absolute file name.
-                        directory === "" ? "." : directory,
-                        watchedDirectoryChanged, /*recursive*/ true);
-                }
+                reportWatchModeWithoutSysSupport();
+                createWatchMode(commandLine, configFileName, fileNames, options, configParseResult.configFileSpecs, configParseResult.wildcardDirectories);
             }
-            return configParseResult;
+            else {
+                performCompilation(fileNames, options);
+            }
+        }
+        else if (isWatchSet(commandLine.options)) {
+            reportWatchModeWithoutSysSupport();
+            createWatchMode(commandLine);
+        }
+        else {
+            performCompilation(commandLine.fileNames, commandLine.options);
         }
 
-        // Invoked to perform initial compilation or re-compilation in watch mode
-        function performCompilation() {
-
-            if (!cachedProgram) {
-                if (configFileName) {
-                    const configParseResult = parseConfigFile();
-                    rootFileNames = configParseResult.fileNames;
-                    compilerOptions = configParseResult.options;
-                }
-                else {
-                    rootFileNames = commandLine.fileNames;
-                    compilerOptions = commandLine.options;
-                }
-                compilerHost = createCompilerHost(compilerOptions);
-                hostGetSourceFile = compilerHost.getSourceFile;
-                compilerHost.getSourceFile = getSourceFile;
-
-                hostFileExists = compilerHost.fileExists;
-                compilerHost.fileExists = cachedFileExists;
+        function reportWatchModeWithoutSysSupport() {
+            if (!sys.watchFile || !sys.watchDirectory) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
+        }
 
+        function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions) {
             if (compilerOptions.pretty) {
                 reportDiagnosticWorker = reportDiagnosticWithColorAndContext;
             }
 
-            // reset the cache of existing files
-            cachedExistingFiles = createMap<boolean>();
-
+            const compilerHost = createCompilerHost(compilerOptions);
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
+            return sys.exit(compileResult.exitStatus);
+        }
+    }
 
-            if (!isWatchSet(compilerOptions)) {
-                return sys.exit(compileResult.exitStatus);
+    interface HostFileInfo {
+        version: number;
+        sourceFile: SourceFile;
+        fileWatcher: FileWatcher;
+    }
+
+    function createWatchMode(commandLine: ParsedCommandLine, configFileName?: string, configFileRootFiles?: string[], configFileOptions?: CompilerOptions, configFileSpecs?: ConfigFileSpecs, configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>) {
+        let program: Program;
+        let needsReload: boolean;
+        let missingFilesMap: Map<FileWatcher>;
+        let configFileWatcher: FileWatcher;
+        let watchedWildCardDirectories: Map<WildCardDirectoryWatchers>;
+        let timerToUpdateProgram: any;
+
+        let compilerOptions: CompilerOptions;
+        let rootFileNames: string[];
+
+        const sourceFilesCache = createMap<HostFileInfo | string>();
+
+        let host: System;
+        if (configFileName) {
+            rootFileNames = configFileRootFiles;
+            compilerOptions = configFileOptions;
+            host = createCachedSystem(sys);
+            configFileWatcher = sys.watchFile(configFileName, onConfigFileChanged);
+        }
+        else {
+            rootFileNames = commandLine.fileNames;
+            compilerOptions = commandLine.options;
+            host = sys;
+        }
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+
+        if (compilerOptions.pretty) {
+            reportDiagnosticWorker = reportDiagnosticWithColorAndContext;
+        }
+
+        synchronizeProgram();
+
+        // Update the wild card directory watch
+        watchConfigFileWildCardDirectories();
+
+        function synchronizeProgram() {
+            writeLog(`Synchronizing program`);
+
+            if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion)) {
+                return;
             }
 
-            setCachedProgram(compileResult.program);
+            // Create the compiler host
+            const compilerHost = createWatchedCompilerHost(compilerOptions);
+            program = compile(rootFileNames, compilerOptions, compilerHost, program).program;
+
+            // Update watches
+            missingFilesMap = updateMissingFilePathsWatch(program, missingFilesMap, watchMissingFilePath, closeMissingFilePathWatcher);
+
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
-
-            const missingPaths = compileResult.program.getMissingFilePaths();
-            missingPaths.forEach(path => {
-                const fileWatcher = sys.watchFile(path, (_fileName, eventKind) => {
-                    if (eventKind === FileWatcherEventKind.Created) {
-                        fileWatcher.close();
-                        startTimerForRecompilation();
-                    }
-                });
-            });
         }
 
-        function cachedFileExists(fileName: string): boolean {
-            let fileExists = cachedExistingFiles.get(fileName);
-            if (fileExists === undefined) {
-                cachedExistingFiles.set(fileName, fileExists = hostFileExists(fileName));
+        function createWatchedCompilerHost(options: CompilerOptions): CompilerHost {
+            const existingDirectories = createMap<boolean>();
+            function directoryExists(directoryPath: string): boolean {
+                if (existingDirectories.has(directoryPath)) {
+                    return true;
+                }
+                if (host.directoryExists(directoryPath)) {
+                    existingDirectories.set(directoryPath, true);
+                    return true;
+                }
+                return false;
             }
-            return fileExists;
-        }
 
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
-            // Return existing SourceFile object if one is available
-            if (cachedProgram) {
-                const sourceFile = cachedProgram.getSourceFile(fileName);
-                // A modified source file has no watcher and should not be reused
-                if (sourceFile && sourceFile.fileWatcher) {
-                    return sourceFile;
+            function ensureDirectoriesExist(directoryPath: string) {
+                if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+                    const parentDirectory = getDirectoryPath(directoryPath);
+                    ensureDirectoriesExist(parentDirectory);
+                    host.createDirectory(directoryPath);
                 }
             }
-            // Use default host function
-            const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
-            if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
-                // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName, eventKind) => sourceFileChanged(sourceFile, eventKind));
-            }
-            return sourceFile;
-        }
 
-        // Change cached program to the given program
-        function setCachedProgram(program: Program) {
-            if (cachedProgram) {
-                const newSourceFiles = program ? program.getSourceFiles() : undefined;
-                forEach(cachedProgram.getSourceFiles(), sourceFile => {
-                    if (!(newSourceFiles && contains(newSourceFiles, sourceFile))) {
-                        if (sourceFile.fileWatcher) {
-                            sourceFile.fileWatcher.close();
-                            sourceFile.fileWatcher = undefined;
-                        }
+            type OutputFingerprint = {
+                hash: string;
+                byteOrderMark: boolean;
+                mtime: Date;
+            };
+            let outputFingerprints: Map<OutputFingerprint>;
+
+            function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
+                if (!outputFingerprints) {
+                    outputFingerprints = createMap<OutputFingerprint>();
+                }
+
+                const hash = host.createHash(data);
+                const mtimeBefore = host.getModifiedTime(fileName);
+
+                if (mtimeBefore) {
+                    const fingerprint = outputFingerprints.get(fileName);
+                    // If output has not been changed, and the file has no external modification
+                    if (fingerprint &&
+                        fingerprint.byteOrderMark === writeByteOrderMark &&
+                        fingerprint.hash === hash &&
+                        fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                        return;
                     }
+                }
+
+                host.writeFile(fileName, data, writeByteOrderMark);
+
+                const mtimeAfter = host.getModifiedTime(fileName);
+
+                outputFingerprints.set(fileName, {
+                    hash,
+                    byteOrderMark: writeByteOrderMark,
+                    mtime: mtimeAfter
                 });
             }
-            cachedProgram = program;
-        }
 
-        // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile, eventKind: FileWatcherEventKind) {
-            sourceFile.fileWatcher.close();
-            sourceFile.fileWatcher = undefined;
-            if (eventKind === FileWatcherEventKind.Deleted) {
-                unorderedRemoveItem(rootFileNames, sourceFile.fileName);
-            }
-            startTimerForRecompilation();
-        }
+            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
+                try {
+                    performance.mark("beforeIOWrite");
+                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-        // If the configuration file changes, forget cached program and start the recompilation timer
-        function configFileChanged() {
-            setCachedProgram(undefined);
-            cachedConfigFileText = undefined;
-            startTimerForRecompilation();
-        }
+                    //if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
+                        writeFileIfUpdated(fileName, data, writeByteOrderMark);
+                    //}
+                    //else {
+                        //host.writeFile(fileName, data, writeByteOrderMark);
+                    //}
 
-        function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
-                return;
+                    performance.mark("afterIOWrite");
+                    performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+                }
+                catch (e) {
+                    if (onError) {
+                        onError(e.message);
+                    }
+                }
             }
 
-            startTimerForHandlingDirectoryChanges();
+            const newLine = getNewLineCharacter(options);
+            const realpath = host.realpath && ((path: string) => host.realpath(path));
+
+            return {
+                getSourceFile: getVersionedSourceFile,
+                getSourceFileByPath: getVersionedSourceFileByPath,
+                getDefaultLibLocation,
+                getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
+                writeFile,
+                getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
+                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames,
+                getCanonicalFileName,
+                getNewLine: () => newLine,
+                fileExists,
+                readFile: fileName => host.readFile(fileName),
+                trace: (s: string) => host.write(s + newLine),
+                directoryExists: directoryName => host.directoryExists(directoryName),
+                getEnvironmentVariable: name => host.getEnvironmentVariable ? host.getEnvironmentVariable(name) : "",
+                getDirectories: (path: string) => host.getDirectories(path),
+                realpath,
+                onReleaseOldSourceFile
+            };
+
+            // TODO: cache module resolution
+            //if (host.resolveModuleNames) {
+            //    compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
+            //}
+            //if (host.resolveTypeReferenceDirectives) {
+            //    compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
+            //        return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
+            //    };
+            //}
         }
 
-        function startTimerForHandlingDirectoryChanges() {
-            if (!sys.setTimeout || !sys.clearTimeout) {
-                return;
+        function fileExists(fileName: string) {
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const hostSourceFileInfo = sourceFilesCache.get(path);
+            if (hostSourceFileInfo !== undefined) {
+                return !isString(hostSourceFileInfo);
             }
 
-            if (timerHandleForDirectoryChanges) {
-                sys.clearTimeout(timerHandleForDirectoryChanges);
-            }
-            timerHandleForDirectoryChanges = sys.setTimeout(directoryChangeHandler, 250);
+            return host.fileExists(fileName);
         }
 
-        function directoryChangeHandler() {
-            const parsedCommandLine = parseConfigFile();
-            const newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
-            const canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
+        function getDefaultLibLocation(): string {
+            return getDirectoryPath(normalizePath(host.getExecutingFilePath()));
+        }
 
-            // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
-            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort())) {
-                setCachedProgram(undefined);
-                startTimerForRecompilation();
+        function getVersionedSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
+            return getVersionedSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersion, onError, shouldCreateNewSourceFile);
+        }
+
+        function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
+            const hostSourceFile = sourceFilesCache.get(path);
+            // No source file on the host
+            if (isString(hostSourceFile)) {
+                return undefined;
+            }
+
+            // Create new source file if requested or the versions dont match
+            if (!hostSourceFile) {
+                const sourceFile = getSourceFile(fileName, languageVersion, onError);
+                if (sourceFile) {
+                    sourceFile.version = "0";
+                    const fileWatcher = watchSourceFileForChanges(sourceFile.path);
+                    sourceFilesCache.set(path, { sourceFile, version: 0, fileWatcher });
+                }
+                else {
+                    sourceFilesCache.set(path, "0");
+                }
+                return sourceFile;
+            }
+            else if (shouldCreateNewSourceFile || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
+                if (shouldCreateNewSourceFile) {
+                    hostSourceFile.version++;
+                }
+                const newSourceFile = getSourceFile(fileName, languageVersion, onError);
+                if (newSourceFile) {
+                    newSourceFile.version = hostSourceFile.version.toString();
+                    hostSourceFile.sourceFile = newSourceFile;
+                }
+                else {
+                    // File doesnt exist any more
+                    hostSourceFile.fileWatcher.close();
+                    sourceFilesCache.set(path, hostSourceFile.version.toString());
+                }
+
+                return newSourceFile;
+            }
+
+            return hostSourceFile.sourceFile;
+
+            function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
+                let text: string;
+                try {
+                    performance.mark("beforeIORead");
+                    text = host.readFile(fileName, compilerOptions.charset);
+                    performance.mark("afterIORead");
+                    performance.measure("I/O Read", "beforeIORead", "afterIORead");
+                }
+                catch (e) {
+                    if (onError) {
+                        onError(e.message);
+                    }
+                    text = "";
+                }
+
+                return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
+            }
+        }
+
+        function removeSourceFile(path: Path) {
+            const hostSourceFile = sourceFilesCache.get(path);
+            if (hostSourceFile !== undefined) {
+                if (!isString(hostSourceFile)) {
+                    hostSourceFile.fileWatcher.close();
+                }
+                sourceFilesCache.delete(path);
+            }
+        }
+
+        function getSourceVersion(path: Path): string {
+            const hostSourceFile = sourceFilesCache.get(path);
+            return !hostSourceFile || isString(hostSourceFile) ? undefined : hostSourceFile.version.toString();
+        }
+
+        function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions) {
+            const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.path);
+            // If this is the source file thats in the cache and new program doesnt need it,
+            // remove the cached entry.
+            // Note we arent deleting entry if file became missing in new program or
+            // there was version update and new source file was created.
+            if (hostSourceFileInfo && !isString(hostSourceFileInfo) && hostSourceFileInfo.sourceFile === oldSourceFile) {
+                sourceFilesCache.delete(oldSourceFile.path);
             }
         }
 
         // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
         // operations (such as saving all modified files in an editor) a chance to complete before we kick
         // off a new compilation.
-        function startTimerForRecompilation() {
+        function scheduleProgramUpdate() {
             if (!sys.setTimeout || !sys.clearTimeout) {
                 return;
             }
 
-            if (timerHandleForRecompilation) {
-                sys.clearTimeout(timerHandleForRecompilation);
+            if (timerToUpdateProgram) {
+                sys.clearTimeout(timerToUpdateProgram);
             }
-            timerHandleForRecompilation = sys.setTimeout(recompile, 250);
+            timerToUpdateProgram = sys.setTimeout(updateProgram, 250);
         }
 
-        function recompile() {
-            timerHandleForRecompilation = undefined;
+        function scheduleProgramReload() {
+            Debug.assert(!!configFileName);
+            needsReload = true;
+            scheduleProgramUpdate();
+        }
+
+        function updateProgram() {
+            timerToUpdateProgram = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
-            performCompilation();
+
+            if (needsReload) {
+                reloadConfigFile();
+            }
+            else {
+                synchronizeProgram();
+            }
+        }
+
+        function reloadConfigFile() {
+            writeLog(`Reloading config file: ${configFileName}`);
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+
+            needsReload = false;
+
+            const cachedHost = host as CachedSystem;
+            cachedHost.clearCache();
+            const configParseResult = parseConfigFile(configFileName, commandLine, cachedHost);
+            rootFileNames = configParseResult.fileNames;
+            compilerOptions = configParseResult.options;
+            configFileSpecs = configParseResult.configFileSpecs;
+            configFileWildCardDirectories = configParseResult.wildcardDirectories;
+
+            synchronizeProgram();
+
+            // Update the wild card directory watch
+            watchConfigFileWildCardDirectories();
+        }
+
+        function watchSourceFileForChanges(path: Path) {
+            return host.watchFile(path, (fileName, eventKind) => onSourceFileChange(fileName, path, eventKind));
+        }
+
+        function onSourceFileChange(fileName: string, path: Path, eventKind: FileWatcherEventKind) {
+            writeLog(`Source file path : ${path} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName}`);
+            const hostSourceFile = sourceFilesCache.get(path);
+            if (hostSourceFile) {
+                // Update the cache
+                if (eventKind === FileWatcherEventKind.Deleted) {
+                    if (!isString(hostSourceFile)) {
+                        hostSourceFile.fileWatcher.close();
+                        sourceFilesCache.set(path, (hostSourceFile.version++).toString());
+                    }
+                }
+                else {
+                    // Deleted file created
+                    if (isString(hostSourceFile)) {
+                        sourceFilesCache.delete(path);
+                    }
+                    else {
+                        // file changed - just update the version
+                        hostSourceFile.version++;
+                    }
+                }
+            }
+            // Update the program
+            scheduleProgramUpdate();
+        }
+
+        function watchMissingFilePath(missingFilePath: Path) {
+            return host.watchFile(missingFilePath, (fileName, eventKind) => onMissingFileChange(fileName, missingFilePath, eventKind));
+        }
+
+        function closeMissingFilePathWatcher(_missingFilePath: Path, fileWatcher: FileWatcher) {
+            fileWatcher.close();
+        }
+
+        function onMissingFileChange(filename: string, missingFilePath: Path, eventKind: FileWatcherEventKind) {
+            writeLog(`Missing file path : ${missingFilePath} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${filename}`);
+            if (eventKind === FileWatcherEventKind.Created && missingFilesMap.has(missingFilePath)) {
+                closeMissingFilePathWatcher(missingFilePath, missingFilesMap.get(missingFilePath));
+                missingFilesMap.delete(missingFilePath);
+
+                if (configFileName) {
+                    const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
+                    (host as CachedSystem).addOrDeleteFileOrFolder(normalizePath(absoluteNormalizedPath));
+                }
+
+                // Delete the entry in the source files cache so that new source file is created
+                removeSourceFile(missingFilePath);
+
+                // When a missing file is created, we should update the graph.
+                scheduleProgramUpdate();
+            }
+        }
+
+        function watchConfigFileWildCardDirectories() {
+            const wildcards = createMapFromTemplate(configFileWildCardDirectories);
+            watchedWildCardDirectories = updateWatchingWildcardDirectories(
+                watchedWildCardDirectories, wildcards,
+                watchWildCardDirectory, stopWatchingWildCardDirectory
+            );
+        }
+
+        function watchWildCardDirectory(directory: string, recursive: boolean) {
+            return host.watchDirectory(directory, fileName =>
+                onFileAddOrRemoveInWatchedDirectory(getNormalizedAbsolutePath(fileName, directory)),
+                recursive);
+        }
+
+        function stopWatchingWildCardDirectory(_directory: string, fileWatcher: FileWatcher, _recursive: boolean, _recursiveChanged: boolean) {
+            fileWatcher.close();
+        }
+
+        function onFileAddOrRemoveInWatchedDirectory(fileName: string) {
+            Debug.assert(!!configFileName);
+            (host as CachedSystem).addOrDeleteFileOrFolder(fileName);
+
+            // Since the file existance changed, update the sourceFiles cache
+            removeSourceFile(toPath(fileName, currentDirectory, getCanonicalFileName));
+
+            // If a change was made inside "folder/file", node will trigger the callback twice:
+            // one with the fileName being "folder/file", and the other one with "folder".
+            // We don't respond to the second one.
+            if (fileName && !isSupportedSourceFileName(fileName, compilerOptions)) {
+                writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileName}`);
+                return;
+            }
+
+            writeLog(`Project: ${configFileName} Detected file add/remove of supported extension: ${fileName}`);
+
+            // Reload is pending, do the reload
+            if (!needsReload) {
+                const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, host, /*extraFileExtensions*/ []);
+                if (!configFileSpecs.filesSpecs) {
+                    reportDiagnostics([getErrorForNoInputFiles(configFileSpecs, configFileName)], /*host*/ undefined);
+                }
+                rootFileNames = result.fileNames;
+
+                // Schedule Update the program
+                scheduleProgramUpdate();
+            }
+        }
+
+        function onConfigFileChanged(fileName: string, eventKind: FileWatcherEventKind) {
+            writeLog(`Config file : ${configFileName} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName}`);
+            scheduleProgramReload();
+        }
+
+        function writeLog(s: string) {
+            const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
+            if (hasDiagnostics) {
+                host.write(s);
+            }
         }
     }
 
-    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
+    interface CachedSystem extends System {
+        addOrDeleteFileOrFolder(fileOrFolder: string): void;
+        clearCache(): void;
+    }
+
+    function createCachedSystem(host: System): CachedSystem {
+        const getFileSize = host.getFileSize ? (path: string) => host.getFileSize(path) : undefined;
+        const watchFile = host.watchFile ? (path: string, callback: FileWatcherCallback, pollingInterval?: number) => host.watchFile(path, callback, pollingInterval) : undefined;
+        const watchDirectory = host.watchDirectory ? (path: string, callback: DirectoryWatcherCallback, recursive?: boolean) => host.watchDirectory(path, callback, recursive) : undefined;
+        const getModifiedTime = host.getModifiedTime ? (path: string) => host.getModifiedTime(path) : undefined;
+        const createHash = host.createHash ? (data: string) => host.createHash(data) : undefined;
+        const getMemoryUsage = host.getMemoryUsage ? () => host.getMemoryUsage() : undefined;
+        const realpath = host.realpath ? (path: string) => host.realpath(path) : undefined;
+        const tryEnableSourceMapsForHost = host.tryEnableSourceMapsForHost ? () => host.tryEnableSourceMapsForHost() : undefined;
+        const setTimeout = host.setTimeout ? (callback: (...args: any[]) => void, ms: number, ...args: any[]) => host.setTimeout(callback, ms, ...args) : undefined;
+        const clearTimeout = host.clearTimeout ? (timeoutId: any) => host.clearTimeout(timeoutId) : undefined;
+
+        const cachedHost = createCachedHost(host);
+        return {
+            args: host.args,
+            newLine: host.newLine,
+            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
+            write: s => host.write(s),
+            readFile: (path, encoding?) => host.readFile(path, encoding),
+            getFileSize,
+            writeFile: (fileName, data, writeByteOrderMark?) => cachedHost.writeFile(fileName, data, writeByteOrderMark),
+            watchFile,
+            watchDirectory,
+            resolvePath: path => host.resolvePath(path),
+            fileExists: fileName => cachedHost.fileExists(fileName),
+            directoryExists: dir => cachedHost.directoryExists(dir),
+            createDirectory: dir => cachedHost.createDirectory(dir),
+            getExecutingFilePath: () => host.getExecutingFilePath(),
+            getCurrentDirectory: () => cachedHost.getCurrentDirectory(),
+            getDirectories: dir => cachedHost.getDirectories(dir),
+            readDirectory: (path, extensions, excludes, includes, depth) => cachedHost.readDirectory(path, extensions, excludes, includes, depth),
+            getModifiedTime,
+            createHash,
+            getMemoryUsage,
+            exit: exitCode => host.exit(exitCode),
+            realpath,
+            getEnvironmentVariable: name => host.getEnvironmentVariable(name),
+            tryEnableSourceMapsForHost,
+            debugMode: host.debugMode,
+            setTimeout,
+            clearTimeout,
+            addOrDeleteFileOrFolder: fileOrFolder => cachedHost.addOrDeleteFileOrFolder(fileOrFolder),
+            clearCache: () => cachedHost.clearCache()
+        };
+    }
+
+    function parseConfigFile(configFileName: string, commandLine: ParsedCommandLine, host: System): ParsedCommandLine {
+        let configFileText: string;
+        try {
+            configFileText = host.readFile(configFileName);
+        }
+        catch (e) {
+            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
+            reportWatchDiagnostic(error);
+            host.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            return;
+        }
+        if (!configFileText) {
+            const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
+            reportDiagnostics([error], /* compilerHost */ undefined);
+            host.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            return;
+        }
+
+        const result = parseJsonText(configFileName, configFileText);
+        reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
+
+        const cwd = host.getCurrentDirectory();
+        const configParseResult = parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
+        reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
+
+        return configParseResult;
+    }
+
+    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost, oldProgram?: Program) {
         const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
         let statistics: Statistic[];
         if (hasDiagnostics) {
@@ -416,7 +741,7 @@ namespace ts {
             statistics = [];
         }
 
-        const program = createProgram(fileNames, compilerOptions, compilerHost);
+        const program = createProgram(fileNames, compilerOptions, compilerHost, oldProgram);
         const exitStatus = compileProgram();
 
         if (compilerOptions.listFiles) {
@@ -480,6 +805,8 @@ namespace ts {
                     diagnostics = program.getSemanticDiagnostics();
                 }
             }
+
+            // TODO: in watch mode to emit only affected files
 
             // Otherwise, emit and report any errors we ran into.
             const emitOutput = program.emit();

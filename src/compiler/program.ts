@@ -386,6 +386,114 @@ namespace ts {
         allDiagnostics?: Diagnostic[];
     }
 
+    export function isProgramUptoDate(program: Program, rootFileNames: string[], newOptions: CompilerOptions, getSourceVersion: (path: Path) => string): boolean {
+        // If we haven't create a program yet, then it is not up-to-date
+        if (!program) {
+            return false;
+        }
+
+        // If number of files in the program do not match, it is not up-to-date
+        if (program.getRootFileNames().length !== rootFileNames.length) {
+            return false;
+        }
+
+        const fileNames = concatenate(rootFileNames, map(program.getSourceFiles(), sourceFile => sourceFile.fileName));
+        // If any file is not up-to-date, then the whole program is not up-to-date
+        for (const fileName of fileNames) {
+            if (!sourceFileUpToDate(program.getSourceFile(fileName))) {
+                return false;
+            }
+        }
+
+        const currentOptions = program.getCompilerOptions();
+        // If the compilation settings do no match, then the program is not up-to-date
+        if (!compareDataObjects(currentOptions, newOptions)) {
+            return false;
+        }
+
+        // If everything matches but the text of config file is changed,
+        // error locations can change for program options, so update the program
+        if (currentOptions.configFile && newOptions.configFile) {
+            return currentOptions.configFile.text === newOptions.configFile.text;
+        }
+
+        return true;
+
+        function sourceFileUpToDate(sourceFile: SourceFile): boolean {
+            if (!sourceFile) {
+                return false;
+            }
+            return sourceFile.version === getSourceVersion(sourceFile.path);
+        }
+    }
+
+    function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
+        // If any of these options change, we cant reuse old source file even if version match
+        const oldOptions = program && program.getCompilerOptions();
+        return oldOptions &&
+            (oldOptions.target !== newOptions.target ||
+                oldOptions.module !== newOptions.module ||
+                oldOptions.moduleResolution !== newOptions.moduleResolution ||
+                oldOptions.noResolve !== newOptions.noResolve ||
+                oldOptions.jsx !== newOptions.jsx ||
+                oldOptions.allowJs !== newOptions.allowJs ||
+                oldOptions.disableSizeLimit !== newOptions.disableSizeLimit ||
+                oldOptions.baseUrl !== newOptions.baseUrl ||
+                !equalOwnProperties(oldOptions.paths, newOptions.paths));
+    }
+
+    /**
+     * Updates the existing missing file watches with the new set of missing files after new program is created
+     * @param program
+     * @param existingMap
+     * @param createMissingFileWatch
+     * @param closeExistingFileWatcher
+     */
+    export function updateMissingFilePathsWatch(program: Program, existingMap: Map<FileWatcher>,
+        createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
+        closeExistingFileWatcher: (missingFilePath: Path, fileWatcher: FileWatcher) => void) {
+
+        const missingFilePaths = program.getMissingFilePaths();
+        const newMissingFilePathMap = arrayToSet(missingFilePaths);
+        // Update the missing file paths watcher
+        return mutateExistingMapWithNewSet(
+            existingMap, newMissingFilePathMap,
+            // Watch the missing files
+            createMissingFileWatch,
+            // Files that are no longer missing (e.g. because they are no longer required)
+            // should no longer be watched.
+            closeExistingFileWatcher
+        );
+    }
+
+    export type WildCardDirectoryWatchers = { watcher: FileWatcher, recursive: boolean };
+
+    export function updateWatchingWildcardDirectories(existingWatchedForWildcards: Map<WildCardDirectoryWatchers>, wildcardDirectories: Map<WatchDirectoryFlags>,
+        watchDirectory: (directory: string, recursive: boolean) => FileWatcher,
+        closeDirectoryWatcher: (directory: string, watcher: FileWatcher, recursive: boolean, recursiveChanged: boolean) => void) {
+        return mutateExistingMap(
+            existingWatchedForWildcards, wildcardDirectories,
+            // Create new watch and recursive info
+            (directory, flag) => {
+                const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                return {
+                    watcher: watchDirectory(directory, recursive),
+                    recursive
+                };
+            },
+            // Close existing watch thats not needed any more
+            (directory, { watcher, recursive }) => closeDirectoryWatcher(directory, watcher, recursive, /*recursiveChanged*/ false),
+            // Watcher is same if the recursive flags match
+            ({ recursive: existingRecursive }, flag) => {
+                // If the recursive dont match, it needs update
+                const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                return existingRecursive !== recursive;
+            },
+            // Close existing watch that doesnt match in recursive flag
+            (directory, { watcher, recursive }) => closeDirectoryWatcher(directory, watcher, recursive, /*recursiveChanged*/ true)
+        );
+    }
+
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
      * that represent a compilation unit.
@@ -478,6 +586,7 @@ namespace ts {
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
+        const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
@@ -518,6 +627,17 @@ namespace ts {
 
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;
+
+        // Release any files we have acquired in the old program but are
+        // not part of the new program.
+        if (oldProgram && host.onReleaseOldSourceFile) {
+            const oldSourceFiles = oldProgram.getSourceFiles();
+            for (const oldSourceFile of oldSourceFiles) {
+                if (!getSourceFile(oldSourceFile.path) || shouldCreateNewSourceFile) {
+                    host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions());
+                }
+            }
+        }
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
@@ -783,8 +903,8 @@ namespace ts {
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
                 const newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
-                    : host.getSourceFile(oldSourceFile.fileName, options.target);
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    : host.getSourceFile(oldSourceFile.fileName, options.target, /*onError*/ undefined, shouldCreateNewSourceFile);
 
                 if (!newSourceFile) {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1593,7 +1713,7 @@ namespace ts {
                 else {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
-            });
+            }, shouldCreateNewSourceFile);
 
             filesByName.set(path, file);
             if (file) {

@@ -1350,7 +1350,7 @@ namespace ts.server {
         }
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string) {
-            const cachedServerHost = new CachedServerHost(this.host, this.toCanonicalFileName);
+            const cachedServerHost = new CachedServerHost(this.host);
             const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedServerHost);
             this.logger.info(`Opened configuration file ${configFileName}`);
             return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, configFileSpecs, cachedServerHost, clientFileName);

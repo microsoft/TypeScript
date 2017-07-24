@@ -639,38 +639,13 @@ namespace ts.server {
                     }
                 }
 
-                const missingFilePaths = this.program.getMissingFilePaths();
-                const newMissingFilePathMap = arrayToSet(missingFilePaths);
                 // Update the missing file paths watcher
-                this.missingFilesMap = mutateExistingMapWithNewSet(
-                    this.missingFilesMap, newMissingFilePathMap,
+                this.missingFilesMap = updateMissingFilePathsWatch(this.program, this.missingFilesMap,
                     // Watch the missing files
-                    missingFilePath => {
-                        const fileWatcher = this.projectService.addFileWatcher(
-                            WatchType.MissingFilePath, this, missingFilePath,
-                            (filename, eventKind) => {
-                                if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
-                                    this.missingFilesMap.delete(missingFilePath);
-                                    this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
-
-                                    if (this.projectKind === ProjectKind.Configured) {
-                                        const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
-                                        (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(absoluteNormalizedPath));
-                                    }
-
-                                    // When a missing file is created, we should update the graph.
-                                    this.markAsDirty();
-                                    this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
-                                }
-                            }
-                        );
-                        return fileWatcher;
-                    },
+                    missingFilePath => this.addMissingFileWatcher(missingFilePath),
                     // Files that are no longer missing (e.g. because they are no longer required)
                     // should no longer be watched.
-                    (missingFilePath, fileWatcher) => {
-                        this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.NotNeeded);
-                    }
+                    (missingFilePath, fileWatcher) => this.closeMissingFileWatcher(missingFilePath, fileWatcher, WatcherCloseReason.NotNeeded)
                 );
             }
 
@@ -692,6 +667,32 @@ namespace ts.server {
                 });
 
             return hasChanges;
+        }
+
+        private addMissingFileWatcher(missingFilePath: Path) {
+            const fileWatcher = this.projectService.addFileWatcher(
+                WatchType.MissingFilePath, this, missingFilePath,
+                (filename, eventKind) => {
+                    if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
+                        this.missingFilesMap.delete(missingFilePath);
+                        this.closeMissingFileWatcher(missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
+
+                        if (this.projectKind === ProjectKind.Configured) {
+                            const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
+                            (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(absoluteNormalizedPath));
+                        }
+
+                        // When a missing file is created, we should update the graph.
+                        this.markAsDirty();
+                        this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+                    }
+                }
+            );
+            return fileWatcher;
+        }
+
+        private closeMissingFileWatcher(missingFilePath: Path, fileWatcher: FileWatcher, reason: WatcherCloseReason) {
+            this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, reason);
         }
 
         isWatchedMissingFile(path: Path) {
@@ -1135,33 +1136,18 @@ namespace ts.server {
         }
 
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
-            this.directoriesWatchedForWildcards = mutateExistingMap(
-                this.directoriesWatchedForWildcards, wildcardDirectories,
-                // Create new watch and recursive info
-                (directory, flag) => {
-                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                    return {
-                        watcher: this.projectService.addDirectoryWatcher(
-                            WatchType.WildCardDirectories, this, directory,
-                            path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
-                            recursive
-                        ),
-                        recursive
-                    };
-                },
-                // Close existing watch thats not needed any more
-                (directory, { watcher, recursive }) => this.projectService.closeDirectoryWatcher(
-                    WatchType.WildCardDirectories, this, directory, watcher, recursive, WatcherCloseReason.NotNeeded
+            this.directoriesWatchedForWildcards = updateWatchingWildcardDirectories(this.directoriesWatchedForWildcards,
+                wildcardDirectories,
+                // Create new directory watcher
+                (directory, recursive) => this.projectService.addDirectoryWatcher(
+                    WatchType.WildCardDirectories, this, directory,
+                    path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
+                    recursive
                 ),
-                // Watcher is same if the recursive flags match
-                ({ recursive: existingRecursive }, flag) => {
-                    // If the recursive dont match, it needs update
-                    const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                    return existingRecursive !== recursive;
-                },
-                // Close existing watch that doesnt match in recursive flag
-                (directory, { watcher, recursive }) => this.projectService.closeDirectoryWatcher(
-                    WatchType.WildCardDirectories, this, directory, watcher, recursive, WatcherCloseReason.RecursiveChanged
+                // Close directory watcher
+                (directory, watcher, recursive, recursiveChanged) => this.projectService.closeDirectoryWatcher(
+                    WatchType.WildCardDirectories, this, directory, watcher, recursive,
+                    recursiveChanged ? WatcherCloseReason.RecursiveChanged : WatcherCloseReason.NotNeeded
                 )
             );
         }
