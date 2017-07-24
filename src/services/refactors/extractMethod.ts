@@ -32,6 +32,11 @@ namespace ts.refactor.extractMethod {
 
         let i = 0;
         for (const extr of extractions) {
+            // Skip these since we don't have a way to report errors yet
+            if (extr.errors && extr.errors.length) {
+                continue;
+            }
+
             // Don't issue refactorings with duplicated names
             const description = formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [extr.scopeDescription]);
             if (!usedNames.get(description)) {
@@ -42,6 +47,10 @@ namespace ts.refactor.extractMethod {
                 });
             }
             i++;
+        }
+
+        if (actions.length === 0) {
+            return undefined;
         }
 
         return [{
@@ -108,7 +117,7 @@ namespace ts.refactor.extractMethod {
         readonly range: Expression | Statement[];
         readonly facts: RangeFacts;
         /**
-         * A list of symbols that are declared in the selected range.
+         * A list of symbols that are declared in the selected range which are visible in the containing lexical scope
          * Used to ensure we don't turn something used outside the range free (or worse, resolve to a different entity).
          */
         readonly declarations: Symbol[];
@@ -377,6 +386,11 @@ namespace ts.refactor.extractMethod {
         }
     }
 
+    function isValidExtractionTarget(node: Node) {
+        // Note that we don't use isFunctionLike because we don't want to put the extracted closure *inside* a method
+        return (node.kind === SyntaxKind.FunctionDeclaration) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
+    }
+
     /**
      * Computes possible places we could extract the function into. For example,
      * you may be able to extract into a class method *or* local closure *or* namespace function,
@@ -392,8 +406,7 @@ namespace ts.refactor.extractMethod {
             }
         }
 
-        // The scope can't be the initial node itself
-        current = current && current.parent;
+        const start = current;
 
         let scopes: Scope[] | undefined = undefined;
         while (current) {
@@ -402,8 +415,7 @@ namespace ts.refactor.extractMethod {
             //  * Function declaration
             //  * Class declaration or expression
             //  * Module/namespace or source file
-            // Note that we don't use isFunctionLike because we don't want to put the extracted closure *inside* a method
-            if ((current.kind === SyntaxKind.FunctionDeclaration) || isSourceFile(current) || isModuleBlock(current) || isClassLike(current)) {
+            if (current !== start && isValidExtractionTarget(current)) {
                 (scopes = scopes || []).push(current as FunctionLikeDeclaration);
             }
 
@@ -555,20 +567,6 @@ namespace ts.refactor.extractMethod {
             callArguments.push(createIdentifier(name));
         });
 
-        // Verify no usages of declarations originating in the extracted range are used in
-        // the extracted-to scope (since they will no longer be visible)
-        const declarations = range.declarations;
-        if (declarations.length) {
-            const stranded = getStrandedReferences(scope);
-            if (stranded) {
-                return {
-                    scope,
-                    scopeDescription: getDescriptionForScope(scope),
-                    errors: [createDiagnosticForNode(stranded.declarations[0], Messages.FunctionWillNotBeVisibleInTheNewScope, stranded.getUnescapedName())]
-                };
-            }
-        }
-
         // Provide explicit return types for contexutally-typed functions
         // to avoid problems when there are literal types present
         if (isExpression(node) && !isJS) {
@@ -674,26 +672,6 @@ namespace ts.refactor.extractMethod {
             changes: changeTracker.getChanges()
         };
 
-        function getStrandedReferences(node: Node): Symbol | undefined {
-            if (node.getStart() < context.startPosition || node.getEnd() > context.endPosition) {
-                let foundDeclaration: Symbol | undefined = undefined;
-                ts.forEachChild(node, reference => {
-                    const ref = reference.symbol;
-                    if (ref) {
-                        for (const decl of declarations) {
-                            if (decl === ref) {
-                                foundDeclaration = decl;
-                                return true;
-                            }
-                        }
-                    }
-                    return getStrandedReferences(reference);
-                });
-                return foundDeclaration;
-            }
-            return undefined;
-        }
-
         function getPropertyAssignmentsForWrites(writes: UsageEntry[]) {
             return writes.map(w => createShorthandPropertyAssignment(w.symbol.getUnescapedName()));
         }
@@ -750,6 +728,15 @@ namespace ts.refactor.extractMethod {
         return isArray(v);
     }
 
+    /**
+     * Produces a range that spans the entirety of nodes, given a selection
+     * that might start/end in the middle of nodes.
+     *
+     * For example, when the user makes a selection like this
+     *                     v---v
+     *   var someThing = foo + bar;
+     *  this returns     ^-------^
+     */
     function getEnclosingTextRange(targetRange: TargetRange, sourceFile: SourceFile): TextRange {
         return isReadonlyArray(targetRange.range)
             ? { pos: targetRange.range[0].getStart(sourceFile), end: targetRange.range[targetRange.range.length - 1].getEnd() }
@@ -784,6 +771,7 @@ namespace ts.refactor.extractMethod {
         const usagesPerScope: ScopeUsages[] = [];
         const substitutionsPerScope: Map<Node>[] = [];
         const errorsPerScope: Diagnostic[][] = [];
+        const visibleDeclarationsInExtractedRange: Symbol[] = [];
 
         // initialize results
         for (const _ of scopes) {
@@ -792,16 +780,25 @@ namespace ts.refactor.extractMethod {
             errorsPerScope.push([]);
         }
         const seenUsages = createMap<Usage>();
-
         let valueUsage = Usage.Read;
-
         const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
+        const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent) ? scopes[0] : getEnclosingBlockScopeContainer(scopes[0]);
 
         forEachChild(target, collectUsages);
+
+        // If there are any declarations in the extracted block that are used in the same enclosing
+        // lexical scope, we can't move the extraction "up" as those declarations will become unreachable
+        if (visibleDeclarationsInExtractedRange.length) {
+            forEachChild(containingLexicalScopeOfExtraction, checkForUsedDeclarations);
+        }
 
         return { target, usagesPerScope, errorsPerScope };
 
         function collectUsages(node: Node) {
+            if (isDeclaration(node) && node.symbol) {
+                visibleDeclarationsInExtractedRange.push(node.symbol);
+            }
+
             if (isAssignmentExpression(node)) {
                 const savedValueUsage = valueUsage;
                 // use 'write' as default usage for values
@@ -913,6 +910,25 @@ namespace ts.refactor.extractMethod {
                 }
             }
             return symbolId;
+        }
+
+        function checkForUsedDeclarations(node: Node) {
+            // If this node is entirely within the original extraction range, we don't need to do anything.
+            if (node === targetRange.range || (isArray(targetRange.range) && targetRange.range.indexOf(node as Statement) >= 0)) {
+                return;
+            }
+
+            // Otherwise check and recurse.
+            const sym = checker.getSymbolAtLocation(node);
+            if (sym && visibleDeclarationsInExtractedRange.some(d => d === sym)) {
+                for (const scope of errorsPerScope) {
+                    scope.push(createDiagnosticForNode(node, Messages.CannotExtractExportedEntity));
+                }
+                return true;
+            }
+            else {
+                forEachChild(node, checkForUsedDeclarations);
+            }
         }
 
         function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: Symbol, scopeDecl: Node, isTypeNode: boolean): PropertyAccessExpression | EntityName {
