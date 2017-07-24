@@ -6,34 +6,26 @@ namespace ts {
         emitSkipped: boolean;
     }
 
+    export interface EmitOutputDetailed extends EmitOutput {
+        diagnostics: Diagnostic[];
+        sourceMaps: SourceMapData[];
+        emittedSourceFiles: SourceFile[];
+    }
+
     export interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
     }
 
-    export interface Builder {
+    export interface Builder<T extends EmitOutput> {
         /**
          * This is the callback when file infos in the builder are updated
          */
         onProgramUpdateGraph(program: Program): void;
         getFilesAffectedBy(program: Program, path: Path): string[];
-        emitFile(program: Program, path: Path): EmitOutput;
+        emitFile(program: Program, path: Path): T | EmitOutput;
         clear(): void;
-    }
-
-    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles?: boolean,
-        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
-        const outputFiles: OutputFile[] = [];
-        const emitOutput = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
-        return {
-            outputFiles,
-            emitSkipped: emitOutput.emitSkipped
-        };
-
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
-            outputFiles.push({ name: fileName, writeByteOrderMark, text });
-        }
     }
 
     interface EmitHandler {
@@ -46,12 +38,49 @@ namespace ts {
         getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile, singleFileResult: string[]): string[];
     }
 
-    export function createBuilder(
+    export function getDetailedEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
+        cancellationToken ?: CancellationToken, customTransformers ?: CustomTransformers): EmitOutputDetailed {
+        return getEmitOutput(/*detailed*/ true, program, sourceFile, emitOnlyDtsFiles,
+            cancellationToken, customTransformers) as EmitOutputDetailed;
+    }
+
+    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
+        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
+        return getEmitOutput(/*detailed*/ false, program, sourceFile, emitOnlyDtsFiles,
+            cancellationToken, customTransformers);
+    }
+
+    function getEmitOutput(isDetailed: boolean, program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
+        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed {
+        const outputFiles: OutputFile[] = [];
+        let emittedSourceFiles: SourceFile[];
+        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        if (!isDetailed) {
+            return { outputFiles, emitSkipped: emitResult.emitSkipped };
+        }
+
+        return {
+            outputFiles,
+            emitSkipped: emitResult.emitSkipped,
+            diagnostics: emitResult.diagnostics,
+            sourceMaps: emitResult.sourceMaps,
+            emittedSourceFiles
+        };
+
+        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, _onError: (message: string) => void, sourceFiles: SourceFile[]) {
+            outputFiles.push({ name: fileName, writeByteOrderMark, text });
+            if (isDetailed) {
+                emittedSourceFiles = concatenate(emittedSourceFiles, sourceFiles);
+            }
+        }
+    }
+
+    export function createBuilder<T extends EmitOutput>(
         getCanonicalFileName: (fileName: string) => string,
-        getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles?: boolean) => EmitOutput,
+        getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles?: boolean) => T,
         computeHash: (data: string) => string,
         shouldEmitFile: (sourceFile: SourceFile) => boolean
-    ): Builder {
+    ): Builder<T> {
         let isModuleEmit: boolean | undefined;
         // Last checked shape signature for the file info
         let fileInfos: Map<string>;
@@ -108,7 +137,7 @@ namespace ts {
             return emitHandler.getFilesAffectedByUpdatedShape(program, sourceFile, singleFileResult);
         }
 
-        function emitFile(program: Program, path: Path): EmitOutput {
+        function emitFile(program: Program, path: Path): T | EmitOutput {
             ensureProgramGraph(program);
             if (!fileInfos || !fileInfos.has(path)) {
                 return { outputFiles: [], emitSkipped: true };

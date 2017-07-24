@@ -130,7 +130,7 @@ namespace ts.server {
         /*@internal*/
         lsHost: LSHost;
 
-        builder: Builder;
+        builder: Builder<EmitOutput>;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */

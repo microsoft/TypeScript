@@ -2,8 +2,9 @@
 /// <reference path="commandLineParser.ts"/>
 
 namespace ts {
-    export interface SourceFile {
-        fileWatcher?: FileWatcher;
+    export interface CompilerHost {
+        /** If this is the emit based on the graph builder, use it to emit */
+        emitWithBuilder?(program: Program): EmitResult;
     }
 
     interface Statistic {
@@ -215,16 +216,17 @@ namespace ts {
 
     function createWatchMode(commandLine: ParsedCommandLine, configFileName?: string, configFileRootFiles?: string[], configFileOptions?: CompilerOptions, configFileSpecs?: ConfigFileSpecs, configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>) {
         let program: Program;
-        let needsReload: boolean;
-        let missingFilesMap: Map<FileWatcher>;
-        let configFileWatcher: FileWatcher;
-        let watchedWildCardDirectories: Map<WildCardDirectoryWatchers>;
-        let timerToUpdateProgram: any;
+        let needsReload: boolean;                                           // true if the config file changed and needs to reload it from the disk
+        let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
+        let configFileWatcher: FileWatcher;                                 // watcher for the config file
+        let watchedWildCardDirectories: Map<WildCardDirectoryWatchers>;     // map of watchers for the wild card directories in the config file
+        let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
         let compilerOptions: CompilerOptions;
         let rootFileNames: string[];
 
-        const sourceFilesCache = createMap<HostFileInfo | string>();
+        const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
+        let changedFilePaths: Path[] = [];
 
         let host: System;
         if (configFileName) {
@@ -240,6 +242,9 @@ namespace ts {
         }
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+
+        // There is no extra check needed since we can just rely on the program to decide emit
+        const builder = createBuilder(getCanonicalFileName, getDetailedEmitOutput, computeHash, _sourceFile => true);
 
         if (compilerOptions.pretty) {
             reportDiagnosticWorker = reportDiagnosticWithColorAndContext;
@@ -268,85 +273,6 @@ namespace ts {
         }
 
         function createWatchedCompilerHost(options: CompilerOptions): CompilerHost {
-            const existingDirectories = createMap<boolean>();
-            function directoryExists(directoryPath: string): boolean {
-                if (existingDirectories.has(directoryPath)) {
-                    return true;
-                }
-                if (host.directoryExists(directoryPath)) {
-                    existingDirectories.set(directoryPath, true);
-                    return true;
-                }
-                return false;
-            }
-
-            function ensureDirectoriesExist(directoryPath: string) {
-                if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-                    const parentDirectory = getDirectoryPath(directoryPath);
-                    ensureDirectoriesExist(parentDirectory);
-                    host.createDirectory(directoryPath);
-                }
-            }
-
-            type OutputFingerprint = {
-                hash: string;
-                byteOrderMark: boolean;
-                mtime: Date;
-            };
-            let outputFingerprints: Map<OutputFingerprint>;
-
-            function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
-                if (!outputFingerprints) {
-                    outputFingerprints = createMap<OutputFingerprint>();
-                }
-
-                const hash = host.createHash(data);
-                const mtimeBefore = host.getModifiedTime(fileName);
-
-                if (mtimeBefore) {
-                    const fingerprint = outputFingerprints.get(fileName);
-                    // If output has not been changed, and the file has no external modification
-                    if (fingerprint &&
-                        fingerprint.byteOrderMark === writeByteOrderMark &&
-                        fingerprint.hash === hash &&
-                        fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
-                        return;
-                    }
-                }
-
-                host.writeFile(fileName, data, writeByteOrderMark);
-
-                const mtimeAfter = host.getModifiedTime(fileName);
-
-                outputFingerprints.set(fileName, {
-                    hash,
-                    byteOrderMark: writeByteOrderMark,
-                    mtime: mtimeAfter
-                });
-            }
-
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
-                try {
-                    performance.mark("beforeIOWrite");
-                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-
-                    //if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
-                        writeFileIfUpdated(fileName, data, writeByteOrderMark);
-                    //}
-                    //else {
-                        //host.writeFile(fileName, data, writeByteOrderMark);
-                    //}
-
-                    performance.mark("afterIOWrite");
-                    performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-                }
-                catch (e) {
-                    if (onError) {
-                        onError(e.message);
-                    }
-                }
-            }
-
             const newLine = getNewLineCharacter(options);
             const realpath = host.realpath && ((path: string) => host.realpath(path));
 
@@ -355,7 +281,7 @@ namespace ts {
                 getSourceFileByPath: getVersionedSourceFileByPath,
                 getDefaultLibLocation,
                 getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
-                writeFile,
+                writeFile: (_fileName, _data, _writeByteOrderMark, _onError?, _sourceFiles?) => { },
                 getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
                 useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames,
                 getCanonicalFileName,
@@ -367,7 +293,8 @@ namespace ts {
                 getEnvironmentVariable: name => host.getEnvironmentVariable ? host.getEnvironmentVariable(name) : "",
                 getDirectories: (path: string) => host.getDirectories(path),
                 realpath,
-                onReleaseOldSourceFile
+                onReleaseOldSourceFile,
+                emitWithBuilder
             };
 
             // TODO: cache module resolution
@@ -379,6 +306,81 @@ namespace ts {
             //        return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
             //    };
             //}
+
+            function ensureDirectoriesExist(directoryPath: string) {
+                if (directoryPath.length > getRootLength(directoryPath) && !host.directoryExists(directoryPath)) {
+                    const parentDirectory = getDirectoryPath(directoryPath);
+                    ensureDirectoriesExist(parentDirectory);
+                    host.createDirectory(directoryPath);
+                }
+            }
+
+            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+                try {
+                    performance.mark("beforeIOWrite");
+                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+
+                    host.writeFile(fileName, data, writeByteOrderMark);
+
+                    performance.mark("afterIOWrite");
+                    performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+                }
+                catch (e) {
+                   return createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, e);
+                }
+            }
+
+            function emitWithBuilder(program: Program): EmitResult {
+                builder.onProgramUpdateGraph(program);
+                const filesPendingToEmit = changedFilePaths;
+                changedFilePaths = [];
+
+                const seenFiles = createMap<true>();
+
+                let emitSkipped: boolean;
+                let diagnostics: Diagnostic[];
+                const emittedFiles: string[] = program.getCompilerOptions().listEmittedFiles ? [] : undefined;
+                let sourceMaps: SourceMapData[];
+                while (filesPendingToEmit.length) {
+                    const filePath = filesPendingToEmit.pop();
+                    const affectedFiles = builder.getFilesAffectedBy(program, filePath);
+                    for (const file of affectedFiles) {
+                        if (!seenFiles.has(file)) {
+                            seenFiles.set(file, true);
+                            const sourceFile = program.getSourceFile(file);
+                            if (sourceFile) {
+                                writeFiles(<EmitOutputDetailed>builder.emitFile(program, sourceFile.path));
+                            }
+                        }
+                    }
+                }
+
+                return { emitSkipped, diagnostics, emittedFiles, sourceMaps };
+
+                function writeFiles(emitOutput: EmitOutputDetailed) {
+                    if (emitOutput.emitSkipped) {
+                        emitSkipped = true;
+                    }
+
+                    diagnostics = concatenate(diagnostics, emitOutput.diagnostics);
+                    sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
+                    // If it emitted more than one source files, just mark all those source files as seen
+                    if (emitOutput.emittedSourceFiles && emitOutput.emittedSourceFiles.length > 1) {
+                        for (const file of emitOutput.emittedSourceFiles) {
+                            seenFiles.set(file.fileName, true);
+                        }
+                    }
+                    for (const outputFile of emitOutput.outputFiles) {
+                        const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
+                        if (error) {
+                            (diagnostics || (diagnostics = [])).push(error);
+                        }
+                        if (emittedFiles) {
+                            emittedFiles.push(outputFile.name);
+                        }
+                    }
+                }
+            }
         }
 
         function fileExists(fileName: string) {
@@ -408,6 +410,7 @@ namespace ts {
 
             // Create new source file if requested or the versions dont match
             if (!hostSourceFile) {
+                changedFilePaths.push(path);
                 const sourceFile = getSourceFile(fileName, languageVersion, onError);
                 if (sourceFile) {
                     sourceFile.version = "0";
@@ -420,6 +423,7 @@ namespace ts {
                 return sourceFile;
             }
             else if (shouldCreateNewSourceFile || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
+                changedFilePaths.push(path);
                 if (shouldCreateNewSourceFile) {
                     hostSourceFile.version++;
                 }
@@ -652,6 +656,10 @@ namespace ts {
                 host.write(s);
             }
         }
+
+        function computeHash(data: string) {
+            return sys.createHash ? sys.createHash(data) : data;
+        }
     }
 
     interface CachedSystem extends System {
@@ -806,16 +814,20 @@ namespace ts {
                 }
             }
 
-            // TODO: in watch mode to emit only affected files
-
-            // Otherwise, emit and report any errors we ran into.
-            const emitOutput = program.emit();
+            // Emit and report any errors we ran into.
+            let emitOutput: EmitResult;
+            if (compilerHost.emitWithBuilder) {
+                emitOutput = compilerHost.emitWithBuilder(program);
+            }
+            else {
+                // Emit whole program
+                emitOutput = program.emit();
+            }
             diagnostics = diagnostics.concat(emitOutput.diagnostics);
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
             reportEmittedFiles(emitOutput.emittedFiles);
-
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
