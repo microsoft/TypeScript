@@ -12,4 +12,5 @@
 goTo.select('f1a', 'f1b');
 verify.not.refactorAvailable('Extract Method');
 goTo.select('g1a', 'g1b');
-// verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Method');
+

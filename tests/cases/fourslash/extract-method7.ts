@@ -10,5 +10,4 @@ goTo.select('a', 'b');
 edit.applyRefactor('Extract Method', 'scope_0');
 verify.currentFileContentIs(`function fn(x = newFunction()) {
 }
-function newFunction() { return 3; }
-`);
+function newFunction() { return 3; }`, true);
