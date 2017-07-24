@@ -3,7 +3,7 @@
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
 /// <reference path="typingsCache.ts"/>
-/// <reference path="builder.ts"/>
+/// <reference path="..\compiler\builder.ts"/>
 
 namespace ts.server {
 

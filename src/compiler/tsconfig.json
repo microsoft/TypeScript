@@ -36,6 +36,7 @@
         "declarationEmitter.ts",
         "emitter.ts",
         "program.ts",
+        "builder.ts",
         "commandLineParser.ts",
         "tsc.ts",
         "diagnosticInformationMap.generated.ts"

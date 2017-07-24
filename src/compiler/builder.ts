@@ -1,8 +1,17 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="session.ts" />
+/// <reference path="program.ts" />
 
-namespace ts.server {
+namespace ts {
+    export interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitSkipped: boolean;
+    }
+
+    export interface OutputFile {
+        name: string;
+        writeByteOrderMark: boolean;
+        text: string;
+    }
+
     export interface Builder {
         /**
          * This is the callback when file infos in the builder are updated
@@ -11,6 +20,20 @@ namespace ts.server {
         getFilesAffectedBy(program: Program, path: Path): string[];
         emitFile(program: Program, path: Path): EmitOutput;
         clear(): void;
+    }
+
+    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles?: boolean,
+        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
+        const outputFiles: OutputFile[] = [];
+        const emitOutput = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        return {
+            outputFiles,
+            emitSkipped: emitOutput.emitSkipped
+        };
+
+        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
+            outputFiles.push({ name: fileName, writeByteOrderMark, text });
+        }
     }
 
     interface EmitHandler {
@@ -157,7 +180,7 @@ namespace ts.server {
                 for (const importName of sourceFile.imports) {
                     const symbol = checker.getSymbolAtLocation(importName);
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
-                        const declarationSourceFile = symbol.declarations[0].getSourceFile();
+                        const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
                         if (declarationSourceFile) {
                             referencedFiles.set(declarationSourceFile.path, true);
                         }
