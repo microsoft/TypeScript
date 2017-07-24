@@ -85,7 +85,7 @@ namespace ts {
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull | undefined {
-        return sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
+        return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
