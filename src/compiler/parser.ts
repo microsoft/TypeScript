@@ -1881,11 +1881,6 @@ namespace ts {
                     if (considerSemicolonAsDelimiter && token() === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
                         nextToken();
                     }
-                    else if (isJSDocParameterStart() && parsingContext & (1 << ParsingContext.Parameters)) {
-                        // If the token was a jsdoc parameter start and we're parsing parameter lists,
-                        // we need to consume the (mostly erroneous) parameter token
-                        nextToken();
-                    }
                     continue;
                 }
 
@@ -2207,11 +2202,7 @@ namespace ts {
             return token() === SyntaxKind.DotDotDotToken ||
                 isIdentifierOrPattern() ||
                 isModifierKind(token()) ||
-                token() === SyntaxKind.AtToken || token() === SyntaxKind.ThisKeyword || isJSDocParameterStart();
-        }
-
-        function isJSDocParameterStart(): boolean {
-            return token() === SyntaxKind.NewKeyword ||
+                token() === SyntaxKind.AtToken || token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword ||
                 token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral;
         }
 
@@ -2230,30 +2221,19 @@ namespace ts {
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
             node.name = parseIdentifierOrPattern();
-            if (getFullWidth(node.name) === 0 && !hasModifiers(node) && isModifierKind(token())) {
-                // in cases like
-                // 'use strict'
-                // function foo(static)
-                // isParameter('static') === true, because of isModifier('static')
-                // however 'static' is not a legal identifier in a strict mode.
-                // so result of this function will be ParameterDeclaration (flags = 0, name = missing, type = undefined, initializer = undefined)
-                // and current token will not change => parsing of the enclosing parameter list will last till the end of time (or OOM)
-                // to avoid this we'll advance cursor to the next token.
-                nextToken();
-            }
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
             node.initializer = parseBindingElementInitializer(/*inParameter*/ true);
 
-            // Do not check for initializers in an ambient context for parameters. This is not
-            // a grammar error because the grammar allows arbitrary call signatures in
-            // an ambient context.
-            // It is actually not necessary for this to be an error at all. The reason is that
-            // function/constructor implementations are syntactically disallowed in ambient
-            // contexts. In addition, parameter initializers are semantically disallowed in
-            // overload signatures. So parameter initializers are transitively disallowed in
-            // ambient contexts.
+            const zeroLengthName = getFullWidth(node.name) === 0;
+            if (zeroLengthName && !node.type && !node.initializer && !node.decorators && !node.modifiers && !node.dotDotDotToken && !node.questionToken) {
+                // What we're parsing isn't actually remotely recognizable as a parameter and we've consumed no tokens whatsoever
+                // Consume a token to advance the parser in some way and avoid an infinite loop in `parseDelimitedList`
+                // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
+                // or when a modifier keyword which is disallowed as a parameter name (ie, `static` in strict mode) is supplied
+                nextToken();
+            }
 
             return addJSDocComment(finishNode(node));
         }
