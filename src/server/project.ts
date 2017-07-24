@@ -219,7 +219,6 @@ namespace ts.server {
                 this.disableLanguageService();
             }
 
-            this.builder = createBuilder(this);
             this.markAsDirty();
         }
 
@@ -247,12 +246,41 @@ namespace ts.server {
             return this.languageService;
         }
 
+        private ensureBuilder() {
+            if (!this.builder) {
+                this.builder = createBuilder(
+                    this.projectService.toCanonicalFileName,
+                    (_program, sourceFile, emitOnlyDts) => this.getFileEmitOutput(sourceFile, emitOnlyDts),
+                    data => this.projectService.host.createHash(data),
+                    sourceFile => !this.projectService.getScriptInfoForPath(sourceFile.path).hasMixedContent
+                );
+            }
+        }
+
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
             if (!this.languageServiceEnabled) {
                 return [];
             }
             this.updateGraph();
-            return this.builder.getFilesAffectedBy(scriptInfo);
+            this.ensureBuilder();
+            return this.builder.getFilesAffectedBy(this.program, scriptInfo.path);
+        }
+
+        /**
+         * Returns true if emit was conducted
+         */
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+            this.ensureBuilder();
+            const { emitSkipped, outputFiles } = this.builder.emitFile(this.program, scriptInfo.path);
+            if (!emitSkipped) {
+                const projectRootPath = this.getProjectRootPath();
+                for (const outputFile of outputFiles) {
+                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, projectRootPath ? projectRootPath : getDirectoryPath(scriptInfo.fileName));
+                    writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
+                }
+            }
+
+            return !emitSkipped;
         }
 
         getProjectVersion() {
@@ -390,11 +418,11 @@ namespace ts.server {
             });
         }
 
-        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean) {
+        private getFileEmitOutput(sourceFile: SourceFile, emitOnlyDtsFiles: boolean) {
             if (!this.languageServiceEnabled) {
                 return undefined;
             }
-            return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
+            return this.getLanguageService().getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles);
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
@@ -451,21 +479,6 @@ namespace ts.server {
                 }
             }
             return false;
-        }
-
-        getAllEmittableFiles() {
-            if (!this.languageServiceEnabled) {
-                return [];
-            }
-            const defaultLibraryFileName = getDefaultLibFileName(this.compilerOptions);
-            const infos = this.getScriptInfos();
-            const result: string[] = [];
-            for (const info of infos) {
-                if (getBaseFileName(info.fileName) !== defaultLibraryFileName && shouldEmitFile(info)) {
-                    result.push(info.fileName);
-                }
-            }
-            return result;
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
@@ -594,11 +607,13 @@ namespace ts.server {
 
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
-            if (this.languageServiceEnabled && this.compileOnSaveEnabled) {
-                this.builder.onProjectUpdateGraph();
-            }
-            else {
-                this.builder.clear();
+            if (this.builder) {
+                if (this.languageServiceEnabled && this.compileOnSaveEnabled) {
+                    this.builder.onProgramUpdateGraph(this.program);
+                }
+                else {
+                    this.builder.clear();
+                }
             }
 
             if (hasChanges) {
