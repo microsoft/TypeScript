@@ -179,7 +179,7 @@ namespace ts.codefix {
             }
 
             // check exports with the same name
-            const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExports(name, moduleSymbol);
+            const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(name, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName);
                 symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name));
