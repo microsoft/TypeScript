@@ -4697,6 +4697,9 @@ namespace ts {
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
+            if (!symbol) {
+                return unknownType;
+            }
             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
