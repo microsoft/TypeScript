@@ -91,12 +91,8 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText));
-    }
-
-    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules.get(moduleNameText) : undefined;
+    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull | undefined {
+        return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
