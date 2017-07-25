@@ -103,24 +103,6 @@ namespace ts.server {
         }
     }
 
-    export function removeItemFromSet<T>(items: T[], itemToRemove: T) {
-        if (items.length === 0) {
-            return;
-        }
-        const index = items.indexOf(itemToRemove);
-        if (index < 0) {
-            return;
-        }
-        if (index ===  items.length - 1) {
-            // last item - pop it
-            items.pop();
-        }
-        else {
-            // non-last item - replace it with the last one
-            items[index] = items.pop();
-        }
-    }
-
     export type NormalizedPath = string & { __normalizedPathTag: any };
 
     export function toNormalizedPath(fileName: string): NormalizedPath {

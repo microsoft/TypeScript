@@ -776,7 +776,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(unescapeLeadingUnderscores(node.name.text)),
+                    createLiteral(unescapeLeadingUnderscores(node.name.escapedText)),
                     node
                 );
             }

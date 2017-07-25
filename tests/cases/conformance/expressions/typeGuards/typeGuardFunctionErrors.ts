@@ -67,7 +67,7 @@ if (funA(0, a)) {
 
 // No type guard in if statement
 if (hasNoTypeGuard(a)) {
-    a.propB; 
+    a.propB;
 }
 
 // Type predicate type is not assignable
@@ -86,7 +86,7 @@ assign2 = function(p1, p2): p2 is A {
     return true;
 };
 
-// No matching signature 
+// No matching signature
 var assign3: (p1, p2) => p1 is A;
 assign3 = function(p1, p2, p3): p1 is A {
     return true;
@@ -143,3 +143,25 @@ var x: A;
 if (hasMissingParameter()) {
     x.propA;
 }
+
+// repro #17297
+
+type Keys = 'a'|'b'|'c'
+type KeySet<T extends Keys> = { [k in T]: true }
+
+// expected an error, since Keys doesn't have a 'd'
+declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
+
+type Foo = { 'a': string; }
+type Bar = { 'a': number; }
+
+interface NeedsFoo<T extends Foo> {
+    foo: T;
+    isFoo(): this is NeedsFoo<Bar>; // should error
+};
+
+declare var anError: NeedsFoo<Bar>; // error, as expected
+declare var alsoAnError: NeedsFoo<number>; // also error, as expected
+declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
+declare function newError2(x: any): x is NeedsFoo<number>; // should error
+declare function newError3(x: number): x is NeedsFoo<number>; // should error

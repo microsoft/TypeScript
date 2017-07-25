@@ -388,7 +388,7 @@ namespace ts.refactor.extractMethod {
                     case SyntaxKind.LabeledStatement:
                         {
                             const label = (<LabeledStatement>node).label;
-                            (seenLabels || (seenLabels = [])).push(label.text);
+                            (seenLabels || (seenLabels = [])).push(label.escapedText);
                             forEachChild(node, visit);
                             seenLabels.pop();
                             break;
@@ -398,7 +398,7 @@ namespace ts.refactor.extractMethod {
                         {
                             const label = (<BreakStatement | ContinueStatement>node).label;
                             if (label) {
-                                if (!contains(seenLabels, label.text)) {
+                                if (!contains(seenLabels, label.escapedText)) {
                                     // attempts to jump to label that is not in range to be extracted
                                     (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
                                 }
@@ -739,7 +739,7 @@ namespace ts.refactor.extractMethod {
         };
 
         function getPropertyAssignmentsForWrites(writes: UsageEntry[]) {
-            return writes.map(w => createShorthandPropertyAssignment(w.symbol.getUnescapedName()));
+            return writes.map(w => createShorthandPropertyAssignment(w.symbol.name));
         }
 
         function generateReturnValueProperty() {
@@ -958,7 +958,7 @@ namespace ts.refactor.extractMethod {
             }
             for (let i = 0; i < scopes.length; i++) {
                 const scope = scopes[i];
-                const resolvedSymbol = checker.resolveName(symbol.getUnescapedName(), scope, symbol.flags);
+                const resolvedSymbol = checker.resolveName(symbol.name, scope, symbol.flags);
                 if (resolvedSymbol === symbol) {
                     continue;
                 }
@@ -1002,13 +1002,13 @@ namespace ts.refactor.extractMethod {
                 return undefined;
             }
             if (symbol.getDeclarations().some(d => d.parent === scopeDecl)) {
-                return createIdentifier(symbol.getUnescapedName());
+                return createIdentifier(symbol.name);
             }
             const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);
             if (prefix === undefined) {
                 return undefined;
             }
-            return isTypeNode ? createQualifiedName(<EntityName>prefix, createIdentifier(symbol.getUnescapedName())) : createPropertyAccess(<Expression>prefix, symbol.getUnescapedName());
+            return isTypeNode ? createQualifiedName(<EntityName>prefix, createIdentifier(symbol.name)) : createPropertyAccess(<Expression>prefix, symbol.name);
         }
     }
 

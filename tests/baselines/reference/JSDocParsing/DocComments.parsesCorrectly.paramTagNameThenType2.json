@@ -16,13 +16,13 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "text": "param"
+                "escapedText": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
-                "text": "name1"
+                "escapedText": "name1"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
@@ -38,7 +38,7 @@
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
-                "text": "name1"
+                "escapedText": "name1"
             },
             "isBracketed": false,
             "comment": "Description"

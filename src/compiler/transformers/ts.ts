@@ -1692,7 +1692,7 @@ namespace ts {
                 const numParameters = parameters.length;
                 for (let i = 0; i < numParameters; i++) {
                     const parameter = parameters[i];
-                    if (i === 0 && isIdentifier(parameter.name) && parameter.name.text === "this") {
+                    if (i === 0 && isIdentifier(parameter.name) && parameter.name.escapedText === "this") {
                         continue;
                     }
                     if (parameter.dotDotDotToken) {
@@ -1841,7 +1841,7 @@ namespace ts {
             for (const typeNode of node.types) {
                 const serializedIndividual = serializeTypeNode(typeNode);
 
-                if (isIdentifier(serializedIndividual) && serializedIndividual.text === "Object") {
+                if (isIdentifier(serializedIndividual) && serializedIndividual.escapedText === "Object") {
                     // One of the individual is global object, return immediately
                     return serializedIndividual;
                 }
@@ -1851,7 +1851,7 @@ namespace ts {
                     // Different types
                     if (!isIdentifier(serializedUnion) ||
                         !isIdentifier(serializedIndividual) ||
-                        serializedUnion.text !== serializedIndividual.text) {
+                        serializedUnion.escapedText !== serializedIndividual.escapedText) {
                         return createIdentifier("Object");
                     }
                 }
@@ -2007,7 +2007,7 @@ namespace ts {
                     : (<ComputedPropertyName>name).expression;
             }
             else if (isIdentifier(name)) {
-                return createLiteral(unescapeLeadingUnderscores(name.text));
+                return createLiteral(unescapeLeadingUnderscores(name.escapedText));
             }
             else {
                 return getSynthesizedClone(name);
@@ -2644,7 +2644,7 @@ namespace ts {
          *       on symbol names.
          */
         function recordEmittedDeclarationInScope(node: Node) {
-            const name = node.symbol && node.symbol.name;
+            const name = node.symbol && node.symbol.escapedName;
             if (name) {
                 if (!currentScopeFirstDeclarationsOfName) {
                     currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
@@ -2662,7 +2662,7 @@ namespace ts {
          */
         function isFirstEmittedDeclarationInScope(node: Node) {
             if (currentScopeFirstDeclarationsOfName) {
-                const name = node.symbol && node.symbol.name;
+                const name = node.symbol && node.symbol.escapedName;
                 if (name) {
                     return currentScopeFirstDeclarationsOfName.get(name) === node;
                 }
@@ -3210,7 +3210,7 @@ namespace ts {
         function getClassAliasIfNeeded(node: ClassDeclaration) {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
-                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? unescapeLeadingUnderscores(node.name.text) : "default");
+                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? unescapeLeadingUnderscores(node.name.escapedText) : "default");
                 classAliases[getOriginalNodeId(node)] = classAlias;
                 hoistVariableDeclaration(classAlias);
                 return classAlias;

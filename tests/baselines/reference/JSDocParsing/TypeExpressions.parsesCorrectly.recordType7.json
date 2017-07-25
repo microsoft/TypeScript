@@ -14,7 +14,7 @@
                 "pos": 2,
                 "end": 5,
                 "flags": "JSDoc",
-                "text": "foo"
+                "escapedText": "foo"
             },
             "type": {
                 "kind": "NumberKeyword",
@@ -33,7 +33,7 @@
                 "pos": 14,
                 "end": 18,
                 "flags": "JSDoc",
-                "text": "bar"
+                "escapedText": "bar"
             },
             "type": {
                 "kind": "NumberKeyword",

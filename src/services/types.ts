@@ -22,10 +22,15 @@ namespace ts {
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
 
+    export interface Identifier {
+        readonly text: string;
+    }
+
     export interface Symbol {
+        readonly name: string;
         getFlags(): SymbolFlags;
-        getName(): __String;
-        getUnescapedName(): string;
+        getEscapedName(): __String;
+        getName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];

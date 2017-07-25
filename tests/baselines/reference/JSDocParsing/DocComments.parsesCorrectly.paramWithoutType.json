@@ -16,19 +16,19 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "text": "param"
+                "escapedText": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 18,
-                "text": "foo"
+                "escapedText": "foo"
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 18,
-                "text": "foo"
+                "escapedText": "foo"
             },
             "isBracketed": false,
             "comment": ""

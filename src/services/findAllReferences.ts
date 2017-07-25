@@ -122,7 +122,7 @@ namespace ts.FindAllReferences {
                 }
                 case "label": {
                     const { node } = def;
-                    return { node, name: unescapeLeadingUnderscores(node.text), kind: ScriptElementKind.label, displayParts: [displayPart(unescapeLeadingUnderscores(node.text), SymbolDisplayPartKind.text)] };
+                    return { node, name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
                 }
                 case "keyword": {
                     const { node } = def;
@@ -357,7 +357,7 @@ namespace ts.FindAllReferences.Core {
         // Labels
         if (isLabelName(node)) {
             if (isJumpStatementTarget(node)) {
-                const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), unescapeLeadingUnderscores((<Identifier>node).text));
+                const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                 // if we have a label definition, look within its statement for references, if not, then
                 // the label is undefined and we have no results..
                 return labelDefinition && getLabelReferencesInNode(labelDefinition.parent, labelDefinition);
@@ -606,7 +606,7 @@ namespace ts.FindAllReferences.Core {
         const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
         if (bindingElement) {
             const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, unescapeLeadingUnderscores((<Identifier>bindingElement.name).text));
+            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
         }
         return undefined;
     }
@@ -718,7 +718,7 @@ namespace ts.FindAllReferences.Core {
     function getLabelReferencesInNode(container: Node, targetLabel: Identifier): SymbolAndEntries[] {
         const references: Entry[] = [];
         const sourceFile = container.getSourceFile();
-        const labelName = unescapeLeadingUnderscores(targetLabel.text);
+        const labelName = targetLabel.text;
         const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container);
         for (const position of possiblePositions) {
             const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
@@ -735,7 +735,7 @@ namespace ts.FindAllReferences.Core {
         // Compare the length so we filter out strict superstrings of the symbol we are looking for
         switch (node && node.kind) {
             case SyntaxKind.Identifier:
-                return unescapeLeadingUnderscores((node as Identifier).text).length === searchSymbolName.length;
+                return (node as Identifier).text.length === searchSymbolName.length;
 
             case SyntaxKind.StringLiteral:
                 return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) &&
@@ -1417,7 +1417,7 @@ namespace ts.FindAllReferences.Core {
         // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
         if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
             isParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
-            addRange(result, checker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.getUnescapedName()));
+            addRange(result, checker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
         }
 
         // If this is symbol of binding element without propertyName declaration in Object binding pattern
@@ -1436,7 +1436,7 @@ namespace ts.FindAllReferences.Core {
 
             // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
             if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getUnescapedName(), result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
+                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
             }
         }
 
@@ -1467,7 +1467,7 @@ namespace ts.FindAllReferences.Core {
         // the function will add any found symbol of the property-name, then its sub-routine will call
         // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
         // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-        if (previousIterationSymbolsCache.has(symbol.name)) {
+        if (previousIterationSymbolsCache.has(symbol.escapedName)) {
             return;
         }
 
@@ -1494,7 +1494,7 @@ namespace ts.FindAllReferences.Core {
                     }
 
                     // Visit the typeReference as well to see if it directly or indirectly use that property
-                    previousIterationSymbolsCache.set(symbol.name, symbol);
+                    previousIterationSymbolsCache.set(symbol.escapedName, symbol);
                     getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache, checker);
                 }
             }
@@ -1554,7 +1554,7 @@ namespace ts.FindAllReferences.Core {
                 }
 
                 const result: Symbol[] = [];
-                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getUnescapedName(), result, /*previousIterationSymbolsCache*/ createSymbolTable(), state.checker);
+                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), state.checker);
                 return find(result, search.includes);
             }
 

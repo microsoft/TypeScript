@@ -242,7 +242,7 @@ namespace ts {
                     }
 
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores((<PropertyAccessExpression>nameExpression).name.text));
+                    return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores((<PropertyAccessExpression>nameExpression).name.escapedText));
                 }
                 return getEscapedTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
             }
@@ -287,8 +287,8 @@ namespace ts {
                     if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
                         if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                             const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
-                            if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                                nameFromParentNode = (<Identifier>nameIdentifier).text;
+                            if (isIdentifier(nameIdentifier)) {
+                                nameFromParentNode = nameIdentifier.escapedText;
                             }
                         }
                     }
@@ -1031,7 +1031,7 @@ namespace ts {
         function bindBreakOrContinueStatement(node: BreakOrContinueStatement): void {
             bind(node.label);
             if (node.label) {
-                const activeLabel = findActiveLabel(node.label.text);
+                const activeLabel = findActiveLabel(node.label.escapedText);
                 if (activeLabel) {
                     activeLabel.referenced = true;
                     bindBreakOrContinueFlow(node, activeLabel.breakTarget, activeLabel.continueTarget);
@@ -1192,7 +1192,7 @@ namespace ts {
             const postStatementLabel = createBranchLabel();
             bind(node.label);
             addAntecedent(preStatementLabel, currentFlow);
-            const activeLabel = pushActiveLabel(node.label.text, postStatementLabel, preStatementLabel);
+            const activeLabel = pushActiveLabel(node.label.escapedText, postStatementLabel, preStatementLabel);
             bind(node.statement);
             popActiveLabel();
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
@@ -1649,7 +1649,7 @@ namespace ts {
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = createSymbolTable();
-            typeLiteralSymbol.members.set(symbol.name, symbol);
+            typeLiteralSymbol.members.set(symbol.escapedName, symbol);
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -1680,9 +1680,9 @@ namespace ts {
                         ? ElementKind.Property
                         : ElementKind.Accessor;
 
-                    const existingKind = seen.get(identifier.text);
+                    const existingKind = seen.get(identifier.escapedText);
                     if (!existingKind) {
-                        seen.set(identifier.text, currentKind);
+                        seen.set(identifier.escapedText, currentKind);
                         continue;
                     }
 
@@ -1792,8 +1792,7 @@ namespace ts {
         }
 
         function isEvalOrArgumentsIdentifier(node: Node): boolean {
-            return node.kind === SyntaxKind.Identifier &&
-                ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
+            return isIdentifier(node) && (node.escapedText === "eval" || node.escapedText === "arguments");
         }
 
         function checkStrictModeEvalOrArguments(contextNode: Node, name: Node) {
@@ -1804,7 +1803,7 @@ namespace ts {
                     // otherwise report generic error message.
                     const span = getErrorSpanForNode(file, name);
                     file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                        getStrictModeEvalOrArgumentsMessage(contextNode), unescapeLeadingUnderscores(identifier.text)));
+                        getStrictModeEvalOrArgumentsMessage(contextNode), unescapeLeadingUnderscores(identifier.escapedText)));
                 }
             }
         }
@@ -2295,14 +2294,10 @@ namespace ts {
         }
 
         function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
-            if (node.kind === SyntaxKind.Identifier) {
-                const symbol = lookupSymbolForName((<Identifier>node).text);
-                if (symbol && symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
-                    const declaration = symbol.valueDeclaration as VariableDeclaration;
-                    if (declaration.initializer) {
-                        return isExportsOrModuleExportsOrAliasOrAssignment(declaration.initializer);
-                    }
-                }
+            if (isIdentifier(node)) {
+                const symbol = lookupSymbolForName(node.escapedText);
+                return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
+                    symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
             }
             return false;
         }
@@ -2369,7 +2364,7 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            bindPropertyAssignment(constructorFunction.text, leftSideOfAssignment, /*isPrototypeProperty*/ true);
+            bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true);
         }
 
         function bindStaticPropertyAssignment(node: BinaryExpression) {
@@ -2391,7 +2386,7 @@ namespace ts {
                 bindExportsPropertyAssignment(node);
             }
             else {
-                bindPropertyAssignment(target.text, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
             }
         }
 
@@ -2432,11 +2427,11 @@ namespace ts {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
             else {
-                const bindingName = node.name ? node.name.text : InternalSymbolName.Class;
+                const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Class;
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames.set(node.name.text, true);
+                    classifiableNames.set(node.name.escapedText, true);
                 }
             }
 
@@ -2452,14 +2447,14 @@ namespace ts {
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
             const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype" as __String);
-            const symbolExport = symbol.exports.get(prototypeSymbol.name);
+            const symbolExport = symbol.exports.get(prototypeSymbol.escapedName);
             if (symbolExport) {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(prototypeSymbol.name)));
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(prototypeSymbol.escapedName)));
             }
-            symbol.exports.set(prototypeSymbol.name, prototypeSymbol);
+            symbol.exports.set(prototypeSymbol.escapedName, prototypeSymbol);
             prototypeSymbol.parent = symbol;
         }
 
@@ -2545,7 +2540,7 @@ namespace ts {
                 node.flowNode = currentFlow;
             }
             checkStrictModeFunctionName(node);
-            const bindingName = node.name ? node.name.text : InternalSymbolName.Function;
+            const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Function;
             return bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
         }
 

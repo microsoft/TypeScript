@@ -239,10 +239,7 @@ namespace ts.server {
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: (fileName, extraFileExtensions) => {
-            const mixedContentExtensions = map(filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
-            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension));
-        }
+        hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -703,15 +700,15 @@ namespace ts.server {
 
             switch (project.projectKind) {
                 case ProjectKind.External:
-                    removeItemFromSet(this.externalProjects, <ExternalProject>project);
+                    unorderedRemoveItem(this.externalProjects, <ExternalProject>project);
                     this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
                     break;
                 case ProjectKind.Configured:
-                    removeItemFromSet(this.configuredProjects, <ConfiguredProject>project);
+                    unorderedRemoveItem(this.configuredProjects, <ConfiguredProject>project);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
                 case ProjectKind.Inferred:
-                    removeItemFromSet(this.inferredProjects, <InferredProject>project);
+                    unorderedRemoveItem(this.inferredProjects, <InferredProject>project);
                     break;
             }
         }
@@ -790,7 +787,7 @@ namespace ts.server {
             // to the disk, and the server's version of the file can be out of sync.
             info.close();
 
-            removeItemFromSet(this.openFiles, info);
+            unorderedRemoveItem(this.openFiles, info);
 
             // collect all projects that should be removed
             let projectsToRemove: Project[];
@@ -940,7 +937,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             for (const rootFile of this.openFiles) {
-                this.logger.info(rootFile.fileName);
+                this.logger.info(`\t${rootFile.fileName}`);
             }
 
             this.logger.endGroup();
@@ -1617,7 +1614,7 @@ namespace ts.server {
         }
 
         /** Makes a filename safe to insert in a RegExp */
-        private static filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
+        private static readonly filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
         private static escapeFilenameForRegex(filename: string) {
             return filename.replace(this.filenameEscapeRegexp, "\\$&");
         }

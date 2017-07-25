@@ -163,7 +163,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                 deleteNode(nodeToDelete);
 
                 if (!assignmentBinaryExpression.right) {
-                    return createProperty([], modifiers, symbol.getUnescapedName(), /*questionToken*/ undefined,
+                    return createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,
                         /*type*/ undefined, /*initializer*/ undefined);
                 }
 

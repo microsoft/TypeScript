@@ -31,6 +31,11 @@ namespace ts {
         next(): { value: T, done: false } | { value: never, done: true };
     }
 
+    /** Array that is only intended to be pushed to, never read. */
+    export interface Push<T> {
+        push(...values: T[]): void;
+    }
+
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
@@ -574,10 +579,10 @@ namespace ts {
     export interface Identifier extends PrimaryExpression {
         kind: SyntaxKind.Identifier;
         /**
-         * Text of identifier (with escapes converted to characters).
-         * If the identifier begins with two underscores, this will begin with three.
+         * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
+         * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
-        text: __String;
+        escapedText: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
@@ -680,7 +685,7 @@ namespace ts {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
-        name?: BindingName;                 // Declared parameter name. Missing if this is a parameter in a JSDocFunctionType.
+        name: BindingName;                  // Declared parameter name.
         questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
@@ -2321,10 +2326,10 @@ namespace ts {
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: StringLiteral[];
-        /* @internal */ moduleAugmentations: StringLiteral[];
+        /* @internal */ imports: ReadonlyArray<StringLiteral>;
+        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        /* @internal */ ambientModuleNames: string[];
+        /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
@@ -2893,7 +2898,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        name: __String;                           // Name of symbol
+        escapedName: __String;                           // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members
