@@ -2214,6 +2214,7 @@ namespace ts {
                 return finishNode(node);
             }
 
+            const startPos = scanner.getStartPos();
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers();
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
@@ -2237,14 +2238,13 @@ namespace ts {
             node.type = parseParameterType();
             node.initializer = parseBindingElementInitializer(/*inParameter*/ true);
 
-            // Do not check for initializers in an ambient context for parameters. This is not
-            // a grammar error because the grammar allows arbitrary call signatures in
-            // an ambient context.
-            // It is actually not necessary for this to be an error at all. The reason is that
-            // function/constructor implementations are syntactically disallowed in ambient
-            // contexts. In addition, parameter initializers are semantically disallowed in
-            // overload signatures. So parameter initializers are transitively disallowed in
-            // ambient contexts.
+            if (startPos === scanner.getStartPos()) {
+                // What we're parsing isn't actually remotely recognizable as a parameter and we've consumed no tokens whatsoever
+                // Consume a token to advance the parser in some way and avoid an infinite loop in `parseDelimitedList`
+                // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
+                // or when a modifier keyword which is disallowed as a parameter name (ie, `static` in strict mode) is supplied
+                nextToken();
+            }
 
             return addJSDocComment(finishNode(node));
         }
