@@ -34,10 +34,9 @@ function main(): void {
     // Check that there are no duplicates.
     const seenNames = ts.createMap<true>();
     for (const name of names) {
-        const low = name.toLowerCase();
-        if (seenNames.has(low))
-            throw new Error(`Name ${low} appears twice`);
-        seenNames.set(low, true);
+        if (seenNames.has(name))
+            throw new Error(`Name ${name} appears twice`);
+        seenNames.set(name, true);
     }
 
     var infoFileOutput = buildInfoFileOutput(diagnosticMessages);
