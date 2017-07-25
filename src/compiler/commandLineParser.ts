@@ -1296,7 +1296,6 @@ namespace ts {
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
             const descriptionColumn: string[] = [];
-            const knownKeysCount = compilerOptionsMap.size;
             categorizedOptions.forEach((options, category) => {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
@@ -1307,7 +1306,7 @@ namespace ts {
                 for (const option of options) {
                     let optionName;
                     if (compilerOptionsMap.has(option.name)) {
-                        optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap.get(option.name))}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
+                        optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap.get(option.name))}${(seenKnownKeys += 1) === compilerOptionsMap.size ? "" : ","}`;
                     }
                     else {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
