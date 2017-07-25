@@ -3136,7 +3136,7 @@ namespace ts {
             return addJSDocComment(finishNode(node));
         }
 
-        function tryParseParenthesizedArrowFunctionExpression(): Expression {
+        function tryParseParenthesizedArrowFunctionExpression(): Expression | undefined {
             const triState = isParenthesizedArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
@@ -3299,7 +3299,7 @@ namespace ts {
             return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
         }
 
-        function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction {
+        function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction | undefined {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token() === SyntaxKind.AsyncKeyword) {
                 const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
@@ -4373,7 +4373,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration {
+        function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration | undefined {
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
                 return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers);
             }
@@ -4486,7 +4486,7 @@ namespace ts {
             return addJSDocComment(finishNode(node));
         }
 
-        function parseOptionalIdentifier() {
+        function parseOptionalIdentifier(): Identifier | undefined {
             return isIdentifier() ? parseIdentifier() : undefined;
         }
 
@@ -5551,7 +5551,7 @@ namespace ts {
             return addJSDocComment(finishNode(node));
         }
 
-        function parseNameOfClassDeclarationOrExpression(): Identifier {
+        function parseNameOfClassDeclarationOrExpression(): Identifier | undefined {
             // implements is a future reserved word so
             // 'class implements' might mean either
             // - class expression with omitted name, 'implements' starts heritage clause
@@ -6091,7 +6091,7 @@ namespace ts {
         }
 
         export namespace JSDocParser {
-            export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
+            export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS);
                 scanner.setText(content, start, length);
@@ -6116,7 +6116,7 @@ namespace ts {
                 return finishNode(result);
             }
 
-            export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
+            export function parseIsolatedJSDocComment(content: string, start: number, length: number): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
                 const jsDoc = parseJSDocCommentWorker(start, length);
@@ -6446,7 +6446,7 @@ namespace ts {
                     tags.end = tag.end;
                 }
 
-                function tryParseTypeExpression(): JSDocTypeExpression {
+                function tryParseTypeExpression(): JSDocTypeExpression | undefined {
                     return tryParse(() => {
                         skipWhitespace();
                         if (token() !== SyntaxKind.OpenBraceToken) {
@@ -6684,7 +6684,7 @@ namespace ts {
                     return false;
                 }
 
-                function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag {
+                function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
                         parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
@@ -6728,12 +6728,10 @@ namespace ts {
                     return currentToken = scanner.scanJSDocToken();
                 }
 
-                function parseJSDocIdentifierName(createIfMissing = false): Identifier {
-                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token()), createIfMissing);
-                }
-
-                function createJSDocIdentifier(isIdentifier: boolean, createIfMissing: boolean): Identifier {
-                    if (!isIdentifier) {
+                function parseJSDocIdentifierName(createIfMissing: true): Identifier;
+                function parseJSDocIdentifierName(createIfMissing?: boolean): Identifier | undefined;
+                function parseJSDocIdentifierName(createIfMissing = false): Identifier | undefined {
+                    if (!tokenIsIdentifierOrKeyword(token())) {
                         if (createIfMissing) {
                             return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
                         }
@@ -7114,7 +7112,7 @@ namespace ts {
                 }
             }
 
-            function getLastChildWorker(node: Node): Node {
+            function getLastChildWorker(node: Node): Node | undefined {
                 let last: Node = undefined;
                 forEachChild(node, child => {
                     if (nodeIsPresent(child)) {
