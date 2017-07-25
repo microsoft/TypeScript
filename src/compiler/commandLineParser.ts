@@ -1307,7 +1307,7 @@ namespace ts {
                 }
             }
 
-            // Serialize all options and thier descriptions
+            // Serialize all options and their descriptions
             let marginLength = 0;
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
