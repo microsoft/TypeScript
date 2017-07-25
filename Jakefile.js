@@ -840,7 +840,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         testTimeout = 800000;
     }
 
-    var colors = process.env.colors || process.env.color || true;
+    var colorsFlag = process.env.color || process.env.colors;
+    var colors = colorsFlag !== "false" && colorsFlag !== "0";
     var reporter = process.env.reporter || process.env.r || defaultReporter;
     var bail = process.env.bail || process.env.b;
     var lintFlag = process.env.lint !== 'false';
