@@ -359,11 +359,11 @@ namespace ts {
     }
 
     /**
-     * @deprecated
+     * @deprecated Use `id.escapedText` to get the escaped text of an Identifier.
      * @param identifier The identifier to escape
      */
     export function escapeIdentifier(identifier: string): string {
-        return escapeLeadingUnderscores(identifier) as string;
+        return identifier;
     }
 
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
@@ -385,6 +385,11 @@ namespace ts {
     export function isAmbientModule(node: Node): boolean {
         return node && node.kind === SyntaxKind.ModuleDeclaration &&
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+    }
+
+    /* @internal */
+    export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
+        return isModuleDeclaration(node) && isStringLiteral(node.name);
     }
 
     /** Given a symbol for a module, checks that it is a shorthand ambient module. */
@@ -481,7 +486,7 @@ namespace ts {
     export function getTextOfPropertyName(name: PropertyName): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return (<Identifier>name).text;
+                return (<Identifier>name).escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 return escapeLeadingUnderscores((<LiteralExpression>name).text);
@@ -497,7 +502,7 @@ namespace ts {
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return getFullWidth(name) === 0 ? unescapeLeadingUnderscores(name.text) : getTextOfNode(name);
+                return getFullWidth(name) === 0 ? unescapeLeadingUnderscores(name.escapedText) : getTextOfNode(name);
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
@@ -1304,7 +1309,7 @@ namespace ts {
         }
         const { expression, arguments: args } = callExpression as CallExpression;
 
-        if (expression.kind !== SyntaxKind.Identifier || (expression as Identifier).text !== "require") {
+        if (expression.kind !== SyntaxKind.Identifier || (expression as Identifier).escapedText !== "require") {
             return false;
         }
 
@@ -1339,11 +1344,11 @@ namespace ts {
     }
 
     export function isExportsIdentifier(node: Node) {
-        return isIdentifier(node) && node.text === "exports";
+        return isIdentifier(node) && node.escapedText === "exports";
     }
 
     export function isModuleExportsPropertyAccessExpression(node: Node) {
-        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.text === "module" && node.name.text === "exports";
+        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.escapedText === "module" && node.name.escapedText === "exports";
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -1359,11 +1364,11 @@ namespace ts {
         const lhs = <PropertyAccessExpression>expr.left;
         if (lhs.expression.kind === SyntaxKind.Identifier) {
             const lhsId = <Identifier>lhs.expression;
-            if (lhsId.text === "exports") {
+            if (lhsId.escapedText === "exports") {
                 // exports.name = expr
                 return SpecialPropertyAssignmentKind.ExportsProperty;
             }
-            else if (lhsId.text === "module" && lhs.name.text === "exports") {
+            else if (lhsId.escapedText === "module" && lhs.name.escapedText === "exports") {
                 // module.exports = expr
                 return SpecialPropertyAssignmentKind.ModuleExports;
             }
@@ -1381,10 +1386,10 @@ namespace ts {
             if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier) {
                 // module.exports.name = expr
                 const innerPropertyAccessIdentifier = <Identifier>innerPropertyAccess.expression;
-                if (innerPropertyAccessIdentifier.text === "module" && innerPropertyAccess.name.text === "exports") {
+                if (innerPropertyAccessIdentifier.escapedText === "module" && innerPropertyAccess.name.escapedText === "exports") {
                     return SpecialPropertyAssignmentKind.ExportsProperty;
                 }
-                if (innerPropertyAccess.name.text === "prototype") {
+                if (innerPropertyAccess.name.escapedText === "prototype") {
                     return SpecialPropertyAssignmentKind.PrototypeProperty;
                 }
             }
@@ -1450,7 +1455,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocFunctionType &&
             (node as JSDocFunctionType).parameters.length > 0 &&
             (node as JSDocFunctionType).parameters[0].name &&
-            ((node as JSDocFunctionType).parameters[0].name as Identifier).text === "new";
+            ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
     }
 
     export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
@@ -1537,8 +1542,8 @@ namespace ts {
 
     export function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] | undefined {
         if (param.name && isIdentifier(param.name)) {
-            const name = param.name.text;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && tag.name.text === name) as JSDocParameterTag[];
+            const name = param.name.escapedText;
+            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && tag.name.escapedText === name) as JSDocParameterTag[];
         }
         else {
             // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
@@ -1549,20 +1554,20 @@ namespace ts {
 
     /** Does the opposite of `getJSDocParameterTags`: given a JSDoc parameter, finds the parameter corresponding to it. */
     export function getParameterFromJSDoc(node: JSDocParameterTag): ParameterDeclaration | undefined {
-        const name = node.name.text;
+        const name = node.name.escapedText;
         const grandParent = node.parent!.parent!;
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         if (!isFunctionLike(grandParent)) {
             return undefined;
         }
         return find(grandParent.parameters, p =>
-            p.name.kind === SyntaxKind.Identifier && p.name.text === name);
+            p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
-        const name = node.name.text;
+        const name = node.name.escapedText;
         const { typeParameters } = (node.parent.parent.parent as ts.SignatureDeclaration | ts.InterfaceDeclaration | ts.ClassDeclaration);
-        return find(typeParameters, p => p.name.text === name);
+        return find(typeParameters, p => p.name.escapedText === name);
     }
 
     export function getJSDocType(node: Node): TypeNode {
@@ -1965,7 +1970,7 @@ namespace ts {
 
     export function getPropertyNameForPropertyNameNode(name: DeclarationName): __String {
         if (name.kind === SyntaxKind.Identifier) {
-            return name.text;
+            return name.escapedText;
         }
         if (name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
             return escapeLeadingUnderscores(name.text);
@@ -1973,7 +1978,7 @@ namespace ts {
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             const nameExpression = name.expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
-                const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
+                const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.escapedText;
                 return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores(rightHandSideName));
             }
             else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
@@ -1987,7 +1992,7 @@ namespace ts {
     export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
         if (node) {
             if (node.kind === SyntaxKind.Identifier) {
-                return unescapeLeadingUnderscores((node as Identifier).text);
+                return unescapeLeadingUnderscores((node as Identifier).escapedText);
             }
             if (node.kind === SyntaxKind.StringLiteral ||
                 node.kind === SyntaxKind.NumericLiteral) {
@@ -2002,7 +2007,7 @@ namespace ts {
     export function getEscapedTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
         if (node) {
             if (node.kind === SyntaxKind.Identifier) {
-                return (node as Identifier).text;
+                return (node as Identifier).escapedText;
             }
             if (node.kind === SyntaxKind.StringLiteral ||
                 node.kind === SyntaxKind.NumericLiteral) {
@@ -2022,11 +2027,11 @@ namespace ts {
      * Includes the word "Symbol" with unicode escapes
      */
     export function isESSymbolIdentifier(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
+        return node.kind === SyntaxKind.Identifier && (<Identifier>node).escapedText === "Symbol";
     }
 
     export function isPushOrUnshiftIdentifier(node: Identifier) {
-        return node.text === "push" || node.text === "unshift";
+        return node.escapedText === "push" || node.escapedText === "unshift";
     }
 
     export function isParameterDeclaration(node: VariableLikeDeclaration) {
@@ -4029,12 +4034,12 @@ namespace ts {
 
     /**
      * Remove extra underscore from escaped identifier text content.
-     * @deprecated
+     * @deprecated Use `id.text` for the unescaped text.
      * @param identifier The escaped identifier text.
      * @returns The unescaped identifier text.
      */
     export function unescapeIdentifier(id: string): string {
-        return unescapeLeadingUnderscores(id as __String);
+        return id;
     }
 
     export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {

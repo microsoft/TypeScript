@@ -122,7 +122,7 @@ namespace ts.FindAllReferences {
                 }
                 case "label": {
                     const { node } = def;
-                    return { node, name: unescapeLeadingUnderscores(node.text), kind: ScriptElementKind.label, displayParts: [displayPart(unescapeLeadingUnderscores(node.text), SymbolDisplayPartKind.text)] };
+                    return { node, name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
                 }
                 case "keyword": {
                     const { node } = def;
@@ -357,7 +357,7 @@ namespace ts.FindAllReferences.Core {
         // Labels
         if (isLabelName(node)) {
             if (isJumpStatementTarget(node)) {
-                const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), unescapeLeadingUnderscores((<Identifier>node).text));
+                const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                 // if we have a label definition, look within its statement for references, if not, then
                 // the label is undefined and we have no results..
                 return labelDefinition && getLabelReferencesInNode(labelDefinition.parent, labelDefinition);
@@ -606,7 +606,7 @@ namespace ts.FindAllReferences.Core {
         const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
         if (bindingElement) {
             const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, unescapeLeadingUnderscores((<Identifier>bindingElement.name).text));
+            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
         }
         return undefined;
     }
@@ -718,7 +718,7 @@ namespace ts.FindAllReferences.Core {
     function getLabelReferencesInNode(container: Node, targetLabel: Identifier): SymbolAndEntries[] {
         const references: Entry[] = [];
         const sourceFile = container.getSourceFile();
-        const labelName = unescapeLeadingUnderscores(targetLabel.text);
+        const labelName = targetLabel.text;
         const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container);
         for (const position of possiblePositions) {
             const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
@@ -735,7 +735,7 @@ namespace ts.FindAllReferences.Core {
         // Compare the length so we filter out strict superstrings of the symbol we are looking for
         switch (node && node.kind) {
             case SyntaxKind.Identifier:
-                return unescapeLeadingUnderscores((node as Identifier).text).length === searchSymbolName.length;
+                return (node as Identifier).text.length === searchSymbolName.length;
 
             case SyntaxKind.StringLiteral:
                 return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) &&

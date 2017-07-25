@@ -2049,7 +2049,7 @@ namespace ts {
                 for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
                     if (isArrayLiteralExpression(property.initializer)) {
                         for (const element of property.initializer.elements) {
-                            if (element.kind === SyntaxKind.StringLiteral && (<StringLiteral>element).text === spec) {
+                            if (isStringLiteral(element) && element.text === spec) {
                                 return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
                             }
                         }

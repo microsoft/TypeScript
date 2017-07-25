@@ -1441,19 +1441,20 @@ namespace ts {
                         break;
                     case SyntaxKind.ModuleDeclaration:
                         if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
-                            const moduleName = <StringLiteral>(<ModuleDeclaration>node).name;
+                            const moduleName = <StringLiteral>(<ModuleDeclaration>node).name; // TODO: GH#17347
+                            const nameText = ts.getTextOfIdentifierOrLiteral(moduleName);
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
                             // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
                             // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
                             //   immediately nested in top level ambient module declaration .
-                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(moduleName.text))) {
+                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(nameText))) {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
                                 if (file.isDeclarationFile) {
                                     // for global .d.ts files record name of ambient module
-                                    (ambientModules || (ambientModules = [])).push(moduleName.text);
+                                    (ambientModules || (ambientModules = [])).push(nameText);
                                 }
                                 // An AmbientExternalModuleDeclaration declares an external module.
                                 // This type of declaration is permitted only in the global module.

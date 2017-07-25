@@ -1158,7 +1158,14 @@ namespace ts {
             }
 
             const result = createNode(kind, scanner.getStartPos());
-            (<Identifier>result).text = "" as __String;
+            switch (kind) {
+                case SyntaxKind.Identifier:
+                    (result as Identifier).escapedText = "" as __String;
+                    break;
+                default: // TODO: GH#17346
+                    (result as LiteralLikeNode).text = "";
+                    break;
+            }
             return finishNode(result);
         }
 
@@ -1182,7 +1189,7 @@ namespace ts {
                 if (token() !== SyntaxKind.Identifier) {
                     node.originalKeywordKind = token();
                 }
-                node.text = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
+                node.escapedText = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
                 nextToken();
                 return finishNode(node);
             }
@@ -3896,7 +3903,7 @@ namespace ts {
             }
 
             if (lhs.kind === SyntaxKind.Identifier) {
-                return (<Identifier>lhs).text === (<Identifier>rhs).text;
+                return (<Identifier>lhs).escapedText === (<Identifier>rhs).escapedText;
             }
 
             if (lhs.kind === SyntaxKind.ThisKeyword) {
@@ -3906,7 +3913,7 @@ namespace ts {
             // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
             // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
             // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
-            return (<PropertyAccessExpression>lhs).name.text === (<PropertyAccessExpression>rhs).name.text &&
+            return (<PropertyAccessExpression>lhs).name.escapedText === (<PropertyAccessExpression>rhs).name.escapedText &&
                 tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
         }
 
@@ -6323,7 +6330,7 @@ namespace ts {
 
                     let tag: JSDocTag;
                     if (tagName) {
-                        switch (tagName.text) {
+                        switch (tagName.escapedText) {
                             case "augments":
                                 tag = parseAugmentsTag(atToken, tagName);
                                 break;
@@ -6506,7 +6513,7 @@ namespace ts {
 
                 function parseReturnTag(atToken: AtToken, tagName: Identifier): JSDocReturnTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
-                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     const result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
@@ -6518,7 +6525,7 @@ namespace ts {
 
                 function parseTypeTag(atToken: AtToken, tagName: Identifier): JSDocTypeTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
-                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
@@ -6584,7 +6591,7 @@ namespace ts {
 
                     function isObjectTypeReference(node: TypeNode) {
                         return node.kind === SyntaxKind.ObjectKeyword ||
-                            isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.text === "Object";
+                            isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object";
                     }
 
                     function scanChildTags(): JSDocTypeLiteral {
@@ -6660,7 +6667,7 @@ namespace ts {
                         return false;
                     }
 
-                    switch (tagName.text) {
+                    switch (tagName.escapedText) {
                         case "type":
                             if (parentTag.jsDocTypeTag) {
                                 // already has a @type tag, terminate the parent tag now.
@@ -6686,7 +6693,7 @@ namespace ts {
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
-                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     // Type parameter list looks like '@template T,U,V'
@@ -6746,7 +6753,7 @@ namespace ts {
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.text = escapeLeadingUnderscores(content.substring(pos, end));
+                    result.escapedText = escapeLeadingUnderscores(content.substring(pos, end));
                     finishNode(result, end);
 
                     nextJSDocToken();
