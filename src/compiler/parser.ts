@@ -2214,6 +2214,7 @@ namespace ts {
                 return finishNode(node);
             }
 
+            const startPos = scanner.getStartPos();
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers();
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
@@ -2221,13 +2222,23 @@ namespace ts {
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
             node.name = parseIdentifierOrPattern();
+            if (getFullWidth(node.name) === 0 && !hasModifiers(node) && isModifierKind(token())) {
+                // in cases like
+                // 'use strict'
+                // function foo(static)
+                // isParameter('static') === true, because of isModifier('static')
+                // however 'static' is not a legal identifier in a strict mode.
+                // so result of this function will be ParameterDeclaration (flags = 0, name = missing, type = undefined, initializer = undefined)
+                // and current token will not change => parsing of the enclosing parameter list will last till the end of time (or OOM)
+                // to avoid this we'll advance cursor to the next token.
+                nextToken();
+            }
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
             node.initializer = parseBindingElementInitializer(/*inParameter*/ true);
 
-            const zeroLengthName = getFullWidth(node.name) === 0;
-            if (zeroLengthName && !node.type && !node.initializer && !node.decorators && !node.modifiers && !node.dotDotDotToken && !node.questionToken) {
+            if (startPos === scanner.getStartPos()) {
                 // What we're parsing isn't actually remotely recognizable as a parameter and we've consumed no tokens whatsoever
                 // Consume a token to advance the parser in some way and avoid an infinite loop in `parseDelimitedList`
                 // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
