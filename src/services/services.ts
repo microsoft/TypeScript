@@ -304,7 +304,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
-        name: __String;
+        escapedName: __String;
         declarations?: Declaration[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -317,19 +317,23 @@ namespace ts {
 
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
-            this.name = name;
+            this.escapedName = name;
         }
 
         getFlags(): SymbolFlags {
             return this.flags;
         }
 
-        getName(): __String {
-            return this.name;
+        get name(): string {
+            return unescapeLeadingUnderscores(this.escapedName);
         }
 
-        getUnescapedName(): string {
-            return unescapeLeadingUnderscores(this.name);
+        getEscapedName(): __String {
+            return this.escapedName;
+        }
+
+        getName(): string {
+            return this.name;
         }
 
         getDeclarations(): Declaration[] | undefined {

@@ -35,7 +35,7 @@ namespace ts.codefix {
      */
     export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker): Node[] {
         const classMembers = classDeclaration.symbol.members;
-        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.name));
+        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.escapedName));
 
         let newNodes: Node[] = [];
         for (const symbol of missingMembers) {
@@ -205,7 +205,7 @@ namespace ts.codefix {
             }
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
-        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.getUnescapedName());
+        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*addAnyType*/ true);
 

@@ -180,7 +180,7 @@ namespace ts.FindAllReferences {
      * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
      */
     function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-        const exportName = exportSymbol.name;
+        const exportName = exportSymbol.escapedName;
         const importSearches: Array<[Identifier, Symbol]> = [];
         const singleReferences: Identifier[] = [];
         function addSearch(location: Identifier, symbol: Symbol): void {
@@ -521,11 +521,11 @@ namespace ts.FindAllReferences {
             // Search on the local symbol in the exporting module, not the exported symbol.
             importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
             // Similarly, skip past the symbol for 'export ='
-            if (importedSymbol.name === "export=") {
+            if (importedSymbol.escapedName === "export=") {
                 importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
             }
 
-            if (symbolName(importedSymbol) === symbol.name) { // If this is a rename import, do not continue searching.
+            if (symbolName(importedSymbol) === symbol.escapedName) { // If this is a rename import, do not continue searching.
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
@@ -595,8 +595,8 @@ namespace ts.FindAllReferences {
     }
 
     function symbolName(symbol: Symbol): __String | undefined {
-        if (symbol.name !== "default") {
-            return symbol.getName();
+        if (symbol.escapedName !== "default") {
+            return symbol.escapedName;
         }
 
         return forEach(symbol.declarations, decl => {
