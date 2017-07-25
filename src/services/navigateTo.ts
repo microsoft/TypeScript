@@ -54,7 +54,7 @@ namespace ts.NavigateTo {
             if (decl.kind === SyntaxKind.ImportClause || decl.kind === SyntaxKind.ImportSpecifier || decl.kind === SyntaxKind.ImportEqualsDeclaration) {
                 const importer = checker.getSymbolAtLocation((decl as NamedDeclaration).name);
                 const imported = checker.getAliasedSymbol(importer);
-                return importer.name !== imported.name;
+                return importer.escapedName !== imported.escapedName;
             }
             else {
                 return true;

@@ -148,7 +148,7 @@ namespace ts.codefix {
             else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
                 symbol = checker.getAliasedSymbol(checker.resolveNameAtLocation(token, checker.getJsxNamespace(), SymbolFlags.Value));
-                symbolName = symbol.getUnescapedName();
+                symbolName = symbol.name;
             }
             else {
                 Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
@@ -171,7 +171,7 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if (localSymbol && localSymbol.name === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
+                if (localSymbol && localSymbol.escapedName === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol);
                     symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isDefault*/ true));

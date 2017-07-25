@@ -2644,7 +2644,7 @@ namespace ts {
          *       on symbol names.
          */
         function recordEmittedDeclarationInScope(node: Node) {
-            const name = node.symbol && node.symbol.name;
+            const name = node.symbol && node.symbol.escapedName;
             if (name) {
                 if (!currentScopeFirstDeclarationsOfName) {
                     currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
@@ -2662,7 +2662,7 @@ namespace ts {
          */
         function isFirstEmittedDeclarationInScope(node: Node) {
             if (currentScopeFirstDeclarationsOfName) {
-                const name = node.symbol && node.symbol.name;
+                const name = node.symbol && node.symbol.escapedName;
                 if (name) {
                     return currentScopeFirstDeclarationsOfName.get(name) === node;
                 }
