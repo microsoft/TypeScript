@@ -294,7 +294,7 @@ gulp.task("configure-nightly", "Runs scripts/configureNightly.ts to prepare a bu
     exec(host, [configureNightlyJs, packageJson, versionFile], done, done);
 });
 gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
-    return runSequence("clean", "useDebugMode", "runtests", (done) => {
+    return runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
         exec("npm", ["publish", "--tag", "next"], done, done);
     });
 });
