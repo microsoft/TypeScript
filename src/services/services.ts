@@ -1511,15 +1511,16 @@ namespace ts {
         function getReferences(fileName: string, position: number, options?: FindAllReferences.Options) {
             synchronizeHostData();
 
-            //Exclude default library when renaming as commonly user don't want to change that file.
+            // Exclude default library when renaming as commonly user don't want to change that file.
             let sourceFiles: SourceFile[] = [];
-            if (options.isForRename) {
-                for (let sourceFile of program.getSourceFiles()) {
+            if (options && options.isForRename) {
+                for (const sourceFile of program.getSourceFiles()) {
                     if (!program.isSourceFileDefaultLibrary(sourceFile)) {
                         sourceFiles.push(sourceFile);
                     }
                 }
-            } else {
+            }
+            else {
                 sourceFiles = program.getSourceFiles();
             }
 
