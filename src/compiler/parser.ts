@@ -411,7 +411,7 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
-                if ((node as JSDocPropertyLikeTag).isParameterNameFirst) {
+                if ((node as JSDocPropertyLikeTag).isNameFirst) {
                     return visitNode(cbNode, (<JSDocPropertyLikeTag>node).fullName) ||
                         visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression);
                 }
@@ -431,12 +431,10 @@ namespace ts {
                 if ((node as JSDocTypedefTag).typeExpression &&
                     (node as JSDocTypedefTag).typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
                     return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).name);
+                        visitNode(cbNode, (<JSDocTypedefTag>node).fullName);
                 }
                 else {
                     return visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).name) ||
                         visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
                 }
             case SyntaxKind.JSDocTypeLiteral:
@@ -6520,7 +6518,27 @@ namespace ts {
                     const result: JSDocPropertyLikeTag = target ?
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
+                    const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, fullName);
+                    if (nestedTypeLiteral) {
+                        typeExpression = nestedTypeLiteral;
+                    }
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeExpression = typeExpression;
+                    if (typeExpression) {
+                        result.type = typeExpression.type;
+                    }
+                    result.fullName = postName || preName;
+                    result.name = ts.isIdentifier(result.fullName) ? result.fullName : result.fullName.right;
+                    result.isNameFirst = !!nestedTypeLiteral || (postName ? false : !!preName);
+                    result.isBracketed = isBracketed;
+                    return finishNode(result);
+
+                }
+
+                function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression, fullName: EntityName) {
                     if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
+                        const typeLiteralExpression = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
                         let child: JSDocPropertyLikeTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         const start = scanner.getStartPos();
@@ -6535,21 +6553,10 @@ namespace ts {
                             if (typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
-                            typeExpression.type = finishNode(jsdocTypeLiteral);
+                            typeLiteralExpression.type = finishNode(jsdocTypeLiteral);
+                            return finishNode(typeLiteralExpression);
                         }
                     }
-                    result.atToken = atToken;
-                    result.tagName = tagName;
-                    result.typeExpression = typeExpression;
-                    if (typeExpression) {
-                        result.type = typeExpression.type;
-                    }
-                    result.fullName = postName || preName;
-                    result.name = ts.isIdentifier(result.fullName) ? result.fullName : result.fullName.right;
-                    result.isParameterNameFirst = postName ? false : !!preName;
-                    result.isBracketed = isBracketed;
-                    return finishNode(result);
-
                 }
 
                 function parseReturnTag(atToken: AtToken, tagName: Identifier): JSDocReturnTag {

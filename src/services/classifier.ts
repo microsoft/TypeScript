@@ -755,7 +755,7 @@ namespace ts {
             return;
 
             function processJSDocParameterTag(tag: JSDocParameterTag) {
-                if (tag.isParameterNameFirst) {
+                if (tag.isNameFirst) {
                     pushCommentRange(pos, tag.name.pos - pos);
                     pushClassification(tag.name.pos, tag.name.end - tag.name.pos, ClassificationType.parameterName);
                     pos = tag.name.end;
@@ -767,7 +767,7 @@ namespace ts {
                     pos = tag.typeExpression.end;
                 }
 
-                if (!tag.isParameterNameFirst) {
+                if (!tag.isNameFirst) {
                     pushCommentRange(pos, tag.name.pos - pos);
                     pushClassification(tag.name.pos, tag.name.end - tag.name.pos, ClassificationType.parameterName);
                     pos = tag.name.end;

@@ -5074,8 +5074,8 @@ namespace ts {
                     return unknownType;
                 }
 
-                const declaration = getDeclarationOfKind<JSDocTypedefTag>(symbol, SyntaxKind.JSDocTypedefTag) ||
-                    getDeclarationOfKind<TypeAliasDeclaration>(symbol, SyntaxKind.TypeAliasDeclaration);
+                const declaration = <JSDocTypedefTag | TypeAliasDeclaration>findDeclaration(
+                    symbol, d => d.kind === SyntaxKind.JSDocTypedefTag || d.kind === SyntaxKind.TypeAliasDeclaration);
                 let type = getTypeFromTypeNode(declaration.kind === SyntaxKind.JSDocTypedefTag ? declaration.typeExpression : declaration.type);
 
                 if (popTypeResolution()) {
@@ -22610,8 +22610,7 @@ namespace ts {
             }
 
             if (entityName.parent!.kind === SyntaxKind.JSDocParameterTag) {
-                const parameter = getParameterFromJSDoc(entityName.parent as JSDocParameterTag);
-                return parameter && parameter.symbol;
+                return getParameterSymbolFromJSDoc(entityName.parent as JSDocParameterTag);
             }
 
             if (entityName.parent.kind === SyntaxKind.TypeParameter && entityName.parent.parent.kind === SyntaxKind.JSDocTemplateTag) {

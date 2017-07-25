@@ -2170,10 +2170,11 @@ namespace ts {
                     }
                     // falls through
                 case SyntaxKind.JSDocPropertyTag:
-                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyLikeTag,
-                        (node as JSDocPropertyLikeTag).isBracketed || ((node as JSDocPropertyLikeTag).typeExpression && (node as JSDocPropertyLikeTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) ?
-                            SymbolFlags.Property | SymbolFlags.Optional : SymbolFlags.Property,
-                        SymbolFlags.PropertyExcludes);
+                    const propTag = node as JSDocPropertyLikeTag;
+                    const flags = propTag.isBracketed || propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
+                        SymbolFlags.Property | SymbolFlags.Optional :
+                        SymbolFlags.Property;
+                    return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.JSDocTypedefTag: {
                     const { fullName } = node as JSDocTypedefTag;
                     if (!fullName || fullName.kind === SyntaxKind.Identifier) {

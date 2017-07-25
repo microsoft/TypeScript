@@ -2135,7 +2135,7 @@ namespace ts {
         name: Identifier;
         typeExpression: JSDocTypeExpression;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
-        isParameterNameFirst: boolean;
+        isNameFirst: boolean;
         isBracketed: boolean;
     }
 
