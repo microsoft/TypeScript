@@ -45,7 +45,7 @@
                 "end": 32,
                 "text": "name1"
             },
-            "isParameterNameFirst": false,
+            "isNameFirst": false,
             "isBracketed": false,
             "comment": "Description"
         },

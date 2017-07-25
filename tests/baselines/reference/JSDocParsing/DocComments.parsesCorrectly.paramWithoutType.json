@@ -30,7 +30,7 @@
                 "end": 18,
                 "text": "foo"
             },
-            "isParameterNameFirst": true,
+            "isNameFirst": true,
             "isBracketed": false,
             "comment": ""
         },

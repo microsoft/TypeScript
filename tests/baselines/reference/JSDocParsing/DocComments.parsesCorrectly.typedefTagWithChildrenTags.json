@@ -109,7 +109,7 @@
                             "end": 69,
                             "text": "age"
                         },
-                        "isParameterNameFirst": false,
+                        "isNameFirst": false,
                         "isBracketed": false
                     },
                     {
@@ -154,7 +154,7 @@
                             "end": 97,
                             "text": "name"
                         },
-                        "isParameterNameFirst": false,
+                        "isNameFirst": false,
                         "isBracketed": false
                     }
                 ]
