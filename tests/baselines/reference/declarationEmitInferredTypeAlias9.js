@@ -1,4 +1,4 @@
-//// [declarationEmitInferedTypeAlias9.ts]
+//// [declarationEmitInferredTypeAlias9.ts]
 type Foo<T> = T | { x: Foo<T> };
 var x: Foo<number[]>;
 
@@ -6,7 +6,7 @@ export function returnSomeGlobalValue() {
     return x;
 }
 
-//// [declarationEmitInferedTypeAlias9.js]
+//// [declarationEmitInferredTypeAlias9.js]
 "use strict";
 exports.__esModule = true;
 var x;
@@ -16,7 +16,7 @@ function returnSomeGlobalValue() {
 exports.returnSomeGlobalValue = returnSomeGlobalValue;
 
 
-//// [declarationEmitInferedTypeAlias9.d.ts]
+//// [declarationEmitInferredTypeAlias9.d.ts]
 export declare function returnSomeGlobalValue(): number[] | {
     x: number[] | any;
 };
