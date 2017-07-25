@@ -555,6 +555,7 @@ namespace ts {
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             isSourceFileFromExternalLibrary,
+            isSourceFileDefaultLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
@@ -973,6 +974,10 @@ namespace ts {
 
         function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
             return sourceFilesFoundSearchingNodeModules.get(file.path);
+        }
+
+        function isSourceFileDefaultLibrary(file: SourceFile): boolean {
+            return file.fileName === host.getDefaultLibFileName(options);
         }
 
         function getDiagnosticsProducingTypeChecker() {
