@@ -3394,9 +3394,7 @@ namespace ts {
                             if (!symbolStack) {
                                 symbolStack = [];
                             }
-                            const isConstructorObject = type.flags & TypeFlags.Object &&
-                                getObjectFlags(type) & ObjectFlags.Anonymous &&
-                                type.symbol && type.symbol.flags & SymbolFlags.Class;
+                            const isConstructorObject = type.objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
                             if (isConstructorObject) {
                                 writeLiteralType(type, flags);
                             }
