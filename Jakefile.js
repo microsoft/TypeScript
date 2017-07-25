@@ -505,7 +505,7 @@ task("configure-nightly", [configureNightlyJs], function () {
 }, { async: true });
 
 desc("Configure, build, test, and publish the nightly release.");
-task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests"], function () {
+task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag next";
     console.log(cmd);
     exec(cmd);

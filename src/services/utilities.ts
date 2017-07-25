@@ -203,7 +203,7 @@ namespace ts {
 
     export function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
-            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
+            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.escapedText === labelName) {
                 return (<LabeledStatement>referenceNode).label;
             }
             referenceNode = referenceNode.parent;

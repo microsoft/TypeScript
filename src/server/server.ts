@@ -200,7 +200,7 @@ namespace ts.server {
 
         msg(s: string, type: Msg.Types = Msg.Err) {
             if (this.fd >= 0 || this.traceToConsole) {
-                s = s + "\n";
+                s = `[${nowString()}] ${s}\n`;
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
                 if (this.firstInGroup) {
                     s = prefix + s;
@@ -220,6 +220,12 @@ namespace ts.server {
                 }
             }
         }
+    }
+
+    // E.g. "12:34:56.789"
+    function nowString() {
+        const d = new Date();
+        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 
     class NodeTypingsInstaller implements ITypingsInstaller {

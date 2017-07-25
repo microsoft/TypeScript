@@ -2405,7 +2405,7 @@ namespace FourSlash {
             const sortedActualArray = actualTextArray.sort();
             if (!ts.arrayIsEqualTo(sortedExpectedArray, sortedActualArray)) {
                 this.raiseError(
-                    `Actual text array doesn't match expected text array. \nActual: \n"${sortedActualArray.join("\n\n")}"\n---\nExpected: \n'${sortedExpectedArray.join("\n\n")}'`);
+                    `Actual text array doesn't match expected text array. \nActual: \n'${sortedActualArray.join("\n\n")}'\n---\nExpected: \n'${sortedExpectedArray.join("\n\n")}'`);
             }
         }
 

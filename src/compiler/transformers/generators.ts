@@ -1635,14 +1635,14 @@ namespace ts {
         }
 
         function transformAndEmitContinueStatement(node: ContinueStatement): void {
-            const label = findContinueTarget(node.label ? unescapeLeadingUnderscores(node.label.text) : undefined);
+            const label = findContinueTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
             Debug.assert(label > 0, "Expected continue statment to point to a valid Label.");
             emitBreak(label, /*location*/ node);
         }
 
         function visitContinueStatement(node: ContinueStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findContinueTarget(node.label && unescapeLeadingUnderscores(node.label.text));
+                const label = findContinueTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1652,14 +1652,14 @@ namespace ts {
         }
 
         function transformAndEmitBreakStatement(node: BreakStatement): void {
-            const label = findBreakTarget(node.label ? unescapeLeadingUnderscores(node.label.text) : undefined);
+            const label = findBreakTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
             Debug.assert(label > 0, "Expected break statment to point to a valid Label.");
             emitBreak(label, /*location*/ node);
         }
 
         function visitBreakStatement(node: BreakStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findBreakTarget(node.label && unescapeLeadingUnderscores(node.label.text));
+                const label = findBreakTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1838,7 +1838,7 @@ namespace ts {
                 //      /*body*/
                 //  .endlabeled
                 //  .mark endLabel
-                beginLabeledBlock(unescapeLeadingUnderscores(node.label.text));
+                beginLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
                 transformAndEmitEmbeddedStatement(node.statement);
                 endLabeledBlock();
             }
@@ -1849,7 +1849,7 @@ namespace ts {
 
         function visitLabeledStatement(node: LabeledStatement) {
             if (inStatementContainingYield) {
-                beginScriptLabeledBlock(unescapeLeadingUnderscores(node.label.text));
+                beginScriptLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
             }
 
             node = visitEachChild(node, visitor, context);
@@ -1950,7 +1950,7 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(unescapeLeadingUnderscores(node.text))) {
+            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(unescapeLeadingUnderscores(node.escapedText))) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
@@ -2123,7 +2123,7 @@ namespace ts {
                 hoistVariableDeclaration(variable.name);
             }
             else {
-                const text = unescapeLeadingUnderscores((<Identifier>variable.name).text);
+                const text = unescapeLeadingUnderscores((<Identifier>variable.name).escapedText);
                 name = declareLocal(text);
                 if (!renamedCatchVariables) {
                     renamedCatchVariables = createMap<boolean>();

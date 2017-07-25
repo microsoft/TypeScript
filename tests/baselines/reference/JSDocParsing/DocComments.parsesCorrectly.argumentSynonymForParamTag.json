@@ -16,7 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "text": "argument"
+                "escapedText": "argument"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
@@ -32,13 +32,13 @@
                 "kind": "Identifier",
                 "pos": 27,
                 "end": 32,
-                "text": "name1"
+                "escapedText": "name1"
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 27,
                 "end": 32,
-                "text": "name1"
+                "escapedText": "name1"
             },
             "isBracketed": false,
             "comment": "Description"

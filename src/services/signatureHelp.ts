@@ -65,14 +65,14 @@ namespace ts.SignatureHelp {
                 ? (<PropertyAccessExpression>expression).name
                 : undefined;
 
-        if (!name || !name.text) {
+        if (!name || !name.escapedText) {
             return undefined;
         }
 
         const typeChecker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = nameToDeclarations.get(unescapeLeadingUnderscores(name.text));
+            const declarations = nameToDeclarations.get(name.text);
 
             if (declarations) {
                 for (const declaration of declarations) {

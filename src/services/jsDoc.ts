@@ -71,7 +71,7 @@ namespace ts.JsDoc {
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
                 if (tag.kind === SyntaxKind.JSDocTag) {
-                    tags.push({ name: unescapeLeadingUnderscores(tag.tagName.text), text: tag.comment });
+                    tags.push({ name: tag.tagName.text, text: tag.comment });
                 }
             }
         });
@@ -120,7 +120,7 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
-        const nameThusFar = unescapeLeadingUnderscores(tag.name.text);
+        const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
         if (!ts.isFunctionLike(fn)) return [];
@@ -128,8 +128,8 @@ namespace ts.JsDoc {
         return mapDefined(fn.parameters, param => {
             if (!isIdentifier(param.name)) return undefined;
 
-            const name = unescapeLeadingUnderscores(param.name.text);
-            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.text === name)
+            const name = param.name.text;
+            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.escapedText === name)
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
             }
@@ -213,7 +213,7 @@ namespace ts.JsDoc {
         for (let i = 0; i < parameters.length; i++) {
             const currentName = parameters[i].name;
             const paramName = currentName.kind === SyntaxKind.Identifier ?
-                (<Identifier>currentName).text :
+                (<Identifier>currentName).escapedText :
                 "param" + i;
             if (isJavaScriptFile) {
                 docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;

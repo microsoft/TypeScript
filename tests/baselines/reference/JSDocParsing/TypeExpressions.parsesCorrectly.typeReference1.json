@@ -8,7 +8,7 @@
         "pos": 1,
         "end": 2,
         "flags": "JSDoc",
-        "text": "a",
+        "escapedText": "a",
         "jsdocDotPos": 2
     },
     "typeArguments": {
