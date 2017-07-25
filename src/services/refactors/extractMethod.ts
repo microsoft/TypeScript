@@ -275,6 +275,29 @@ namespace ts.refactor.extractMethod {
                     // already found an error - can stop now
                     return true;
                 }
+
+                // Some things can't be extracted in certain situations
+                switch (node.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                        (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractFunction));
+                        return true;
+                    case SyntaxKind.SuperKeyword:
+                        // For a super *constructor call*, we have to be extracting the entire class,
+                        // but a super *method call* simply implies a 'this' reference
+                        if (node.parent.kind === SyntaxKind.CallExpression) {
+                            // Super constructor call
+                            const containingClass = getContainingClass(node);
+                            if (containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
+                                (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractFunction));
+                                return true;
+                            }
+                        }
+                        else {
+                            rangeFacts |= RangeFacts.UsesThis;
+                        }
+                        break;
+                }
+
                 if (!node || isFunctionLike(node) || isClassLike(node)) {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
