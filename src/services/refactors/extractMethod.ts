@@ -107,7 +107,11 @@ namespace ts.refactor.extractMethod {
         HasReturn = 1 << 0,
         IsGenerator = 1 << 1,
         IsAsyncFunction = 1 << 2,
-        UsesThis = 1 << 3
+        UsesThis = 1 << 3,
+        /**
+         * The range is in a function which needs the 'static' modifier in a class
+         */
+        InStaticRegion = 1 << 4
     }
 
     /**
@@ -260,6 +264,28 @@ namespace ts.refactor.extractMethod {
                     return [createDiagnosticForNode(nodeToCheck, Messages.CannotExtractExportedEntity)];
                 }
                 declarations.push(nodeToCheck.symbol);
+            }
+
+            // If we're in a class, see if we're in a static region (static property initializer; class constructor parameter default) or not
+            const stoppingPoint: Node = getContainingClass(nodeToCheck);
+            if (stoppingPoint) {
+                let current: Node = nodeToCheck;
+                while (current !== stoppingPoint) {
+                    if (current.kind === SyntaxKind.PropertyDeclaration) {
+                        if (hasModifier(current, ModifierFlags.Static)) {
+                            rangeFacts |= RangeFacts.InStaticRegion;
+                        }
+                        break;
+                    }
+                    else if (current.kind === SyntaxKind.Parameter) {
+                        const ctorOrMethod = getContainingFunction(current);
+                        if (ctorOrMethod.kind === SyntaxKind.Constructor) {
+                            rangeFacts |= RangeFacts.InStaticRegion;
+                        }
+                        break;
+                    }
+                    current = current.parent;
+                }
             }
 
             let errors: Diagnostic[];
@@ -542,6 +568,18 @@ namespace ts.refactor.extractMethod {
         }
     }
 
+    function getUniqueName(isNameOkay: (name: __String) => boolean) {
+        let functionNameText = "newFunction" as __String;
+        if (isNameOkay(functionNameText)) {
+            return functionNameText;
+        }
+        let i = 1;
+        while (!isNameOkay(functionNameText = `newFunction_${i}` as __String)) {
+            i++;
+        }
+        return functionNameText;
+    }
+
     export function extractFunctionInScope(
         node: Node,
         scope: Scope,
@@ -552,12 +590,14 @@ namespace ts.refactor.extractMethod {
         const checker = context.program.getTypeChecker();
 
         // Make a unique name for the extracted function
-        let functionNameText = "newFunction" as __String;
-        if (scope.locals && scope.locals.has(functionNameText)) {
-            let i = 1;
-            while (scope.locals.has(functionNameText = `newFunction_${i}` as __String)) {
-                i++;
-            }
+        let functionNameText: __String;
+        if (isClassLike(scope)) {
+            const type = range.facts & RangeFacts.InStaticRegion ? checker.getTypeOfSymbolAtLocation(scope.symbol, scope) : checker.getDeclaredTypeOfSymbol(scope.symbol);
+            const props = checker.getPropertiesOfType(type);
+            functionNameText = getUniqueName(n => props.every(p => p.name !== n));
+        }
+        else {
+            functionNameText = getUniqueName(n => !(scope.locals && scope.locals.has(n)));
         }
         const isJS = isInJavaScriptFile(node);
 
@@ -606,6 +646,9 @@ namespace ts.refactor.extractMethod {
             if (range.facts & RangeFacts.IsAsyncFunction) {
                 modifiers.push(createToken(SyntaxKind.AsyncKeyword));
             }
+            if (range.facts & RangeFacts.InStaticRegion) {
+                modifiers.push(createToken(SyntaxKind.StaticKeyword));
+            }
             newFunction = createMethod(
                 /*decorators*/ undefined,
                 modifiers,
@@ -638,7 +681,7 @@ namespace ts.refactor.extractMethod {
         const newNodes: Node[] = [];
         // replace range with function call
         let call: Expression = createCall(
-            isClassLike(scope) ? createPropertyAccess(createThis(), functionName) : functionName,
+            isClassLike(scope) ? createPropertyAccess(range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.getText()) : createThis(), functionName) : functionName,
             /*typeArguments*/ undefined,
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
