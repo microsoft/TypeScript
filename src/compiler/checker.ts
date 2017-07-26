@@ -7359,6 +7359,11 @@ namespace ts {
                 type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
                 unionTypes.set(id, type);
                 type.types = types;
+                /*
+                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
+                If there exist both `type T = number | boolean` and `type U = number | boolean`, it is arbitrary which one gets the aliasSymbol.
+                It's important that we create equivalent union types only once, so that's an unfortunate side effect.
+                */
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
             }
@@ -7452,7 +7457,7 @@ namespace ts {
                 type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
                 intersectionTypes.set(id, type);
                 type.types = typeSet;
-                type.aliasSymbol = aliasSymbol;
+                type.aliasSymbol = aliasSymbol; // See comment in `getUnionTypeFromSortedList`.
                 type.aliasTypeArguments = aliasTypeArguments;
             }
             return type;
