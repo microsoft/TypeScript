@@ -1778,17 +1778,14 @@ namespace ts {
         }
 
         function tryGetMemberInModuleExportsAndProperties(memberName: __String, moduleSymbol: Symbol): Symbol | undefined {
-            const symbolTable = getExportsOfModule(moduleSymbol);
-            if (symbolTable) {
-                let symbol = symbolTable.get(memberName);
-                if (!symbol) {
-                    const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
-                    if (exportEquals !== moduleSymbol) {
-                         symbol = getPropertyOfType(getTypeOfSymbol(exportEquals), memberName);
-                    }
+            const symbol = tryGetMemberInModuleExports(memberName, moduleSymbol);
+            if (!symbol) {
+                const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
+                if (exportEquals !== moduleSymbol) {
+                    return getPropertyOfType(getTypeOfSymbol(exportEquals), memberName);
                 }
-                return symbol;
             }
+            return symbol;
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {

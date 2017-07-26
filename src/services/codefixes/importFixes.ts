@@ -178,6 +178,9 @@ namespace ts.codefix {
                 }
             }
 
+            // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
+            Debug.assert(name !== "default");
+
             // check exports with the same name
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(name, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
