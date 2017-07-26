@@ -1891,7 +1891,13 @@ namespace ts {
                     if (considerSemicolonAsDelimiter && token() === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
                         nextToken();
                     }
-                    checkZeroLengthNode(startPos);
+                    if (startPos === scanner.getStartPos()) {
+                        // What we're parsing isn't actually remotely recognizable as a element and we've consumed no tokens whatsoever
+                        // Consume a token to advance the parser in some way and avoid an infinite loop
+                        // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
+                        // or when a modifier keyword which is disallowed as a parameter name (ie, `static` in strict mode) is supplied
+                        nextToken();
+                    }
                     continue;
                 }
 
@@ -1917,16 +1923,6 @@ namespace ts {
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
-
-            function checkZeroLengthNode(startPos: number) {
-                if (startPos === scanner.getStartPos()) {
-                    // What we're parsing isn't actually remotely recognizable as a parameter and we've consumed no tokens whatsoever
-                    // Consume a token to advance the parser in some way and avoid an infinite loop in `parseDelimitedList`
-                    // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
-                    // or when a modifier keyword which is disallowed as a parameter name (ie, `static` in strict mode) is supplied
-                    nextToken();
-                }
-            }
         }
 
         function createMissingList<T extends Node>(): NodeArray<T> {
