@@ -837,7 +837,7 @@ namespace ts.server {
      */
     export class InferredProject extends Project {
 
-        private static newName = (() => {
+        private static readonly newName = (() => {
             let nextId = 1;
             return () => {
                 const id = nextId;

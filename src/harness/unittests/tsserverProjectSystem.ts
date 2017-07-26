@@ -561,7 +561,7 @@ namespace ts.projectSystem {
         }
 
         clearOutput() {
-            this.output.length = 0;
+            clear(this.output);
         }
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;

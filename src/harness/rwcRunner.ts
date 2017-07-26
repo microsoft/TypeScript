@@ -238,10 +238,8 @@ namespace RWC {
 }
 
 class RWCRunner extends RunnerBase {
-    private static sourcePath = "internal/cases/rwc/";
-
     public enumerateTestFiles() {
-        return Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
+        return Harness.IO.listFiles("internal/cases/rwc/", /.+\.json$/);
     }
 
     public kind(): TestRunnerKind {

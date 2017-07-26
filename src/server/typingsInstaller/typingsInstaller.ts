@@ -93,10 +93,10 @@ namespace ts.server.typingsInstaller {
         abstract readonly typesRegistry: Map<void>;
 
         constructor(
-            readonly installTypingHost: InstallTypingHost,
-            readonly globalCachePath: string,
-            readonly safeListPath: Path,
-            readonly throttleLimit: number,
+            protected readonly installTypingHost: InstallTypingHost,
+            private readonly globalCachePath: string,
+            private readonly safeListPath: Path,
+            private readonly throttleLimit: number,
             protected readonly log = nullLog) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);

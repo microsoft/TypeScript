@@ -8,13 +8,10 @@ namespace ts {
         [index: string]: T;
     }
 
-    /** ES6 Map interface. */
-    export interface Map<T> {
+    /** ES6 Map interface, only read methods included. */
+    export interface ReadonlyMap<T> {
         get(key: string): T | undefined;
         has(key: string): boolean;
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
         forEach(action: (value: T, key: string) => void): void;
         readonly size: number;
         keys(): Iterator<string>;
@@ -22,9 +19,21 @@ namespace ts {
         entries(): Iterator<[string, T]>;
     }
 
+    /** ES6 Map interface. */
+    export interface Map<T> extends ReadonlyMap<T> {
+        set(key: string, value: T): this;
+        delete(key: string): boolean;
+        clear(): void;
+    }
+
     /** ES6 Iterator type. */
     export interface Iterator<T> {
         next(): { value: T, done: false } | { value: never, done: true };
+    }
+
+    /** Array that is only intended to be pushed to, never read. */
+    export interface Push<T> {
+        push(...values: T[]): void;
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths
@@ -501,25 +510,28 @@ namespace ts {
         flags: NodeFlags;
         /* @internal */ modifierFlagsCache?: ModifierFlags;
         /* @internal */ transformFlags?: TransformFlags;
-        decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
-        modifiers?: ModifiersArray;                     // Array of modifiers
-        /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
-        parent?: Node;                                  // Parent node (initialized by binding)
-        /* @internal */ original?: Node;                // The original node if this is an updated node.
-        /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
-        /* @internal */ jsDoc?: JSDoc[];                // JSDoc that directly precedes this node
-        /* @internal */ jsDocCache?: JSDocTag[];        // Cache for getJSDocTags
-        /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
-        /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type;          // Used to temporarily assign a contextual type during overload resolution
-        /* @internal */ contextualMapper?: TypeMapper;  // Mapper for contextual type
+        decorators?: NodeArray<Decorator>;                    // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                           // Array of modifiers
+        /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
+        parent?: Node;                                        // Parent node (initialized by binding)
+        /* @internal */ original?: Node;                      // The original node if this is an updated node.
+        /* @internal */ startsOnNewLine?: boolean;            // Whether a synthesized node should start on a new line (used by transforms).
+        /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
+        /* @internal */ jsDocCache?: ReadonlyArray<JSDocTag>; // Cache for getJSDocTags
+        /* @internal */ symbol?: Symbol;                      // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
+        /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
+        /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ contextualMapper?: TypeMapper;        // Mapper for contextual type
     }
 
-    export interface NodeArray<T extends Node> extends Array<T>, TextRange {
+    /* @internal */
+    export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
+
+    export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
         hasTrailingComma?: boolean;
         /* @internal */ transformFlags?: TransformFlags;
     }
@@ -567,10 +579,10 @@ namespace ts {
     export interface Identifier extends PrimaryExpression {
         kind: SyntaxKind.Identifier;
         /**
-         * Text of identifier (with escapes converted to characters).
-         * If the identifier begins with two underscores, this will begin with three.
+         * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
+         * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
-        text: __String;
+        escapedText: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
@@ -673,7 +685,7 @@ namespace ts {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
-        name: BindingName;                  // Declared parameter name
+        name: BindingName;                  // Declared parameter name.
         questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
@@ -751,7 +763,7 @@ namespace ts {
     export interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
+        name?: DeclarationName; // May be missing for ParameterDeclaration, see comment there
         questionToken?: QuestionToken;
         type?: TypeNode;
         initializer?: Expression;
@@ -2314,10 +2326,10 @@ namespace ts {
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: StringLiteral[];
-        /* @internal */ moduleAugmentations: StringLiteral[];
+        /* @internal */ imports: ReadonlyArray<StringLiteral>;
+        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        /* @internal */ ambientModuleNames: string[];
+        /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
@@ -2349,11 +2361,11 @@ namespace ts {
          */
         fileExists(path: string): boolean;
 
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
     }
 
     export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: SourceFile[]): void;
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: ReadonlyArray<SourceFile>): void;
     }
 
     export class OperationCanceledException { }
@@ -2520,6 +2532,7 @@ namespace ts {
          * Returns `any` if the index is not valid.
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
+        getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
@@ -2677,6 +2690,7 @@ namespace ts {
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
+        InArrayType                     = 1 << 15,  // Writing an array element type
     }
 
     export const enum SymbolFormatFlags {
@@ -2885,7 +2899,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        name: __String;                           // Name of symbol
+        escapedName: __String;                           // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members
@@ -2982,18 +2996,22 @@ namespace ts {
      */
     export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
-    /** EscapedStringMap based on ES6 Map interface. */
-    export interface UnderscoreEscapedMap<T> {
+    /** ReadonlyMap where keys are `__String`s. */
+    export interface ReadonlyUnderscoreEscapedMap<T> {
         get(key: __String): T | undefined;
         has(key: __String): boolean;
-        set(key: __String, value: T): this;
-        delete(key: __String): boolean;
-        clear(): void;
         forEach(action: (value: T, key: __String) => void): void;
         readonly size: number;
         keys(): Iterator<__String>;
         values(): Iterator<T>;
         entries(): Iterator<[__String, T]>;
+    }
+
+    /** Map where keys are `__String`s. */
+    export interface UnderscoreEscapedMap<T> extends ReadonlyUnderscoreEscapedMap<T> {
+        set(key: __String, value: T): this;
+        delete(key: __String): boolean;
+        clear(): void;
     }
 
     /** SymbolTable based on ES6 Map interface. */
@@ -3856,7 +3874,7 @@ namespace ts {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module
-        readFile(fileName: string): string;
+        readFile(fileName: string): string | undefined;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;

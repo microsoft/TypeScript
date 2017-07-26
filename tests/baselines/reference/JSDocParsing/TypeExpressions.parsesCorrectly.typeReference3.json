@@ -13,7 +13,7 @@
             "pos": 1,
             "end": 2,
             "flags": "JSDoc",
-            "text": "a"
+            "escapedText": "a"
         },
         "right": {
             "kind": "Identifier",
@@ -21,7 +21,7 @@
             "end": 11,
             "flags": "JSDoc",
             "originalKeywordKind": "FunctionKeyword",
-            "text": "function"
+            "escapedText": "function"
         }
     }
 }

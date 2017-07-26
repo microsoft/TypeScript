@@ -16,19 +16,19 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 16,
-                "text": "typedef"
+                "escapedText": "typedef"
             },
             "fullName": {
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
-                "text": "People"
+                "escapedText": "People"
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
-                "text": "People"
+                "escapedText": "People"
             },
             "jsDocTypeLiteral": {
                 "kind": "JSDocTypeLiteral",
@@ -47,7 +47,7 @@
                         "kind": "Identifier",
                         "pos": 29,
                         "end": 33,
-                        "text": "type"
+                        "escapedText": "type"
                     },
                     "typeExpression": {
                         "kind": "JSDocTypeExpression",
@@ -61,7 +61,7 @@
                                 "kind": "Identifier",
                                 "pos": 35,
                                 "end": 41,
-                                "text": "Object"
+                                "escapedText": "Object"
                             }
                         }
                     }
@@ -80,7 +80,7 @@
                             "kind": "Identifier",
                             "pos": 48,
                             "end": 56,
-                            "text": "property"
+                            "escapedText": "property"
                         },
                         "typeExpression": {
                             "kind": "JSDocTypeExpression",
@@ -96,13 +96,13 @@
                             "kind": "Identifier",
                             "pos": 66,
                             "end": 69,
-                            "text": "age"
+                            "escapedText": "age"
                         },
                         "name": {
                             "kind": "Identifier",
                             "pos": 66,
                             "end": 69,
-                            "text": "age"
+                            "escapedText": "age"
                         },
                         "isBracketed": false
                     },
@@ -119,7 +119,7 @@
                             "kind": "Identifier",
                             "pos": 75,
                             "end": 83,
-                            "text": "property"
+                            "escapedText": "property"
                         },
                         "typeExpression": {
                             "kind": "JSDocTypeExpression",
@@ -135,13 +135,13 @@
                             "kind": "Identifier",
                             "pos": 93,
                             "end": 97,
-                            "text": "name"
+                            "escapedText": "name"
                         },
                         "name": {
                             "kind": "Identifier",
                             "pos": 93,
                             "end": 97,
-                            "text": "name"
+                            "escapedText": "name"
                         },
                         "isBracketed": false
                     }

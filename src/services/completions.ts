@@ -606,7 +606,7 @@ namespace ts.Completions {
                     if (symbol.flags & (SymbolFlags.Module | SymbolFlags.Enum)) {
                         // Extract module or enum members
                         const exportedSymbols = typeChecker.getExportsOfModule(symbol);
-                        const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.getUnescapedName());
+                        const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
                         const isValidAccess = isRhsOfImportDeclaration ?
                             // Any kind is allowed when dotting off namespace in internal import equals declaration
@@ -636,7 +636,7 @@ namespace ts.Completions {
         function addTypeProperties(type: Type) {
             // Filter private properties
             for (const symbol of type.getApparentProperties()) {
-                if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.getUnescapedName())) {
+                if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                     symbols.push(symbol);
                 }
             }
@@ -963,7 +963,7 @@ namespace ts.Completions {
             isMemberCompletion = true;
 
             let typeMembers: Symbol[];
-            let existingMembers: Declaration[];
+            let existingMembers: ReadonlyArray<Declaration>;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 // We are completing on contextual types, but may also include properties
@@ -1093,14 +1093,14 @@ namespace ts.Completions {
                         }
                     }
                     const implementedInterfaceTypePropertySymbols = (classElementModifierFlags & ModifierFlags.Static) ?
-                        undefined :
-                        flatMap(implementsTypeNodes, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
+                        emptyArray :
+                        flatMap(implementsTypeNodes || emptyArray, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
 
                     // List of property symbols of base type that are not private and already implemented
                     symbols = filterClassMembersList(
                         baseClassTypeToGetPropertiesFrom ?
                             typeChecker.getPropertiesOfType(baseClassTypeToGetPropertiesFrom) :
-                            undefined,
+                            emptyArray,
                         implementedInterfaceTypePropertySymbols,
                         classLikeDeclaration.members,
                         classElementModifierFlags);
@@ -1443,7 +1443,7 @@ namespace ts.Completions {
          * @returns Symbols to be suggested at an import/export clause, barring those whose named imports/exports
          *          do not occur at the current position and have not otherwise been typed.
          */
-        function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
+        function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ReadonlyArray<ImportOrExportSpecifier>): Symbol[] {
             const existingImportsOrExports = createUnderscoreEscapedMap<boolean>();
 
             for (const element of namedImportsOrExports) {
@@ -1453,14 +1453,14 @@ namespace ts.Completions {
                 }
 
                 const name = element.propertyName || element.name;
-                existingImportsOrExports.set(name.text, true);
+                existingImportsOrExports.set(name.escapedText, true);
             }
 
             if (existingImportsOrExports.size === 0) {
-                return filter(exportsOfModule, e => e.name !== "default");
+                return filter(exportsOfModule, e => e.escapedName !== "default");
             }
 
-            return filter(exportsOfModule, e => e.name !== "default" && !existingImportsOrExports.get(e.name));
+            return filter(exportsOfModule, e => e.escapedName !== "default" && !existingImportsOrExports.get(e.escapedName));
         }
 
         /**
@@ -1469,7 +1469,7 @@ namespace ts.Completions {
          * @returns Symbols to be suggested in an object binding pattern or object literal expression, barring those whose declarations
          *          do not occur at the current position and have not otherwise been typed.
          */
-        function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: Declaration[]): Symbol[] {
+        function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: ReadonlyArray<Declaration>): Symbol[] {
             if (!existingMembers || existingMembers.length === 0) {
                 return contextualMemberSymbols;
             }
@@ -1496,7 +1496,7 @@ namespace ts.Completions {
                 if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
                     // include only identifiers in completion list
                     if ((<BindingElement>m).propertyName.kind === SyntaxKind.Identifier) {
-                        existingName = (<Identifier>(<BindingElement>m).propertyName).text;
+                        existingName = (<Identifier>(<BindingElement>m).propertyName).escapedText;
                     }
                 }
                 else {
@@ -1510,7 +1510,7 @@ namespace ts.Completions {
                 existingMemberNames.set(existingName, true);
             }
 
-            return filter(contextualMemberSymbols, m => !existingMemberNames.get(m.name));
+            return filter(contextualMemberSymbols, m => !existingMemberNames.get(m.escapedName));
         }
 
         /**
@@ -1518,7 +1518,11 @@ namespace ts.Completions {
          *
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
-        function filterClassMembersList(baseSymbols: Symbol[], implementingTypeSymbols: Symbol[], existingMembers: ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
+        function filterClassMembersList(
+            baseSymbols: ReadonlyArray<Symbol>,
+            implementingTypeSymbols: ReadonlyArray<Symbol>,
+            existingMembers: ReadonlyArray<ClassElement>,
+            currentClassElementModifierFlags: ModifierFlags): Symbol[] {
             const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
@@ -1553,13 +1557,21 @@ namespace ts.Completions {
                 }
             }
 
-            return concatenate(
-                filter(baseSymbols, baseProperty => isValidProperty(baseProperty, ModifierFlags.Private)),
-                filter(implementingTypeSymbols, implementingProperty => isValidProperty(implementingProperty, ModifierFlags.NonPublicAccessibilityModifier))
-            );
+            const result: Symbol[] = [];
+            addPropertySymbols(baseSymbols, ModifierFlags.Private);
+            addPropertySymbols(implementingTypeSymbols, ModifierFlags.NonPublicAccessibilityModifier);
+            return result;
+
+            function addPropertySymbols(properties: ReadonlyArray<Symbol>, inValidModifierFlags: ModifierFlags) {
+                for (const property of properties) {
+                    if (isValidProperty(property, inValidModifierFlags)) {
+                        result.push(property);
+                    }
+                }
+            }
 
             function isValidProperty(propertySymbol: Symbol, inValidModifierFlags: ModifierFlags) {
-                return !existingMemberNames.get(propertySymbol.name) &&
+                return !existingMemberNames.get(propertySymbol.escapedName) &&
                     propertySymbol.getDeclarations() &&
                     !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & inValidModifierFlags);
             }
@@ -1580,11 +1592,11 @@ namespace ts.Completions {
                 }
 
                 if (attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames.set((<JsxAttribute>attr).name.text, true);
+                    seenNames.set((<JsxAttribute>attr).name.escapedText, true);
                 }
             }
 
-            return filter(symbols, a => !seenNames.get(a.name));
+            return filter(symbols, a => !seenNames.get(a.escapedName));
         }
 
         function isCurrentlyEditingNode(node: Node): boolean {
@@ -1598,7 +1610,7 @@ namespace ts.Completions {
      * @return undefined if the name is of external module
      */
     function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string | undefined {
-        const name = symbol.getUnescapedName();
+        const name = symbol.name;
         if (!name) return undefined;
 
         // First check of the displayName is not external module; if it is an external module, it is not valid entry

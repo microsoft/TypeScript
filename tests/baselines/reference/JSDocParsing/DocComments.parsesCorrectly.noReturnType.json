@@ -16,7 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
-                "text": "return"
+                "escapedText": "return"
             },
             "comment": ""
         },

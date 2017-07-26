@@ -209,7 +209,7 @@ namespace Utils {
             }
         }
 
-        readFile(path: string): string {
+        readFile(path: string): string | undefined {
             const value = this.traversePath(path);
             if (value && value.isFile()) {
                 return value.content.content;

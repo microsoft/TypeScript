@@ -13,6 +13,7 @@ declare var console: any;
 class C {
     private myModule = import("./0");
     method() {
+        const loadAsync = import("./0");
         this.myModule.then(Zero => {
             console.log(Zero.foo());
         }, async err => {

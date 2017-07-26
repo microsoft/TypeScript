@@ -479,7 +479,7 @@ namespace Harness {
         getCurrentDirectory(): string;
         useCaseSensitiveFileNames(): boolean;
         resolvePath(path: string): string;
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
         writeFile(path: string, contents: string): void;
         directoryName(path: string): string;
         getDirectories(path: string): string[];
@@ -719,7 +719,7 @@ namespace Harness {
                 }
             });
 
-            export function readFile(file: string) {
+            export function readFile(file: string): string | undefined {
                 const response = Http.getFileFromServerSync(serverRoot + file);
                 if (response.status === 200) {
                     return response.responseText;
@@ -976,7 +976,7 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => fileMap.has(toPath(fileName)),
-                readFile: (fileName: string): string => {
+                readFile(fileName: string): string | undefined {
                     const file = fileMap.get(toPath(fileName));
                     if (ts.endsWith(fileName, "json")) {
                         // strip comments
