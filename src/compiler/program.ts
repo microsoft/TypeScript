@@ -387,7 +387,8 @@ namespace ts {
         allDiagnostics?: Diagnostic[];
     }
 
-    export function isProgramUptoDate(program: Program, rootFileNames: string[], newOptions: CompilerOptions, getSourceVersion: (path: Path) => string): boolean {
+    export function isProgramUptoDate(program: Program, rootFileNames: string[], newOptions: CompilerOptions,
+        getSourceVersion: (path: Path) => string, fileExists: (fileName: string) => boolean): boolean {
         // If we haven't create a program yet, then it is not up-to-date
         if (!program) {
             return false;
@@ -398,12 +399,16 @@ namespace ts {
             return false;
         }
 
-        const fileNames = concatenate(rootFileNames, map(program.getSourceFiles(), sourceFile => sourceFile.fileName));
         // If any file is not up-to-date, then the whole program is not up-to-date
-        for (const fileName of fileNames) {
-            if (!sourceFileUpToDate(program.getSourceFile(fileName))) {
+        for (const file of program.getSourceFiles()) {
+            if (!sourceFileUpToDate(program.getSourceFile(file.fileName))) {
                 return false;
             }
+        }
+
+        // If any of the missing file paths are now created
+        if (program.getMissingFilePaths().some(missingFilePath => fileExists(missingFilePath))) {
+            return false;
         }
 
         const currentOptions = program.getCompilerOptions();
@@ -445,14 +450,10 @@ namespace ts {
 
     /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
-     * @param program
-     * @param existingMap
-     * @param createMissingFileWatch
-     * @param closeExistingFileWatcher
      */
     export function updateMissingFilePathsWatch(program: Program, existingMap: Map<FileWatcher>,
         createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
-        closeExistingFileWatcher: (missingFilePath: Path, fileWatcher: FileWatcher) => void) {
+        closeExistingMissingFilePathFileWatcher: (missingFilePath: Path, fileWatcher: FileWatcher) => void) {
 
         const missingFilePaths = program.getMissingFilePaths();
         const newMissingFilePathMap = arrayToSet(missingFilePaths);
@@ -463,12 +464,15 @@ namespace ts {
             createMissingFileWatch,
             // Files that are no longer missing (e.g. because they are no longer required)
             // should no longer be watched.
-            closeExistingFileWatcher
+            closeExistingMissingFilePathFileWatcher
         );
     }
 
     export type WildCardDirectoryWatchers = { watcher: FileWatcher, recursive: boolean };
 
+    /**
+     * Updates the existing wild card directory watcyhes with the new set of wild card directories from the config file after new program is created
+     */
     export function updateWatchingWildcardDirectories(existingWatchedForWildcards: Map<WildCardDirectoryWatchers>, wildcardDirectories: Map<WatchDirectoryFlags>,
         watchDirectory: (directory: string, recursive: boolean) => FileWatcher,
         closeDirectoryWatcher: (directory: string, watcher: FileWatcher, recursive: boolean, recursiveChanged: boolean) => void) {

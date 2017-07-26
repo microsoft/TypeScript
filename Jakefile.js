@@ -91,6 +91,7 @@ var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "
 var harnessCoreSources = [
     "harness.ts",
     "virtualFileSystem.ts",
+    "virtualFileSystemWithWatch.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
     "fourslash.ts",
@@ -128,6 +129,7 @@ var harnessSources = harnessCoreSources.concat([
     "convertCompilerOptionsFromJson.ts",
     "convertTypeAcquisitionFromJson.ts",
     "tsserverProjectSystem.ts",
+    "tscWatchMode.ts",
     "compileOnSave.ts",
     "typingsInstaller.ts",
     "projectErrors.ts",

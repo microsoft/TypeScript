@@ -1116,7 +1116,7 @@ namespace ts {
             let hostCache = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (path) => hostCache.getVersion(path))) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists)) {
                 return;
             }
 
@@ -1139,14 +1139,7 @@ namespace ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
-                fileExists: (fileName): boolean => {
-                    // stub missing host functionality
-                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    const entry = hostCache.getEntryByPath(path);
-                    return entry ?
-                        !isString(entry) :
-                        (host.fileExists && host.fileExists(fileName));
-                },
+                fileExists,
                 readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -1188,6 +1181,14 @@ namespace ts {
             // pointers set property.
             program.getTypeChecker();
             return;
+
+            function fileExists(fileName: string) {
+                const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                const entry = hostCache.getEntryByPath(path);
+                return entry ?
+                    !isString(entry) :
+                    (host.fileExists && host.fileExists(fileName));
+            }
 
             // Release any files we have acquired in the old program but are
             // not part of the new program.

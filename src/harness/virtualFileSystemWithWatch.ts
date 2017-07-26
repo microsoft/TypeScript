@@ -30,6 +30,19 @@ namespace ts.TestFSWithWatch {
         newLine?: string;
     }
 
+    export function createWatchedSystem(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
+        if (!params) {
+            params = {};
+        }
+        const host = new TestServerHost(/*withSafelist*/ false,
+            params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
+            params.executingFilePath || getExecutingFilePathFromLibFile(),
+            params.currentDirectory || "/",
+            fileOrFolderList,
+            params.newLine);
+        return host;
+    }
+
     export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
         if (!params) {
             params = {};
@@ -112,6 +125,23 @@ namespace ts.TestFSWithWatch {
         checkMapKeys("watchedDirectories", recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
+    export function checkOutputContains(host: TestServerHost, expected: string[] | ReadonlyArray<string>) {
+        const mapExpected = arrayToSet(expected);
+        for (const f of host.getOutput()) {
+            if (mapExpected.has(f)) {
+                mapExpected.delete(f);
+            }
+        }
+        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);
+    }
+
+    export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
+        const mapExpectedToBeAbsent = arrayToSet(expectedToBeAbsent);
+        for (const f of host.getOutput()) {
+            assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(host.getOutput())}`);
+        }
+    }
+
     export class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
@@ -172,7 +202,7 @@ namespace ts.TestFSWithWatch {
             this.reloadFS(fileOrFolderList);
         }
 
-        private toFullPath(s: string) {
+        toFullPath(s: string) {
             const fullPath = getNormalizedAbsolutePath(s, this.currentDirectory);
             return this.toPath(fullPath);
         }
@@ -345,6 +375,11 @@ namespace ts.TestFSWithWatch {
             return isFile(this.fs.get(path));
         }
 
+        readFile(s: string) {
+            const fsEntry = this.fs.get(this.toFullPath(s));
+            return isFile(fsEntry) ? fsEntry.content : undefined;
+        }
+
         getFileSize(s: string) {
             const path = this.toFullPath(s);
             const entry = this.fs.get(path);
@@ -432,7 +467,15 @@ namespace ts.TestFSWithWatch {
         }
 
         runQueuedTimeoutCallbacks() {
-            this.timeoutCallbacks.invoke();
+            try {
+                this.timeoutCallbacks.invoke();
+            }
+            catch (e) {
+                if (e.message === this.existMessage) {
+                    return;
+                }
+                throw e;
+            }
         }
 
         runQueuedImmediateCallbacks() {
@@ -482,11 +525,15 @@ namespace ts.TestFSWithWatch {
             clear(this.output);
         }
 
-        readonly readFile = (s: string) => (<File>this.fs.get(this.toFullPath(s))).content;
+        readonly existMessage = "System Exit";
+        exitCode: number;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly exit = notImplemented;
+        exit(exitCode?: number) {
+            this.exitCode = exitCode;
+            throw new Error(this.existMessage);
+        }
         readonly getEnvironmentVariable = notImplemented;
     }
 }

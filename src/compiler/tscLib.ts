@@ -12,35 +12,49 @@ namespace ts {
         value: string;
     }
 
-    const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = {
+    export interface FormatDiagnosticsHostWithWrite extends FormatDiagnosticsHost {
+        write?(s: string): void;
+    }
+
+    const defaultFormatDiagnosticsHost: FormatDiagnosticsHostWithWrite = sys ? {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
-        getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
-    };
+        getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames),
+        write: s => sys.write(s)
+    } : undefined;
+
+    function getDefaultFormatDiagnosticsHost(system: System): FormatDiagnosticsHostWithWrite {
+        return system === sys ? defaultFormatDiagnosticsHost : {
+            getCurrentDirectory: () => system.getCurrentDirectory(),
+            getNewLine: () => system.newLine,
+            getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
+            write: s => system.write(s)
+        };
+    }
 
     let reportDiagnosticWorker = reportDiagnosticSimply;
 
-    function reportDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost) {
+    function reportDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHostWithWrite) {
         reportDiagnosticWorker(diagnostic, host || defaultFormatDiagnosticsHost);
     }
 
-    function reportDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): void {
+    function reportDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHostWithWrite): void {
         for (const diagnostic of diagnostics) {
             reportDiagnostic(diagnostic, host);
         }
     }
 
-    function reportEmittedFiles(files: string[]): void {
+    function reportEmittedFiles(files: string[], system: System): void {
         if (!files || files.length === 0) {
             return;
         }
 
-        const currentDir = sys.getCurrentDirectory();
+        const currentDir = system.getCurrentDirectory();
 
         for (const file of files) {
             const filepath = getNormalizedAbsolutePath(file, currentDir);
 
-            sys.write(`TSFILE: ${filepath}${sys.newLine}`);
+            system.write(`TSFILE: ${filepath}${system.newLine}`);
         }
     }
 
@@ -57,15 +71,15 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function reportDiagnosticSimply(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        sys.write(ts.formatDiagnostics([diagnostic], host));
+    function reportDiagnosticSimply(diagnostic: Diagnostic, host: FormatDiagnosticsHostWithWrite): void {
+        host.write(ts.formatDiagnostics([diagnostic], host));
     }
 
-    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine);
+    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHostWithWrite): void {
+        host.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + host.getNewLine());
     }
 
-    function reportWatchDiagnostic(diagnostic: Diagnostic) {
+    function reportWatchDiagnostic(diagnostic: Diagnostic, system: System) {
         let output = new Date().toLocaleTimeString() + " - ";
 
         if (diagnostic.file) {
@@ -73,9 +87,9 @@ namespace ts {
             output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
-        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine + sys.newLine + sys.newLine }`;
+        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, system.newLine) }${ system.newLine + system.newLine + system.newLine }`;
 
-        sys.write(output);
+        system.write(output);
     }
 
     function padLeft(s: string, length: number) {
@@ -175,7 +189,7 @@ namespace ts {
             const configParseResult = parseConfigFile(configFileName, commandLineOptions, sys);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
-                createWatchModeWithConfigFile(configParseResult, commandLineOptions);
+                createWatchModeWithConfigFile(configParseResult, commandLineOptions, sys);
             }
             else {
                 performCompilation(configParseResult.fileNames, configParseResult.options);
@@ -184,7 +198,7 @@ namespace ts {
         else {
             if (isWatchSet(commandLine.options)) {
                 reportWatchModeWithoutSysSupport();
-                createWatchModeWithoutConfigFile(commandLine.fileNames, commandLineOptions);
+                createWatchModeWithoutConfigFile(commandLine.fileNames, commandLineOptions, sys);
             }
             else {
                 performCompilation(commandLine.fileNames, commandLineOptions);
@@ -204,7 +218,7 @@ namespace ts {
             }
 
             const compilerHost = createCompilerHost(compilerOptions);
-            const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
+            const compileResult = compile(rootFileNames, compilerOptions, compilerHost, sys);
             return sys.exit(compileResult.exitStatus);
         }
     }
@@ -216,16 +230,16 @@ namespace ts {
     }
 
     /* @internal */
-    export function createWatchModeWithConfigFile(configParseResult: ParsedCommandLine, optionsToExtend?: CompilerOptions) {
-        return createWatchMode(configParseResult.fileNames, configParseResult.options,  configParseResult.options.configFilePath, configParseResult.configFileSpecs, configParseResult.wildcardDirectories, optionsToExtend);
+    export function createWatchModeWithConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions, system: System) {
+        return createWatchMode(configParseResult.fileNames, configParseResult.options, system, configParseResult.options.configFilePath, configParseResult.configFileSpecs, configParseResult.wildcardDirectories, optionsToExtend);
     }
 
     /* @internal */
-    export function createWatchModeWithoutConfigFile(rootFileNames: string[], compilerOptions: CompilerOptions) {
-        return createWatchMode(rootFileNames, compilerOptions);
+    export function createWatchModeWithoutConfigFile(rootFileNames: string[], compilerOptions: CompilerOptions, system: System) {
+        return createWatchMode(rootFileNames, compilerOptions, system);
     }
 
-    function createWatchMode(rootFileNames: string[], compilerOptions: CompilerOptions, configFileName?: string, configFileSpecs?: ConfigFileSpecs, configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>, optionsToExtendForConfigFile?: CompilerOptions) {
+    function createWatchMode(rootFileNames: string[], compilerOptions: CompilerOptions, system: System, configFileName?: string, configFileSpecs?: ConfigFileSpecs, configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>, optionsToExtendForConfigFile?: CompilerOptions) {
         let program: Program;
         let needsReload: boolean;                                           // true if the config file changed and needs to reload it from the disk
         let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
@@ -238,11 +252,11 @@ namespace ts {
 
         let host: System;
         if (configFileName) {
-            host = createCachedSystem(sys);
-            configFileWatcher = sys.watchFile(configFileName, onConfigFileChanged);
+            host = createCachedSystem(system);
+            configFileWatcher = system.watchFile(configFileName, onConfigFileChanged);
         }
         else {
-            host = sys;
+            host = system;
         }
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
@@ -259,21 +273,23 @@ namespace ts {
         // Update the wild card directory watch
         watchConfigFileWildCardDirectories();
 
+        return () => program;
+
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);
 
-            if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion)) {
+            if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists)) {
                 return;
             }
 
             // Create the compiler host
             const compilerHost = createWatchedCompilerHost(compilerOptions);
-            program = compile(rootFileNames, compilerOptions, compilerHost, program).program;
+            program = compile(rootFileNames, compilerOptions, compilerHost, system, program).program;
 
             // Update watches
             missingFilesMap = updateMissingFilePathsWatch(program, missingFilesMap, watchMissingFilePath, closeMissingFilePathWatcher);
 
-            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes), system);
         }
 
         function createWatchedCompilerHost(options: CompilerOptions): CompilerHost {
@@ -302,14 +318,14 @@ namespace ts {
             };
 
             // TODO: cache module resolution
-            //if (host.resolveModuleNames) {
-            //    compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
-            //}
-            //if (host.resolveTypeReferenceDirectives) {
-            //    compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
-            //        return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
-            //    };
-            //}
+            // if (host.resolveModuleNames) {
+            //     compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
+            // }
+            // if (host.resolveTypeReferenceDirectives) {
+            //     compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
+            //         return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
+            //     };
+            // }
 
             function ensureDirectoriesExist(directoryPath: string) {
                 if (directoryPath.length > getRootLength(directoryPath) && !host.directoryExists(directoryPath)) {
@@ -342,7 +358,7 @@ namespace ts {
                 const seenFiles = createMap<true>();
 
                 let emitSkipped: boolean;
-                let diagnostics: Diagnostic[];
+                const diagnostics: Diagnostic[] = [];
                 const emittedFiles: string[] = program.getCompilerOptions().listEmittedFiles ? [] : undefined;
                 let sourceMaps: SourceMapData[];
                 while (filesPendingToEmit.length) {
@@ -366,7 +382,7 @@ namespace ts {
                         emitSkipped = true;
                     }
 
-                    diagnostics = concatenate(diagnostics, emitOutput.diagnostics);
+                    diagnostics.push(...emitOutput.diagnostics);
                     sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
                     // If it emitted more than one source files, just mark all those source files as seen
                     if (emitOutput.emittedSourceFiles && emitOutput.emittedSourceFiles.length > 1) {
@@ -377,7 +393,7 @@ namespace ts {
                     for (const outputFile of emitOutput.outputFiles) {
                         const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
                         if (error) {
-                            (diagnostics || (diagnostics = [])).push(error);
+                            diagnostics.push(error);
                         }
                         if (emittedFiles) {
                             emittedFiles.push(outputFile.name);
@@ -413,41 +429,43 @@ namespace ts {
             }
 
             // Create new source file if requested or the versions dont match
-            if (!hostSourceFile) {
+            if (!hostSourceFile || shouldCreateNewSourceFile || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
                 changedFilePaths.push(path);
-                const sourceFile = getSourceFile(fileName, languageVersion, onError);
-                if (sourceFile) {
-                    sourceFile.version = "0";
-                    const fileWatcher = watchSourceFileForChanges(sourceFile.path);
-                    sourceFilesCache.set(path, { sourceFile, version: 0, fileWatcher });
+
+                const sourceFile = getNewSourceFile();
+                if (hostSourceFile) {
+                    if (shouldCreateNewSourceFile) {
+                        hostSourceFile.version++;
+                    }
+                    if (sourceFile) {
+                        hostSourceFile.sourceFile = sourceFile;
+                        sourceFile.version = hostSourceFile.version.toString();
+                        if (!hostSourceFile.fileWatcher) {
+                            hostSourceFile.fileWatcher = watchSourceFileForChanges(path);
+                        }
+                    }
+                    else {
+                        // There is no source file on host any more, close the watch, missing file paths will track it
+                        hostSourceFile.fileWatcher.close();
+                        sourceFilesCache.set(path, hostSourceFile.version.toString());
+                    }
                 }
                 else {
-                    sourceFilesCache.set(path, "0");
+                    let fileWatcher: FileWatcher;
+                    if (sourceFile) {
+                        sourceFile.version = "0";
+                        fileWatcher = watchSourceFileForChanges(path);
+                        sourceFilesCache.set(path, { sourceFile, version: 0, fileWatcher });
+                    }
+                    else {
+                        sourceFilesCache.set(path, "0");
+                    }
                 }
                 return sourceFile;
             }
-            else if (shouldCreateNewSourceFile || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
-                changedFilePaths.push(path);
-                if (shouldCreateNewSourceFile) {
-                    hostSourceFile.version++;
-                }
-                const newSourceFile = getSourceFile(fileName, languageVersion, onError);
-                if (newSourceFile) {
-                    newSourceFile.version = hostSourceFile.version.toString();
-                    hostSourceFile.sourceFile = newSourceFile;
-                }
-                else {
-                    // File doesnt exist any more
-                    hostSourceFile.fileWatcher.close();
-                    sourceFilesCache.set(path, hostSourceFile.version.toString());
-                }
-
-                return newSourceFile;
-            }
-
             return hostSourceFile.sourceFile;
 
-            function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
+            function getNewSourceFile() {
                 let text: string;
                 try {
                     performance.mark("beforeIORead");
@@ -459,7 +477,6 @@ namespace ts {
                     if (onError) {
                         onError(e.message);
                     }
-                    text = "";
                 }
 
                 return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
@@ -496,14 +513,14 @@ namespace ts {
         // operations (such as saving all modified files in an editor) a chance to complete before we kick
         // off a new compilation.
         function scheduleProgramUpdate() {
-            if (!sys.setTimeout || !sys.clearTimeout) {
+            if (!system.setTimeout || !system.clearTimeout) {
                 return;
             }
 
             if (timerToUpdateProgram) {
-                sys.clearTimeout(timerToUpdateProgram);
+                system.clearTimeout(timerToUpdateProgram);
             }
-            timerToUpdateProgram = sys.setTimeout(updateProgram, 250);
+            timerToUpdateProgram = system.setTimeout(updateProgram, 250);
         }
 
         function scheduleProgramReload() {
@@ -514,7 +531,7 @@ namespace ts {
 
         function updateProgram() {
             timerToUpdateProgram = undefined;
-            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation), system);
 
             if (needsReload) {
                 reloadConfigFile();
@@ -526,8 +543,6 @@ namespace ts {
 
         function reloadConfigFile() {
             writeLog(`Reloading config file: ${configFileName}`);
-            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
-
             needsReload = false;
 
             const cachedHost = host as CachedSystem;
@@ -550,6 +565,8 @@ namespace ts {
 
         function onSourceFileChange(fileName: string, path: Path, eventKind: FileWatcherEventKind) {
             writeLog(`Source file path : ${path} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName}`);
+
+            updateCachedSystem(fileName, path);
             const hostSourceFile = sourceFilesCache.get(path);
             if (hostSourceFile) {
                 // Update the cache
@@ -570,8 +587,16 @@ namespace ts {
                     }
                 }
             }
+
             // Update the program
             scheduleProgramUpdate();
+        }
+
+        function updateCachedSystem(fileName: string, path: Path) {
+            if (configFileName) {
+                const absoluteNormalizedPath = getNormalizedAbsolutePath(fileName, getDirectoryPath(path));
+                (host as CachedSystem).addOrDeleteFileOrFolder(normalizePath(absoluteNormalizedPath));
+            }
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
@@ -588,10 +613,7 @@ namespace ts {
                 closeMissingFilePathWatcher(missingFilePath, missingFilesMap.get(missingFilePath));
                 missingFilesMap.delete(missingFilePath);
 
-                if (configFileName) {
-                    const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
-                    (host as CachedSystem).addOrDeleteFileOrFolder(normalizePath(absoluteNormalizedPath));
-                }
+                updateCachedSystem(filename, missingFilePath);
 
                 // Delete the entry in the source files cache so that new source file is created
                 removeSourceFile(missingFilePath);
@@ -621,10 +643,12 @@ namespace ts {
 
         function onFileAddOrRemoveInWatchedDirectory(fileName: string) {
             Debug.assert(!!configFileName);
-            (host as CachedSystem).addOrDeleteFileOrFolder(fileName);
+
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
 
             // Since the file existance changed, update the sourceFiles cache
-            removeSourceFile(toPath(fileName, currentDirectory, getCanonicalFileName));
+            updateCachedSystem(fileName, path);
+            removeSourceFile(path);
 
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
@@ -640,7 +664,7 @@ namespace ts {
             if (!needsReload) {
                 const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, host, /*extraFileExtensions*/ []);
                 if (!configFileSpecs.filesSpecs) {
-                    reportDiagnostics([getErrorForNoInputFiles(configFileSpecs, configFileName)], /*host*/ undefined);
+                    reportDiagnostics([getErrorForNoInputFiles(configFileSpecs, configFileName)], getDefaultFormatDiagnosticsHost(system));
                 }
                 rootFileNames = result.fileNames;
 
@@ -662,7 +686,7 @@ namespace ts {
         }
 
         function computeHash(data: string) {
-            return sys.createHash ? sys.createHash(data) : data;
+            return system.createHash ? system.createHash(data) : data;
         }
     }
 
@@ -718,35 +742,35 @@ namespace ts {
     }
 
     /* @internal */
-    export function parseConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: System): ParsedCommandLine {
+    export function parseConfigFile(configFileName: string, optionsToExtend: CompilerOptions, system: System): ParsedCommandLine {
         let configFileText: string;
         try {
-            configFileText = host.readFile(configFileName);
+            configFileText = system.readFile(configFileName);
         }
         catch (e) {
             const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
-            reportWatchDiagnostic(error);
-            host.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            reportWatchDiagnostic(error, system);
+            system.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             return;
         }
         if (!configFileText) {
             const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
-            reportDiagnostics([error], /* compilerHost */ undefined);
-            host.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            reportDiagnostics([error], getDefaultFormatDiagnosticsHost(system));
+            system.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             return;
         }
 
         const result = parseJsonText(configFileName, configFileText);
-        reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
+        reportDiagnostics(result.parseDiagnostics, getDefaultFormatDiagnosticsHost(system));
 
-        const cwd = host.getCurrentDirectory();
-        const configParseResult = parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
-        reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
+        const cwd = system.getCurrentDirectory();
+        const configParseResult = parseJsonSourceFileConfigFileContent(result, system, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
+        reportDiagnostics(configParseResult.errors, getDefaultFormatDiagnosticsHost(system));
 
         return configParseResult;
     }
 
-    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost, oldProgram?: Program) {
+    function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost, system: System, oldProgram?: Program) {
         const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
         let statistics: Statistic[];
         if (hasDiagnostics) {
@@ -759,12 +783,12 @@ namespace ts {
 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
-                sys.write(file.fileName + sys.newLine);
+                system.write(file.fileName + system.newLine);
             });
         }
 
         if (hasDiagnostics) {
-            const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
+            const memoryUsed = system.getMemoryUsage ? system.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
             reportCountStatistic("Nodes", program.getNodeCount());
@@ -830,9 +854,9 @@ namespace ts {
             }
             diagnostics = diagnostics.concat(emitOutput.diagnostics);
 
-            reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
+            reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), getDefaultFormatDiagnosticsHost(system));
 
-            reportEmittedFiles(emitOutput.emittedFiles);
+            reportEmittedFiles(emitOutput.emittedFiles, system);
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -859,7 +883,7 @@ namespace ts {
             }
 
             for (const { name, value } of statistics) {
-                sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
+                system.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + system.newLine);
             }
         }
 
@@ -1011,8 +1035,4 @@ namespace ts {
 
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();
-}
-
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-    ts.sys.tryEnableSourceMapsForHost();
 }
