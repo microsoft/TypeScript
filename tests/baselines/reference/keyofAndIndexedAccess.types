@@ -145,7 +145,7 @@ type NAME = "name";
 >NAME : "name"
 
 type WIDTH_OR_HEIGHT = "width" | "height";
->WIDTH_OR_HEIGHT : "width" | "height"
+>WIDTH_OR_HEIGHT : WIDTH_OR_HEIGHT
 
 type Q10 = Shape["name"];  // string
 >Q10 : string
@@ -167,7 +167,7 @@ type Q20 = Shape[NAME];  // string
 type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
 >Q21 : number
 >Shape : Shape
->WIDTH_OR_HEIGHT : "width" | "height"
+>WIDTH_OR_HEIGHT : WIDTH_OR_HEIGHT
 
 type Q30 = [string, number][0];  // string
 >Q30 : string
@@ -1988,17 +1988,17 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 // Repro from #13073
 
 type KeyTypes = "a" | "b"
->KeyTypes : "a" | "b"
+>KeyTypes : KeyTypes
 
 let MyThingy: { [key in KeyTypes]: string[] };
 >MyThingy : { a: string[]; b: string[]; }
 >key : key
->KeyTypes : "a" | "b"
+>KeyTypes : KeyTypes
 
 function addToMyThingy<S extends KeyTypes>(key: S) {
->addToMyThingy : <S extends "a" | "b">(key: S) => void
+>addToMyThingy : <S extends KeyTypes>(key: S) => void
 >S : S
->KeyTypes : "a" | "b"
+>KeyTypes : KeyTypes
 >key : S
 >S : S
 

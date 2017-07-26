@@ -48,8 +48,8 @@ module M1 {
     }
 
     var x = [EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F];
->x : EConst1[]
->[EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F] : EConst1[]
+>x : (EConst1)[]
+>[EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F] : (EConst1)[]
 >EConst1.A : EConst1.A
 >EConst1 : typeof EConst1
 >A : EConst1.A

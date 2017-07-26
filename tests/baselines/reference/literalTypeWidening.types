@@ -286,14 +286,14 @@ function increment(x: number): number {
 }
 
 let result = doWork<number>();
->result : Result<number>
+>result : number | "FAILURE"
 >doWork<number>() : Result<number>
 >doWork : <T>() => Result<T>
 
 if (isSuccess(result)) {
 >isSuccess(result) : boolean
 >isSuccess : <T>(result: Result<T>) => result is T
->result : Result<number>
+>result : number | "FAILURE"
 
   increment(result);
 >increment(result) : number
@@ -312,7 +312,7 @@ function onMouseOver(): TestEvent { return "onmouseover"; }
 >"onmouseover" : "onmouseover"
 
 let x = onMouseOver();
->x : TestEvent
+>x : "onmouseover" | "onmouseout"
 >onMouseOver() : TestEvent
 >onMouseOver : () => TestEvent
 

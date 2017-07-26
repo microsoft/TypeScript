@@ -13,14 +13,14 @@ type YesNo = Choice.Yes | Choice.No;
 >No : Choice.No
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : YesNo
+>NoYes : NoYes
 >Choice : any
 >No : Choice.No
 >Choice : any
 >Yes : Choice.Yes
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
->UnknownYesNo : Choice
+>UnknownYesNo : UnknownYesNo
 >Choice : any
 >Unknown : Choice.Unknown
 >Choice : any
@@ -37,7 +37,7 @@ function f1() {
 
     var a: NoYes;
 >a : YesNo
->NoYes : YesNo
+>NoYes : NoYes
 
     var a: Choice.Yes | Choice.No;
 >a : YesNo
@@ -55,17 +55,17 @@ function f1() {
 }
 
 function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
->f2 : (a: YesNo, b: Choice, c: Choice) => void
+>f2 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
 >a : YesNo
 >YesNo : YesNo
->b : Choice
->UnknownYesNo : Choice
+>b : UnknownYesNo
+>UnknownYesNo : UnknownYesNo
 >c : Choice
 >Choice : Choice
 
     b = a;
 >b = a : YesNo
->b : Choice
+>b : UnknownYesNo
 >a : YesNo
 
     c = a;
@@ -74,9 +74,9 @@ function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
 >a : YesNo
 
     c = b;
->c = b : YesNo
+>c = b : Choice.Yes | Choice.No
 >c : Choice
->b : YesNo
+>b : Choice.Yes | Choice.No
 }
 
 function f3(a: Choice.Yes, b: YesNo) {
@@ -234,11 +234,11 @@ declare function g(x: Choice): number;
 >Choice : Choice
 
 function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
->f5 : (a: YesNo, b: Choice, c: Choice) => void
+>f5 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
 >a : YesNo
 >YesNo : YesNo
->b : Choice
->UnknownYesNo : Choice
+>b : UnknownYesNo
+>UnknownYesNo : UnknownYesNo
 >c : Choice
 >Choice : Choice
 
@@ -268,7 +268,7 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >z4 : number
 >g(b) : number
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->b : Choice
+>b : UnknownYesNo
 
     var z5 = g(c);
 >z5 : number
@@ -336,30 +336,30 @@ function f11(x: YesNo) {
 }
 
 function f12(x: UnknownYesNo) {
->f12 : (x: Choice) => void
->x : Choice
->UnknownYesNo : Choice
+>f12 : (x: UnknownYesNo) => void
+>x : UnknownYesNo
+>UnknownYesNo : UnknownYesNo
 
     if (x) {
->x : Choice
+>x : UnknownYesNo
 
         x;
->x : YesNo
+>x : Choice.Yes | Choice.No
     }
     else {
         x;
->x : Choice
+>x : UnknownYesNo
     }
 }
 
 function f13(x: UnknownYesNo) {
->f13 : (x: Choice) => void
->x : Choice
->UnknownYesNo : Choice
+>f13 : (x: UnknownYesNo) => void
+>x : UnknownYesNo
+>UnknownYesNo : UnknownYesNo
 
     if (x === Choice.Yes) {
 >x === Choice.Yes : boolean
->x : Choice
+>x : UnknownYesNo
 >Choice.Yes : Choice.Yes
 >Choice : typeof Choice
 >Yes : Choice.Yes
@@ -394,9 +394,9 @@ function f20(x: Item) {
 >Item : Item
 
     switch (x.kind) {
->x.kind : YesNo
+>x.kind : Choice.Yes | Choice.No
 >x : Item
->kind : YesNo
+>kind : Choice.Yes | Choice.No
 
         case Choice.Yes: return x.a;
 >Choice.Yes : Choice.Yes
@@ -422,9 +422,9 @@ function f21(x: Item) {
 >Item : Item
 
     switch (x.kind) {
->x.kind : YesNo
+>x.kind : Choice.Yes | Choice.No
 >x : Item
->kind : YesNo
+>kind : Choice.Yes | Choice.No
 
         case Choice.Yes: return x.a;
 >Choice.Yes : Choice.Yes

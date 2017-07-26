@@ -25,7 +25,7 @@ function isS(t: T): t is S {
 }
 
 function f(foo: T) {
->f : (foo: T) => S
+>f : (foo: T) => "a" | "b"
 >foo : T
 >T : T
 
@@ -35,7 +35,7 @@ function f(foo: T) {
 >foo : T
 
         return foo;
->foo : S
+>foo : "a" | "b"
     }
     else { 
         return foo[0];
