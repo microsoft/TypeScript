@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/declarationEmitInferedTypeAlias1.ts] ////
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias3.ts] ////
 
 //// [0.ts]
 {
@@ -8,8 +8,8 @@
 export { }
 
 //// [1.ts]
-let v = "str" || true;
-export { v }
+var x = "hi" || 5;
+export default x;
 
 //// [0.js]
 "use strict";
@@ -20,12 +20,12 @@ exports.__esModule = true;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
-var v = "str" || true;
-exports.v = v;
+var x = "hi" || 5;
+exports["default"] = x;
 
 
 //// [0.d.ts]
 export {  };
 //// [1.d.ts]
-declare let v: string | boolean;
-export { v };
+declare var x: string | number;
+export default x;
