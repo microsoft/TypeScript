@@ -1547,25 +1547,29 @@ namespace ts {
     export function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] | undefined {
         if (param.name && isIdentifier(param.name)) {
             const name = param.name.escapedText;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && tag.name.escapedText === name) as JSDocParameterTag[];
+            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name) as JSDocParameterTag[];
         }
-        else {
-            // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
-            // But multi-line object types aren't supported yet either
-            return undefined;
-        }
+        // a binding pattern doesn't have a name, so it's not possible to match it a jsdoc parameter, which is identified by name
+        return undefined;
     }
 
     /** Does the opposite of `getJSDocParameterTags`: given a JSDoc parameter, finds the parameter corresponding to it. */
-    export function getParameterFromJSDoc(node: JSDocParameterTag): ParameterDeclaration | undefined {
-        const name = node.name.escapedText;
-        const grandParent = node.parent!.parent!;
-        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
-        if (!isFunctionLike(grandParent)) {
+    export function getParameterSymbolFromJSDoc(node: JSDocParameterTag): Symbol | undefined {
+        if (node.symbol) {
+            return node.symbol;
+        }
+        if (!isIdentifier(node.name)) {
             return undefined;
         }
-        return find(grandParent.parameters, p =>
+        const name = node.name.escapedText;
+        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
+        const func = node.parent!.parent!;
+        if (!isFunctionLike(func)) {
+            return undefined;
+        }
+        const parameter = find(func.parameters, p =>
             p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
+        return parameter && parameter.symbol;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -4057,6 +4061,9 @@ namespace ts {
         if (!declaration) {
             return undefined;
         }
+        if (isJSDocPropertyLikeTag(declaration) && declaration.name.kind === SyntaxKind.QualifiedName) {
+            return declaration.name.right;
+        }
         if (declaration.kind === SyntaxKind.BinaryExpression) {
             const expr = declaration as BinaryExpression;
             switch (getSpecialPropertyAssignmentKind(expr)) {
@@ -4713,6 +4720,10 @@ namespace ts {
 
     export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
         return node.kind === SyntaxKind.JSDocPropertyTag;
+    }
+
+    export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+        return node.kind === SyntaxKind.JSDocPropertyTag || node.kind === SyntaxKind.JSDocParameterTag;
     }
 
     export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral {

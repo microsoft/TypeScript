@@ -28,18 +28,13 @@
                     "end": 20
                 }
             },
-            "postParameterName": {
-                "kind": "Identifier",
-                "pos": 22,
-                "end": 27,
-                "escapedText": "name1"
-            },
             "name": {
                 "kind": "Identifier",
                 "pos": 22,
                 "end": 27,
                 "escapedText": "name1"
             },
+            "isNameFirst": false,
             "isBracketed": false,
             "comment": "Description"
         },
