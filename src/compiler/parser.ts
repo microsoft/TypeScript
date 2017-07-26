@@ -2237,8 +2237,7 @@ namespace ts {
             return token() === SyntaxKind.DotDotDotToken ||
                 isIdentifierOrPattern() ||
                 isModifierKind(token()) ||
-                token() === SyntaxKind.AtToken || token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword ||
-                token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral;
+                token() === SyntaxKind.AtToken || isStartOfType();
         }
 
         function parseParameter(): ParameterDeclaration {
