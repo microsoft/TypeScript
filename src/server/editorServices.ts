@@ -937,7 +937,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             for (const rootFile of this.openFiles) {
-                this.logger.info(rootFile.fileName);
+                this.logger.info(`\t${rootFile.fileName}`);
             }
 
             this.logger.endGroup();

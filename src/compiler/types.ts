@@ -510,22 +510,22 @@ namespace ts {
         flags: NodeFlags;
         /* @internal */ modifierFlagsCache?: ModifierFlags;
         /* @internal */ transformFlags?: TransformFlags;
-        decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
-        modifiers?: ModifiersArray;                     // Array of modifiers
-        /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
-        parent?: Node;                                  // Parent node (initialized by binding)
-        /* @internal */ original?: Node;                // The original node if this is an updated node.
-        /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
-        /* @internal */ jsDoc?: JSDoc[];                // JSDoc that directly precedes this node
-        /* @internal */ jsDocCache?: JSDocTag[];        // Cache for getJSDocTags
-        /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
-        /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type;          // Used to temporarily assign a contextual type during overload resolution
-        /* @internal */ contextualMapper?: TypeMapper;  // Mapper for contextual type
+        decorators?: NodeArray<Decorator>;                    // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                           // Array of modifiers
+        /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
+        parent?: Node;                                        // Parent node (initialized by binding)
+        /* @internal */ original?: Node;                      // The original node if this is an updated node.
+        /* @internal */ startsOnNewLine?: boolean;            // Whether a synthesized node should start on a new line (used by transforms).
+        /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
+        /* @internal */ jsDocCache?: ReadonlyArray<JSDocTag>; // Cache for getJSDocTags
+        /* @internal */ symbol?: Symbol;                      // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
+        /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
+        /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ contextualMapper?: TypeMapper;        // Mapper for contextual type
     }
 
     /* @internal */
@@ -579,10 +579,10 @@ namespace ts {
     export interface Identifier extends PrimaryExpression {
         kind: SyntaxKind.Identifier;
         /**
-         * Text of identifier (with escapes converted to characters).
-         * If the identifier begins with two underscores, this will begin with three.
+         * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
+         * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
-        text: __String;
+        escapedText: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
@@ -685,7 +685,7 @@ namespace ts {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
-        name?: BindingName;                 // Declared parameter name. Missing if this is a parameter in a JSDocFunctionType.
+        name: BindingName;                  // Declared parameter name.
         questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
@@ -2360,7 +2360,7 @@ namespace ts {
     }
 
     export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: SourceFile[]): void;
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: ReadonlyArray<SourceFile>): void;
     }
 
     export class OperationCanceledException { }
@@ -2894,7 +2894,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        name: __String;                           // Name of symbol
+        escapedName: __String;                           // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members

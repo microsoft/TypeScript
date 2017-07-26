@@ -59,7 +59,7 @@ namespace ts {
         const result = createMap<Symbol>() as SymbolTable;
         if (symbols) {
             for (const symbol of symbols) {
-                result.set(symbol.name, symbol);
+                result.set(symbol.escapedName, symbol);
             }
         }
         return result;
@@ -2306,7 +2306,7 @@ namespace ts {
 
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
-        this.name = name;
+        this.escapedName = name;
         this.declarations = undefined;
     }
 

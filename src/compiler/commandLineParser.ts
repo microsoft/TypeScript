@@ -1200,15 +1200,7 @@ namespace ts {
     /* @internal */
     export function generateTSConfig(options: CompilerOptions, fileNames: ReadonlyArray<string>, newLine: string): string {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
-        const configurations: { compilerOptions: MapLike<CompilerOptionsValue>; files?: ReadonlyArray<string> } = {
-            compilerOptions: serializeCompilerOptions(compilerOptions)
-        };
-        if (fileNames && fileNames.length) {
-            // only set the files property if we have at least one file
-            configurations.files = fileNames;
-        }
-
-
+        const compilerOptionsMap = serializeCompilerOptions(compilerOptions);
         return writeConfigurations();
 
         function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
@@ -1233,8 +1225,8 @@ namespace ts {
             });
         }
 
-        function serializeCompilerOptions(options: CompilerOptions): MapLike<CompilerOptionsValue> {
-            const result: ts.MapLike<CompilerOptionsValue> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValue> {
+            const result = createMap<CompilerOptionsValue>();
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
@@ -1251,15 +1243,15 @@ namespace ts {
                         if (!customTypeMap) {
                             // There is no map associated with this compiler option then use the value as-is
                             // This is the case if the value is expect to be string, number, boolean or list of string
-                            result[name] = value;
+                            result.set(name, value);
                         }
                         else {
                             if (optionDefinition.type === "list") {
-                                result[name] = (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap));
+                                result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)));
                             }
                             else {
                                 // There is a typeMap associated with this command-line option so use it to map value back to its name
-                                result[name] = getNameOfCompilerOptionValue(value, customTypeMap);
+                                result.set(name, getNameOfCompilerOptionValue(value, customTypeMap));
                             }
                         }
                     }
@@ -1291,33 +1283,30 @@ namespace ts {
 
         function writeConfigurations() {
             // Filter applicable options to place in the file
-            const categorizedOptions = reduceLeft(
-                filter(optionDeclarations, o => o.category !== Diagnostics.Command_line_Options && o.category !== Diagnostics.Advanced_Options),
-                (memo, value) => {
-                    if (value.category) {
-                        const name = getLocaleSpecificMessage(value.category);
-                        (memo[name] || (memo[name] = [])).push(value);
-                    }
-                    return memo;
-                }, <MapLike<CommandLineOption[]>>{});
+            const categorizedOptions = createMultiMap<CommandLineOption>();
+            for (const option of optionDeclarations) {
+                const { category } = option;
+                if (category !== undefined && category !== Diagnostics.Command_line_Options && category !== Diagnostics.Advanced_Options) {
+                    categorizedOptions.add(getLocaleSpecificMessage(category), option);
+                }
+            }
 
-            // Serialize all options and thier descriptions
+            // Serialize all options and their descriptions
             let marginLength = 0;
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
             const descriptionColumn: string[] = [];
-            const knownKeysCount = getOwnKeys(configurations.compilerOptions).length;
-            for (const category in categorizedOptions) {
+            categorizedOptions.forEach((options, category) => {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
                     descriptionColumn.push("");
                 }
                 nameColumn.push(`/* ${category} */`);
                 descriptionColumn.push("");
-                for (const option of categorizedOptions[category]) {
+                for (const option of options) {
                     let optionName;
-                    if (hasProperty(configurations.compilerOptions, option.name)) {
-                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
+                    if (compilerOptionsMap.has(option.name)) {
+                        optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap.get(option.name))}${(seenKnownKeys += 1) === compilerOptionsMap.size ? "" : ","}`;
                     }
                     else {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
@@ -1326,7 +1315,7 @@ namespace ts {
                     descriptionColumn.push(`/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`);
                     marginLength = Math.max(optionName.length, marginLength);
                 }
-            }
+            });
 
             // Write the output
             const tab = makePadding(2);
@@ -1339,11 +1328,11 @@ namespace ts {
                 const description = descriptionColumn[i];
                 result.push(optionName && `${tab}${tab}${optionName}${ description && (makePadding(marginLength - optionName.length + 2) + description)}`);
             }
-            if (configurations.files && configurations.files.length) {
+            if (fileNames.length) {
                 result.push(`${tab}},`);
                 result.push(`${tab}"files": [`);
-                for (let i = 0; i < configurations.files.length; i++) {
-                    result.push(`${tab}${tab}${JSON.stringify(configurations.files[i])}${i === configurations.files.length - 1 ? "" : ","}`);
+                for (let i = 0; i < fileNames.length; i++) {
+                    result.push(`${tab}${tab}${JSON.stringify(fileNames[i])}${i === fileNames.length - 1 ? "" : ","}`);
                 }
                 result.push(`${tab}]`);
             }
@@ -2049,7 +2038,7 @@ namespace ts {
                 for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
                     if (isArrayLiteralExpression(property.initializer)) {
                         for (const element of property.initializer.elements) {
-                            if (element.kind === SyntaxKind.StringLiteral && (<StringLiteral>element).text === spec) {
+                            if (isStringLiteral(element) && element.text === spec) {
                                 return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
                             }
                         }

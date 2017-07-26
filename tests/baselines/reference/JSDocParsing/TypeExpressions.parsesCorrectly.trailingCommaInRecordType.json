@@ -14,7 +14,7 @@
                 "pos": 2,
                 "end": 3,
                 "flags": "JSDoc",
-                "text": "a"
+                "escapedText": "a"
             }
         },
         "length": 1,

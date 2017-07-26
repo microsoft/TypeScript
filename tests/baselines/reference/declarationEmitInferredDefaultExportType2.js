@@ -1,4 +1,4 @@
-//// [declarationEmitInferedDefaultExportType2.ts]
+//// [declarationEmitInferredDefaultExportType2.ts]
 // test.ts
 export = {
   foo: [],
@@ -6,7 +6,7 @@ export = {
   baz: null
 }
 
-//// [declarationEmitInferedDefaultExportType2.js]
+//// [declarationEmitInferredDefaultExportType2.js]
 "use strict";
 module.exports = {
     foo: [],
@@ -15,7 +15,7 @@ module.exports = {
 };
 
 
-//// [declarationEmitInferedDefaultExportType2.d.ts]
+//// [declarationEmitInferredDefaultExportType2.d.ts]
 declare const _default: {
     foo: any[];
     bar: any;
