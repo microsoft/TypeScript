@@ -167,5 +167,3 @@ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unne
 >unnest : number
 >1 : 1
 
-// TODO: Also write these ridiculous object[] / nested tests for @typedef as well
-

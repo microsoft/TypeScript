@@ -130,5 +130,3 @@ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unne
 >oh : Symbol(oh, Decl(0.js, 70, 59))
 >unnest : Symbol(unnest, Decl(0.js, 70, 75))
 
-// TODO: Also write these ridiculous object[] / nested tests for @typedef as well
-

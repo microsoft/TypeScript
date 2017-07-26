@@ -76,5 +76,3 @@ function foo5(opts5) {
 }
 
 foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]);
-
-// TODO: Also write these ridiculous object[] / nested tests for @typedef as well

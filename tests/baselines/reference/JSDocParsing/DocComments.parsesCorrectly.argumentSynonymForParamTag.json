@@ -28,17 +28,6 @@
                     "end": 25
                 }
             },
-            "type": {
-                "kind": "NumberKeyword",
-                "pos": 19,
-                "end": 25
-            },
-            "fullName": {
-                "kind": "Identifier",
-                "pos": 27,
-                "end": 32,
-                "text": "name1"
-            },
             "name": {
                 "kind": "Identifier",
                 "pos": 27,

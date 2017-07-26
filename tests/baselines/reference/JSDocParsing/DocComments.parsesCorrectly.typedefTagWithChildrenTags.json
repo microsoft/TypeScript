@@ -92,17 +92,6 @@
                                 "end": 64
                             }
                         },
-                        "type": {
-                            "kind": "NumberKeyword",
-                            "pos": 58,
-                            "end": 64
-                        },
-                        "fullName": {
-                            "kind": "Identifier",
-                            "pos": 66,
-                            "end": 69,
-                            "text": "age"
-                        },
                         "name": {
                             "kind": "Identifier",
                             "pos": 66,
@@ -136,17 +125,6 @@
                                 "pos": 85,
                                 "end": 91
                             }
-                        },
-                        "type": {
-                            "kind": "StringKeyword",
-                            "pos": 85,
-                            "end": 91
-                        },
-                        "fullName": {
-                            "kind": "Identifier",
-                            "pos": 93,
-                            "end": 97,
-                            "text": "name"
                         },
                         "name": {
                             "kind": "Identifier",
