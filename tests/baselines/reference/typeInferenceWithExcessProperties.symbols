@@ -1,0 +1,65 @@
+=== tests/cases/compiler/typeInferenceWithExcessProperties.ts ===
+// Repro from #17041
+
+interface Named {
+>Named : Symbol(Named, Decl(typeInferenceWithExcessProperties.ts, 0, 0))
+
+    name: string;
+>name : Symbol(Named.name, Decl(typeInferenceWithExcessProperties.ts, 2, 17))
+}
+
+function parrot<T extends Named>(obj: T): T {
+>parrot : Symbol(parrot, Decl(typeInferenceWithExcessProperties.ts, 4, 1))
+>T : Symbol(T, Decl(typeInferenceWithExcessProperties.ts, 6, 16))
+>Named : Symbol(Named, Decl(typeInferenceWithExcessProperties.ts, 0, 0))
+>obj : Symbol(obj, Decl(typeInferenceWithExcessProperties.ts, 6, 33))
+>T : Symbol(T, Decl(typeInferenceWithExcessProperties.ts, 6, 16))
+>T : Symbol(T, Decl(typeInferenceWithExcessProperties.ts, 6, 16))
+
+    return obj;
+>obj : Symbol(obj, Decl(typeInferenceWithExcessProperties.ts, 6, 33))
+}
+
+
+parrot({
+>parrot : Symbol(parrot, Decl(typeInferenceWithExcessProperties.ts, 4, 1))
+
+    name: "TypeScript",
+>name : Symbol(name, Decl(typeInferenceWithExcessProperties.ts, 11, 8))
+
+});
+
+parrot({
+>parrot : Symbol(parrot, Decl(typeInferenceWithExcessProperties.ts, 4, 1))
+
+    name: "TypeScript",
+>name : Symbol(name, Decl(typeInferenceWithExcessProperties.ts, 15, 8))
+
+    age: 5,
+>age : Symbol(age, Decl(typeInferenceWithExcessProperties.ts, 16, 23))
+
+});
+
+parrot({
+>parrot : Symbol(parrot, Decl(typeInferenceWithExcessProperties.ts, 4, 1))
+
+    name: "TypeScript",
+>name : Symbol(name, Decl(typeInferenceWithExcessProperties.ts, 20, 8))
+
+    age: function () { },
+>age : Symbol(age, Decl(typeInferenceWithExcessProperties.ts, 21, 23))
+
+});
+
+parrot({
+>parrot : Symbol(parrot, Decl(typeInferenceWithExcessProperties.ts, 4, 1))
+
+    name: "TypeScript",
+>name : Symbol(name, Decl(typeInferenceWithExcessProperties.ts, 25, 8))
+
+    sayHello() {
+>sayHello : Symbol(sayHello, Decl(typeInferenceWithExcessProperties.ts, 26, 23))
+
+    },
+});
+
