@@ -1865,9 +1865,12 @@ namespace ts {
             let commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
+                    const startPos = scanner.getStartPos();
                     result.push(parseListElement(kind, parseElement));
                     commaStart = scanner.getTokenPos();
+
                     if (parseOptional(SyntaxKind.CommaToken)) {
+                        // No need to check for a zero length node since we know we parsed a comma
                         continue;
                     }
 
@@ -1886,6 +1889,13 @@ namespace ts {
                     // a semicolon to delimit object literal members.   Note: we'll have already
                     // reported an error when we called parseExpected above.
                     if (considerSemicolonAsDelimiter && token() === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
+                        nextToken();
+                    }
+                    if (startPos === scanner.getStartPos()) {
+                        // What we're parsing isn't actually remotely recognizable as a element and we've consumed no tokens whatsoever
+                        // Consume a token to advance the parser in some way and avoid an infinite loop
+                        // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
+                        // or when a modifier keyword which is disallowed as a parameter name (ie, `static` in strict mode) is supplied
                         nextToken();
                     }
                     continue;
@@ -2221,7 +2231,6 @@ namespace ts {
                 return finishNode(node);
             }
 
-            const startPos = scanner.getStartPos();
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers();
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
@@ -2244,14 +2253,6 @@ namespace ts {
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
             node.initializer = parseBindingElementInitializer(/*inParameter*/ true);
-
-            if (startPos === scanner.getStartPos()) {
-                // What we're parsing isn't actually remotely recognizable as a parameter and we've consumed no tokens whatsoever
-                // Consume a token to advance the parser in some way and avoid an infinite loop in `parseDelimitedList`
-                // This can happen when we're speculatively parsing parenthesized expressions which we think may be arrow functions,
-                // or when a modifier keyword which is disallowed as a parameter name (ie, `static` in strict mode) is supplied
-                nextToken();
-            }
 
             return addJSDocComment(finishNode(node));
         }
