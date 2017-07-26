@@ -38,6 +38,7 @@
         "program.ts",
         "builder.ts",
         "commandLineParser.ts",
+        "tscLib.ts",
         "tsc.ts",
         "diagnosticInformationMap.generated.ts"
     ]
