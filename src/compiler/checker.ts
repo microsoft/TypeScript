@@ -2072,10 +2072,8 @@ namespace ts {
                 }
             }
 
-            if (symbol) {
-                if (!(isPropertyOrMethodDeclarationSymbol(symbol))) {
-                    return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
-                }
+            if (symbol && !isPropertyOrMethodDeclarationSymbol(symbol)) {
+                return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
             }
         }
 
