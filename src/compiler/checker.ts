@@ -16952,8 +16952,12 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral) {
+            const isOperandNumericLiteral = node.operand.kind === SyntaxKind.NumericLiteral;
+            if (isOperandNumericLiteral && node.operator === SyntaxKind.MinusToken) {
                 return getFreshTypeOfLiteralType(getLiteralType(-(<LiteralExpression>node.operand).text));
+            }
+            if (isOperandNumericLiteral && node.operator === SyntaxKind.PlusToken) {
+                return getFreshTypeOfLiteralType(getLiteralType(+(<LiteralExpression>node.operand).text));
             }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
