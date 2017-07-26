@@ -753,6 +753,10 @@ namespace Harness {
         }
     }
 
+    export function mockHash(s: string): string {
+        return `hash-${s}`;
+    }
+
     const environment = Utils.getExecutionEnvironment();
     switch (environment) {
         case Utils.ExecutionEnvironment.Node:

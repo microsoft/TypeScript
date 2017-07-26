@@ -25,7 +25,7 @@ namespace ts.server {
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: Harness.LanguageService.mockHash,
+        createHash: Harness.mockHash,
     };
 
     const mockLogger: Logger = {

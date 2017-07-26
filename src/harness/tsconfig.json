@@ -1,4 +1,4 @@
-﻿{
+{
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
@@ -44,6 +44,7 @@
         "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
+        "../compiler/builder.ts",
         "../compiler/commandLineParser.ts",
         "../compiler/diagnosticInformationMap.generated.ts",
         "../services/breakpoints.ts",

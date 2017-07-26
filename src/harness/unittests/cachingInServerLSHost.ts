@@ -47,7 +47,7 @@ namespace ts {
             clearTimeout,
             setImmediate: typeof setImmediate !== "undefined" ? setImmediate : action => setTimeout(action, 0),
             clearImmediate: typeof clearImmediate !== "undefined" ? clearImmediate : clearTimeout,
-            createHash: Harness.LanguageService.mockHash,
+            createHash: Harness.mockHash,
         };
     }
 
