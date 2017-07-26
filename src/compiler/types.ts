@@ -2129,10 +2129,9 @@ namespace ts {
         typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
     }
 
-    export interface JSDocPropertyLikeTag extends JSDocTag, VariableLikeDeclaration {
+    export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
         parent: JSDoc;
-        fullName?: EntityName;
-        name: Identifier;
+        name: EntityName;
         typeExpression: JSDocTypeExpression;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
         isNameFirst: boolean;
@@ -2149,7 +2148,7 @@ namespace ts {
 
     export interface JSDocTypeLiteral extends JSDocType {
         kind: SyntaxKind.JSDocTypeLiteral;
-        jsDocPropertyTags?: NodeArray<JSDocPropertyLikeTag>;
+        jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>;
         jsDocTypeTag?: JSDocTypeTag;
         /** If true, then this type literal represents an *array* of its type. */
         isArrayType?: boolean;

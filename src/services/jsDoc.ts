@@ -120,7 +120,10 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
-        const nameThusFar = isIdentifier(tag.fullName) ? unescapeLeadingUnderscores(tag.name.text) : undefined;
+        if (!isIdentifier(tag.name)) {
+            return emptyArray;
+        }
+        const nameThusFar = unescapeLeadingUnderscores(tag.name.text);
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
         if (!ts.isFunctionLike(fn)) return [];
@@ -129,7 +132,7 @@ namespace ts.JsDoc {
             if (!isIdentifier(param.name)) return undefined;
 
             const name = unescapeLeadingUnderscores(param.name.text);
-            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.fullName) && t.name.text === name)
+            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.text === name)
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
             }

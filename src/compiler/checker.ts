@@ -4493,8 +4493,8 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
-                if (isInJavaScriptFile(declaration) && declaration.kind === SyntaxKind.JSDocPropertyTag && (<JSDocPropertyTag>declaration).typeExpression) {
-                    return links.type = getTypeFromTypeNode((<JSDocPropertyTag>declaration).typeExpression.type);
+                if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.typeExpression) {
+                    return links.type = getTypeFromTypeNode(declaration.typeExpression.type);
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {

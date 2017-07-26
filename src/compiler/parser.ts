@@ -412,12 +412,12 @@ namespace ts {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 if ((node as JSDocPropertyLikeTag).isNameFirst) {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).fullName) ||
+                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
                         visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression);
                 }
                 else {
                     return visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).fullName);
+                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).name);
                 }
             case SyntaxKind.JSDocReturnTag:
                 return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
@@ -438,7 +438,10 @@ namespace ts {
                         visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
                 }
             case SyntaxKind.JSDocTypeLiteral:
-                return visitNodes(cbNode, cbNodes, (<JSDocTypeLiteral>node).jsDocPropertyTags);
+                for (const tag of (node as JSDocTypeLiteral).jsDocPropertyTags) {
+                    visitNode(cbNode, tag);
+                }
+                return;
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
         }
@@ -1943,12 +1946,16 @@ namespace ts {
                     break;
                 }
                 dotPos = scanner.getStartPos();
-                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
-                node.left = entity;
-                node.right = parseRightSideOfDot(allowReservedWords);
-                entity = finishNode(node);
+                entity = createQualifiedName(entity, parseRightSideOfDot(allowReservedWords));
             }
             return entity;
+        }
+
+        function createQualifiedName(entity: EntityName, name: Identifier): QualifiedName {
+            const node = createNode(SyntaxKind.QualifiedName, entity.pos) as QualifiedName;
+            node.left = entity;
+            node.right = name;
+            return finishNode(node);
         }
 
         function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
@@ -6473,10 +6480,10 @@ namespace ts {
                     });
                 }
 
-                function parseBracketNameInPropertyAndParamTag(): { fullName: EntityName, isBracketed: boolean } {
+                function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
-                    const fullName = parseJSDocEntityName(/*createIfMissing*/ true);
+                    const name = parseJSDocEntityName();
                     if (isBracketed) {
                         skipWhitespace();
 
@@ -6488,68 +6495,68 @@ namespace ts {
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
 
-                    return { fullName, isBracketed };
+                    return { name, isBracketed };
                 }
 
                 function isObjectOrObjectArrayTypeReference(node: TypeNode): boolean {
-                    return node.kind === SyntaxKind.ObjectKeyword ||
-                        isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.text === "Object" ||
-                        node.kind === SyntaxKind.ArrayType && isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
+                    switch (node.kind) {
+                        case SyntaxKind.ObjectKeyword:
+                            return true;
+                        case SyntaxKind.ArrayType:
+                            return isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
+                        default:
+                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.text === "Object";
+                    }
                 }
 
                 function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse.Parameter): JSDocParameterTag;
                 function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse.Property): JSDocPropertyTag;
                 function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse): JSDocPropertyLikeTag {
                     let typeExpression = tryParseTypeExpression();
+                    let isNameFirst = !typeExpression;
                     skipWhitespace();
 
-                    const { fullName, isBracketed } = parseBracketNameInPropertyAndParamTag();
+                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
 
-                    let preName: EntityName, postName: EntityName;
-                    if (typeExpression) {
-                        postName = fullName;
-                    }
-                    else {
-                        preName = fullName;
+                    if (isNameFirst) {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const result: JSDocPropertyLikeTag = target ?
+                    const result: JSDocPropertyLikeTag = target === PropertyLikeParse.Parameter ?
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
-                    const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, fullName);
+                    const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
+                        isNameFirst = true;
                     }
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = typeExpression;
-                    if (typeExpression) {
-                        result.type = typeExpression.type;
-                    }
-                    result.fullName = postName || preName;
-                    result.name = ts.isIdentifier(result.fullName) ? result.fullName : result.fullName.right;
-                    result.isNameFirst = !!nestedTypeLiteral || (postName ? false : !!preName);
+                    result.name = name;
+                    result.isNameFirst = isNameFirst;
                     result.isBracketed = isBracketed;
                     return finishNode(result);
 
                 }
 
-                function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression, fullName: EntityName) {
+                function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression, name: EntityName) {
                     if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         const typeLiteralExpression = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
-                        let child: JSDocPropertyLikeTag | false;
+                        let child: JSDocParameterTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         const start = scanner.getStartPos();
-                        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Parameter, fullName))) {
-                            if (!jsdocTypeLiteral) {
-                                jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
-                                jsdocTypeLiteral.jsDocPropertyTags = [] as MutableNodeArray<JSDocPropertyTag>;
+                        let children: JSDocParameterTag[];
+                        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Parameter, name))) {
+                            if (!children) {
+                                children = [];
                             }
-                            (jsdocTypeLiteral.jsDocPropertyTags as MutableNodeArray<JSDocPropertyTag>).push(child as JSDocPropertyTag);
+                            children.push(child);
                         }
-                        if (jsdocTypeLiteral) {
+                        if (children) {
+                            jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
+                            jsdocTypeLiteral.jsDocPropertyTags = children;
                             if (typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
@@ -6678,61 +6685,58 @@ namespace ts {
                     }
                 }
 
-                function textsEqual(parent: EntityName, name: EntityName): boolean {
-                    while (!ts.isIdentifier(parent) || !ts.isIdentifier(name)) {
-                        if (!ts.isIdentifier(parent) && !ts.isIdentifier(name) && parent.right.text === name.right.text) {
-                            parent = parent.left;
-                            name = name.left;
+                function textsEqual(a: EntityName, b: EntityName): boolean {
+                    while (!ts.isIdentifier(a) || !ts.isIdentifier(b)) {
+                        if (!ts.isIdentifier(a) && !ts.isIdentifier(b) && a.right.text === b.right.text) {
+                            a = a.left;
+                            b = b.left;
                         }
                         else {
                             return false;
                         }
                     }
-                    return parent.text === name.text;
+                    return a.text === b.text;
                 }
 
                 function parseChildParameterOrPropertyTag(target: PropertyLikeParse.Property): JSDocTypeTag | JSDocPropertyTag | false;
-                function parseChildParameterOrPropertyTag(target: PropertyLikeParse.Parameter, fullName: EntityName): JSDocPropertyTag | JSDocParameterTag | false;
-                function parseChildParameterOrPropertyTag(target: PropertyLikeParse, fullName?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
-                    let resumePos = scanner.getStartPos();
+                function parseChildParameterOrPropertyTag(target: PropertyLikeParse.Parameter, name: EntityName): JSDocParameterTag | false;
+                function parseChildParameterOrPropertyTag(target: PropertyLikeParse, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     let canParseTag = true;
                     let seenAsterisk = false;
-                    while (token() !== SyntaxKind.EndOfFileToken) {
+                    while (true) {
                         nextJSDocToken();
                         switch (token()) {
-                        case SyntaxKind.AtToken:
-                            if (canParseTag) {
-                                const child = tryParseChildTag(target);
-                                if (child && child.kind === SyntaxKind.JSDocParameterTag &&
-                                    (ts.isIdentifier(child.fullName) || !textsEqual(fullName, child.fullName.left))) {
-                                    break;
+                            case SyntaxKind.AtToken:
+                                if (canParseTag) {
+                                    const child = tryParseChildTag(target);
+                                    if (child && child.kind === SyntaxKind.JSDocParameterTag &&
+                                        (ts.isIdentifier(child.name) || !textsEqual(name, child.name.left))) {
+                                        return false;
+                                    }
+                                    return child;
                                 }
-                                return child;
-                            }
-                            seenAsterisk = false;
-                            break;
-                        case SyntaxKind.NewLineTrivia:
-                            resumePos = scanner.getStartPos() - 1;
-                            canParseTag = true;
-                            seenAsterisk = false;
-                            break;
-                        case SyntaxKind.AsteriskToken:
-                            if (seenAsterisk) {
+                                seenAsterisk = false;
+                                break;
+                            case SyntaxKind.NewLineTrivia:
+                                canParseTag = true;
+                                seenAsterisk = false;
+                                break;
+                            case SyntaxKind.AsteriskToken:
+                                if (seenAsterisk) {
+                                    canParseTag = false;
+                                }
+                                seenAsterisk = true;
+                                break;
+                            case SyntaxKind.Identifier:
                                 canParseTag = false;
-                            }
-                            seenAsterisk = true;
-                            break;
-                        case SyntaxKind.Identifier:
-                            canParseTag = false;
-                            break;
-                        case SyntaxKind.EndOfFileToken:
-                            break;
+                                break;
+                            case SyntaxKind.EndOfFileToken:
+                                return false;
                         }
                     }
-                    scanner.setTextPos(resumePos);
                 }
 
-                function tryParseChildTag(target: PropertyLikeParse, alreadyHasTypeTag?: boolean): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+                function tryParseChildTag(target: PropertyLikeParse): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const atToken = <AtToken>createNode(SyntaxKind.AtToken, scanner.getStartPos());
                     atToken.end = scanner.getTextPos();
@@ -6745,7 +6749,7 @@ namespace ts {
                     }
                     switch (tagName.text) {
                         case "type":
-                            return !alreadyHasTypeTag && target === PropertyLikeParse.Property && parseTypeTag(atToken, tagName);
+                            return target === PropertyLikeParse.Property && parseTypeTag(atToken, tagName);
                         case "prop":
                         case "property":
                             return target === PropertyLikeParse.Property && parseParameterOrPropertyTag(atToken, tagName, target);
@@ -6801,8 +6805,8 @@ namespace ts {
                     return currentToken = scanner.scanJSDocToken();
                 }
 
-                function parseJSDocEntityName(createIfMissing = false): EntityName {
-                    let entity: EntityName = parseJSDocIdentifierName(createIfMissing);
+                function parseJSDocEntityName(): EntityName {
+                    let entity: EntityName = parseJSDocIdentifierName(/*createIfMissing*/ true);
                     if (parseOptional(SyntaxKind.OpenBracketToken)) {
                         parseExpected(SyntaxKind.CloseBracketToken);
                         // Note that y[] is accepted as an entity name, but the postfix brackets are not saved for checking.
@@ -6810,13 +6814,11 @@ namespace ts {
                         // but it's not worth it to enforce that restriction.
                     }
                     while (parseOptional(SyntaxKind.DotToken)) {
-                        const node: QualifiedName = createNode(SyntaxKind.QualifiedName, entity.pos) as QualifiedName;
-                        node.left = entity;
-                        node.right = parseJSDocIdentifierName(createIfMissing);
+                        const name = parseJSDocIdentifierName(/*createIfMissing*/ true);
                         if (parseOptional(SyntaxKind.OpenBracketToken)) {
                             parseExpected(SyntaxKind.CloseBracketToken);
                         }
-                        entity = finishNode(node);
+                        entity = createQualifiedName(entity, name);
                     }
                     return entity;
                 }
