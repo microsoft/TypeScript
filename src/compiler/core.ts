@@ -711,7 +711,7 @@ namespace ts {
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
         outer: for (; offsetB < arrayB.length; offsetB++) {
