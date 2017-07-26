@@ -21524,7 +21524,7 @@ namespace ts {
                                 else {
                                     const argument = ex.argumentExpression;
                                     Debug.assert(isLiteralExpression(argument));
-                                    name = (argument as LiteralExpression).text as __String; // TODO: GH#17348
+                                    name = escapeLeadingUnderscores((argument as LiteralExpression).text);
                                 }
                                 return evaluateEnumMember(expr, type.symbol, name);
                             }
