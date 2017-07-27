@@ -2905,7 +2905,7 @@ namespace ts {
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
-        /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
+        exportSymbol?: Symbol;                  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
