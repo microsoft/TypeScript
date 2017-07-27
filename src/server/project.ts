@@ -1134,10 +1134,12 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            this.directoriesWatchedForWildcards.forEach(watcher => {
-                watcher.close();
-            });
-            this.directoriesWatchedForWildcards = undefined;
+            if (this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards.forEach(watcher => {
+                    watcher.close();
+                });
+                this.directoriesWatchedForWildcards = undefined;
+            }
 
             this.stopWatchingDirectory();
         }

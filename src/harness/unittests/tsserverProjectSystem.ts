@@ -2332,6 +2332,32 @@ namespace ts.projectSystem {
             const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(f1.path);
             assert.equal(navbar[0].spans[0].length, f1.content.length);
         });
+
+        it("deleting config file opened from the external project works", () => {
+            const site = {
+                path: "/user/someuser/project/js/site.js",
+                content: ""
+            };
+            const configFile = {
+                path: "/user/someuser/project/tsconfig.json",
+                content: "{}"
+            };
+            const projectFileName = "/user/someuser/project/WebApplication6.csproj";
+            const host = createServerHost([libFile, site, configFile]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProjects([{
+                projectFileName,
+                rootFiles: [toExternalFile(configFile.path), toExternalFile(site.path)],
+                options: { "allowJs": false, "allowNonTsExtensions": false, "allowSyntheticDefaultImports": false, "allowUnreachableCode": false, "allowUnusedLabels": false, "alwaysStrict": false, "compileOnSave": true, "declaration": false, "emitBOM": false, "emitDecoratorMetadata": false, "experimentalAsyncFunctions": false, "experimentalDecorators": false, "forceConsistentCasingInFileNames": false, "importHelpers": false, "inlineSourceMap": false, "inlineSources": false, "isolatedModules": false, "jsx": 0, "noEmit": false, "noEmitHelpers": false, "noEmitOnError": true, "noFallthroughCasesInSwitch": false, "noImplicitAny": false, "noImplicitReturns": false, "noImplicitThis": false, "noImplicitUseStrict": false, "noLib": false, "noResolve": false, "noUnusedLocals": false, "noUnusedParameters": false, "preserveConstEnums": false, "removeComments": false, "skipDefaultLibCheck": false, "skipLibCheck": false, "sourceMap": true, "strictNullChecks": false, "stripInternal": false, "suppressExcessPropertyErrors": false, "suppressImplicitAnyIndexErrors": false, "target": 1 },
+                typeAcquisition: { "include": [] }
+            }]);
+
+            let knownProjects = projectService.synchronizeProjectList([]);
+            host.reloadFS([libFile, site]);
+            host.triggerFileWatcherCallback(configFile.path);
+
+            knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info));
+        });
     });
 
     describe("Proper errors", () => {
