@@ -6,9 +6,7 @@ interface DiagnosticDetails {
     isEarly?: boolean;
 }
 
-interface InputDiagnosticMessageTable {
-    [msg: string]: DiagnosticDetails;
-}
+type InputDiagnosticMessageTable = ts.Map<DiagnosticDetails>;
 
 function main(): void {
     var sys = ts.sys;
@@ -28,50 +26,32 @@ function main(): void {
     var inputFilePath = sys.args[0].replace(/\\/g, "/");
     var inputStr = sys.readFile(inputFilePath);
 
-    var diagnosticMessages: InputDiagnosticMessageTable = JSON.parse(inputStr);
-
-    var names = Object.keys(diagnosticMessages);
+    var diagnosticMessagesJson: { [key: string]: DiagnosticDetails } = JSON.parse(inputStr);
     // Check that there are no duplicates.
     const seenNames = ts.createMap<true>();
-    for (const name of names) {
+    for (const name of Object.keys(diagnosticMessagesJson)) {
         if (seenNames.has(name))
             throw new Error(`Name ${name} appears twice`);
         seenNames.set(name, true);
     }
 
+    const diagnosticMessages: InputDiagnosticMessageTable = ts.createMapFromTemplate(diagnosticMessagesJson);
+
     var infoFileOutput = buildInfoFileOutput(diagnosticMessages);
-    checkForUniqueCodes(names, diagnosticMessages);
+    checkForUniqueCodes(diagnosticMessages);
     writeFile("diagnosticInformationMap.generated.ts", infoFileOutput);
 
     var messageOutput = buildDiagnosticMessageOutput(diagnosticMessages);
     writeFile("diagnosticMessages.generated.json", messageOutput);
 }
 
-function checkForUniqueCodes(messages: string[], diagnosticTable: InputDiagnosticMessageTable) {
-    const originalMessageForCode: string[] = [];
-    let numConflicts = 0;
-
-    for (const currentMessage of messages) {
-        const code = diagnosticTable[currentMessage].code;
-
-        if (code in originalMessageForCode) {
-            const originalMessage = originalMessageForCode[code];
-            ts.sys.write("\x1b[91m"); // High intensity red.
-            ts.sys.write("Error");
-            ts.sys.write("\x1b[0m");  // Reset formatting.
-            ts.sys.write(`: Diagnostic code '${code}' conflicts between "${originalMessage}" and "${currentMessage}".`);
-            ts.sys.write(ts.sys.newLine + ts.sys.newLine);
-
-            numConflicts++;
-        }
-        else {
-            originalMessageForCode[code] = currentMessage;
-        }
-    }
-
-    if (numConflicts > 0) {
-        throw new Error(`Found ${numConflicts} conflict(s) in diagnostic codes.`);
-    }
+function checkForUniqueCodes(diagnosticTable: InputDiagnosticMessageTable) {
+    const allCodes: { [key: number]: true | undefined } = [];
+    diagnosticTable.forEach(({ code }) => {
+        if (allCodes[code])
+            throw new Error(`Diagnostic code ${code} appears more than once.`);
+        allCodes[code] = true;
+    });
 }
 
 function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable): string {
@@ -80,19 +60,14 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable): string 
         '/// <reference path="types.ts" />\r\n' +
         '/* @internal */\r\n' +
         'namespace ts {\r\n' +
+        "    function diag(code: number, category: DiagnosticCategory, key: string, message: string): DiagnosticMessage {\r\n" +
+        "        return { code, category, key, message };\r\n" +
+        "    }\r\n" +
         '    export const Diagnostics = {\r\n';
-    for (const name of Object.keys(messageTable)) {
-        var diagnosticDetails = messageTable[name];
-        var propName = convertPropertyName(name);
-
-        result +=
-        '        ' + propName +
-        ': { code: ' + diagnosticDetails.code +
-        ', category: DiagnosticCategory.' + diagnosticDetails.category +
-        ', key: "' + createKey(propName, diagnosticDetails.code) + '"' +
-        ', message: "' + name.replace(/[\"]/g, '\\"') + '"' +
-        ' },\r\n';
-    }
+    messageTable.forEach(({ code, category }, name) => {
+        const propName = convertPropertyName(name);
+        result += `        ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}),\r\n`;
+    });
 
     result += '    };\r\n}';
 
@@ -100,19 +75,19 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable): string 
 }
 
 function buildDiagnosticMessageOutput(messageTable: InputDiagnosticMessageTable): string {
-    var result =
-        '{';
-    var names = Object.keys(messageTable);
-    for (var i = 0; i < names.length; i++) {
-        var name = names[i];
-        var diagnosticDetails = messageTable[name];
-        var propName = convertPropertyName(name);
-
-        result += '\r\n  "' + createKey(propName, diagnosticDetails.code) + '"' + ' : "' + name.replace(/[\"]/g, '\\"') + '"';
-        if (i !== names.length - 1) {
+    let result = '{';
+    let first = true;
+    messageTable.forEach(({ code }, name) => {
+        if (!first) {
+            first = false;
+        }
+        else {
             result += ',';
         }
-    }
+
+        const propName = convertPropertyName(name);
+        result += `\r\n  "${createKey(propName, code)}": "${name.replace(/[\"]/g, '\\"')}"`;
+    });
 
     result += '\r\n}';
 
@@ -130,7 +105,6 @@ function convertPropertyName(origName: string): string {
         if (char === ':') { return "_Colon"; }
         return /\w/.test(char) ? char : "_";
     }).join("");
-
 
     // get rid of all multi-underscores
     result = result.replace(/_+/g, "_");
