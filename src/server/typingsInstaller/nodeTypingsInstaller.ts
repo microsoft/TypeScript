@@ -17,10 +17,10 @@ namespace ts.server.typingsInstaller {
         constructor(private readonly logFile?: string) {
         }
 
-        isEnabled() {
+        isEnabled = () => {
             return this.logEnabled && this.logFile !== undefined;
         }
-        writeLine(text: string) {
+        writeLine = (text: string) => {
             try {
                 fs.appendFileSync(this.logFile, text + sys.newLine);
             }
@@ -77,11 +77,12 @@ namespace ts.server.typingsInstaller {
 
         private delayedInitializationError: InitializationFailedResponse;
 
-        constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, npmLocation: string | undefined, throttleLimit: number, log: Log) {
+        constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, throttleLimit: number, log: Log) {
             super(
                 sys,
                 globalTypingsCacheLocation,
                 typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+                typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);
             this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
@@ -175,6 +176,7 @@ namespace ts.server.typingsInstaller {
     const logFilePath = findArgument(server.Arguments.LogFile);
     const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
     const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
+    const typesMapLocation = findArgument(server.Arguments.TypesMapLocation);
     const npmLocation = findArgument(server.Arguments.NpmLocation);
 
     const log = new FileLog(logFilePath);
@@ -189,6 +191,6 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, npmLocation, /*throttleLimit*/5, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, /*throttleLimit*/5, log);
     installer.listen();
 }

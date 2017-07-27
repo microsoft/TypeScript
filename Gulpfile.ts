@@ -464,6 +464,7 @@ gulp.task(serverFile, /*help*/ false, [servicesFile, typingsInstallerJs, cancell
         .pipe(gulp.dest("src/server"));
 });
 
+const typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
@@ -473,7 +474,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile], (done) => {
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
         .pipe(serverLibraryProject());
-
+    
     return merge2([
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
@@ -486,7 +487,23 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile], (done) => {
     ]);
 });
 
-gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
+gulp.task(typesMapJson, /*help*/ false, [], (done) => {
+    fs.readFile('src/server/typesMaps.json', 'utf-8', (err, data) => {
+        if (err) {
+            return done(err);
+        }
+        try {
+            JSON.parse(data);
+        } catch (e) {
+            done(e);
+        }
+        fs.writeFile(typesMapJson, data, err => {
+            done(err);
+        });
+    });
+});
+
+gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile, typesMapJson]);
 gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile]);
 gulp.task("tsc", "Builds only the compiler", [builtLocalCompiler]);
 

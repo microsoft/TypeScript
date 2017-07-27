@@ -109,6 +109,11 @@ namespace ts.server {
         "smart": IndentStyle.Smart
     });
 
+    export interface TypesMapFile {
+        typesMap: SafeList;
+        simpleMap: string[];
+    }
+
     /**
      * How to understand this block:
      *  * The 'match' property is a regexp that matches a filename.
@@ -329,6 +334,7 @@ namespace ts.server {
         globalPlugins?: string[];
         pluginProbeLocations?: string[];
         allowLocalPluginLoads?: boolean;
+        typesMapLocation?: string;
     }
 
     export class ProjectService {
@@ -389,6 +395,7 @@ namespace ts.server {
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
+        public readonly typesMapLocation: string | undefined;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
@@ -404,12 +411,17 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.host.getExecutingFilePath(), '../typesMap.json') : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(this.host);
+
+            if (opts.typesMapLocation) {
+                this.loadTypesMap();
+            }
 
             this.typingsInstaller.attach(this);
 
@@ -445,6 +457,25 @@ namespace ts.server {
                 eventName: ProjectLanguageServiceStateEvent,
                 data: { project, languageServiceEnabled }
             });
+        }
+
+        private loadTypesMap() {
+            if (!this.host.fileExists(this.typesMapLocation)) {
+                this.logger.info(`Provided types map file "${this.typesMapLocation}" doesn't exist`);
+                return;
+            }
+            try {
+                const raw: TypesMapFile = JSON.parse(this.host.readFile(this.typesMapLocation));
+                // Parse the regexps
+                for (const k of Object.keys(raw.typesMap)) {
+                    raw.typesMap[k].match = new RegExp(raw.typesMap[k].match as {} as string, "i");
+                }
+                // raw is now fixed and ready
+                this.safelist = raw.typesMap;
+            } catch(e) {
+                this.logger.info(`Error loading types map: ${e}`);
+                this.safelist = defaultTypeSafeList;
+            }
         }
 
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
@@ -1623,23 +1654,14 @@ namespace ts.server {
             this.safelist = defaultTypeSafeList;
         }
 
-        loadSafeList(fileName: string): void {
-            const raw: SafeList = JSON.parse(this.host.readFile(fileName, "utf-8"));
-            // Parse the regexps
-            for (const k of Object.keys(raw)) {
-                raw[k].match = new RegExp(raw[k].match as {} as string, "i");
-            }
-            // raw is now fixed and ready
-            this.safelist = raw;
-        }
-
-        applySafeList(proj: protocol.ExternalProject): void {
+        applySafeList(proj: protocol.ExternalProject): NormalizedPath[] {
             const { rootFiles, typeAcquisition } = proj;
             const types = (typeAcquisition && typeAcquisition.include) || [];
 
             const excludeRules: string[] = [];
 
-            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
+            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName)) as NormalizedPath[];
+            const excludedFiles: NormalizedPath[] = [];
 
             for (const name of Object.keys(this.safelist)) {
                 const rule = this.safelist[name];
@@ -1698,7 +1720,17 @@ namespace ts.server {
             }
 
             const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
-            proj.rootFiles = proj.rootFiles.filter((_file, index) => !excludeRegexes.some(re => re.test(normalizedNames[index])));
+            const filesToKeep: ts.server.protocol.ExternalFile[] = [];
+            for(let i = 0; i < proj.rootFiles.length; i++) {
+                if (excludeRegexes.some(re => re.test(normalizedNames[i]))) {
+                    excludedFiles.push(normalizedNames[i]);
+                }
+                else {
+                    filesToKeep.push(proj.rootFiles[i]);
+                }
+            }
+            proj.rootFiles = filesToKeep;
+            return excludedFiles;
         }
 
         openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects = false): void {
@@ -1709,7 +1741,7 @@ namespace ts.server {
                 proj.typeAcquisition = typeAcquisition;
             }
 
-            this.applySafeList(proj);
+            const excludedFiles = this.applySafeList(proj);
 
             let tsConfigFiles: NormalizedPath[];
             const rootFiles: protocol.ExternalFile[] = [];
@@ -1733,6 +1765,7 @@ namespace ts.server {
             const externalProject = this.findExternalProjectByProjectName(proj.projectFileName);
             let exisingConfigFiles: string[];
             if (externalProject) {
+                externalProject.excludedFiles = excludedFiles;
                 if (!tsConfigFiles) {
                     const compilerOptions = convertCompilerOptions(proj.options);
                     if (this.exceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader)) {
@@ -1802,7 +1835,8 @@ namespace ts.server {
             else {
                 // no config files - remove the item from the collection
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
-                this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
+                const newProj = this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
+                newProj.excludedFiles = excludedFiles;
             }
             if (!suppressRefreshOfInferredProjects) {
                 this.refreshInferredProjects();

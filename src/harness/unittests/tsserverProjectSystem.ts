@@ -18,14 +18,24 @@ namespace ts.projectSystem {
         })
     };
 
-    const customSafeList = {
-        path: <Path>"/typeMapList.json",
-        content: JSON.stringify({
-            "quack": {
-                "match": "/duckquack-(\\d+)\\.min\\.js",
-                "types": ["duck-types"]
+    const customTypesMap = {
+        path: <Path>"/typesMap.json",
+        content: `{
+            "typesMap": {
+                "jquery": {
+                    "match": "jquery(-(\\\\.?\\\\d+)+)?(\\\\.intellisense)?(\\\\.min)?\\\\.js$",
+                    "types": ["jquery"]
+                },
+                "quack": {
+                    "match": "/duckquack-(\\\\d+)\\\\.min\\\\.js",
+                    "types": ["duck-types"]
+                }
             },
-        })
+            "simpleMap": {
+                "Bacon": "baconjs",
+                "bliss": "blissfuljs"
+            }
+        }`
     };
 
     export interface PostExecAction {
@@ -59,7 +69,7 @@ namespace ts.projectSystem {
             installTypingHost: server.ServerHost,
             readonly typesRegistry = createMap<void>(),
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, customTypesMap.path, throttleLimit, log);
         }
 
         protected postExecActions: PostExecAction[] = [];
@@ -218,7 +228,7 @@ namespace ts.projectSystem {
         constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
             typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler) {
             super({
-                host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler
+                host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler, typesMapLocation: customTypesMap.path
             });
         }
 
@@ -1479,9 +1489,8 @@ namespace ts.projectSystem {
                 path: "/lib/duckquack-3.min.js",
                 content: "whoa do @@ not parse me ok thanks!!!"
             };
-            const host = createServerHost([customSafeList, file1, office]);
+            const host = createServerHost([file1, office, customTypesMap]);
             const projectService = createProjectService(host);
-            projectService.loadSafeList(customSafeList.path);
             try {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
                 const proj = projectService.externalProjects[0];
@@ -1491,7 +1500,7 @@ namespace ts.projectSystem {
                 projectService.resetSafeList();
             }
         });
-
+        
         it("ignores files excluded by the default type list", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
