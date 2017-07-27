@@ -1,7 +1,7 @@
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(6,12): error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(6,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
 tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(14,12): error TS2503: Cannot find namespace 'Foo'.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(22,12): error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(29,12): error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(22,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(29,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
 tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(36,12): error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
 
 
@@ -12,8 +12,8 @@ tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(36,12): error TS2702
         }
     
         var x: Foo.bar = "";
-               ~~~
-!!! error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
+               ~~~~~~~
+!!! error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
     }
     
     namespace Test2 {
@@ -32,8 +32,8 @@ tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(36,12): error TS2702
         }
     
         var x: Foo.bar = "";
-               ~~~
-!!! error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
+               ~~~~~~~
+!!! error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
     }
     
     namespace Test4 {
@@ -41,8 +41,8 @@ tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(36,12): error TS2702
                         | { bar: string }
     
         var x: Foo.bar = "";
-               ~~~
-!!! error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
+               ~~~~~~~
+!!! error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
     }
     
     namespace Test5 {
