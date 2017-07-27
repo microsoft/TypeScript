@@ -2192,6 +2192,10 @@
         "category": "Error",
         "code": 2712
     },
+    "Cannot access '{0}.{1}' because '{0}' is a type, but not a namespace. Did you mean to retrieve the type of the property '{1}' in '{0}' with '{0}[\"{1}\"]'?": {
+        "category": "Error",
+        "code": 2713
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
