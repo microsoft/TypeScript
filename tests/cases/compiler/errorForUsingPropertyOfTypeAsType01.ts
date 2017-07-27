@@ -4,6 +4,7 @@ namespace Test1 {
     }
 
     var x: Foo.bar = "";
+    var y: Test1.Foo.bar = "";
 }
 
 namespace Test2 {
@@ -12,6 +13,7 @@ namespace Test2 {
     }
 
     var x: Foo.bar = "";
+    var y: Test2.Foo.bar = "";
 }
 
 namespace Test3 {
@@ -20,6 +22,7 @@ namespace Test3 {
     }
 
     var x: Foo.bar = "";
+    var y: Test3.Foo.bar = "";
 }
 
 namespace Test4 {
@@ -27,6 +30,7 @@ namespace Test4 {
                     | { bar: string }
 
     var x: Foo.bar = "";
+    var y: Test4.Foo.bar = "";
 }
 
 namespace Test5 {
@@ -34,4 +38,7 @@ namespace Test5 {
                     | { wat: string }
 
     var x: Foo.bar = "";
+    var y: Test5.Foo.bar = "";
 }
+
+import lol = Test5.Foo.
