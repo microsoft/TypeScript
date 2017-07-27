@@ -25,10 +25,6 @@ namespace ts.JsTyping {
         typings?: string;
     }
 
-    // A map of loose file names to library names
-    // that we are confident require typings
-    let safeList: Map<string>;
-
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
         "buffer", "querystring", "events", "http", "cluster",
@@ -39,6 +35,16 @@ namespace ts.JsTyping {
         "constants", "process", "v8", "timers", "console"];
 
     const nodeCoreModules = arrayToMap(<string[]>nodeCoreModuleList, x => x);
+
+    /**
+     * A map of loose file names to library names that we are confident require typings
+     */
+    export type SafeList = ReadonlyMap<string>;
+
+    export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
+        const result = readConfigFile(safeListPath, path => host.readFile(path));
+        return createMapFromTemplate<string>(result.config);
+    }
 
     /**
      * @param host is the object providing I/O related operations.
@@ -54,8 +60,8 @@ namespace ts.JsTyping {
         log: ((message: string) => void) | undefined,
         fileNames: string[],
         projectRootPath: Path,
-        safeListPath: Path,
-        packageNameToTypingLocation: Map<string>,
+        safeList: SafeList,
+        packageNameToTypingLocation: ReadonlyMap<string>,
         typeAcquisition: TypeAcquisition,
         unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
@@ -74,11 +80,6 @@ namespace ts.JsTyping {
                 return path;
             }
         });
-
-        if (!safeList) {
-            const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = createMapFromTemplate<string>(result.config);
-        }
 
         const filesToWatch: string[] = [];
 

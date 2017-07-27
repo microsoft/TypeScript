@@ -3,6 +3,7 @@
 /* @internal */
 namespace ts {
     export const emptyArray: never[] = [] as never[];
+    export const emptyMap: ReadonlyMap<never> = createMap<never>();
 
     export const externalHelpersModuleNameText = "tslib";
 
