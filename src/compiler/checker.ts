@@ -1243,6 +1243,7 @@ namespace ts {
                 const parent = errorLocation.parent;
                 if (symbol) {
                     if (isQualifiedName(parent)) {
+                        Debug.assert(parent.left === errorLocation, "Should only be resolving left side of qualified name as a namespace");
                         const propName = parent.right.escapedText;
                         const propType = getPropertyOfType(getDeclaredTypeOfSymbol(symbol), propName);
                         if (propType) {
