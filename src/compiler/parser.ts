@@ -1163,7 +1163,7 @@ namespace ts {
             return node;
         }
 
-        function createMissingNode(kind: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T {
             if (reportAtCurrentPosition) {
                 parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
             }
@@ -1172,15 +1172,15 @@ namespace ts {
             }
 
             const result = createNode(kind, scanner.getStartPos());
-            switch (kind) {
-                case SyntaxKind.Identifier:
-                    (result as Identifier).escapedText = "" as __String;
-                    break;
-                default: // TODO: GH#17346
-                    (result as LiteralLikeNode).text = "";
-                    break;
+
+            if (kind === SyntaxKind.Identifier) {
+                (result as Identifier).escapedText = "" as __String;
             }
-            return finishNode(result);
+            else if (isLiteralKind(kind) || isTemplateLiteralKind(kind)) {
+                (result as LiteralLikeNode).text = "";
+            }
+
+            return finishNode(result) as T;
         }
 
         function internIdentifier(text: string): string {
@@ -1208,7 +1208,7 @@ namespace ts {
                 return finishNode(node);
             }
 
-            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
+            return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
@@ -2002,7 +2002,7 @@ namespace ts {
                     // Report that we need an identifier.  However, report it right after the dot,
                     // and not on the next token.  This is because the next token might actually
                     // be an identifier and the error would be quite confusing.
-                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
+                    return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
                 }
             }
 
@@ -5534,7 +5534,7 @@ namespace ts {
 
             if (decorators || modifiers) {
                 // treat this as a property declaration with a missing name.
-                const name = <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                const name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                 return parsePropertyDeclaration(fullStart, decorators, modifiers, name, /*questionToken*/ undefined);
             }
 
@@ -6836,7 +6836,7 @@ namespace ts {
                 function createJSDocIdentifier(isIdentifier: boolean, createIfMissing: boolean): Identifier {
                     if (!isIdentifier) {
                         if (createIfMissing) {
-                            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
+                            return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
                         }
                         else {
                             parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
