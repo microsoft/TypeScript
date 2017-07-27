@@ -18,7 +18,7 @@ namespace ts.projectSystem {
         })
     };
 
-    const customTypesMap = {
+    export const customTypesMap = {
         path: <Path>"/typesMap.json",
         content: `{
             "typesMap": {
@@ -33,7 +33,11 @@ namespace ts.projectSystem {
             },
             "simpleMap": {
                 "Bacon": "baconjs",
-                "bliss": "blissfuljs"
+                "bliss": "blissfuljs",
+                "commander": "commander",
+                "cordova": "cordova",
+                "react": "react",
+                "lodash": "lodash"
             }
         }`
     };
@@ -297,10 +301,7 @@ namespace ts.projectSystem {
     }
 
     export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${JSON.stringify(expectedFileNames)}, got ${actualFileNames}`);
-        for (const f of expectedFileNames) {
-            assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${JSON.stringify(actualFileNames)}`);
-        }
+        assert.sameMembers(actualFileNames, expectedFileNames, caption);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
@@ -1500,7 +1501,7 @@ namespace ts.projectSystem {
                 projectService.resetSafeList();
             }
         });
-        
+
         it("ignores files excluded by the default type list", () => {
             const file1 = {
                 path: "/a/b/f1.ts",

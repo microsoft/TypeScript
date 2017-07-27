@@ -763,7 +763,7 @@ namespace ts.server {
     }
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), '../typesMap.json');
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
     const globalPlugins = (findArgument("--globalPlugins") || "").split(",");

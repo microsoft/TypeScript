@@ -322,7 +322,7 @@ namespace ts.projectSystem {
                 content: "declare const lodash: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3]);
+            const host = createServerHost([file1, file2, file3, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
@@ -347,6 +347,7 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
 
+            debugger;
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
@@ -445,7 +446,7 @@ namespace ts.projectSystem {
                 content: "declare const moment: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3, packageJson]);
+            const host = createServerHost([file1, file2, file3, packageJson, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
@@ -521,7 +522,7 @@ namespace ts.projectSystem {
             };
 
             const typingFiles = [commander, express, jquery, moment, lodash];
-            const host = createServerHost([lodashJs, commanderJs, file3, packageJson]);
+            const host = createServerHost([lodashJs, commanderJs, file3, packageJson, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") });
@@ -600,7 +601,7 @@ namespace ts.projectSystem {
                 typings: typingsName("gulp")
             };
 
-            const host = createServerHost([lodashJs, commanderJs, file3]);
+            const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });

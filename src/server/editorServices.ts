@@ -411,7 +411,7 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
-            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.host.getExecutingFilePath(), '../typesMap.json') : opts.typesMapLocation;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.host.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
@@ -472,7 +472,8 @@ namespace ts.server {
                 }
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
-            } catch(e) {
+            }
+            catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
                 this.safelist = defaultTypeSafeList;
             }
@@ -1721,7 +1722,7 @@ namespace ts.server {
 
             const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
             const filesToKeep: ts.server.protocol.ExternalFile[] = [];
-            for(let i = 0; i < proj.rootFiles.length; i++) {
+            for (let i = 0; i < proj.rootFiles.length; i++) {
                 if (excludeRegexes.some(re => re.test(normalizedNames[i]))) {
                     excludedFiles.push(normalizedNames[i]);
                 }

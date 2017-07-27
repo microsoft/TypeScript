@@ -95,5 +95,8 @@
         "fs": false,
         "os": false,
         "path": false
+    },
+    "dependencies": {
+        "browser-resolve": "^1.11.2"
     }
 }

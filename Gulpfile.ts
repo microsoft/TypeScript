@@ -474,7 +474,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
         .pipe(serverLibraryProject());
-    
+
     return merge2([
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
@@ -488,7 +488,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
 });
 
 gulp.task(typesMapJson, /*help*/ false, [], () => {
-    return gulp.src('src/server/typesMap.json')
+    return gulp.src("src/server/typesMap.json")
         .pipe(insert.transform((contents, file) => {
             JSON.parse(contents);
             return contents;
