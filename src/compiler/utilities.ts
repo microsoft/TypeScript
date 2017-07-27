@@ -358,8 +358,8 @@ namespace ts {
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
-    export function escapeLeadingUnderscores(identifier: string): __String {
-        return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
+    export function escapeLeadingUnderscores(identifier: string | undefined): __String | undefined {
+        return identifier && (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as __String;
     }
 
     /**
@@ -4042,9 +4042,9 @@ namespace ts {
      * @param identifier The escaped identifier text.
      * @returns The unescaped identifier text.
      */
-    export function unescapeLeadingUnderscores(identifier: __String): string {
+    export function unescapeLeadingUnderscores(identifier: __String | undefined): string | undefined {
         const id = identifier as string;
-        return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
+        return id && id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
     }
 
     /**
