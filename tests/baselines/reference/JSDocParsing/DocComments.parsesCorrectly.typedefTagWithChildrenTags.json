@@ -30,7 +30,7 @@
                 "end": 23,
                 "escapedText": "People"
             },
-            "jsDocTypeLiteral": {
+            "typeExpression": {
                 "kind": "JSDocTypeLiteral",
                 "pos": 26,
                 "end": 98,
@@ -92,18 +92,13 @@
                                 "end": 64
                             }
                         },
-                        "postParameterName": {
-                            "kind": "Identifier",
-                            "pos": 66,
-                            "end": 69,
-                            "escapedText": "age"
-                        },
                         "name": {
                             "kind": "Identifier",
                             "pos": 66,
                             "end": 69,
                             "escapedText": "age"
                         },
+                        "isNameFirst": false,
                         "isBracketed": false
                     },
                     {
@@ -131,18 +126,13 @@
                                 "end": 91
                             }
                         },
-                        "postParameterName": {
-                            "kind": "Identifier",
-                            "pos": 93,
-                            "end": 97,
-                            "escapedText": "name"
-                        },
                         "name": {
                             "kind": "Identifier",
                             "pos": 93,
                             "end": 97,
                             "escapedText": "name"
                         },
+                        "isNameFirst": false,
                         "isBracketed": false
                     }
                 ]
