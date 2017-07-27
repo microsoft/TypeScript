@@ -16952,12 +16952,13 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            const isOperandNumericLiteral = node.operand.kind === SyntaxKind.NumericLiteral;
-            if (isOperandNumericLiteral && node.operator === SyntaxKind.MinusToken) {
-                return getFreshTypeOfLiteralType(getLiteralType(-(<LiteralExpression>node.operand).text));
-            }
-            if (isOperandNumericLiteral && node.operator === SyntaxKind.PlusToken) {
-                return getFreshTypeOfLiteralType(getLiteralType(+(<LiteralExpression>node.operand).text));
+            if (node.operand.kind === SyntaxKind.NumericLiteral) {
+                if (node.operator === SyntaxKind.MinusToken) {
+                    return getFreshTypeOfLiteralType(getLiteralType(-(<LiteralExpression>node.operand).text));
+                }
+                else if (node.operator === SyntaxKind.PlusToken) {
+                    return getFreshTypeOfLiteralType(getLiteralType(+(<LiteralExpression>node.operand).text));
+                }
             }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
