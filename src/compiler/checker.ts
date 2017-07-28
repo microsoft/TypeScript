@@ -16330,8 +16330,7 @@ namespace ts {
                         const defaultSymbol = getPropertyOfType(type, InternalSymbolName.Default);
                         if (!defaultSymbol) {
                             const memberTable = createSymbolTable();
-                            const newSymbol = cloneSymbol(esModuleSymbol);
-                            newSymbol.escapedName = InternalSymbolName.Default;
+                            const newSymbol = copySymbol(esModuleSymbol, InternalSymbolName.Default);
                             memberTable.set(InternalSymbolName.Default, newSymbol);
                             const syntheticType = getIntersectionType([type, createAnonymousType(createSymbol(esModuleSymbol.flags, InternalSymbolName.Synthetic), memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined)]);
                             return createPromiseReturnType(node, syntheticType);
@@ -16341,6 +16340,17 @@ namespace ts {
                 }
             }
             return createPromiseReturnType(node, anyType);
+
+            function copySymbol(symbol: Symbol, name: __String): Symbol {
+                const result = createSymbol(symbol.flags, name);
+                result.declarations = symbol.declarations.slice(0);
+                result.parent = symbol.parent;
+                if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
+                if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
+                if (symbol.members) result.members = cloneMap(symbol.members);
+                if (symbol.exports) result.exports = cloneMap(symbol.exports);
+                return result;
+            }
         }
 
         function isCommonJsRequire(node: Node) {
