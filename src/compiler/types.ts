@@ -2979,7 +2979,6 @@ namespace ts {
         Function = "__function", // Unnamed function expression
         Computed = "__computed", // Computed property name declaration with dynamic name
         Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
-        Synthetic = "__synthetic", // Symbol name used for the object intersected to create a synthetic default export
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
     }

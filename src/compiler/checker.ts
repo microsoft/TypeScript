@@ -1754,7 +1754,7 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export=" as __String), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias)) || moduleSymbol;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -1769,7 +1769,7 @@ namespace ts {
         }
 
         function hasExportAssignmentSymbol(moduleSymbol: Symbol): boolean {
-            return moduleSymbol.exports.get("export=" as __String) !== undefined;
+            return moduleSymbol.exports.get(InternalSymbolName.ExportEquals) !== undefined;
         }
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
@@ -16325,32 +16325,30 @@ namespace ts {
             if (moduleSymbol) {
                 const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true);
                 if (esModuleSymbol) {
-                    const type = getTypeOfSymbol(esModuleSymbol);
-                    if (allowSyntheticDefaultImports) {
-                        const defaultSymbol = getPropertyOfType(type, InternalSymbolName.Default);
-                        if (!defaultSymbol) {
-                            const memberTable = createSymbolTable();
-                            const newSymbol = copySymbol(esModuleSymbol, InternalSymbolName.Default);
-                            memberTable.set(InternalSymbolName.Default, newSymbol);
-                            const syntheticType = getIntersectionType([type, createAnonymousType(createSymbol(esModuleSymbol.flags, InternalSymbolName.Synthetic), memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined)]);
-                            return createPromiseReturnType(node, syntheticType);
-                        }
-                    }
-                    return createPromiseReturnType(node, type);
+                    return createPromiseReturnType(node, syntheticDefaultType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol));
                 }
             }
             return createPromiseReturnType(node, anyType);
+        }
 
-            function copySymbol(symbol: Symbol, name: __String): Symbol {
-                const result = createSymbol(symbol.flags, name);
-                result.declarations = symbol.declarations.slice(0);
-                result.parent = symbol.parent;
-                if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
-                if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
-                if (symbol.members) result.members = cloneMap(symbol.members);
-                if (symbol.exports) result.exports = cloneMap(symbol.exports);
-                return result;
+        function syntheticDefaultType(type: Type, symbol: Symbol): Type {
+            if (allowSyntheticDefaultImports && type && type !== unknownType) {
+                const defaultSymbol = getPropertyOfType(type, InternalSymbolName.Default);
+                if (!defaultSymbol) {
+                    const memberTable = createSymbolTable();
+                    const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
+                    getSymbolLinks(newSymbol).target = resolveSymbol(symbol);
+                    memberTable.set(InternalSymbolName.Default, newSymbol);
+                    const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
+                    const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+                    const resolved = resolveStructuredTypeMembers(defaultContainingObject);
+                    resolved.properties = [newSymbol];
+                    getSymbolLinks(anonymousSymbol).type = defaultContainingObject;
+                    const newType = getIntersectionType([type, defaultContainingObject]);
+                    return newType;
+                }
             }
+            return type;
         }
 
         function isCommonJsRequire(node: Node) {
