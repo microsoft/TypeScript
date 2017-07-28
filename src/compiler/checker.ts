@@ -16384,6 +16384,10 @@ namespace ts {
         }
 
         function checkNonNullAssertion(node: NonNullExpression) {
+            if (isInJavaScriptFile(node)) {
+                error(node, Diagnostics.non_null_assertions_can_only_be_used_in_a_ts_file);
+            }
+
             return getNonNullableType(checkExpression(node.expression));
         }
 

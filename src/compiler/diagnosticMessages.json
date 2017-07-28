@@ -3459,6 +3459,10 @@
         "category": "Error",
         "code": 8012
     },
+    "'non-null assertions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8015
