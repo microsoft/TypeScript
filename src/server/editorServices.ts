@@ -367,6 +367,7 @@ namespace ts.server {
         readonly openFiles: ScriptInfo[] = [];
 
         private compilerOptionsForInferredProjects: CompilerOptions;
+        private typeAcquisitionForInferredProjects: TypeAcquisition;
         private compileOnSaveForInferredProjects: boolean;
         private readonly projectToSizeMap: Map<number> = createMap<number>();
         private readonly directoryWatchers: DirectoryWatchers;
@@ -477,6 +478,14 @@ namespace ts.server {
                 proj.compileOnSaveEnabled = projectCompilerOptions.compileOnSave;
             }
             this.updateProjectGraphs(this.inferredProjects);
+        }
+
+        setTypeAcquisitionForInferredProjects(typeAcquisition: TypeAcquisition): void {
+            this.typeAcquisitionForInferredProjects = typeAcquisition;
+            for (const project of this.inferredProjects) {
+                project.setTypeAcquisition(typeAcquisition);
+                project.updateGraph();
+            }
         }
 
         stopWatchingDirectory(directory: string) {
@@ -1300,6 +1309,8 @@ namespace ts.server {
             const project = useExistingProject
                 ? this.inferredProjects[0]
                 : new InferredProject(this, this.documentRegistry, this.compilerOptionsForInferredProjects);
+
+            project.setTypeAcquisition(this.typeAcquisitionForInferredProjects);
 
             project.addRoot(root);
 

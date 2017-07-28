@@ -150,6 +150,8 @@ namespace ts.server {
 
         public typesVersion = 0;
 
+        typeAcquisition: TypeAcquisition;
+
         public isNonTsProject() {
             this.updateGraph();
             return allFilesAreJsOrDts(this);
@@ -260,7 +262,6 @@ namespace ts.server {
             return this.projectName;
         }
         abstract getProjectRootPath(): string | undefined;
-        abstract getTypeAcquisition(): TypeAcquisition;
 
         getExternalFiles(): SortedReadonlyArray<string> {
             return emptyArray as SortedReadonlyArray<string>;
@@ -636,6 +637,38 @@ namespace ts.server {
             }
         }
 
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
+            if (!newTypeAcquisition) {
+                if (this.projectKind !== ProjectKind.Configured) {
+                    // set default typings options for inferred projects and external projects
+                    newTypeAcquisition = {
+                        enable: allRootFilesAreJsOrDts(this),
+                        include: [],
+                        exclude: []
+                    };
+                }
+            }
+            else {
+                if (newTypeAcquisition.enable === undefined) {
+                    if (this.projectKind !== ProjectKind.Configured) {
+                        // if autoDiscovery was not specified by the caller - set it based on the content of the project
+                        newTypeAcquisition.enable = allRootFilesAreJsOrDts(this);
+                    }
+                }
+                if (!newTypeAcquisition.include) {
+                    newTypeAcquisition.include = [];
+                }
+                if (!newTypeAcquisition.exclude) {
+                    newTypeAcquisition.exclude = [];
+                }
+            }
+            this.typeAcquisition = newTypeAcquisition;
+        }
+
+        getTypeAcquisition() {
+            return this.typeAcquisition;
+        }
+
         reloadScript(filename: NormalizedPath, tempFileName?: NormalizedPath): boolean {
             const script = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (script) {
@@ -843,14 +876,6 @@ namespace ts.server {
                 this.projectService.stopWatchingDirectory(directory);
             }
         }
-
-        getTypeAcquisition(): TypeAcquisition {
-            return {
-                enable: allRootFilesAreJsOrDts(this),
-                include: [],
-                exclude: []
-            };
-        }
     }
 
     /**
@@ -859,7 +884,6 @@ namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     export class ConfiguredProject extends Project {
-        private typeAcquisition: TypeAcquisition;
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<FileWatcher> | undefined;
@@ -1088,7 +1112,6 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
-        private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
@@ -1109,36 +1132,8 @@ namespace ts.server {
             return getDirectoryPath(normalizeSlashes(this.getProjectName()));
         }
 
-        getTypeAcquisition() {
-            return this.typeAcquisition;
-        }
-
         setProjectErrors(projectErrors: Diagnostic[]) {
             this.projectErrors = projectErrors;
-        }
-
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            if (!newTypeAcquisition) {
-                // set default typings options
-                newTypeAcquisition = {
-                    enable: allRootFilesAreJsOrDts(this),
-                    include: [],
-                    exclude: []
-                };
-            }
-            else {
-                if (newTypeAcquisition.enable === undefined) {
-                    // if autoDiscovery was not specified by the caller - set it based on the content of the project
-                    newTypeAcquisition.enable = allRootFilesAreJsOrDts(this);
-                }
-                if (!newTypeAcquisition.include) {
-                    newTypeAcquisition.include = [];
-                }
-                if (!newTypeAcquisition.exclude) {
-                    newTypeAcquisition.exclude = [];
-                }
-            }
-            this.typeAcquisition = newTypeAcquisition;
         }
     }
 }

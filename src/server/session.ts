@@ -201,6 +201,7 @@ namespace ts.server {
         /* @internal */
         export const BreakpointStatement: protocol.CommandTypes.BreakpointStatement = "breakpointStatement";
         export const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export const TypeAcquisitionForInferredProjects: protocol.CommandTypes.TypeAcquisitionForInferredProjects = "typeAcquisitionForInferredProjects";
         export const GetCodeFixes: protocol.CommandTypes.GetCodeFixes = "getCodeFixes";
         /* @internal */
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
@@ -785,6 +786,10 @@ namespace ts.server {
 
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
             this.projectService.setCompilerOptionsForInferredProjects(args.options);
+        }
+
+        private setTypeAcquisitionForInferredProjects(args: protocol.SetTypeAcquisitionForInferredProjectsArgs): void {
+            this.projectService.setTypeAcquisitionForInferredProjects(args.typeAcquisition);
         }
 
         private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {
@@ -1938,6 +1943,10 @@ namespace ts.server {
             [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
                 this.setCompilerOptionsForInferredProjects(request.arguments);
                 return this.requiredResponse(/*response*/ true);
+            },
+            [CommandNames.TypeAcquisitionForInferredProjects]: (request: protocol.SetTypeAcquisitionForInferredProjectsRequest) => {
+                this.setTypeAcquisitionForInferredProjects(request.arguments);
+                return this.requiredResponse(/* response */ true);
             },
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));

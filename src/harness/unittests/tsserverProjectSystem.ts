@@ -2072,6 +2072,38 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
         });
 
+        it("type acquisition for inferred projects", () => {
+            const file1 = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/app2.js",
+                content: ""
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+
+            projectService.setTypeAcquisitionForInferredProjects({
+                enable: true,
+                include: ["cordova"]
+            });
+
+            projectService.openClientFile(file2.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+
+            for (const project of projectService.inferredProjects) {
+                const typeAcquisition = project.getTypeAcquisition();
+                assert.equal(typeAcquisition.enable, true);
+                assert.deepEqual(typeAcquisition.include, ["cordova"]);
+            }
+        });
+
         it("syntax tree cache handles changes in project settings", () => {
             const file1 = {
                 path: "/a/b/app.ts",
