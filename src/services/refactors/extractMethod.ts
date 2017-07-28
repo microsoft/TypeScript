@@ -255,7 +255,7 @@ namespace ts.refactor.extractMethod {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) || !isExpression(nodeToCheck) || !isLegalExpressionExtraction(nodeToCheck)) {
+            if (!isStatement(nodeToCheck) && !(isExpression(nodeToCheck) && isLegalExpressionExtraction(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 

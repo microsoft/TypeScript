@@ -5336,10 +5336,17 @@ namespace ts {
         const kind = node.kind;
         return isStatementKindButNotDeclarationKind(kind)
             || isDeclarationStatementKind(kind)
-            || (kind === SyntaxKind.Block &&
-                node.parent.kind !== SyntaxKind.TryStatement &&
-                node.parent.kind !== SyntaxKind.CatchClause &&
-                !isFunctionBlock(node));
+            || isBlockStatement(node);
+    }
+
+    function isBlockStatement(node: Node): node is Block {
+        if (node.kind !== SyntaxKind.Block) return false;
+        if (node.parent !== undefined) {
+            if (node.parent.kind === SyntaxKind.TryStatement || node.parent.kind === SyntaxKind.CatchClause) {
+                return false;
+            }
+        }
+        return !isFunctionBlock(node);
     }
 
     // Module references
