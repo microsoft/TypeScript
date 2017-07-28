@@ -255,7 +255,7 @@ namespace ts.refactor.extractMethod {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) && !isExpression(nodeToCheck)) {
+            if (!isStatement(nodeToCheck) || !isExpression(nodeToCheck) || !isLegalExpressionExtraction(nodeToCheck)) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
@@ -1028,6 +1028,36 @@ namespace ts.refactor.extractMethod {
     function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
         return textSpanContainsPosition(span, node.getStart(file)) &&
             node.getEnd() <= textSpanEnd(span);
+    }
+
+    /**
+     * Computes whether or not a node represents an expression in a position where it could
+     * be extracted.
+     * The isExpression() in utilities.ts returns some false positives we need to handle,
+     * such as `import x from 'y'` -- the 'y' is a StringLiteral but is *not* an expression
+     * in the sense of something that you could extract on
+     */
+    function isLegalExpressionExtraction(node: Node): boolean {
+        switch (node.parent.kind) {
+            case SyntaxKind.EnumMember:
+                return false;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+                return node.parent.kind !== SyntaxKind.ImportDeclaration &&
+                    node.parent.kind !== SyntaxKind.ImportSpecifier;
+
+            case SyntaxKind.SpreadElement:
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.BindingElement:
+                return false;
+
+            case SyntaxKind.Identifier:
+                return node.parent.kind !== SyntaxKind.BindingElement &&
+                    node.parent.kind !== SyntaxKind.ImportSpecifier;
+        }
+        return true;
     }
 
     function isBlockLike(node: Node): node is BlockLike {
