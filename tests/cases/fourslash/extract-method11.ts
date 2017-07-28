@@ -5,6 +5,7 @@
 // * Import declarations
 // * Super calls
 // * Function body blocks
+// * try/catch blocks
 
 //// /*1a*/import * as x from 'y';/*1b*/
 //// namespace N {
@@ -15,8 +16,9 @@
 ////     }/*okb*/
 //// }
 //// function f() /*3a*/{ return 0 }/*3b*/
+//// try /*4a*/{ console.log }/*4b*/ catch (e) /*5a*/{ console.log; }/*5b*/
 
-for (const m of ['1', '2', '3']) {
+for (const m of ['1', '2', '3', '4', '5']) {
     goTo.select(m + 'a', m + 'b');
     verify.not.refactorAvailable('Extract Method');
 }

@@ -5336,7 +5336,10 @@ namespace ts {
         const kind = node.kind;
         return isStatementKindButNotDeclarationKind(kind)
             || isDeclarationStatementKind(kind)
-            || (kind === SyntaxKind.Block && !isFunctionBlock(node));
+            || (kind === SyntaxKind.Block &&
+                node.parent.kind !== SyntaxKind.TryStatement &&
+                node.parent.kind !== SyntaxKind.CatchClause &&
+                !isFunctionBlock(node));
     }
 
     // Module references
