@@ -138,6 +138,7 @@ var harnessSources = harnessCoreSources.concat([
     "telemetry.ts",
     "transform.ts",
     "customTransforms.ts",
+    "programMissingFiles.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -286,7 +287,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types "
+        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError --types "
         if (opts.types) {
             options += opts.types.join(",");
         }
@@ -504,7 +505,7 @@ task("configure-nightly", [configureNightlyJs], function () {
 }, { async: true });
 
 desc("Configure, build, test, and publish the nightly release.");
-task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests"], function () {
+task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag next";
     console.log(cmd);
     exec(cmd);
@@ -839,7 +840,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         testTimeout = 800000;
     }
 
-    var colors = process.env.colors || process.env.color || true;
+    var colorsFlag = process.env.color || process.env.colors;
+    var colors = colorsFlag !== "false" && colorsFlag !== "0";
     var reporter = process.env.reporter || process.env.r || defaultReporter;
     var bail = process.env.bail || process.env.b;
     var lintFlag = process.env.lint !== 'false';

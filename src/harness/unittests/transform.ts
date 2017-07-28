@@ -8,7 +8,7 @@ namespace ts {
             context.enableSubstitution(SyntaxKind.Identifier);
             context.onSubstituteNode = (hint, node) => {
                 node = previousOnSubstituteNode(hint, node);
-                if (hint === EmitHint.Expression && node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "undefined") {
+                if (hint === EmitHint.Expression && isIdentifier(node) && node.escapedText === "undefined") {
                     node = createPartiallyEmittedExpression(
                         addSyntheticTrailingComment(
                             setTextRange(
@@ -26,7 +26,7 @@ namespace ts {
             context.enableSubstitution(SyntaxKind.Identifier);
             context.onSubstituteNode = (hint, node) => {
                 node = previousOnSubstituteNode(hint, node);
-                if (node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "oldName") {
+                if (isIdentifier(node) && node.escapedText === "oldName") {
                     node = setTextRange(createIdentifier("newName"), node);
                 }
                 return node;

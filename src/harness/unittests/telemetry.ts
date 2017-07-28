@@ -77,7 +77,7 @@ namespace ts.projectSystem {
                 et.service.openExternalProject({
                     rootFiles: toExternalFiles([file1.path]),
                     options: compilerOptions,
-                    projectFileName: projectFileName,
+                    projectFileName,
                 });
                 checkNumberOfProjects(et.service, { externalProjects: 1 });
             }

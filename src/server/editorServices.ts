@@ -45,7 +45,7 @@ namespace ts.server {
          * Any compiler options that might contain paths will be taken out.
          * Enum compiler options will be converted to strings.
          */
-        readonly compilerOptions: ts.CompilerOptions;
+        readonly compilerOptions: CompilerOptions;
         // "extends", "files", "include", or "exclude" will be undefined if an external config is used.
         // Otherwise, we will use "true" if the property is present and "false" if it is missing.
         readonly extends: boolean | undefined;
@@ -201,7 +201,7 @@ namespace ts.server {
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
     export function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
-        const result = projects.reduce<T[]>((previous, current) => concatenate(previous, action(current)), []).sort(comparer);
+        const result = flatMap(projects, action).sort(comparer);
         return projects.length > 1 ? deduplicate(result, areEqual) : result;
     }
 
@@ -239,10 +239,7 @@ namespace ts.server {
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: (fileName, extraFileExtensions) => {
-            const mixedContentExtensions = ts.map(ts.filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
-            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension));
-        }
+        hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -343,7 +340,7 @@ namespace ts.server {
         /**
          * Container of all known scripts
          */
-        private readonly filenameToScriptInfo = createFileMap<ScriptInfo>();
+        private readonly filenameToScriptInfo = createMap<ScriptInfo>();
         /**
          * maps external project file name to list of config files that were the part of this project
          */
@@ -373,7 +370,7 @@ namespace ts.server {
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
-        private static safelist: SafeList = defaultTypeSafeList;
+        private safelist: SafeList = defaultTypeSafeList;
 
         private changedFiles: ScriptInfo[];
 
@@ -568,7 +565,7 @@ namespace ts.server {
                     if (info.containingProjects.length === 0) {
                         // Orphan script info, remove it as we can always reload it on next open
                         info.stopWatcher();
-                        this.filenameToScriptInfo.remove(info.path);
+                        this.filenameToScriptInfo.delete(info.path);
                     }
                     else {
                         // file has been changed which might affect the set of referenced files in projects that include
@@ -588,7 +585,7 @@ namespace ts.server {
             // TODO: handle isOpen = true case
 
             if (!info.isScriptOpen()) {
-                this.filenameToScriptInfo.remove(info.path);
+                this.filenameToScriptInfo.delete(info.path);
                 this.lastDeletedFile = info;
 
                 // capture list of projects since detachAllProjects will wipe out original list
@@ -633,7 +630,7 @@ namespace ts.server {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
+            if (fileName && !isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
                 return;
             }
 
@@ -703,15 +700,15 @@ namespace ts.server {
 
             switch (project.projectKind) {
                 case ProjectKind.External:
-                    removeItemFromSet(this.externalProjects, <ExternalProject>project);
+                    unorderedRemoveItem(this.externalProjects, <ExternalProject>project);
                     this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
                     break;
                 case ProjectKind.Configured:
-                    removeItemFromSet(this.configuredProjects, <ConfiguredProject>project);
+                    unorderedRemoveItem(this.configuredProjects, <ConfiguredProject>project);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
                 case ProjectKind.Inferred:
-                    removeItemFromSet(this.inferredProjects, <InferredProject>project);
+                    unorderedRemoveItem(this.inferredProjects, <InferredProject>project);
                     break;
             }
         }
@@ -790,7 +787,7 @@ namespace ts.server {
             // to the disk, and the server's version of the file can be out of sync.
             info.close();
 
-            removeItemFromSet(this.openFiles, info);
+            unorderedRemoveItem(this.openFiles, info);
 
             // collect all projects that should be removed
             let projectsToRemove: Project[];
@@ -852,14 +849,13 @@ namespace ts.server {
         }
 
         private deleteOrphanScriptInfoNotInAnyProject() {
-            for (const path of this.filenameToScriptInfo.getKeys()) {
-                const info = this.filenameToScriptInfo.get(path);
+            this.filenameToScriptInfo.forEach(info => {
                 if (!info.isScriptOpen() && info.containingProjects.length === 0) {
                     // if there are not projects that include this script info - delete it
                     info.stopWatcher();
-                    this.filenameToScriptInfo.remove(info.path);
+                    this.filenameToScriptInfo.delete(info.path);
                 }
-            }
+            });
         }
 
         /**
@@ -941,7 +937,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             for (const rootFile of this.openFiles) {
-                this.logger.info(rootFile.fileName);
+                this.logger.info(`\t${rootFile.fileName}`);
             }
 
             this.logger.endGroup();
@@ -1083,7 +1079,7 @@ namespace ts.server {
                 configFileName: configFileName(),
                 projectType: project instanceof server.ExternalProject ? "external" : "configured",
                 languageServiceEnabled: project.languageServiceEnabled,
-                version: ts.version,
+                version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 
@@ -1093,7 +1089,7 @@ namespace ts.server {
                 }
 
                 const configFilePath = project instanceof server.ConfiguredProject && project.getConfigFilePath();
-                const base = ts.getBaseFileName(configFilePath);
+                const base = getBaseFileName(configFilePath);
                 return base === "tsconfig.json" || base === "jsconfig.json" ? base : "other";
             }
 
@@ -1618,13 +1614,13 @@ namespace ts.server {
         }
 
         /** Makes a filename safe to insert in a RegExp */
-        private static filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
+        private static readonly filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
         private static escapeFilenameForRegex(filename: string) {
             return filename.replace(this.filenameEscapeRegexp, "\\$&");
         }
 
         resetSafeList(): void {
-            ProjectService.safelist = defaultTypeSafeList;
+            this.safelist = defaultTypeSafeList;
         }
 
         loadSafeList(fileName: string): void {
@@ -1634,7 +1630,7 @@ namespace ts.server {
                 raw[k].match = new RegExp(raw[k].match as {} as string, "i");
             }
             // raw is now fixed and ready
-            ProjectService.safelist = raw;
+            this.safelist = raw;
         }
 
         applySafeList(proj: protocol.ExternalProject): void {
@@ -1645,8 +1641,8 @@ namespace ts.server {
 
             const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
 
-            for (const name of Object.keys(ProjectService.safelist)) {
-                const rule = ProjectService.safelist[name];
+            for (const name of Object.keys(this.safelist)) {
+                const rule = this.safelist[name];
                 for (const root of normalizedNames) {
                     if (rule.match.test(root)) {
                         this.logger.info(`Excluding files based on rule ${name}`);

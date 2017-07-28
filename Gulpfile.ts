@@ -256,14 +256,8 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
     return true;
 }
 
-// Doing tsconfig inheritance manually. https://github.com/ivogabe/gulp-typescript/issues/459
-const tsconfigBase = JSON.parse(fs.readFileSync("src/tsconfig-base.json", "utf-8")).compilerOptions;
-
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
-    for (const key in tsconfigBase) {
-        copy[key] = tsconfigBase[key];
-    }
     for (const key in base) {
         copy[key] = base[key];
     }
@@ -300,7 +294,7 @@ gulp.task("configure-nightly", "Runs scripts/configureNightly.ts to prepare a bu
     exec(host, [configureNightlyJs, packageJson, versionFile], done, done);
 });
 gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
-    return runSequence("clean", "useDebugMode", "runtests", (done) => {
+    return runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
         exec("npm", ["publish", "--tag", "next"], done, done);
     });
 });
@@ -561,7 +555,7 @@ gulp.task(run, /*help*/ false, [servicesFile], () => {
         .pipe(newer(run))
         .pipe(sourcemaps.init())
         .pipe(testProject())
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "." }))
         .pipe(gulp.dest("src/harness"));
 });
 
@@ -675,7 +669,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function(err) {
+            runTestsInParallel(taskConfigsFolder, run, { testTimeout, noColors: colors === " --no-colors " }, function(err) {
                 // last worker clean everything and runs linter in case if there were no errors
                 del(taskConfigsFolder).then(() => {
                     if (!err) {

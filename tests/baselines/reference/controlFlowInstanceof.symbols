@@ -45,7 +45,7 @@ function f2(s: Set<string> | Set<number>) {
 
     if (s instanceof Promise) {
 >s : Symbol(s, Decl(controlFlowInstanceof.ts, 12, 12))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
         s;  // Set<number> & Promise<any>
 >s : Symbol(s, Decl(controlFlowInstanceof.ts, 12, 12))

@@ -4,7 +4,13 @@ declare function setTimeout(handler: (...args: any[]) => void, timeout: number):
 declare function clearTimeout(handle: any): void;
 
 namespace ts {
-    export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
+    export enum FileWatcherEventKind {
+        Created,
+        Changed,
+        Deleted
+    }
+
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface WatchedFile {
         fileName: string;
@@ -17,7 +23,7 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        readFile(path: string, encoding?: string): string;
+        readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
@@ -33,7 +39,7 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -91,10 +97,10 @@ namespace ts {
         directoryExists(path: string): boolean;
         createDirectory(path: string): void;
         resolvePath(path: string): string;
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
         writeFile(path: string, contents: string): void;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], basePaths?: string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, basePaths?: ReadonlyArray<string>, excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
@@ -174,7 +180,7 @@ namespace ts {
                         const callbacks = fileWatcherCallbacks.get(fileName);
                         if (callbacks) {
                             for (const fileCallback of callbacks) {
-                                fileCallback(fileName);
+                                fileCallback(fileName, FileWatcherEventKind.Changed);
                             }
                         }
                     }
@@ -190,15 +196,22 @@ namespace ts {
                 if (platform === "win32" || platform === "win64") {
                     return false;
                 }
-                // convert current file name to upper case / lower case and check if file exists
-                // (guards against cases when name is already all uppercase or lowercase)
-                return !fileExists(__filename.toUpperCase()) || !fileExists(__filename.toLowerCase());
+                // If this file exists under a different case, we must be case-insensitve.
+                return !fileExists(swapCase(__filename));
+            }
+
+            /** Convert all lowercase chars to uppercase, and vice-versa */
+            function swapCase(s: string): string {
+                return s.replace(/\w/g, (ch) => {
+                    const up = ch.toUpperCase();
+                    return ch === up ? ch.toLowerCase() : up;
+                });
             }
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
-            function readFile(fileName: string, _encoding?: string): string {
+            function readFile(fileName: string, _encoding?: string): string | undefined {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -281,8 +294,8 @@ namespace ts {
                 }
             }
 
-            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), getAccessibleFileSystemEntries);
+            function readDirectory(path: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
             }
 
             const enum FileSystemEntryKind {
@@ -319,7 +332,7 @@ namespace ts {
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
-                useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+                useCaseSensitiveFileNames,
                 write(s: string): void {
                     process.stdout.write(s);
                 },
@@ -340,11 +353,22 @@ namespace ts {
                     }
 
                     function fileChanged(curr: any, prev: any) {
-                        if (+curr.mtime <= +prev.mtime) {
+                        const isCurrZero = +curr.mtime === 0;
+                        const isPrevZero = +prev.mtime === 0;
+                        const created = !isCurrZero && isPrevZero;
+                        const deleted = isCurrZero && !isPrevZero;
+
+                        const eventKind = created
+                            ? FileWatcherEventKind.Created
+                            : deleted
+                                ? FileWatcherEventKind.Deleted
+                                : FileWatcherEventKind.Changed;
+
+                        if (eventKind === FileWatcherEventKind.Changed && +curr.mtime <= +prev.mtime) {
                             return;
                         }
 
-                        callback(fileName);
+                        callback(fileName, eventKind);
                     }
                 },
                 watchDirectory: (directoryName, callback, recursive) => {
@@ -377,9 +401,7 @@ namespace ts {
                         }
                     );
                 },
-                resolvePath: function(path: string): string {
-                    return _path.resolve(path);
-                },
+                resolvePath: path => _path.resolve(path),
                 fileExists,
                 directoryExists,
                 createDirectory(directoryName: string) {
@@ -475,7 +497,7 @@ namespace ts {
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
                 getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
-                readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
+                readDirectory(path, extensions, excludes, includes, _depth) {
                     const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
                     return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
                 },

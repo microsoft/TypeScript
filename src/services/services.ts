@@ -304,7 +304,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
-        name: string;
+        escapedName: __String;
         declarations?: Declaration[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -315,13 +315,21 @@ namespace ts {
         // symbol has no JSDoc tags, then the empty array will be returned.
         tags?: JSDocTagInfo[];
 
-        constructor(flags: SymbolFlags, name: string) {
+        constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
-            this.name = name;
+            this.escapedName = name;
         }
 
         getFlags(): SymbolFlags {
             return this.flags;
+        }
+
+        get name(): string {
+            return unescapeLeadingUnderscores(this.escapedName);
+        }
+
+        getEscapedName(): __String {
+            return this.escapedName;
         }
 
         getName(): string {
@@ -360,7 +368,7 @@ namespace ts {
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
-        public text: string;
+        public escapedText: __String;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -370,6 +378,10 @@ namespace ts {
         /*@internal*/typeArguments: NodeArray<TypeNode>;
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
+        }
+
+        get text(): string {
+            return unescapeLeadingUnderscores(this.escapedText);
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
@@ -509,7 +521,7 @@ namespace ts {
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
-        public nameTable: Map<number>;
+        public nameTable: UnderscoreEscapedMap<number>;
         public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: StringLiteral[];
@@ -589,7 +601,7 @@ namespace ts {
             function getDeclarationName(declaration: Declaration) {
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
-                    const result = getTextOfIdentifierOrLiteral(name);
+                    const result = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
                     if (result !== undefined) {
                         return result;
                     }
@@ -600,20 +612,7 @@ namespace ts {
                             return (<PropertyAccessExpression>expr).name.text;
                         }
 
-                        return getTextOfIdentifierOrLiteral(expr);
-                    }
-                }
-
-                return undefined;
-            }
-
-            function getTextOfIdentifierOrLiteral(node: Node) {
-                if (node) {
-                    if (node.kind === SyntaxKind.Identifier ||
-                        node.kind === SyntaxKind.StringLiteral ||
-                        node.kind === SyntaxKind.NumericLiteral) {
-
-                        return (<Identifier | LiteralExpression>node).text;
+                        return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
                     }
                 }
 
@@ -657,7 +656,6 @@ namespace ts {
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ExportSpecifier:
                     case SyntaxKind.ImportSpecifier:
-                    case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportClause:
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.GetAccessor:
@@ -818,14 +816,14 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: FileMap<HostFileInformation>;
+        private fileNameToEntry: Map<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
-            this.fileNameToEntry = createFileMap<HostFileInformation>();
+            this.fileNameToEntry = createMap<HostFileInformation>();
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
@@ -848,7 +846,7 @@ namespace ts {
                 entry = {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
-                    scriptSnapshot: scriptSnapshot,
+                    scriptSnapshot,
                     scriptKind: getScriptKind(fileName, this.host)
                 };
             }
@@ -862,7 +860,7 @@ namespace ts {
         }
 
         public containsEntryByPath(path: Path): boolean {
-            return this.fileNameToEntry.contains(path);
+            return this.fileNameToEntry.has(path);
         }
 
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
@@ -874,7 +872,7 @@ namespace ts {
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue((_path, value) => {
+            this.fileNameToEntry.forEach(value => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -1159,7 +1157,7 @@ namespace ts {
                         !!hostCache.getEntryByPath(path) :
                         (host.fileExists && host.fileExists(fileName));
                 },
-                readFile: (fileName): string => {
+                readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     if (hostCache.containsEntryByPath(path)) {
@@ -1534,12 +1532,8 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const outputFiles: OutputFile[] = [];
 
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
-                outputFiles.push({
-                    name: fileName,
-                    writeByteOrderMark: writeByteOrderMark,
-                    text: data
-                });
+            function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
+                outputFiles.push({ name: fileName, writeByteOrderMark, text });
             }
 
             const customTransformers = host.getCustomTransformers && host.getCustomTransformers();
@@ -1763,8 +1757,10 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-
-            if (key === "}") {
+            if (key === "{") {
+                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+            }
+            else if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === ";") {
@@ -1780,32 +1776,14 @@ namespace ts {
         function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            const span = { start, length: end - start };
-            const newLineChar = getNewLineOrDefaultFromHost(host);
+            const span = createTextSpanFromBounds(start, end);
+            const newLineCharacter = getNewLineOrDefaultFromHost(host);
+            const rulesProvider = getRuleProvider(formatOptions);
 
-            let allFixes: CodeAction[] = [];
-
-            forEach(deduplicate(errorCodes), error => {
+            return flatMap(deduplicate(errorCodes), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-
-                const context = {
-                    errorCode: error,
-                    sourceFile: sourceFile,
-                    span: span,
-                    program: program,
-                    newLineCharacter: newLineChar,
-                    host: host,
-                    cancellationToken: cancellationToken,
-                    rulesProvider: getRuleProvider(formatOptions)
-                };
-
-                const fixes = codefix.getFixes(context);
-                if (fixes) {
-                    allFixes = allFixes.concat(fixes);
-                }
+                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
             });
-
-            return allFixes;
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
@@ -1864,7 +1842,8 @@ namespace ts {
             const fileContents = sourceFile.text;
             const result: TodoComment[] = [];
 
-            if (descriptors.length > 0) {
+            // Exclude node_modules files as we don't want to show the todos of external libraries.
+            if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
                 const regExp = getTodoCommentsRegExp();
 
                 let matchArray: RegExpExecArray;
@@ -1915,11 +1894,7 @@ namespace ts {
                     }
 
                     const message = matchArray[2];
-                    result.push({
-                        descriptor: descriptor,
-                        message: message,
-                        position: matchPosition
-                    });
+                    result.push({ descriptor, message, position: matchPosition });
                 }
             }
 
@@ -1991,6 +1966,12 @@ namespace ts {
                 return (char >= CharacterCodes.a && char <= CharacterCodes.z) ||
                     (char >= CharacterCodes.A && char <= CharacterCodes.Z) ||
                     (char >= CharacterCodes._0 && char <= CharacterCodes._9);
+            }
+
+            function isNodeModulesFile(path: string): boolean {
+                const node_modulesFolderName = "/node_modules/";
+
+                return path.indexOf(node_modulesFolderName) !== -1;
             }
         }
 
@@ -2081,7 +2062,7 @@ namespace ts {
 
     /* @internal */
     /** Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`. */
-    export function getNameTable(sourceFile: SourceFile): Map<number> {
+    export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -2090,42 +2071,33 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createMap<number>();
-
-        walk(sourceFile);
-        sourceFile.nameTable = nameTable;
-
-        function walk(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    setNameTable((<Identifier>node).text, node);
-                    break;
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    // We want to store any numbers/strings if they were a name that could be
-                    // related to a declaration.  So, if we have 'import x = require("something")'
-                    // then we want 'something' to be in the name table.  Similarly, if we have
-                    // "a['propname']" then we want to store "propname" in the name table.
-                    if (isDeclarationName(node) ||
-                        node.parent.kind === SyntaxKind.ExternalModuleReference ||
-                        isArgumentOfElementAccessExpression(node) ||
-                        isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable((<LiteralExpression>node).text, node);
-                    }
-                    break;
-                default:
-                    forEachChild(node, walk);
-                    if (node.jsDoc) {
-                        for (const jsDoc of node.jsDoc) {
-                            forEachChild(jsDoc, walk);
-                        }
-                    }
+        const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
+        sourceFile.forEachChild(function walk(node) {
+            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteral(node) && literalIsName(node)) {
+                const text = getEscapedTextOfIdentifierOrLiteral(node);
+                nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
-        }
 
-        function setNameTable(text: string, node: ts.Node): void {
-            nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
-        }
+            forEachChild(node, walk);
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    forEachChild(jsDoc, walk);
+                }
+            }
+        });
+    }
+
+    /**
+     * We want to store any numbers/strings if they were a name that could be
+     * related to a declaration.  So, if we have 'import x = require("something")'
+     * then we want 'something' to be in the name table.  Similarly, if we have
+     * "a['propname']" then we want to store "propname" in the name table.
+     */
+    function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
+        return isDeclarationName(node) ||
+            node.parent.kind === SyntaxKind.ExternalModuleReference ||
+            isArgumentOfElementAccessExpression(node) ||
+            isLiteralComputedPropertyDeclarationName(node);
     }
 
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {
@@ -2166,7 +2138,7 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = getTextOfPropertyName(node.name);
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(node.name));
         if (name && contextualType) {
             const result: Symbol[] = [];
             const symbol = contextualType.getProperty(name);

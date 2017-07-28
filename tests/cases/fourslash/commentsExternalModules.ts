@@ -35,7 +35,7 @@ goTo.file("commentsExternalModules_file0.ts");
 verify.quickInfoAt("1", "namespace m1", "Namespace comment");
 
 goTo.marker('2');
-verify.completionListContains("b", "var m1.b: number", "b's comment");
+verify.completionListContains("b", "var b: number", "b's comment");
 verify.completionListContains("foo", "function foo(): number", "foo's comment");
 
 goTo.marker('3');
