@@ -347,7 +347,6 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
 
-            debugger;
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
