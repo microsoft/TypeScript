@@ -2345,18 +2345,36 @@ namespace ts.projectSystem {
             const projectFileName = "/user/someuser/project/WebApplication6.csproj";
             const host = createServerHost([libFile, site, configFile]);
             const projectService = createProjectService(host);
-            projectService.openExternalProjects([{
+
+            const externalProject: protocol.ExternalProject = {
                 projectFileName,
-                rootFiles: [toExternalFile(configFile.path), toExternalFile(site.path)],
-                options: { "allowJs": false, "allowNonTsExtensions": false, "allowSyntheticDefaultImports": false, "allowUnreachableCode": false, "allowUnusedLabels": false, "alwaysStrict": false, "compileOnSave": true, "declaration": false, "emitBOM": false, "emitDecoratorMetadata": false, "experimentalAsyncFunctions": false, "experimentalDecorators": false, "forceConsistentCasingInFileNames": false, "importHelpers": false, "inlineSourceMap": false, "inlineSources": false, "isolatedModules": false, "jsx": 0, "noEmit": false, "noEmitHelpers": false, "noEmitOnError": true, "noFallthroughCasesInSwitch": false, "noImplicitAny": false, "noImplicitReturns": false, "noImplicitThis": false, "noImplicitUseStrict": false, "noLib": false, "noResolve": false, "noUnusedLocals": false, "noUnusedParameters": false, "preserveConstEnums": false, "removeComments": false, "skipDefaultLibCheck": false, "skipLibCheck": false, "sourceMap": true, "strictNullChecks": false, "stripInternal": false, "suppressExcessPropertyErrors": false, "suppressImplicitAnyIndexErrors": false, "target": 1 },
+                rootFiles: [toExternalFile(site.path), toExternalFile(configFile.path)],
+                options: { allowJs: false },
                 typeAcquisition: { "include": [] }
-            }]);
+            };
+
+            projectService.openExternalProjects([externalProject]);
 
             let knownProjects = projectService.synchronizeProjectList([]);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, externalProjects: 0, inferredProjects: 0 });
+
+            const configProject = projectService.configuredProjects[0];
+            checkProjectActualFiles(configProject, [libFile.path]);
+
+            const diagnostics = configProject.getProjectErrors();
+            assert.equal(diagnostics[0].code, Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+
             host.reloadFS([libFile, site]);
             host.triggerFileWatcherCallback(configFile.path);
 
             knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info));
+            checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 0, inferredProjects: 0 });
+
+            externalProject.rootFiles.length = 1;
+            projectService.openExternalProjects([externalProject]);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 1, inferredProjects: 0 });
+            checkProjectActualFiles(projectService.externalProjects[0], [site.path, libFile.path]);
         });
     });
 
