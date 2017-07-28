@@ -2361,11 +2361,11 @@ namespace ts.projectSystem {
             const configProject = projectService.configuredProjects[0];
             checkProjectActualFiles(configProject, [libFile.path]);
 
-            const diagnostics = configProject.getProjectErrors();
+            const diagnostics = configProject.getAllProjectErrors();
             assert.equal(diagnostics[0].code, Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
 
             host.reloadFS([libFile, site]);
-            host.triggerFileWatcherCallback(configFile.path);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Deleted);
 
             knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info));
             checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 0, inferredProjects: 0 });
