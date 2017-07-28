@@ -5339,6 +5339,14 @@ namespace ts {
             || isBlockStatement(node);
     }
 
+    /* @internal */
+    export function isStatementOrBlock(node: Node): node is Statement {
+        const kind = node.kind;
+        return isStatementKindButNotDeclarationKind(kind)
+            || isDeclarationStatementKind(kind)
+            || node.kind === SyntaxKind.Block;
+    }
+
     function isBlockStatement(node: Node): node is Block {
         if (node.kind !== SyntaxKind.Block) return false;
         if (node.parent !== undefined) {
