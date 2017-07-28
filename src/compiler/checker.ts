@@ -17598,7 +17598,7 @@ namespace ts {
                 }
 
                 if (functionFlags & FunctionFlags.Generator) {
-                    const expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
+                    const expressionType = checkExpressionCached(node.expression);
                     let expressionElementType: Type;
                     const nodeIsYieldStar = !!node.asteriskToken;
                     if (nodeIsYieldStar) {
