@@ -16333,20 +16333,27 @@ namespace ts {
 
         function syntheticDefaultType(type: Type, symbol: Symbol): Type {
             if (allowSyntheticDefaultImports && type && type !== unknownType) {
-                const defaultSymbol = getPropertyOfType(type, InternalSymbolName.Default);
-                if (!defaultSymbol) {
-                    const memberTable = createSymbolTable();
-                    const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
-                    getSymbolLinks(newSymbol).target = resolveSymbol(symbol);
-                    memberTable.set(InternalSymbolName.Default, newSymbol);
-                    const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
-                    const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                    const resolved = resolveStructuredTypeMembers(defaultContainingObject);
-                    resolved.properties = [newSymbol];
-                    getSymbolLinks(anonymousSymbol).type = defaultContainingObject;
-                    const newType = getIntersectionType([type, defaultContainingObject]);
-                    return newType;
+                const synthType = type as SyntheticDefaultModuleType;
+                if (!synthType.syntheticType) {
+                    const defaultSymbol = getPropertyOfType(type, InternalSymbolName.Default);
+                    if (!defaultSymbol) {
+                        const memberTable = createSymbolTable();
+                        const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
+                        getSymbolLinks(newSymbol).target = resolveSymbol(symbol);
+                        memberTable.set(InternalSymbolName.Default, newSymbol);
+                        const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
+                        const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+                        const resolved = resolveStructuredTypeMembers(defaultContainingObject);
+                        resolved.properties = [newSymbol];
+                        getSymbolLinks(anonymousSymbol).type = defaultContainingObject;
+                        const newType = getIntersectionType([type, defaultContainingObject]);
+                        synthType.syntheticType = newType;
+                    }
+                    else {
+                        synthType.syntheticType = type;
+                    }
                 }
+                return synthType.syntheticType;
             }
             return type;
         }

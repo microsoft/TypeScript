@@ -3317,6 +3317,11 @@ namespace ts {
         awaitedTypeOfType?: Type;
     }
 
+    /* @internal */
+    export interface SyntheticDefaultModuleType extends Type {
+        syntheticType?: Type;
+    }
+
     export interface TypeVariable extends Type {
         /* @internal */
         resolvedBaseConstraint: Type;
