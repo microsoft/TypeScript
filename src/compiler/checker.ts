@@ -19526,10 +19526,9 @@ namespace ts {
                 // Since the javascript won't do semantic analysis like typescript,
                 // if the javascript file comes before the typescript file and both contain same name functions,
                 // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
-                const firstDeclaration = forEach(localSymbol.declarations,
+                const firstDeclaration = find(localSymbol.declarations,
                     // Get first non javascript function declaration
-                    declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFileOfNode(declaration)) ?
-                        declaration : undefined);
+                    declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFileOfNode(declaration)));
 
                 // Only type check the symbol once
                 if (node === firstDeclaration) {
