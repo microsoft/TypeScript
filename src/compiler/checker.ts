@@ -16325,7 +16325,19 @@ namespace ts {
             if (moduleSymbol) {
                 const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true);
                 if (esModuleSymbol) {
-                    return createPromiseReturnType(node, getTypeOfSymbol(esModuleSymbol));
+                    const type = getTypeOfSymbol(esModuleSymbol);
+                    if (allowSyntheticDefaultImports) {
+                        const defaultSymbol = getPropertyOfType(type, InternalSymbolName.Default);
+                        if (!defaultSymbol) {
+                            const memberTable = createSymbolTable();
+                            const newSymbol = cloneSymbol(esModuleSymbol);
+                            newSymbol.escapedName = InternalSymbolName.Default;
+                            memberTable.set(InternalSymbolName.Default, newSymbol);
+                            const syntheticType = getIntersectionType([type, createAnonymousType(createSymbol(esModuleSymbol.flags, InternalSymbolName.Synthetic), memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined)]);
+                            return createPromiseReturnType(node, syntheticType);
+                        }
+                    }
+                    return createPromiseReturnType(node, type);
                 }
             }
             return createPromiseReturnType(node, anyType);
