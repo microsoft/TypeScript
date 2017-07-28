@@ -599,7 +599,7 @@ namespace ts.refactor.extractMethod {
         else {
             functionNameText = getUniqueName(n => !(scope.locals && scope.locals.has(n)));
         }
-        const isJS = isInJavaScriptFile(node);
+        const isJS = isInJavaScriptFile(scope);
 
         const functionName = createIdentifier(functionNameText as string);
         const functionReference = createIdentifier(functionNameText as string);
