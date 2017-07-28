@@ -1741,8 +1741,7 @@ namespace ts {
                 node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
                 node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
                 !isIdentifierName(node) &&
-                !isInAmbientContext(node) &&
-                node.parent.kind !== SyntaxKind.JsxAttribute) {
+                !isInAmbientContext(node)) {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
