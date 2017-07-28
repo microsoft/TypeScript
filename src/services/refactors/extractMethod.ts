@@ -602,6 +602,8 @@ namespace ts.refactor.extractMethod {
         const isJS = isInJavaScriptFile(node);
 
         const functionName = createIdentifier(functionNameText as string);
+        const functionReference = createIdentifier(functionNameText as string);
+
         let returnType: TypeNode = undefined;
         const parameters: ParameterDeclaration[] = [];
         const callArguments: Identifier[] = [];
@@ -681,7 +683,7 @@ namespace ts.refactor.extractMethod {
         const newNodes: Node[] = [];
         // replace range with function call
         let call: Expression = createCall(
-            isClassLike(scope) ? createPropertyAccess(range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.getText()) : createThis(), functionName) : functionName,
+            isClassLike(scope) ? createPropertyAccess(range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.getText()) : createThis(), functionReference) : functionReference,
             /*typeArguments*/ undefined,
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
