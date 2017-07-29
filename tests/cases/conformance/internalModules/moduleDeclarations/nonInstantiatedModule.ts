@@ -29,7 +29,7 @@ module M2 {
 var p: { x: number; y: number; };
 var p: M2.Point;
 
-var p2: { Origin() : { x: number; y: number; } };
+var p2: { readonly Origin: () => { x: number; y: number; } };
 var p2: typeof M2.Point;
 
 module M3 {
