@@ -125,11 +125,14 @@ namespace ts.TestFSWithWatch {
         checkMapKeys("watchedDirectories", recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
-    export function checkOutputContains(host: TestServerHost, expected: string[] | ReadonlyArray<string>) {
+    export function checkOutputContains(host: TestServerHost, expected: ReadonlyArray<string>) {
         const mapExpected = arrayToSet(expected);
+        const mapSeen = createMap<true>();
         for (const f of host.getOutput()) {
+            assert.isUndefined(mapSeen.get(f), `Already found ${f} in ${JSON.stringify(host.getOutput())}`);
             if (mapExpected.has(f)) {
                 mapExpected.delete(f);
+                mapSeen.set(f, true);
             }
         }
         assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);

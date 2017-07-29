@@ -31,6 +31,45 @@ namespace ts.tscWatch {
         return createWatchModeWithConfigFile(configFileResult, {}, host);
     }
 
+    function getEmittedLineForMultiFileOutput(file: FileOrFolder, host: WatchedSystem) {
+        return `TSFILE: ${file.path.replace(".ts", ".js")}${host.newLine}`;
+    }
+
+    function getEmittedLineForSingleFileOutput(filename: string, host: WatchedSystem) {
+        return `TSFILE: ${filename}${host.newLine}`;
+    }
+
+    interface FileOrFolderEmit extends FileOrFolder {
+        output?: string;
+    }
+
+    function getFileOrFolderEmit(file: FileOrFolder, getOutput?: (file: FileOrFolder) => string): FileOrFolderEmit {
+        const result = file as FileOrFolderEmit;
+        if (getOutput) {
+            result.output = getOutput(file);
+        }
+        return result;
+    }
+
+    function getEmittedLines(files: FileOrFolderEmit[]) {
+        const seen = createMap<true>();
+        const result: string[] = [];
+        for (const { output} of files) {
+            if (output && !seen.has(output)) {
+                seen.set(output, true);
+                result.push(output);
+            }
+        }
+        return result;
+    }
+
+    function checkAffectedLines(host: WatchedSystem, affectedFiles: FileOrFolderEmit[], allEmittedFiles: string[]) {
+        const expectedAffectedFiles = getEmittedLines(affectedFiles);
+        const expectedNonAffectedFiles = mapDefined(allEmittedFiles, line => contains(expectedAffectedFiles, line) ? undefined : line);
+        checkOutputContains(host, expectedAffectedFiles);
+        checkOutputDoesNotContain(host, expectedNonAffectedFiles);
+    }
+
     describe("tsc-watch program updates", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -908,93 +947,434 @@ namespace ts.tscWatch {
         });
     });
 
-    describe("tsc-watch emit", () => {
-        it("emit with outFile or out setting projectUsesOutFile should not be returned if not set", () => {
-            const f1 = {
-                path: "/a/a.ts",
-                content: "let x = 1"
-            };
-            const f2 = {
-                path: "/a/b.ts",
-                content: "let y = 1"
-            };
-            const config = {
+    describe("tsc-watch emit with outFile or out setting", () => {
+        function createWatchForOut(out?: string, outFile?: string) {
+            const host = createWatchedSystem([]);
+            const config: FileOrFolderEmit = {
                 path: "/a/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: { listEmittedFiles: true }
                 })
             };
-            const files = [f1, f2, config, libFile];
-            const host = createWatchedSystem([f1, f2, config, libFile]);
-            createWatchWithConfig(config.path, host);
-            const emittedF1 = `TSFILE: ${f1.path.replace(".ts", ".js")}${host.newLine}`;
-            const emittedF2 = `TSFILE: ${f2.path.replace(".ts", ".js")}${host.newLine}`;
-            checkOutputContains(host, [emittedF1, emittedF2]);
-            host.clearOutput();
 
-            f1.content = "let x = 11";
-            host.reloadFS(files);
-            host.runQueuedTimeoutCallbacks();
-            checkOutputContains(host, [emittedF1]);
-            checkOutputDoesNotContain(host, [emittedF2]);
-        });
+            let getOutput: (file: FileOrFolder) => string;
+            if (out) {
+                config.content = JSON.stringify({
+                    compilerOptions: { listEmittedFiles: true, out }
+                });
+                getOutput = __ => getEmittedLineForSingleFileOutput(out, host);
+            }
+            else if (outFile) {
+                config.content = JSON.stringify({
+                    compilerOptions: { listEmittedFiles: true, outFile }
+                });
+                getOutput = __ => getEmittedLineForSingleFileOutput(outFile, host);
+            }
+            else {
+                getOutput = file => getEmittedLineForMultiFileOutput(file, host);
+            }
 
-        it("emit with outFile or out setting projectUsesOutFile should be true if out is set", () => {
-            const outJS = "/a/out.js";
-            const f1 = {
+            const f1 = getFileOrFolderEmit({
                 path: "/a/a.ts",
                 content: "let x = 1"
-            };
-            const f2 = {
+            }, getOutput);
+            const f2 = getFileOrFolderEmit({
                 path: "/a/b.ts",
                 content: "let y = 1"
-            };
-            const config = {
-                path: "/a/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: { listEmittedFiles: true, out: outJS }
-                })
-            };
+            }, getOutput);
+
             const files = [f1, f2, config, libFile];
-            const host = createWatchedSystem([f1, f2, config, libFile]);
+            host.reloadFS(files);
             createWatchWithConfig(config.path, host);
-            const emittedF1 = `TSFILE: ${outJS}${host.newLine}`;
-            checkOutputContains(host, [emittedF1]);
+
+            const allEmittedLines = getEmittedLines(files);
+            checkOutputContains(host, allEmittedLines);
             host.clearOutput();
 
             f1.content = "let x = 11";
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
-            checkOutputContains(host, [emittedF1]);
+            checkAffectedLines(host, [f1], allEmittedLines);
+        }
+
+        it("projectUsesOutFile should not be returned if not set", () => {
+            createWatchForOut();
         });
 
-        it("emit with outFile or out setting projectUsesOutFile should be true if outFile is set", () => {
+        it("projectUsesOutFile should be true if out is set", () => {
             const outJs = "/a/out.js";
-            const f1 = {
-                path: "/a/a.ts",
-                content: "let x = 1"
-            };
-            const f2 = {
-                path: "/a/b.ts",
-                content: "let y = 1"
-            };
-            const config = {
-                path: "/a/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: { listEmittedFiles: true, outFile: outJs }
-                })
-            };
-            const files = [f1, f2, config, libFile];
-            const host = createWatchedSystem([f1, f2, config, libFile]);
-            createWatchWithConfig(config.path, host);
-            const emittedF1 = `TSFILE: ${outJs}${host.newLine}`;
-            checkOutputContains(host, [emittedF1]);
-            host.clearOutput();
+            createWatchForOut(outJs);
+        });
 
-            f1.content = "let x = 11";
-            host.reloadFS(files);
-            host.runQueuedTimeoutCallbacks();
-            checkOutputContains(host, [emittedF1]);
+        it("projectUsesOutFile should be true if outFile is set", () => {
+            const outJs = "/a/out.js";
+            createWatchForOut(/*out*/ undefined, outJs);
         });
     });
+
+    describe("tsc-watch emit for configured projects", () => {
+        const file1Consumer1Path = "/a/b/file1Consumer1.ts";
+        const moduleFile1Path = "/a/b/moduleFile1.ts";
+        function getInitialState(configObj: any = {}, fileNames?: string[]) {
+            const host = createWatchedSystem([]);
+            const getOutputName = (file: FileOrFolder) => getEmittedLineForMultiFileOutput(file, host);
+            const moduleFile1 = getFileOrFolderEmit({
+                path: moduleFile1Path,
+                content: "export function Foo() { };",
+            }, getOutputName);
+
+            const file1Consumer1 = getFileOrFolderEmit({
+                path: file1Consumer1Path,
+                content: `import {Foo} from "./moduleFile1"; export var y = 10;`,
+            }, getOutputName);
+
+            const file1Consumer2 = getFileOrFolderEmit({
+                path: "/a/b/file1Consumer2.ts",
+                content: `import {Foo} from "./moduleFile1"; let z = 10;`,
+            }, getOutputName);
+
+            const moduleFile2 = getFileOrFolderEmit({
+                path: "/a/b/moduleFile2.ts",
+                content: `export var Foo4 = 10;`,
+            }, getOutputName);
+
+            const globalFile3 = getFileOrFolderEmit({
+                path: "/a/b/globalFile3.ts",
+                content: `interface GlobalFoo { age: number }`
+            });
+
+            (configObj.compilerOptions || (configObj.compilerOptions = {})).listEmittedFiles = true;
+            const configFile = getFileOrFolderEmit({
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify(configObj)
+            });
+
+            const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile];
+            let allEmittedFiles = getEmittedLines(files);
+            host.reloadFS(files);
+
+            // Initial compile
+            createWatchWithConfig(configFile.path, host);
+            if (fileNames) {
+                checkAffectedLines(host, map(fileNames, name => find(files, file => file.path === name)), allEmittedFiles);
+            }
+            else {
+                checkOutputContains(host, allEmittedFiles);
+            }
+            host.clearOutput();
+
+            return {
+                moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile,
+                files,
+                verifyAffectedFiles,
+                verifyAffectedAllFiles,
+                getOutputName
+            };
+
+            function verifyAffectedAllFiles() {
+                host.reloadFS(files);
+                host.checkTimeoutQueueLengthAndRun(1);
+                checkOutputContains(host, allEmittedFiles);
+                host.clearOutput();
+            }
+
+            function verifyAffectedFiles(expected: FileOrFolderEmit[], filesToReload?: FileOrFolderEmit[]) {
+                if (!filesToReload) {
+                    filesToReload = files;
+                }
+                else if (filesToReload.length > files.length) {
+                    allEmittedFiles = getEmittedLines(filesToReload);
+                }
+                host.reloadFS(filesToReload);
+                host.checkTimeoutQueueLengthAndRun(1);
+                checkAffectedLines(host, expected, allEmittedFiles);
+                host.clearOutput();
+            }
+        }
+
+        it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
+            const {
+                moduleFile1, file1Consumer1, file1Consumer2,
+                verifyAffectedFiles
+            } = getInitialState();
+
+            // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+            moduleFile1.content = `export var T: number;export function Foo() { };`;
+            verifyAffectedFiles([moduleFile1, file1Consumer1, file1Consumer2]);
+
+            // Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`
+            moduleFile1.content = `export var T: number;export function Foo() { console.log('hi'); };`;
+            verifyAffectedFiles([moduleFile1]);
+        });
+
+        it("should be up-to-date with the reference map changes", () => {
+            const {
+                moduleFile1, file1Consumer1, file1Consumer2,
+                verifyAffectedFiles
+            } = getInitialState();
+
+            // Change file1Consumer1 content to `export let y = Foo();`
+            file1Consumer1.content = `export let y = Foo();`;
+            verifyAffectedFiles([file1Consumer1]);
+
+            // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+            moduleFile1.content = `export var T: number;export function Foo() { };`;
+            verifyAffectedFiles([moduleFile1, file1Consumer2]);
+
+            // Add the import statements back to file1Consumer1
+            file1Consumer1.content = `import {Foo} from "./moduleFile1";let y = Foo();`;
+            verifyAffectedFiles([file1Consumer1]);
+
+            // Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
+            moduleFile1.content = `export var T: number;export var T2: string;export function Foo() { };`;
+            verifyAffectedFiles([moduleFile1, file1Consumer2, file1Consumer1]);
+
+            // Multiple file edits in one go:
+
+            // Change file1Consumer1 content to `export let y = Foo();`
+            // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+            file1Consumer1.content = `export let y = Foo();`;
+            moduleFile1.content = `export var T: number;export function Foo() { };`;
+            verifyAffectedFiles([moduleFile1, file1Consumer1, file1Consumer2]);
+        });
+
+        it("should be up-to-date with deleted files", () => {
+            const {
+                moduleFile1, file1Consumer1, file1Consumer2,
+                files,
+                verifyAffectedFiles
+            } = getInitialState();
+
+            // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+            moduleFile1.content = `export var T: number;export function Foo() { };`;
+
+            // Delete file1Consumer2
+            const filesToLoad = mapDefined(files, file => file === file1Consumer2 ? undefined : file);
+            verifyAffectedFiles([moduleFile1, file1Consumer1], filesToLoad);
+        });
+
+        it("should be up-to-date with newly created files", () => {
+            const {
+                moduleFile1, file1Consumer1, file1Consumer2,
+                files,
+                verifyAffectedFiles,
+                getOutputName
+            } = getInitialState();
+
+            const file1Consumer3 = getFileOrFolderEmit({
+                path: "/a/b/file1Consumer3.ts",
+                content: `import {Foo} from "./moduleFile1"; let y = Foo();`
+            }, getOutputName);
+            moduleFile1.content = `export var T: number;export function Foo() { };`;
+            verifyAffectedFiles([moduleFile1, file1Consumer1, file1Consumer3, file1Consumer2], files.concat(file1Consumer3));
+        });
+
+        it("should detect changes in non-root files", () => {
+            const {
+                moduleFile1, file1Consumer1,
+                verifyAffectedFiles,
+            } = getInitialState({ files: [file1Consumer1Path] }, [file1Consumer1Path, moduleFile1Path]);
+
+            moduleFile1.content = `export var T: number;export function Foo() { };`;
+            verifyAffectedFiles([moduleFile1, file1Consumer1]);
+
+            // change file1 internal, and verify only file1 is affected
+            moduleFile1.content += "var T1: number;";
+            verifyAffectedFiles([moduleFile1]);
+        });
+
+        it("should return all files if a global file changed shape", () => {
+            const {
+                globalFile3, verifyAffectedAllFiles
+            } = getInitialState();
+
+            globalFile3.content += "var T2: string;";
+            verifyAffectedAllFiles();
+        });
+
+        //it("should save with base tsconfig.json", () => {
+        //    configFile = {
+        //        path: "/a/b/tsconfig.json",
+        //        content: `{
+        //                "extends": "/a/tsconfig.json"
+        //            }`
+        //    };
+
+        //    const configFile2: FileOrFolder = {
+        //        path: "/a/tsconfig.json",
+        //        content: `{
+        //                "compileOnSave": true
+        //            }`
+        //    };
+
+        //    const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile, libFile]);
+        //    const typingsInstaller = createTestTypingsInstaller(host);
+        //    const session = createSession(host, typingsInstaller);
+
+        //    openFilesForSession([moduleFile1, file1Consumer1], session);
+        //    sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+        //});
+
+        //it("should always return the file itself if '--isolatedModules' is specified", () => {
+        //    configFile = {
+        //        path: "/a/b/tsconfig.json",
+        //        content: `{
+        //                "compileOnSave": true,
+        //                "compilerOptions": {
+        //                    "isolatedModules": true
+        //                }
+        //            }`
+        //    };
+
+        //    const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
+        //    const typingsInstaller = createTestTypingsInstaller(host);
+        //    const session = createSession(host, typingsInstaller);
+        //    openFilesForSession([moduleFile1], session);
+
+        //    const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
+        //        file: moduleFile1.path,
+        //        line: 1,
+        //        offset: 27,
+        //        endLine: 1,
+        //        endOffset: 27,
+        //        insertString: `Point,`
+        //    });
+        //    session.executeCommand(file1ChangeShapeRequest);
+        //    sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
+        //});
+
+        //it("should always return the file itself if '--out' or '--outFile' is specified", () => {
+        //    configFile = {
+        //        path: "/a/b/tsconfig.json",
+        //        content: `{
+        //                "compileOnSave": true,
+        //                "compilerOptions": {
+        //                    "module": "system",
+        //                    "outFile": "/a/b/out.js"
+        //                }
+        //            }`
+        //    };
+
+        //    const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
+        //    const typingsInstaller = createTestTypingsInstaller(host);
+        //    const session = createSession(host, typingsInstaller);
+        //    openFilesForSession([moduleFile1], session);
+
+        //    const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
+        //        file: moduleFile1.path,
+        //        line: 1,
+        //        offset: 27,
+        //        endLine: 1,
+        //        endOffset: 27,
+        //        insertString: `Point,`
+        //    });
+        //    session.executeCommand(file1ChangeShapeRequest);
+        //    sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
+        //});
+
+        //it("should return cascaded affected file list", () => {
+        //    const file1Consumer1Consumer1: FileOrFolder = {
+        //        path: "/a/b/file1Consumer1Consumer1.ts",
+        //        content: `import {y} from "./file1Consumer1";`
+        //    };
+        //    const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
+        //    const typingsInstaller = createTestTypingsInstaller(host);
+        //    const session = createSession(host, typingsInstaller);
+
+        //    openFilesForSession([moduleFile1, file1Consumer1], session);
+        //    sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
+
+        //    const changeFile1Consumer1ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
+        //        file: file1Consumer1.path,
+        //        line: 2,
+        //        offset: 1,
+        //        endLine: 2,
+        //        endOffset: 1,
+        //        insertString: `export var T: number;`
+        //    });
+        //    session.executeCommand(changeModuleFile1ShapeRequest1);
+        //    session.executeCommand(changeFile1Consumer1ShapeRequest);
+        //    sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
+        //});
+
+        //it("should work fine for files with circular references", () => {
+        //    const file1: FileOrFolder = {
+        //        path: "/a/b/file1.ts",
+        //        content: `
+        //            /// <reference path="./file2.ts" />
+        //            export var t1 = 10;`
+        //    };
+        //    const file2: FileOrFolder = {
+        //        path: "/a/b/file2.ts",
+        //        content: `
+        //            /// <reference path="./file1.ts" />
+        //            export var t2 = 10;`
+        //    };
+        //    const host = createServerHost([file1, file2, configFile]);
+        //    const typingsInstaller = createTestTypingsInstaller(host);
+        //    const session = createSession(host, typingsInstaller);
+
+        //    openFilesForSession([file1, file2], session);
+        //    const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+        //    sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [{ projectFileName: configFile.path, files: [file1, file2] }]);
+        //});
+
+        //it("should return results for all projects if not specifying projectFileName", () => {
+        //    const file1: FileOrFolder = { path: "/a/b/file1.ts", content: "export var t = 10;" };
+        //    const file2: FileOrFolder = { path: "/a/b/file2.ts", content: `import {t} from "./file1"; var t2 = 11;` };
+        //    const file3: FileOrFolder = { path: "/a/c/file2.ts", content: `import {t} from "../b/file1"; var t3 = 11;` };
+        //    const configFile1: FileOrFolder = { path: "/a/b/tsconfig.json", content: `{ "compileOnSave": true }` };
+        //    const configFile2: FileOrFolder = { path: "/a/c/tsconfig.json", content: `{ "compileOnSave": true }` };
+
+        //    const host = createServerHost([file1, file2, file3, configFile1, configFile2]);
+        //    const session = createSession(host);
+
+        //    openFilesForSession([file1, file2, file3], session);
+        //    const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+
+        //    sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [
+        //        { projectFileName: configFile1.path, files: [file1, file2] },
+        //        { projectFileName: configFile2.path, files: [file1, file3] }
+        //    ]);
+        //});
+
+        //it("should detect removed code file", () => {
+        //    const referenceFile1: FileOrFolder = {
+        //        path: "/a/b/referenceFile1.ts",
+        //        content: `
+        //            /// <reference path="./moduleFile1.ts" />
+        //            export var x = Foo();`
+        //    };
+        //    const host = createServerHost([moduleFile1, referenceFile1, configFile]);
+        //    const session = createSession(host);
+
+        //    openFilesForSession([referenceFile1], session);
+        //    host.reloadFS([referenceFile1, configFile]);
+
+        //    const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
+        //    sendAffectedFileRequestAndCheckResult(session, request, [
+        //        { projectFileName: configFile.path, files: [referenceFile1] }
+        //    ]);
+        //    const requestForMissingFile = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path });
+        //    sendAffectedFileRequestAndCheckResult(session, requestForMissingFile, []);
+        //});
+
+        //it("should detect non-existing code file", () => {
+        //    const referenceFile1: FileOrFolder = {
+        //        path: "/a/b/referenceFile1.ts",
+        //        content: `
+        //            /// <reference path="./moduleFile2.ts" />
+        //            export var x = Foo();`
+        //    };
+        //    const host = createServerHost([referenceFile1, configFile]);
+        //    const session = createSession(host);
+
+        //    openFilesForSession([referenceFile1], session);
+        //    const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
+        //    sendAffectedFileRequestAndCheckResult(session, request, [
+        //        { projectFileName: configFile.path, files: [referenceFile1] }
+        //    ]);
+        //});
+    });
+
 }

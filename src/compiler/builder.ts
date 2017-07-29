@@ -294,9 +294,11 @@ namespace ts {
                 existingMap = mutateExistingMapWithNewSet<true>(
                     existingMap,
                     getReferencedFiles(program, sourceFile),
-                    // Creating new Reference: Also add referenced by
+                    // Creating new Reference: as sourceFile references file with path 'key'
+                    // in other words source file (path) is referenced by 'key'
                     key => { referencedBy.add(key, path); return true; },
-                    // Remove existing reference
+                    // Remove existing reference by entry: source file doesnt reference file 'key' any more
+                    // in other words source file (path) is not referenced by 'key'
                     (key, _existingValue) => { referencedBy.remove(key, path); }
                 );
                 references.set(path, existingMap);
@@ -338,28 +340,28 @@ namespace ts {
                 // Because if so, its own referencedBy files need to be saved as well to make the
                 // emitting result consistent with files on disk.
 
-                const fileNamesMap = createMap<string>();
-                const setFileName = (path: Path, sourceFile: SourceFile) => {
-                    fileNamesMap.set(path, sourceFile && shouldEmitFile(sourceFile) ? sourceFile.fileName : undefined);
+                const seenFileNamesMap = createMap<string>();
+                const setSeenFileName = (path: Path, sourceFile: SourceFile) => {
+                    seenFileNamesMap.set(path, sourceFile && shouldEmitFile(sourceFile) ? sourceFile.fileName : undefined);
                 };
 
                 // Start with the paths this file was referenced by
                 const path = sourceFile.path;
-                setFileName(path, sourceFile);
+                setSeenFileName(path, sourceFile);
                 const queue = getReferencedByPaths(path).slice();
                 while (queue.length > 0) {
                     const currentPath = queue.pop();
-                    if (!fileNamesMap.has(currentPath)) {
+                    if (!seenFileNamesMap.has(currentPath)) {
                         const currentSourceFile = program.getSourceFileByPath(currentPath);
                         if (currentSourceFile && updateShapeSignature(program, currentSourceFile)) {
                             queue.push(...getReferencedByPaths(currentPath));
                         }
-                        setFileName(currentPath, currentSourceFile);
+                        setSeenFileName(currentPath, currentSourceFile);
                     }
                 }
 
                 // Return array of values that needs emit
-                return flatMapIter(fileNamesMap.values(), value => value);
+                return flatMapIter(seenFileNamesMap.values(), value => value);
             }
         }
     }
