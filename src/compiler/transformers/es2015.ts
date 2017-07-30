@@ -3173,7 +3173,7 @@ namespace ts {
         function visitCatchClause(node: CatchClause): CatchClause {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
-            if (isBindingPattern(node.variableDeclaration.name)) {
+            if (node.variableDeclaration && isBindingPattern(node.variableDeclaration.name)) {
                 const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const newVariableDeclaration = createVariableDeclaration(temp);
                 setTextRange(newVariableDeclaration, node.variableDeclaration);
