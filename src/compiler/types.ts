@@ -1807,8 +1807,8 @@ namespace ts {
 
     export interface CatchClause extends Node {
         kind: SyntaxKind.CatchClause;
-        parent?: TryStatement;
-        variableDeclaration: VariableDeclaration;
+        parent: TryStatement;
+        variableDeclaration?: VariableDeclaration;
         block: Block;
     }
 
