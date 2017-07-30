@@ -1,9 +1,5 @@
 //// [invalidTryStatements2.ts]
 function fn() {
-    try {
-    } catch { // syntax error, missing '(x)'
-    }
-
     catch(x) { } // error missing try
 
     finally{ } // potential error; can be absorbed by the 'catch'
@@ -30,10 +26,6 @@ function fn2() {
 
 //// [invalidTryStatements2.js]
 function fn() {
-    try {
-    }
-    catch (_ignoredCatchParameter) {
-    }
     try {
     }
     catch (x) { } // error missing try

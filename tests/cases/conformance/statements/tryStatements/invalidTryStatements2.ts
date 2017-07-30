@@ -1,8 +1,4 @@
 function fn() {
-    try {
-    } catch { // syntax error, missing '(x)'
-    }
-
     catch(x) { } // error missing try
 
     finally{ } // potential error; can be absorbed by the 'catch'
