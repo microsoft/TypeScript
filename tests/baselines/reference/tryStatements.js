@@ -1,20 +1,19 @@
 //// [tryStatements.ts]
 function fn() {
-    try {
+    try { } catch { }
 
-    } catch (x) {
-        var x: any;
-    }
+    try { } catch (x) { var x: any; }
 
     try { } finally { }
 
-    try { }catch(z){ } finally { }
+    try { } catch(z) { } finally { }
 }
 
 //// [tryStatements.js]
 function fn() {
-    try {
-    }
+    try { }
+    catch (_ignoredCatchParameter) { }
+    try { }
     catch (x) {
         var x;
     }

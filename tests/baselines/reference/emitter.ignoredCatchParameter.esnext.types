@@ -1,0 +1,7 @@
+=== tests/cases/conformance/emitter/esnext/noCatchParameter/emitter.ignoredCatchParameter.esnext.ts ===
+function fn() {
+>fn : () => void
+
+    try {} catch {}
+}
+

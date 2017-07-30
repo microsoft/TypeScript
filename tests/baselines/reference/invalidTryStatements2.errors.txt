@@ -1,4 +1,3 @@
-tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(3,13): error TS1005: '(' expected.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(6,5): error TS1005: 'try' expected.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(12,5): error TS1005: 'try' expected.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(13,5): error TS1005: 'try' expected.
@@ -6,12 +5,10 @@ tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(22,5):
 tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(26,5): error TS1005: 'try' expected.
 
 
-==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (6 errors) ====
+==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (5 errors) ====
     function fn() {
         try {
         } catch { // syntax error, missing '(x)'
-                ~
-!!! error TS1005: '(' expected.
         }
     
         catch(x) { } // error missing try

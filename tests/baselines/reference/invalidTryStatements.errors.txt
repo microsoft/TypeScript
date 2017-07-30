@@ -1,9 +1,10 @@
 tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(8,23): error TS1196: Catch clause variable cannot have a type annotation.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(9,23): error TS1196: Catch clause variable cannot have a type annotation.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,23): error TS1196: Catch clause variable cannot have a type annotation.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(14,13): error TS2714: Duplicate identifier '_ignoredCatchParameter'. Compiler uses the parameter declaration '_ignoredCatchParameter' to bind ignored catched exceptions.
 
 
-==== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts (3 errors) ====
+==== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts (4 errors) ====
     function fn() {
         try {
         } catch (x) {
@@ -20,6 +21,13 @@ tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,23):
         try { } catch (y: string) { }
                           ~~~~~~
 !!! error TS1196: Catch clause variable cannot have a type annotation.
+    
+        
+        try { } catch { 
+            let _ignoredCatchParameter; // Should error since we downlevel emit this variable.
+                ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2714: Duplicate identifier '_ignoredCatchParameter'. Compiler uses the parameter declaration '_ignoredCatchParameter' to bind ignored catched exceptions.
+        }
     }
     
     

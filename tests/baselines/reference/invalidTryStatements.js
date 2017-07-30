@@ -9,6 +9,11 @@ function fn() {
     try { } catch (z: any) { }
     try { } catch (a: number) { }
     try { } catch (y: string) { }
+
+    
+    try { } catch { 
+        let _ignoredCatchParameter; // Should error since we downlevel emit this variable.
+    }
 }
 
 
@@ -27,4 +32,8 @@ function fn() {
     catch (a) { }
     try { }
     catch (y) { }
+    try { }
+    catch (_ignoredCatchParameter) {
+        var _ignoredCatchParameter = void 0; // Should error since we downlevel emit this variable.
+    }
 }

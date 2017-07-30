@@ -2,17 +2,14 @@
 function fn() {
 >fn : () => void
 
-    try {
+    try { } catch { }
 
-    } catch (x) {
+    try { } catch (x) { var x: any; }
 >x : any
-
-        var x: any;
 >x : any
-    }
 
     try { } finally { }
 
-    try { }catch(z){ } finally { }
+    try { } catch(z) { } finally { }
 >z : any
 }
