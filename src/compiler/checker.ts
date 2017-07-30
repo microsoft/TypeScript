@@ -481,7 +481,7 @@ namespace ts {
             Type,
             ResolvedBaseConstructorType,
             DeclaredType,
-            ResolvedReturnType
+            ResolvedReturnType,
         }
 
         const enum CheckMode {
