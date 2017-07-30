@@ -10,6 +10,8 @@ function fn() {
 
     try { } finally { }
 
+    try { } catch { } finally { }
+
     try { } catch(z) { } finally { }
->z : Symbol(z, Decl(tryStatements.ts, 7, 18))
+>z : Symbol(z, Decl(tryStatements.ts, 9, 18))
 }

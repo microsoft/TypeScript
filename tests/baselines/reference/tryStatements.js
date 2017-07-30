@@ -6,6 +6,8 @@ function fn() {
 
     try { } finally { }
 
+    try { } catch { } finally { }
+
     try { } catch(z) { } finally { }
 }
 
@@ -18,6 +20,9 @@ function fn() {
         var x;
     }
     try { }
+    finally { }
+    try { }
+    catch (_ignoredCatchParameter) { }
     finally { }
     try { }
     catch (z) { }

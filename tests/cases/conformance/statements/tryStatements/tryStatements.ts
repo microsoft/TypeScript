@@ -6,5 +6,7 @@ function fn() {
 
     try { } finally { }
 
+    try { } catch { } finally { }
+
     try { } catch(z) { } finally { }
 }
