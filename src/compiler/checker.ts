@@ -20887,7 +20887,6 @@ namespace ts {
                 }
                 else if (/* !catchClause.variableDeclaration && */ languageVersion < ScriptTarget.ESNext) {
                     const blockLocals = catchClause.block.locals;
-                    debugger;
                     if (blockLocals) {
                         forEachKey(blockLocals, caughtName => {
                             if (caughtName === "_ignoredCatchParameter") {
