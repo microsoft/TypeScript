@@ -2196,6 +2196,10 @@
         "category": "Error",
         "code": 2713
     },
+    "Duplicate identifier '_ignoredCatchParameter'. Compiler uses the parameter declaration '_ignoredCatchParameter' to bind ignored catched exceptions.": {
+        "category": "Error",
+        "code": 2714
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
