@@ -20,7 +20,11 @@ verify.currentFileContentIs(`class C {
     constructor(q: string = C.newFunction()) {
     }
 
-    private static newFunction(): string { return "hello"; }
+    private static newFunction(): string {
+        return "hello";
+    }
 
-    private static newFunction_1() { return 100; }
+    private static newFunction_1() {
+        return 100;
+    }
 }`);

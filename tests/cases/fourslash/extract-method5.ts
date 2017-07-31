@@ -14,5 +14,7 @@ verify.currentFileContentIs(
 `function f() {
     var x: 1 | 2 | 3 = newFunction();
 
-    function newFunction(): 1 | 2 | 3 { return 2; }
+    function newFunction(): 1 | 2 | 3 {
+        return 2;
+    }
 }`);

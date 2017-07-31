@@ -763,10 +763,10 @@ namespace ts.refactor.extractMethod {
                     // it is ok to know that range has at least one return since it we only allow unconditional returns
                     rewrittenStatements.push(createReturn(createObjectLiteral(getPropertyAssignmentsForWrites(writes))));
                 }
-                return { body: createBlock(rewrittenStatements), returnValueProperty };
+                return { body: createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
             }
             else {
-                return { body: createBlock(statements), returnValueProperty: undefined };
+                return { body: createBlock(statements, /*multiLine*/ true), returnValueProperty: undefined };
             }
 
             function visitor(node: Node): VisitResult<Node> {
