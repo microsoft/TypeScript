@@ -82,7 +82,12 @@ function buildDiagnosticMessageOutput(messageTable: InputDiagnosticMessageTable)
     });
 
     // Shave trailing comma, then add newline and ending brace
-    return result.slice(0, result.length - 1) + '\r\n}';
+    result = result.slice(0, result.length - 1) + '\r\n}';
+
+    // Assert that we generated valid JSON
+    JSON.parse(result);
+
+    return result;
 }
 
 function createKey(name: string, code: number) : string {
