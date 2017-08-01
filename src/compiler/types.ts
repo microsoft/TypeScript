@@ -3363,7 +3363,12 @@ namespace ts {
         /* @internal */
         thisParameter?: Symbol;             // symbol of this-type parameter
         /* @internal */
-        resolvedReturnType: Type;           // Resolved return type
+        // See comment in `instantiateSignature` for why these are set lazily.
+        resolvedReturnType: Type | undefined; // Lazily set by `getReturnTypeOfSignature`.
+        /* @internal */
+        // Lazily set by `getTypePredicateOfSignature`.
+        // Unlike `resolvedReturnType`, `undefined` is a valid value, so we use "pending" instead to indicate a type predicate that must still be computed.
+        resolvedTypePredicate: TypePredicate | undefined | "pending";
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
@@ -3380,8 +3385,6 @@ namespace ts {
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
-        /* @internal */
-        typePredicate?: TypePredicate;
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
     }
