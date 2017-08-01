@@ -1194,13 +1194,21 @@ namespace Harness {
             return { result, options };
         }
 
-        export function compileDeclarationFiles(inputFiles: TestFile[],
+        export interface DeclarationCompilationContext {
+            declInputFiles: TestFile[];
+            declOtherFiles: TestFile[];
+            harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions;
+            options: ts.CompilerOptions;
+            currentDirectory: string;
+        }
+
+        export function prepareDeclarationCompilationContext(inputFiles: TestFile[],
             otherFiles: TestFile[],
             result: CompilerResult,
             harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-            currentDirectory: string) {
+            currentDirectory: string): DeclarationCompilationContext | undefined {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
                 throw new Error("There were no errors and declFiles generated did not match number of js files generated");
             }
@@ -1212,8 +1220,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory || harnessSettings["currentDirectory"]);
-                return { declInputFiles, declOtherFiles, declResult: output.result };
+                return {declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings["currentDirectory"]};
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -1257,6 +1264,15 @@ namespace Harness {
             function findUnit(fileName: string, units: TestFile[]) {
                 return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
             }
+        }
+
+        export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined) {
+            if (!context) {
+                return;
+            }
+            const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
+            const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory);
+            return { declInputFiles, declOtherFiles, declResult: output.result };
         }
 
         function normalizeLineEndings(text: string, lineEnding: string): string {
@@ -1586,9 +1602,10 @@ namespace Harness {
                     }
                 }
 
-                const declFileCompilationResult =
-                    Harness.Compiler.compileDeclarationFiles(
-                        toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined);
+                const declFileContext = Harness.Compiler.prepareDeclarationCompilationContext(
+                    toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined
+                );
+                const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declFileContext);
 
                 if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                     jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
