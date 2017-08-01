@@ -1,4 +1,4 @@
-﻿///<reference path="fourslash.ts" />
+///<reference path="fourslash.ts" />
 
 //// var x = class myClass {
 ////    getClassName (){
@@ -11,4 +11,4 @@ goTo.marker("0");
 verify.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
 
 goTo.marker("1");
-verify.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
+verify.not.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");

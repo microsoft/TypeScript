@@ -177,9 +177,9 @@ function foo10() {
     var A = (function () {
         function A() {
         }
+        A.a = x;
         return A;
     }());
-    A.a = x;
     var x;
 }
 function foo11() {

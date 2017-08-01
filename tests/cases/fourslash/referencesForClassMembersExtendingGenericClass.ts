@@ -26,7 +26,7 @@ const methods = ranges.get("method");
 const [m0, m1, m2] = methods;
 verify.referenceGroups(m0, [{ definition: "(method) Base<T>.method<U>(a?: T, b?: U): this", ranges: methods }]);
 verify.referenceGroups(m1, [
-    { definition: "(method) Base<T>.method(): void", ranges: [m0] },
+    { definition: "(method) Base<T>.method<U>(a?: T, b?: U): this", ranges: [m0] },
     { definition: "(method) MyClass.method(): void", ranges: [m1, m2] }
 ]);
 verify.referenceGroups(m2, [

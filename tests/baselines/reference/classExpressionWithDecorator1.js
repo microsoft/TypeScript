@@ -12,10 +12,10 @@ var v = ;
 var C = (function () {
     function C() {
     }
+    C.p = 1;
+    C = __decorate([
+        decorate
+    ], C);
     return C;
 }());
-C.p = 1;
-C = __decorate([
-    decorate
-], C);
 ;

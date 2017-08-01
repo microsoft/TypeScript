@@ -36,6 +36,6 @@ var Foo = (function () {
         var a = this.y;
         var b = this.x;
     };
+    Foo.y = this;
     return Foo;
 }());
-Foo.y = this;

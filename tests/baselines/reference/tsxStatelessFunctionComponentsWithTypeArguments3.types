@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 import React = require('react')
 >React : typeof React
 
@@ -131,8 +130,8 @@ function createLink(func: (a: number)=>void) {
 >o1 : JSX.Element
 ><Link func={(a:number, b:string)=>{}} /> : JSX.Element
 >Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
->func : (a: number, b: string) => void
->(a:number, b:string)=>{} : (a: number, b: string) => void
+>func : (a: number, b: string) => any
+>(a:number, b:string)=>{} : (a: number, b: string) => any
 >a : number
 >b : string
 }

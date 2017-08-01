@@ -83,25 +83,25 @@ var p5 = ([a = 1]) => { };
 >1 : 1
 
 var p6 = ({ a }) => { };
->p6 : ({a}: { a: any; }) => void
->({ a }) => { } : ({a}: { a: any; }) => void
+>p6 : ({ a }: { a: any; }) => void
+>({ a }) => { } : ({ a }: { a: any; }) => void
 >a : any
 
 var p7 = ({ a: { b } }) => { };
->p7 : ({a: {b}}: { a: { b: any; }; }) => void
->({ a: { b } }) => { } : ({a: {b}}: { a: { b: any; }; }) => void
+>p7 : ({ a: { b } }: { a: { b: any; }; }) => void
+>({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
 >a : any
 >b : any
 
 var p8 = ({ a = 1 }) => { };
->p8 : ({a}: { a?: number; }) => void
->({ a = 1 }) => { } : ({a}: { a?: number; }) => void
+>p8 : ({ a }: { a?: number; }) => void
+>({ a = 1 }) => { } : ({ a }: { a?: number; }) => void
 >a : number
 >1 : 1
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
->p9 : ({a: {b}}: { a?: { b?: number; }; }) => void
->({ a: { b = 1 } = { b: 1 } }) => { } : ({a: {b}}: { a?: { b?: number; }; }) => void
+>p9 : ({ a: { b } }: { a?: { b?: number; }; }) => void
+>({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b } }: { a?: { b?: number; }; }) => void
 >a : any
 >b : number
 >1 : 1
@@ -110,8 +110,8 @@ var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >1 : 1
 
 var p10 = ([{ value, done }]) => { };
->p10 : ([{value, done}]: [{ value: any; done: any; }]) => void
->([{ value, done }]) => { } : ([{value, done}]: [{ value: any; done: any; }]) => void
+>p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
 >value : any
 >done : any
 

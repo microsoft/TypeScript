@@ -1,5 +1,5 @@
-tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(11,17): error TS2339: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'.
-tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17): error TS2339: Property 'massage' does not exist on type 'Error'.
+tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(11,17): error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'. Did you mean 'dontPanic'?
+tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17): error TS2551: Property 'massage' does not exist on type 'Error'. Did you mean 'message'?
 
 
 ==== tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts (2 errors) ====
@@ -15,14 +15,14 @@ tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17)
                 err.dontPanic(); // OK
                 err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
                     ~~~~~~~
-!!! error TS2339: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'.
+!!! error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'. Did you mean 'dontPanic'?
             }
     
             else if (err instanceof Error) {
                 err.message;
                 err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
                     ~~~~~~~
-!!! error TS2339: Property 'massage' does not exist on type 'Error'.
+!!! error TS2551: Property 'massage' does not exist on type 'Error'. Did you mean 'message'?
             }
     
             else {

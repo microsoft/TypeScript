@@ -5,6 +5,6 @@ class foo { constructor() { static f = 3; } }
 var foo = (function () {
     function foo() {
     }
+    foo.f = 3;
     return foo;
 }());
-foo.f = 3;

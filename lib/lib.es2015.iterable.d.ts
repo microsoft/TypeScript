@@ -52,17 +52,17 @@ interface Array<T> {
     [Symbol.iterator](): IterableIterator<T>;
 
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Returns an iterable of key, value pairs for every entry in the array
      */
     entries(): IterableIterator<[number, T]>;
 
     /**
-     * Returns an list of keys in the array
+     * Returns an iterable of keys in the array
      */
     keys(): IterableIterator<number>;
 
     /**
-     * Returns an list of values in the array
+     * Returns an iterable of values in the array
      */
     values(): IterableIterator<T>;
 }
@@ -86,21 +86,21 @@ interface ArrayConstructor {
 }
 
 interface ReadonlyArray<T> {
-    /** Iterator */
+    /** Iterator of values in the array. */
     [Symbol.iterator](): IterableIterator<T>;
 
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Returns an iterable of key, value pairs for every entry in the array
      */
     entries(): IterableIterator<[number, T]>;
 
     /**
-     * Returns an list of keys in the array
+     * Returns an iterable of keys in the array
      */
     keys(): IterableIterator<number>;
 
     /**
-     * Returns an list of values in the array
+     * Returns an iterable of values in the array
      */
     values(): IterableIterator<T>;
 }
@@ -111,9 +111,42 @@ interface IArguments {
 }
 
 interface Map<K, V> {
+    /** Returns an iterable of entries in the map. */
     [Symbol.iterator](): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of key, value pairs for every entry in the map.
+     */
     entries(): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of keys in the map
+     */
     keys(): IterableIterator<K>;
+
+    /**
+     * Returns an iterable of values in the map
+     */
+    values(): IterableIterator<V>;
+}
+
+interface ReadonlyMap<K, V> {
+    /** Returns an iterable of entries in the map. */
+    [Symbol.iterator](): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of key, value pairs for every entry in the map.
+     */
+    entries(): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of keys in the map
+     */
+    keys(): IterableIterator<K>;
+
+    /**
+     * Returns an iterable of values in the map
+     */
     values(): IterableIterator<V>;
 }
 
@@ -128,9 +161,40 @@ interface WeakMapConstructor {
 }
 
 interface Set<T> {
+    /** Iterates over values in the set. */
     [Symbol.iterator](): IterableIterator<T>;
+    /**
+     * Returns an iterable of [v,v] pairs for every value `v` in the set.
+     */
     entries(): IterableIterator<[T, T]>;
+    /**
+     * Despite its name, returns an iterable of the values in the set,
+     */
     keys(): IterableIterator<T>;
+
+    /**
+     * Returns an iterable of values in the set.
+     */
+    values(): IterableIterator<T>;
+}
+
+interface ReadonlySet<T> {
+    /** Iterates over values in the set. */
+    [Symbol.iterator](): IterableIterator<T>;
+
+    /**
+     * Returns an iterable of [v,v] pairs for every value `v` in the set.
+     */
+    entries(): IterableIterator<[T, T]>;
+
+    /**
+     * Despite its name, returns an iterable of the values in the set,
+     */
+    keys(): IterableIterator<T>;
+
+    /**
+     * Returns an iterable of values in the set.
+     */
     values(): IterableIterator<T>;
 }
 

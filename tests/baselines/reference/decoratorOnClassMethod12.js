@@ -40,9 +40,9 @@ var M;
             return _super !== null && _super.apply(this, arguments) || this;
         }
         C.prototype.method = function () { };
+        __decorate([
+            _super.decorator
+        ], C.prototype, "method", null);
         return C;
     }(S));
-    __decorate([
-        _super.decorator
-    ], C.prototype, "method", null);
 })(M || (M = {}));

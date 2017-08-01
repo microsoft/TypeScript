@@ -10,13 +10,13 @@ interface ISomething {
 }
 
 function foo({}, {foo, bar}: ISomething) {}
->foo : ({}: {}, {foo, bar}: ISomething) => void
+>foo : ({}: {}, { foo, bar }: ISomething) => void
 >foo : string
 >bar : string
 >ISomething : ISomething
 
 function baz([], {foo, bar}: ISomething) {}
->baz : ([]: any[], {foo, bar}: ISomething) => void
+>baz : ([]: any[], { foo, bar }: ISomething) => void
 >foo : string
 >bar : string
 >ISomething : ISomething

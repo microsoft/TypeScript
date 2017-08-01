@@ -65,9 +65,9 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    C.barBack = "";
     return C;
 }());
-C.barBack = "";
 var c = new C();
 var foo = c.Foo;
 c.Foo = "foov";

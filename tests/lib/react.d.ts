@@ -159,7 +159,8 @@ declare namespace __React {
     type ReactInstance = Component<any, any> | Element;
 
     // Base component for plain JS classes
-    class Component<P, S> implements ComponentLifecycle<P, S> {
+    interface Component<P, S> extends ComponentLifecycle<P, S> { }
+    class Component<P, S> {
         constructor(props?: P, context?: any);
         setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
         setState(state: S, callback?: () => any): void;
@@ -197,7 +198,7 @@ declare namespace __React {
 
     type SFC<P> = StatelessComponent<P>;
     interface StatelessComponent<P> {
-        (props: P, context?: any): ReactElement<any>;
+        (props: P & { children?: ReactNode }, context?: any): ReactElement<any>;
         propTypes?: ValidationMap<P>;
         contextTypes?: ValidationMap<any>;
         defaultProps?: P;

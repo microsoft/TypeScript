@@ -38,7 +38,7 @@ declare class C {
 declare var c: any;
 declare var r: () => void;
 declare class C2 {
-    private constructor(x);
+    private constructor();
 }
 declare var c2: any;
 declare var r2: (x: number) => void;

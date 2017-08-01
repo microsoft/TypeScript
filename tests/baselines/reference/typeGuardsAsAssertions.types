@@ -382,3 +382,17 @@ function f6() {
 >slice : (start?: number | undefined, end?: number | undefined) => string
 }
 
+function f7() {
+>f7 : () => void
+
+    let x: string;
+>x : string
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string
+>slice : (start?: number | undefined, end?: number | undefined) => string
+}
+

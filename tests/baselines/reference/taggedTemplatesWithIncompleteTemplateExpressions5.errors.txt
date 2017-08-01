@@ -1,4 +1,4 @@
-tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts(5,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts(5,1): error TS2554: Expected 3 arguments, but got 4.
 tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts(5,30): error TS1109: Expression expected.
 
 
@@ -9,6 +9,6 @@ tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts(5,30):
     // Incomplete call, but too many parameters.
     f `123qdawdrqw${ 1 }${ 2 }${ 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 3 arguments, but got 4.
                                  
 !!! error TS1109: Expression expected.

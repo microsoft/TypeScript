@@ -9,7 +9,7 @@ namespace ts.server {
         newLine: "\n",
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
-        readFile(): string { return void 0; },
+        readFile: () => undefined,
         writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,
@@ -19,13 +19,13 @@ namespace ts.server {
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         getEnvironmentVariable(): string { return ""; },
-        readDirectory(): string[] { return []; },
+        readDirectory() { return []; },
         exit: noop,
         setTimeout() { return 0; },
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: s => s
+        createHash: Harness.LanguageService.mockHash,
     };
 
     const mockLogger: Logger = {
@@ -134,7 +134,7 @@ namespace ts.server {
                     type: "request",
                     arguments: {
                         formatOptions: {
-                            indentStyle: "Block"
+                            indentStyle: protocol.IndentStyle.Block,
                         }
                     }
                 };
@@ -149,11 +149,11 @@ namespace ts.server {
                     type: "request",
                     arguments: {
                         options: {
-                            module: "System",
-                            target: "ES5",
-                            jsx: "React",
-                            newLine: "Lf",
-                            moduleResolution: "Node"
+                            module: protocol.ModuleKind.System,
+                            target: protocol.ScriptTarget.ES5,
+                            jsx: protocol.JsxEmit.React,
+                            newLine: protocol.NewLineKind.Lf,
+                            moduleResolution: protocol.ModuleResolutionKind.Node,
                         }
                     }
                 };
@@ -172,12 +172,81 @@ namespace ts.server {
         });
 
         describe("onMessage", () => {
+            const allCommandNames: CommandNames[] = [
+                CommandNames.Brace,
+                CommandNames.BraceFull,
+                CommandNames.BraceCompletion,
+                CommandNames.Change,
+                CommandNames.Close,
+                CommandNames.Completions,
+                CommandNames.CompletionsFull,
+                CommandNames.CompletionDetails,
+                CommandNames.CompileOnSaveAffectedFileList,
+                CommandNames.Configure,
+                CommandNames.Definition,
+                CommandNames.DefinitionFull,
+                CommandNames.Implementation,
+                CommandNames.ImplementationFull,
+                CommandNames.Exit,
+                CommandNames.Format,
+                CommandNames.Formatonkey,
+                CommandNames.FormatFull,
+                CommandNames.FormatonkeyFull,
+                CommandNames.FormatRangeFull,
+                CommandNames.Geterr,
+                CommandNames.GeterrForProject,
+                CommandNames.SemanticDiagnosticsSync,
+                CommandNames.SyntacticDiagnosticsSync,
+                CommandNames.NavBar,
+                CommandNames.NavBarFull,
+                CommandNames.Navto,
+                CommandNames.NavtoFull,
+                CommandNames.NavTree,
+                CommandNames.NavTreeFull,
+                CommandNames.Occurrences,
+                CommandNames.DocumentHighlights,
+                CommandNames.DocumentHighlightsFull,
+                CommandNames.Open,
+                CommandNames.Quickinfo,
+                CommandNames.QuickinfoFull,
+                CommandNames.References,
+                CommandNames.ReferencesFull,
+                CommandNames.Reload,
+                CommandNames.Rename,
+                CommandNames.RenameInfoFull,
+                CommandNames.RenameLocationsFull,
+                CommandNames.Saveto,
+                CommandNames.SignatureHelp,
+                CommandNames.SignatureHelpFull,
+                CommandNames.TypeDefinition,
+                CommandNames.ProjectInfo,
+                CommandNames.ReloadProjects,
+                CommandNames.Unknown,
+                CommandNames.OpenExternalProject,
+                CommandNames.CloseExternalProject,
+                CommandNames.SynchronizeProjectList,
+                CommandNames.ApplyChangedToOpenFiles,
+                CommandNames.EncodedSemanticClassificationsFull,
+                CommandNames.Cleanup,
+                CommandNames.OutliningSpans,
+                CommandNames.TodoComments,
+                CommandNames.Indentation,
+                CommandNames.DocCommentTemplate,
+                CommandNames.CompilerOptionsDiagnosticsFull,
+                CommandNames.NameOrDottedNameSpan,
+                CommandNames.BreakpointStatement,
+                CommandNames.CompilerOptionsForInferredProjects,
+                CommandNames.GetCodeFixes,
+                CommandNames.GetCodeFixesFull,
+                CommandNames.GetSupportedCodeFixes,
+                CommandNames.GetApplicableRefactors,
+                CommandNames.GetEditsForRefactor,
+                CommandNames.GetEditsForRefactorFull,
+            ];
+
             it("should not throw when commands are executed with invalid arguments", () => {
                 let i = 0;
-                for (const name in CommandNames) {
-                    if (!Object.prototype.hasOwnProperty.call(CommandNames, name)) {
-                        continue;
-                    }
+                for (const name of allCommandNames) {
                     const req: protocol.Request = {
                         command: name,
                         seq: i,
@@ -320,7 +389,7 @@ namespace ts.server {
                     request_seq: 0,
                     type: "response",
                     command,
-                    body: body,
+                    body,
                     success: true
                 });
             });
@@ -367,7 +436,7 @@ namespace ts.server {
                 request_seq: 0,
                 type: "response",
                 command,
-                body: body,
+                body,
                 success: true
             });
         });

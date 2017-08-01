@@ -29,8 +29,8 @@ var A = (function () {
     A.prototype.__foo = function (bar) {
         // do something with bar
     };
+    __decorate([
+        dec()
+    ], A.prototype, "__foo");
     return A;
 }());
-__decorate([
-    dec()
-], A.prototype, "__foo");

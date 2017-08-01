@@ -4,7 +4,7 @@
 ////    export class [|{| "isWriteAccess": true, "isDefinition": true |}C|] {}
 ////}
 ////declare module "b" {
-////    export { [|{| "isWriteAccess": true, "isDefinition": true |}C|] as [|{| "isWriteAccess": true, "isDefinition": true |}D|] } from "a";
+////    export { [|C|] as [|{| "isWriteAccess": true, "isDefinition": true |}D|] } from "a";
 ////}
 ////declare module "c" {
 ////    import { [|{| "isWriteAccess": true, "isDefinition": true |}D|] } from "b";

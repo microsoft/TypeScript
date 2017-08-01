@@ -290,7 +290,7 @@ function f3() {
 >c2 : 1 | "two"
 
     let x3 = c3;
->x3 : number | boolean | E
+>x3 : number | boolean
 >c3 : true | E.A | 123
 
     let x4 = c4;

@@ -135,7 +135,7 @@ declare class BaseB {
 }
 declare class BaseC {
     x: number;
-    private constructor(x);
+    private constructor();
     createInstance(): void;
     static staticInstance(): void;
 }

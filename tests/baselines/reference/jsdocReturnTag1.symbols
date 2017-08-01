@@ -1,0 +1,27 @@
+=== tests/cases/conformance/jsdoc/returns.js ===
+/**
+ * @returns {string} This comment is not currently exposed
+ */
+function f() {
+>f : Symbol(f, Decl(returns.js, 0, 0))
+
+    return 5;
+}
+
+/**
+ * @returns {string=} This comment is not currently exposed
+ */
+function f1() {
+>f1 : Symbol(f1, Decl(returns.js, 5, 1))
+
+    return 5;
+}
+
+/**
+ * @returns {string|number} This comment is not currently exposed
+ */
+function f2() {
+>f2 : Symbol(f2, Decl(returns.js, 12, 1))
+
+    return 5 || "hello";
+}

@@ -34,11 +34,11 @@ var MyModule;
     var Person = (function () {
         function Person() {
         }
+        __decorate([
+            inject,
+            __metadata("design:type", Leg)
+        ], Person.prototype, "leftLeg", void 0);
         return Person;
     }());
-    __decorate([
-        inject,
-        __metadata("design:type", Leg)
-    ], Person.prototype, "leftLeg", void 0);
     MyModule.Person = Person;
 })(MyModule || (MyModule = {}));

@@ -1,23 +1,32 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        const node = getTouchingWord(sourceFile, position);
-        return node && (getSemanticDocumentHighlights(node, typeChecker, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile));
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] | undefined {
+        const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
+        // Note that getTouchingWord indicates failure by returning the sourceFile node.
+        if (node === sourceFile) return undefined;
+
+        Debug.assert(node.parent !== undefined);
+
+        if (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent)) {
+            // For a JSX element, just highlight the matching tag, not all references.
+            const { openingElement, closingElement } = node.parent.parent;
+            const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
+            return [{ fileName: sourceFile.fileName, highlightSpans }];
+        }
+
+        return getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
-        const start = node.getStart(sourceFile);
-        const end = node.getEnd();
-
         return {
             fileName: sourceFile.fileName,
-            textSpan: createTextSpanFromBounds(start, end),
+            textSpan: createTextSpanFromNode(node, sourceFile),
             kind: HighlightSpanKind.none
         };
     }
 
-    function getSemanticDocumentHighlights(node: Node, typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(node, sourceFilesToSearch, typeChecker, cancellationToken);
+    function getSemanticDocumentHighlights(node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(node, program, sourceFilesToSearch, cancellationToken);
         return referenceEntries && convertReferencedSymbols(referenceEntries);
     }
 
@@ -289,21 +298,20 @@ namespace ts.DocumentHighlights {
         const keywords: Node[] = [];
         const modifierFlag: ModifierFlags = getFlagFromModifier(modifier);
 
-        let nodes: Node[];
+        let nodes: ReadonlyArray<Node>;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
                 // Container is either a class declaration or the declaration is a classDeclaration
                 if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = (<Node[]>(<ClassDeclaration>declaration).members).concat(declaration);
+                    nodes = [...(<ClassDeclaration>declaration).members, declaration];
                 }
                 else {
                     nodes = (<Block>container).statements;
                 }
                 break;
             case SyntaxKind.Constructor:
-                nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
-                    (<ClassDeclaration>container.parent).members);
+                nodes = [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
                 break;
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
@@ -317,11 +325,11 @@ namespace ts.DocumentHighlights {
                     });
 
                     if (constructor) {
-                        nodes = nodes.concat(constructor.parameters);
+                        nodes = [...nodes, ...constructor.parameters];
                     }
                 }
                 else if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = nodes.concat(container);
+                    nodes = [...nodes, container];
                 }
                 break;
             default:
@@ -598,7 +606,7 @@ namespace ts.DocumentHighlights {
      */
     function isLabeledBy(node: Node, labelName: string) {
         for (let owner = node.parent; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent) {
-            if ((<LabeledStatement>owner).label.text === labelName) {
+            if ((<LabeledStatement>owner).label.escapedText === labelName) {
                 return true;
             }
         }

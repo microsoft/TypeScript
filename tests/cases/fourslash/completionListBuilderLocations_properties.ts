@@ -10,4 +10,4 @@
 ////    public static a/*property2*/
 ////}
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+goTo.eachMarker(() => verify.completionListContainsClassElementKeywords());

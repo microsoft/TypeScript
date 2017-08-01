@@ -279,8 +279,8 @@ namespace ts.NavigationBar {
     function mergeChildren(children: NavigationBarNode[]): void {
         const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, child => {
-            const decl = <Declaration>child.node;
-            const name = decl.name && nodeText(decl.name);
+            const declName = getNameOfDeclaration(<Declaration>child.node);
+            const name = declName && nodeText(declName);
             if (!name) {
                 // Anonymous items are never merged.
                 return true;
@@ -378,9 +378,9 @@ namespace ts.NavigationBar {
             return getModuleName(<ModuleDeclaration>node);
         }
 
-        const decl = <Declaration>node;
-        if (decl.name) {
-            return getPropertyNameForPropertyNameNode(decl.name);
+        const declName = getNameOfDeclaration(<Declaration>node);
+        if (declName) {
+            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName));
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -399,7 +399,7 @@ namespace ts.NavigationBar {
             return getModuleName(<ModuleDeclaration>node);
         }
 
-        const name = (<Declaration>node).name;
+        const name = getNameOfDeclaration(<Declaration>node);
         if (name) {
             const text = nodeText(name);
             if (text.length > 0) {
@@ -450,7 +450,7 @@ namespace ts.NavigationBar {
                 if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                     const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
                     if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return (<Identifier>nameIdentifier).text;
+                        return nameIdentifier.text;
                     }
                 }
             }
@@ -580,12 +580,12 @@ namespace ts.NavigationBar {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result: string[] = [];
 
-        result.push(moduleDeclaration.name.text);
+        result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
 
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
             moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
-            result.push(moduleDeclaration.name.text);
+            result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
         }
 
         return result.join(".");

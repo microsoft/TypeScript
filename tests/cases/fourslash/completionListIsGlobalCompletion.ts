@@ -53,7 +53,7 @@ verify.completionListIsGlobal(false);
 goTo.marker("9");
 verify.completionListIsGlobal(false);
 goTo.marker("10");
-verify.completionListIsGlobal(true);
+verify.completionListIsGlobal(false);
 goTo.marker("11");
 verify.completionListIsGlobal(true);
 goTo.marker("12");

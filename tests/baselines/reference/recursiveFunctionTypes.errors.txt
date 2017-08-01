@@ -8,9 +8,9 @@ tests/cases/compiler/recursiveFunctionTypes.ts(17,5): error TS2322: Type '() => 
 tests/cases/compiler/recursiveFunctionTypes.ts(22,5): error TS2345: Argument of type '3' is not assignable to parameter of type '(t: typeof g) => void'.
 tests/cases/compiler/recursiveFunctionTypes.ts(25,1): error TS2322: Type '3' is not assignable to type '() => any'.
 tests/cases/compiler/recursiveFunctionTypes.ts(30,10): error TS2394: Overload signature is not compatible with function implementation.
-tests/cases/compiler/recursiveFunctionTypes.ts(33,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/recursiveFunctionTypes.ts(33,1): error TS2554: Expected 0-1 arguments, but got 2.
 tests/cases/compiler/recursiveFunctionTypes.ts(34,4): error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
-tests/cases/compiler/recursiveFunctionTypes.ts(42,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/recursiveFunctionTypes.ts(42,1): error TS2554: Expected 0-1 arguments, but got 2.
 tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
 
 
@@ -68,7 +68,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     
     f6("", 3); // error (arity mismatch)
     ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0-1 arguments, but got 2.
     f6(""); // ok (function takes an any param)
        ~~
 !!! error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
@@ -81,7 +81,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     
     f7("", 3); // error (arity mismatch)
     ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0-1 arguments, but got 2.
     f7(""); // ok (function takes an any param)
        ~~
 !!! error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.

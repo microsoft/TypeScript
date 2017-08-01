@@ -31,10 +31,10 @@ var B = (function () {
     function B() {
         this.x = new A();
     }
+    __decorate([
+        decorator,
+        __metadata("design:type", A)
+    ], B.prototype, "x", void 0);
     return B;
 }());
-__decorate([
-    decorator,
-    __metadata("design:type", A)
-], B.prototype, "x", void 0);
 exports.B = B;

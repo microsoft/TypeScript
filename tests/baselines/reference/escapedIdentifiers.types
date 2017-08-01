@@ -220,7 +220,7 @@ class testClass {
 >testClass : testClass
 
     public func(arg1: number, arg\u0032: string, arg\u0033: boolean, arg4: number) { 
->func : (arg1: number, arg\u0032: string, arg\u0033: boolean, arg4: number) => void
+>func : (arg1: number, arg2: string, arg3: boolean, arg4: number) => void
 >arg1 : number
 >arg\u0032 : string
 >arg\u0033 : boolean

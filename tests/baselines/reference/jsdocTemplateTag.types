@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsdoc/forgot.js ===
+/**
+ * @param {T} a
+ * @template T
+ */
+function f(a) {
+>f : <T>(a: T) => () => T
+>a : T
+
+    return () => a
+>() => a : () => T
+>a : T
+}
+let n = f(1)()
+>n : number
+>f(1)() : number
+>f(1) : () => number
+>f : <T>(a: T) => () => T
+>1 : 1
+
+/**
+ * @param {T} a
+ * @template T
+ * @returns {function(): T}
+ */
+function g(a) {
+>g : <T>(a: T) => () => T
+>a : T
+
+    return () => a
+>() => a : () => T
+>a : T
+}
+let s = g('hi')()
+>s : string
+>g('hi')() : string
+>g('hi') : () => string
+>g : <T>(a: T) => () => T
+>'hi' : "hi"
+

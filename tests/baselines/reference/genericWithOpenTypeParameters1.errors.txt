@@ -1,6 +1,6 @@
 tests/cases/compiler/genericWithOpenTypeParameters1.ts(7,40): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-tests/cases/compiler/genericWithOpenTypeParameters1.ts(8,35): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,35): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(8,35): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,35): error TS2558: Expected 0 type arguments, but got 1.
 
 
 ==== tests/cases/compiler/genericWithOpenTypeParameters1.ts (3 errors) ====
@@ -15,9 +15,9 @@ tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,35): error TS2346: Supp
 !!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
     var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
                                       ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
     var f3 = <T>(x: B<T>) => { return x.foo<number>(1); } // error
                                       ~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
     var f4 = (x: B<number>) => { return x.foo(1); } // no error
     

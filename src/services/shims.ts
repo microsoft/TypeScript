@@ -69,7 +69,7 @@ namespace ts {
 
         getTypeRootsVersion?(): number;
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
-        readFile(path: string, encoding?: string): string;
+        readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
@@ -95,7 +95,7 @@ namespace ts {
         /**
          * Read arbitary text files on disk, i.e. when resolution procedure needs the content of 'package.json' to determine location of bundled typings for node modules
          */
-        readFile(fileName: string): string;
+        readFile(fileName: string): string | undefined;
         realpath?(path: string): string;
         trace(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
@@ -444,7 +444,7 @@ namespace ts {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
 
-        public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: string[], include?: string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(path, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
             return JSON.parse(this.shimHost.readDirectory(
@@ -458,7 +458,7 @@ namespace ts {
             ));
         }
 
-        public readFile(path: string, encoding?: string): string {
+        public readFile(path: string, encoding?: string): string | undefined {
             return this.shimHost.readFile(path, encoding);
         }
 
@@ -467,7 +467,7 @@ namespace ts {
         }
     }
 
-    export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
+    export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost, JsTyping.TypingResolutionHost {
 
         public directoryExists: (directoryName: string) => boolean;
         public realpath: (path: string) => string;
@@ -483,46 +483,26 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[], depth?: number): string[] {
-            // Wrap the API changes for 2.0 release. This try/catch
-            // should be removed once TypeScript 2.0 has shipped.
-            try {
-                const pattern = getFileMatcherPatterns(rootDir, exclude, include,
-                    this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
-                return JSON.parse(this.shimHost.readDirectory(
-                    rootDir,
-                    JSON.stringify(extensions),
-                    JSON.stringify(pattern.basePaths),
-                    pattern.excludePattern,
-                    pattern.includeFilePattern,
-                    pattern.includeDirectoryPattern,
-                    depth
-                ));
-            }
-            catch (e) {
-                const results: string[] = [];
-                for (const extension of extensions) {
-                    for (const file of this.readDirectoryFallback(rootDir, extension, exclude))
-                    {
-                        if (!contains(results, file)) {
-                            results.push(file);
-                        }
-                    }
-                }
-                return results;
-            }
+        public readDirectory(rootDir: string, extensions: ReadonlyArray<string>, exclude: ReadonlyArray<string>, include: ReadonlyArray<string>, depth?: number): string[] {
+            const pattern = getFileMatcherPatterns(rootDir, exclude, include,
+                this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+            return JSON.parse(this.shimHost.readDirectory(
+                rootDir,
+                JSON.stringify(extensions),
+                JSON.stringify(pattern.basePaths),
+                pattern.excludePattern,
+                pattern.includeFilePattern,
+                pattern.includeDirectoryPattern,
+                depth
+            ));
         }
 
         public fileExists(fileName: string): boolean {
             return this.shimHost.fileExists(fileName);
         }
 
-        public readFile(fileName: string): string {
+        public readFile(fileName: string): string | undefined {
             return this.shimHost.readFile(fileName);
-        }
-
-        private readDirectoryFallback(rootDir: string, extension: string, exclude: string[]) {
-            return JSON.parse(this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude)));
         }
 
         public getDirectories(path: string): string[] {
@@ -1025,8 +1005,9 @@ namespace ts {
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
         private logPerformance = false;
+        private safeList: JsTyping.SafeList | undefined;
 
-        constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
+        constructor(factory: ShimFactory, public readonly logger: Logger, private readonly host: CoreServicesShimHostAdapter) {
             super(factory);
         }
 
@@ -1038,7 +1019,11 @@ namespace ts {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
-                const resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
+                let resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
+                if (result.resolvedModule && result.resolvedModule.extension !== Extension.Ts && result.resolvedModule.extension !== Extension.Tsx && result.resolvedModule.extension !== Extension.Dts) {
+                    resolvedFileName = undefined;
+                }
+
                 return {
                     resolvedFileName,
                     failedLookupLocations: result.failedLookupLocations
@@ -1105,27 +1090,16 @@ namespace ts {
                 () => {
                     const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    const result = parseConfigFileTextToJson(fileName, text);
-
-                    if (result.error) {
-                        return {
-                            options: {},
-                            typeAcquisition: {},
-                            files: [],
-                            raw: {},
-                            errors: [realizeDiagnostic(result.error, "\r\n")]
-                        };
-                    }
-
+                    const result = parseJsonText(fileName, text);
                     const normalizedFileName = normalizeSlashes(fileName);
-                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
+                    const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
                         typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
-                        errors: realizeDiagnostics(configFile.errors, "\r\n")
+                        errors: realizeDiagnostics(result.parseDiagnostics.concat(configFile.errors), "\r\n")
                     };
                 });
         }
@@ -1141,11 +1115,15 @@ namespace ts {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
             return this.forwardJSONCall("discoverTypings()", () => {
                 const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
-                return ts.JsTyping.discoverTypings(
+                if (this.safeList === undefined) {
+                    this.safeList = JsTyping.loadSafeList(this.host, toPath(info.safeListPath, info.safeListPath, getCanonicalFileName));
+                }
+                return JsTyping.discoverTypings(
                     this.host,
+                    msg => this.logger.log(msg),
                     info.fileNames,
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
-                    toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
+                    this.safeList,
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
                     info.unresolvedImports);
@@ -1202,7 +1180,7 @@ namespace ts {
 
         public close(): void {
             // Forget all the registered shims
-            this._shims = [];
+            clear(this._shims);
             this.documentRegistry = undefined;
         }
 
@@ -1244,4 +1222,4 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.4";
+const toolsVersion = "2.5";

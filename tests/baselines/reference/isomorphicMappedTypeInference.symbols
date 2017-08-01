@@ -149,9 +149,9 @@ function f1() {
     let x: number = b.a.value;
 >x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 45, 7))
 >b.a.value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 0, 15))
->b.a : Symbol(a)
+>b.a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 39, 13))
 >b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 44, 7))
->a : Symbol(a)
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 39, 13))
 >value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 0, 15))
 }
 

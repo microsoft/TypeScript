@@ -19,9 +19,9 @@ exports.__esModule = true;
 var Foo = (function () {
     function Foo() {
     }
+    Foo.CONSTANT = "Foo";
     return Foo;
 }());
-Foo.CONSTANT = "Foo";
 exports.Foo = Foo;
 function assert(value) {
     if (!value)

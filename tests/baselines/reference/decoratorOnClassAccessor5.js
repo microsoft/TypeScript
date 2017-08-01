@@ -20,8 +20,8 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec
+    ], C.prototype, "accessor", null);
     return C;
 }());
-__decorate([
-    dec
-], C.prototype, "accessor", null);

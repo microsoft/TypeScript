@@ -21,36 +21,40 @@
 ////
 ////interface TestInterface implements Module./*TypeReferenceInImplementsList*/ { }
 
-goTo.marker("ValueReference");
-verify.completionListContains("exportedVariable");
-verify.completionListContains("exportedFunction");
-verify.completionListContains("exportedClass");
-verify.completionListContains("exportedModule");
-// No inner declarations
-verify.not.completionListContains("innerVariable");
-verify.not.completionListContains("innerClass");
-// Include type declarations
-verify.completionListContains("exportedInterface");
+function getVerify(isTypeLocation: boolean) {
+    return {
+        verifyValue: isTypeLocation ? verify.not : verify,
+        verifyType: isTypeLocation ? verify : verify.not,
+        verifyValueOrType: verify,
+        verifyNotValueOrType: verify.not,
+    };
+}
 
-goTo.marker("TypeReference");
-verify.completionListContains("exportedClass");
-verify.completionListContains("exportedModule");
-verify.completionListContains("exportedInterface");
-// Include value completions
-verify.completionListContains("exportedVariable");
+function verifyModuleMembers(marker: string, isTypeLocation: boolean) {
+    goTo.marker(marker);
 
-goTo.marker("TypeReferenceInExtendsList");
-verify.completionListContains("exportedClass");
-verify.completionListContains("exportedModule");
-verify.completionListContains("exportedInterface");
-// Include value completions
-verify.completionListContains("exportedVariable");
+    const { verifyValue, verifyType, verifyValueOrType, verifyNotValueOrType } = getVerify(isTypeLocation);
 
+    verifyValue.completionListContains("exportedVariable");
+    verifyValue.completionListContains("exportedFunction");
+    verifyValue.completionListContains("exportedModule");
 
-goTo.marker("TypeReferenceInImplementsList");
-verify.completionListContains("exportedClass");
-verify.completionListContains("exportedModule");
-verify.completionListContains("exportedInterface");
-// Include value completions
-verify.completionListContains("exportedVariable");
+    verifyValueOrType.completionListContains("exportedClass");
 
+    // Include type declarations
+    verifyType.completionListContains("exportedInterface");
+
+    // No inner declarations
+    verifyNotValueOrType.completionListContains("innerVariable");
+    verifyNotValueOrType.completionListContains("innerFunction");
+    verifyNotValueOrType.completionListContains("innerClass");
+    verifyNotValueOrType.completionListContains("innerModule");
+    verifyNotValueOrType.completionListContains("innerInterface");
+
+    verifyNotValueOrType.completionListContains("exportedInnerModuleVariable");
+}
+
+verifyModuleMembers("ValueReference", /*isTypeLocation*/ false);
+verifyModuleMembers("TypeReference", /*isTypeLocation*/ true);
+verifyModuleMembers("TypeReferenceInExtendsList", /*isTypeLocation*/ false);
+verifyModuleMembers("TypeReferenceInImplementsList", /*isTypeLocation*/ true);

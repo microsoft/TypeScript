@@ -293,8 +293,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)
-                || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
+            if (node.isDeclarationFile || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
                 return node;
             }
 
@@ -641,10 +640,13 @@ namespace ts {
                     return undefined;
                 }
 
-                return createStatement(
-                    inlineExpressions(
-                        map(variables, transformInitializedVariable)
-                    )
+                return setSourceMapRange(
+                    createStatement(
+                        inlineExpressions(
+                            map(variables, transformInitializedVariable)
+                        )
+                    ),
+                    node
                 );
             }
         }
@@ -1174,7 +1176,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function transformAndEmitStatements(statements: Statement[], start = 0) {
+        function transformAndEmitStatements(statements: ReadonlyArray<Statement>, start = 0) {
             const numStatements = statements.length;
             for (let i = start; i < numStatements; i++) {
                 transformAndEmitStatement(statements[i]);
@@ -1282,9 +1284,12 @@ namespace ts {
         }
 
         function transformInitializedVariable(node: VariableDeclaration) {
-            return createAssignment(
-                <Identifier>getSynthesizedClone(node.name),
-                visitNode(node.initializer, visitor, isExpression)
+            return setSourceMapRange(
+                createAssignment(
+                    setSourceMapRange(<Identifier>getSynthesizedClone(node.name), node.name),
+                    visitNode(node.initializer, visitor, isExpression)
+                ),
+                node
             );
         }
 
@@ -1630,14 +1635,14 @@ namespace ts {
         }
 
         function transformAndEmitContinueStatement(node: ContinueStatement): void {
-            const label = findContinueTarget(node.label ? node.label.text : undefined);
+            const label = findContinueTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
             Debug.assert(label > 0, "Expected continue statment to point to a valid Label.");
             emitBreak(label, /*location*/ node);
         }
 
         function visitContinueStatement(node: ContinueStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findContinueTarget(node.label && node.label.text);
+                const label = findContinueTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1647,14 +1652,14 @@ namespace ts {
         }
 
         function transformAndEmitBreakStatement(node: BreakStatement): void {
-            const label = findBreakTarget(node.label ? node.label.text : undefined);
+            const label = findBreakTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
             Debug.assert(label > 0, "Expected break statment to point to a valid Label.");
             emitBreak(label, /*location*/ node);
         }
 
         function visitBreakStatement(node: BreakStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findBreakTarget(node.label && node.label.text);
+                const label = findBreakTarget(node.label && unescapeLeadingUnderscores(node.label.escapedText));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1833,7 +1838,7 @@ namespace ts {
                 //      /*body*/
                 //  .endlabeled
                 //  .mark endLabel
-                beginLabeledBlock(node.label.text);
+                beginLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
                 transformAndEmitEmbeddedStatement(node.statement);
                 endLabeledBlock();
             }
@@ -1844,7 +1849,7 @@ namespace ts {
 
         function visitLabeledStatement(node: LabeledStatement) {
             if (inStatementContainingYield) {
-                beginScriptLabeledBlock(node.label.text);
+                beginScriptLabeledBlock(unescapeLeadingUnderscores(node.label.escapedText));
             }
 
             node = visitEachChild(node, visitor, context);
@@ -1945,7 +1950,7 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(node.text)) {
+            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(unescapeLeadingUnderscores(node.escapedText))) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
@@ -2118,7 +2123,7 @@ namespace ts {
                 hoistVariableDeclaration(variable.name);
             }
             else {
-                const text = (<Identifier>variable.name).text;
+                const text = unescapeLeadingUnderscores((<Identifier>variable.name).escapedText);
                 name = declareLocal(text);
                 if (!renamedCatchVariables) {
                     renamedCatchVariables = createMap<boolean>();
@@ -2215,8 +2220,8 @@ namespace ts {
             beginBlock(<LoopBlock>{
                 kind: CodeBlockKind.Loop,
                 isScript: false,
-                breakLabel: breakLabel,
-                continueLabel: continueLabel
+                breakLabel,
+                continueLabel,
             });
             return breakLabel;
         }
@@ -2257,7 +2262,7 @@ namespace ts {
             beginBlock(<SwitchBlock>{
                 kind: CodeBlockKind.Switch,
                 isScript: false,
-                breakLabel: breakLabel
+                breakLabel,
             });
             return breakLabel;
         }

@@ -15,7 +15,7 @@ namespace ts {
          * @param node A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -77,7 +77,7 @@ namespace ts {
             return visitJsxOpeningLikeElement(node, /*children*/ undefined, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: JsxChild[], isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
             let objectProperties: Expression;
             const attrs = node.attributes.properties;
@@ -88,7 +88,7 @@ namespace ts {
             else {
                 // Map spans of JsxAttribute nodes into object literals and spans
                 // of JsxSpreadAttribute nodes into expressions.
-                const segments = flatten(
+                const segments = flatten<Expression | ObjectLiteralExpression>(
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
                         : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
@@ -252,8 +252,8 @@ namespace ts {
             }
             else {
                 const name = (<JsxOpeningLikeElement>node).tagName;
-                if (isIdentifier(name) && isIntrinsicJsxName(name.text)) {
-                    return createLiteral(name.text);
+                if (isIdentifier(name) && isIntrinsicJsxName(name.escapedText)) {
+                    return createLiteral(unescapeLeadingUnderscores(name.escapedText));
                 }
                 else {
                     return createExpressionFromEntityName(name);
@@ -268,11 +268,11 @@ namespace ts {
          */
         function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
             const name = node.name;
-            if (/^[A-Za-z_]\w*$/.test(name.text)) {
+            if (/^[A-Za-z_]\w*$/.test(unescapeLeadingUnderscores(name.escapedText))) {
                 return name;
             }
             else {
-                return createLiteral(name.text);
+                return createLiteral(unescapeLeadingUnderscores(name.escapedText));
             }
         }
 

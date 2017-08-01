@@ -64,6 +64,6 @@ var Q = (function (_super) {
         _super.x.call(this); // error
         _super.y.call(this);
     };
+    Q.yy = _super.; // error for static initializer accessing super
     return Q;
 }(P));
-Q.yy = _super.; // error for static initializer accessing super

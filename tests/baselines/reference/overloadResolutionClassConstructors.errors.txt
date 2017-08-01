@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(27,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(60,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(61,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(65,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(60,1): error TS2558: Expected 3 type arguments, but got 1.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(61,1): error TS2558: Expected 3 type arguments, but got 2.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(65,1): error TS2558: Expected 3 type arguments, but got 4.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(73,25): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(74,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(75,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
@@ -78,16 +78,16 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     // Generic overloads with differing arity called with type arguments matching each overload type parameter count
     new fn3<number>(4); // Error
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 3 type arguments, but got 1.
     new fn3<string, string>('', '', '');  // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 3 type arguments, but got 2.
     new fn3<number, string, string>('', '', 3);
     
     // Generic overloads with differing arity called with type argument count that doesn't match any overload
     new fn3<number, number, number, number>(); // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 3 type arguments, but got 4.
     
     // Generic overloads with constraints called with type arguments that satisfy the constraints
     class fn4<T extends string, U extends number> {

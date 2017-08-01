@@ -48,11 +48,11 @@ var A = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec1
+    ], A.prototype, "x", null);
     return A;
 }());
-__decorate([
-    dec1
-], A.prototype, "x", null);
 var B = (function () {
     function B() {
     }
@@ -62,11 +62,11 @@ var B = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec2
+    ], B.prototype, "x", null);
     return B;
 }());
-__decorate([
-    dec2
-], B.prototype, "x", null);
 var C = (function () {
     function C() {
     }
@@ -76,11 +76,11 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec1
+    ], C.prototype, "x", null);
     return C;
 }());
-__decorate([
-    dec1
-], C.prototype, "x", null);
 var D = (function () {
     function D() {
     }
@@ -90,11 +90,11 @@ var D = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec2
+    ], D.prototype, "x", null);
     return D;
 }());
-__decorate([
-    dec2
-], D.prototype, "x", null);
 var E = (function () {
     function E() {
     }
@@ -104,11 +104,11 @@ var E = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec1
+    ], E.prototype, "x", null);
     return E;
 }());
-__decorate([
-    dec1
-], E.prototype, "x", null);
 var F = (function () {
     function F() {
     }
@@ -118,8 +118,8 @@ var F = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec1
+    ], F.prototype, "x", null);
     return F;
 }());
-__decorate([
-    dec1
-], F.prototype, "x", null);

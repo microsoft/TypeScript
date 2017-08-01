@@ -7,6 +7,6 @@ class AtomicNumbers {
 var AtomicNumbers = (function () {
     function AtomicNumbers() {
     }
+    AtomicNumbers.H = 1;
     return AtomicNumbers;
 }());
-AtomicNumbers.H = 1;

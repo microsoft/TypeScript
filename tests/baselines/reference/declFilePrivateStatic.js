@@ -39,10 +39,10 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    C.x = 1;
+    C.y = 1;
     return C;
 }());
-C.x = 1;
-C.y = 1;
 
 
 //// [declFilePrivateStatic.d.ts]

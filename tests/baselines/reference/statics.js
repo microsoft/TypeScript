@@ -45,11 +45,11 @@ var M;
         C.f = function (n) {
             return "wow: " + (n + C.y + C.pub + C.priv);
         };
+        C.priv = 2;
+        C.pub = 3;
+        C.y = C.priv;
         return C;
     }());
-    C.priv = 2;
-    C.pub = 3;
-    C.y = C.priv;
     M.C = C;
     var c = C.y;
     function f() {

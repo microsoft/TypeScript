@@ -1,5 +1,5 @@
-tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(3,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(5,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(3,1): error TS2558: Expected 2 type arguments, but got 1.
+tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(5,1): error TS2558: Expected 2 type arguments, but got 3.
 
 
 ==== tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts (2 errors) ====
@@ -7,8 +7,8 @@ tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(5,1): error TS2346: S
     
     f<number>();
     ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     f<number, string>();
     f<number, string, number>();
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 3.

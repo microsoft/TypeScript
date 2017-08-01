@@ -34,11 +34,11 @@ g<U>();
 g<InvalidReference>(); // Should get error for type argument
 
 // @Filename: /super.ts
-import { C } from "unknown";
+import { A, B } from "unknown";
 
 type T = number;
 
-export class D extends C {
+export class C extends A<B> {
     m() {
         super.m<T>(1);
         super.m<InvalidReference>(); // Should get error for type argument

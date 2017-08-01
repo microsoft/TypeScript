@@ -1,4 +1,4 @@
-tests/cases/compiler/anonymousClassExpression2.ts(13,18): error TS2339: Property 'methodA' does not exist on type 'B'.
+tests/cases/compiler/anonymousClassExpression2.ts(13,18): error TS2551: Property 'methodA' does not exist on type 'B'. Did you mean 'methodB'?
 
 
 ==== tests/cases/compiler/anonymousClassExpression2.ts (1 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/anonymousClassExpression2.ts(13,18): error TS2339: Property
             methodB() {
                 this.methodA; // error
                      ~~~~~~~
-!!! error TS2339: Property 'methodA' does not exist on type 'B'.
+!!! error TS2551: Property 'methodA' does not exist on type 'B'. Did you mean 'methodB'?
                 this.methodB; // ok
             }
         }

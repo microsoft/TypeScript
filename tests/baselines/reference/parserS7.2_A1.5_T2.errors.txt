@@ -1,5 +1,5 @@
-tests/cases/conformance/parser/ecmascript5/parserS7.2_A1.5_T2.ts(14,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.2_A1.5_T2.ts(20,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.2_A1.5_T2.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.2_A1.5_T2.ts(20,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 
 
 ==== tests/cases/conformance/parser/ecmascript5/parserS7.2_A1.5_T2.ts (2 errors) ====
@@ -18,7 +18,7 @@ tests/cases/conformance/parser/ecmascript5/parserS7.2_A1.5_T2.ts(20,3): error TS
     if (x !== 1) {
       $ERROR('#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' + (x));
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     
     //CHECK#2
@@ -26,7 +26,7 @@ tests/cases/conformance/parser/ecmascript5/parserS7.2_A1.5_T2.ts(20,3): error TS
     if (x !== 1) {
       $ERROR('#2:  var x = 1 ; x === 1. Actual: ' + (x));
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     
     

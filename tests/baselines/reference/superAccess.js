@@ -29,9 +29,9 @@ var MyBase = (function () {
         this.S2 = "test";
         this.f = function () { return 5; };
     }
+    MyBase.S1 = 5;
     return MyBase;
 }());
-MyBase.S1 = 5;
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {

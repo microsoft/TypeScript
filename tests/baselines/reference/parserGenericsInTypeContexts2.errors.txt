@@ -1,4 +1,9 @@
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,17): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,19): error TS2304: Cannot find name 'X'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,21): error TS2304: Cannot find name 'T'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,25): error TS2304: Cannot find name 'Y'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,27): error TS2304: Cannot find name 'Z'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,29): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,45): error TS2304: Cannot find name 'B'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,47): error TS2304: Cannot find name 'X'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(1,49): error TS2304: Cannot find name 'T'.
@@ -49,10 +54,20 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts(14,28): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts (49 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts (54 errors) ====
     class C extends A<X<T>, Y<Z<T>>> implements B<X<T>, Y<Z<T>>> {
                     ~
 !!! error TS2304: Cannot find name 'A'.
+                      ~
+!!! error TS2304: Cannot find name 'X'.
+                        ~
+!!! error TS2304: Cannot find name 'T'.
+                            ~
+!!! error TS2304: Cannot find name 'Y'.
+                              ~
+!!! error TS2304: Cannot find name 'Z'.
+                                ~
+!!! error TS2304: Cannot find name 'T'.
                                                 ~
 !!! error TS2304: Cannot find name 'B'.
                                                   ~

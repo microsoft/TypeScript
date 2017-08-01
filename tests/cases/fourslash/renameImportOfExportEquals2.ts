@@ -8,10 +8,10 @@
 ////}
 ////declare module "a" {
 ////    import * as [|{| "isWriteAccess": true, "isDefinition": true |}O|] from "mod";
-////    export { [|{| "isWriteAccess": true, "isDefinition": true |}O|] as [|{| "isWriteAccess": true, "isDefinition": true |}P|] }; // Renaming N here would rename
+////    export { [|O|] as [|{| "isWriteAccess": true, "isDefinition": true |}P|] }; // Renaming N here would rename
 ////}
 ////declare module "b" {
-////    import { [|{| "isWriteAccess": true, "isDefinition": true |}P|] as [|{| "isWriteAccess": true, "isDefinition": true |}Q|] } from "a";
+////    import { [|P|] as [|{| "isWriteAccess": true, "isDefinition": true |}Q|] } from "a";
 ////    export const y: typeof [|Q|].x;
 ////}
 

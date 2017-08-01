@@ -10,7 +10,7 @@ namespace ts.NavigateTo {
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
 
-            if (excludeDtsFiles && fileExtensionIs(sourceFile.fileName, ".d.ts")) {
+            if (excludeDtsFiles && fileExtensionIs(sourceFile.fileName, Extension.Dts)) {
                 continue;
             }
 
@@ -52,9 +52,9 @@ namespace ts.NavigateTo {
         rawItems = filter(rawItems, item => {
             const decl = item.declaration;
             if (decl.kind === SyntaxKind.ImportClause || decl.kind === SyntaxKind.ImportSpecifier || decl.kind === SyntaxKind.ImportEqualsDeclaration) {
-                const importer = checker.getSymbolAtLocation(decl.name);
+                const importer = checker.getSymbolAtLocation((decl as NamedDeclaration).name);
                 const imported = checker.getAliasedSymbol(importer);
-                return importer.name !== imported.name;
+                return importer.escapedName !== imported.escapedName;
             }
             else {
                 return true;
@@ -83,31 +83,21 @@ namespace ts.NavigateTo {
             return true;
         }
 
-        function getTextOfIdentifierOrLiteral(node: Node) {
-            if (node) {
-                if (node.kind === SyntaxKind.Identifier ||
-                    node.kind === SyntaxKind.StringLiteral ||
-                    node.kind === SyntaxKind.NumericLiteral) {
-
-                    return (<Identifier | LiteralExpression>node).text;
-                }
-            }
-
-            return undefined;
-        }
-
         function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]) {
-            if (declaration && declaration.name) {
-                const text = getTextOfIdentifierOrLiteral(declaration.name);
-                if (text !== undefined) {
-                    containers.unshift(text);
-                }
-                else if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
-                    return tryAddComputedPropertyName((<ComputedPropertyName>declaration.name).expression, containers, /*includeLastPortion*/ true);
-                }
-                else {
-                    // Don't know how to add this.
-                    return false;
+            if (declaration) {
+                const name = getNameOfDeclaration(declaration);
+                if (name) {
+                    const text = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
+                    if (text !== undefined) {
+                        containers.unshift(text);
+                    }
+                    else if (name.kind === SyntaxKind.ComputedPropertyName) {
+                        return tryAddComputedPropertyName((<ComputedPropertyName>name).expression, containers, /*includeLastPortion*/ true);
+                    }
+                    else {
+                        // Don't know how to add this.
+                        return false;
+                    }
                 }
             }
 
@@ -118,7 +108,7 @@ namespace ts.NavigateTo {
         //
         //      [X.Y.Z]() { }
         function tryAddComputedPropertyName(expression: Expression, containers: string[], includeLastPortion: boolean): boolean {
-            const text = getTextOfIdentifierOrLiteral(expression);
+            const text = getTextOfIdentifierOrLiteral(expression as LiteralExpression);
             if (text !== undefined) {
                 if (includeLastPortion) {
                     containers.unshift(text);
@@ -143,8 +133,9 @@ namespace ts.NavigateTo {
 
             // First, if we started with a computed property name, then add all but the last
             // portion into the container array.
-            if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
-                if (!tryAddComputedPropertyName((<ComputedPropertyName>declaration.name).expression, containers, /*includeLastPortion*/ false)) {
+            const name = getNameOfDeclaration(declaration);
+            if (name.kind === SyntaxKind.ComputedPropertyName) {
+                if (!tryAddComputedPropertyName((<ComputedPropertyName>name).expression, containers, /*includeLastPortion*/ false)) {
                     return undefined;
                 }
             }
@@ -190,6 +181,7 @@ namespace ts.NavigateTo {
         function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {
             const declaration = rawItem.declaration;
             const container = <Declaration>getContainerNode(declaration);
+            const containerName = container && getNameOfDeclaration(container);
             return {
                 name: rawItem.name,
                 kind: getNodeKind(declaration),
@@ -199,8 +191,8 @@ namespace ts.NavigateTo {
                 fileName: rawItem.fileName,
                 textSpan: createTextSpanFromNode(declaration),
                 // TODO(jfreeman): What should be the containerName when the container has a computed name?
-                containerName: container && container.name ? (<Identifier>container.name).text : "",
-                containerKind: container && container.name ? getNodeKind(container) : ""
+                containerName: containerName ? (<Identifier>containerName).text : "",
+                containerKind: containerName ? getNodeKind(container) : ScriptElementKind.unknown
             };
         }
     }

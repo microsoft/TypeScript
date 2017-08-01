@@ -4,7 +4,7 @@
 ////     x: number;
 //// }
 //// interface I2 {
-////     y: number;
+////     y: "𣋝ઢȴ¬⏊";
 //// }
 ////
 //// class C implements I1,I2 {[|
@@ -12,7 +12,7 @@
 //// }
 
 verify.rangeAfterCodeFix(`
-y: number;
+y: "𣋝ઢȴ¬⏊";
 `);
 
 verify.not.codeFixAvailable();

@@ -1,4 +1,3 @@
-declare const require: any, process: any;
 const fs: any = require("fs");
 const path: any = require("path");
 

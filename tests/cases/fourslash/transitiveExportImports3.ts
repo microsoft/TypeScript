@@ -4,7 +4,7 @@
 ////export function [|{| "isWriteAccess": true, "isDefinition": true |}f|]() {}
 
 // @Filename: b.ts
-////export { [|{| "isWriteAccess": true, "isDefinition": true |}f|] as [|{| "isWriteAccess": true, "isDefinition": true |}g|] } from "./a";
+////export { [|f|] as [|{| "isWriteAccess": true, "isDefinition": true |}g|] } from "./a";
 ////import { [|{| "isWriteAccess": true, "isDefinition": true |}f|] } from "./a";
 ////import { [|{| "isWriteAccess": true, "isDefinition": true |}g|] } from "./b";
 

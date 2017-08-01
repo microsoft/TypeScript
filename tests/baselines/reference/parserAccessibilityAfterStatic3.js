@@ -9,6 +9,6 @@ static public = 1;
 var Outer = (function () {
     function Outer() {
     }
+    Outer.public = 1;
     return Outer;
 }());
-Outer.public = 1;

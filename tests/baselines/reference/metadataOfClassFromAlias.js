@@ -41,10 +41,10 @@ function annotation() {
 var ClassA = (function () {
     function ClassA() {
     }
+    __decorate([
+        annotation(),
+        __metadata("design:type", Object)
+    ], ClassA.prototype, "array", void 0);
     return ClassA;
 }());
-__decorate([
-    annotation(),
-    __metadata("design:type", Object)
-], ClassA.prototype, "array", void 0);
 exports.ClassA = ClassA;

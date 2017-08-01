@@ -1,7 +1,7 @@
 tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(10,30): error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type 'number[]'.
   Type 'string | number' is not assignable to type 'number'.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(11,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(11,11): error TS2558: Expected 2 type arguments, but got 1.
 
 
 ==== tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts (2 errors) ====
@@ -21,5 +21,5 @@ tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts(11,11): e
 !!! error TS2345:     Type 'string' is not assignable to type 'number'.
     var r7b = map<number>([1, ""], (x) => x.toString()); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     var r8 = map<any, string>([1, ""], (x) => x.toString());

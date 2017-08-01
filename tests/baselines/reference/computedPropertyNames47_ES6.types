@@ -12,7 +12,7 @@ var o = {
 >{    [E1.x || E2.x]: 0} : { [x: number]: number; }
 
     [E1.x || E2.x]: 0
->E1.x || E2.x : E1 | E2
+>E1.x || E2.x : E2
 >E1.x : E1
 >E1 : typeof E1
 >x : E1

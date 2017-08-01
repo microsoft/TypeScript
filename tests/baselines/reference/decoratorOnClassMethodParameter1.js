@@ -19,8 +19,8 @@ var C = (function () {
     function C() {
     }
     C.prototype.method = function (p) { };
+    __decorate([
+        __param(0, dec)
+    ], C.prototype, "method", null);
     return C;
 }());
-__decorate([
-    __param(0, dec)
-], C.prototype, "method", null);

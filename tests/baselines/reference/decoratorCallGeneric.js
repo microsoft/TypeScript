@@ -24,8 +24,8 @@ var C = (function () {
     function C() {
     }
     C.m = function () { };
+    C = __decorate([
+        dec
+    ], C);
     return C;
 }());
-C = __decorate([
-    dec
-], C);

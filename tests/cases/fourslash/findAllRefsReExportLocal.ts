@@ -5,7 +5,7 @@
 // @Filename: /a.ts
 ////var [|{| "isWriteAccess": true, "isDefinition": true |}x|];
 ////export { [|{| "isWriteAccess": true, "isDefinition": true |}x|] };
-////export { [|{| "isWriteAccess": true, "isDefinition": true |}x|] as [|{| "isWriteAccess": true, "isDefinition": true |}y|] };
+////export { [|x|] as [|{| "isWriteAccess": true, "isDefinition": true |}y|] };
 
 // @Filename: /b.ts
 ////import { [|{| "isWriteAccess": true, "isDefinition": true |}x|], [|{| "isWriteAccess": true, "isDefinition": true |}y|] } from "./a";

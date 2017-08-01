@@ -27,7 +27,6 @@ var C = (function () {
     function C(x) {
         this.a = z; // error
         this.c = this.z; // error
-        this.d = this.z; // error
         z = 1;
     }
     return C;
@@ -36,7 +35,6 @@ var D = (function () {
     function D(x) {
         this.a = z; // error
         this.c = this.z; // error
-        this.d = this.z; // error
         z = 1;
     }
     return D;

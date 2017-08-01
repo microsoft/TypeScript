@@ -47,7 +47,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -369,7 +369,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(node.name.text),
+                    createLiteral(unescapeLeadingUnderscores(node.name.escapedText)),
                     node
                 );
             }

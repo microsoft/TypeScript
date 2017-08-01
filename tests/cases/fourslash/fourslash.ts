@@ -116,6 +116,7 @@ declare namespace FourSlashInterface {
         ranges(): Range[];
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
+        symbolsInScope(range: Range): any[];
     }
     class goTo {
         marker(name?: string | Marker): void;
@@ -133,11 +134,15 @@ declare namespace FourSlashInterface {
     class verifyNegatable {
         private negative;
         not: verifyNegatable;
+        allowedClassElementKeywords: string[];
+        allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
         completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
+        completionListContainsClassElementKeywords(): void;
+        completionListContainsConstructorParameterKeywords(): void;
         completionListAllowsNewIdentifier(): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
@@ -148,6 +153,9 @@ declare namespace FourSlashInterface {
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         codeFixAvailable(): void;
+        applicableRefactorAvailableAtMarker(markerName: string): void;
+        codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
+        applicableRefactorAvailableForRange(): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -185,6 +193,7 @@ declare namespace FourSlashInterface {
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
+        typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
         /**
          * @deprecated, prefer 'referenceGroups'
          * Like `referencesAre`, but goes to `start` first.
@@ -232,6 +241,9 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
+        fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
+        rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
+        fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any): void;
@@ -242,6 +254,7 @@ declare namespace FourSlashInterface {
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
+        documentHighlightsOf(startRange: Range, ranges: Range[]): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.

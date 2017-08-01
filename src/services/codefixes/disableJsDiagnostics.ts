@@ -22,7 +22,7 @@ namespace ts.codefix {
         // We also want to check if the previous line holds a comment for a node on the next line
         // if so, we do not want to separate the node from its comment if we can.
         if (!isInComment(sourceFile, startPosition) && !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition)) {
-            const token = getTouchingToken(sourceFile, startPosition);
+            const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
             const tokenLeadingCommnets = getLeadingCommentRangesOfNode(token, sourceFile);
             if (!tokenLeadingCommnets || !tokenLeadingCommnets.length || tokenLeadingCommnets[0].pos >= startPosition) {
                 return {
@@ -32,7 +32,7 @@ namespace ts.codefix {
             }
         }
 
-        // If all fails, add an extra new line immediatlly before the error span.
+        // If all fails, add an extra new line immediately before the error span.
         return {
             span: { start: position, length: 0 },
             newText: `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`

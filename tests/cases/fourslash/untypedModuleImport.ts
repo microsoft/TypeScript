@@ -17,6 +17,6 @@ const [r0, r1, r2] = test.ranges();
 verify.singleReferenceGroup('"foo"', [r1]);
 
 goTo.marker("foo");
-verify.goToDefinitionIs([]);
+verify.goToDefinitionIs("foo");
 verify.quickInfoIs("import foo");
 verify.singleReferenceGroup("import foo", [r0, r2]);

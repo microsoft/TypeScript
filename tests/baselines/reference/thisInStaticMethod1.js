@@ -14,7 +14,7 @@ var foo = (function () {
     foo.bar = function () {
         return this.x;
     };
+    foo.x = 3;
     return foo;
 }());
-foo.x = 3;
 var x = foo.bar();

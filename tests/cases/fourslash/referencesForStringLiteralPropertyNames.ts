@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    public "[|{| "isDefinition": true |}ss|]": any;
+////    public "[|{| "isWriteAccess": true, "isDefinition": true |}ss|]": any;
 ////}
 ////
 ////var x: Foo;
 ////x.[|ss|];
 ////x["[|ss|]"];
-////x = { "[|{| "isDefinition": true |}ss|]": 0 };
+////x = { "[|{| "isWriteAccess": true, "isDefinition": true |}ss|]": 0 };
 ////x = { [|{| "isWriteAccess": true, "isDefinition": true |}ss|]: 0 };
 
 const ranges = test.ranges();

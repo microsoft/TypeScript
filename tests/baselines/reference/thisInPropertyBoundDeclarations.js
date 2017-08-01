@@ -74,13 +74,13 @@ var Bug = (function () {
     Bug.prototype.foo = function (name) {
         this.name = name;
     };
+    Bug.func = [
+        function (that, name) {
+            that.foo(name);
+        }
+    ];
     return Bug;
 }());
-Bug.func = [
-    function (that, name) {
-        that.foo(name);
-    }
-];
 // Valid use of this in a property bound decl
 var A = (function () {
     function A() {

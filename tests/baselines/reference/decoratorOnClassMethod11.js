@@ -22,9 +22,9 @@ var M;
         }
         C.prototype.decorator = function (target, key) { };
         C.prototype.method = function () { };
+        __decorate([
+            this.decorator
+        ], C.prototype, "method", null);
         return C;
     }());
-    __decorate([
-        this.decorator
-    ], C.prototype, "method", null);
 })(M || (M = {}));

@@ -20,17 +20,12 @@ class A {
 >options : Symbol(A.options, Decl(thisTypeInNativeThisAssignableMethods.ts, 0, 9))
         }
         options.forEach(function (item) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 3, 15))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(thisTypeInNativeThisAssignableMethods.ts, 7, 34))
 
             this.options.push(item);
->this.options.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->this.options : Symbol(A.options, Decl(thisTypeInNativeThisAssignableMethods.ts, 0, 9))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(A.options, Decl(thisTypeInNativeThisAssignableMethods.ts, 0, 9))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(thisTypeInNativeThisAssignableMethods.ts, 7, 34))
 
         }, this);
@@ -49,41 +44,38 @@ class A {
 >Array : Symbol(Array, Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
         options.forEach(function () {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 13, 18))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 
             undefinedArr.push(this);
 >undefinedArr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >undefinedArr : Symbol(undefinedArr, Decl(thisTypeInNativeThisAssignableMethods.ts, 14, 13))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
 
         }); // case1
         options.forEach(function () {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 13, 18))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 
             undefinedArr.push(this);
 >undefinedArr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >undefinedArr : Symbol(undefinedArr, Decl(thisTypeInNativeThisAssignableMethods.ts, 14, 13))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
 
         }, undefined); // case2
 >undefined : Symbol(undefined)
 
         options.forEach(function () {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 13, 18))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 
             undefinedArr.push(this);
 >undefinedArr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >undefinedArr : Symbol(undefinedArr, Decl(thisTypeInNativeThisAssignableMethods.ts, 14, 13))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
 
         }, null); // case3
 
@@ -171,91 +163,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 36, 9))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 49, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 49, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 49, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 49, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 36, 9))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 53, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 53, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 53, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 53, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 53, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 36, 9))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 58, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 58, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 58, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 58, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 36, 9))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 62, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 62, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 62, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 62, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 36, 9))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 66, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 66, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 66, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 37, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 66, 36))
 
         }, thisObject);
@@ -354,91 +328,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 81, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 94, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 94, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 94, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 94, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 81, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 98, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 98, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 98, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 98, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 98, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 81, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 103, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 103, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 103, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 103, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 81, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 107, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 107, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 107, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 107, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 81, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 111, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 111, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 111, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 111, 36))
 
         }, thisObject);
@@ -494,91 +450,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 116, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 129, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 129, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 129, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 129, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 116, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 133, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 133, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 133, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 133, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 133, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 116, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 138, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 138, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 138, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 138, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 116, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 142, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 142, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 142, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 142, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 116, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 146, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 146, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 146, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 117, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 146, 36))
 
         }, thisObject);
@@ -634,91 +572,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 151, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 164, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 164, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 164, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 164, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 151, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 168, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 168, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 168, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 168, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 168, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 151, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 173, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 173, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 173, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 173, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 151, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 177, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 177, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 177, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 177, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 151, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 181, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 181, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 181, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 152, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 181, 36))
 
         }, thisObject);
@@ -774,91 +694,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 186, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 199, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 199, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 199, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 199, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 186, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 203, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 203, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 203, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 203, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 203, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 186, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 208, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 208, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 208, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 208, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 186, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 212, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 212, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 212, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 212, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 186, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 216, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 216, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 216, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 187, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 216, 36))
 
         }, thisObject);
@@ -914,91 +816,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 221, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 234, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 234, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 234, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 234, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 221, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 238, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 238, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 238, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 238, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 238, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 221, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 243, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 243, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 243, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 243, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 221, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 247, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 247, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 247, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 247, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 221, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 251, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 251, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 251, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 222, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 251, 36))
 
         }, thisObject);
@@ -1054,91 +938,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 256, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 269, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 269, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 269, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 269, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 256, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 273, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 273, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 273, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 273, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 273, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 256, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 278, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 278, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 278, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 278, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 256, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 282, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 282, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 282, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 282, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 256, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 286, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 286, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 286, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 257, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 286, 36))
 
         }, thisObject);
@@ -1194,91 +1060,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 291, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 304, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 304, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 304, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 304, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 291, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 308, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 308, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 308, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 308, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 308, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 291, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 313, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 313, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 313, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 313, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 291, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 317, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 317, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 317, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 317, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 291, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 321, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 321, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 321, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 292, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 321, 36))
 
         }, thisObject);
@@ -1334,91 +1182,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 326, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 339, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 339, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 339, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 339, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 326, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 343, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 343, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 343, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 343, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 343, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 326, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 348, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 348, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 348, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 348, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 326, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 352, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 352, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 352, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 352, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 326, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 356, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 356, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 356, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 327, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 356, 36))
 
         }, thisObject);
@@ -1474,91 +1304,73 @@ class A {
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 13))
 
         options.forEach(function (val, index) {
->options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 361, 10))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 374, 34))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 374, 38))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 374, 34))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 374, 38))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 13))
 
         options.map(function (val, index) {
->options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 361, 10))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 378, 30))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 378, 34))
 
             if (val === this.options[index])
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 378, 30))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 378, 34))
 
                 return this.options[index];
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 378, 34))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 13))
 
         options.some(function (val, index) {
->options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 361, 10))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 383, 31))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 383, 35))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 383, 31))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 383, 35))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 13))
 
         options.filter(function (val, index) {
->options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 361, 10))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 387, 33))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 387, 37))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 387, 33))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 387, 37))
 
         }, thisObject);
 >thisObject : Symbol(thisObject, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 13))
 
         options.every(function (val, index) {
->options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>options.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 361, 10))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 391, 32))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 391, 36))
 
             return val === this.options[index];
 >val : Symbol(val, Decl(thisTypeInNativeThisAssignableMethods.ts, 391, 32))
->this.options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
->this : Symbol(this, Decl(lib.es5.d.ts, --, --))
->options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 362, 28))
 >index : Symbol(index, Decl(thisTypeInNativeThisAssignableMethods.ts, 391, 36))
 
         }, thisObject);

@@ -32,9 +32,9 @@ var C = (function () {
     }
     C.prototype.c = function () { return ''; };
     C.f = function () { return ''; };
+    C.g = function () { return ''; };
     return C;
 }());
-C.g = function () { return ''; };
 var c = new C();
 var r1 = c.x;
 var r2 = c.a;

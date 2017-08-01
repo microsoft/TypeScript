@@ -4,7 +4,7 @@ namespace ts.codefix {
         errorCodes: [Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
-            const token = getTokenAtPosition(sourceFile, context.span.start);
+            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
             if (token.kind !== SyntaxKind.Identifier) {
                 return undefined;
             }

@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(195,37): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 
 
@@ -7,7 +7,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(195,37): error T
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {

@@ -34,8 +34,8 @@ function myFunction(myType: MyType) {
 >x : Symbol(x, Decl(argumentsAsPropertyName.ts, 11, 13))
 
         [1, 2, 3].forEach(function(j) { use(x); })
->[1, 2, 3].forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>[1, 2, 3].forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >j : Symbol(j, Decl(argumentsAsPropertyName.ts, 12, 35))
 >use : Symbol(use, Decl(argumentsAsPropertyName.ts, 3, 1))
 >x : Symbol(x, Decl(argumentsAsPropertyName.ts, 11, 13))

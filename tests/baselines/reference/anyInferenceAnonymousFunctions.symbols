@@ -35,16 +35,16 @@ paired.reduce((b3, b4) => b3.concat({}), []);
 >b3 : Symbol(b3, Decl(anyInferenceAnonymousFunctions.ts, 13, 15))
 
 paired.map((c1) => c1.count);
->paired.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>paired.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >c1 : Symbol(c1, Decl(anyInferenceAnonymousFunctions.ts, 15, 12))
 >c1 : Symbol(c1, Decl(anyInferenceAnonymousFunctions.ts, 15, 12))
 
 paired.map(function (c2) { return c2.count; });
->paired.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>paired.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >paired : Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >c2 : Symbol(c2, Decl(anyInferenceAnonymousFunctions.ts, 16, 21))
 >c2 : Symbol(c2, Decl(anyInferenceAnonymousFunctions.ts, 16, 21))
 

@@ -12,6 +12,6 @@ var A = (function () {
 var B = (function () {
     function B() {
     }
+    B.NOT_NULL = new B();
     return B;
 }());
-B.NOT_NULL = new B();

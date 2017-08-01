@@ -148,9 +148,9 @@ function outer(x) {
     var Inner = (function () {
         function Inner() {
         }
+        Inner.y = x;
         return Inner;
     }());
-    Inner.y = x;
     return Inner;
 }
 var y = outer(5).y;

@@ -1,37 +1,24 @@
-tests/cases/conformance/jsx/file.tsx(6,25): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(7,25): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(15,33): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(16,34): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(17,33): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/file.tsx(16,42): error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & { prop: number; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
     import React = require('react')
     
-    // Error, can only spread object type
     declare function Component<U>(l: U): JSX.Element;
     function createComponent<T extends { prop: number }>(arg: T) {
         let a1 = <Component {...arg} />;
-                            ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
         let a2 = <Component {...arg} prop1 />;
-                            ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
     }
     
     declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
     declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
     
-    // Error, can only spread object type
     function Bar<T extends { prop: number }>(arg: T) {
         let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
-                                    ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
         let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
-                                     ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
         let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
-                                    ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+        let a4 = <ComponentSpecific {...arg} prop1="hello" />;   // U is "hello"
+                                             ~~~~~~~~~~~~~
+!!! error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & { prop: number; }'.
     }
     

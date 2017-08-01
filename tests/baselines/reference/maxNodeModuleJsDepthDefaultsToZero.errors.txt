@@ -1,6 +1,16 @@
 /index.ts(4,5): error TS2339: Property 'y' does not exist on type 'typeof "shortid"'.
 
 
+==== /tsconfig.json (0 errors) ====
+    {
+        "compileOnSave": true,
+        "compilerOptions": {
+            "module": "commonjs",
+            "moduleResolution": "node",
+            "outDir": "bin"
+        },
+        "exclude": [ "node_modules" ]
+    }
 ==== /index.ts (1 errors) ====
     /// <reference path="/typings/index.d.ts" />
     import * as foo from "shortid";

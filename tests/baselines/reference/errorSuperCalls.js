@@ -124,10 +124,10 @@ var NoBase = (function () {
         enumerable: true,
         configurable: true
     });
+    //super call in static class member initializer with no base type
+    NoBase.k = _this = _super.call(this) || this;
     return NoBase;
 }());
-//super call in static class member initializer with no base type
-NoBase.k = _this = _super.call(this) || this;
 var Base = (function () {
     function Base() {
     }

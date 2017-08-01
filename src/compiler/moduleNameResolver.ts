@@ -13,12 +13,6 @@ namespace ts {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    /** Array that is only intended to be pushed to, never read. */
-    /* @internal */
-    export interface Push<T> {
-        push(value: T): void;
-    }
-
     /**
      * Result of trying to resolve a module.
      * At least one of `ts` and `js` should be defined, or the whole thing should be `undefined`.
@@ -47,17 +41,11 @@ namespace ts {
         return resolved.path;
     }
 
-    /** Adds `isExernalLibraryImport` to a Resolved to get a ResolvedModule. */
-    function resolvedModuleFromResolved({ path, extension }: Resolved, isExternalLibraryImport: boolean): ResolvedModuleFull {
-        return { resolvedFileName: path, extension, isExternalLibraryImport };
-    }
-
     function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
-        return { resolvedModule: resolved && resolvedModuleFromResolved(resolved, isExternalLibraryImport), failedLookupLocations };
-    }
-
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
+        return {
+            resolvedModule: resolved && { resolvedFileName: resolved.path, extension: resolved.extension, isExternalLibraryImport },
+            failedLookupLocations
+        };
     }
 
     interface ModuleResolutionState {
@@ -153,11 +141,7 @@ namespace ts {
      */
     export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
-        const moduleResolutionState: ModuleResolutionState = {
-            compilerOptions: options,
-            host: host,
-            traceEnabled
-        };
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled };
 
         const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {
@@ -272,6 +256,8 @@ namespace ts {
                         for (const typeDirectivePath of host.getDirectories(root)) {
                             const normalized = normalizePath(typeDirectivePath);
                             const packageJsonPath = pathToPackageJson(combinePaths(root, normalized));
+                            // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
+                            // See `createNotNeededPackageJSON` in the types-publisher` repo.
                             // tslint:disable-next-line:no-null-keyword
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
                             if (!isNotNeededPackage) {
@@ -308,7 +294,7 @@ namespace ts {
     }
 
     export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache {
-        const directoryToModuleNameMap = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        const directoryToModuleNameMap = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const moduleNameToDirectoryMap = createMap<PerModuleNameCache>();
 
         return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName };
@@ -324,7 +310,7 @@ namespace ts {
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string) {
-            if (!moduleHasNonRelativeName(nonRelativeModuleName)) {
+            if (isExternalModuleNameRelative(nonRelativeModuleName)) {
                 return undefined;
             }
             let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
@@ -336,7 +322,7 @@ namespace ts {
         }
 
         function createPerModuleNameCache(): PerModuleNameCache {
-            const directoryPathMap = createFileMap<ResolvedModuleWithFailedLookupLocations>();
+            const directoryPathMap = createMap<ResolvedModuleWithFailedLookupLocations>();
 
             return { get, set };
 
@@ -358,7 +344,7 @@ namespace ts {
             function set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void {
                 const path = toPath(directory, currentDirectory, getCanonicalFileName);
                 // if entry is already in cache do nothing
-                if (directoryPathMap.contains(path)) {
+                if (directoryPathMap.has(path)) {
                     return;
                 }
                 directoryPathMap.set(path, result);
@@ -372,7 +358,7 @@ namespace ts {
                 let current = path;
                 while (true) {
                     const parent = getDirectoryPath(current);
-                    if (parent === current || directoryPathMap.contains(parent)) {
+                    if (parent === current || directoryPathMap.has(parent)) {
                         break;
                     }
                     directoryPathMap.set(parent, result);
@@ -442,6 +428,8 @@ namespace ts {
                 case ModuleResolutionKind.Classic:
                     result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache);
                     break;
+                default:
+                    Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
 
             if (perFolderCache) {
@@ -539,7 +527,7 @@ namespace ts {
     function tryLoadModuleUsingOptionalResolutionSettings(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader,
         failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
 
-        if (moduleHasNonRelativeName(moduleName)) {
+        if (!isExternalModuleNameRelative(moduleName)) {
             return tryLoadModuleUsingBaseUrl(extensions, moduleName, loader, failedLookupLocations, state);
         }
         else {
@@ -653,11 +641,13 @@ namespace ts {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
-                // A path mapping may have a ".ts" extension; in contrast to an import, which should omit it.
-                const tsExtension = tryGetExtensionFromPath(candidate);
-                if (tsExtension !== undefined) {
+                // A path mapping may have an extension, in contrast to an import, which should omit it.
+                const extension = tryGetExtensionFromPath(candidate);
+                if (extension !== undefined) {
                     const path = tryFile(candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state);
-                    return path && { path, extension: tsExtension };
+                    if (path !== undefined) {
+                        return { path, extension };
+                    }
                 }
 
                 return loader(extensions, candidate, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
@@ -713,7 +703,7 @@ namespace ts {
                 return toSearchResult({ resolved, isExternalLibraryImport: false });
             }
 
-            if (moduleHasNonRelativeName(moduleName)) {
+            if (!isExternalModuleNameRelative(moduleName)) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, Extensions[extensions]);
                 }
@@ -813,15 +803,15 @@ namespace ts {
 
         switch (extensions) {
             case Extensions.DtsOnly:
-                return tryExtension(".d.ts", Extension.Dts);
+                return tryExtension(Extension.Dts);
             case Extensions.TypeScript:
-                return tryExtension(".ts", Extension.Ts) || tryExtension(".tsx", Extension.Tsx) || tryExtension(".d.ts", Extension.Dts);
+                return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
             case Extensions.JavaScript:
-                return tryExtension(".js", Extension.Js) || tryExtension(".jsx", Extension.Jsx);
+                return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
         }
 
-        function tryExtension(ext: string, extension: Extension): Resolved | undefined {
-            const path = tryFile(candidate + ext, failedLookupLocations, onlyRecordFailures, state);
+        function tryExtension(extension: Extension): Resolved | undefined {
+            const path = tryFile(candidate + extension, failedLookupLocations, onlyRecordFailures, state);
             return path && { path, extension };
         }
     }
@@ -971,10 +961,13 @@ namespace ts {
         }
     }
 
+    /** Double underscores are used in DefinitelyTyped to delimit scoped packages. */
+    const mangledScopedPackageSeparator = "__";
+
     /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
     function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
         if (startsWith(moduleName, "@")) {
-            const replaceSlash = moduleName.replace(ts.directorySeparator, "__");
+            const replaceSlash = moduleName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
             if (replaceSlash !== moduleName) {
                 const mangled = replaceSlash.slice(1); // Take off the "@"
                 if (state.traceEnabled) {
@@ -984,6 +977,17 @@ namespace ts {
             }
         }
         return moduleName;
+    }
+
+    /* @internal */
+    export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
+        const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
+        if (withoutAtTypePrefix !== mangledName) {
+            return withoutAtTypePrefix.indexOf(mangledScopedPackageSeparator) !== -1 ?
+                "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
+                withoutAtTypePrefix;
+        }
+        return mangledName;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {
@@ -1012,7 +1016,7 @@ namespace ts {
             }
             const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
 
-            if (moduleHasNonRelativeName(moduleName)) {
+            if (!isExternalModuleNameRelative(moduleName)) {
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
                     const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, traceEnabled, host);

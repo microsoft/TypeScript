@@ -29,19 +29,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Remote = (function () {
     function Remote() {
     }
+    Remote = __decorate([
+        decorator("hello")
+    ], Remote);
     return Remote;
 }());
-Remote = __decorate([
-    decorator("hello")
-], Remote);
 /**
  * Floating Comment
  */
 var AnotherRomote = (function () {
     function AnotherRomote() {
     }
+    AnotherRomote = __decorate([
+        decorator("hi")
+    ], AnotherRomote);
     return AnotherRomote;
 }());
-AnotherRomote = __decorate([
-    decorator("hi")
-], AnotherRomote);

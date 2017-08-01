@@ -1,4 +1,4 @@
-tests/cases/compiler/functionOverloads37.ts(4,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/functionOverloads37.ts(4,9): error TS2554: Expected 1 arguments, but got 0.
 
 
 ==== tests/cases/compiler/functionOverloads37.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/functionOverloads37.ts(4,9): error TS2346: Supplied paramet
     function foo(bar:{a:any;}[]):any{ return bar }
     var x = foo();
             ~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     

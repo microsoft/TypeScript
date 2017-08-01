@@ -33,7 +33,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -156,7 +156,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ObjectLiteralElement[]): Expression[] {
+        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElement>): Expression[] {
             let chunkObject: (ShorthandPropertyAssignment | PropertyAssignment)[];
             const objects: Expression[] = [];
             for (const e of elements) {
@@ -351,8 +351,10 @@ namespace ts {
             );
         }
 
-        function awaitAsYield(expression: Expression) {
-            return createYield(/*asteriskToken*/ undefined, enclosingFunctionFlags & FunctionFlags.Generator ? createAwaitHelper(context, expression) : expression);
+        function createDownlevelAwait(expression: Expression) {
+            return enclosingFunctionFlags & FunctionFlags.Generator
+                ? createYield(/*asteriskToken*/ undefined, createAwaitHelper(context, expression))
+                : createAwait(expression);
         }
 
         function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
@@ -385,11 +387,11 @@ namespace ts {
                             EmitFlags.NoHoisting
                         ),
                         /*condition*/ createComma(
-                            createAssignment(result, awaitAsYield(callNext)),
+                            createAssignment(result, createDownlevelAwait(callNext)),
                             createLogicalNot(getDone)
                         ),
                         /*incrementor*/ undefined,
-                        /*statement*/ convertForOfStatementHead(node, awaitAsYield(getValue))
+                        /*statement*/ convertForOfStatementHead(node, createDownlevelAwait(getValue))
                     ),
                     /*location*/ node
                 ),
@@ -434,7 +436,7 @@ namespace ts {
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(awaitAsYield(callReturn))
+                                    createStatement(createDownlevelAwait(callReturn))
                                 ),
                                 EmitFlags.SingleLine
                             )
@@ -774,7 +776,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(node.name.text),
+                    createLiteral(unescapeLeadingUnderscores(node.name.escapedText)),
                     node
                 );
             }
@@ -929,8 +931,8 @@ namespace ts {
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
                 var i, p;
-                return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-                function verb(n) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : v; }; }
+                return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+                function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
             };
         `
     };

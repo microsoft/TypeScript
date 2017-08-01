@@ -44,7 +44,7 @@ namespace ts.JsDoc {
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations: Declaration[]) {
+    export function getJsDocCommentsFromDeclarations(declarations?: Declaration[]) {
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
@@ -53,38 +53,25 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const documentationComment = <SymbolDisplayPart[]>[];
         forEachUnique(declarations, declaration => {
-            const comments = getCommentsFromJSDoc(declaration);
-            if (!comments) {
-                return;
-            }
-            for (const comment of comments) {
-                if (comment) {
+            forEach(getAllJSDocs(declaration), doc => {
+                if (doc.comment) {
                     if (documentationComment.length) {
                         documentationComment.push(lineBreakPart());
                     }
-                    documentationComment.push(textPart(comment));
+                    documentationComment.push(textPart(doc.comment));
                 }
-            }
+            });
         });
         return documentationComment;
     }
 
-    export function getJsDocTagsFromDeclarations(declarations: Declaration[]) {
+    export function getJsDocTagsFromDeclarations(declarations?: Declaration[]) {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
-            const jsDocs = getJSDocs(declaration);
-            if (!jsDocs) {
-                return;
-            }
-            for (const doc of jsDocs) {
-                const tagsForDoc = (doc as JSDoc).tags;
-                if (tagsForDoc) {
-                    tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => {
-                        return {
-                            name: jsDocTag.tagName.text,
-                            text: jsDocTag.comment
-                        }; }));
+            for (const tag of getJSDocTags(declaration)) {
+                if (tag.kind === SyntaxKind.JSDocTag) {
+                    tags.push({ name: tag.tagName.text, text: tag.comment });
                 }
             }
         });
@@ -132,6 +119,28 @@ namespace ts.JsDoc {
         }));
     }
 
+    export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
+        if (!isIdentifier(tag.name)) {
+            return emptyArray;
+        }
+        const nameThusFar = tag.name.text;
+        const jsdoc = tag.parent;
+        const fn = jsdoc.parent;
+        if (!ts.isFunctionLike(fn)) return [];
+
+        return mapDefined(fn.parameters, param => {
+            if (!isIdentifier(param.name)) return undefined;
+
+            const name = param.name.text;
+            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name)
+                || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
+                return undefined;
+            }
+
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
+        });
+    }
+
     /**
      * Checks if position points to a valid position to add JSDoc comments, and if so,
      * returns the appropriate template. Otherwise returns an empty string.
@@ -158,7 +167,7 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        const tokenAtPos = getTokenAtPosition(sourceFile, position);
+        const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         const tokenStart = tokenAtPos.getStart();
         if (!tokenAtPos || tokenStart < position) {
             return undefined;
@@ -207,7 +216,7 @@ namespace ts.JsDoc {
         for (let i = 0; i < parameters.length; i++) {
             const currentName = parameters[i].name;
             const paramName = currentName.kind === SyntaxKind.Identifier ?
-                (<Identifier>currentName).text :
+                (<Identifier>currentName).escapedText :
                 "param" + i;
             if (isJavaScriptFile) {
                 docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
@@ -235,7 +244,7 @@ namespace ts.JsDoc {
         return { newText: result, caretOffset: preamble.length };
     }
 
-    function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
+    function getParametersForJsDocOwningNode(commentOwner: Node): ReadonlyArray<ParameterDeclaration> {
         if (isFunctionLike(commentOwner)) {
             return commentOwner.parameters;
         }
@@ -260,7 +269,7 @@ namespace ts.JsDoc {
      * @param rightHandSide the expression which may contain an appropriate set of parameters
      * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
      */
-    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ParameterDeclaration[] {
+    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ReadonlyArray<ParameterDeclaration> {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
             rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
         }

@@ -10,8 +10,8 @@ var r = C.x;
 var C = (function () {
     function C() {
     }
+    C.x = 1;
     return C;
 }());
-C.x = 1;
 var c = new C();
 var r = C.x;

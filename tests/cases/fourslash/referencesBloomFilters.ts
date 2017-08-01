@@ -12,7 +12,7 @@
 ////function blah2() { container["[|searchProp|]"] };
 
 // @Filename: redeclaration.ts
-////container = { "[|{| "isDefinition": true |}searchProp|]" : 18 };
+////container = { "[|{| "isWriteAccess": true, "isDefinition": true |}searchProp|]" : 18 };
 
 const ranges = test.ranges();
 const [r0, r1, r2, r3] = ranges;

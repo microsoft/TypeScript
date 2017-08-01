@@ -52,13 +52,13 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,9): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,16): error TS2304: Cannot find name 'method1'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,24): error TS2304: Cannot find name 'val'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,27): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,28): error TS2304: Cannot find name 'number'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,28): error TS2693: 'number' only refers to a type, but is being used as a value here.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,36): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,9): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,16): error TS2304: Cannot find name 'method2'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,26): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(241,5): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(246,25): error TS2339: Property 'method1' does not exist on type 'B'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(246,25): error TS2551: Property 'method1' does not exist on type 'B'. Did you mean 'method2'?
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,9): error TS2390: Constructor implementation is missing.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,21): error TS2369: A parameter property is only allowed in a constructor implementation.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,44): error TS2369: A parameter property is only allowed in a constructor implementation.
@@ -67,14 +67,14 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,9): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,16): error TS2304: Cannot find name 'Overloads'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,26): error TS2304: Cannot find name 'value'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,31): error TS1005: ',' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,33): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,33): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,9): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,16): error TS2304: Cannot find name 'Overloads'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,27): error TS1135: Argument expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,33): error TS1005: '(' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,35): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,35): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,43): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,52): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,52): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,60): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,65): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,9): error TS2304: Cannot find name 'public'.
@@ -82,7 +82,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,16): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,16): error TS2304: Cannot find name 'DefaultValue'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,29): error TS2304: Cannot find name 'value'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,35): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
@@ -435,7 +435,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                               ~
 !!! error TS1005: ',' expected.
                                ~~~~~~
-!!! error TS2304: Cannot find name 'number'.
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
                                        ~
 !!! error TS1005: ';' expected.
                 return val;
@@ -458,7 +458,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
             public method2() {
                 return this.method1(2);
                             ~~~~~~~
-!!! error TS2339: Property 'method1' does not exist on type 'B'.
+!!! error TS2551: Property 'method1' does not exist on type 'B'. Did you mean 'method2'?
             }
         }
     
@@ -486,7 +486,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                                   ~
 !!! error TS1005: ',' expected.
                                     ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
             public Overloads( while : string, ...rest: string[]) {  & 
             ~~~~~~
 !!! error TS1128: Declaration or statement expected.
@@ -497,11 +497,11 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                                     ~
 !!! error TS1005: '(' expected.
                                       ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                               ~~~
 !!! error TS1109: Expression expected.
                                                        ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                                                ~
 !!! error TS1005: ';' expected.
                                                                     ~
@@ -519,7 +519,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                                       ~
 !!! error TS1109: Expression expected.
                                         ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                                           ~
 !!! error TS1005: ';' expected.
         }

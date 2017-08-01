@@ -42,10 +42,10 @@ var Shapes;
         }
         // Instance member
         Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };
+        // Static member
+        Point.origin = new Point(0, 0);
         return Point;
     }());
-    // Static member
-    Point.origin = new Point(0, 0);
     Shapes.Point = Point;
 })(Shapes || (Shapes = {}));
 // Local variables
