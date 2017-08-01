@@ -5,7 +5,6 @@
 ////  */
 //// /// <reference types="node" />
 //// /// <reference path="./a.ts" />
-//// /// <reference no-default-lib="test" />
 //// /// <amd-dependency path="./b.ts" />
 //// /**
 ////  * This is a comment intended to be attached to this interface
@@ -24,7 +23,6 @@ verify.importFixAtPosition([
  */
 /// <reference types="node" />
 /// <reference path="./a.ts" />
-/// <reference no-default-lib="test" />
 /// <amd-dependency path="./b.ts" />
 import { f1 } from "./module";
 
