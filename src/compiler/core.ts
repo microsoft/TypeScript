@@ -171,6 +171,12 @@ namespace ts {
         return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
+    export const enum Comparison {
+        LessThan    = -1,
+        EqualTo     = 0,
+        GreaterThan = 1
+    }
+
     export function length(array: ReadonlyArray<any>) {
         return array ? array.length : 0;
     }
@@ -851,6 +857,8 @@ namespace ts {
         result[index] = value;
         return result;
     }
+
+    export type Comparer<T> = (a: T, b: T) => Comparison;
 
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
