@@ -176,6 +176,7 @@ namespace ts.server {
         return [] as SortedArray<T>;
     }
 
+    /* @internal */
     export function toSortedArray(arr: string[]): SortedArray<string>;
     export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
     export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
@@ -183,6 +184,7 @@ namespace ts.server {
         return arr as SortedArray<T>;
     }
 
+    /* @internal */
     export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
         compare = compare || compareValues;
         let newIndex = 0;
@@ -262,6 +264,7 @@ namespace ts.server {
         }
     }
 
+    /* @internal */
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
         if (array.length === 0) {
             array.push(insert);
@@ -274,6 +277,7 @@ namespace ts.server {
         }
     }
 
+    /* @internal */
     export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
         if (!array || array.length === 0) {
             return;
