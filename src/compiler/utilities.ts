@@ -681,6 +681,10 @@ namespace ts {
     export let fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
     export let fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
     export let defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
+    /**
+     * Copy with new flags via RegExp constructor is ES6+, so this needs to be manually synced with the above
+     */
+    const defaultLibReferenceRegExGIM = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
 
     export function isPartOfTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -1872,7 +1876,7 @@ namespace ts {
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
         const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegEx as any, "gim"); // TODO (weswigham): Remove cast after #17555 is a published lib change
+        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegExGIM);
         if (simpleReferenceRegEx.test(comment)) {
             if (isNoDefaultLibRegEx.test(comment)) {
                 return { isNoDefaultLib: true };
