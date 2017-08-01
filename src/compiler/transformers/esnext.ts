@@ -216,7 +216,7 @@ namespace ts {
 
         function visitCatchClause(node: CatchClause): CatchClause {
             if (!node.variableDeclaration) {
-                return updateCatchClause(node, createVariableDeclaration("_ignoredCatchParameter"), node.block);
+                return updateCatchClause(node, createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined)), node.block);
             }
             return visitEachChild(node, visitor, context);
         }

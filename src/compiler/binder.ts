@@ -2924,7 +2924,7 @@ namespace ts {
         if (!node.variableDeclaration) {
             transformFlags |= TransformFlags.AssertESNext;
         }
-        else if (/* node.variableDeclaration && */ isBindingPattern(node.variableDeclaration.name)) {
+        else if (isBindingPattern(node.variableDeclaration.name)) {
             transformFlags |= TransformFlags.AssertES2015;
         }
 

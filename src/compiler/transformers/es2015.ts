@@ -3173,7 +3173,8 @@ namespace ts {
         function visitCatchClause(node: CatchClause): CatchClause {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
-            if (node.variableDeclaration && isBindingPattern(node.variableDeclaration.name)) {
+            Debug.assert(!!node.variableDeclaration, "Catch clauses should always be present when downleveling ES2015 code.");
+            if (isBindingPattern(node.variableDeclaration.name)) {
                 const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const newVariableDeclaration = createVariableDeclaration(temp);
                 setTextRange(newVariableDeclaration, node.variableDeclaration);

@@ -20885,17 +20885,6 @@ namespace ts {
                         }
                     }
                 }
-                else if (/* !catchClause.variableDeclaration && */ languageVersion < ScriptTarget.ESNext) {
-                    const blockLocals = catchClause.block.locals;
-                    if (blockLocals) {
-                        forEachKey(blockLocals, caughtName => {
-                            if (caughtName === "_ignoredCatchParameter") {
-                                const localSymbol = blockLocals.get(caughtName);
-                                grammarErrorOnNode(localSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_ignoredCatchParameter_Compiler_uses_the_parameter_declaration_ignoredCatchParameter_to_bind_ignored_catched_exceptions);
-                            }
-                        });
-                    }
-                }
 
                 checkBlock(catchClause.block);
             }
