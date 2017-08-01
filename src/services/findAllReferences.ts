@@ -608,7 +608,7 @@ namespace ts.FindAllReferences.Core {
 
         const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
         const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
-        if (propSymbol && propSymbol.flags & (SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
+        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
             // See GH#16922
             Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
             return (propSymbol as TransientSymbol).target;
