@@ -828,10 +828,8 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new(pattern: RegExp | string): RegExp;
-    new(pattern: string, flags?: string): RegExp;
-    (pattern: RegExp | string): RegExp;
-    (pattern: string, flags?: string): RegExp;
+    new(pattern: RegExp | string, flags?: string): RegExp;
+    (pattern: RegExp | string, flags?: string): RegExp;
     readonly prototype: RegExp;
 
     // Non-standard extensions
