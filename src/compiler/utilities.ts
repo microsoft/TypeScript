@@ -275,7 +275,8 @@ namespace ts {
             const textSubStr = text.substring(commentPos, commentEnd);
             return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
                 textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ||
-                textSubStr.match(fullTripleSlashReferenceTypeReferenceDirectiveRegEx) ?
+                textSubStr.match(fullTripleSlashReferenceTypeReferenceDirectiveRegEx) ||
+                textSubStr.match(defaultLibReferenceRegEx) ?
                 true : false;
         }
         return false;
@@ -700,6 +701,7 @@ namespace ts {
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
     export let fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
     export let fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    export let defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
 
     export function isPartOfTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -1891,7 +1893,7 @@ namespace ts {
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
         const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        const isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegEx as any, "gim"); // TODO (weswigham): Remove cast after #17555 is a published lib change
         if (simpleReferenceRegEx.test(comment)) {
             if (isNoDefaultLibRegEx.test(comment)) {
                 return { isNoDefaultLib: true };
