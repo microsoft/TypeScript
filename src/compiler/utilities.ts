@@ -274,7 +274,8 @@ namespace ts {
             text.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
             const textSubStr = text.substring(commentPos, commentEnd);
             return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
-                textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
+                textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ||
+                textSubStr.match(fullTripleSlashReferenceTypeReferenceDirectiveRegEx) ?
                 true : false;
         }
         return false;
