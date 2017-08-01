@@ -828,9 +828,7 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new(pattern: RegExp | string): RegExp;
     new(pattern: RegExp | string, flags?: string): RegExp;
-    (pattern: RegExp | string): RegExp;
     (pattern: RegExp | string, flags?: string): RegExp;
     readonly prototype: RegExp;
 
