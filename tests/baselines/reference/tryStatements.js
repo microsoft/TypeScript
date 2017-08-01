@@ -14,7 +14,7 @@ function fn() {
 //// [tryStatements.js]
 function fn() {
     try { }
-    catch (_ignoredCatchParameter) { }
+    catch (_a) { }
     try { }
     catch (x) {
         var x;
@@ -22,7 +22,7 @@ function fn() {
     try { }
     finally { }
     try { }
-    catch (_ignoredCatchParameter) { }
+    catch (_b) { }
     finally { }
     try { }
     catch (z) { }

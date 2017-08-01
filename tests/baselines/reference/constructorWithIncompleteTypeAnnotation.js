@@ -441,7 +441,7 @@ var BasicFeatures = (function () {
         var xx = c;
         retVal += ;
         try { }
-        catch (_ignoredCatchParameter) { }
+        catch (_a) { }
         Property;
         retVal += c.Member();
         retVal += xx.Foo() ? 0 : 1;
