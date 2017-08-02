@@ -15,7 +15,7 @@ tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(19,20)
     
         finally { } // potential error; can be absorbed by the 'catch'
     
-        try { }; // missing finally
+        try { }; // error missing finally
                ~
 !!! error TS1005: 'finally' expected.
     }

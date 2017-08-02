@@ -3,7 +3,7 @@ function fn() {
 
     finally { } // potential error; can be absorbed by the 'catch'
 
-    try { }; // missing finally
+    try { }; // error missing finally
 }
 
 function fn2() {
