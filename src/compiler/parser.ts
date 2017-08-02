@@ -4783,6 +4783,10 @@ namespace ts {
                 result.variableDeclaration = parseVariableDeclaration();
                 parseExpected(SyntaxKind.CloseParenToken);
             }
+            else {
+                // Keep shape of node to not avoid degrading performance.
+                result.variableDeclaration = undefined;
+            }
 
             result.block = parseBlock(/*ignoreMissingOpenBrace*/ false);
             return finishNode(result);

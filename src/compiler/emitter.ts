@@ -2134,7 +2134,7 @@ namespace ts {
             if (node.variableDeclaration) {
                 writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emit(node.variableDeclaration);
-                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : openParenPos);
+                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration.end);
                 write(" ");
             }
             emit(node.block);
