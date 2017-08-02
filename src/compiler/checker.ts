@@ -7526,11 +7526,11 @@ namespace ts {
                     return getTypeOfSymbol(prop);
                 }
             }
-            if (!(indexType.flags & TypeFlags.Nullable) && isTypeOfKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+            if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                 if (isTypeAny(objectType)) {
                     return anyType;
                 }
-                const indexInfo = isTypeOfKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
+                const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
                     getIndexInfoOfType(objectType, IndexKind.String) ||
                     undefined;
                 if (indexInfo) {
@@ -11286,7 +11286,7 @@ namespace ts {
                 (<BinaryExpression>parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
                 (<BinaryExpression>parent.parent).left === parent &&
                 !isAssignmentTarget(parent.parent) &&
-                isTypeOfKind(getTypeOfExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike);
+                isTypeAssignableToKind(getTypeOfExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike);
             return isLengthPushOrUnshift || isElementAssignment;
         }
 
@@ -11458,7 +11458,7 @@ namespace ts {
                         }
                         else {
                             const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
-                            if (isTypeOfKind(indexType, TypeFlags.NumberLike)) {
+                            if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
                                 evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
                             }
                         }
@@ -13290,7 +13290,7 @@ namespace ts {
         function isNumericComputedName(name: ComputedPropertyName): boolean {
             // It seems odd to consider an expression of type Any to result in a numeric name,
             // but this behavior is consistent with checkIndexedAccess
-            return isTypeOfKind(checkComputedPropertyName(name), TypeFlags.NumberLike);
+            return isTypeAssignableToKind(checkComputedPropertyName(name), TypeFlags.NumberLike);
         }
 
         function isInfinityOrNaNString(name: string | __String): boolean {
@@ -13328,7 +13328,7 @@ namespace ts {
                 links.resolvedType = checkExpression(node.expression);
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
-                if (links.resolvedType.flags & TypeFlags.Nullable || !isTypeOfKind(links.resolvedType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+                if (links.resolvedType.flags & TypeFlags.Nullable || !isTypeAssignableToKind(links.resolvedType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
                 else {
@@ -15431,7 +15431,7 @@ namespace ts {
 
                     case SyntaxKind.ComputedPropertyName:
                         const nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
-                        if (isTypeOfKind(nameType, TypeFlags.ESSymbol)) {
+                        if (isTypeAssignableToKind(nameType, TypeFlags.ESSymbol)) {
                             return nameType;
                         }
                         else {
@@ -16813,7 +16813,7 @@ namespace ts {
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
-            if (!isTypeOfKind(type, TypeFlags.NumberLike)) {
+            if (!isTypeAssignableToKind(type, TypeFlags.NumberLike)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -16986,12 +16986,11 @@ namespace ts {
             return false;
         }
 
-        function isTypeOfKind(source: Type, kind: TypeFlags, excludeAny?: boolean) {
+        function isTypeAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean) {
             if (source.flags & kind) {
                 return true;
             }
-            if (excludeAny && source.flags & (TypeFlags.Any | TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null)) {
-                // TODO: The callers who want this should really handle these cases FIRST
+            if (strict && source.flags & (TypeFlags.Any | TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null)) {
                 return false;
             }
             const targets = [];
@@ -17042,7 +17041,7 @@ namespace ts {
             // and the right operand to be of type Any, a subtype of the 'Function' interface type, or have a call or construct signature.
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (isTypeOfKind(leftType, TypeFlags.Primitive, /*excludeAny*/ true)) {
+            if (!(leftType.flags & TypeFlags.Any) && isTypeAssignableToKind(leftType, TypeFlags.Primitive)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -17065,10 +17064,10 @@ namespace ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!(isTypeComparableTo(leftType, stringType) || isTypeOfKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbol))) {
+            if (!(isTypeComparableTo(leftType, stringType) || isTypeAssignableToKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbol))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeOfKind(rightType, TypeFlags.NonPrimitive | TypeFlags.TypeVariable)) {
+            if (!isTypeAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.TypeVariable)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -17377,33 +17376,30 @@ namespace ts {
                         return silentNeverType;
                     }
 
-                    if (!isTypeOfKind(leftType, TypeFlags.StringLike) && !isTypeOfKind(rightType, TypeFlags.StringLike)) {
+                    if (!isTypeAssignableToKind(leftType, TypeFlags.StringLike) && !isTypeAssignableToKind(rightType, TypeFlags.StringLike)) {
                         leftType = checkNonNullType(leftType, left);
                         rightType = checkNonNullType(rightType, right);
                     }
 
                     let resultType: Type;
-                    if (isTypeOfKind(leftType, TypeFlags.NumberLike, /*excludeAny*/ true) && isTypeOfKind(rightType, TypeFlags.NumberLike, /*excludeAny*/ true)) {
+                    if (isTypeAssignableToKind(leftType, TypeFlags.NumberLike, /*strict*/ true) && isTypeAssignableToKind(rightType, TypeFlags.NumberLike, /*strict*/ true)) {
                         // Operands of an enum type are treated as having the primitive type Number.
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
-                    else {
-                        if (isTypeOfKind(leftType, TypeFlags.StringLike, /*excludeAny*/ true) || isTypeOfKind(rightType, TypeFlags.StringLike, /*excludeAny*/ true)) {
+                    else if (isTypeAssignableToKind(leftType, TypeFlags.StringLike, /*strict*/ true) || isTypeAssignableToKind(rightType, TypeFlags.StringLike, /*strict*/ true)) {
                             // If one or both operands are of the String primitive type, the result is of the String primitive type.
                             resultType = stringType;
-                        }
-                        else if (isTypeAny(leftType) || isTypeAny(rightType)) {
-                            // Otherwise, the result is of type Any.
-                            // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
-                            // TODO: Reorder this to check for any (plus void/undefined/null) first
-                            resultType = leftType === unknownType || rightType === unknownType ? unknownType : anyType;
-                        }
+                    }
+                    else if (isTypeAny(leftType) || isTypeAny(rightType)) {
+                        // Otherwise, the result is of type Any.
+                        // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
+                        resultType = leftType === unknownType || rightType === unknownType ? unknownType : anyType;
+                    }
 
-                        // Symbols are not allowed at all in arithmetic expressions
-                        if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
-                            return resultType;
-                        }
+                    // Symbols are not allowed at all in arithmetic expressions
+                    if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
+                        return resultType;
                     }
 
                     if (!resultType) {
@@ -18620,7 +18616,7 @@ namespace ts {
             }
             // Check if we're indexing with a numeric type and the object type is a generic
             // type with a constraint that has a numeric index signature.
-            if (maybeTypeOfKind(objectType, TypeFlags.TypeVariable) && isTypeOfKind(indexType, TypeFlags.NumberLike)) {
+            if (maybeTypeOfKind(objectType, TypeFlags.TypeVariable) && isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
                 const constraint = getBaseConstraintOfType(objectType);
                 if (constraint && getIndexInfoOfType(constraint, IndexKind.Number)) {
                     return type;
@@ -20322,7 +20318,7 @@ namespace ts {
 
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeOfKind(rightType, TypeFlags.NonPrimitive | TypeFlags.TypeVariable)) {
+            if (!isTypeAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.TypeVariable)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -23303,22 +23299,22 @@ namespace ts {
             else if (type.flags & TypeFlags.Any) {
                 return TypeReferenceSerializationKind.ObjectType;
             }
-            else if (isTypeOfKind(type, TypeFlags.Void | TypeFlags.Nullable | TypeFlags.Never)) {
+            else if (isTypeAssignableToKind(type, TypeFlags.Void | TypeFlags.Nullable | TypeFlags.Never)) {
                 return TypeReferenceSerializationKind.VoidNullableOrNeverType;
             }
-            else if (isTypeOfKind(type, TypeFlags.BooleanLike)) {
+            else if (isTypeAssignableToKind(type, TypeFlags.BooleanLike)) {
                 return TypeReferenceSerializationKind.BooleanType;
             }
-            else if (isTypeOfKind(type, TypeFlags.NumberLike)) {
+            else if (isTypeAssignableToKind(type, TypeFlags.NumberLike)) {
                 return TypeReferenceSerializationKind.NumberLikeType;
             }
-            else if (isTypeOfKind(type, TypeFlags.StringLike)) {
+            else if (isTypeAssignableToKind(type, TypeFlags.StringLike)) {
                 return TypeReferenceSerializationKind.StringLikeType;
             }
             else if (isTupleType(type)) {
                 return TypeReferenceSerializationKind.ArrayLikeType;
             }
-            else if (isTypeOfKind(type, TypeFlags.ESSymbol)) {
+            else if (isTypeAssignableToKind(type, TypeFlags.ESSymbol)) {
                 return TypeReferenceSerializationKind.ESSymbolType;
             }
             else if (isFunctionType(type)) {
