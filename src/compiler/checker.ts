@@ -15781,20 +15781,20 @@ namespace ts {
             return resolveErrorCall(node);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
-                if (candidates.length === 1 && !candidates[0].typeParameters) {
+                /*if (candidates.length === 1 && !candidates[0].typeParameters) {
                     const c = candidates[0];
                     if (!hasCorrectArity(node, args, c, signatureHelpTrailingComma)) {
                         return undefined;
                     }
 
-                    if (!checkApplicableSignature(node, args, c, relation, /*excludeArgument*/ undefined, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, c, relation, /*excludeArgument* / undefined, /*reportErrors* / false)) {
                         candidateForArgumentError = c;
                         return undefined;
                     }
                     else {
                         return c;
                     }
-                }
+                }*/ //this change is fine...
 
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
@@ -15804,17 +15804,32 @@ namespace ts {
                         continue;
                     }
 
-                    if (!originalCandidate.typeParameters && 1 + 1 === 3) {
+                    if (!originalCandidate.typeParameters) {
+                        excludeCount = 0; excludeArgument = undefined;//TODO: should be able to do this...
+
+                        while (true) {
+                            if (!checkApplicableSignature(node, args, originalCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                                candidateForArgumentError = originalCandidate;
+                                break;
+                            }
+                            if (excludeCount === 0) {
+                                return originalCandidate;
+                            }
+                            removeOneExcludedArgument();
+                        }
+
+
+
                         //simplified version:
                         //Debug.assert(excludeArgument === undefined); It will be defined if *some* candidate takes type parameters, even if this one doesn't.
-                        if (!checkApplicableSignature(node, args, originalCandidate, relation, /*excludeArgument*/ undefined, /*reportErrors*/ false)) {
+                        /*if (!checkApplicableSignature(node, args, originalCandidate, relation, /*excludeArgument* / undefined, /*reportErrors* / false)) {
                             candidateForArgumentError = originalCandidate;
                             // Try again with another candidate
                         }
                         else {
                             //candidates[candidateIndex] = originalCandidate; //Not necessary...
                             return originalCandidate;
-                        }
+                        }*/
                     }
                     else {
                         let candidate: Signature;
@@ -15846,20 +15861,24 @@ namespace ts {
                                 candidates[candidateIndex] = candidate;
                                 return candidate;
                             }
-                            excludeCount--;
-                            if (excludeCount > 0) {
-                                const idx = indexOf(excludeArgument, /*value*/ true);
-                                Debug.assert(idx !== -1);
-                                excludeArgument[idx] = false; //This doesn't affect `inferTypeArguments` because that uses `excludeArgument[i] !== undefined`!
-                            }
-                            else {
-                                excludeArgument = undefined;
-                            }
+                            removeOneExcludedArgument();
                         }
                     }
                 }
 
                 return undefined;
+            }
+
+            function removeOneExcludedArgument(): void {
+                excludeCount--;
+                if (excludeCount > 0) {
+                    const idx = indexOf(excludeArgument, /*value*/ true);
+                    Debug.assert(idx !== -1);
+                    excludeArgument[idx] = false; //This doesn't affect `inferTypeArguments` because that uses `excludeArgument[i] !== undefined`!
+                }
+                else {
+                    excludeArgument = undefined;
+                }
             }
 
         }
