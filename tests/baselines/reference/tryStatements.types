@@ -4,6 +4,13 @@ function fn() {
 
     try { } catch { }
 
+    try { } catch { 
+        try { } catch { 
+            try { } catch { }
+        }
+        try { } catch { }
+    }
+
     try { } catch (x) { var x: any; }
 >x : any
 >x : any
@@ -12,6 +19,6 @@ function fn() {
 
     try { } catch { } finally { }
 
-    try { } catch(z) { } finally { }
+    try { } catch (z) { } finally { }
 >z : any
 }

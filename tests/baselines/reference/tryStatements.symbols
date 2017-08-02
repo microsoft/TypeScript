@@ -4,14 +4,21 @@ function fn() {
 
     try { } catch { }
 
+    try { } catch { 
+        try { } catch { 
+            try { } catch { }
+        }
+        try { } catch { }
+    }
+
     try { } catch (x) { var x: any; }
->x : Symbol(x, Decl(tryStatements.ts, 3, 19))
->x : Symbol(x, Decl(tryStatements.ts, 3, 27))
+>x : Symbol(x, Decl(tryStatements.ts, 10, 19))
+>x : Symbol(x, Decl(tryStatements.ts, 10, 27))
 
     try { } finally { }
 
     try { } catch { } finally { }
 
-    try { } catch(z) { } finally { }
->z : Symbol(z, Decl(tryStatements.ts, 9, 18))
+    try { } catch (z) { } finally { }
+>z : Symbol(z, Decl(tryStatements.ts, 16, 19))
 }
