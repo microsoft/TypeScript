@@ -2192,6 +2192,10 @@
         "category": "Error",
         "code": 2712
     },
+    "Cannot access '{0}.{1}' because '{0}' is a type, but not a namespace. Did you mean to retrieve the type of the property '{1}' in '{0}' with '{0}[\"{1}\"]'?": {
+        "category": "Error",
+        "code": 2713
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3455,6 +3459,10 @@
         "category": "Error",
         "code": 8012
     },
+    "'non-null assertions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8015
@@ -3652,6 +3660,10 @@
     "Prefix '{0}' with an underscore.": {
         "category": "Message",
         "code": 90025
+    },
+    "Rewrite as the indexed access type '{0}'.": {
+        "category": "Message",
+        "code": 90026
     },
 
     "Convert function to an ES2015 class": {

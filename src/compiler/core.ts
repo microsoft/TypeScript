@@ -59,7 +59,7 @@ namespace ts {
         const result = createMap<Symbol>() as SymbolTable;
         if (symbols) {
             for (const symbol of symbols) {
-                result.set(symbol.name, symbol);
+                result.set(symbol.escapedName, symbol);
             }
         }
         return result;
@@ -711,7 +711,7 @@ namespace ts {
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
         outer: for (; offsetB < arrayB.length; offsetB++) {
@@ -2306,7 +2306,7 @@ namespace ts {
 
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
-        this.name = name;
+        this.escapedName = name;
         this.declarations = undefined;
     }
 

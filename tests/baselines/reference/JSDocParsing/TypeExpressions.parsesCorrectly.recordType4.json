@@ -14,7 +14,7 @@
                 "pos": 2,
                 "end": 5,
                 "flags": "JSDoc",
-                "text": "foo"
+                "escapedText": "foo"
             }
         },
         "1": {
@@ -27,7 +27,7 @@
                 "pos": 6,
                 "end": 10,
                 "flags": "JSDoc",
-                "text": "bar"
+                "escapedText": "bar"
             }
         },
         "length": 2,

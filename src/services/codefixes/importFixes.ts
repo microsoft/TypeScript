@@ -148,7 +148,7 @@ namespace ts.codefix {
             else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
                 symbol = checker.getAliasedSymbol(checker.resolveNameAtLocation(token, checker.getJsxNamespace(), SymbolFlags.Value));
-                symbolName = symbol.getUnescapedName();
+                symbolName = symbol.name;
             }
             else {
                 Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
@@ -171,15 +171,18 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports("default", moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if (localSymbol && localSymbol.name === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
+                if (localSymbol && localSymbol.escapedName === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol);
-                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isDefault*/ true));
+                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isNamespaceImport*/ true));
                 }
             }
 
+            // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
+            Debug.assert(name !== "default");
+
             // check exports with the same name
-            const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExports(name, moduleSymbol);
+            const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(name, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName);
                 symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name));
@@ -559,8 +562,8 @@ namespace ts.codefix {
 
                 function getNodeModulePathParts(fullPath: string) {
                     // If fullPath can't be valid module file within node_modules, returns undefined.
-                    // Example of expected pattern: /base/path/node_modules/[otherpackage/node_modules/]package/[subdirectory/]file.js
-                    // Returns indices:                       ^            ^                                   ^             ^
+                    // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
+                    // Returns indices:                       ^            ^                                                      ^             ^
 
                     let topLevelNodeModulesIndex = 0;
                     let topLevelPackageNameIndex = 0;
@@ -570,6 +573,7 @@ namespace ts.codefix {
                     const enum States {
                         BeforeNodeModules,
                         NodeModules,
+                        Scope,
                         PackageContent
                     }
 
@@ -589,8 +593,14 @@ namespace ts.codefix {
                                 }
                                 break;
                             case States.NodeModules:
-                                packageRootIndex = partEnd;
-                                state = States.PackageContent;
+                            case States.Scope:
+                                if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
+                                    state = States.Scope;
+                                }
+                                else {
+                                    packageRootIndex = partEnd;
+                                    state = States.PackageContent;
+                                }
                                 break;
                             case States.PackageContent:
                                 if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
