@@ -1001,6 +1001,7 @@ namespace ts {
         function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
             bind(node.expression);
             if (node.kind === SyntaxKind.ReturnStatement) {
+                bind(node.returnKeyword);
                 hasExplicitReturn = true;
                 if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);

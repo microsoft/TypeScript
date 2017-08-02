@@ -1460,15 +1460,17 @@ namespace ts {
             : node;
     }
 
-    export function createReturn(expression?: Expression): ReturnStatement {
+    export function createReturn(expression?: Expression, returnKeyword: Token<SyntaxKind.ReturnKeyword> = createToken(SyntaxKind.ReturnKeyword)): ReturnStatement {
         const node = <ReturnStatement>createSynthesizedNode(SyntaxKind.ReturnStatement);
+        node.returnKeyword = returnKeyword;
         node.expression = expression;
         return node;
     }
 
-    export function updateReturn(node: ReturnStatement, expression: Expression | undefined) {
-        return node.expression !== expression
-            ? updateNode(createReturn(expression), node)
+    export function updateReturn(node: ReturnStatement, returnKeyword: Token<SyntaxKind.ReturnKeyword>, expression: Expression | undefined) {
+        return node.expression !== expression ||
+            node.returnKeyword !== returnKeyword
+            ? updateNode(createReturn(expression, returnKeyword), node)
             : node;
     }
 

@@ -634,6 +634,7 @@ namespace ts {
 
             case SyntaxKind.ReturnStatement:
                 return updateReturn(<ReturnStatement>node,
+                    visitNode((<ReturnStatement>node).returnKeyword, visitor, isToken),
                     visitNode((<ReturnStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.WithStatement:

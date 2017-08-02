@@ -259,7 +259,8 @@ namespace ts {
             case SyntaxKind.BreakStatement:
                 return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
             case SyntaxKind.ReturnStatement:
-                return visitNode(cbNode, (<ReturnStatement>node).expression);
+                return visitNode(cbNode, (<ReturnStatement>node).returnKeyword) ||
+                    visitNode(cbNode, (<ReturnStatement>node).expression);
             case SyntaxKind.WithStatement:
                 return visitNode(cbNode, (<WithStatement>node).expression) ||
                     visitNode(cbNode, (<WithStatement>node).statement);
@@ -4687,7 +4688,7 @@ namespace ts {
         function parseReturnStatement(): ReturnStatement {
             const node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
 
-            parseExpected(SyntaxKind.ReturnKeyword);
+            node.returnKeyword = parseExpectedToken(SyntaxKind.ReturnKeyword, /*reportAtCurrentPosition*/ true, Diagnostics._0_expected, "return");
             if (!canParseSemicolon()) {
                 node.expression = allowInAnd(parseExpression);
             }
