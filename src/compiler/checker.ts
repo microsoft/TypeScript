@@ -13328,7 +13328,9 @@ namespace ts {
                 links.resolvedType = checkExpression(node.expression);
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
-                if (links.resolvedType.flags & TypeFlags.Nullable || !isTypeAssignableToKind(links.resolvedType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+                if (links.resolvedType.flags & TypeFlags.Nullable ||
+                    !isTypeAssignableToKind(links.resolvedType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol) &&
+                    !isTypeAssignableTo(links.resolvedType, getUnionType([stringType, numberType, esSymbolType]))) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
                 else {
@@ -16986,42 +16988,22 @@ namespace ts {
             return false;
         }
 
-        function isTypeAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean) {
+        function isTypeAssignableToKind(source: Type, kind: TypeFlags, strict?: boolean): boolean {
             if (source.flags & kind) {
                 return true;
             }
             if (strict && source.flags & (TypeFlags.Any | TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null)) {
                 return false;
             }
-            const targets = [];
-            if (kind & TypeFlags.NumberLike) {
-                targets.push(numberType);
-            }
-            if (kind & TypeFlags.StringLike) {
-                targets.push(stringType);
-            }
-            if (kind & TypeFlags.BooleanLike) {
-                targets.push(booleanType);
-            }
-            if (kind & TypeFlags.Void) {
-                targets.push(voidType);
-            }
-            if (kind & TypeFlags.Never) {
-                targets.push(neverType);
-            }
-            if (kind & TypeFlags.Null) {
-                targets.push(nullType);
-            }
-            if (kind & TypeFlags.Undefined) {
-                targets.push(undefinedType);
-            }
-            if (kind & TypeFlags.ESSymbol) {
-                targets.push(esSymbolType);
-            }
-            if (kind & TypeFlags.NonPrimitive) {
-                targets.push(nonPrimitiveType);
-            }
-            return isTypeAssignableTo(source, getUnionType(targets));
+            return kind & TypeFlags.NumberLike && isTypeAssignableTo(source, numberType) ||
+                kind & TypeFlags.StringLike && isTypeAssignableTo(source, stringType) ||
+                kind & TypeFlags.BooleanLike && isTypeAssignableTo(source, booleanType) ||
+                kind & TypeFlags.Void && isTypeAssignableTo(source, voidType) ||
+                kind & TypeFlags.Never && isTypeAssignableTo(source, neverType) ||
+                kind & TypeFlags.Null && isTypeAssignableTo(source, nullType) ||
+                kind & TypeFlags.Undefined && isTypeAssignableTo(source, undefinedType) ||
+                kind & TypeFlags.ESSymbol && isTypeAssignableTo(source, esSymbolType) ||
+                kind & TypeFlags.NonPrimitive && isTypeAssignableTo(source, nonPrimitiveType);
         }
 
         function isConstEnumObjectType(type: Type): boolean {
