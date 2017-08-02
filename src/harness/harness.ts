@@ -1289,9 +1289,14 @@ namespace Harness {
 
         export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
             diagnostics.sort(ts.compareDiagnostics);
-            const outputLines: string[] = [];
+            let outputLines: string = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
             let totalErrorsReportedInNonLibraryFiles = 0;
+
+            let firstLine = true;
+            function newLine() {
+                return firstLine ? (firstLine = false, "") : "\r\n"; 
+            }
 
             function outputErrorText(error: ts.Diagnostic) {
                 const message = ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine());
@@ -1301,7 +1306,7 @@ namespace Harness {
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
                     .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
-                errLines.forEach(e => outputLines.push(e));
+                errLines.forEach(e => outputLines += (newLine() + e));
 
                 // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
                 // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers)
@@ -1327,7 +1332,7 @@ namespace Harness {
 
 
                 // Header
-                outputLines.push("==== " + inputFile.unitName + " (" + fileErrors.length + " errors) ====");
+                outputLines += (newLine() + "==== " + inputFile.unitName + " (" + fileErrors.length + " errors) ====");
 
                 // Make sure we emit something for every error
                 let markedErrorCount = 0;
@@ -1356,7 +1361,7 @@ namespace Harness {
                         nextLineStart = lineStarts[lineIndex + 1];
                     }
                     // Emit this line from the original file
-                    outputLines.push("    " + line);
+                    outputLines += (newLine() + "    " + line);
                     fileErrors.forEach(err => {
                         // Does any error start or continue on to this line? Emit squiggles
                         const end = ts.textSpanEnd(err);
@@ -1368,7 +1373,7 @@ namespace Harness {
                             // Calculate the start of the squiggle
                             const squiggleStart = Math.max(0, relativeOffset);
                             // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
-                            outputLines.push("    " + line.substr(0, squiggleStart).replace(/[^\s]/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~"));
+                            outputLines += (newLine() + "    " + line.substr(0, squiggleStart).replace(/[^\s]/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~"));
 
                             // If the error ended here, or we're at the end of the file, emit its message
                             if ((lineIndex === lines.length - 1) || nextLineStart > end) {
@@ -1399,7 +1404,7 @@ namespace Harness {
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
 
             return minimalDiagnosticsToString(diagnostics) +
-                Harness.IO.newLine() + Harness.IO.newLine() + outputLines.join("\r\n");
+                Harness.IO.newLine() + Harness.IO.newLine() + outputLines;
         }
 
         export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[]) {
