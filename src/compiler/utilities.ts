@@ -2415,7 +2415,7 @@ namespace ts {
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
         // Otherwise just return the original string.
         return nonAsciiCharacters.test(s) ?
-            s.replace(nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
+            replaceBy(s, nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
             s;
     }
 

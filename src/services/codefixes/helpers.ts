@@ -16,11 +16,13 @@ namespace ts.codefix {
         }
 
         Debug.assert(changes.length === 1);
+        let newText = "";
+        for (const tc of changes[0].textChanges) newText += tc.newText;
         const consolidatedChanges: FileTextChanges[] = [{
             fileName: changes[0].fileName,
             textChanges: [{
                 span: changes[0].textChanges[0].span,
-                newText: changes[0].textChanges.reduce((prev, cur) => prev + cur.newText, "")
+                newText,
             }]
 
         }];

@@ -225,7 +225,7 @@ namespace ts {
          * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
          */
         function decodeEntities(text: string): string {
-            return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
+            return replaceBy(text, /&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
                 if (decimal) {
                     return String.fromCharCode(parseInt(decimal, 10));
                 }

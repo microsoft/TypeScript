@@ -443,7 +443,7 @@ namespace Utils {
                         harnessFrameCount++;
                     }
 
-                    line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
+                    line = ts.replaceBy(line, /\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
                     frameCount++;
                 }
 

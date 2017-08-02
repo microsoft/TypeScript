@@ -104,7 +104,7 @@ namespace FourSlash {
     });
 
     export function escapeXmlAttributeValue(s: string) {
-        return s.replace(/[&<>"'\/]/g, ch => entityMap.get(ch));
+        return ts.replaceBy(s, /[&<>"'\/]/g, ch => entityMap.get(ch));
     }
 
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
@@ -1633,7 +1633,11 @@ namespace FourSlash {
                 return s + new Array(length - s.length + 1).join(" ");
             }
             function max<T>(arr: T[], selector: (x: T) => number): number {
-                return arr.reduce((prev, x) => Math.max(prev, selector(x)), 0);
+                let max = 0;
+                for (const x of arr) {
+                    max = Math.max(max, selector(x));
+                }
+                return max;
             }
             const longestNameLength = max(entries, m => m.name.length);
             const longestKindLength = max(entries, m => m.kind.length);
@@ -2436,7 +2440,7 @@ namespace FourSlash {
         }
 
         private clarifyNewlines(str: string) {
-            return str.replace(/\r?\n/g, lineEnding => {
+            return ts.replaceBy(str, /\r?\n/g, lineEnding => {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
                 return "# - " + representation + lineEnding;
             });

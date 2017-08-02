@@ -11,6 +11,11 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    //kill
+    export function replaceBy(s: string, searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string {
+        return (s as any).replace(searchValue, replacer);
+    }
+
     /**
      * Ternary values are defined such that
      * x & y is False if either x or y is False.
@@ -1291,7 +1296,7 @@ namespace ts {
     export function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
-        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
+        return replaceBy(text, /{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
     }
 
     export let localizedDiagnosticMessages: MapLike<string> = undefined;
