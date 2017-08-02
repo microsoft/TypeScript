@@ -1750,7 +1750,6 @@ namespace ts {
 
     export interface ReturnStatement extends Statement {
         kind: SyntaxKind.ReturnStatement;
-        returnKeyword: Token<SyntaxKind.ReturnKeyword>;
         expression?: Expression;
     }
 

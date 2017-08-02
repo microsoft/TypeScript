@@ -1571,7 +1571,7 @@ namespace ts {
         }
 
         function emitReturnStatement(node: ReturnStatement) {
-            emit(node.returnKeyword);
+            writeToken(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
             emitExpressionWithPrefix(" ", node.expression);
             write(";");
         }
