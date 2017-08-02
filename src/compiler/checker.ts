@@ -15805,8 +15805,7 @@ namespace ts {
                     }
 
                     if (!originalCandidate.typeParameters) {
-                        excludeCount = 0; excludeArgument = undefined;//TODO: should be able to do this...
-
+                        //excludeCount = 0; excludeArgument = undefined;//TODO: should be able to do this...
                         while (true) {
                             if (!checkApplicableSignature(node, args, originalCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
                                 candidateForArgumentError = originalCandidate;
