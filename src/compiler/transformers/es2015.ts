@@ -2491,7 +2491,7 @@ namespace ts {
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
             const values = createValuesHelper(context, expression, node.expression);
-            const next = createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, []);
+            const next = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
 
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
