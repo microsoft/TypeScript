@@ -15628,9 +15628,10 @@ namespace ts {
             //
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
+            const anyCandidateGeneric = candidates.some(c => !!c.typeParameters);
             let excludeArgument: boolean[] | undefined;
             let excludeCount = 0;
-            if (!isDecorator) { //TODO: `&& candidates.some(c => !!c.typeParameters)` don't need to compute this if no candidate has type parameters.
+            if (!isDecorator && anyCandidateGeneric) {
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
                 for (let i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
@@ -15781,87 +15782,60 @@ namespace ts {
             return resolveErrorCall(node);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
-                /*if (candidates.length === 1 && !candidates[0].typeParameters) {
-                    const c = candidates[0];
-                    if (!hasCorrectArity(node, args, c, signatureHelpTrailingComma)) {
-                        return undefined;
-                    }
-
-                    if (!checkApplicableSignature(node, args, c, relation, /*excludeArgument* / undefined, /*reportErrors* / false)) {
-                        candidateForArgumentError = c;
-                        return undefined;
-                    }
-                    else {
-                        return c;
-                    }
-                }*/ //this change is fine...
-
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
+
+                if (!anyCandidateGeneric) {
+                    for (const candidate of candidates) {
+                        if (!hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
+                            continue;
+                        }
+                        Debug.assert(excludeArgument === undefined);
+                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                            candidateForArgumentError = candidate;
+                            continue;
+                        }
+                        return candidate;
+                    }
+                    return undefined;
+                }
+
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                     const originalCandidate = candidates[candidateIndex];
                     if (!hasCorrectArity(node, args, originalCandidate, signatureHelpTrailingComma)) {
                         continue;
                     }
 
-                    if (!originalCandidate.typeParameters) {
-                        //excludeCount = 0; excludeArgument = undefined;//TODO: should be able to do this...
-                        while (true) {
-                            if (!checkApplicableSignature(node, args, originalCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                                candidateForArgumentError = originalCandidate;
-                                break;
-                            }
-                            if (excludeCount === 0) {
-                                return originalCandidate;
-                            }
-                            removeOneExcludedArgument();
-                        }
+                    let candidate: Signature;
+                    const inferenceContext = originalCandidate.typeParameters ?
+                        createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0) :
+                        undefined;
 
-
-
-                        //simplified version:
-                        //Debug.assert(excludeArgument === undefined); It will be defined if *some* candidate takes type parameters, even if this one doesn't.
-                        /*if (!checkApplicableSignature(node, args, originalCandidate, relation, /*excludeArgument* / undefined, /*reportErrors* / false)) {
-                            candidateForArgumentError = originalCandidate;
-                            // Try again with another candidate
-                        }
-                        else {
-                            //candidates[candidateIndex] = originalCandidate; //Not necessary...
-                            return originalCandidate;
-                        }*/
-                    }
-                    else {
-                        let candidate: Signature;
-                        const inferenceContext = originalCandidate.typeParameters ?
-                            createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0) :
-                            undefined;
-
-                        while (true) {
-                            candidate = originalCandidate;
-                            if (candidate.typeParameters) {
-                                let typeArgumentTypes: Type[];
-                                if (typeArguments) {
-                                    typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
-                                    if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
-                                        candidateForTypeArgumentError = originalCandidate;
-                                        break;
-                                    }
+                    while (true) {
+                        candidate = originalCandidate;
+                        if (candidate.typeParameters) {
+                            let typeArgumentTypes: Type[];
+                            if (typeArguments) {
+                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
+                                if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
+                                    candidateForTypeArgumentError = originalCandidate;
+                                    break;
                                 }
-                                else {
-                                    typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                                }
-                                candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                             }
-                            if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                                candidateForArgumentError = candidate;
-                                break;
+                            else {
+                                typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
-                            if (excludeCount === 0) {
-                                candidates[candidateIndex] = candidate;
-                                return candidate;
-                            }
-                            removeOneExcludedArgument();
+                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
+                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                            candidateForArgumentError = candidate;
+                            break;
+                        }
+                        if (excludeCount === 0) {
+                            candidates[candidateIndex] = candidate;
+                            return candidate;
+                        }
+                        removeOneExcludedArgument();
                     }
                 }
 
