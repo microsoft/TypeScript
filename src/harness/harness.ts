@@ -1220,7 +1220,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                return {declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings["currentDirectory"]};
+                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings["currentDirectory"] };
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -1289,13 +1289,13 @@ namespace Harness {
 
         export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
             diagnostics.sort(ts.compareDiagnostics);
-            let outputLines: string = "";
+            let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
             let totalErrorsReportedInNonLibraryFiles = 0;
 
             let firstLine = true;
             function newLine() {
-                return firstLine ? (firstLine = false, "") : "\r\n"; 
+                return firstLine ? (firstLine = false, "") : "\r\n";
             }
 
             function outputErrorText(error: ts.Diagnostic) {
