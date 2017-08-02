@@ -18593,7 +18593,9 @@ namespace ts {
                     if (produceDiagnostics) {
                         const symbol = getNodeLinks(node).resolvedSymbol;
                         if (!symbol) {
-                            // There is no resolved symbol cached if the type resolved to a builtin via jsdoc type reference resolution, none of which are generic when they have no associated symbol
+                            // There is no resolved symbol cached if the type resolved to a builtin
+                            // via JSDoc type reference resolution (eg, Boolean became boolean), none
+                            // of which are generic when they have no associated symbol
                             error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
                             return;
                         }
