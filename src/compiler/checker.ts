@@ -18599,7 +18599,10 @@ namespace ts {
                             error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
                             return;
                         }
-                        const typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
+                        let typeParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
+                        if (!typeParameters && getObjectFlags(type) & ObjectFlags.Reference) {
+                            typeParameters = (<TypeReference>type).target.localTypeParameters;
+                        }
                         checkTypeArgumentConstraints(typeParameters, node.typeArguments);
                     }
                 }

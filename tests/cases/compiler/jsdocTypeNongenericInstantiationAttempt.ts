@@ -61,3 +61,11 @@ function sayHello6(somebody) {
 function sayHello7(somebody) {
     return 'Hello ' + somebody;
 }
+
+// @filename: index8.js
+function fn() {}
+
+/**
+ * @param {fn<T>} somebody
+ */
+function sayHello8(somebody) { }
