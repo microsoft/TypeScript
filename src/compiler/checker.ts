@@ -16335,19 +16335,15 @@ namespace ts {
             if (allowSyntheticDefaultImports && type && type !== unknownType) {
                 const synthType = type as SyntheticDefaultModuleType;
                 if (!synthType.syntheticType) {
-                    const defaultSymbol = getPropertyOfType(type, InternalSymbolName.Default);
-                    if (!defaultSymbol) {
+                    if (!getPropertyOfType(type, InternalSymbolName.Default)) {
                         const memberTable = createSymbolTable();
                         const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
-                        getSymbolLinks(newSymbol).target = resolveSymbol(symbol);
+                        newSymbol.target = resolveSymbol(symbol);
                         memberTable.set(InternalSymbolName.Default, newSymbol);
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
                         const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                        const resolved = resolveStructuredTypeMembers(defaultContainingObject);
-                        resolved.properties = [newSymbol];
-                        getSymbolLinks(anonymousSymbol).type = defaultContainingObject;
-                        const newType = getIntersectionType([type, defaultContainingObject]);
-                        synthType.syntheticType = newType;
+                        anonymousSymbol.type = defaultContainingObject;
+                        synthType.syntheticType = getIntersectionType([type, defaultContainingObject]);
                     }
                     else {
                         synthType.syntheticType = type;
