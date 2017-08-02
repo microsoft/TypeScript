@@ -4784,7 +4784,7 @@ namespace ts {
                 parseExpected(SyntaxKind.CloseParenToken);
             }
             else {
-                // Keep shape of node to not avoid degrading performance.
+                // Keep shape of node to avoid degrading performance.
                 result.variableDeclaration = undefined;
             }
 
