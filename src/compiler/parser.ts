@@ -2700,6 +2700,7 @@ namespace ts {
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.AsteriskToken:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);

@@ -18594,7 +18594,17 @@ namespace ts {
                     forEach(node.typeArguments, checkSourceElement);
                     if (produceDiagnostics) {
                         const symbol = getNodeLinks(node).resolvedSymbol;
-                        const typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
+                        if (!symbol) {
+                            // There is no resolved symbol cached if the type resolved to a builtin
+                            // via JSDoc type reference resolution (eg, Boolean became boolean), none
+                            // of which are generic when they have no associated symbol
+                            error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                            return;
+                        }
+                        let typeParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
+                        if (!typeParameters && getObjectFlags(type) & ObjectFlags.Reference) {
+                            typeParameters = (<TypeReference>type).target.localTypeParameters;
+                        }
                         checkTypeArgumentConstraints(typeParameters, node.typeArguments);
                     }
                 }
