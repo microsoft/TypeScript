@@ -174,7 +174,7 @@ namespace ts.codefix {
                 if (localSymbol && localSymbol.escapedName === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol);
-                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isDefault*/ true));
+                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isNamespaceImport*/ true));
                 }
             }
 
@@ -562,8 +562,8 @@ namespace ts.codefix {
 
                 function getNodeModulePathParts(fullPath: string) {
                     // If fullPath can't be valid module file within node_modules, returns undefined.
-                    // Example of expected pattern: /base/path/node_modules/[otherpackage/node_modules/]package/[subdirectory/]file.js
-                    // Returns indices:                       ^            ^                                   ^             ^
+                    // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
+                    // Returns indices:                       ^            ^                                                      ^             ^
 
                     let topLevelNodeModulesIndex = 0;
                     let topLevelPackageNameIndex = 0;
@@ -573,6 +573,7 @@ namespace ts.codefix {
                     const enum States {
                         BeforeNodeModules,
                         NodeModules,
+                        Scope,
                         PackageContent
                     }
 
@@ -592,8 +593,14 @@ namespace ts.codefix {
                                 }
                                 break;
                             case States.NodeModules:
-                                packageRootIndex = partEnd;
-                                state = States.PackageContent;
+                            case States.Scope:
+                                if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
+                                    state = States.Scope;
+                                }
+                                else {
+                                    packageRootIndex = partEnd;
+                                    state = States.PackageContent;
+                                }
                                 break;
                             case States.PackageContent:
                                 if (fullPath.indexOf("/node_modules/", partStart) === partStart) {

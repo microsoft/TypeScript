@@ -1050,6 +1050,7 @@ namespace ts.projectSystem {
             const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray);
             assert.deepEqual(logger.finish(), [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
+                "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
             ]);
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
@@ -1114,6 +1115,8 @@ namespace ts.projectSystem {
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ []);
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
+                '    Found package names: ["a"]',
+                "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["a"],"filesToWatch":["/bower_components","/node_modules"]}',
             ]);
             assert.deepEqual(result, {

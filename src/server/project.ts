@@ -936,9 +936,9 @@ namespace ts.server {
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
         private projectFileWatcher: FileWatcher;
-        private directoryWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<FileWatcher>;
-        private typeRootsWatchers: FileWatcher[];
+        private directoryWatcher: FileWatcher | undefined;
+        private directoriesWatchedForWildcards: Map<FileWatcher> | undefined;
+        private typeRootsWatchers: FileWatcher[] | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         private plugins: PluginModule[] = [];
@@ -1134,10 +1134,12 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            this.directoriesWatchedForWildcards.forEach(watcher => {
-                watcher.close();
-            });
-            this.directoriesWatchedForWildcards = undefined;
+            if (this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards.forEach(watcher => {
+                    watcher.close();
+                });
+                this.directoriesWatchedForWildcards = undefined;
+            }
 
             this.stopWatchingDirectory();
         }

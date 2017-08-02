@@ -1781,7 +1781,8 @@ namespace ts {
                 // Property name in binding element or import specifier
                 return (<BindingElement | ImportSpecifier>parent).propertyName === node;
             case SyntaxKind.ExportSpecifier:
-                // Any name in an export specifier
+            case SyntaxKind.JsxAttribute:
+                // Any name in an export specifier or JSX Attribute
                 return true;
         }
         return false;

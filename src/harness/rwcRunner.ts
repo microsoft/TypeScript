@@ -54,7 +54,8 @@ namespace RWC {
                 useCustomLibraryFile = undefined;
             });
 
-            it("can compile", () => {
+            it("can compile", function(this: Mocha.ITestCallbackContext) {
+                this.timeout(800000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
                 const ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
