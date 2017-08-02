@@ -5900,6 +5900,10 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
+            const transformed = getTransformedIndexedAccessType(type);
+            if (transformed) {
+                return transformed;
+            }
             const baseObjectType = getBaseConstraintOfType(type.objectType);
             const baseIndexType = getBaseConstraintOfType(type.indexType);
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
@@ -5971,10 +5975,17 @@ namespace ts {
                     return stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
+                    const transformed = getTransformedIndexedAccessType(<IndexedAccessType>t);
+                    if (transformed) {
+                        return getBaseConstraint(transformed);
+                    }
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
+                }
+                if (isGenericMappedType(t)) {
+                    return emptyObjectType;
                 }
                 return t;
             }
@@ -7610,7 +7621,44 @@ namespace ts {
                 false;
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
+        // Return true if the given type is a non-generic object type with a string index signature and no
+        // other members.
+        function isStringIndexOnlyType(type: Type) {
+            if (type.flags & TypeFlags.Object && !isGenericMappedType(type)) {
+                const t = resolveStructuredTypeMembers(<ObjectType>type);
+                return t.properties.length === 0 &&
+                    t.callSignatures.length === 0 && t.constructSignatures.length === 0 &&
+                    t.stringIndexInfo && !t.numberIndexInfo;
+            }
+            return false;
+        }
+
+        // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
+        // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
+        // transformed type of the form '(U & V)[K] | D'. This allows us to properly reason about higher order indexed
+        // access types with default property values as expressed by D.
+        function getTransformedIndexedAccessType(type: IndexedAccessType): Type {
+            const objectType = type.objectType;
+            if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType) && some((<IntersectionType>objectType).types, isStringIndexOnlyType)) {
+                const regularTypes: Type[] = [];
+                const stringIndexTypes: Type[] = [];
+                for (const t of (<IntersectionType>objectType).types) {
+                    if (isStringIndexOnlyType(t)) {
+                        stringIndexTypes.push(getIndexTypeOfType(t, IndexKind.String));
+                    }
+                    else {
+                        regularTypes.push(t);
+                    }
+                }
+                return getUnionType([
+                    getIndexedAccessType(getIntersectionType(regularTypes), type.indexType),
+                    getIntersectionType(stringIndexTypes)
+                ]);
+            }
+            return undefined;
+        }
+
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode): Type {
             // If the object type is a mapped type { [P in K]: E }, where K is generic, we instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
@@ -18662,6 +18710,8 @@ namespace ts {
         }
 
         function checkIndexedAccessType(node: IndexedAccessTypeNode) {
+            checkSourceElement(node.objectType);
+            checkSourceElement(node.indexType);
             checkIndexedAccessIndexType(getTypeFromIndexedAccessTypeNode(node), node);
         }
 
