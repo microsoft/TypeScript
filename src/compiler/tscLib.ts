@@ -292,7 +292,7 @@ namespace ts {
         }
 
         function createWatchedCompilerHost(options: CompilerOptions): CompilerHost {
-            const newLine = getNewLineCharacter(options);
+            const newLine = getNewLineCharacter(options, system);
             const realpath = host.realpath && ((path: string) => host.realpath(path));
 
             return {

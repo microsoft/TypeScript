@@ -1345,4 +1345,123 @@ namespace ts.tscWatch {
             verifyAffectedFiles([referenceFile1Emit, moduleFile2], [libFile, moduleFile2, referenceFile1Emit, configFile]);
         });
     });
+
+    describe("tsc-watch emit file content", () => {
+        interface EmittedFile extends FileOrFolder {
+            shouldBeWritten: boolean;
+        }
+        function getEmittedFiles(files: FileOrFolderEmit[], contents: string[]): EmittedFile[] {
+            return map(contents, (content, index) => {
+                    return {
+                        content,
+                        path: changeExtension(files[index].path, Extension.Js),
+                        shouldBeWritten: true
+                    };
+                }
+            );
+        }
+        function verifyEmittedFiles(host: WatchedSystem, emittedFiles: EmittedFile[]) {
+            for (const { path, content, shouldBeWritten } of emittedFiles) {
+                if (shouldBeWritten) {
+                    assert.isTrue(host.fileExists(path), `Expected file ${path} to be present`);
+                    assert.equal(host.readFile(path), content, `Contents of file ${path} do not match`);
+                }
+                else {
+                    assert.isNotTrue(host.fileExists(path), `Expected file ${path} to be absent`);
+                }
+            }
+        }
+
+        function verifyEmittedFileContents(newLine: string, inputFiles: FileOrFolder[], initialEmittedFileContents: string[],
+            modifyFiles: (files: FileOrFolderEmit[], emitedFiles: EmittedFile[]) => FileOrFolderEmit[], configFile?: FileOrFolder) {
+            const host = createWatchedSystem([], { newLine });
+            const files = concatenate(
+                map(inputFiles, file => getFileOrFolderEmit(file, fileToConvert => getEmittedLineForMultiFileOutput(fileToConvert, host))),
+                configFile ? [libFile, configFile] : [libFile]
+            );
+            const allEmittedFiles = getEmittedLines(files);
+            host.reloadFS(files);
+
+            // Initial compile
+            if (configFile) {
+                createWatchWithConfig(configFile.path, host);
+            }
+            else {
+                // First file as the root
+                createWatchModeWithoutConfigFile([files[0].path], { listEmittedFiles: true }, host);
+            }
+            checkOutputContains(host, allEmittedFiles);
+
+            const emittedFiles = getEmittedFiles(files, initialEmittedFileContents);
+            verifyEmittedFiles(host, emittedFiles);
+            host.clearOutput();
+
+            const affectedFiles = modifyFiles(files, emittedFiles);
+            host.reloadFS(files);
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkAffectedLines(host, affectedFiles, allEmittedFiles);
+
+            verifyEmittedFiles(host, emittedFiles);
+        }
+
+        function verifyNewLine(newLine: string) {
+            const lines = ["var x = 1;", "var y = 2;"];
+            const fileContent = lines.join(newLine);
+            const f = {
+                path: "/a/app.ts",
+                content: fileContent
+            };
+
+            verifyEmittedFileContents(newLine, [f], [fileContent + newLine], modifyFiles);
+
+            function modifyFiles(files: FileOrFolderEmit[], emittedFiles: EmittedFile[]) {
+                files[0].content = fileContent + newLine + "var z = 3;";
+                emittedFiles[0].content = files[0].content + newLine;
+                return [files[0]];
+            }
+        }
+
+        it("handles new lines: \\n", () => {
+            verifyNewLine("\n");
+        });
+
+        it("handles new lines: \\r\\n", () => {
+            verifyNewLine("\r\n");
+        });
+
+        it("should emit specified file", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: `export function Foo() { return 10; }`
+            };
+
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: `import {Foo} from "./f1"; export let y = Foo();`
+            };
+
+            const file3 = {
+                path: "/a/b/f3.ts",
+                content: `import {y} from "./f2"; let x = y;`
+            };
+
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { listEmittedFiles: true } })
+            };
+
+            verifyEmittedFileContents("\r\n", [file1, file2, file3], [
+                `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`,
+                `"use strict";\r\nexports.__esModule = true;\r\nvar f1_1 = require("./f1");\r\nexports.y = f1_1.Foo();\r\n`,
+                `"use strict";\r\nexports.__esModule = true;\r\nvar f2_1 = require("./f2");\r\nvar x = f2_1.y;\r\n`
+            ], modifyFiles, configFile);
+
+            function modifyFiles(files: FileOrFolderEmit[], emittedFiles: EmittedFile[]) {
+                files[0].content += `export function foo2() { return 2; }`;
+                emittedFiles[0].content += `function foo2() { return 2; }\r\nexports.foo2 = foo2;\r\n`;
+                emittedFiles[2].shouldBeWritten = false;
+                return files.slice(0, 2);
+            }
+        });
+    });
 }
