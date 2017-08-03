@@ -100,6 +100,7 @@ namespace ts.refactor.extractMethod {
         export const FunctionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
         export const InsufficientSelection = createMessage("Select more than a single identifier.");
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
+        export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
     }
 
     export enum RangeFacts {
@@ -226,13 +227,22 @@ namespace ts.refactor.extractMethod {
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
         else {
+            // We have a single expression (start)
             const errors = checkRootNode(start) || checkNode(start);
             if (errors) {
                 return { errors };
             }
+
+            // If our selection is the expression in an ExrpessionStatement, expand
+            // the selection to include the enclosing Statement (this stops us
+            // from trying to care about the return value of the extracted function
+            // and eliminates double semicolon insertion in certain scenarios)
             const range = isStatement(start)
                 ? [start]
-                : <Expression>start;
+                : start.parent && start.parent.kind === SyntaxKind.ExpressionStatement
+                    ? [start.parent as Statement]
+                    : <Expression>start;
+
             return { targetRange: { range, facts: rangeFacts, declarations } };
         }
 
@@ -581,7 +591,7 @@ namespace ts.refactor.extractMethod {
     }
 
     export function extractFunctionInScope(
-        node: Node,
+        node: Statement | Expression | Block,
         scope: Scope,
         { usages: usagesInScope, substitutions }: ScopeUsages,
         range: TargetRange,
@@ -597,7 +607,8 @@ namespace ts.refactor.extractMethod {
             functionNameText = getUniqueName(n => props.every(p => p.name !== n));
         }
         else {
-            functionNameText = getUniqueName(n => !(scope.locals && scope.locals.has(n)));
+            const file = scope.getSourceFile();
+            functionNameText = getUniqueName(n => !file.identifiers.has(n as string));
         }
         const isJS = isInJavaScriptFile(scope);
 
@@ -706,10 +717,24 @@ namespace ts.refactor.extractMethod {
             if (returnValueProperty) {
                 assignments.push(createShorthandPropertyAssignment(returnValueProperty));
             }
+
             // propagate writes back
-            newNodes.push(createStatement(createBinary(createObjectLiteral(assignments), SyntaxKind.EqualsToken, call)));
-            if (returnValueProperty) {
-                newNodes.push(createReturn(createIdentifier(returnValueProperty)));
+            if (assignments.length === 1) {
+                if (returnValueProperty) {
+                    newNodes.push(createReturn(createIdentifier(returnValueProperty)));
+                }
+                else {
+                    newNodes.push(createStatement(createBinary(assignments[0].name, SyntaxKind.EqualsToken, call)));
+                }
+            }
+            else {
+                // emit e.g.
+                //   { a, b, __return } = newFunction(a, b);
+                //   return __return;
+                newNodes.push(createStatement(createBinary(createObjectLiteral(assignments), SyntaxKind.EqualsToken, call)));
+                if (returnValueProperty) {
+                    newNodes.push(createReturn(createIdentifier(returnValueProperty)));
+                }
             }
         }
         else {
@@ -751,17 +776,23 @@ namespace ts.refactor.extractMethod {
         function transformFunctionBody(body: Node) {
             if (isBlock(body) && !writes && substitutions.size === 0) {
                 // already block, no writes to propagate back, no substitutions - can use node as is
-                return { body, returnValueProperty: undefined };
+                return { body: createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
             }
             let returnValueProperty: string;
             const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : createReturn(<Expression>body)]);
             // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
             if (writes || substitutions.size) {
                 const rewrittenStatements = visitNodes(statements, visitor).slice();
-                if (writes && !(range.facts & RangeFacts.HasReturn)) {
+                if (writes && !(range.facts & RangeFacts.HasReturn) && isStatement(body)) {
                     // add return at the end to propagate writes back in case if control flow falls out of the function body
                     // it is ok to know that range has at least one return since it we only allow unconditional returns
-                    rewrittenStatements.push(createReturn(createObjectLiteral(getPropertyAssignmentsForWrites(writes))));
+                    const assignments = getPropertyAssignmentsForWrites(writes);
+                    if (assignments.length === 1) {
+                        rewrittenStatements.push(createReturn(assignments[0].name));
+                    }
+                    else {
+                        rewrittenStatements.push(createReturn(createObjectLiteral(assignments)));
+                    }
                 }
                 return { body: createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
             }
@@ -778,7 +809,12 @@ namespace ts.refactor.extractMethod {
                         }
                         assignments.push(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
                     }
-                    return createReturn(createObjectLiteral(assignments));
+                    if (assignments.length === 1) {
+                        return createReturn(assignments[0].name as Expression);
+                    }
+                    else {
+                        return createReturn(createObjectLiteral(assignments));
+                    }
                 }
                 else {
                     const substitution = substitutions.get(getNodeId(node).toString());
@@ -852,7 +888,20 @@ namespace ts.refactor.extractMethod {
         const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
         const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent) ? scopes[0] : getEnclosingBlockScopeContainer(scopes[0]);
 
-        forEachChild(target, collectUsages);
+        collectUsages(target);
+
+        for (let i = 0; i < scopes.length; i++) {
+            let hasWrite = false;
+            usagesPerScope[i].usages.forEach(value => {
+                if (value.usage === Usage.Write) {
+                    hasWrite = true;
+                    return false;
+                }
+            });
+            if (hasWrite && !isArray(targetRange.range) && isExpression(targetRange.range)) {
+                errorsPerScope[i].push(createDiagnosticForNode(targetRange.range, Messages.CannotCombineWritesAndReturns));
+            }
+        }
 
         // If there are any declarations in the extracted block that are used in the same enclosing
         // lexical scope, we can't move the extraction "up" as those declarations will become unreachable
@@ -880,6 +929,13 @@ namespace ts.refactor.extractMethod {
                 const savedValueUsage = valueUsage;
                 valueUsage = Usage.Write;
                 collectUsages(node.operand);
+                valueUsage = savedValueUsage;
+            }
+            else if (isPropertyAccessExpression(node) || isElementAccessExpression(node)) {
+                const savedValueUsage = valueUsage;
+                // use 'write' as default usage for values
+                valueUsage = Usage.Read;
+                forEachChild(node, collectUsages);
                 valueUsage = savedValueUsage;
             }
             else if (isIdentifier(node)) {
