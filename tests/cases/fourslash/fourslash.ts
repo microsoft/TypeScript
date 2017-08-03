@@ -158,7 +158,7 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name?: string);
+        refactorAvailable(name?: string, subName?: string);
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
