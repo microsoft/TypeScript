@@ -251,6 +251,7 @@ namespace ts.server {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
+        useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -311,6 +312,7 @@ namespace ts.server {
                 logger: this.logger,
                 cancellationToken: this.cancellationToken,
                 useSingleInferredProject: opts.useSingleInferredProject,
+                useInferredProjectPerProjectRoot: opts.useInferredProjectPerProjectRoot,
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
@@ -744,7 +746,7 @@ namespace ts.server {
         }
 
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
-            this.projectService.setCompilerOptionsForInferredProjects(args.options);
+            this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
         }
 
         private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {

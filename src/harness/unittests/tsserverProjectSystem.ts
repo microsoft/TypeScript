@@ -186,23 +186,25 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler, cancellationToken?: server.ServerCancellationToken, throttleWaitMilliseconds?: number) {
-        if (typingsInstaller === undefined) {
-            typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
+    export function createSession(host: server.ServerHost, opts: Partial<server.SessionOptions> = {}) {
+        if (opts.typingsInstaller === undefined) {
+            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        const opts: server.SessionOptions = {
+        if (opts.eventHandler !== undefined) {
+            opts.canUseEvents = true;
+        }
+        return new TestSession({
             host,
-            cancellationToken: cancellationToken || server.nullCancellationToken,
+            cancellationToken: server.nullCancellationToken,
             useSingleInferredProject: false,
-            typingsInstaller,
+            useInferredProjectPerProjectRoot: false,
+            typingsInstaller: opts.typingsInstaller,
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger,
-            canUseEvents: projectServiceEventHandler !== undefined,
-            eventHandler: projectServiceEventHandler,
-            throttleWaitMilliseconds
-        };
-        return new TestSession(opts);
+            canUseEvents: false,
+            ...opts
+        });
     }
 
     export interface CreateProjectServiceParameters {
@@ -216,9 +218,16 @@ namespace ts.projectSystem {
 
     export class TestProjectService extends server.ProjectService {
         constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
-            typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler) {
+            typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler, opts: Partial<server.ProjectServiceOptions> = {}) {
             super({
-                host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, eventHandler
+                host,
+                logger,
+                cancellationToken,
+                useSingleInferredProject,
+                useInferredProjectPerProjectRoot: false,
+                typingsInstaller,
+                eventHandler,
+                ...opts
             });
         }
 
@@ -632,7 +641,7 @@ namespace ts.projectSystem {
         }
     }
 
-    describe("tsserver-project-system", () => {
+    describe("tsserverProjectSystem", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
             content: "let x = 1"
@@ -2231,13 +2240,16 @@ namespace ts.projectSystem {
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
             let lastEvent: server.ProjectLanguageServiceStateEvent;
-            const session = createSession(host, /*typingsInstaller*/ undefined, e => {
-                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
-                    return;
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: e => {
+                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
+                        return;
+                    }
+                    assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                    assert.equal(e.data.project.getProjectName(), config.path, "project name");
+                    lastEvent = <server.ProjectLanguageServiceStateEvent>e;
                 }
-                assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
-                assert.equal(e.data.project.getProjectName(), config.path, "project name");
-                lastEvent = <server.ProjectLanguageServiceStateEvent>e;
             });
             session.executeCommand(<protocol.OpenRequest>{
                 seq: 0,
@@ -2281,12 +2293,15 @@ namespace ts.projectSystem {
             host.getFileSize = (filePath: string) =>
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
             let lastEvent: server.ProjectLanguageServiceStateEvent;
-            const session = createSession(host, /*typingsInstaller*/ undefined, e => {
-                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
-                    return;
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: e => {
+                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
+                        return;
+                    }
+                    assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                    lastEvent = <server.ProjectLanguageServiceStateEvent>e;
                 }
-                assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
-                lastEvent = <server.ProjectLanguageServiceStateEvent>e;
             });
             session.executeCommand(<protocol.OpenRequest>{
                 seq: 0,
@@ -3070,7 +3085,10 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file, configFile]);
-            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: serverEventManager.handler
+            });
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
 
@@ -3097,7 +3115,10 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file, configFile]);
-            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: serverEventManager.handler
+            });
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
         });
@@ -3116,7 +3137,10 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file, configFile]);
-            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: serverEventManager.handler
+            });
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
 
@@ -3505,6 +3529,93 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f.path]);
         });
+
+        it("inferred projects per project root", () => {
+            const file1 = { path: "/a/file1.ts", content: "let x = 1;", projectRootPath: "/a" };
+            const file2 = { path: "/a/file2.ts", content: "let y = 2;", projectRootPath: "/a" };
+            const file3 = { path: "/b/file2.ts", content: "let x = 3;", projectRootPath: "/b" };
+            const file4 = { path: "/c/file3.ts", content: "let z = 4;" };
+            const host = createServerHost([file1, file2, file3, file4]);
+            const session = createSession(host, {
+                useSingleInferredProject: true,
+                useInferredProjectPerProjectRoot: true
+            });
+            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+                seq: 1,
+                type: "request",
+                command: CommandNames.CompilerOptionsForInferredProjects,
+                arguments: {
+                    options: {
+                        allowJs: true,
+                        target: ScriptTarget.ESNext
+                    }
+                }
+            });
+            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+                seq: 2,
+                type: "request",
+                command: CommandNames.CompilerOptionsForInferredProjects,
+                arguments: {
+                    options: {
+                        allowJs: true,
+                        target: ScriptTarget.ES2015
+                    },
+                    projectRootPath: "/b"
+                }
+            });
+            session.executeCommand(<server.protocol.OpenRequest>{
+                seq: 3,
+                type: "request",
+                command: CommandNames.Open,
+                arguments: {
+                    file: file1.path,
+                    fileContent: file1.content,
+                    scriptKindName: "JS",
+                    projectRootPath: file1.projectRootPath
+                }
+            });
+            session.executeCommand(<server.protocol.OpenRequest>{
+                seq: 4,
+                type: "request",
+                command: CommandNames.Open,
+                arguments: {
+                    file: file2.path,
+                    fileContent: file2.content,
+                    scriptKindName: "JS",
+                    projectRootPath: file2.projectRootPath
+                }
+            });
+            session.executeCommand(<server.protocol.OpenRequest>{
+                seq: 5,
+                type: "request",
+                command: CommandNames.Open,
+                arguments: {
+                    file: file3.path,
+                    fileContent: file3.content,
+                    scriptKindName: "JS",
+                    projectRootPath: file3.projectRootPath
+                }
+            });
+            session.executeCommand(<server.protocol.OpenRequest>{
+                seq: 6,
+                type: "request",
+                command: CommandNames.Open,
+                arguments: {
+                    file: file4.path,
+                    fileContent: file4.content,
+                    scriptKindName: "JS"
+                }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { inferredProjects: 3 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [file4.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.inferredProjects[2], [file3.path]);
+            assert.equal(projectService.inferredProjects[0].getCompilerOptions().target, ScriptTarget.ESNext);
+            assert.equal(projectService.inferredProjects[1].getCompilerOptions().target, ScriptTarget.ESNext);
+            assert.equal(projectService.inferredProjects[2].getCompilerOptions().target, ScriptTarget.ES2015);
+        });
     });
 
     describe("No overwrite emit error", () => {
@@ -3698,7 +3809,7 @@ namespace ts.projectSystem {
                 resetRequest: noop
             };
 
-            const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
+            const session = createSession(host, { cancellationToken });
 
             expectedRequestId = session.getNextSeq();
             session.executeCommandSeq(<server.protocol.OpenRequest>{
@@ -3738,7 +3849,11 @@ namespace ts.projectSystem {
 
             const cancellationToken = new TestServerCancellationToken();
             const host = createServerHost([f1, config]);
-            const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken);
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: () => { },
+                cancellationToken
+            });
             {
                 session.executeCommandSeq(<protocol.OpenRequest>{
                     command: "open",
@@ -3871,7 +3986,12 @@ namespace ts.projectSystem {
             };
             const cancellationToken = new TestServerCancellationToken(/*cancelAfterRequest*/ 3);
             const host = createServerHost([f1, config]);
-            const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken, /*throttleWaitMilliseconds*/ 0);
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: () => { },
+                cancellationToken,
+                throttleWaitMilliseconds: 0
+            });
             {
                 session.executeCommandSeq(<protocol.OpenRequest>{
                     command: "open",

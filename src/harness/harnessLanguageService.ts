@@ -828,6 +828,7 @@ namespace Harness.LanguageService {
                 host: serverHost,
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,

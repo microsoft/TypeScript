@@ -9,6 +9,7 @@ namespace ts.server {
         canUseEvents: boolean;
         installerEventPort: number;
         useSingleInferredProject: boolean;
+        useInferredProjectPerProjectRoot: boolean;
         disableAutomaticTypingAcquisition: boolean;
         globalTypingsCacheLocation: string;
         logger: Logger;
@@ -410,6 +411,7 @@ namespace ts.server {
                 host,
                 cancellationToken,
                 useSingleInferredProject,
+                useInferredProjectPerProjectRoot,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
@@ -765,6 +767,7 @@ namespace ts.server {
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
+    const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
@@ -774,6 +777,7 @@ namespace ts.server {
         installerEventPort: eventPort,
         canUseEvents: eventPort === undefined,
         useSingleInferredProject,
+        useInferredProjectPerProjectRoot,
         disableAutomaticTypingAcquisition,
         globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
         typingSafeListLocation,

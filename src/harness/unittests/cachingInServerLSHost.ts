@@ -69,6 +69,7 @@ namespace ts {
             logger,
             cancellationToken: { isCancellationRequested: () => false },
             useSingleInferredProject: false,
+            useInferredProjectPerProjectRoot: false,
             typingsInstaller: undefined
         };
         const projectService = new server.ProjectService(svcOpts);
