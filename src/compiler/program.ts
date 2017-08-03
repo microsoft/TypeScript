@@ -797,13 +797,13 @@ namespace ts {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
                 }
 
-                Debug.assert(!newSourceFile.redirect, "Host should not return a redirect source file from `getSourceFile`");
+                Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
 
                 let fileChanged: boolean;
-                if (oldSourceFile.redirect) {
+                if (oldSourceFile.redirectInfo) {
                     // We got `newSourceFile` by path, so it is actually for the unredirected file.
                     // This lets us know if the unredirected file has changed. If it has we should break the redirect.
-                    if (newSourceFile !== oldSourceFile.redirect.unredirected) {
+                    if (newSourceFile !== oldSourceFile.redirectInfo.unredirected) {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
@@ -811,7 +811,7 @@ namespace ts {
                     newSourceFile = oldSourceFile; // Use the redirect.
                 }
                 else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
-                    // This is similar to the above case. If a redirected-to source file changes, the redirect may be broken.
+                    // If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
@@ -1609,15 +1609,15 @@ namespace ts {
             const redirect: SourceFile = Object.create(redirectTarget);
             redirect.fileName = fileName;
             redirect.path = path;
-            redirect.redirect = { redirectTarget, unredirected };
+            redirect.redirectInfo = { redirectTarget, unredirected };
             Object.defineProperties(redirect, {
                 id: {
-                    get(this: SourceFile) { return this.redirect.redirectTarget.id; },
-                    set(this: SourceFile, value: SourceFile["id"]) { this.redirect.redirectTarget.id = value; },
+                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.id; },
+                    set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo.redirectTarget.id = value; },
                 },
                 symbol: {
-                    get(this: SourceFile) { return this.redirect.redirectTarget.symbol; },
-                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirect.redirectTarget.symbol = value; },
+                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.symbol; },
+                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo.redirectTarget.symbol = value; },
                 },
             });
             return redirect;
