@@ -18,18 +18,13 @@
                 "end": 14,
                 "escapedText": "param"
             },
-            "preParameterName": {
-                "kind": "Identifier",
-                "pos": 15,
-                "end": 18,
-                "escapedText": "foo"
-            },
             "name": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 18,
                 "escapedText": "foo"
             },
+            "isNameFirst": true,
             "isBracketed": false,
             "comment": ""
         },

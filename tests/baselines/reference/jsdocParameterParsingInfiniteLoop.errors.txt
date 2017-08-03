@@ -1,0 +1,11 @@
+tests/cases/compiler/example.js(3,20): error TS1003: Identifier expected.
+
+
+==== tests/cases/compiler/example.js (1 errors) ====
+    // @ts-check
+    /**
+     * @type {function(@foo)}
+                       ~
+!!! error TS1003: Identifier expected.
+     */
+    let x;

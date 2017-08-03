@@ -2332,6 +2332,50 @@ namespace ts.projectSystem {
             const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(f1.path);
             assert.equal(navbar[0].spans[0].length, f1.content.length);
         });
+
+        it("deleting config file opened from the external project works", () => {
+            const site = {
+                path: "/user/someuser/project/js/site.js",
+                content: ""
+            };
+            const configFile = {
+                path: "/user/someuser/project/tsconfig.json",
+                content: "{}"
+            };
+            const projectFileName = "/user/someuser/project/WebApplication6.csproj";
+            const host = createServerHost([libFile, site, configFile]);
+            const projectService = createProjectService(host);
+
+            const externalProject: protocol.ExternalProject = {
+                projectFileName,
+                rootFiles: [toExternalFile(site.path), toExternalFile(configFile.path)],
+                options: { allowJs: false },
+                typeAcquisition: { "include": [] }
+            };
+
+            projectService.openExternalProjects([externalProject]);
+
+            let knownProjects = projectService.synchronizeProjectList([]);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, externalProjects: 0, inferredProjects: 0 });
+
+            const configProject = projectService.configuredProjects[0];
+            checkProjectActualFiles(configProject, [libFile.path]);
+
+            const diagnostics = configProject.getAllProjectErrors();
+            assert.equal(diagnostics[0].code, Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+
+            host.reloadFS([libFile, site]);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Deleted);
+
+            knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info));
+            checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 0, inferredProjects: 0 });
+
+            externalProject.rootFiles.length = 1;
+            projectService.openExternalProjects([externalProject]);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 1, inferredProjects: 0 });
+            checkProjectActualFiles(projectService.externalProjects[0], [site.path, libFile.path]);
+        });
     });
 
     describe("Proper errors", () => {

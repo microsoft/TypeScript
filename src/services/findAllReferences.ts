@@ -604,11 +604,16 @@ namespace ts.FindAllReferences.Core {
 
     function getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol: Symbol, checker: TypeChecker): Symbol | undefined {
         const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
-        if (bindingElement) {
-            const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
+        if (!bindingElement) return undefined;
+
+        const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
+        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
+        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
+            // See GH#16922
+            Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
+            return (propSymbol as TransientSymbol).target;
         }
-        return undefined;
+        return propSymbol;
     }
 
     /**

@@ -28,18 +28,13 @@
                     "end": 22
                 }
             },
-            "postParameterName": {
-                "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
-                "escapedText": "name1"
-            },
             "name": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
                 "escapedText": "name1"
             },
+            "isNameFirst": false,
             "isBracketed": false,
             "comment": ""
         },
@@ -68,18 +63,13 @@
                     "end": 48
                 }
             },
-            "postParameterName": {
-                "kind": "Identifier",
-                "pos": 50,
-                "end": 55,
-                "escapedText": "name2"
-            },
             "name": {
                 "kind": "Identifier",
                 "pos": 50,
                 "end": 55,
                 "escapedText": "name2"
             },
+            "isNameFirst": false,
             "isBracketed": false,
             "comment": ""
         },

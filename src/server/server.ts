@@ -757,6 +757,8 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    setStackTraceLimit();
+
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
     const npmLocation = findArgument(Arguments.NpmLocation);
 

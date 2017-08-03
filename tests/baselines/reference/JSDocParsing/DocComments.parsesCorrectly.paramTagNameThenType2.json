@@ -18,12 +18,6 @@
                 "end": 14,
                 "escapedText": "param"
             },
-            "preParameterName": {
-                "kind": "Identifier",
-                "pos": 15,
-                "end": 20,
-                "escapedText": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 21,
@@ -40,6 +34,7 @@
                 "end": 20,
                 "escapedText": "name1"
             },
+            "isNameFirst": true,
             "isBracketed": false,
             "comment": "Description"
         },

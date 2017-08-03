@@ -1,3 +1,4 @@
+/// <reference path="correctQualifiedNameToIndexedAccessType.ts" />
 /// <reference path="fixClassIncorrectlyImplementsInterface.ts" />
 /// <reference path="fixAddMissingMember.ts" />
 /// <reference path="fixSpelling.ts" />
