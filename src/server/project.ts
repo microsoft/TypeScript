@@ -130,7 +130,7 @@ namespace ts.server {
         /*@internal*/
         lsHost: LSHost;
 
-        builder: Builder<EmitOutput>;
+        builder: Builder;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -250,7 +250,7 @@ namespace ts.server {
             if (!this.builder) {
                 this.builder = createBuilder(
                     this.projectService.toCanonicalFileName,
-                    (_program, sourceFile, emitOnlyDts) => this.getFileEmitOutput(sourceFile, emitOnlyDts),
+                    (_program, sourceFile, emitOnlyDts, isDetailed) => this.getFileEmitOutput(sourceFile, emitOnlyDts, isDetailed),
                     data => this.projectService.host.createHash(data),
                     sourceFile => !this.projectService.getScriptInfoForPath(sourceFile.path).hasMixedContent
                 );
@@ -418,11 +418,11 @@ namespace ts.server {
             });
         }
 
-        private getFileEmitOutput(sourceFile: SourceFile, emitOnlyDtsFiles: boolean) {
+        private getFileEmitOutput(sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) {
             if (!this.languageServiceEnabled) {
                 return undefined;
             }
-            return this.getLanguageService().getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles);
+            return this.getLanguageService().getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles, isDetailed);
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {

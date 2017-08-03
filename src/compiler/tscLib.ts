@@ -248,7 +248,6 @@ namespace ts {
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
-        let changedFilePaths: Path[] = [];
 
         let host: System;
         if (configFileName) {
@@ -262,7 +261,7 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
 
         // There is no extra check needed since we can just rely on the program to decide emit
-        const builder = createBuilder(getCanonicalFileName, getDetailedEmitOutput, computeHash, _sourceFile => true);
+        const builder = createBuilder(getCanonicalFileName, getFileEmitOutput, computeHash, _sourceFile => true);
 
         if (compilerOptions.pretty) {
             reportDiagnosticWorker = reportDiagnosticWithColorAndContext;
@@ -352,51 +351,44 @@ namespace ts {
 
             function emitWithBuilder(program: Program): EmitResult {
                 builder.onProgramUpdateGraph(program);
-                const filesPendingToEmit = changedFilePaths;
-                changedFilePaths = [];
-
-                const seenFiles = createMap<true>();
-
-                let emitSkipped: boolean;
-                const diagnostics: Diagnostic[] = [];
                 const emittedFiles: string[] = program.getCompilerOptions().listEmittedFiles ? [] : undefined;
                 let sourceMaps: SourceMapData[];
-                while (filesPendingToEmit.length) {
-                    const filePath = filesPendingToEmit.pop();
-                    const affectedFiles = builder.getFilesAffectedBy(program, filePath);
-                    for (const file of affectedFiles) {
-                        if (!seenFiles.has(file)) {
-                            seenFiles.set(file, true);
-                            const sourceFile = program.getSourceFile(file);
-                            if (sourceFile) {
-                                writeFiles(<EmitOutputDetailed>builder.emitFile(program, sourceFile.path));
+                let emitSkipped: boolean;
+                let diagnostics: Diagnostic[];
+
+                const result = builder.emitChangedFiles(program);
+                switch (result.length) {
+                    case 0:
+                        emitSkipped = true;
+                        break;
+                    case 1:
+                        const emitOutput = result[0];
+                        ({ diagnostics, sourceMaps, emitSkipped } = emitOutput);
+                        writeOutputFiles(emitOutput.outputFiles);
+                        break;
+                    default:
+                        for (const emitOutput of result) {
+                            if (emitOutput.emitSkipped) {
+                                emitSkipped = true;
                             }
+                            diagnostics = concatenate(diagnostics, emitOutput.diagnostics);
+                            sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
+                            writeOutputFiles(emitOutput.outputFiles);
                         }
-                    }
                 }
 
-                return { emitSkipped, diagnostics, emittedFiles, sourceMaps };
+                return { emitSkipped, diagnostics: diagnostics || [], emittedFiles, sourceMaps };
 
-                function writeFiles(emitOutput: EmitOutputDetailed) {
-                    if (emitOutput.emitSkipped) {
-                        emitSkipped = true;
-                    }
-
-                    diagnostics.push(...emitOutput.diagnostics);
-                    sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
-                    // If it emitted more than one source files, just mark all those source files as seen
-                    if (emitOutput.emittedSourceFiles && emitOutput.emittedSourceFiles.length > 1) {
-                        for (const file of emitOutput.emittedSourceFiles) {
-                            seenFiles.set(file.fileName, true);
-                        }
-                    }
-                    for (const outputFile of emitOutput.outputFiles) {
-                        const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
-                        if (error) {
-                            diagnostics.push(error);
-                        }
-                        if (emittedFiles) {
-                            emittedFiles.push(outputFile.name);
+                function writeOutputFiles(outputFiles: OutputFile[]) {
+                    if (outputFiles) {
+                        for (const outputFile of outputFiles) {
+                            const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
+                            if (error) {
+                                diagnostics.push(error);
+                            }
+                            if (emittedFiles) {
+                                emittedFiles.push(outputFile.name);
+                            }
                         }
                     }
                 }
@@ -430,8 +422,6 @@ namespace ts {
 
             // Create new source file if requested or the versions dont match
             if (!hostSourceFile || shouldCreateNewSourceFile || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
-                changedFilePaths.push(path);
-
                 const sourceFile = getNewSourceFile();
                 if (hostSourceFile) {
                     if (shouldCreateNewSourceFile) {

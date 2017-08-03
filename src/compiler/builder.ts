@@ -18,13 +18,14 @@ namespace ts {
         text: string;
     }
 
-    export interface Builder<T extends EmitOutput> {
+    export interface Builder {
         /**
          * This is the callback when file infos in the builder are updated
          */
         onProgramUpdateGraph(program: Program): void;
         getFilesAffectedBy(program: Program, path: Path): string[];
-        emitFile(program: Program, path: Path): T | EmitOutput;
+        emitFile(program: Program, path: Path): EmitOutput;
+        emitChangedFiles(program: Program): EmitOutputDetailed[];
         clear(): void;
     }
 
@@ -38,19 +39,7 @@ namespace ts {
         getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile, singleFileResult: string[]): string[];
     }
 
-    export function getDetailedEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
-        cancellationToken ?: CancellationToken, customTransformers ?: CustomTransformers): EmitOutputDetailed {
-        return getEmitOutput(/*detailed*/ true, program, sourceFile, emitOnlyDtsFiles,
-            cancellationToken, customTransformers) as EmitOutputDetailed;
-    }
-
-    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
-        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
-        return getEmitOutput(/*detailed*/ false, program, sourceFile, emitOnlyDtsFiles,
-            cancellationToken, customTransformers);
-    }
-
-    function getEmitOutput(isDetailed: boolean, program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
+    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean,
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed {
         const outputFiles: OutputFile[] = [];
         let emittedSourceFiles: SourceFile[];
@@ -75,20 +64,23 @@ namespace ts {
         }
     }
 
-    export function createBuilder<T extends EmitOutput>(
+    export function createBuilder(
         getCanonicalFileName: (fileName: string) => string,
-        getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles?: boolean) => T,
+        getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed,
         computeHash: (data: string) => string,
         shouldEmitFile: (sourceFile: SourceFile) => boolean
-    ): Builder<T> {
+    ): Builder {
         let isModuleEmit: boolean | undefined;
         // Last checked shape signature for the file info
-        let fileInfos: Map<string>;
+        type FileInfo = { version: string; signature: string; };
+        let fileInfos: Map<FileInfo>;
+        let changedFilesSinceLastEmit: Map<true>;
         let emitHandler: EmitHandler;
         return {
             onProgramUpdateGraph,
             getFilesAffectedBy,
             emitFile,
+            emitChangedFiles,
             clear
         };
 
@@ -100,17 +92,35 @@ namespace ts {
                 fileInfos = undefined;
             }
 
-            fileInfos = mutateExistingMap(
+            changedFilesSinceLastEmit = changedFilesSinceLastEmit || createMap<true>();
+            fileInfos = mutateExistingMapWithSameExistingValues(
                 fileInfos, arrayToMap(program.getSourceFiles(), sourceFile => sourceFile.path),
-                (_path, sourceFile) => {
-                    emitHandler.addScriptInfo(program, sourceFile);
-                    return "";
-                },
-                (path: Path, _value) => emitHandler.removeScriptInfo(path),
-                    /*isSameValue*/ undefined,
-                    /*OnDeleteExistingMismatchValue*/ undefined,
-                (_prevValue, sourceFile) => emitHandler.updateScriptInfo(program, sourceFile)
+                // Add new file info
+                (_path, sourceFile) => addNewFileInfo(program, sourceFile),
+                // Remove existing file info
+                removeExistingFileInfo,
+                // We will update in place instead of deleting existing value and adding new one
+                (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile)
             );
+        }
+
+        function addNewFileInfo(program: Program, sourceFile: SourceFile): FileInfo {
+            changedFilesSinceLastEmit.set(sourceFile.path, true);
+            emitHandler.addScriptInfo(program, sourceFile);
+            return { version: sourceFile.version, signature: undefined };
+        }
+
+        function removeExistingFileInfo(path: Path, _existingFileInfo: FileInfo) {
+            changedFilesSinceLastEmit.set(path, true);
+            emitHandler.removeScriptInfo(path);
+        }
+
+        function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile) {
+            if (existingInfo.version !== sourceFile.version) {
+                changedFilesSinceLastEmit.set(sourceFile.path, true);
+                existingInfo.version = sourceFile.version;
+                emitHandler.updateScriptInfo(program, sourceFile);
+            }
         }
 
         function ensureProgramGraph(program: Program) {
@@ -130,30 +140,59 @@ namespace ts {
 
             const sourceFile = program.getSourceFile(path);
             const singleFileResult = sourceFile && shouldEmitFile(sourceFile) ? [sourceFile.fileName] : [];
-            if (!fileInfos || !fileInfos.has(path) || !updateShapeSignature(program, sourceFile)) {
+            const info = fileInfos && fileInfos.get(path);
+            if (!info || !updateShapeSignature(program, sourceFile, info)) {
                 return singleFileResult;
             }
 
+            Debug.assert(!!sourceFile);
             return emitHandler.getFilesAffectedByUpdatedShape(program, sourceFile, singleFileResult);
         }
 
-        function emitFile(program: Program, path: Path): T | EmitOutput {
+        function emitFile(program: Program, path: Path) {
             ensureProgramGraph(program);
             if (!fileInfos || !fileInfos.has(path)) {
                 return { outputFiles: [], emitSkipped: true };
             }
 
-            return getEmitOutput(program, program.getSourceFileByPath(path), /*emitOnlyDtsFiles*/ false);
+            return getEmitOutput(program, program.getSourceFileByPath(path), /*emitOnlyDtsFiles*/ false, /*isDetailed*/ false);
+        }
+
+        function emitChangedFiles(program: Program): EmitOutputDetailed[] {
+            ensureProgramGraph(program);
+            const result: EmitOutputDetailed[] = [];
+            if (changedFilesSinceLastEmit) {
+                const seenFiles = createMap<SourceFile>();
+                changedFilesSinceLastEmit.forEach((__value, path: Path) => {
+                    const affectedFiles = getFilesAffectedBy(program, path);
+                    for (const file of affectedFiles) {
+                        if (!seenFiles.has(file)) {
+                            const sourceFile = program.getSourceFile(file);
+                            seenFiles.set(file, sourceFile);
+                            if (sourceFile) {
+                                const emitOutput = getEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ false, /*isDetailed*/ true) as EmitOutputDetailed;
+                                result.push(emitOutput);
+
+                                // mark all the emitted source files as seen
+                                if (emitOutput.emittedSourceFiles) {
+                                    for (const file of emitOutput.emittedSourceFiles) {
+                                        seenFiles.set(file.fileName, file);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                changedFilesSinceLastEmit = undefined;
+            }
+            return result;
         }
 
         function clear() {
             isModuleEmit = undefined;
             emitHandler = undefined;
             fileInfos = undefined;
-        }
-
-        function isExternalModuleOrHasOnlyAmbientExternalModules(sourceFile: SourceFile) {
-            return sourceFile && (isExternalModule(sourceFile) || containsOnlyAmbientModules(sourceFile));
         }
 
         /**
@@ -174,20 +213,21 @@ namespace ts {
         /**
          * @return {boolean} indicates if the shape signature has changed since last update.
          */
-        function updateShapeSignature(program: Program, sourceFile: SourceFile) {
-            const path = sourceFile.path;
-
-            const prevSignature = fileInfos.get(path);
-            let latestSignature = prevSignature;
+        function updateShapeSignature(program: Program, sourceFile: SourceFile, info: FileInfo) {
+            const prevSignature = info.signature;
+            let latestSignature: string;
             if (sourceFile.isDeclarationFile) {
                 latestSignature = computeHash(sourceFile.text);
-                fileInfos.set(path, latestSignature);
+                info.signature = latestSignature;
             }
             else {
-                const emitOutput = getEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true);
+                const emitOutput = getEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true, /*isDetailed*/ false);
                 if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
                     latestSignature = computeHash(emitOutput.outputFiles[0].text);
-                    fileInfos.set(path, latestSignature);
+                    info.signature = latestSignature;
+                }
+                else {
+                    latestSignature = prevSignature;
                 }
             }
 
@@ -201,6 +241,7 @@ namespace ts {
          */
         function getReferencedFiles(program: Program, sourceFile: SourceFile): Map<true> {
             const referencedFiles = createMap<true>();
+
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
@@ -281,44 +322,45 @@ namespace ts {
         function getModuleEmitHandler(): EmitHandler {
             const references = createMap<Map<true>>();
             const referencedBy = createMultiMap<Path>();
-            const scriptVersionForReferences = createMap<string>();
             return {
-                addScriptInfo,
+                addScriptInfo: setReferences,
                 removeScriptInfo,
-                updateScriptInfo,
+                updateScriptInfo: setReferences,
                 getFilesAffectedByUpdatedShape
             };
 
-            function setReferences(program: Program, sourceFile: SourceFile, existingMap: Map<true>) {
+            function setReferences(program: Program, sourceFile: SourceFile) {
                 const path = sourceFile.path;
-                existingMap = mutateExistingMapWithNewSet<true>(
-                    existingMap,
-                    getReferencedFiles(program, sourceFile),
-                    // Creating new Reference: as sourceFile references file with path 'key'
-                    // in other words source file (path) is referenced by 'key'
-                    key => { referencedBy.add(key, path); return true; },
-                    // Remove existing reference by entry: source file doesnt reference file 'key' any more
-                    // in other words source file (path) is not referenced by 'key'
-                    (key, _existingValue) => { referencedBy.remove(key, path); }
+                references.set(path,
+                    mutateExistingMapWithNewSet<true>(
+                        // Existing references
+                        references.get(path),
+                        // Updated references
+                        getReferencedFiles(program, sourceFile),
+                        // Creating new Reference: as sourceFile references file with path 'key'
+                        // in other words source file (path) is referenced by 'key'
+                        key => { referencedBy.add(key, path); return true; },
+                        // Remove existing reference by entry: source file doesnt reference file 'key' any more
+                        // in other words source file (path) is not referenced by 'key'
+                        (key, _existingValue) => { referencedBy.remove(key, path); }
+                    )
                 );
-                references.set(path, existingMap);
-                scriptVersionForReferences.set(path, sourceFile.version);
-            }
-
-            function addScriptInfo(program: Program, sourceFile: SourceFile) {
-                setReferences(program, sourceFile, undefined);
             }
 
             function removeScriptInfo(path: Path) {
+                // Remove existing references
+                references.forEach((_value, key) => {
+                    referencedBy.remove(key, path);
+                });
                 references.delete(path);
-                scriptVersionForReferences.delete(path);
-            }
 
-            function updateScriptInfo(program: Program, sourceFile: SourceFile) {
-                const path = sourceFile.path;
-                const lastUpdatedVersion = scriptVersionForReferences.get(path);
-                if (lastUpdatedVersion !== sourceFile.version) {
-                    setReferences(program, sourceFile, references.get(path));
+                // Delete the entry and add files referencing this file, as chagned files too
+                const referencedByPaths = referencedBy.get(path);
+                if (referencedByPaths) {
+                    for (const path of referencedByPaths) {
+                        changedFilesSinceLastEmit.set(path, true);
+                    }
+                    referencedBy.delete(path);
                 }
             }
 
@@ -327,7 +369,7 @@ namespace ts {
             }
 
             function getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile, singleFileResult: string[]): string[] {
-                if (!isExternalModuleOrHasOnlyAmbientExternalModules(sourceFile)) {
+                if (!isExternalModule(sourceFile) && !containsOnlyAmbientModules(sourceFile)) {
                     return getAllEmittableFiles(program);
                 }
 
@@ -353,7 +395,7 @@ namespace ts {
                     const currentPath = queue.pop();
                     if (!seenFileNamesMap.has(currentPath)) {
                         const currentSourceFile = program.getSourceFileByPath(currentPath);
-                        if (currentSourceFile && updateShapeSignature(program, currentSourceFile)) {
+                        if (currentSourceFile && updateShapeSignature(program, currentSourceFile, fileInfos.get(currentPath))) {
                             queue.push(...getReferencedByPaths(currentPath));
                         }
                         setSeenFileName(currentPath, currentSourceFile);
@@ -361,7 +403,7 @@ namespace ts {
                 }
 
                 // Return array of values that needs emit
-                return flatMapIter(seenFileNamesMap.values(), value => value);
+                return flatMapIter(seenFileNamesMap.values());
             }
         }
     }

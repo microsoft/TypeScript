@@ -3656,13 +3656,27 @@ namespace ts {
         );
     }
 
+    export function mutateExistingMapWithSameExistingValues<T, U>(
+        existingMap: Map<T>, newMap: Map<U>,
+        createNewValue: (key: string, valueInNewMap: U) => T,
+        onDeleteExistingValue: (key: string, existingValue: T) => void,
+        onExistingValue?: (existingValue: T, valueInNewMap: U) => void
+    ): Map<T> {
+        return mutateExistingMap(
+            existingMap, newMap,
+            createNewValue, onDeleteExistingValue,
+            /*isSameValue*/ undefined, /*onDeleteExistingMismatchValue*/ undefined,
+            onExistingValue
+        );
+    }
+
     export function mutateExistingMap<T, U>(
         existingMap: Map<T>, newMap: Map<U>,
         createNewValue: (key: string, valueInNewMap: U) => T,
         onDeleteExistingValue: (key: string, existingValue: T) => void,
         isSameValue?: (existingValue: T, valueInNewMap: U) => boolean,
         OnDeleteExistingMismatchValue?: (key: string, existingValue: T) => void,
-        onSameExistingValue?: (existingValue: T, valueInNewMap: U) => void
+        onExistingValue?: (existingValue: T, valueInNewMap: U) => void
     ): Map<T> {
         // If there are new values update them
         if (newMap) {
@@ -3680,8 +3694,8 @@ namespace ts {
                         existingMap.delete(key);
                         OnDeleteExistingMismatchValue(key, existingValue);
                     }
-                    else if (onSameExistingValue) {
-                        onSameExistingValue(existingValue, valueInNewMap);
+                    else if (onExistingValue) {
+                        onExistingValue(existingValue, valueInNewMap);
                     }
                 });
             }
