@@ -10325,6 +10325,19 @@ namespace ts {
             }
         }
 
+        function isPossiblyAssignableTo(source: Type, target: Type) {
+            const properties = getPropertiesOfObjectType(target);
+            for (const targetProp of properties) {
+                if (!(targetProp.flags & (SymbolFlags.Optional | SymbolFlags.Prototype))) {
+                    const sourceProp = getPropertyOfObjectType(source, targetProp.escapedName);
+                    if (!sourceProp) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
@@ -10518,10 +10531,14 @@ namespace ts {
                         return;
                     }
                 }
-                inferFromProperties(source, target);
-                inferFromSignatures(source, target, SignatureKind.Call);
-                inferFromSignatures(source, target, SignatureKind.Construct);
-                inferFromIndexTypes(source, target);
+                // Infer from the members of source and target only if the two types are possibly related. We check
+                // in both directions because we may be inferring for a co-variant or a contra-variant position.
+                if (isPossiblyAssignableTo(source, target) || isPossiblyAssignableTo(target, source)) {
+                    inferFromProperties(source, target);
+                    inferFromSignatures(source, target, SignatureKind.Call);
+                    inferFromSignatures(source, target, SignatureKind.Construct);
+                    inferFromIndexTypes(source, target);
+                }
             }
 
             function inferFromProperties(source: Type, target: Type) {
