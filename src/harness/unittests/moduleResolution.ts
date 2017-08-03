@@ -56,7 +56,7 @@ namespace ts {
         else {
             return { readFile, fileExists: path => map.has(path) };
         }
-        function readFile(path: string): string {
+        function readFile(path: string): string | undefined {
             const file = map.get(path);
             return file && file.content;
         }

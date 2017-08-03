@@ -2,6 +2,8 @@
 /// <reference path="performance.ts" />
 
 namespace ts {
+    // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
+    // If changing the text in this section, be sure to test `configureNightly` too.
     export const versionMajorMinor = "2.5";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
@@ -57,7 +59,7 @@ namespace ts {
         const result = createMap<Symbol>() as SymbolTable;
         if (symbols) {
             for (const symbol of symbols) {
-                result.set(symbol.name, symbol);
+                result.set(symbol.escapedName, symbol);
             }
         }
         return result;
@@ -384,6 +386,10 @@ namespace ts {
         array.length = outIndex;
     }
 
+    export function clear(array: {}[]): void {
+        array.length = 0;
+    }
+
     export function map<T, U>(array: ReadonlyArray<T>, f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {
@@ -585,7 +591,7 @@ namespace ts {
         return result;
     }
 
-    export function mapEntries<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
+    export function mapEntries<T, U>(map: ReadonlyMap<T>, f: (key: string, value: T) => [string, U]): Map<U> {
         if (!map) {
             return undefined;
         }
@@ -705,7 +711,7 @@ namespace ts {
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
         outer: for (; offsetB < arrayB.length; offsetB++) {
@@ -780,7 +786,7 @@ namespace ts {
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: (x: T, y: T) => Comparison = compareValues) {
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T> = compareValues) {
         return array
             .map((_, i) => i) // create array of indices
             .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
@@ -852,6 +858,8 @@ namespace ts {
         return result;
     }
 
+    export type Comparer<T> = (a: T, b: T) => Comparison;
+
     /**
      * Performs a binary search, finding the index at which 'value' occurs in 'array'.
      * If no such index is found, returns the 2's-complement of first index at which
@@ -859,7 +867,7 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number {
+    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: Comparer<T>, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
@@ -996,9 +1004,9 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T> | Map<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: ReadonlyMap<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T> | ReadonlyMap<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
@@ -1011,9 +1019,9 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}> | Map<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
+    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: ReadonlyMap<{}>, callback: (key: string) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}> | ReadonlyMap<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
             const result = callback(key as string & __String);
@@ -1025,8 +1033,8 @@ namespace ts {
     }
 
     /** Copy entries from `source` to `target`. */
-    export function copyEntries<T>(source: UnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
-    export function copyEntries<T>(source: Map<T>, target: Map<T>): void;
+    export function copyEntries<T>(source: ReadonlyUnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
+    export function copyEntries<T>(source: ReadonlyMap<T>, target: Map<T>): void;
     export function copyEntries<T, U extends UnderscoreEscapedMap<T> | Map<T>>(source: U, target: U): void {
         (source as Map<T>).forEach((value, key) => {
             (target as Map<T>).set(key, value);
@@ -1104,8 +1112,8 @@ namespace ts {
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;
-    export function cloneMap<T>(map: Map<T>): Map<T>;
-    export function cloneMap<T>(map: Map<T> | SymbolTable): Map<T> | SymbolTable {
+    export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
+    export function cloneMap<T>(map: ReadonlyMap<T> | SymbolTable): Map<T> | SymbolTable {
         const clone = createMap<T>();
         copyEntries(map as Map<T>, clone);
         return clone;
@@ -1580,10 +1588,21 @@ namespace ts {
         return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
     }
 
+    /* @internal */
+    export function pathIsRelative(path: string): boolean {
+        return /^\.\.?($|[\\/])/.test(path);
+    }
+
     export function isExternalModuleNameRelative(moduleName: string): boolean {
         // TypeScript 1.0 spec (April 2014): 11.2.1
         // An external module name is "relative" if the first term is "." or "..".
-        return /^\.\.?($|[\\/])/.test(moduleName);
+        // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
+        return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
+    }
+
+    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
+    export function moduleHasNonRelativeName(moduleName: string): boolean {
+        return !isExternalModuleNameRelative(moduleName);
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
@@ -2282,7 +2301,7 @@ namespace ts {
 
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
-        this.name = name;
+        this.escapedName = name;
         this.declarations = undefined;
     }
 

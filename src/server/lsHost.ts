@@ -29,7 +29,7 @@ namespace ts.server {
                     : undefined;
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
                 // return result immediately only if it is .ts, .tsx or .d.ts
-                if (moduleHasNonRelativeName(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
+                if (!isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
                     // otherwise try to load typings from @types
 
                     // create different collection of failed lookup locations for second pass
@@ -217,7 +217,7 @@ namespace ts.server {
             return !this.project.isWatchedMissingFile(path) && this.host.fileExists(file);
         }
 
-        readFile(fileName: string): string {
+        readFile(fileName: string): string | undefined {
             return this.host.readFile(fileName);
         }
 

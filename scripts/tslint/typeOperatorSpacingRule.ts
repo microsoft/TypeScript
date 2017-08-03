@@ -19,7 +19,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
         ts.forEachChild(node, recur);
     }
 
-    function check(types: ts.TypeNode[]): void {
+    function check(types: ReadonlyArray<ts.TypeNode>): void {
         let expectedStart = types[0].end + 2; // space, | or &
         for (let i = 1; i < types.length; i++) {
             const currentType = types[i];
