@@ -15786,23 +15786,19 @@ namespace ts {
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
-                return isSingleNonGenericCandidate ? chooseOverloadSimple(candidates[0], relation, signatureHelpTrailingComma) : chooseOverloadComplex(candidates, relation, signatureHelpTrailingComma);
-            }
 
-            function chooseOverloadSimple(candidate: Signature, relation: Map<RelationComparisonResult>, signatureHelpTrailingComma: boolean): Signature | undefined {
-                if (!hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
-                    return undefined;
-                }
-                else if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                    candidateForArgumentError = candidate;
-                    return undefined;
-                }
-                else {
+                if (isSingleNonGenericCandidate) {
+                    const candidate = candidates[0];
+                    if (!hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
+                        return undefined;
+                    }
+                    if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        candidateForArgumentError = candidate;
+                        return undefined;
+                    }
                     return candidate;
                 }
-            }
 
-            function chooseOverloadComplex(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma: boolean): Signature | undefined {
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                     const originalCandidate = candidates[candidateIndex];
                     if (!hasCorrectArity(node, args, originalCandidate, signatureHelpTrailingComma)) {
