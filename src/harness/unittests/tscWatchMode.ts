@@ -68,7 +68,7 @@ namespace ts.tscWatch {
     function getEmittedLines(files: FileOrFolderEmit[]) {
         const seen = createMap<true>();
         const result: string[] = [];
-        for (const { output} of files) {
+        for (const { output } of files) {
             if (output && !seen.has(output)) {
                 seen.set(output, true);
                 result.push(output);
@@ -1367,12 +1367,12 @@ namespace ts.tscWatch {
         }
         function getEmittedFiles(files: FileOrFolderEmit[], contents: string[]): EmittedFile[] {
             return map(contents, (content, index) => {
-                    return {
-                        content,
-                        path: changeExtension(files[index].path, Extension.Js),
-                        shouldBeWritten: true
-                    };
-                }
+                return {
+                    content,
+                    path: changeExtension(files[index].path, Extension.Js),
+                    shouldBeWritten: true
+                };
+            }
             );
         }
         function verifyEmittedFiles(host: WatchedSystem, emittedFiles: EmittedFile[]) {
@@ -1477,6 +1477,137 @@ namespace ts.tscWatch {
                 emittedFiles[2].shouldBeWritten = false;
                 return files.slice(0, 2);
             }
+        });
+    });
+
+    describe("tsc-watch module resolution caching", () => {
+        it("works", () => {
+            const root = {
+                path: "/a/d/f0.ts",
+                content: `import {x} from "f1"`
+            };
+
+            const imported = {
+                path: "/a/f1.ts",
+                content: `foo()`
+            };
+
+            const f1IsNotModule = `a/d/f0.ts(1,17): error TS2306: File '${imported.path}' is not a module.\n`;
+            const cannotFindFoo = `a/f1.ts(1,1): error TS2304: Cannot find name 'foo'.\n`;
+            const cannotAssignValue = "a/d/f0.ts(2,21): error TS2322: Type '1' is not assignable to type 'string'.\n";
+
+            const files = [root, imported, libFile];
+            const host = createWatchedSystem(files);
+            createWatchModeWithoutConfigFile([root.path], host, { module: ModuleKind.AMD });
+
+            // ensure that imported file was found
+            checkOutputContains(host, [f1IsNotModule, cannotFindFoo]);
+            host.clearOutput();
+
+            const originalFileExists = host.fileExists;
+            {
+                const newContent = `import {x} from "f1"
+                var x: string = 1;`;
+                root.content = newContent;
+                host.reloadFS(files);
+
+                // patch fileExists to make sure that disk is not touched
+                host.fileExists = notImplemented;
+
+                // trigger synchronization to make sure that import will be fetched from the cache
+                host.runQueuedTimeoutCallbacks();
+
+                // ensure file has correct number of errors after edit
+                checkOutputContains(host, [f1IsNotModule, cannotAssignValue]);
+                host.clearOutput();
+            }
+            {
+                let fileExistsIsCalled = false;
+                host.fileExists = (fileName): boolean => {
+                    if (fileName === "lib.d.ts") {
+                        return false;
+                    }
+                    fileExistsIsCalled = true;
+                    assert.isTrue(fileName.indexOf("/f2.") !== -1);
+                    return originalFileExists.call(host, fileName);
+                };
+
+                root.content = `import {x} from "f2"`;
+                host.reloadFS(files);
+
+                    // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+                    host.runQueuedTimeoutCallbacks();
+
+                    // ensure file has correct number of errors after edit
+                    const cannotFindModuleF2 = `a/d/f0.ts(1,17): error TS2307: Cannot find module 'f2'.\n`;
+                    checkOutputContains(host, [cannotFindModuleF2]);
+                    host.clearOutput();
+
+                assert.isTrue(fileExistsIsCalled);
+            }
+            {
+                let fileExistsCalled = false;
+                host.fileExists = (fileName): boolean => {
+                    if (fileName === "lib.d.ts") {
+                        return false;
+                    }
+                    fileExistsCalled = true;
+                    assert.isTrue(fileName.indexOf("/f1.") !== -1);
+                    return originalFileExists.call(host, fileName);
+                };
+
+                const newContent = `import {x} from "f1"`;
+                root.content = newContent;
+
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+
+                checkOutputContains(host, [f1IsNotModule, cannotFindFoo]);
+                assert.isTrue(fileExistsCalled);
+            }
+        });
+
+        it("loads missing files from disk", () => {
+            const root = {
+                path: `/a/foo.ts`,
+                content: `import {x} from "bar"`
+            };
+
+            const imported = {
+                path: `/a/bar.d.ts`,
+                content: `export const y = 1;`
+            };
+
+            const files = [root, libFile];
+            const host = createWatchedSystem(files);
+            const originalFileExists = host.fileExists;
+
+            let fileExistsCalledForBar = false;
+            host.fileExists = fileName => {
+                if (fileName === "lib.d.ts") {
+                    return false;
+                }
+                if (!fileExistsCalledForBar) {
+                    fileExistsCalledForBar = fileName.indexOf("/bar.") !== -1;
+                }
+
+                return originalFileExists.call(host, fileName);
+            };
+
+            createWatchModeWithoutConfigFile([root.path], host, { module: ModuleKind.AMD });
+
+            const barNotFound = `a/foo.ts(1,17): error TS2307: Cannot find module 'bar'.\n`;
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
+            checkOutputContains(host, [barNotFound]);
+            host.clearOutput();
+
+            fileExistsCalledForBar = false;
+            root.content = `import {y} from "bar"`;
+            host.reloadFS(files.concat(imported));
+
+            host.runQueuedTimeoutCallbacks();
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            checkOutputDoesNotContain(host, [barNotFound]);
         });
     });
 }
