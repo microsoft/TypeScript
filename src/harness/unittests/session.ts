@@ -9,7 +9,7 @@ namespace ts.server {
         newLine: "\n",
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
-        readFile(): string { return void 0; },
+        readFile: () => undefined,
         writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,
@@ -19,13 +19,13 @@ namespace ts.server {
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         getEnvironmentVariable(): string { return ""; },
-        readDirectory(): string[] { return []; },
+        readDirectory() { return []; },
         exit: noop,
         setTimeout() { return 0; },
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: s => s
+        createHash: Harness.LanguageService.mockHash,
     };
 
     const mockLogger: Logger = {
@@ -240,8 +240,8 @@ namespace ts.server {
                 CommandNames.GetCodeFixesFull,
                 CommandNames.GetSupportedCodeFixes,
                 CommandNames.GetApplicableRefactors,
-                CommandNames.GetRefactorCodeActions,
-                CommandNames.GetRefactorCodeActionsFull,
+                CommandNames.GetEditsForRefactor,
+                CommandNames.GetEditsForRefactorFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -389,7 +389,7 @@ namespace ts.server {
                     request_seq: 0,
                     type: "response",
                     command,
-                    body: body,
+                    body,
                     success: true
                 });
             });
@@ -436,7 +436,7 @@ namespace ts.server {
                 request_seq: 0,
                 type: "response",
                 command,
-                body: body,
+                body,
                 success: true
             });
         });

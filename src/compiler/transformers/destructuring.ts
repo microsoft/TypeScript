@@ -411,11 +411,11 @@ namespace ts {
         }
         else if (isStringOrNumericLiteral(propertyName)) {
             const argumentExpression = getSynthesizedClone(propertyName);
-            argumentExpression.text = unescapeIdentifier(argumentExpression.text);
+            argumentExpression.text = argumentExpression.text;
             return createElementAccess(value, argumentExpression);
         }
         else {
-            const name = createIdentifier(unescapeIdentifier(propertyName.text));
+            const name = createIdentifier(unescapeLeadingUnderscores(propertyName.escapedText));
             return createPropertyAccess(value, name);
         }
     }
@@ -492,7 +492,7 @@ namespace ts {
     /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
      * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`
      */
-    function createRestCall(context: TransformationContext, value: Expression, elements: BindingOrAssignmentElement[], computedTempVariables: Expression[], location: TextRange): Expression {
+    function createRestCall(context: TransformationContext, value: Expression, elements: ReadonlyArray<BindingOrAssignmentElement>, computedTempVariables: ReadonlyArray<Expression>, location: TextRange): Expression {
         context.requestEmitHelper(restHelper);
         const propertyNames: Expression[] = [];
         let computedTempVariableOffset = 0;

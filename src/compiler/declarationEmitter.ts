@@ -211,7 +211,7 @@ namespace ts {
             decreaseIndent = newWriter.decreaseIndent;
         }
 
-        function writeAsynchronousModuleElements(nodes: Node[]) {
+        function writeAsynchronousModuleElements(nodes: ReadonlyArray<Node>) {
             const oldWriter = writer;
             forEach(nodes, declaration => {
                 let nodeToCheck: Node;
@@ -335,9 +335,12 @@ namespace ts {
             write(": ");
 
             // use the checker's type, not the declared type,
-            // for non-optional initialized parameters that aren't a parameter property
+            // for optional parameter properties
+            // and also for non-optional initialized parameters that aren't a parameter property
+            // these types may need to add `undefined`.
             const shouldUseResolverType = declaration.kind === SyntaxKind.Parameter &&
-                resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration);
+                (resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration) ||
+                 resolver.isOptionalUninitializedParameterProperty(declaration as ParameterDeclaration));
             if (type && !shouldUseResolverType) {
                 // Write the type
                 emitType(type);
@@ -371,13 +374,13 @@ namespace ts {
             }
         }
 
-        function emitLines(nodes: Node[]) {
+        function emitLines(nodes: ReadonlyArray<Node>) {
             for (const node of nodes) {
                 emit(node);
             }
         }
 
-        function emitSeparatedList(nodes: Node[], separator: string, eachNodeEmitFn: (node: Node) => void, canEmitFn?: (node: Node) => boolean) {
+        function emitSeparatedList(nodes: ReadonlyArray<Node>, separator: string, eachNodeEmitFn: (node: Node) => void, canEmitFn?: (node: Node) => boolean) {
             let currentWriterPos = writer.getTextPos();
             for (const node of nodes) {
                 if (!canEmitFn || canEmitFn(node)) {
@@ -390,7 +393,7 @@ namespace ts {
             }
         }
 
-        function emitCommaList(nodes: Node[], eachNodeEmitFn: (node: Node) => void, canEmitFn?: (node: Node) => boolean) {
+        function emitCommaList(nodes: ReadonlyArray<Node>, eachNodeEmitFn: (node: Node) => void, canEmitFn?: (node: Node) => boolean) {
             emitSeparatedList(nodes, ", ", eachNodeEmitFn, canEmitFn);
         }
 
@@ -596,7 +599,7 @@ namespace ts {
             currentIdentifiers = node.identifiers;
             isCurrentFileExternalModule = isExternalModule(node);
             enclosingDeclaration = node;
-            emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, /*removeComents*/ true);
+            emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, /*removeComments*/ true);
             emitLines(node.statements);
         }
 
@@ -1004,7 +1007,7 @@ namespace ts {
             return node.parent.kind === SyntaxKind.MethodDeclaration && hasModifier(node.parent, ModifierFlags.Private);
         }
 
-        function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
+        function emitTypeParameters(typeParameters: ReadonlyArray<TypeParameterDeclaration>) {
             function emitTypeParameter(node: TypeParameterDeclaration) {
                 increaseIndent();
                 emitJsDocComments(node);
@@ -1106,7 +1109,7 @@ namespace ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: ReadonlyArray<ExpressionWithTypeArguments>, isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
@@ -1161,7 +1164,7 @@ namespace ts {
             if (baseTypeNode && !isEntityNameExpression(baseTypeNode.expression)) {
                 tempVarName = baseTypeNode.expression.kind === SyntaxKind.NullKeyword ?
                     "null" :
-                    emitTempVariableDeclaration(baseTypeNode.expression, `${node.name.text}_base`, {
+                    emitTempVariableDeclaration(baseTypeNode.expression, `${node.name.escapedText}_base`, {
                         diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                         errorNode: baseTypeNode,
                         typeName: node.name

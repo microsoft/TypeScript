@@ -8,10 +8,14 @@ function getDefaultSettings() {
 }
 
 function doSomething(settings: Settings) { /* ... */ }
-
 // forgot to call `getDefaultSettings`
 // but it is not caught because we don't check for call signatures
 doSomething(getDefaultSettings);
+// same for arrow expressions:
+doSomething(() => { });
+doSomething(12);
+doSomething('completely wrong');
+doSomething(false);
 
 // this is an oddly popular way of defining settings
 // this example is from services/textChanges.ts

@@ -17,9 +17,8 @@ class Poisoned extends React.Component<{}, {}> {
     }
 }
 
-const obj: Object = {};
+const obj = {};
 >obj : Symbol(obj, Decl(file.tsx, 8, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // OK
 let p = <Poisoned {...obj} />;

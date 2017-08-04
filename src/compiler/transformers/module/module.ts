@@ -103,7 +103,7 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
-            if (currentModuleInfo.hasExportStarsToExportValues) {
+            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
@@ -408,7 +408,7 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
-            if (currentModuleInfo.hasExportStarsToExportValues) {
+            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(body, exportStarHelper);
@@ -514,14 +514,14 @@ namespace ts {
 
         function visitImportCallExpression(node: ImportCall): Expression {
             switch (compilerOptions.module) {
-                case ModuleKind.CommonJS:
-                    return transformImportCallExpressionCommonJS(node);
                 case ModuleKind.AMD:
                     return transformImportCallExpressionAMD(node);
                 case ModuleKind.UMD:
                     return transformImportCallExpressionUMD(node);
+                case ModuleKind.CommonJS:
+                default:
+                    return transformImportCallExpressionCommonJS(node);
             }
-            Debug.fail("All supported module kind in this transformation step should have been handled");
         }
 
         function transformImportCallExpressionUMD(node: ImportCall): Expression {
@@ -833,15 +833,7 @@ namespace ts {
                 // export * from "mod";
                 return setTextRange(
                     createStatement(
-                        createCall(
-                            createIdentifier("__export"),
-                            /*typeArguments*/ undefined,
-                            [
-                                moduleKind !== ModuleKind.AMD
-                                    ? createRequireCall(node)
-                                    : generatedName
-                            ]
-                        )
+                        createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
                     ),
                     node
                 );
@@ -932,7 +924,7 @@ namespace ts {
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, importCallExpressionVisitor),
-                                node.members
+                                visitNodes(node.members, importCallExpressionVisitor)
                             ),
                             node
                         ),
@@ -1233,7 +1225,7 @@ namespace ts {
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
             const name = getDeclarationName(decl);
-            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(name.text);
+            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.escapedText));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);
@@ -1598,8 +1590,16 @@ namespace ts {
         text: `
             function __export(m) {
                 for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-            }`
+            }
+        `
     };
+
+    function createExportStarHelper(context: TransformationContext, module: Expression) {
+        const compilerOptions = context.getCompilerOptions();
+        return compilerOptions.importHelpers
+            ? createCall(getHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
+            : createCall(createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
+    }
 
     // emit helper for dynamic import
     const dynamicImportUMDHelper: EmitHelper = {

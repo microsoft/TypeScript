@@ -156,7 +156,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ObjectLiteralElement[]): Expression[] {
+        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElement>): Expression[] {
             let chunkObject: (ShorthandPropertyAssignment | PropertyAssignment)[];
             const objects: Expression[] = [];
             for (const e of elements) {
@@ -776,7 +776,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(node.name.text),
+                    createLiteral(unescapeLeadingUnderscores(node.name.escapedText)),
                     node
                 );
             }

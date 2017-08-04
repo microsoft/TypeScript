@@ -44,6 +44,18 @@ namespace ts.projectSystem {
         });
     }
 
+    function trackingLogger(): { log(message: string): void, finish(): string[] } {
+        const logs: string[] = [];
+        return {
+            log(message) {
+               logs.push(message);
+            },
+            finish() {
+                return logs;
+            }
+        };
+    }
+
     import typingsName = TI.typingsName;
 
     describe("local module", () => {
@@ -80,7 +92,7 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path]);
+            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path, config.path]);
             installer.installAll(0);
         });
     });
@@ -133,12 +145,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [file1.path]);
+            checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, jquery.path]);
+            checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
         });
 
         it("inferred project (typings installed)", () => {
@@ -663,16 +675,22 @@ namespace ts.projectSystem {
                 path: "/node_modules/jquery/package.json",
                 content: JSON.stringify({ name: "jquery" })
             };
+            // Should not search deeply in node_modules.
+            const nestedPackage = {
+                path: "/node_modules/jquery/nested/package.json",
+                content: JSON.stringify({ name: "nested" }),
+            };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
                 content: ""
             };
-            const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
+            const host = createServerHost([app, jsconfig, jquery, jqueryPackage, nestedPackage]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery", "nested") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    assert.deepEqual(args, [`@types/jquery@ts${versionMajorMinor}`]);
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -684,12 +702,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("configured projects discover from bower_components", () => {
@@ -730,13 +748,13 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
-            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules"]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
+            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("configured projects discover from bower.json", () => {
@@ -777,12 +795,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("Malformed package.json should be watched", () => {
@@ -820,7 +838,7 @@ namespace ts.projectSystem {
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             host.reloadFS([f, fixedPackageJson]);
-            host.triggerFileWatcherCallback(fixedPackageJson.path, /*removed*/ false);
+            host.triggerFileWatcherCallback(fixedPackageJson.path, FileWatcherEventKind.Changed);
             // expected install request
             installer.installAll(/*expectedCount*/ 1);
 
@@ -1009,6 +1027,8 @@ namespace ts.projectSystem {
     });
 
     describe("discover typings", () => {
+        const emptySafeList = emptyMap;
+
         it("should use mappings from safe list", () => {
             const app = {
                 path: "/a/b/app.js",
@@ -1022,10 +1042,17 @@ namespace ts.projectSystem {
                 path: "/a/b/chroma.min.js",
                 content: ""
             };
-            const cache = createMap<string>();
+
+            const safeList = createMapFromTemplate({ jquery: "jquery", chroma: "chroma-js" });
 
             const host = createServerHost([app, jquery, chroma]);
-            const result = JsTyping.discoverTypings(host, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), /*safeListPath*/ undefined, cache, { enable: true }, []);
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray);
+            assert.deepEqual(logger.finish(), [
+                'Inferred typings from file names: ["jquery","chroma-js"]',
+                "Inferred typings from unresolved imports: []",
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
+            ]);
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
         });
 
@@ -1038,7 +1065,12 @@ namespace ts.projectSystem {
             const cache = createMap<string>();
 
             for (const name of JsTyping.nodeCoreModuleList) {
-                const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enable: true }, [name, "somename"]);
+                const logger = trackingLogger();
+                const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, [name, "somename"]);
+                assert.deepEqual(logger.finish(), [
+                    'Inferred typings from unresolved imports: ["node","somename"]',
+                    'Result: {"cachedTypingPaths":[],"newTypingNames":["node","somename"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
+                ]);
                 assert.deepEqual(result.newTypingNames.sort(), ["node", "somename"]);
             }
         });
@@ -1054,9 +1086,44 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f, node]);
             const cache = createMapFromTemplate<string>({ "node": node.path });
-            const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enable: true }, ["fs", "bar"]);
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
+            assert.deepEqual(logger.finish(), [
+                'Inferred typings from unresolved imports: ["node","bar"]',
+                'Result: {"cachedTypingPaths":["/a/b/node.d.ts"],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
+            ]);
             assert.deepEqual(result.cachedTypingPaths, [node.path]);
             assert.deepEqual(result.newTypingNames, ["bar"]);
+        });
+
+        it("should search only 2 levels deep", () => {
+            const app = {
+                path: "/app.js",
+                content: "",
+            };
+            const a = {
+                path: "/node_modules/a/package.json",
+                content: JSON.stringify({ name: "a" }),
+            };
+            const b = {
+                path: "/node_modules/a/b/package.json",
+                content: JSON.stringify({ name: "b" }),
+            };
+            const host = createServerHost([app, a, b]);
+            const cache = createMap<string>();
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ []);
+            assert.deepEqual(logger.finish(), [
+                'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
+                '    Found package names: ["a"]',
+                "Inferred typings from unresolved imports: []",
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["a"],"filesToWatch":["/bower_components","/node_modules"]}',
+            ]);
+            assert.deepEqual(result, {
+                cachedTypingPaths: [],
+                newTypingNames: ["a"], // But not "b"
+                filesToWatch: ["/bower_components", "/node_modules"],
+            });
         });
     });
 
@@ -1066,7 +1133,7 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
-            const package = {
+            const packageFile = {
                 path: "/a/package.json",
                 content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
             };
@@ -1075,7 +1142,7 @@ namespace ts.projectSystem {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f1, package]);
+            const host = createServerHost([f1, packageFile]);
             let seenTelemetryEvent = false;
             const installer = new (class extends Installer {
                 constructor() {
@@ -1115,7 +1182,7 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
-            const package = {
+            const packageFile = {
                 path: "/a/package.json",
                 content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
             };
@@ -1124,7 +1191,7 @@ namespace ts.projectSystem {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f1, package]);
+            const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
             const installer = new (class extends Installer {
@@ -1166,12 +1233,12 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
-            const package = {
+            const packageFile = {
                 path: "/a/package.json",
                 content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
             };
             const cachePath = "/a/cache/";
-            const host = createServerHost([f1, package]);
+            const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
             const installer = new (class extends Installer {

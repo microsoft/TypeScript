@@ -18,9 +18,8 @@ class Poisoned extends React.Component<{}, {}> {
     }
 }
 
-const obj: Object = {};
->obj : Object
->Object : Object
+const obj = {};
+>obj : {}
 >{} : {}
 
 // OK
@@ -28,7 +27,7 @@ let p = <Poisoned {...obj} />;
 >p : JSX.Element
 ><Poisoned {...obj} /> : JSX.Element
 >Poisoned : typeof Poisoned
->obj : Object
+>obj : {}
 
 let y = <Poisoned />;
 >y : JSX.Element

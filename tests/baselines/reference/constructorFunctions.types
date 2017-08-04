@@ -1,0 +1,114 @@
+=== tests/cases/conformance/salsa/index.js ===
+function C1() {
+>C1 : () => typeof C1
+
+    if (!(this instanceof C1)) return new C1();
+>!(this instanceof C1) : boolean
+>(this instanceof C1) : boolean
+>this instanceof C1 : boolean
+>this : any
+>C1 : () => typeof C1
+>new C1() : { x: number; }
+>C1 : () => typeof C1
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+}
+
+const c1_v1 = C1();
+>c1_v1 : { x: number; }
+>C1() : { x: number; }
+>C1 : () => typeof C1
+
+const c1_v2 = new C1();
+>c1_v2 : { x: number; }
+>new C1() : { x: number; }
+>C1 : () => typeof C1
+
+var C2 = function () {
+>C2 : () => any
+>function () {    if (!(this instanceof C2)) return new C2();    this.x = 1;} : () => any
+
+    if (!(this instanceof C2)) return new C2();
+>!(this instanceof C2) : boolean
+>(this instanceof C2) : boolean
+>this instanceof C2 : boolean
+>this : any
+>C2 : () => any
+>new C2() : { x: number; }
+>C2 : () => any
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+
+};
+
+const c2_v1 = C2();
+>c2_v1 : { x: number; }
+>C2() : { x: number; }
+>C2 : () => any
+
+const c2_v2 = new C2();
+>c2_v2 : { x: number; }
+>new C2() : { x: number; }
+>C2 : () => any
+
+/** @class */
+function C3() {
+>C3 : () => typeof C3
+
+    if (!(this instanceof C3)) return new C3();
+>!(this instanceof C3) : boolean
+>(this instanceof C3) : boolean
+>this instanceof C3 : boolean
+>this : any
+>C3 : () => typeof C3
+>new C3() : {}
+>C3 : () => typeof C3
+
+};
+
+const c3_v1 = C3();
+>c3_v1 : {}
+>C3() : {}
+>C3 : () => typeof C3
+
+const c3_v2 = new C3();
+>c3_v2 : {}
+>new C3() : {}
+>C3 : () => typeof C3
+
+/** @class */
+var C4 = function () {
+>C4 : () => any
+>function () {    if (!(this instanceof C4)) return new C4();} : () => any
+
+    if (!(this instanceof C4)) return new C4();
+>!(this instanceof C4) : boolean
+>(this instanceof C4) : boolean
+>this instanceof C4 : boolean
+>this : any
+>C4 : () => any
+>new C4() : {}
+>C4 : () => any
+
+};
+
+const c4_v1 = C4();
+>c4_v1 : {}
+>C4() : {}
+>C4 : () => any
+
+const c4_v2 = new C4();
+>c4_v2 : {}
+>new C4() : {}
+>C4 : () => any
+

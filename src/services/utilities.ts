@@ -2,7 +2,6 @@
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
-    export const emptyArray: any[] = [];
 
     export const enum SemanticMeaning {
         None = 0x0,
@@ -82,7 +81,7 @@ namespace ts {
         else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.All;
         }
-        else if (isInRightSideOfImport(node)) {
+        else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node);
         }
         else if (isDeclarationName(node)) {
@@ -93,6 +92,10 @@ namespace ts {
         }
         else if (isNamespaceReference(node)) {
             return SemanticMeaning.Namespace;
+        }
+        else if (isTypeParameterDeclaration(node.parent)) {
+            Debug.assert(isJSDocTemplateTag(node.parent.parent)); // Else would be handled by isDeclarationName
+            return SemanticMeaning.Type;
         }
         else {
             return SemanticMeaning.Value;
@@ -114,7 +117,7 @@ namespace ts {
         return SemanticMeaning.Namespace;
     }
 
-    function isInRightSideOfImport(node: Node) {
+    export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
             node = node.parent;
         }
@@ -173,7 +176,6 @@ namespace ts {
 
         switch (node.parent.kind) {
             case SyntaxKind.TypeReference:
-            case SyntaxKind.JSDocTypeReference:
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
@@ -201,7 +203,7 @@ namespace ts {
 
     export function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
-            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
+            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.escapedText === labelName) {
                 return (<LabeledStatement>referenceNode).label;
             }
             referenceNode = referenceNode.parent;
@@ -271,6 +273,13 @@ namespace ts {
     }
 
     export function getContainerNode(node: Node): Declaration {
+        if (node.kind === SyntaxKind.JSDocTypedefTag) {
+            // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
+            // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
+            // Then we get parent again in the loop.
+            node = node.parent.parent;
+        }
+
         while (true) {
             node = node.parent;
             if (!node) {
@@ -584,14 +593,14 @@ namespace ts {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
-    export function findContainingList(node: Node): Node {
+    export function findContainingList(node: Node): SyntaxList | undefined {
         // The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
         const syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
-            if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
+            if (isSyntaxList(c) && c.pos <= node.pos && c.end >= node.end) {
                 return c;
             }
         });
@@ -615,18 +624,21 @@ namespace ts {
         return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyName(n.kind));
     }
 
-    /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeItemAtEndPosition?: (n: Node) => boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition, includeJsDocComment);
+    /**
+     * Returns the token if position is in [start, end).
+     * If position === end, returns the preceding token if includeItemAtEndPosition(previousToken) === true
+     */
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false, includeJsDocComment);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined, includeJsDocComment);
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition?: boolean): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, includeEndPosition, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment: boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: (n: Node) => boolean, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -636,23 +648,24 @@ namespace ts {
 
             // find the child that contains 'position'
             for (const child of current.getChildren()) {
-                if (isJSDocNode(child) && !includeJsDocComment) {
+                if (!includeJsDocComment && isJSDocNode(child)) {
                     continue;
                 }
 
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, includeJsDocComment);
                 if (start > position) {
-                    continue;
+                    // If this child begins after position, then all subsequent children will as well.
+                    break;
                 }
 
                 const end = child.getEnd();
-                if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
+                if (position < end || (position === end && (child.kind === SyntaxKind.EndOfFileToken || includeEndPosition))) {
                     current = child;
                     continue outer;
                 }
-                else if (includeItemAtEndPosition && end === position) {
+                else if (includePrecedingTokenAtEndPosition && end === position) {
                     const previousToken = findPrecedingToken(position, sourceFile, child);
-                    if (previousToken && includeItemAtEndPosition(previousToken)) {
+                    if (previousToken && includePrecedingTokenAtEndPosition(previousToken)) {
                         return previousToken;
                     }
                 }
@@ -707,7 +720,7 @@ namespace ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node {
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
@@ -738,7 +751,7 @@ namespace ts {
                 // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
                 // if this is the case - then we should assume that token in question is located in previous child.
                 if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
-                    const start = child.getStart(sourceFile);
+                    const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
@@ -755,7 +768,7 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
@@ -779,7 +792,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number): boolean {
         const previousToken = findPrecedingToken(position, sourceFile);
-        if (previousToken && previousToken.kind === SyntaxKind.StringLiteral) {
+        if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
 
@@ -901,42 +914,6 @@ namespace ts {
         }
     }
 
-    /**
-     * Get the corresponding JSDocTag node if the position is in a jsDoc comment
-     */
-    export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
-        let node = ts.getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-        if (isToken(node)) {
-            switch (node.kind) {
-                case SyntaxKind.VarKeyword:
-                case SyntaxKind.LetKeyword:
-                case SyntaxKind.ConstKeyword:
-                    // if the current token is var, let or const, skip the VariableDeclarationList
-                    node = node.parent === undefined ? undefined : node.parent.parent;
-                    break;
-                default:
-                    node = node.parent;
-                    break;
-            }
-        }
-
-        if (node) {
-            if (node.jsDoc) {
-                for (const jsDoc of node.jsDoc) {
-                    if (jsDoc.tags) {
-                        for (const tag of jsDoc.tags) {
-                            if (tag.pos <= position && position <= tag.end) {
-                                return tag;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return undefined;
-    }
-
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note, that getWidth() does not take trivia into account.
@@ -1009,6 +986,12 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function cloneCompilerOptions(options: CompilerOptions): CompilerOptions {
+        const result = clone(options);
+        setConfigFileInOptions(result, options && options.configFile);
+        return result;
     }
 
     export function compareDataObjects(dst: any, src: any): boolean {
@@ -1213,10 +1196,7 @@ namespace ts {
     }
 
     export function displayPart(text: string, kind: SymbolDisplayPartKind): SymbolDisplayPart {
-        return <SymbolDisplayPart>{
-            text: text,
-            kind: SymbolDisplayPartKind[kind]
-        };
+        return { text, kind: SymbolDisplayPartKind[kind] };
     }
 
     export function spacePart() {
@@ -1259,10 +1239,13 @@ namespace ts {
     }
 
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
-        writeDisplayParts(displayPartWriter);
-        const result = displayPartWriter.displayParts();
-        displayPartWriter.clear();
-        return result;
+        try {
+            writeDisplayParts(displayPartWriter);
+            return displayPartWriter.displayParts();
+        }
+        finally {
+            displayPartWriter.clear();
+        }
     }
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
@@ -1287,7 +1270,7 @@ namespace ts {
         // If this is an export or import specifier it could have been renamed using the 'as' syntax.
         // If so we want to search for whatever is under the cursor.
         if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return location.text;
+            return getTextOfIdentifierOrLiteral(location);
         }
 
         // Try to get the local symbol if we're dealing with an 'export default'
@@ -1325,38 +1308,7 @@ namespace ts {
     export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
-        let scriptKind: ScriptKind;
-        if (host && host.getScriptKind) {
-            scriptKind = host.getScriptKind(fileName);
-        }
-        if (!scriptKind) {
-            scriptKind = getScriptKindFromFileName(fileName);
-        }
-        return ensureScriptKind(fileName, scriptKind);
-    }
-
-    export function sanitizeConfigFile(configFileName: string, content: string) {
-        const options: TranspileOptions = {
-            fileName: "config.js",
-            compilerOptions: {
-                target: ScriptTarget.ES2015,
-                removeComments: true
-            },
-            reportDiagnostics: true
-        };
-        const { outputText, diagnostics } = ts.transpileModule("(" + content + ")", options);
-        // Becasue the content was wrapped in "()", the start position of diagnostics needs to be subtract by 1
-        // also, the emitted result will have "(" in the beginning and ");" in the end. We need to strip these
-        // as well
-        const trimmedOutput = outputText.trim();
-        for (const diagnostic of diagnostics) {
-            diagnostic.start = diagnostic.start - 1;
-        }
-        const {config, error} = parseConfigFileTextToJson(configFileName, trimmedOutput.substring(1, trimmedOutput.length - 2), /*stripComments*/ false);
-        return {
-            configJsonObject: config || {},
-            diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
-        };
+        return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {

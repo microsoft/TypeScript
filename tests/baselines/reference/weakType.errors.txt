@@ -1,11 +1,14 @@
-tests/cases/compiler/weakType.ts(31,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
-tests/cases/compiler/weakType.ts(56,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+tests/cases/compiler/weakType.ts(16,13): error TS2559: Type '12' has no properties in common with type 'Settings'.
+tests/cases/compiler/weakType.ts(17,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
+tests/cases/compiler/weakType.ts(18,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
+tests/cases/compiler/weakType.ts(35,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
+tests/cases/compiler/weakType.ts(60,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
   Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak'.
     Types of property 'properties' are incompatible.
       Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
 
 
-==== tests/cases/compiler/weakType.ts (2 errors) ====
+==== tests/cases/compiler/weakType.ts (5 errors) ====
     interface Settings {
         timeout?: number;
         onError?(): void;
@@ -16,10 +19,20 @@ tests/cases/compiler/weakType.ts(56,5): error TS2322: Type '{ properties: { wron
     }
     
     function doSomething(settings: Settings) { /* ... */ }
-    
     // forgot to call `getDefaultSettings`
     // but it is not caught because we don't check for call signatures
     doSomething(getDefaultSettings);
+    // same for arrow expressions:
+    doSomething(() => { });
+    doSomething(12);
+                ~~
+!!! error TS2559: Type '12' has no properties in common with type 'Settings'.
+    doSomething('completely wrong');
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
+    doSomething(false);
+                ~~~~~
+!!! error TS2559: Type 'false' has no properties in common with type 'Settings'.
     
     // this is an oddly popular way of defining settings
     // this example is from services/textChanges.ts

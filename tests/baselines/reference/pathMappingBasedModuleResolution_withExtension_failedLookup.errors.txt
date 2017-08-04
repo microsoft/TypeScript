@@ -1,6 +1,16 @@
 /a.ts(1,21): error TS2307: Cannot find module 'foo'.
 
 
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "baseUrl": ".",
+            "paths": {
+                "foo": ["foo/foo.ts"]
+            }
+        }
+    }
+    
 ==== /a.ts (1 errors) ====
     import { foo } from "foo";
                         ~~~~~

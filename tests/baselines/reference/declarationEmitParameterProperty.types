@@ -1,0 +1,9 @@
+=== tests/cases/compiler/declarationEmitParameterProperty.ts ===
+export class Foo {
+>Foo : Foo
+
+  constructor(public bar?: string) {
+>bar : string | undefined
+  }
+}
+

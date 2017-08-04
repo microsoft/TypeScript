@@ -72,3 +72,13 @@ let overlapConflict: { id:string, a: string } =
     f({ a: 1 }, { a: 'mismatch' })
 let overwriteId: { id: string, a: number, c: number, d: string } =
     f({ a: 1, id: true }, { c: 1, d: 'no' })
+
+// excess property checks
+type A = { a: string, b: string };
+type Extra = { a: string, b: string, extra: string };
+const extra1: A = { a: "a", b: "b", extra: "extra" };
+const extra2 = { a: "a", b: "b", extra: "extra" };
+const a1: A = { ...extra1 }; // error spans should be here
+const a2: A = { ...extra2 }; // not on the symbol declarations above
+const extra3: Extra = { a: "a", b: "b", extra: "extra" };
+const a3: A = { ...extra3 }; // same here

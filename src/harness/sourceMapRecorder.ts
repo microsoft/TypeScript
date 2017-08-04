@@ -259,7 +259,7 @@ namespace Harness.SourceMapRecorder {
         export function recordSourceMapSpan(sourceMapSpan: ts.SourceMapSpan) {
             // verify the decoded span is same as the new span
             const decodeResult = SourceMapDecoder.decodeNextEncodedSourceMapSpan();
-            let decodedErrors: string[];
+            let decodeErrors: string[];
             if (decodeResult.error
                 || decodeResult.sourceMapSpan.emittedLine   !== sourceMapSpan.emittedLine
                 || decodeResult.sourceMapSpan.emittedColumn !== sourceMapSpan.emittedColumn
@@ -268,22 +268,20 @@ namespace Harness.SourceMapRecorder {
                 || decodeResult.sourceMapSpan.sourceIndex   !== sourceMapSpan.sourceIndex
                 || decodeResult.sourceMapSpan.nameIndex     !== sourceMapSpan.nameIndex) {
                 if (decodeResult.error) {
-                    decodedErrors = ["!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error];
+                    decodeErrors = ["!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error];
                 }
                 else {
-                    decodedErrors = ["!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:"];
+                    decodeErrors = ["!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:"];
                 }
-                decodedErrors.push("!!^^ !!^^ Decoded span from sourcemap's mappings entry: " + getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) + " Span encoded by the emitter:" + getSourceMapSpanString(sourceMapSpan, /*getAbsentNameIndex*/ true));
+                decodeErrors.push("!!^^ !!^^ Decoded span from sourcemap's mappings entry: " + getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) + " Span encoded by the emitter:" + getSourceMapSpanString(sourceMapSpan, /*getAbsentNameIndex*/ true));
             }
 
             if (spansOnSingleLine.length && spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine) {
                 // On different line from the one that we have been recording till now,
                 writeRecordedSpans();
-                spansOnSingleLine = [{ sourceMapSpan: sourceMapSpan, decodeErrors: decodedErrors }];
+                spansOnSingleLine = [];
             }
-            else {
-                spansOnSingleLine.push({ sourceMapSpan: sourceMapSpan, decodeErrors: decodedErrors });
-            }
+            spansOnSingleLine.push({ sourceMapSpan, decodeErrors });
         }
 
         export function recordNewSourceFileSpan(sourceMapSpan: ts.SourceMapSpan, newSourceFileCode: string) {
