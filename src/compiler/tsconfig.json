@@ -39,7 +39,6 @@
         "builder.ts",
         "watchedProgram.ts",
         "commandLineParser.ts",
-        "tscLib.ts",
         "tsc.ts",
         "diagnosticInformationMap.generated.ts"
     ]
