@@ -128,6 +128,9 @@ namespace ts.server {
         public languageServiceEnabled = true;
 
         /*@internal*/
+        resolutionCache: ResolutionCache;
+
+        /*@internal*/
         lsHost: LSHost;
 
         builder: Builder;
@@ -211,7 +214,14 @@ namespace ts.server {
             this.setInternalCompilerOptionsForEmittingJsFiles();
 
             this.lsHost = new LSHost(host, this, this.projectService.cancellationToken);
-            this.lsHost.setCompilationSettings(this.compilerOptions);
+            this.resolutionCache = createResolutionCache(
+                fileName => this.projectService.toPath(fileName),
+                () => this.compilerOptions,
+                (primaryResult, moduleName, compilerOptions, host) => resolveWithGlobalCache(primaryResult, moduleName, compilerOptions, host,
+                    this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined, this.getProjectName())
+            );
+            this.lsHost.compilationSettings = this.compilerOptions;
+            this.resolutionCache.setModuleResolutionHost(this.lsHost);
 
             this.languageService = createLanguageService(this.lsHost, this.documentRegistry);
 
@@ -349,6 +359,7 @@ namespace ts.server {
             this.rootFilesMap = undefined;
             this.program = undefined;
             this.builder = undefined;
+            this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
             this.projectErrors = undefined;
             this.lsHost.dispose();
@@ -518,7 +529,7 @@ namespace ts.server {
             if (this.isRoot(info)) {
                 this.removeRoot(info);
             }
-            this.lsHost.notifyFileRemoved(info);
+            this.resolutionCache.invalidateResolutionOfDeletedFile(info.path);
             this.cachedUnresolvedImportsPerFile.remove(info.path);
 
             if (detachFromProject) {
@@ -573,11 +584,11 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            this.lsHost.startRecordingFilesWithChangedResolutions();
+            this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
             let hasChanges = this.updateGraphWorker();
 
-            const changedFiles: ReadonlyArray<Path> = this.lsHost.finishRecordingFilesWithChangedResolutions() || emptyArray;
+            const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
@@ -759,9 +770,13 @@ namespace ts.server {
                     this.cachedUnresolvedImportsPerFile.clear();
                     this.lastCachedUnresolvedImportsList = undefined;
                 }
+                const oldOptions = this.compilerOptions;
                 this.compilerOptions = compilerOptions;
                 this.setInternalCompilerOptionsForEmittingJsFiles();
-                this.lsHost.setCompilationSettings(compilerOptions);
+                if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
+                    this.resolutionCache.clear();
+                }
+                this.lsHost.compilationSettings = this.compilerOptions;
 
                 this.markAsDirty();
             }

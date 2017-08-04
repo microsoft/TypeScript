@@ -1,6 +1,7 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts" />
 /// <reference path="scriptInfo.ts" />
+/// <reference path="..\compiler\resolutionCache.ts" />
 
 namespace ts.server {
     export class CachedServerHost implements ServerHost {
@@ -103,15 +104,10 @@ namespace ts.server {
 
     }
 
-    type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
     export class LSHost implements LanguageServiceHost, ModuleResolutionHost {
-        private compilationSettings: CompilerOptions;
-        private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-        private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+        /*@internal*/
+        compilationSettings: CompilerOptions;
 
-        private filesWithChangedSetOfUnresolvedImports: Path[];
-
-        private resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
         /**
@@ -130,25 +126,6 @@ namespace ts.server {
                 this.trace = s => host.trace(s);
             }
 
-            this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
-                const globalCache = this.project.getTypeAcquisition().enable
-                    ? this.project.projectService.typingsInstaller.globalTypingsCacheLocation
-                    : undefined;
-                const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
-                // return result immediately only if it is .ts, .tsx or .d.ts
-                if (!isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
-                    // otherwise try to load typings from @types
-
-                    // create different collection of failed lookup locations for second pass
-                    // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-                    const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, this.project.getProjectName(), compilerOptions, host, globalCache);
-                    if (resolvedModule) {
-                        return { resolvedModule, failedLookupLocations: primaryResult.failedLookupLocations.concat(failedLookupLocations) };
-                    }
-                }
-                return primaryResult;
-            };
-
             if (this.host.realpath) {
                 this.realpath = path => this.host.realpath(path);
             }
@@ -156,97 +133,7 @@ namespace ts.server {
 
         dispose() {
             this.project = undefined;
-            this.resolveModuleName = undefined;
             this.host = undefined;
-        }
-
-        public startRecordingFilesWithChangedResolutions() {
-            this.filesWithChangedSetOfUnresolvedImports = [];
-        }
-
-        public finishRecordingFilesWithChangedResolutions() {
-            const collected = this.filesWithChangedSetOfUnresolvedImports;
-            this.filesWithChangedSetOfUnresolvedImports = undefined;
-            return collected;
-        }
-
-        private resolveNamesWithLocalCache<T extends NameResolutionWithFailedLookupLocations, R>(
-            names: string[],
-            containingFile: string,
-            cache: Map<Map<T>>,
-            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
-            getResult: (s: T) => R,
-            getResultFileName: (result: R) => string | undefined,
-            logChanges: boolean): R[] {
-
-            const path = this.project.projectService.toPath(containingFile);
-            const currentResolutionsInFile = cache.get(path);
-
-            const newResolutions: Map<T> = createMap<T>();
-            const resolvedModules: R[] = [];
-            const compilerOptions = this.getCompilationSettings();
-
-            for (const name of names) {
-                // check if this is a duplicate entry in the list
-                let resolution = newResolutions.get(name);
-                if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
-                    if (moduleResolutionIsValid(existingResolution)) {
-                        // ok, it is safe to use existing name resolution results
-                        resolution = existingResolution;
-                    }
-                    else {
-                        resolution = loader(name, containingFile, compilerOptions, this);
-                        newResolutions.set(name, resolution);
-                    }
-                    if (logChanges && this.filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
-                        this.filesWithChangedSetOfUnresolvedImports.push(path);
-                        // reset log changes to avoid recording the same file multiple times
-                        logChanges = false;
-                    }
-                }
-
-                Debug.assert(resolution !== undefined);
-
-                resolvedModules.push(getResult(resolution));
-            }
-
-            // replace old results with a new one
-            cache.set(path, newResolutions);
-            return resolvedModules;
-
-            function resolutionIsEqualTo(oldResolution: T, newResolution: T): boolean {
-                if (oldResolution === newResolution) {
-                    return true;
-                }
-                if (!oldResolution || !newResolution || oldResolution.isInvalidated) {
-                    return false;
-                }
-                const oldResult = getResult(oldResolution);
-                const newResult = getResult(newResolution);
-                if (oldResult === newResult) {
-                    return true;
-                }
-                if (!oldResult || !newResult) {
-                    return false;
-                }
-                return getResultFileName(oldResult) === getResultFileName(newResult);
-            }
-
-            function moduleResolutionIsValid(resolution: T): boolean {
-                if (!resolution || resolution.isInvalidated) {
-                    return false;
-                }
-
-                const result = getResult(resolution);
-                if (result) {
-                    return true;
-                }
-
-                // consider situation if we have no candidate locations as valid resolution.
-                // after all there is no point to invalidate it if we have no idea where to look for the module.
-                return resolution.failedLookupLocations.length === 0;
-            }
         }
 
         getNewLine() {
@@ -270,13 +157,11 @@ namespace ts.server {
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective,
-                m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName,  /*logChanges*/ false);
+            return this.project.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[] {
-            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName,
-                m => m.resolvedModule, r => r.resolvedFileName, /*logChanges*/ true);
+            return this.project.resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ true);
         }
 
         getDefaultLibFileName() {
@@ -338,45 +223,6 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.host.getDirectories(path);
-        }
-
-        notifyFileRemoved(info: ScriptInfo) {
-            this.invalidateResolutionOfDeletedFile(info, this.resolvedModuleNames,
-                m => m.resolvedModule, r => r.resolvedFileName);
-            this.invalidateResolutionOfDeletedFile(info, this.resolvedTypeReferenceDirectives,
-                m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName);
-        }
-
-        private invalidateResolutionOfDeletedFile<T extends NameResolutionWithFailedLookupLocations, R>(
-            deletedInfo: ScriptInfo,
-            cache: Map<Map<T>>,
-            getResult: (s: T) => R,
-            getResultFileName: (result: R) => string | undefined) {
-            cache.forEach((value, path) => {
-                if (path === deletedInfo.path) {
-                    cache.delete(path);
-                }
-                else if (value) {
-                    value.forEach((resolution) => {
-                        if (resolution && !resolution.isInvalidated) {
-                            const result = getResult(resolution);
-                            if (result) {
-                                if (getResultFileName(result) === deletedInfo.path) {
-                                    resolution.isInvalidated = true;
-                                }
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-        setCompilationSettings(opt: CompilerOptions) {
-            if (changesAffectModuleResolution(this.compilationSettings, opt)) {
-                this.resolvedModuleNames.clear();
-                this.resolvedTypeReferenceDirectives.clear();
-            }
-            this.compilationSettings = opt;
         }
     }
 }

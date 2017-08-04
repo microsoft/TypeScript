@@ -1,5 +1,6 @@
 /// <reference path="program.ts" />
 /// <reference path="builder.ts" />
+/// <reference path="resolutionCache.ts"/>
 
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
@@ -254,6 +255,7 @@ namespace ts {
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
+
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
 
@@ -267,6 +269,9 @@ namespace ts {
         }
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+
+        // Cache for the module resolution
+        const resolutionCache = createResolutionCache(fileName => toPath(fileName), () => compilerOptions);
 
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder(getCanonicalFileName, getFileEmitOutput, computeHash, _sourceFile => true);
@@ -287,6 +292,10 @@ namespace ts {
 
             // Create the compiler host
             const compilerHost = createWatchedCompilerHost(compilerOptions);
+            resolutionCache.setModuleResolutionHost(compilerHost);
+            if (changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
+                resolutionCache.clear();
+            }
             beforeCompile(compilerOptions);
 
             // Compile the program
@@ -321,22 +330,18 @@ namespace ts {
                 getEnvironmentVariable: name => host.getEnvironmentVariable ? host.getEnvironmentVariable(name) : "",
                 getDirectories: (path: string) => host.getDirectories(path),
                 realpath,
-                onReleaseOldSourceFile,
+                resolveTypeReferenceDirectives: (typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile),
+                resolveModuleNames: (moduleNames, containingFile) => resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ false),
+                onReleaseOldSourceFile
             };
+        }
 
-            // TODO: cache module resolution
-            // if (host.resolveModuleNames) {
-            //     compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
-            // }
-            // if (host.resolveTypeReferenceDirectives) {
-            //     compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
-            //         return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
-            //     };
-            // }
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
         function fileExists(fileName: string) {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const path = toPath(fileName);
             const hostSourceFileInfo = sourceFilesCache.get(path);
             if (hostSourceFileInfo !== undefined) {
                 return !isString(hostSourceFileInfo);
@@ -350,7 +355,7 @@ namespace ts {
         }
 
         function getVersionedSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
-            return getVersionedSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersion, onError, shouldCreateNewSourceFile);
+            return getVersionedSourceFileByPath(fileName, toPath(fileName), languageVersion, onError, shouldCreateNewSourceFile);
         }
 
         function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
@@ -418,6 +423,7 @@ namespace ts {
             if (hostSourceFile !== undefined) {
                 if (!isString(hostSourceFile)) {
                     hostSourceFile.fileWatcher.close();
+                    resolutionCache.invalidateResolutionOfDeletedFile(path);
                 }
                 sourceFilesCache.delete(path);
             }
@@ -501,6 +507,7 @@ namespace ts {
             if (hostSourceFile) {
                 // Update the cache
                 if (eventKind === FileWatcherEventKind.Deleted) {
+                    resolutionCache.invalidateResolutionOfDeletedFile(path);
                     if (!isString(hostSourceFile)) {
                         hostSourceFile.fileWatcher.close();
                         sourceFilesCache.set(path, (hostSourceFile.version++).toString());
@@ -574,7 +581,7 @@ namespace ts {
         function onFileAddOrRemoveInWatchedDirectory(fileName: string) {
             Debug.assert(!!configFileName);
 
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const path = toPath(fileName);
 
             // Since the file existance changed, update the sourceFiles cache
             updateCachedSystem(fileName, path);

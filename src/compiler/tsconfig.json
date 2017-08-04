@@ -37,6 +37,7 @@
         "emitter.ts",
         "program.ts",
         "builder.ts",
+        "resolutionCache.ts",
         "watchedProgram.ts",
         "commandLineParser.ts",
         "tsc.ts",
