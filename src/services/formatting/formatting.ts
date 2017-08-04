@@ -1168,6 +1168,14 @@ namespace ts.formatting {
     }
 
     export function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, onlyMultiLine: boolean): CommentRange | undefined {
+        // Considering a fixed position,
+        // - trailing comments are those following and on the same line as the position.
+        // - leading comments are those in the range [position, start of next non-trivia token)
+        // that are not trailing comments of that position.
+        //
+        // Note, `node.start` is the start-position of the first comment following the previous
+        // token that is not a trailing comment, so the leading and trailing comments of all
+        // tokens contain all comments in a sourcefile disjointly.
         const precedingToken = findPrecedingToken(position, sourceFile);
         const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
         const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false), sourceFile);
