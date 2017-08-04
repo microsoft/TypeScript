@@ -37,6 +37,7 @@
         "emitter.ts",
         "program.ts",
         "builder.ts",
+        "watchedProgram.ts",
         "commandLineParser.ts",
         "tscLib.ts",
         "tsc.ts",

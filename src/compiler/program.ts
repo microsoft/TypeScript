@@ -228,17 +228,23 @@ namespace ts {
         let output = "";
 
         for (const diagnostic of diagnostics) {
-            if (diagnostic.file) {
-                const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-                const fileName = diagnostic.file.fileName;
-                const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
-                output += `${relativeFileName}(${line + 1},${character + 1}): `;
-            }
-
-            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+            output += formatDiagnostic(diagnostic, host);
         }
         return output;
+    }
+
+    export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
+        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        const errorMessage = `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+
+        if (diagnostic.file) {
+            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            const fileName = diagnostic.file.fileName;
+            const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
+            return `${relativeFileName}(${line + 1},${character + 1}): ` + errorMessage;
+        }
+
+        return errorMessage;
     }
 
     const redForegroundEscapeSequence = "\u001b[91m";
