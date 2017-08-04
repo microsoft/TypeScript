@@ -188,11 +188,7 @@ namespace ts.textChanges {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
-        public static fromCodeFixContext(context: { newLineCharacter: string, rulesProvider: formatting.RulesProvider }) {
-            return new ChangeTracker(getNewlineKind(context), context.rulesProvider);
-        }
-
-        public static fromRefactorContext(context: RefactorContext) {
+        public static fromCodeFixContext(context: { newLineCharacter: string, rulesProvider?: formatting.RulesProvider }) {
             return new ChangeTracker(getNewlineKind(context), context.rulesProvider);
         }
 
@@ -285,7 +281,7 @@ namespace ts.textChanges {
             return this;
         }
 
-        private replaceWithMutiple(sourceFile: SourceFile, startPosition: number, endPosition: number, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions): this {
+        private replaceWithMultiple(sourceFile: SourceFile, startPosition: number, endPosition: number, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions): this {
             this.changes.push({
                 kind: ChangeKind.ReplaceWithMultipleNodes,
                 sourceFile,
@@ -299,23 +295,23 @@ namespace ts.textChanges {
         public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions) {
             const startPosition = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
             const endPosition = getAdjustedEndPosition(sourceFile, oldNode, options);
-            return this.replaceWithMutiple(sourceFile, startPosition, endPosition, newNodes, options);
+            return this.replaceWithMultiple(sourceFile, startPosition, endPosition, newNodes, options);
         }
 
         public replaceNodesWithNodes(sourceFile: SourceFile, oldNodes: ReadonlyArray<Node>, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions) {
             const startPosition = getAdjustedStartPosition(sourceFile, oldNodes[0], options, Position.Start);
             const endPosition = getAdjustedEndPosition(sourceFile, lastOrUndefined(oldNodes), options);
-            return this.replaceWithMutiple(sourceFile, startPosition, endPosition, newNodes, options);
+            return this.replaceWithMultiple(sourceFile, startPosition, endPosition, newNodes, options);
         }
 
         public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions) {
-            return this.replaceWithMutiple(sourceFile, range.pos, range.end, newNodes, options);
+            return this.replaceWithMultiple(sourceFile, range.pos, range.end, newNodes, options);
         }
 
         public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions) {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
-            return this.replaceWithMutiple(sourceFile, startPosition, endPosition, newNodes, options);
+            return this.replaceWithMultiple(sourceFile, startPosition, endPosition, newNodes, options);
         }
 
         public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
@@ -539,10 +535,10 @@ namespace ts.textChanges {
                 text = parts.join(change.options.nodeSeparator);
             }
             else {
+                Debug.assert(change.kind === ChangeKind.ReplaceWithSingleNode, "change.kind === ReplaceWithSingleNode");
                 text = this.getFormattedTextOfNode(change.node, sourceFile, pos, options);
             }
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-            // however keep indentation if it is was forced
             text = (posStartsLine || options.indentation !== undefined) ? text : text.replace(/^\s+/, "");
             return (options.prefix || "") + text + (options.suffix || "");
         }

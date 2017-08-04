@@ -700,7 +700,7 @@ namespace ts.refactor.extractMethod {
             );
         }
 
-        const changeTracker = textChanges.ChangeTracker.fromRefactorContext(context);
+        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
         // insert function at the end of the scope
         changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
 

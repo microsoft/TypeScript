@@ -2749,11 +2749,15 @@ namespace FourSlash {
             }
         }
 
-        public verifyRefactorAvailable(negative: boolean, name?: string, subName?: string) {
-            const selection = {
+        private getSelection() {
+            return ({
                 pos: this.currentCaretPosition,
                 end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd
-            };
+            });
+        }
+
+        public verifyRefactorAvailable(negative: boolean, name?: string, subName?: string) {
+            const selection = this.getSelection();
 
             let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection) || [];
             if (name) {
@@ -2764,7 +2768,7 @@ namespace FourSlash {
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
             }
-            if (!negative && !isAvailable) {
+            else if (!negative && !isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
             }
         }
@@ -2786,7 +2790,7 @@ namespace FourSlash {
         }
 
         public applyRefactor(refactorName: string, actionName: string) {
-            const range = { pos: this.currentCaretPosition, end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd };
+            const range = this.getSelection();
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
             const refactor = ts.find(refactors, r => r.name === refactorName);
             if (!refactor) {
