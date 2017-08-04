@@ -967,7 +967,7 @@ namespace ts.refactor.extractMethod {
                 if (isQualifiedName(node.parent) && node !== node.parent.left) {
                     return;
                 }
-                if ((isPropertyAccessExpression(node.parent) || isElementAccessExpression(node.parent)) && node !== node.parent.expression) {
+                if (isPropertyAccessExpression(node.parent) && node !== node.parent.expression) {
                     return;
                 }
                 recordUsage(node, valueUsage, /*isTypeNode*/ isPartOfTypeNode(node));
