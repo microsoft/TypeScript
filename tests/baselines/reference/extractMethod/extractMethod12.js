@@ -21,7 +21,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ z, __return } = this.newFunction(z));
+            ({ __return, z } = this.newFunction(z));
             return __return;
         }
 
@@ -30,7 +30,7 @@ namespace A {
             y = 10;
             z = 42;
             this.b();
-            return { z, __return: a1.x + 10 };
+            return { __return: a1.x + 10, z };
         }
     }
 }

@@ -728,7 +728,7 @@ namespace ts.refactor.extractMethod {
 
             const assignments = getPropertyAssignmentsForWrites(writes);
             if (returnValueProperty) {
-                assignments.push(createShorthandPropertyAssignment(returnValueProperty));
+                assignments.unshift(createShorthandPropertyAssignment(returnValueProperty));
             }
 
             // propagate writes back
@@ -820,7 +820,7 @@ namespace ts.refactor.extractMethod {
                         if (!returnValueProperty) {
                             returnValueProperty = generateReturnValueProperty();
                         }
-                        assignments.push(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
+                        assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
                     }
                     if (assignments.length === 1) {
                         return createReturn(assignments[0].name as Expression);

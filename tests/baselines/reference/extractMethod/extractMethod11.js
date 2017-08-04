@@ -18,7 +18,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ z, __return } = this.newFunction(z));
+            ({ __return, z } = this.newFunction(z));
             return __return;
         }
 
@@ -26,7 +26,7 @@ namespace A {
             let a1 = { x: 1 };
             y = 10;
             z = 42;
-            return { z, __return: a1.x + 10 };
+            return { __return: a1.x + 10, z };
         }
     }
 }
@@ -37,7 +37,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ z, __return } = newFunction(z));
+            ({ __return, z } = newFunction(z));
             return __return;
         }
     }
@@ -46,7 +46,7 @@ namespace A {
         let a1 = { x: 1 };
         y = 10;
         z = 42;
-        return { z, __return: a1.x + 10 };
+        return { __return: a1.x + 10, z };
     }
 }
 ==SCOPE::file '/a.ts'==
@@ -56,7 +56,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ y, z, __return } = newFunction(y, z));
+            ({ __return, y, z } = newFunction(y, z));
             return __return;
         }
     }
@@ -65,5 +65,5 @@ function newFunction(y: number, z: number) {
     let a1 = { x: 1 };
     y = 10;
     z = 42;
-    return { y, z, __return: a1.x + 10 };
+    return { __return: a1.x + 10, y, z };
 }

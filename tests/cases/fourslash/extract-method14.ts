@@ -15,10 +15,10 @@ edit.applyRefactor('Extract Method', 'scope_1');
 verify.currentFileContentIs(`function foo() {
     var i = 10;
     var __return: any;
-    ({ i, __return } = newFunction(i));
+    ({ __return, i } = newFunction(i));
     return __return;
 }
 function newFunction(i) {
-    return { i, __return: i++ };
+    return { __return: i++, i };
 }
 `);

@@ -44,7 +44,7 @@ namespace A {
             let a = 1;
         
             var __return: any;
-            ({ a, __return } = newFunction(a));
+            ({ __return, a } = newFunction(a));
             return __return;
         }
 
@@ -52,7 +52,7 @@ namespace A {
             let y = 5;
             let z = x;
             a = y;
-            return { a, __return: foo() };
+            return { __return: foo(), a };
         }
     }
 }
@@ -66,7 +66,7 @@ namespace A {
             let a = 1;
         
             var __return: any;
-            ({ a, __return } = newFunction(a));
+            ({ __return, a } = newFunction(a));
             return __return;
         }
     }
@@ -75,7 +75,7 @@ namespace A {
         let y = 5;
         let z = x;
         a = y;
-        return { a, __return: foo() };
+        return { __return: foo(), a };
     }
 }
 ==SCOPE::file '/a.ts'==
@@ -88,7 +88,7 @@ namespace A {
             let a = 1;
         
             var __return: any;
-            ({ a, __return } = newFunction(x, a));
+            ({ __return, a } = newFunction(x, a));
             return __return;
         }
     }
@@ -97,5 +97,5 @@ function newFunction(x: number, a: number) {
     let y = 5;
     let z = x;
     a = y;
-    return { a, __return: A.foo() };
+    return { __return: A.foo(), a };
 }
