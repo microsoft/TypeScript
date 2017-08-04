@@ -269,14 +269,6 @@ namespace ts.refactor.extractMethod {
             if (!isStatement(nodeToCheck) && !(isExpression(nodeToCheck) && isLegalExpressionExtraction(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
-
-            if (isDeclaration(nodeToCheck)) {
-                if (hasModifier(nodeToCheck, ModifierFlags.Export)) {
-                    return [createDiagnosticForNode(nodeToCheck, Messages.CannotExtractExportedEntity)];
-                }
-                declarations.push(nodeToCheck.symbol);
-            }
-
             // If we're in a class, see if we're in a static region (static property initializer, static method, class constructor parameter default) or not
             const stoppingPoint: Node = getContainingClass(nodeToCheck);
             if (stoppingPoint) {
@@ -316,6 +308,15 @@ namespace ts.refactor.extractMethod {
                 if (errors) {
                     // already found an error - can stop now
                     return true;
+                }
+
+                if (isDeclaration(node)) {
+                    const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
+                    if (hasModifier(declaringNode, ModifierFlags.Export)) {
+                        (errors || (errors = []).push(createDiagnosticForNode(node, Messages.CannotExtractExportedEntity)));
+                        return true;
+                    }
+                    declarations.push(node.symbol);
                 }
 
                 // Some things can't be extracted in certain situations
