@@ -3673,5 +3673,15 @@
     "Convert function '{0}' to class": {
         "category": "Message",
         "code": 95002
+    },
+
+    "Extract function": {
+        "category": "Message",
+        "code": 95003
+    },
+
+    "Extract function into '{0}'": {
+        "category": "Message",
+        "code": 95004
     }
 }
