@@ -101,6 +101,7 @@ namespace ts.refactor.extractMethod {
         export const InsufficientSelection = createMessage("Select more than a single identifier.");
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
         export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
+        export const CannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
     }
 
     export enum RangeFacts {
@@ -276,7 +277,7 @@ namespace ts.refactor.extractMethod {
                 declarations.push(nodeToCheck.symbol);
             }
 
-            // If we're in a class, see if we're in a static region (static property initializer; class constructor parameter default) or not
+            // If we're in a class, see if we're in a static region (static property initializer, static method, class constructor parameter default) or not
             const stoppingPoint: Node = getContainingClass(nodeToCheck);
             if (stoppingPoint) {
                 let current: Node = nodeToCheck;
@@ -293,6 +294,11 @@ namespace ts.refactor.extractMethod {
                             rangeFacts |= RangeFacts.InStaticRegion;
                         }
                         break;
+                    }
+                    else if (current.kind === SyntaxKind.MethodDeclaration) {
+                        if (hasModifier(current, ModifierFlags.Static)) {
+                            rangeFacts |= RangeFacts.InStaticRegion;
+                        }
                     }
                     current = current.parent;
                 }
@@ -447,7 +453,7 @@ namespace ts.refactor.extractMethod {
 
     function isValidExtractionTarget(node: Node) {
         // Note that we don't use isFunctionLike because we don't want to put the extracted closure *inside* a method
-        return (node.kind === SyntaxKind.FunctionDeclaration) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
+        return (node.kind === SyntaxKind.FunctionDeclaration) || (node.kind === SyntaxKind.Constructor) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
     }
 
     /**
@@ -892,14 +898,23 @@ namespace ts.refactor.extractMethod {
 
         for (let i = 0; i < scopes.length; i++) {
             let hasWrite = false;
+            let readonlyClassPropertyWrite: Declaration | undefined = undefined;
             usagesPerScope[i].usages.forEach(value => {
                 if (value.usage === Usage.Write) {
                     hasWrite = true;
-                    return false;
+                    if (value.symbol.flags & SymbolFlags.ClassMember &&
+                        value.symbol.valueDeclaration &&
+                        hasModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
+                        readonlyClassPropertyWrite = value.symbol.valueDeclaration;
+                    }
                 }
             });
+
             if (hasWrite && !isArray(targetRange.range) && isExpression(targetRange.range)) {
                 errorsPerScope[i].push(createDiagnosticForNode(targetRange.range, Messages.CannotCombineWritesAndReturns));
+            }
+            else if (readonlyClassPropertyWrite && i > 0) {
+                errorsPerScope[i].push(createDiagnosticForNode(readonlyClassPropertyWrite, Messages.CannotCombineWritesAndReturns));
             }
         }
 
