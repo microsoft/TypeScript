@@ -102,6 +102,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
         export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
         export const CannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
+        export const CannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
     }
 
     export enum RangeFacts {
@@ -269,6 +270,11 @@ namespace ts.refactor.extractMethod {
             if (!isStatement(nodeToCheck) && !(isExpression(nodeToCheck) && isLegalExpressionExtraction(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
+
+            if (isInAmbientContext(nodeToCheck)) {
+                return [createDiagnosticForNode(nodeToCheck, Messages.CannotExtractAmbientBlock)];
+            }
+
             // If we're in a class, see if we're in a static region (static property initializer, static method, class constructor parameter default) or not
             const stoppingPoint: Node = getContainingClass(nodeToCheck);
             if (stoppingPoint) {
