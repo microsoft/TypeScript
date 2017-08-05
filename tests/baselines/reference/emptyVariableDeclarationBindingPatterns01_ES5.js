@@ -60,19 +60,19 @@
     var _g = a, _h = a;
     var _j = a, _k = a;
     var _l = a, _m = a;
-    var _o = a.p1, _p = a.p2;
-    var _q = a.p1, _r = a.p2;
-    var _s = a.p1, _t = a.p2;
-    for (var _u = {}, _v = {}; false; void 0) {
+    var _o = a;
+    var _p = a;
+    var _q = a;
+    for (var _r = {}, _s = {}; false; void 0) {
     }
     function f(_a, _b, _c) {
         _a = a;
         _b = a;
-        var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+        var _d = _c;
         return function (_a, _b, _c) {
             _a = a;
             _b = a;
-            var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+            var _d = _c;
             return a;
         };
     }

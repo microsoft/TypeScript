@@ -49,22 +49,6 @@
 })();
 
 //// [emptyVariableDeclarationBindingPatterns01_ES5iterable.js]
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
 var __values = (this && this.__values) || function (o) {
     var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
     if (m) return m.call(o);
@@ -80,25 +64,25 @@ var __values = (this && this.__values) || function (o) {
     var _a = a;
     var _b = a;
     var _c = a;
-    var _d = __read(a, 0);
-    var _e = __read(a, 0);
-    var _f = __read(a, 0);
-    var _g = a, _h = __read(a, 0);
-    var _j = a, _k = __read(a, 0);
-    var _l = a, _m = __read(a, 0);
-    var _o = a.p1, _p = __read(a.p2, 0);
-    var _q = a.p1, _r = __read(a.p2, 0);
-    var _s = a.p1, _t = __read(a.p2, 0);
-    for (var _u = {}, _v = {}; false; void 0) {
+    var _d = a;
+    var _e = a;
+    var _f = a;
+    var _g = a, _h = a;
+    var _j = a, _k = a;
+    var _l = a, _m = a;
+    var _o = a;
+    var _p = a;
+    var _q = a;
+    for (var _r = {}, _s = {}; false; void 0) {
     }
     function f(_a, _b, _c) {
         _a = a;
         _b = a;
-        var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+        var _d = _c;
         return function (_a, _b, _c) {
             _a = a;
             _b = a;
-            var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+            var _d = _c;
             return a;
         };
     }
@@ -143,7 +127,7 @@ var __values = (this && this.__values) || function (o) {
     }
     try {
         for (var ns_4 = __values(ns), ns_4_1 = ns_4.next(); !ns_4_1.done; ns_4_1 = ns_4.next()) {
-            var _g = __read(ns_4_1.value, 0);
+            var _g = ns_4_1.value;
         }
     }
     catch (e_4_1) { e_4 = { error: e_4_1 }; }
@@ -155,7 +139,7 @@ var __values = (this && this.__values) || function (o) {
     }
     try {
         for (var ns_5 = __values(ns), ns_5_1 = ns_5.next(); !ns_5_1.done; ns_5_1 = ns_5.next()) {
-            var _j = __read(ns_5_1.value, 0);
+            var _j = ns_5_1.value;
         }
     }
     catch (e_5_1) { e_5 = { error: e_5_1 }; }
@@ -167,7 +151,7 @@ var __values = (this && this.__values) || function (o) {
     }
     try {
         for (var ns_6 = __values(ns), ns_6_1 = ns_6.next(); !ns_6_1.done; ns_6_1 = ns_6.next()) {
-            var _l = __read(ns_6_1.value, 0);
+            var _l = ns_6_1.value;
         }
     }
     catch (e_6_1) { e_6 = { error: e_6_1 }; }

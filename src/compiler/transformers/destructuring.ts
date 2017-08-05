@@ -142,6 +142,13 @@ namespace ts {
         rval?: Expression,
         hoistTempVariables?: boolean,
         skipInitializer?: boolean): VariableDeclaration[] {
+        if (node.name && isEmptyBindingPattern(node.name)) {
+            // If the binding pattern is empty, all we need to do is emit a variable declaration to ensure the RHS is executed.
+            const declaration = createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined), node.type, rval || node.initializer || createVoidZero());
+            setTextRange(declaration, node);
+            aggregateTransformFlags(declaration);
+            return [declaration];
+        }
         let pendingExpressions: Expression[];
         const pendingDeclarations: { pendingExpressions?: Expression[], name: BindingName, value: Expression, location?: TextRange, original?: Node; }[] = [];
         const declarations: VariableDeclaration[] = [];
@@ -331,8 +338,7 @@ namespace ts {
                 location
             );
         }
-        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0) ||
-                every(elements, (element) => isOmittedExpression(element))) {
+        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)) {
             // For anything other than a single-element destructuring we need to generate a temporary
             // to ensure value is evaluated exactly once. Additionally, if we have zero elements
             // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
