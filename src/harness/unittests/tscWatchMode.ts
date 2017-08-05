@@ -1609,5 +1609,52 @@ namespace ts.tscWatch {
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputDoesNotContain(host, [barNotFound]);
         });
+
+        it("should compile correctly when resolved module goes missing and then comes back (module is not part of the root)", () => {
+            const root = {
+                path: `/a/foo.ts`,
+                content: `import {x} from "bar"`
+            };
+
+            const imported = {
+                path: `/a/bar.d.ts`,
+                content: `export const y = 1;`
+            };
+
+            const files = [root, libFile];
+            const filesWithImported = files.concat(imported);
+            const host = createWatchedSystem(filesWithImported);
+            const originalFileExists = host.fileExists;
+            let fileExistsCalledForBar = false;
+            host.fileExists = fileName => {
+                if (fileName === "lib.d.ts") {
+                    return false;
+                }
+                if (!fileExistsCalledForBar) {
+                    fileExistsCalledForBar = fileName.indexOf("/bar.") !== -1;
+                }
+                return originalFileExists.call(host, fileName);
+            };
+
+            createWatchModeWithoutConfigFile([root.path], host, { module: ModuleKind.AMD });
+
+            const barNotFound = `a/foo.ts(1,17): error TS2307: Cannot find module 'bar'.\n`;
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
+            checkOutputDoesNotContain(host, [barNotFound]);
+            host.clearOutput();
+
+            fileExistsCalledForBar = false;
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            checkOutputContains(host, [barNotFound]);
+            host.clearOutput();
+
+            fileExistsCalledForBar = false;
+            host.reloadFS(filesWithImported);
+            host.checkTimeoutQueueLengthAndRun(1);
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            checkOutputDoesNotContain(host, [barNotFound]);
+        });
     });
 }
