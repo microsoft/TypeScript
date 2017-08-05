@@ -13,7 +13,7 @@ var a;
 function f(_a, _b, _c) {
     _a = a;
     _b = a;
-    var _d = _c;
+    var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
 }
 
 
