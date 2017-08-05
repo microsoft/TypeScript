@@ -600,6 +600,31 @@ namespace ts {
         return result;
     }
 
+    export function groupBy<T>(array: ReadonlyArray<T>, predicate: (elem: T, index: number) => string): T[][] {
+        if (!array) {
+            return undefined;
+        }
+
+        const collection = createMap<T[]>();
+        let result: T[][];
+        array.forEach((value, index) => {
+            const key = predicate(value, index);
+            if (collection.has(key)) {
+                collection.get(key).push(value);
+            }
+            else {
+                const newGroup = [value];
+                collection.set(key, newGroup);
+                if (!result) {
+                    result = [];
+                }
+                result.push(newGroup);
+            }
+        });
+
+        return result;
+    }
+
     export function some<T>(array: ReadonlyArray<T>, predicate?: (value: T) => boolean): boolean {
         if (array) {
             if (predicate) {

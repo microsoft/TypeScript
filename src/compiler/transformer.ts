@@ -237,10 +237,21 @@ namespace ts {
         /**
          * Records a hoisted variable declaration for the provided name within a lexical environment.
          */
-        function hoistVariableDeclaration(name: Identifier): void {
+        function hoistVariableDeclaration(name: Identifier, commentContext?: VariableStatement): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
             const decl = setEmitFlags(createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
+
+            // Make a best effort to attach comments, if possible
+            const parseNode = getParseTreeNode(name);
+            if (parseNode && parseNode.parent && isVariableDeclaration(parseNode.parent) && parseNode.parent.name === parseNode) {
+                // This handles comments on identifiers inside the declaration, but not comments on the enclosing variable statement
+                setCommentRange(decl, getCommentRange(parseNode));
+                // Whereas this retains a link between the hoisted variable and its original statement (if present)
+                // - allowing the comments on _that_ to be preserved once the lexical environment is finished.
+                getOrCreateEmitNode(decl).commentContext = commentContext;
+            }
+
             if (!lexicalEnvironmentVariableDeclarations) {
                 lexicalEnvironmentVariableDeclarations = [decl];
             }
@@ -299,6 +310,31 @@ namespace ts {
             lexicalEnvironmentSuspended = false;
         }
 
+        function hasLeadingComments(node: Node) {
+            node = getParseTreeNode(node);
+            if (!node) {
+                return node && node.emitNode && !!node.emitNode.leadingComments;
+            }
+            const ranges = getLeadingCommentRangesOfNode(node, getSourceFileOfNode(node));
+            return ranges && ranges.length > 0;
+        }
+
+        function chunkVariableDeclarationsBySyntheticComments(declarations: VariableDeclaration[]): VariableDeclaration[][] {
+            return groupBy(declarations, decl => decl.emitNode && decl.emitNode.commentContext && hasLeadingComments(decl.emitNode.commentContext)
+                ? "" + getNodeId(decl.emitNode.commentContext)
+                : "no-comment"
+            );
+        }
+
+        function createSimpleVariableStatement(declarations: VariableDeclaration[]) {
+            const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(declarations));
+            // Bring forward comments on declarations whose statements are omitted due to variable hoisting and place them on the hoisted declaration
+            if (declarations[0] && declarations[0].emitNode && declarations[0].emitNode.commentContext) {
+                setCommentRange(statement, declarations[0].emitNode.commentContext);
+            }
+            return statement;
+        }
+
         /**
          * Ends a lexical environment. The previous set of hoisted declarations are restored and
          * any hoisted declarations added in this environment are returned.
@@ -315,16 +351,13 @@ namespace ts {
                 }
 
                 if (lexicalEnvironmentVariableDeclarations) {
-                    const statement = createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
-                    );
+                    const newStatements = map(chunkVariableDeclarationsBySyntheticComments(lexicalEnvironmentVariableDeclarations), createSimpleVariableStatement);
 
                     if (!statements) {
-                        statements = [statement];
+                        statements = newStatements;
                     }
                     else {
-                        statements.push(statement);
+                        statements = concatenate(statements, newStatements);
                     }
                 }
             }

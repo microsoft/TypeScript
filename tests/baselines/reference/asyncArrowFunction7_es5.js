@@ -9,6 +9,7 @@ var bar = async (): Promise<void> => {
 var _this = this;
 var bar = function () { return __awaiter(_this, void 0, void 0, function () {
     var _this = this;
+    // 'await' here is an identifier, and not an await expression.
     var foo;
     return __generator(this, function (_a) {
         foo = function (a) {

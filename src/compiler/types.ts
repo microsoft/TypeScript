@@ -4215,6 +4215,7 @@ namespace ts {
         constantValue?: string | number;         // The constant value of an expression
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
         helpers?: EmitHelper[];                  // Emit helpers for the node
+        commentContext?: VariableStatement;      // Context node for hoisted identifiers so that they may be grouped by context and appropriate comments retained
     }
 
     export const enum EmitFlags {
@@ -4344,7 +4345,7 @@ namespace ts {
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
 
         /** Hoists a variable declaration to the containing scope. */
-        hoistVariableDeclaration(node: Identifier): void;
+        hoistVariableDeclaration(node: Identifier, commentContext?: VariableStatement): void;
 
         /** Records a request for a non-scoped emit helper in the current context. */
         requestEmitHelper(helper: EmitHelper): void;

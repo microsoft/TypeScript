@@ -1,0 +1,81 @@
+=== tests/cases/compiler/commentsAreAttachedToHoistedDeclarationsOnTransform.ts ===
+async function example() {
+>example : () => Promise<string>
+
+    // result.value will be promise
+    const promise = Promise.resolve("foo");
+>promise : Promise<string>
+>Promise.resolve("foo") : Promise<string>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>"foo" : "foo"
+
+    await promise;
+>await promise : string
+>promise : Promise<string>
+
+    // result.value will be "foo"
+    return "foo";
+>"foo" : "foo"
+}
+
+async function example2() {
+>example2 : () => Promise<string>
+
+    // test abc
+    let abc;
+>abc : any
+
+    // test def
+    let def,
+>def : any
+
+        // ghi
+        ghi;
+>ghi : any
+
+
+    // result.value will be promise
+    const promise = Promise.resolve("foo");
+>promise : Promise<string>
+>Promise.resolve("foo") : Promise<string>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>"foo" : "foo"
+
+    await promise;
+>await promise : string
+>promise : Promise<string>
+
+    // result.value will be "foo"
+    return "foo";
+>"foo" : "foo"
+}
+
+async function example3() {
+>example3 : () => Promise<void>
+
+  // comment1
+  let a = 1;
+>a : number
+>1 : 1
+
+  // comment2
+  let b;
+>b : any
+}
+
+async function example4() {
+>example4 : () => Promise<void>
+
+  /** comment1 */
+  let a = 1;
+>a : number
+>1 : 1
+
+  /** comment2 */
+  let b;
+>b : any
+}
