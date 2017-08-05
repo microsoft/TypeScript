@@ -74,6 +74,32 @@ namespace ts {
                 }
             }).outputText;
         });
+
+        testBaseline("synthesizedNamespace", () => {
+            return ts.transpileModule(`namespace Reflect { const x = 1; }`, {
+                transformers: {
+                    before: [forceSyntheticModuleDeclaration],
+                },
+                compilerOptions: {
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function forceSyntheticModuleDeclaration(context: ts.TransformationContext) {
+                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                    return visitNode(sourceFile);
+
+                    function visitNode<T extends ts.Node>(node: T): T {
+                        if (node.kind === ts.SyntaxKind.ModuleBlock) {
+                            const block = node as T & ts.ModuleBlock;
+                            const statements = ts.createNodeArray([...block.statements]);
+                            return ts.updateModuleBlock(block, statements) as typeof block;
+                        }
+                        return ts.visitEachChild(node, visitNode, context);
+                    }
+                };
+            }
+        })
     });
 }
 
