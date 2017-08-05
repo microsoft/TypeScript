@@ -2639,9 +2639,6 @@ namespace ts {
         /**
          * Records that a declaration was emitted in the current scope, if it was the first
          * declaration for the provided symbol.
-         *
-         * NOTE: if there is ever a transformation above this one, we may not be able to rely
-         *       on symbol names.
          */
         function recordEmittedDeclarationInScope(node: Node) {
             const name = node.symbol && node.symbol.escapedName;
@@ -2657,10 +2654,13 @@ namespace ts {
         }
 
         /**
-         * Determines whether a declaration is the first declaration with the same name emitted
-         * in the current scope.
+         * Determines whether a declaration is *could* be the first declaration with
+         * the same name emitted in the current scope. Only returns false if we are absolutely
+         * certain a previous declaration has been emitted.
          */
-        function isFirstEmittedDeclarationInScope(node: Node) {
+        function isPotentiallyFirstEmittedDeclarationInScope(node: Node) {
+            // If the node has a named symbol, then we have enough knowledge to determine
+            // whether a prior declaration has been emitted.
             if (currentScopeFirstDeclarationsOfName) {
                 const name = node.symbol && node.symbol.escapedName;
                 if (name) {
@@ -2668,7 +2668,8 @@ namespace ts {
                 }
             }
 
-            return false;
+            // Otherwise, we can't be sure. For example, this node could be synthetic.
+            return true;
         }
 
         /**
@@ -2690,7 +2691,7 @@ namespace ts {
             setOriginalNode(statement, node);
 
             recordEmittedDeclarationInScope(node);
-            if (isFirstEmittedDeclarationInScope(node)) {
+            if (isPotentiallyFirstEmittedDeclarationInScope(node)) {
                 // Adjust the source map emit to match the old emitter.
                 if (node.kind === SyntaxKind.EnumDeclaration) {
                     setSourceMapRange(statement.declarationList, node);
