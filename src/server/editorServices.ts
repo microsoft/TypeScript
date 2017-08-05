@@ -247,7 +247,8 @@ namespace ts.server {
         WildCardDirectories = "Wild card directory",
         TypeRoot = "Type root of the project",
         ClosedScriptInfo = "Closed Script info",
-        ConfigFileForInferredRoot = "Config file for the inferred project root"
+        ConfigFileForInferredRoot = "Config file for the inferred project root",
+        FailedLookupLocation = "Failed lookup locations in module resolution"
     }
 
     /* @internal */

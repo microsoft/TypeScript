@@ -217,8 +217,7 @@ namespace ts.server {
             this.resolutionCache = createResolutionCache(
                 fileName => this.projectService.toPath(fileName),
                 () => this.compilerOptions,
-                () => this.markAsDirty(),
-                (fileName, callback) => host.watchFile(fileName, callback),
+                (failedLookupLocation, containingFile, name) => this.watchFailedLookupLocation(failedLookupLocation, containingFile, name),
                 s => this.projectService.logger.info(s),
                 (primaryResult, moduleName, compilerOptions, host) => resolveWithGlobalCache(primaryResult, moduleName, compilerOptions, host,
                     this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined, this.getProjectName())
@@ -233,6 +232,23 @@ namespace ts.server {
             }
 
             this.markAsDirty();
+        }
+
+        private watchFailedLookupLocation(failedLookupLocation: string, containingFile: string, name: string) {
+            // There is some kind of change in the failed lookup location, update the program
+            return this.projectService.addFileWatcher(WatchType.FailedLookupLocation, this, failedLookupLocation, (__fileName, eventKind) => {
+                this.projectService.logger.info(`Watcher: FailedLookupLocations: Status: ${FileWatcherEventKind[eventKind]}: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
+                if (this.projectKind === ProjectKind.Configured) {
+                    (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(failedLookupLocation));
+                }
+                this.updateTypes();
+                // TODO: We need more intensive approach wherein we are able to comunicate to the program structure reuser that the even though the source file
+                // refering to this failed location hasnt changed, it needs to re-evaluate the module resolutions for the invalidated resolutions.
+                // For now just clear existing program, that should still reuse the source files but atleast compute the resolutions again.
+                // this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
+                // this.markAsDirty();
+                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+            });
         }
 
         private setInternalCompilerOptionsForEmittingJsFiles() {

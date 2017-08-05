@@ -335,7 +335,8 @@ namespace ts.projectSystem {
             checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
             const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
-            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
+            const moduleLookupLocations = ["/a/b/c/module.ts", "/a/b/c/module.tsx"];
+            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path, ...moduleLookupLocations));
         });
 
         it("can handle tsconfig file name with difference casing", () => {

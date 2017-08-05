@@ -9,6 +9,7 @@ namespace ts {
         resolveModuleNames(moduleNames: string[], containingFile: string, logChanges: boolean): ResolvedModuleFull[];
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         invalidateResolutionOfDeletedFile(filePath: Path): void;
+        invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation: string): void;
         clear(): void;
     }
 
@@ -33,8 +34,7 @@ namespace ts {
     export function createResolutionCache(
         toPath: (fileName: string) => Path,
         getCompilerOptions: () => CompilerOptions,
-        clearProgramAndScheduleUpdate: () => void,
-        watchForFailedLookupLocation: (fileName: string, callback: FileWatcherCallback) => FileWatcher,
+        watchForFailedLookupLocation: (failedLookupLocation: string, containingFile: string, name: string) => FileWatcher,
         log: (s: string) => void,
         resolveWithGlobalCache?: ResolverWithGlobalCache): ResolutionCache {
 
@@ -54,6 +54,7 @@ namespace ts {
             resolveModuleNames,
             resolveTypeReferenceDirectives,
             invalidateResolutionOfDeletedFile,
+            invalidateResolutionOfChangedFailedLookupLocation,
             clear
         };
 
@@ -185,11 +186,8 @@ namespace ts {
                 log(`Watcher: FailedLookupLocations: Status: Using existing watcher: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name} refCount: ${failedLookupLocationWatcher.refCount}`);
             }
             else {
-                const fileWatcher = watchForFailedLookupLocation(failedLookupLocation, (__fileName, eventKind) => {
-                    log(`Watcher: FailedLookupLocations: Status: ${FileWatcherEventKind[eventKind]}: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
-                    // There is some kind of change in the failed lookup location, update the program
-                    clearProgramAndScheduleUpdate();
-                });
+                log(`Watcher: FailedLookupLocations: Status: new watch: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
+                const fileWatcher = watchForFailedLookupLocation(failedLookupLocation, containingFile, name);
                 failedLookupLocationsWatches.set(failedLookupLocationPath, { fileWatcher, refCount: 1 });
             }
         }
@@ -260,7 +258,7 @@ namespace ts {
                     });
                 }
                 else if (value) {
-                    value.forEach((resolution) => {
+                    value.forEach((resolution, __name) => {
                         if (resolution && !resolution.isInvalidated) {
                             const result = getResult(resolution);
                             if (result) {
@@ -274,9 +272,31 @@ namespace ts {
             });
         }
 
+        function invalidateResolutionCacheOfChangedFailedLookupLocation<T extends NameResolutionWithFailedLookupLocations>(
+            failedLookupLocation: string,
+            cache: Map<Map<T>>) {
+            cache.forEach((value, _containingFilePath) => {
+                if (value) {
+                    value.forEach((resolution, __name) => {
+                        if (resolution && !resolution.isInvalidated && contains(resolution.failedLookupLocations, failedLookupLocation)) {
+                            // TODO: mark the file as needing re-evaluation of module resolution instead of using it blindly.
+                            // Note: Right now this invalidation path is not used at all as it doesnt matter as we are anyways clearing the program,
+                            // which means all the resolutions will be discarded.
+                            resolution.isInvalidated = true;
+                        }
+                    });
+                }
+            });
+        }
+
         function invalidateResolutionOfDeletedFile(filePath: Path) {
             invalidateResolutionCacheOfDeletedFile(filePath, resolvedModuleNames, m => m.resolvedModule, r => r.resolvedFileName);
             invalidateResolutionCacheOfDeletedFile(filePath, resolvedTypeReferenceDirectives, m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName);
+        }
+
+        function invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation: string) {
+             invalidateResolutionCacheOfChangedFailedLookupLocation(failedLookupLocation, resolvedModuleNames);
+             invalidateResolutionCacheOfChangedFailedLookupLocation(failedLookupLocation, resolvedTypeReferenceDirectives);
         }
     }
 }
