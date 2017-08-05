@@ -271,7 +271,13 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
 
         // Cache for the module resolution
-        const resolutionCache = createResolutionCache(fileName => toPath(fileName), () => compilerOptions);
+        const resolutionCache = createResolutionCache(
+            fileName => toPath(fileName),
+            () => compilerOptions,
+            () => clearExistingProgramAndScheduleProgramUpdate(),
+            (fileName, callback) => system.watchFile(fileName, callback),
+            s => writeLog(s)
+        );
 
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder(getCanonicalFileName, getFileEmitOutput, computeHash, _sourceFile => true);
@@ -462,6 +468,11 @@ namespace ts {
         function scheduleProgramReload() {
             Debug.assert(!!configFileName);
             needsReload = true;
+            scheduleProgramUpdate();
+        }
+
+        function clearExistingProgramAndScheduleProgramUpdate() {
+            program = undefined;
             scheduleProgramUpdate();
         }
 

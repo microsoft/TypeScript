@@ -33,12 +33,19 @@ namespace ts {
     export function createResolutionCache(
         toPath: (fileName: string) => Path,
         getCompilerOptions: () => CompilerOptions,
+        clearProgramAndScheduleUpdate: () => void,
+        watchForFailedLookupLocation: (fileName: string, callback: FileWatcherCallback) => FileWatcher,
+        log: (s: string) => void,
         resolveWithGlobalCache?: ResolverWithGlobalCache): ResolutionCache {
 
         let host: ModuleResolutionHost;
         let filesWithChangedSetOfUnresolvedImports: Path[];
+
         const resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+
+        type FailedLookupLocationsWatcher = { fileWatcher: FileWatcher; refCount: number };
+        const failedLookupLocationsWatches = createMap<FailedLookupLocationsWatcher>();
 
         return {
             setModuleResolutionHost,
@@ -55,6 +62,11 @@ namespace ts {
         }
 
         function clear() {
+            failedLookupLocationsWatches.forEach((failedLookupLocationWatcher, failedLookupLocationPath: Path) => {
+                log(`Watcher: FailedLookupLocations: Status: ForceClose: LocationPath: ${failedLookupLocationPath}, refCount: ${failedLookupLocationWatcher.refCount}`);
+                failedLookupLocationWatcher.fileWatcher.close();
+            });
+            failedLookupLocationsWatches.clear();
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
         }
@@ -103,8 +115,9 @@ namespace ts {
                     }
                     else {
                         resolution = loader(name, containingFile, compilerOptions, host);
-                        newResolutions.set(name, resolution);
+                        updateFailedLookupLocationWatches(containingFile, name, existingResolution && existingResolution.failedLookupLocations, resolution.failedLookupLocations);
                     }
+                    newResolutions.set(name, resolution);
                     if (logChanges && filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
                         filesWithChangedSetOfUnresolvedImports.push(path);
                         // reset log changes to avoid recording the same file multiple times
@@ -155,7 +168,6 @@ namespace ts {
             }
         }
 
-
         function resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
             return resolveNamesWithLocalCache(typeDirectiveNames, containingFile, resolvedTypeReferenceDirectives, resolveTypeReferenceDirective,
                 m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName,  /*logChanges*/ false);
@@ -166,6 +178,75 @@ namespace ts {
                 m => m.resolvedModule, r => r.resolvedFileName, logChanges);
         }
 
+        function watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
+            const failedLookupLocationWatcher = failedLookupLocationsWatches.get(failedLookupLocationPath);
+            if (failedLookupLocationWatcher) {
+                failedLookupLocationWatcher.refCount++;
+                log(`Watcher: FailedLookupLocations: Status: Using existing watcher: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name} refCount: ${failedLookupLocationWatcher.refCount}`);
+            }
+            else {
+                const fileWatcher = watchForFailedLookupLocation(failedLookupLocation, (__fileName, eventKind) => {
+                    log(`Watcher: FailedLookupLocations: Status: ${FileWatcherEventKind[eventKind]}: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
+                    // There is some kind of change in the failed lookup location, update the program
+                    clearProgramAndScheduleUpdate();
+                });
+                failedLookupLocationsWatches.set(failedLookupLocationPath, { fileWatcher, refCount: 1 });
+            }
+        }
+
+        function closeFailedLookupLocationWatcher(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
+            const failedLookupLocationWatcher = failedLookupLocationsWatches.get(failedLookupLocationPath);
+            Debug.assert(!!failedLookupLocationWatcher);
+            failedLookupLocationWatcher.refCount--;
+            if (failedLookupLocationWatcher.refCount) {
+                log(`Watcher: FailedLookupLocations: Status: Removing existing watcher: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}: refCount: ${failedLookupLocationWatcher.refCount}`);
+            }
+            else {
+                log(`Watcher: FailedLookupLocations: Status: Closing the file watcher: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
+                failedLookupLocationWatcher.fileWatcher.close();
+                failedLookupLocationsWatches.delete(failedLookupLocationPath);
+            }
+        }
+
+        type FailedLookupLocationAction = (failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) => void;
+        function withFailedLookupLocations(failedLookupLocations: string[], containingFile: string, name: string, fn: FailedLookupLocationAction) {
+            forEach(failedLookupLocations, failedLookupLocation => {
+                fn(failedLookupLocation, toPath(failedLookupLocation), containingFile, name);
+            });
+        }
+
+        function updateFailedLookupLocationWatches(containingFile: string, name: string, existingFailedLookupLocations: string[], failedLookupLocations: string[]) {
+            if (failedLookupLocations) {
+                if (existingFailedLookupLocations) {
+                    const existingWatches = arrayToMap(existingFailedLookupLocations, failedLookupLocation => toPath(failedLookupLocation));
+                    for (const failedLookupLocation of failedLookupLocations) {
+                        const failedLookupLocationPath = toPath(failedLookupLocation);
+                        if (existingWatches && existingWatches.has(failedLookupLocationPath)) {
+                            // still has same failed lookup location, keep the was
+                            existingWatches.delete(failedLookupLocationPath);
+                        }
+                        else {
+                            // Create new watch
+                            watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name);
+                        }
+                    }
+
+                    // Close all the watches that are still present in the existingWatches since those are not the locations looked up for buy new resolution
+                    existingWatches.forEach((failedLookupLocation, failedLookupLocationPath: Path) =>
+                        closeFailedLookupLocationWatcher(failedLookupLocation, failedLookupLocationPath, containingFile, name)
+                    );
+                }
+                else {
+                    // Watch all the failed lookup locations
+                    withFailedLookupLocations(failedLookupLocations, containingFile, name, watchFailedLookupLocation);
+                }
+            }
+            else {
+                // Close existing watches for the failed locations
+                withFailedLookupLocations(existingFailedLookupLocations, containingFile, name, closeFailedLookupLocationWatcher);
+            }
+        }
+
         function invalidateResolutionCacheOfDeletedFile<T extends NameResolutionWithFailedLookupLocations, R>(
             deletedFilePath: Path,
             cache: Map<Map<T>>,
@@ -174,6 +255,9 @@ namespace ts {
             cache.forEach((value, path) => {
                 if (path === deletedFilePath) {
                     cache.delete(path);
+                    value.forEach((resolution, name) => {
+                        withFailedLookupLocations(resolution.failedLookupLocations, path, name, closeFailedLookupLocationWatcher);
+                    });
                 }
                 else if (value) {
                     value.forEach((resolution) => {

@@ -217,6 +217,9 @@ namespace ts.server {
             this.resolutionCache = createResolutionCache(
                 fileName => this.projectService.toPath(fileName),
                 () => this.compilerOptions,
+                () => this.markAsDirty(),
+                (fileName, callback) => host.watchFile(fileName, callback),
+                s => this.projectService.logger.info(s),
                 (primaryResult, moduleName, compilerOptions, host) => resolveWithGlobalCache(primaryResult, moduleName, compilerOptions, host,
                     this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined, this.getProjectName())
             );
@@ -359,6 +362,7 @@ namespace ts.server {
             this.rootFilesMap = undefined;
             this.program = undefined;
             this.builder = undefined;
+            this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
             this.projectErrors = undefined;
