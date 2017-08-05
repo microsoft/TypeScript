@@ -3979,6 +3979,7 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
         onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
+        hasInvalidatedResolution?: HasInvalidatedResolution;
     }
 
     /* @internal */

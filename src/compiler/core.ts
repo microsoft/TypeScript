@@ -1220,7 +1220,7 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(): void {}
+    export function noop(): any {}
 
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {

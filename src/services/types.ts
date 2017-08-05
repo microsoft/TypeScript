@@ -185,6 +185,7 @@ namespace ts {
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        hasInvalidatedResolution?: HasInvalidatedResolution;
         directoryExists?(directoryName: string): boolean;
 
         /*

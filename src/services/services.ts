@@ -1115,8 +1115,11 @@ namespace ts {
             // Get a fresh cache of the host information
             let hostCache = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
+
+            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || noop;
+
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists, hasInvalidatedResolution)) {
                 return;
             }
 
@@ -1155,7 +1158,8 @@ namespace ts {
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
-                onReleaseOldSourceFile
+                onReleaseOldSourceFile,
+                hasInvalidatedResolution
             };
             if (host.trace) {
                 compilerHost.trace = message => host.trace(message);

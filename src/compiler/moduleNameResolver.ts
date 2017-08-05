@@ -768,6 +768,8 @@ namespace ts {
         return !host.directoryExists || host.directoryExists(directoryName);
     }
 
+    export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
+
     /**
      * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.

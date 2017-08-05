@@ -241,12 +241,8 @@ namespace ts.server {
                 if (this.projectKind === ProjectKind.Configured) {
                     (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(failedLookupLocation));
                 }
-                this.updateTypes();
-                // TODO: We need more intensive approach wherein we are able to comunicate to the program structure reuser that the even though the source file
-                // refering to this failed location hasnt changed, it needs to re-evaluate the module resolutions for the invalidated resolutions.
-                // For now just clear existing program, that should still reuse the source files but atleast compute the resolutions again.
-                // this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
-                // this.markAsDirty();
+                this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
+                this.markAsDirty();
                 this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
             });
         }
@@ -605,6 +601,7 @@ namespace ts.server {
          */
         updateGraph(): boolean {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
+            this.lsHost.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
 
             let hasChanges = this.updateGraphWorker();
 
@@ -640,7 +637,7 @@ namespace ts.server {
             // otherwise tell it to drop its internal state
             if (this.builder) {
                 if (this.languageServiceEnabled && this.compileOnSaveEnabled) {
-                    this.builder.onProgramUpdateGraph(this.program);
+                    this.builder.onProgramUpdateGraph(this.program, this.lsHost.hasInvalidatedResolution);
                 }
                 else {
                     this.builder.clear();

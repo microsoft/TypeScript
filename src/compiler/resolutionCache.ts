@@ -4,12 +4,18 @@
 namespace ts {
     export interface ResolutionCache {
         setModuleResolutionHost(host: ModuleResolutionHost): void;
+
         startRecordingFilesWithChangedResolutions(): void;
         finishRecordingFilesWithChangedResolutions(): Path[];
+
         resolveModuleNames(moduleNames: string[], containingFile: string, logChanges: boolean): ResolvedModuleFull[];
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+
         invalidateResolutionOfDeletedFile(filePath: Path): void;
         invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation: string): void;
+
+        createHasInvalidatedResolution(): HasInvalidatedResolution;
+
         clear(): void;
     }
 
@@ -40,6 +46,7 @@ namespace ts {
 
         let host: ModuleResolutionHost;
         let filesWithChangedSetOfUnresolvedImports: Path[];
+        let filesWithInvalidatedResolutions: Map<true>;
 
         const resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
@@ -55,6 +62,7 @@ namespace ts {
             resolveTypeReferenceDirectives,
             invalidateResolutionOfDeletedFile,
             invalidateResolutionOfChangedFailedLookupLocation,
+            createHasInvalidatedResolution,
             clear
         };
 
@@ -80,6 +88,12 @@ namespace ts {
             const collected = filesWithChangedSetOfUnresolvedImports;
             filesWithChangedSetOfUnresolvedImports = undefined;
             return collected;
+        }
+
+        function createHasInvalidatedResolution(): HasInvalidatedResolution {
+            const collected = filesWithInvalidatedResolutions;
+            filesWithInvalidatedResolutions = undefined;
+            return path => collected && collected.has(path);
         }
 
         function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -250,7 +264,7 @@ namespace ts {
             cache: Map<Map<T>>,
             getResult: (s: T) => R,
             getResultFileName: (result: R) => string | undefined) {
-            cache.forEach((value, path) => {
+            cache.forEach((value, path: Path) => {
                 if (path === deletedFilePath) {
                     cache.delete(path);
                     value.forEach((resolution, name) => {
@@ -264,6 +278,7 @@ namespace ts {
                             if (result) {
                                 if (getResultFileName(result) === deletedFilePath) {
                                     resolution.isInvalidated = true;
+                                    (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(path, true);
                                 }
                             }
                         }
@@ -275,14 +290,13 @@ namespace ts {
         function invalidateResolutionCacheOfChangedFailedLookupLocation<T extends NameResolutionWithFailedLookupLocations>(
             failedLookupLocation: string,
             cache: Map<Map<T>>) {
-            cache.forEach((value, _containingFilePath) => {
+            cache.forEach((value, containingFile: Path) => {
                 if (value) {
                     value.forEach((resolution, __name) => {
                         if (resolution && !resolution.isInvalidated && contains(resolution.failedLookupLocations, failedLookupLocation)) {
-                            // TODO: mark the file as needing re-evaluation of module resolution instead of using it blindly.
-                            // Note: Right now this invalidation path is not used at all as it doesnt matter as we are anyways clearing the program,
-                            // which means all the resolutions will be discarded.
+                            // Mark the file as needing re-evaluation of module resolution instead of using it blindly.
                             resolution.isInvalidated = true;
+                            (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFile, true);
                         }
                     });
                 }

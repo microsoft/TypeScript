@@ -394,7 +394,7 @@ namespace ts {
     }
 
     export function isProgramUptoDate(program: Program, rootFileNames: string[], newOptions: CompilerOptions,
-        getSourceVersion: (path: Path) => string, fileExists: (fileName: string) => boolean): boolean {
+        getSourceVersion: (path: Path) => string, fileExists: (fileName: string) => boolean, hasInvalidatedResolution: HasInvalidatedResolution): boolean {
         // If we haven't create a program yet, then it is not up-to-date
         if (!program) {
             return false;
@@ -432,10 +432,9 @@ namespace ts {
         return true;
 
         function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-            if (!sourceFile) {
-                return false;
-            }
-            return sourceFile.version === getSourceVersion(sourceFile.path);
+            return sourceFile &&
+                sourceFile.version === getSourceVersion(sourceFile.path) &&
+                !hasInvalidatedResolution(sourceFile.path);
         }
     }
 
@@ -565,6 +564,7 @@ namespace ts {
 
         let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
+        const hasInvalidatedResolution = host.hasInvalidatedResolution || noop;
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
@@ -803,7 +803,7 @@ namespace ts {
                         trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
                     }
                 }
-                else {
+                else if (!hasInvalidatedResolution(oldProgramState.file.path)) {
                     resolvesToAmbientModuleInNonModifiedFile = moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
                 }
 
@@ -960,6 +960,13 @@ namespace ts {
                     }
 
                     // tentatively approve the file
+                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                }
+                else if (hasInvalidatedResolution(oldSourceFile.path)) {
+                    // 'module/types' references could have changed
+                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+
+                    // add file to the modified list so that we will resolve it later
                     modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
                 }
 

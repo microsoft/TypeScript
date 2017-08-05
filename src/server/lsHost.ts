@@ -110,6 +110,10 @@ namespace ts.server {
 
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
+
+        /*@internal*/
+        hasInvalidatedResolution: HasInvalidatedResolution;
+
         /**
          * This is the host that is associated with the project. This is normally same as projectService's host
          * except in Configured projects where it is CachedServerHost so that we can cache the results of the

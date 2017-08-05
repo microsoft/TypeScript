@@ -256,6 +256,7 @@ namespace ts {
 
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[];                    // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
+        let hasInvalidatedResolution: HasInvalidatedResolution;             // Passed along to see if source file has invalidated resolutions
 
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
@@ -292,7 +293,8 @@ namespace ts {
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);
 
-            if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists)) {
+            hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
+            if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution)) {
                 return;
             }
 
@@ -306,7 +308,7 @@ namespace ts {
 
             // Compile the program
             program = createProgram(rootFileNames, compilerOptions, compilerHost, program);
-            builder.onProgramUpdateGraph(program);
+            builder.onProgramUpdateGraph(program, hasInvalidatedResolution);
 
             // Update watches
             missingFilesMap = updateMissingFilePathsWatch(program, missingFilesMap, watchMissingFilePath, closeMissingFilePathWatcher);
@@ -351,7 +353,8 @@ namespace ts {
                 realpath,
                 resolveTypeReferenceDirectives: (typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile),
                 resolveModuleNames: (moduleNames, containingFile) => resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ false),
-                onReleaseOldSourceFile
+                onReleaseOldSourceFile,
+                hasInvalidatedResolution
             };
         }
 
@@ -569,13 +572,7 @@ namespace ts {
             writeLog(`Failed lookup location : ${failedLookupLocation} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName} containingFile: ${containingFile}, name: ${name}`);
             const path = toPath(failedLookupLocation);
             updateCachedSystem(failedLookupLocation, path);
-
-            // TODO: We need more intensive approach wherein we are able to comunicate to the program structure reuser that the even though the source file
-            // refering to this failed location hasnt changed, it needs to re-evaluate the module resolutions for the invalidated resolutions.
-            // For now just clear existing program, that should still reuse the source files but atleast compute the resolutions again.
-
-            // resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
-            program = undefined;
+            resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
             scheduleProgramUpdate();
         }
 

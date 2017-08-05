@@ -22,7 +22,7 @@ namespace ts {
         /**
          * This is the callback when file infos in the builder are updated
          */
-        onProgramUpdateGraph(program: Program): void;
+        onProgramUpdateGraph(program: Program, hasInvalidatedResolution: HasInvalidatedResolution): void;
         getFilesAffectedBy(program: Program, path: Path): string[];
         emitFile(program: Program, path: Path): EmitOutput;
         emitChangedFiles(program: Program): EmitOutputDetailed[];
@@ -84,7 +84,7 @@ namespace ts {
             clear
         };
 
-        function createProgramGraph(program: Program) {
+        function createProgramGraph(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
             const currentIsModuleEmit = program.getCompilerOptions().module !== ModuleKind.None;
             if (isModuleEmit !== currentIsModuleEmit) {
                 isModuleEmit = currentIsModuleEmit;
@@ -100,7 +100,7 @@ namespace ts {
                 // Remove existing file info
                 removeExistingFileInfo,
                 // We will update in place instead of deleting existing value and adding new one
-                (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile)
+                (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
             );
         }
 
@@ -115,8 +115,8 @@ namespace ts {
             emitHandler.removeScriptInfo(path);
         }
 
-        function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile) {
-            if (existingInfo.version !== sourceFile.version) {
+        function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile, hasInvalidatedResolution: HasInvalidatedResolution) {
+            if (existingInfo.version !== sourceFile.version || hasInvalidatedResolution(sourceFile.path)) {
                 changedFilesSinceLastEmit.set(sourceFile.path, true);
                 existingInfo.version = sourceFile.version;
                 emitHandler.updateScriptInfo(program, sourceFile);
@@ -125,13 +125,13 @@ namespace ts {
 
         function ensureProgramGraph(program: Program) {
             if (!emitHandler) {
-                createProgramGraph(program);
+                createProgramGraph(program, noop);
             }
         }
 
-        function onProgramUpdateGraph(program: Program) {
+        function onProgramUpdateGraph(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
             if (emitHandler) {
-                createProgramGraph(program);
+                createProgramGraph(program, hasInvalidatedResolution);
             }
         }
 
@@ -297,8 +297,6 @@ namespace ts {
             }
             return result;
         }
-
-        function noop() { }
 
         function getNonModuleEmitHandler(): EmitHandler {
             return {
