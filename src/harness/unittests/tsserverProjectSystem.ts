@@ -407,17 +407,20 @@ namespace ts.projectSystem {
                             // Update file
                             if (currentEntry.content !== fileOrFolder.content) {
                                 currentEntry.content = fileOrFolder.content;
+                                currentEntry.fileSize = fileOrFolder.fileSize;
                                 this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
                             }
                         }
                         else {
                             // TODO: Changing from file => folder
+                            Debug.fail(`Currently ${path} is file and new FS makes it folder which isnt supported yet`);
                         }
                     }
                     else {
                         // Folder
                         if (typeof fileOrFolder.content === "string") {
                             // TODO: Changing from folder => file
+                            Debug.fail(`Currently ${path} is folder and new FS makes it file which isnt supported yet`);
                         }
                         else {
                             // Folder update: Nothing to do.
@@ -778,6 +781,20 @@ namespace ts.projectSystem {
         }
     }
 
+    type ErrorInformation = { diagnosticMessage: DiagnosticMessage, errorTextArguments?: string[] };
+    function getProtocolDiagnosticMessage({ diagnosticMessage, errorTextArguments = [] }: ErrorInformation) {
+        return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
+    }
+
+    function verifyDiagnostics(actual: server.protocol.Diagnostic[], expected: ErrorInformation[]) {
+        const expectedErrors = expected.map(getProtocolDiagnosticMessage);
+        assert.deepEqual(actual.map(diag => flattenDiagnosticMessageText(diag.text, "\n")), expectedErrors);
+    }
+
+    function verifyNoDiagnostics(actual: server.protocol.Diagnostic[]) {
+        verifyDiagnostics(actual, []);
+    }
+
     describe("tsserver-project-system", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -1111,10 +1128,13 @@ namespace ts.projectSystem {
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
 
             // Two errors: CommonFile2 not found and cannot find name y
-            assert.equal(diags.length, 2, diags.map(diag => flattenDiagnosticMessageText(diag.text, "\n")).join("\n"));
+            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            verifyDiagnostics(diags, [
+                { diagnosticMessage: Diagnostics.Cannot_find_name_0, errorTextArguments: ["y"] },
+                { diagnosticMessage: Diagnostics.File_0_not_found, errorTextArguments: [commonFile2.path] }
+            ]);
 
             host.reloadFS([file1, commonFile2, libFile]);
             host.runQueuedTimeoutCallbacks();
@@ -1122,8 +1142,8 @@ namespace ts.projectSystem {
             assert.strictEqual(projectService.inferredProjects[0], project, "Inferred project should be same");
             checkProjectRootFiles(project, [file1.path]);
             checkProjectActualFiles(project, [file1.path, libFile.path, commonFile2.path]);
-            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 0);
+            diags = session.executeCommand(getErrRequest).response;
+            verifyNoDiagnostics(diags);
         });
 
         it("should create new inferred projects for files excluded from a configured project", () => {
@@ -3110,15 +3130,18 @@ namespace ts.projectSystem {
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 0);
+            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            verifyNoDiagnostics(diags);
 
             const moduleFileOldPath = moduleFile.path;
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1]);
             host.runQueuedTimeoutCallbacks();
-            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            diags = session.executeCommand(getErrRequest).response;
+            verifyDiagnostics(diags, [
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+            ]);
             assert.equal(diags.length, 1);
 
             moduleFile.path = moduleFileOldPath;
@@ -3133,8 +3156,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.runQueuedTimeoutCallbacks();
 
-            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 0);
+            diags = session.executeCommand(getErrRequest).response;
+            verifyNoDiagnostics(diags);
         });
 
         it("should restore the states for configured projects", () => {
@@ -3158,22 +3181,24 @@ namespace ts.projectSystem {
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 0);
+            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            verifyNoDiagnostics(diags);
 
             const moduleFileOldPath = moduleFile.path;
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1, configFile]);
             host.runQueuedTimeoutCallbacks();
-            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 1);
+            diags = session.executeCommand(getErrRequest).response;
+            verifyDiagnostics(diags, [
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+            ]);
 
             moduleFile.path = moduleFileOldPath;
             host.reloadFS([moduleFile, file1, configFile]);
             host.runQueuedTimeoutCallbacks();
-            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 0);
+            diags = session.executeCommand(getErrRequest).response;
+            verifyNoDiagnostics(diags);
         });
 
         it("should property handle missing config files", () => {
@@ -3239,8 +3264,10 @@ namespace ts.projectSystem {
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 1);
+            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            verifyDiagnostics(diags, [
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+            ]);
 
             host.reloadFS([file1, moduleFile]);
             host.runQueuedTimeoutCallbacks();
@@ -3253,8 +3280,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
 
             // Recheck
-            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
-            assert.equal(diags.length, 0);
+            diags = session.executeCommand(getErrRequest).response;
+            verifyNoDiagnostics(diags);
         });
     });
 

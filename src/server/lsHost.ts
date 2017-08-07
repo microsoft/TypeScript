@@ -154,19 +154,19 @@ namespace ts.server {
             const path = this.toPath(fileOrFolder);
             const existingResult = this.cachedReadDirectoryResult.get(path);
             if (existingResult) {
+                // This was a folder already present, remove it if this doesnt exist any more
                 if (!this.host.directoryExists(fileOrFolder)) {
                     this.cachedReadDirectoryResult.delete(path);
                 }
             }
             else {
-                // Was this earlier file
+                // This was earlier a file (hence not in cached directory contents)
+                // or we never cached the directory containing it
                 const parentResult = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
                 if (parentResult) {
                     const baseName = getBaseFileName(fileOrFolder);
-                    if (parentResult) {
-                        parentResult.files = this.updateFileSystemEntry(parentResult.files, baseName, this.host.fileExists(path));
-                        parentResult.directories = this.updateFileSystemEntry(parentResult.directories, baseName, this.host.directoryExists(path));
-                    }
+                    parentResult.files = this.updateFileSystemEntry(parentResult.files, baseName, this.host.fileExists(path));
+                    parentResult.directories = this.updateFileSystemEntry(parentResult.directories, baseName, this.host.directoryExists(path));
                 }
             }
         }
