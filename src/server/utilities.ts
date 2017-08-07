@@ -293,76 +293,53 @@ namespace ts.server {
         }
     }
 
-    export function cleanExistingMap<T>(
-        existingMap: Map<T>,
-        onDeleteExistingValue: (key: string, existingValue: T) => void) {
-        if (existingMap) {
-            // Remove all
-            existingMap.forEach((existingValue, key) => {
-                existingMap.delete(key);
-                onDeleteExistingValue(key, existingValue);
-            });
-        }
+    /**
+     * clears already present map (!== undefined) by calling onDeleteExistingValue callback before deleting that key/value
+     */
+    export function clearMap<T>(map: Map<T>, onDeleteExistingValue: (key: string, existingValue: T) => void) {
+        // Remove all
+        map.forEach((existingValue, key) => {
+            map.delete(key);
+            onDeleteExistingValue(key, existingValue);
+        });
     }
 
-    export function mutateExistingMapWithNewSet<T>(
-        existingMap: Map<T>, newMap: Map<true>,
-        createNewValue: (key: string) => T,
-        onDeleteExistingValue: (key: string, existingValue: T) => void
-    ): Map<T> {
-        return mutateExistingMap(
-            existingMap, newMap,
-            // Same value if the value is set in the map
-            /*isSameValue*/(_existingValue, _valueInNewMap) => true,
-            /*createNewValue*/(key, _valueInNewMap) => createNewValue(key),
-            onDeleteExistingValue,
-            // Should never be called since we say yes to same values all the time
-            /*OnDeleteExistingMismatchValue*/(_key, _existingValue) => notImplemented()
-        );
+    export interface MutateMapOptions<T, U> {
+        createNewValue(key: string, valueInNewMap: U): T;
+        onDeleteExistingValue(key: string, existingValue: T, isNotSame?: boolean): void;
+
+        isSameValue?(existingValue: T, valueInNewMap: U): boolean;
     }
 
-    export function mutateExistingMap<T, U>(
-        existingMap: Map<T>, newMap: Map<U>,
-        isSameValue: (existingValue: T, valueInNewMap: U) => boolean,
-        createNewValue: (key: string, valueInNewMap: U) => T,
-        onDeleteExistingValue: (key: string, existingValue: T) => void,
-        OnDeleteExistingMismatchValue: (key: string, existingValue: T) => void
-    ): Map<T> {
+    /**
+     * Mutates the map with newMap such that keys in map will be same as newMap.
+     */
+    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
         // If there are new values update them
         if (newMap) {
-            if (existingMap) {
-                // Needs update
-                existingMap.forEach((existingValue, key) => {
-                    const valueInNewMap = newMap.get(key);
-                    // Existing value - remove it
-                    if (valueInNewMap === undefined) {
-                        existingMap.delete(key);
-                        onDeleteExistingValue(key, existingValue);
-                    }
+            const { isSameValue, createNewValue, onDeleteExistingValue } = options;
+            // Needs update
+            map.forEach((existingValue, key) => {
+                const valueInNewMap = newMap.get(key);
+                if (valueInNewMap === undefined ||
                     // different value - remove it
-                    else if (!isSameValue(existingValue, valueInNewMap)) {
-                        existingMap.delete(key);
-                        OnDeleteExistingMismatchValue(key, existingValue);
-                    }
-                });
-            }
-            else {
-                // Create new
-                existingMap = createMap<T>();
-            }
-
-            // Add new values that are not already present
-            newMap.forEach((valueInNewMap, key) => {
-                if (!existingMap.has(key)) {
-                    // New values
-                    existingMap.set(key, createNewValue(key, valueInNewMap));
+                    (isSameValue && !isSameValue(existingValue, valueInNewMap))) {
+                    const isNotSame = valueInNewMap !== undefined;
+                    map.delete(key);
+                    onDeleteExistingValue(key, existingValue, isNotSame);
                 }
             });
 
-            return existingMap;
+            // Add new values that are not already present
+            newMap.forEach((valueInNewMap, key) => {
+                if (!map.has(key)) {
+                    // New values
+                    map.set(key, createNewValue(key, valueInNewMap));
+                }
+            });
         }
-
-        cleanExistingMap(existingMap, onDeleteExistingValue);
-        return undefined;
+        else {
+            clearMap(map, options.onDeleteExistingValue);
+        }
     }
 }

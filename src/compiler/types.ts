@@ -3688,7 +3688,13 @@ namespace ts {
 
     export interface ConfigFileSpecs {
         filesSpecs: ReadonlyArray<string>;
+        /**
+         * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
+         */
         includeSpecs: ReadonlyArray<string>;
+        /**
+         * Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
+         */
         excludeSpecs: ReadonlyArray<string>;
         validatedIncludeSpecs: ReadonlyArray<string>;
         validatedExcludeSpecs: ReadonlyArray<string>;

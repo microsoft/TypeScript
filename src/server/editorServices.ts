@@ -280,7 +280,7 @@ namespace ts.server {
     /* @internal */
     export type ServerDirectoryWatcherCallback = (path: NormalizedPath) => void;
 
-    type ConfigFileExistence = {
+    interface ConfigFileExistence {
         /**
          * Cached value of existence of config file
          * It is true if there is configured project open for this file.
@@ -302,7 +302,7 @@ namespace ts.server {
          * The watcher is present only when there is no open configured project for this config file
          */
         configFileWatcher?: FileWatcher;
-    };
+    }
 
     export interface ProjectServiceOptions {
         host: ServerHost;
@@ -1606,13 +1606,15 @@ namespace ts.server {
         }
 
         /* @internal */
-        closeDirectoryWatcher(watchType: WatchType, project: Project, directory: string, watcher: FileWatcher, recursive: boolean, reason: WatcherCloseReason) {
+        closeDirectoryWatcher(watchType: WatchType, project: Project, directory: string, watcher: FileWatcher, flags: WatchDirectoryFlags, reason: WatcherCloseReason) {
+            const recursive = isRecursiveDirectoryWatch(flags);
             this.logger.info(`DirectoryWatcher ${recursive ? "recursive" : ""}:: Close: ${directory} Project: ${project.getProjectName()} WatchType: ${watchType} Reason: ${reason}`);
             watcher.close();
         }
 
         /* @internal */
-        addDirectoryWatcher(watchType: WatchType, project: Project, directory: string, cb: ServerDirectoryWatcherCallback, recursive: boolean) {
+        addDirectoryWatcher(watchType: WatchType, project: Project, directory: string, cb: ServerDirectoryWatcherCallback, flags: WatchDirectoryFlags) {
+            const recursive = isRecursiveDirectoryWatch(flags);
             this.logger.info(`DirectoryWatcher ${recursive ? "recursive" : ""}:: Added: ${directory} Project: ${project.getProjectName()} WatchType: ${watchType}`);
             return this.host.watchDirectory(directory, fileName => {
                 const path = toNormalizedPath(getNormalizedAbsolutePath(fileName, directory));

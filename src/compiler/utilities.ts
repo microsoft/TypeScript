@@ -3607,6 +3607,10 @@ namespace ts {
     export function getCombinedLocalAndExportSymbolFlags(symbol: Symbol): SymbolFlags {
         return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
     }
+
+    export function isRecursiveDirectoryWatch(flags: WatchDirectoryFlags) {
+        return (flags & WatchDirectoryFlags.Recursive) !== 0;
+    }
 }
 
 namespace ts {
