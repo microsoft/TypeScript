@@ -16,7 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "text": "template"
+                "escapedText": "template"
             },
             "typeParameters": {
                 "0": {
@@ -27,7 +27,7 @@
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "text": "K"
+                        "escapedText": "K"
                     }
                 },
                 "1": {
@@ -38,7 +38,7 @@
                         "kind": "Identifier",
                         "pos": 21,
                         "end": 22,
-                        "text": "V"
+                        "escapedText": "V"
                     }
                 },
                 "length": 2,

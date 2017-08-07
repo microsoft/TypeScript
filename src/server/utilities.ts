@@ -176,6 +176,85 @@ namespace ts.server {
         return [] as SortedArray<T>;
     }
 
+    export class ThrottledOperations {
+        private pendingTimeouts: Map<any> = createMap<any>();
+        constructor(private readonly host: ServerHost) {
+        }
+
+        public schedule(operationId: string, delay: number, cb: () => void) {
+            const pendingTimeout = this.pendingTimeouts.get(operationId);
+            if (pendingTimeout) {
+                // another operation was already scheduled for this id - cancel it
+                this.host.clearTimeout(pendingTimeout);
+            }
+            // schedule new operation, pass arguments
+            this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
+        }
+
+        private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
+            self.pendingTimeouts.delete(operationId);
+            cb();
+        }
+    }
+
+    export class GcTimer {
+        private timerId: any;
+        constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
+        }
+
+        public scheduleCollect() {
+            if (!this.host.gc || this.timerId !== undefined) {
+                // no global.gc or collection was already scheduled - skip this request
+                return;
+            }
+            this.timerId = this.host.setTimeout(GcTimer.run, this.delay, this);
+        }
+
+        private static run(self: GcTimer) {
+            self.timerId = undefined;
+
+            const log = self.logger.hasLevel(LogLevel.requestTime);
+            const before = log && self.host.getMemoryUsage();
+
+            self.host.gc();
+            if (log) {
+                const after = self.host.getMemoryUsage();
+                self.logger.perftrc(`GC::before ${before}, after ${after}`);
+            }
+        }
+    }
+}
+
+/* @internal */
+namespace ts.server {
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
+        if (array.length === 0) {
+            array.push(insert);
+            return;
+        }
+
+        const insertIndex = binarySearch(array, insert, compare);
+        if (insertIndex < 0) {
+            array.splice(~insertIndex, 0, insert);
+        }
+    }
+
+    export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
+        if (!array || array.length === 0) {
+            return;
+        }
+
+        if (array[0] === remove) {
+            array.splice(0, 1);
+            return;
+        }
+
+        const removeIndex = binarySearch(array, remove, compare);
+        if (removeIndex >= 0) {
+            array.splice(removeIndex, 1);
+        }
+    }
+
     export function toSortedArray(arr: string[]): SortedArray<string>;
     export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
     export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
@@ -285,81 +364,5 @@ namespace ts.server {
 
         cleanExistingMap(existingMap, onDeleteExistingValue);
         return undefined;
-    }
-
-    export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = createMap<any>();
-        constructor(private readonly host: ServerHost) {
-        }
-
-        public schedule(operationId: string, delay: number, cb: () => void) {
-            const pendingTimeout = this.pendingTimeouts.get(operationId);
-            if (pendingTimeout) {
-                // another operation was already scheduled for this id - cancel it
-                this.host.clearTimeout(pendingTimeout);
-            }
-            // schedule new operation, pass arguments
-            this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
-        }
-
-        private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
-            self.pendingTimeouts.delete(operationId);
-            cb();
-        }
-    }
-
-    export class GcTimer {
-        private timerId: any;
-        constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
-        }
-
-        public scheduleCollect() {
-            if (!this.host.gc || this.timerId !== undefined) {
-                // no global.gc or collection was already scheduled - skip this request
-                return;
-            }
-            this.timerId = this.host.setTimeout(GcTimer.run, this.delay, this);
-        }
-
-        private static run(self: GcTimer) {
-            self.timerId = undefined;
-
-            const log = self.logger.hasLevel(LogLevel.requestTime);
-            const before = log && self.host.getMemoryUsage();
-
-            self.host.gc();
-            if (log) {
-                const after = self.host.getMemoryUsage();
-                self.logger.perftrc(`GC::before ${before}, after ${after}`);
-            }
-        }
-    }
-
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
-        if (array.length === 0) {
-            array.push(insert);
-            return;
-        }
-
-        const insertIndex = binarySearch(array, insert, compare);
-        if (insertIndex < 0) {
-            array.splice(~insertIndex, 0, insert);
-        }
-    }
-
-    export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
-        if (!array || array.length === 0) {
-            return;
-        }
-
-        if (array[0] === remove) {
-            array.splice(0, 1);
-            return;
-        }
-
-        const removeIndex = binarySearch(array, remove, compare);
-        if (removeIndex >= 0) {
-            array.splice(removeIndex, 1);
-        }
     }
 }

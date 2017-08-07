@@ -981,8 +981,8 @@ namespace ts.server {
         private typeAcquisition: TypeAcquisition;
         /* @internal */
         configFileWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<WildCardDirectoryWatchers>;
-        private typeRootsWatchers: Map<FileWatcher>;
+        private directoriesWatchedForWildcards: Map<WildCardDirectoryWatchers> | undefined;
+        private typeRootsWatchers: Map<FileWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */

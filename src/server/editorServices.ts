@@ -349,7 +349,7 @@ namespace ts.server {
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
-        private static safelist: SafeList = defaultTypeSafeList;
+        private safelist: SafeList = defaultTypeSafeList;
 
         private changedFiles: ScriptInfo[];
         private pendingProjectUpdates = createMap<Project>();
@@ -1148,7 +1148,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             for (const rootFile of this.openFiles) {
-                this.logger.info(rootFile.fileName);
+                this.logger.info(`\t${rootFile.fileName}`);
             }
 
             this.logger.endGroup();
@@ -1899,7 +1899,7 @@ namespace ts.server {
         }
 
         resetSafeList(): void {
-            ProjectService.safelist = defaultTypeSafeList;
+            this.safelist = defaultTypeSafeList;
         }
 
         loadSafeList(fileName: string): void {
@@ -1909,7 +1909,7 @@ namespace ts.server {
                 raw[k].match = new RegExp(raw[k].match as {} as string, "i");
             }
             // raw is now fixed and ready
-            ProjectService.safelist = raw;
+            this.safelist = raw;
         }
 
         applySafeList(proj: protocol.ExternalProject): void {
@@ -1920,8 +1920,8 @@ namespace ts.server {
 
             const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
 
-            for (const name of Object.keys(ProjectService.safelist)) {
-                const rule = ProjectService.safelist[name];
+            for (const name of Object.keys(this.safelist)) {
+                const rule = this.safelist[name];
                 for (const root of normalizedNames) {
                     if (rule.match.test(root)) {
                         this.logger.info(`Excluding files based on rule ${name}`);

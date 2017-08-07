@@ -4,6 +4,18 @@ declare function setTimeout(handler: (...args: any[]) => void, timeout: number):
 declare function clearTimeout(handle: any): void;
 
 namespace ts {
+    /**
+     * Set a high stack trace limit to provide more information in case of an error.
+     * Called for command-line and server use cases.
+     * Not called if TypeScript is used as a library.
+     */
+    /* @internal */
+    export function setStackTraceLimit() {
+        if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
+            (Error as any).stackTraceLimit = 100;
+        }
+    }
+
     export enum FileWatcherEventKind {
         Created,
         Changed,
@@ -196,9 +208,16 @@ namespace ts {
                 if (platform === "win32" || platform === "win64") {
                     return false;
                 }
-                // convert current file name to upper case / lower case and check if file exists
-                // (guards against cases when name is already all uppercase or lowercase)
-                return !fileExists(__filename.toUpperCase()) || !fileExists(__filename.toLowerCase());
+                // If this file exists under a different case, we must be case-insensitve.
+                return !fileExists(swapCase(__filename));
+            }
+
+            /** Convert all lowercase chars to uppercase, and vice-versa */
+            function swapCase(s: string): string {
+                return s.replace(/\w/g, (ch) => {
+                    const up = ch.toUpperCase();
+                    return ch === up ? ch.toLowerCase() : up;
+                });
             }
 
             const platform: string = _os.platform();

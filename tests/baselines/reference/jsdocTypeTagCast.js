@@ -97,7 +97,7 @@ var a;
 /** @type {string} */
 var s;
 var a = ("" + 4);
-var s = "" + (4);
+var s = "" +/** @type {*} */  (4);
 var SomeBase = (function () {
     function SomeBase() {
         this.p = 42;
@@ -128,19 +128,19 @@ var someBase = new SomeBase();
 var someDerived = new SomeDerived();
 var someOther = new SomeOther();
 var someFakeClass = new SomeFakeClass();
-someBase = (someDerived);
-someBase = (someBase);
-someBase = (someOther); // Error
-someDerived = (someDerived);
-someDerived = (someBase);
-someDerived = (someOther); // Error
-someOther = (someDerived); // Error
-someOther = (someBase); // Error
-someOther = (someOther);
+someBase =/** @type {SomeBase} */  (someDerived);
+someBase =/** @type {SomeBase} */  (someBase);
+someBase =/** @type {SomeBase} */  (someOther); // Error
+someDerived =/** @type {SomeDerived} */  (someDerived);
+someDerived =/** @type {SomeDerived} */  (someBase);
+someDerived =/** @type {SomeDerived} */  (someOther); // Error
+someOther =/** @type {SomeOther} */  (someDerived); // Error
+someOther =/** @type {SomeOther} */  (someBase); // Error
+someOther =/** @type {SomeOther} */  (someOther);
 someFakeClass = someBase;
 someFakeClass = someDerived;
 someBase = someFakeClass; // Error
-someBase = (someFakeClass);
+someBase =/** @type {SomeBase} */  (someFakeClass);
 // Type assertion cannot be a type-predicate type
 /** @type {number | string} */
 var numOrStr;

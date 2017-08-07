@@ -11,7 +11,7 @@ namespace ts {
             return find(n);
 
             function find(node: Node): Node {
-                if (isDeclaration(node) && node.name && isIdentifier(node.name) && node.name.text === name) {
+                if (isDeclaration(node) && node.name && isIdentifier(node.name) && node.name.escapedText === name) {
                     return node;
                 }
                 else {

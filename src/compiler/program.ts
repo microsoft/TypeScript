@@ -1196,10 +1196,14 @@ namespace ts {
                         case SyntaxKind.EnumDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
                             return;
-                        case SyntaxKind.TypeAssertionExpression:
-                            const typeAssertionExpression = <TypeAssertion>node;
-                            diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
+                        case SyntaxKind.NonNullExpression:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.non_null_assertions_can_only_be_used_in_a_ts_file));
                             return;
+                        case SyntaxKind.AsExpression:
+                            diagnostics.push(createDiagnosticForNode((node as AsExpression).type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
+                            return;
+                        case SyntaxKind.TypeAssertionExpression:
+                            Debug.fail(); // Won't parse these in a JS file anyway, as they are interpreted as JSX.
                     }
 
                     const prevParent = parent;
@@ -1441,19 +1445,20 @@ namespace ts {
                         break;
                     case SyntaxKind.ModuleDeclaration:
                         if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
-                            const moduleName = <StringLiteral>(<ModuleDeclaration>node).name;
+                            const moduleName = <StringLiteral>(<ModuleDeclaration>node).name; // TODO: GH#17347
+                            const nameText = ts.getTextOfIdentifierOrLiteral(moduleName);
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
                             // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
                             // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
                             //   immediately nested in top level ambient module declaration .
-                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(moduleName.text))) {
+                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(nameText))) {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
                                 if (file.isDeclarationFile) {
                                     // for global .d.ts files record name of ambient module
-                                    (ambientModules || (ambientModules = [])).push(moduleName.text);
+                                    (ambientModules || (ambientModules = [])).push(nameText);
                                 }
                                 // An AmbientExternalModuleDeclaration declares an external module.
                                 // This type of declaration is permitted only in the global module.

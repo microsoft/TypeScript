@@ -69,14 +69,16 @@ function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
     y[k] = x[k];  // Error
 }
 
+type Thing = { a: string, b: string };
+
 function f30<T>(x: T, y: Partial<T>) {
     x = y;  // Error
     y = x;
 }
 
-function f31<T>(x: T, y: Partial<T>) {
-    x = y;  // Error
-    y = x;
+function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>) {
+    x = y;
+    y = x;  // Error
 }
 
 function f40<T>(x: T, y: Readonly<T>) {
@@ -84,9 +86,9 @@ function f40<T>(x: T, y: Readonly<T>) {
     y = x;
 }
 
-function f41<T>(x: T, y: Readonly<T>) {
+function f41<T extends Thing>(x: Readonly<Thing>, y: Readonly<T>) {
     x = y;
-    y = x;
+    y = x;  // Error
 }
 
 type Item = {

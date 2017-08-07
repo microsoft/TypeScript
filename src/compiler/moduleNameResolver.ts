@@ -13,12 +13,6 @@ namespace ts {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    /** Array that is only intended to be pushed to, never read. */
-    /* @internal */
-    export interface Push<T> {
-        push(value: T): void;
-    }
-
     /**
      * Result of trying to resolve a module.
      * At least one of `ts` and `js` should be defined, or the whole thing should be `undefined`.
@@ -262,6 +256,8 @@ namespace ts {
                         for (const typeDirectivePath of host.getDirectories(root)) {
                             const normalized = normalizePath(typeDirectivePath);
                             const packageJsonPath = pathToPackageJson(combinePaths(root, normalized));
+                            // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
+                            // See `createNotNeededPackageJSON` in the types-publisher` repo.
                             // tslint:disable-next-line:no-null-keyword
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
                             if (!isNotNeededPackage) {
