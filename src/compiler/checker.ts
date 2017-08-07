@@ -13026,7 +13026,7 @@ namespace ts {
 
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, checkMode?: CheckMode) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
-            const type = getApparentTypeOfContextualType(objectLiteral, checkMode);
+            const type = getInstantiatedContextualType(objectLiteral, checkMode);
             if (type) {
                 if (!hasDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
@@ -13123,6 +13123,17 @@ namespace ts {
         }
 
         /**
+         * This must be called when a contextual type function is attempting to dig into a type to contextually type a subexpression
+         * Otherwise, contextual typing stops when a type argument is encountered, and `any` is ued instead.
+         */
+        function getInstantiatedContextualType(node: Expression, checkMode?: CheckMode): Type {
+            if (checkMode === CheckMode.Inferential && node.contextualType && node.contextualMapper) {
+                return instantiateType(node.contextualType, node.contextualMapper);
+            }
+            return getContextualType(node, checkMode);
+        }
+
+        /**
          * Woah! Do you really want to use this function?
          *
          * Unless you're trying to get the *non-apparent* type for a
@@ -13145,12 +13156,6 @@ namespace ts {
                 return undefined;
             }
             if (node.contextualType) {
-                if (checkMode & CheckMode.Inferential) {
-                    const mapper = getContextualMapper(node);
-                    if (mapper) {
-                        return instantiateType(node.contextualType, mapper);
-                    }
-                }
                 return node.contextualType;
             }
             const parent = node.parent;
@@ -16848,7 +16853,7 @@ namespace ts {
 
             // Check if function expression is contextually typed and assign parameter types if so.
             if (!(links.flags & NodeCheckFlags.ContextChecked)) {
-                const contextualSignature = getContextualSignature(node);
+                const contextualSignature = getContextualSignature(node); // Intentionally do not pass check mode; resolve without instantiation
                 // If a type check is started at a function expression that is an argument of a function call, obtaining the
                 // contextual type may recursively get back to here during overload resolution of the call. If so, we will have
                 // already assigned contextual types.
