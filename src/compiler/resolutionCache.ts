@@ -276,7 +276,7 @@ namespace ts {
                         if (resolution && !resolution.isInvalidated) {
                             const result = getResult(resolution);
                             if (result) {
-                                if (getResultFileName(result) === deletedFilePath) {
+                                if (toPath(getResultFileName(result)) === deletedFilePath) {
                                     resolution.isInvalidated = true;
                                     (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(path, true);
                                 }

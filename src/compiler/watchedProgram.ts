@@ -101,29 +101,12 @@ namespace ts {
         }
     }
 
-    export function compileProgram(system: System, program: Program, emitProgram: () => EmitResult,
-        reportDiagnostic: DiagnosticReporter): ExitStatus {
-        let diagnostics: Diagnostic[];
-
-        // First get and report any syntactic errors.
-        diagnostics = program.getSyntacticDiagnostics();
-
-        // If we didn't have any syntactic errors, then also try getting the global and
-        // semantic errors.
-        if (diagnostics.length === 0) {
-            diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
-
-            if (diagnostics.length === 0) {
-                diagnostics = program.getSemanticDiagnostics();
-            }
-        }
-
-        // Emit and report any errors we ran into.
-        const emitOutput = emitProgram();
-        diagnostics = diagnostics.concat(emitOutput.diagnostics);
-
+    export function handleEmitOutputAndReportErrors(system: System, program: Program,
+        emittedFiles: string[], emitSkipped: boolean,
+        diagnostics: Diagnostic[], reportDiagnostic: DiagnosticReporter
+    ): ExitStatus {
         reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), reportDiagnostic);
-        reportEmittedFiles(emitOutput.emittedFiles, system);
+        reportEmittedFiles(emittedFiles, system);
 
         if (program.getCompilerOptions().listFiles) {
             forEach(program.getSourceFiles(), file => {
@@ -131,7 +114,7 @@ namespace ts {
             });
         }
 
-        if (emitOutput.emitSkipped && diagnostics.length > 0) {
+        if (emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
@@ -141,74 +124,6 @@ namespace ts {
             return ExitStatus.DiagnosticsPresent_OutputsGenerated;
         }
         return ExitStatus.Success;
-    }
-
-    function emitWatchedProgram(host: System, program: Program, builder: Builder) {
-        const emittedFiles: string[] = program.getCompilerOptions().listEmittedFiles ? [] : undefined;
-        let sourceMaps: SourceMapData[];
-        let emitSkipped: boolean;
-        let diagnostics: Diagnostic[];
-
-        const result = builder.emitChangedFiles(program);
-        switch (result.length) {
-            case 0:
-                emitSkipped = true;
-                break;
-            case 1:
-                const emitOutput = result[0];
-                ({ diagnostics, sourceMaps, emitSkipped } = emitOutput);
-                writeOutputFiles(emitOutput.outputFiles);
-                break;
-            default:
-                for (const emitOutput of result) {
-                    if (emitOutput.emitSkipped) {
-                        emitSkipped = true;
-                    }
-                    diagnostics = concatenate(diagnostics, emitOutput.diagnostics);
-                    sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
-                    writeOutputFiles(emitOutput.outputFiles);
-                }
-        }
-
-        return { emitSkipped, diagnostics: diagnostics || [], emittedFiles, sourceMaps };
-
-
-        function ensureDirectoriesExist(directoryPath: string) {
-            if (directoryPath.length > getRootLength(directoryPath) && !host.directoryExists(directoryPath)) {
-                const parentDirectory = getDirectoryPath(directoryPath);
-                ensureDirectoriesExist(parentDirectory);
-                host.createDirectory(directoryPath);
-            }
-        }
-
-        function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
-            try {
-                performance.mark("beforeIOWrite");
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-
-                host.writeFile(fileName, data, writeByteOrderMark);
-
-                performance.mark("afterIOWrite");
-                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-            }
-            catch (e) {
-                return createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, e);
-            }
-        }
-
-        function writeOutputFiles(outputFiles: OutputFile[]) {
-            if (outputFiles) {
-                for (const outputFile of outputFiles) {
-                    const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
-                    if (error) {
-                        diagnostics.push(error);
-                    }
-                    if (emittedFiles) {
-                        emittedFiles.push(outputFile.name);
-                    }
-                }
-            }
-        }
     }
 
     export function createWatchingSystemHost(pretty?: DiagnosticStyle, system = sys,
@@ -228,7 +143,82 @@ namespace ts {
         };
 
         function compileWatchedProgram(host: System, program: Program, builder: Builder) {
-            return compileProgram(system, program, () => emitWatchedProgram(host, program, builder), reportDiagnostic);
+            // First get and report any syntactic errors.
+            let diagnostics = program.getSyntacticDiagnostics();
+            let reportSemanticDiagnostics = false;
+
+            // If we didn't have any syntactic errors, then also try getting the global and
+            // semantic errors.
+            if (diagnostics.length === 0) {
+                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+
+                if (diagnostics.length === 0) {
+                    reportSemanticDiagnostics = true;
+                }
+            }
+
+            // Emit and report any errors we ran into.
+            const emittedFiles: string[] = program.getCompilerOptions().listEmittedFiles ? [] : undefined;
+            let sourceMaps: SourceMapData[];
+            let emitSkipped: boolean;
+
+            const result = builder.emitChangedFiles(program);
+            if (result.length === 0) {
+                emitSkipped = true;
+            }
+            else {
+                for (const emitOutput of result) {
+                    if (emitOutput.emitSkipped) {
+                        emitSkipped = true;
+                    }
+                    diagnostics = concatenate(diagnostics, emitOutput.diagnostics);
+                    sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
+                    writeOutputFiles(emitOutput.outputFiles);
+                }
+            }
+
+            if (reportSemanticDiagnostics) {
+                diagnostics = diagnostics.concat(builder.getSemanticDiagnostics(program));
+            }
+            return handleEmitOutputAndReportErrors(host, program, emittedFiles, emitSkipped,
+                diagnostics, reportDiagnostic);
+
+            function ensureDirectoriesExist(directoryPath: string) {
+                if (directoryPath.length > getRootLength(directoryPath) && !host.directoryExists(directoryPath)) {
+                    const parentDirectory = getDirectoryPath(directoryPath);
+                    ensureDirectoriesExist(parentDirectory);
+                    host.createDirectory(directoryPath);
+                }
+            }
+
+            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+                try {
+                    performance.mark("beforeIOWrite");
+                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+
+                    host.writeFile(fileName, data, writeByteOrderMark);
+
+                    performance.mark("afterIOWrite");
+                    performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+                }
+                catch (e) {
+                    return createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, e);
+                }
+            }
+
+            function writeOutputFiles(outputFiles: OutputFile[]) {
+                if (outputFiles) {
+                    for (const outputFile of outputFiles) {
+                        const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
+                        if (error) {
+                            diagnostics.push(error);
+                        }
+                        if (emittedFiles) {
+                            emittedFiles.push(outputFile.name);
+                        }
+                    }
+                }
+            }
         }
     }
 

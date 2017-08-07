@@ -157,7 +157,7 @@ namespace ts {
         enableStatistics(compilerOptions);
 
         const program = createProgram(rootFileNames, compilerOptions, compilerHost);
-        const exitStatus = compileProgram(sys, program, () => program.emit(), reportDiagnostic);
+        const exitStatus = compileProgram(program);
 
         reportStatistics(program);
         return sys.exit(exitStatus);
@@ -172,6 +172,29 @@ namespace ts {
             reportStatistics(program);
         };
         return watchingHost;
+    }
+
+    function compileProgram(program: Program): ExitStatus {
+        let diagnostics: Diagnostic[];
+
+        // First get and report any syntactic errors.
+        diagnostics = program.getSyntacticDiagnostics();
+
+        // If we didn't have any syntactic errors, then also try getting the global and
+        // semantic errors.
+        if (diagnostics.length === 0) {
+            diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+
+            if (diagnostics.length === 0) {
+                diagnostics = program.getSemanticDiagnostics();
+            }
+        }
+
+        // Emit and report any errors we ran into.
+        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit();
+        diagnostics = diagnostics.concat(emitDiagnostics);
+
+        return handleEmitOutputAndReportErrors(sys, program, emittedFiles, emitSkipped, diagnostics, reportDiagnostic);
     }
 
     function enableStatistics(compilerOptions: CompilerOptions) {

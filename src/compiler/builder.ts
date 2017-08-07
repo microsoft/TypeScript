@@ -26,6 +26,7 @@ namespace ts {
         getFilesAffectedBy(program: Program, path: Path): string[];
         emitFile(program: Program, path: Path): EmitOutput;
         emitChangedFiles(program: Program): EmitOutputDetailed[];
+        getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): Diagnostic[];
         clear(): void;
     }
 
@@ -74,6 +75,7 @@ namespace ts {
         // Last checked shape signature for the file info
         type FileInfo = { version: string; signature: string; };
         let fileInfos: Map<FileInfo>;
+        const semanticDiagnosticsPerFile = createMap<Diagnostic[]>();
         let changedFilesSinceLastEmit: Map<true>;
         let emitHandler: EmitHandler;
         return {
@@ -81,6 +83,7 @@ namespace ts {
             getFilesAffectedBy,
             emitFile,
             emitChangedFiles,
+            getSemanticDiagnostics,
             clear
         };
 
@@ -90,6 +93,7 @@ namespace ts {
                 isModuleEmit = currentIsModuleEmit;
                 emitHandler = isModuleEmit ? getModuleEmitHandler() : getNonModuleEmitHandler();
                 fileInfos = undefined;
+                semanticDiagnosticsPerFile.clear();
             }
 
             changedFilesSinceLastEmit = changedFilesSinceLastEmit || createMap<true>();
@@ -104,20 +108,27 @@ namespace ts {
             );
         }
 
+        function registerChangedFile(path: Path) {
+            changedFilesSinceLastEmit.set(path, true);
+            // All changed files need to re-evaluate its semantic diagnostics
+            semanticDiagnosticsPerFile.delete(path);
+        }
+
         function addNewFileInfo(program: Program, sourceFile: SourceFile): FileInfo {
-            changedFilesSinceLastEmit.set(sourceFile.path, true);
+            registerChangedFile(sourceFile.path);
             emitHandler.addScriptInfo(program, sourceFile);
             return { version: sourceFile.version, signature: undefined };
         }
 
         function removeExistingFileInfo(path: Path, _existingFileInfo: FileInfo) {
-            changedFilesSinceLastEmit.set(path, true);
+            registerChangedFile(path);
             emitHandler.removeScriptInfo(path);
         }
 
         function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile, hasInvalidatedResolution: HasInvalidatedResolution) {
             if (existingInfo.version !== sourceFile.version || hasInvalidatedResolution(sourceFile.path)) {
-                changedFilesSinceLastEmit.set(sourceFile.path, true);
+                registerChangedFile(sourceFile.path);
+                semanticDiagnosticsPerFile.delete(sourceFile.path);
                 existingInfo.version = sourceFile.version;
                 emitHandler.updateScriptInfo(program, sourceFile);
             }
@@ -170,6 +181,9 @@ namespace ts {
                             const sourceFile = program.getSourceFile(file);
                             seenFiles.set(file, sourceFile);
                             if (sourceFile) {
+                                // Any affected file shouldnt have the cached diagnostics
+                                semanticDiagnosticsPerFile.delete(sourceFile.path);
+
                                 const emitOutput = getEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ false, /*isDetailed*/ true) as EmitOutputDetailed;
                                 result.push(emitOutput);
 
@@ -189,10 +203,45 @@ namespace ts {
             return result;
         }
 
+        function getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): Diagnostic[] {
+            ensureProgramGraph(program);
+
+            // Ensure that changed files have cleared their respective
+            if (changedFilesSinceLastEmit) {
+                changedFilesSinceLastEmit.forEach((__value, path: Path) => {
+                    const affectedFiles = getFilesAffectedBy(program, path);
+                    for (const file of affectedFiles) {
+                        const sourceFile = program.getSourceFile(file);
+                        if (sourceFile) {
+                            semanticDiagnosticsPerFile.delete(sourceFile.path);
+                        }
+                    }
+                });
+            }
+
+            let diagnostics: Diagnostic[];
+            for (const sourceFile of program.getSourceFiles()) {
+                const path = sourceFile.path;
+                const cachedDiagnostics = semanticDiagnosticsPerFile.get(path);
+                // Report the semantic diagnostics from the cache if we already have those diagnostics present
+                if (cachedDiagnostics) {
+                    diagnostics = concatenate(diagnostics, cachedDiagnostics);
+                }
+                else {
+                    // Diagnostics werent cached, get them from program, and cache the result
+                    const cachedDiagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
+                    semanticDiagnosticsPerFile.set(path, cachedDiagnostics);
+                    diagnostics = concatenate(diagnostics, cachedDiagnostics);
+                }
+            }
+            return diagnostics || emptyArray;
+        }
+
         function clear() {
             isModuleEmit = undefined;
             emitHandler = undefined;
             fileInfos = undefined;
+            semanticDiagnosticsPerFile.clear();
         }
 
         /**
@@ -356,7 +405,7 @@ namespace ts {
                 const referencedByPaths = referencedBy.get(path);
                 if (referencedByPaths) {
                     for (const path of referencedByPaths) {
-                        changedFilesSinceLastEmit.set(path, true);
+                        registerChangedFile(path);
                     }
                     referencedBy.delete(path);
                 }
