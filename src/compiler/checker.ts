@@ -9671,6 +9671,11 @@ namespace ts {
                 if (sourceInfo) {
                     return indexInfoRelatedTo(sourceInfo, targetInfo, reportErrors);
                 }
+                if (isGenericMappedType(source)) {
+                    // A generic mapped type { [P in K]: T } is related to an index signature { [x: string]: U }
+                    // if T is related to U.
+                    return kind === IndexKind.String && isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), targetInfo.type, reportErrors);
+                }
                 if (isObjectLiteralType(source)) {
                     let related = Ternary.True;
                     if (kind === IndexKind.String) {
