@@ -1,0 +1,74 @@
+=== tests/cases/compiler/index.ts ===
+interface ActionsObject<State> {
+>ActionsObject : ActionsObject<State>
+>State : State
+
+    [prop: string]: (state: State) => State;
+>prop : string
+>state : State
+>State : State
+>State : State
+}
+
+interface Options<State, Actions> {
+>Options : Options<State, Actions>
+>State : State
+>Actions : Actions
+
+    state?: State;
+>state : State
+>State : State
+
+    view?: (state: State, actions: Actions) => any;
+>view : (state: State, actions: Actions) => any
+>state : State
+>State : State
+>actions : Actions
+>Actions : Actions
+
+    actions: string | Actions;
+>actions : string | Actions
+>Actions : Actions
+}
+
+declare function app<State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>): void;
+>app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
+>State : State
+>Actions : Actions
+>ActionsObject : ActionsObject<State>
+>State : State
+>obj : Options<State, Actions>
+>Options : Options<State, Actions>
+>State : State
+>Actions : Actions
+
+app({
+>app({    state: 100,    actions: {        foo: s => s    },    view: (s, a) => undefined as any,}) : void
+>app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
+>{    state: 100,    actions: {        foo: s => s    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: ActionsObject<number>) => any; }
+
+    state: 100,
+>state : number
+>100 : 100
+
+    actions: {
+>actions : { foo: (s: number) => number; }
+>{        foo: s => s    } : { foo: (s: number) => number; }
+
+        foo: s => s
+>foo : (s: number) => number
+>s => s : (s: number) => number
+>s : number
+>s : number
+
+    },
+    view: (s, a) => undefined as any,
+>view : (s: number, a: ActionsObject<number>) => any
+>(s, a) => undefined as any : (s: number, a: ActionsObject<number>) => any
+>s : number
+>a : ActionsObject<number>
+>undefined as any : any
+>undefined : undefined
+
+});
+

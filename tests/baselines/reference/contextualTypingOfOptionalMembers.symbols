@@ -1,0 +1,67 @@
+=== tests/cases/compiler/index.ts ===
+interface ActionsObject<State> {
+>ActionsObject : Symbol(ActionsObject, Decl(index.ts, 0, 0))
+>State : Symbol(State, Decl(index.ts, 0, 24))
+
+    [prop: string]: (state: State) => State;
+>prop : Symbol(prop, Decl(index.ts, 1, 5))
+>state : Symbol(state, Decl(index.ts, 1, 21))
+>State : Symbol(State, Decl(index.ts, 0, 24))
+>State : Symbol(State, Decl(index.ts, 0, 24))
+}
+
+interface Options<State, Actions> {
+>Options : Symbol(Options, Decl(index.ts, 2, 1))
+>State : Symbol(State, Decl(index.ts, 4, 18))
+>Actions : Symbol(Actions, Decl(index.ts, 4, 24))
+
+    state?: State;
+>state : Symbol(Options.state, Decl(index.ts, 4, 35))
+>State : Symbol(State, Decl(index.ts, 4, 18))
+
+    view?: (state: State, actions: Actions) => any;
+>view : Symbol(Options.view, Decl(index.ts, 5, 18))
+>state : Symbol(state, Decl(index.ts, 6, 12))
+>State : Symbol(State, Decl(index.ts, 4, 18))
+>actions : Symbol(actions, Decl(index.ts, 6, 25))
+>Actions : Symbol(Actions, Decl(index.ts, 4, 24))
+
+    actions: string | Actions;
+>actions : Symbol(Options.actions, Decl(index.ts, 6, 51))
+>Actions : Symbol(Actions, Decl(index.ts, 4, 24))
+}
+
+declare function app<State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>): void;
+>app : Symbol(app, Decl(index.ts, 8, 1))
+>State : Symbol(State, Decl(index.ts, 10, 21))
+>Actions : Symbol(Actions, Decl(index.ts, 10, 27))
+>ActionsObject : Symbol(ActionsObject, Decl(index.ts, 0, 0))
+>State : Symbol(State, Decl(index.ts, 10, 21))
+>obj : Symbol(obj, Decl(index.ts, 10, 66))
+>Options : Symbol(Options, Decl(index.ts, 2, 1))
+>State : Symbol(State, Decl(index.ts, 10, 21))
+>Actions : Symbol(Actions, Decl(index.ts, 10, 27))
+
+app({
+>app : Symbol(app, Decl(index.ts, 8, 1))
+
+    state: 100,
+>state : Symbol(state, Decl(index.ts, 12, 5))
+
+    actions: {
+>actions : Symbol(actions, Decl(index.ts, 13, 15))
+
+        foo: s => s
+>foo : Symbol(foo, Decl(index.ts, 14, 14))
+>s : Symbol(s, Decl(index.ts, 15, 12))
+>s : Symbol(s, Decl(index.ts, 15, 12))
+
+    },
+    view: (s, a) => undefined as any,
+>view : Symbol(view, Decl(index.ts, 16, 6))
+>s : Symbol(s, Decl(index.ts, 17, 11))
+>a : Symbol(a, Decl(index.ts, 17, 13))
+>undefined : Symbol(undefined)
+
+});
+
