@@ -31,6 +31,11 @@ namespace ts.formatting {
                 return 0;
             }
 
+            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position, options);
+            if (indentationOfEnclosingMultiLineComment >= 0) {
+                return indentationOfEnclosingMultiLineComment;
+            }
+
             const precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
                 return getBaseIndentation(options);
@@ -43,11 +48,6 @@ namespace ts.formatting {
             }
 
             const lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
-
-            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position, options);
-            if (indentationOfEnclosingMultiLineComment >= 0) {
-                return indentationOfEnclosingMultiLineComment;
-            }
 
             // indentation is first non-whitespace character in a previous line
             // for block indentation, we should look for a line which contains something that's not

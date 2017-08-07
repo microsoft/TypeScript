@@ -1757,17 +1757,20 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-            if (key === "{") {
-                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+
+            if (!isInComment(sourceFile, position)) {
+                if (key === "{") {
+                    return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "}") {
+                    return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === ";") {
+                    return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "\n") {
+                    return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                }
             }
 
             return [];
