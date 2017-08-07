@@ -6,13 +6,15 @@ interface Settings {
 function getDefaultSettings() {
     return { timeout: 1000 };
 }
+interface CtorOnly {
+    new(s: string): string
+}
 
 function doSomething(settings: Settings) { /* ... */ }
 // forgot to call `getDefaultSettings`
-// but it is not caught because we don't check for call signatures
 doSomething(getDefaultSettings);
-// same for arrow expressions:
 doSomething(() => { });
+doSomething(null as CtorOnly);
 doSomething(12);
 doSomething('completely wrong');
 doSomething(false);
@@ -58,3 +60,4 @@ declare let unknown: {
     }
 }
 let weak: Weak & Spoiler = unknown
+
