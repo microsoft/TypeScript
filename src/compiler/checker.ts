@@ -9226,20 +9226,13 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.Promised) {
-                    // A promised S is related to a promised T if S is related to T
-                    if (source.flags & TypeFlags.Promised) {
-                        if (result = isRelatedTo((<PromisedType>source).type, (<PromisedType>target).type, /*reportErrors*/ false)) {
-                            return result;
-                        }
-                    }
-                    // A type S is related to promised T if S is related to promised C, where C is the
-                    // constraint of T.
-                    const constraint = getConstraintOfType((<PromisedType>target).type);
-                    if (constraint) {
-                        if (result = isRelatedTo(source, getPromisedType(constraint), reportErrors)) {
-                            return result;
-                        }
+                else if (target.flags & TypeFlags.Promised && source.flags & TypeFlags.Promised) {
+                    // A promised S is related to a promised T if S is related to T:
+                    //
+                    //  S <: T ⇒ promised S <: promised T
+                    //
+                    if (result = isRelatedTo((<PromisedType>source).type, (<PromisedType>target).type, reportErrors)) {
+                        return result;
                     }
                 }
 
@@ -9291,7 +9284,10 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Promised) {
                     // A promised S is related to T if promised C is related to T, where C is the
-                    // constraint of S.
+                    // constraint of S:
+                    //
+                    //  S <: C ^ promised C <: T ⇒ promised S <: T
+                    //
                     const constraint = getConstraintOfType((<PromisedType>source).type);
                     if (constraint) {
                         if (result = isRelatedTo(getPromisedType(constraint), target, reportErrors)) {
