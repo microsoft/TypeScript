@@ -665,14 +665,7 @@ namespace ts.server {
 
             const configFileSpecs = project.configFileSpecs;
             const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilerOptions(), project.getCachedServerHost(), this.hostConfiguration.extraFileExtensions);
-            const errors = project.getAllProjectErrors();
-            const isErrorNoInputFiles = (error: Diagnostic) => error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
-            if (result.fileNames.length !== 0) {
-                filterMutate(errors, error => !isErrorNoInputFiles(error));
-            }
-            else if (!configFileSpecs.filesSpecs && !some(errors, isErrorNoInputFiles)) {
-                errors.push(getErrorForNoInputFiles(configFileSpecs, configFilename));
-            }
+            project.updateErrorOnNoInputFiles(result.fileNames.length !== 0);
             this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader, /*clientFileName*/ undefined);
             this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
         }

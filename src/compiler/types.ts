@@ -3930,9 +3930,9 @@ namespace ts {
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModuleFull | undefined;
+        readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
-        failedLookupLocations: string[];
+        readonly failedLookupLocations: string[];
         /*@internal*/
         isInvalidated?: boolean;
     }
@@ -3945,8 +3945,8 @@ namespace ts {
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-        resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
-        failedLookupLocations: string[];
+        readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
+        readonly failedLookupLocations: string[];
         /*@internal*/
         isInvalidated?: boolean;
     }

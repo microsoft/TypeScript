@@ -1226,6 +1226,16 @@ namespace ts.server {
         getEffectiveTypeRoots() {
             return getEffectiveTypeRoots(this.getCompilerOptions(), this.lsHost.host) || [];
         }
+
+        /*@internal*/
+        updateErrorOnNoInputFiles(hasFileNames: boolean) {
+            if (hasFileNames) {
+                filterMutate(this.projectErrors, error => !isErrorNoInputFiles(error));
+            }
+            else if (!this.configFileSpecs.filesSpecs && !some(this.projectErrors, isErrorNoInputFiles)) {
+                this.projectErrors.push(getErrorForNoInputFiles(this.configFileSpecs, this.getConfigFilePath()));
+            }
+        }
     }
 
     /**

@@ -253,29 +253,19 @@ namespace ts.projectSystem {
         entries: FSEntry[];
     }
 
-    export function isFolder(s: FSEntry): s is Folder {
+    export function isFolder(s: FSEntry | undefined): s is Folder {
         return s && isArray((<Folder>s).entries);
     }
 
-    export function isFile(s: FSEntry): s is File {
+    export function isFile(s: FSEntry | undefined): s is File {
         return s && typeof (<File>s).content === "string";
     }
 
-    function invokeDirectoryWatcher(callbacks: DirectoryWatcherCallback[], getRelativeFilePath: () => string) {
+    function invokeWatcherCallbacks<T>(callbacks: T[], invokeCallback: (cb: T) => void): void {
         if (callbacks) {
             const cbs = callbacks.slice();
             for (const cb of cbs) {
-                const fileName = getRelativeFilePath();
-                cb(fileName);
-            }
-        }
-    }
-
-    function invokeFileWatcher(callbacks: FileWatcherCallback[], fileName: string, eventId: FileWatcherEventKind) {
-        if (callbacks) {
-            const cbs = callbacks.slice();
-            for (const cb of cbs) {
-                cb(fileName, eventId);
+                invokeCallback(cb);
             }
         }
     }
@@ -380,7 +370,7 @@ namespace ts.projectSystem {
 
         private readonly output: string[] = [];
 
-        private fs: Map<FSEntry> = createMap<FSEntry>();
+        private fs = createMap<FSEntry>();
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
@@ -510,8 +500,12 @@ namespace ts.projectSystem {
             }
             else {
                 Debug.assert(fileOrFolder.entries.length === 0);
-                invokeDirectoryWatcher(this.watchedDirectories.get(fileOrFolder.path), () => this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath));
-                invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(fileOrFolder.path), () => this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath));
+                const relativePath = this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath);
+                // Invoke directory and recursive directory watcher for the folder
+                // Here we arent invoking recursive directory watchers for the base folders
+                // since that is something we would want to do for both file as well as folder we are deleting
+                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrFolder.path), cb => cb(relativePath));
+                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrFolder.path), cb => cb(relativePath));
             }
 
             if (basePath !== fileOrFolder.path) {
@@ -524,22 +518,31 @@ namespace ts.projectSystem {
             }
         }
 
-        private invokeFileWatcher(fileFullPath: string, eventId: FileWatcherEventKind) {
+        private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
-            invokeFileWatcher(callbacks, getBaseFileName(fileFullPath), eventId);
+            const fileName = getBaseFileName(fileFullPath);
+            invokeWatcherCallbacks(callbacks, cb => cb(fileName, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
             return getRelativePathToDirectoryOrUrl(directoryFullPath, fileFullPath, this.currentDirectory, this.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         }
 
+        /**
+         * This will call the directory watcher for the foldeFullPath and recursive directory watchers for this and base folders
+         */
         private invokeDirectoryWatcher(folderFullPath: string, fileName: string) {
-            invokeDirectoryWatcher(this.watchedDirectories.get(this.toPath(folderFullPath)), () => this.getRelativePathToDirectory(folderFullPath, fileName));
+            const relativePath = this.getRelativePathToDirectory(folderFullPath, fileName);
+            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => cb(relativePath));
             this.invokeRecursiveDirectoryWatcher(folderFullPath, fileName);
         }
 
+        /**
+         * This will call the recursive directory watcher for this directory as well as all the base directories
+         */
         private invokeRecursiveDirectoryWatcher(fullPath: string, fileName: string) {
-            invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), () => this.getRelativePathToDirectory(fullPath, fileName));
+            const relativePath = this.getRelativePathToDirectory(fullPath, fileName);
+            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), cb => cb(relativePath));
             const basePath = getDirectoryPath(fullPath);
             if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
                 this.invokeRecursiveDirectoryWatcher(basePath, fileName);
@@ -883,6 +886,45 @@ namespace ts.projectSystem {
             // watching all files except one that was open
             checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
             checkWatchedDirectories(host, [getDirectoryPath(configFile.path)], /*recursive*/ true);
+        });
+
+        it("create configured project with the file list", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `
+                {
+                    "compilerOptions": {},
+                    "include": ["*.ts"]
+                }`
+            };
+            const file1: FileOrFolder = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/f2.ts",
+                content: "let y = 1"
+            };
+            const file3: FileOrFolder = {
+                path: "/a/b/c/f3.ts",
+                content: "let z = 1"
+            };
+
+            const host = createServerHost([configFile, libFile, file1, file2, file3]);
+            const projectService = createProjectService(host);
+            const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
+
+            assert(configFileName, "should find config file");
+            assert.isTrue(!configFileErrors, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 1);
+
+            const project = configuredProjectAt(projectService, 0);
+            checkProjectActualFiles(project, [file1.path, libFile.path, file2.path, configFile.path]);
+            checkProjectRootFiles(project, [file1.path, file2.path]);
+            // watching all files except one that was open
+            checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
+            checkWatchedDirectories(host, [getDirectoryPath(configFile.path)], /*recursive*/ false);
         });
 
         it("add and then remove a config file in a folder with loose files", () => {
