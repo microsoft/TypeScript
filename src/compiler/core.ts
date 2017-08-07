@@ -534,6 +534,19 @@ namespace ts {
         return result;
     }
 
+    export function mapDefinedIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): U[] {
+        const result: U[] = [];
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) break;
+            const res = mapFn(value);
+            if (res !== undefined) {
+                result.push(res);
+            }
+        }
+        return result;
+    }
+
     /**
      * Computes the first matching span of elements and returns a tuple of the first span
      * and the remaining elements.

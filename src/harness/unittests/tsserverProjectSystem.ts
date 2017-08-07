@@ -263,6 +263,8 @@ namespace ts.projectSystem {
 
     function invokeWatcherCallbacks<T>(callbacks: T[], invokeCallback: (cb: T) => void): void {
         if (callbacks) {
+            // The array copy is made to ensure that even if one of the callback removes the callbacks,
+            // we dont miss any callbacks following it
             const cbs = callbacks.slice();
             for (const cb of cbs) {
                 invokeCallback(cb);
