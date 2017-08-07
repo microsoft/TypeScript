@@ -3425,11 +3425,29 @@ namespace ts {
         AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
+    /**
+     * Ternary values are defined such that
+     * x & y is False if either x or y is False.
+     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+     * x & y is True if both x and y are True.
+     * x | y is False if both x and y are False.
+     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+     * x | y is True if either x or y is True.
+     */
+    export const enum Ternary {
+        False = 0,
+        Maybe = 1,
+        True = -1
+    }
+
+    export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
+
     /* @internal */
     export interface InferenceContext extends TypeMapper {
         signature: Signature;               // Generic signature for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
+        compareTypes: TypeComparer;         // Type comparer function
     }
 
     /* @internal */
