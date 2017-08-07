@@ -15,7 +15,7 @@ tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{
 !!! error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, T>'.
     }
     
-    function f2<T, K extends string>(x: { [key: string]: T }, y: Record<string, T>) {
+    function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
         x = y;
         y = x;
     }

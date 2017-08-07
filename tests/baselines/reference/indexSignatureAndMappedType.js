@@ -7,7 +7,7 @@ function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
     y = x;  // Error
 }
 
-function f2<T, K extends string>(x: { [key: string]: T }, y: Record<string, T>) {
+function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
     x = y;
     y = x;
 }
@@ -55,7 +55,7 @@ function f3(x, y) {
 declare function f1<T, K extends string>(x: {
     [key: string]: T;
 }, y: Record<K, T>): void;
-declare function f2<T, K extends string>(x: {
+declare function f2<T>(x: {
     [key: string]: T;
 }, y: Record<string, T>): void;
 declare function f3<T, U, K extends string>(x: {
