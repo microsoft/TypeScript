@@ -487,13 +487,12 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
-            if (!this.isRoot(info)) {
-                this.rootFiles.push(info);
-                this.rootFilesMap.set(info.path, info);
-                info.attachToProject(this);
+            Debug.assert(!this.isRoot(info));
+            this.rootFiles.push(info);
+            this.rootFilesMap.set(info.path, info);
+            info.attachToProject(this);
 
-                this.markAsDirty();
-            }
+            this.markAsDirty();
         }
 
         // add a root file to project

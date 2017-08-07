@@ -1289,8 +1289,7 @@ namespace ts.server {
                 }
 
                 const configFilePath = project instanceof server.ConfiguredProject && project.getConfigFilePath();
-                const base = getBaseFileName(configFilePath);
-                return base === "tsconfig.json" || base === "jsconfig.json" ? base : "other";
+                return getBaseConfigFileName(configFilePath) || "other";
             }
 
             function convertTypeAcquisition({ enable, include, exclude }: TypeAcquisition): ProjectInfoTypeAcquisitionData {
@@ -1344,13 +1343,14 @@ namespace ts.server {
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, clientFileName?: string) {
             const projectRootFilesMap = project.getRootFilesMap();
-            const newRootScriptInfoMap: Map<ProjectRoot> = createMap<ProjectRoot>();
+            const newRootScriptInfoMap = createMap<ProjectRoot>();
 
             for (const f of newUncheckedFiles) {
                 const newRootFile = propertyReader.getFileName(f);
                 const normalizedPath = toNormalizedPath(newRootFile);
                 let scriptInfo: ScriptInfo | NormalizedPath;
                 let path: Path;
+                // Use the project's lsHost so that it can use caching instead of reaching to disk for the query
                 if (!project.lsHost.fileExists(newRootFile)) {
                     path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path);
@@ -1378,7 +1378,7 @@ namespace ts.server {
                 newRootScriptInfoMap.set(path, scriptInfo);
             }
 
-            // project's root file map size is always going to be larger than new roots map
+            // project's root file map size is always going to be same or larger than new roots map
             // as we have already all the new files to the project
             if (projectRootFilesMap.size > newRootScriptInfoMap.size) {
                 projectRootFilesMap.forEach((value, path) => {
@@ -1388,12 +1388,14 @@ namespace ts.server {
                         }
                         else {
                             projectRootFilesMap.delete(path);
-                            project.markAsDirty();
                         }
                     }
                 });
             }
-            project.markAsDirty(); // Just to ensure that even if root files dont change, the changes to the non root file are picked up
+
+            // Just to ensure that even if root files dont change, the changes to the non root file are picked up,
+            // mark the project as dirty unconditionally
+            project.markAsDirty();
         }
 
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
@@ -1408,38 +1410,22 @@ namespace ts.server {
 
         /**
          * Read the config file of the project again and update the project
-         * @param project
          */
         /* @internal */
         reloadConfiguredProject(project: ConfiguredProject) {
             // At this point, there is no reason to not have configFile in the host
-
-            // note: the returned "success" is true does not mean the "configFileErrors" is empty.
-            // because we might have tolerated the errors and kept going. So always return the configFileErrors
-            // regardless the "success" here is true or not.
             const host = project.getCachedServerHost();
+
+            // Clear the cache since we are reloading the project from disk
             host.clearCache();
             const configFileName = project.getConfigFilePath();
             this.logger.info(`Reloading configured project ${configFileName}`);
+
+            // Read updated contents from disk
             const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, host);
+
+            // Update the project
             project.configFileSpecs = configFileSpecs;
-            this.updateConfiguredProject(project, projectOptions, configFileErrors);
-
-            if (!this.eventHandler) {
-                return;
-            }
-
-            this.eventHandler(<ConfigFileDiagEvent>{
-                eventName: ConfigFileDiagEvent,
-                data: { configFileName, diagnostics: project.getGlobalProjectErrors() || [], triggerFile: configFileName }
-            });
-        }
-
-        /**
-         * Updates the configured project with updated config file contents
-         * @param project
-         */
-        private updateConfiguredProject(project: ConfiguredProject, projectOptions: ProjectOptions, configFileErrors: Diagnostic[]) {
             if (this.exceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader)) {
                 project.disableLanguageService();
                 project.stopWatchingWildCards(WatcherCloseReason.ProjectReloadHitMaxSize);
@@ -1451,6 +1437,15 @@ namespace ts.server {
                 project.watchTypeRoots();
             }
             this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
+
+            if (!this.eventHandler) {
+                return;
+            }
+
+            this.eventHandler(<ConfigFileDiagEvent>{
+                eventName: ConfigFileDiagEvent,
+                data: { configFileName, diagnostics: project.getGlobalProjectErrors() || [], triggerFile: configFileName }
+            });
         }
 
         /*@internal*/
@@ -1587,8 +1582,8 @@ namespace ts.server {
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
-                    // We need to update the projects because of we might interprete more/less files
-                    // depending on whether extra files extenstions are either added or removed
+                    // We need to update the project structures again as it is possible that existing
+                    // project structure could have more or less files depending on extensions permitted
                     this.reloadProjects();
                     this.logger.info("Host file extension mappings updated");
                 }
@@ -1664,7 +1659,7 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          */
         private reloadConfiguredsProjectForFiles(openFiles: ScriptInfo[], delayReload: boolean) {
-            const mapUpdatedProjects = createMap<true>();
+            const updatedProjects = createMap<true>();
             // try to reload config file for all open files
             for (const info of openFiles) {
                 // This tries to search for a tsconfig.json for the given file. If we found it,
@@ -1673,12 +1668,12 @@ namespace ts.server {
                 // otherwise we create a new one.
                 const configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
-                    let project = this.findConfiguredProjectByProjectName(configFileName);
+                    const project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
-                        project = this.createConfiguredProject(configFileName, info.fileName);
-                        mapUpdatedProjects.set(configFileName, true);
+                        this.createConfiguredProject(configFileName, info.fileName);
+                        updatedProjects.set(configFileName, true);
                     }
-                    else if (!mapUpdatedProjects.has(configFileName)) {
+                    else if (!updatedProjects.has(configFileName)) {
                         if (delayReload) {
                             project.pendingReload = true;
                             this.delayUpdateProjectGraph(project);
@@ -1686,19 +1681,22 @@ namespace ts.server {
                         else {
                             this.reloadConfiguredProject(project);
                         }
-                        mapUpdatedProjects.set(configFileName, true);
+                        updatedProjects.set(configFileName, true);
                     }
                 }
             }
         }
 
         /**
-         *  - script info can be never migrate to state - root file in inferred project, this is only a starting point
-         *  - if script info has more that one containing projects - it is not a root file in inferred project because:
-         *    - references in inferred project supercede the root part
-         *    - root/reference in non-inferred project beats root in inferred project
+         * Remove the root of inferred project if script info is part of another project
          */
         private removeRootOfInferredProjectIfNowPartOfOtherProject(info: ScriptInfo) {
+            // If the script info is root of inferred project, it could only be first containing project
+            // since info is added to inferred project and made root only when there are no other projects containing it
+            // So even if it is root of the inferred project and after project structure updates its now part
+            // of multiple project it needs to be removed from that inferred project because:
+            // - references in inferred project supercede the root part
+            // - root / reference in non - inferred project beats root in inferred project
             if (info.containingProjects.length > 1 &&
                 info.containingProjects[0].projectKind === ProjectKind.Inferred &&
                 info.containingProjects[0].isRoot(info)) {
@@ -1728,8 +1726,8 @@ namespace ts.server {
                 if (info.containingProjects.length === 0) {
                     this.assignScriptInfoToInferredProject(info);
                 }
-                // Or remove the root of inferred project if is referenced in more than one projects
                 else {
+                    // Or remove the root of inferred project if is referenced in more than one projects
                     this.removeRootOfInferredProjectIfNowPartOfOtherProject(info);
                 }
             }
@@ -1848,7 +1846,7 @@ namespace ts.server {
                     if (!this.changedFiles) {
                         this.changedFiles = [scriptInfo];
                     }
-                    else if (this.changedFiles.indexOf(scriptInfo) < 0) {
+                    else if (!contains(this.changedFiles, scriptInfo)) {
                         this.changedFiles.push(scriptInfo);
                     }
                 }
@@ -2023,8 +2021,7 @@ namespace ts.server {
             const rootFiles: protocol.ExternalFile[] = [];
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
-                const baseFileName = getBaseFileName(normalized);
-                if (baseFileName === "tsconfig.json" || baseFileName === "jsconfig.json") {
+                if (getBaseConfigFileName(normalized)) {
                     if (this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
