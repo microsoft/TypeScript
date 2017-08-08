@@ -557,7 +557,7 @@ namespace ts {
                     // Only bother calling into the typechecker if this is an identifier that
                     // could possibly resolve to a type name.  This makes classification run
                     // in a third of the time it would normally take.
-                    if (classifiableNames.has(identifier.text)) {
+                    if (classifiableNames.has(identifier.escapedText)) {
                         const symbol = typeChecker.getSymbolAtLocation(node);
                         if (symbol) {
                             const type = classifySymbol(symbol, getMeaningFromLocation(node));
@@ -755,10 +755,10 @@ namespace ts {
             return;
 
             function processJSDocParameterTag(tag: JSDocParameterTag) {
-                if (tag.preParameterName) {
-                    pushCommentRange(pos, tag.preParameterName.pos - pos);
-                    pushClassification(tag.preParameterName.pos, tag.preParameterName.end - tag.preParameterName.pos, ClassificationType.parameterName);
-                    pos = tag.preParameterName.end;
+                if (tag.isNameFirst) {
+                    pushCommentRange(pos, tag.name.pos - pos);
+                    pushClassification(tag.name.pos, tag.name.end - tag.name.pos, ClassificationType.parameterName);
+                    pos = tag.name.end;
                 }
 
                 if (tag.typeExpression) {
@@ -767,10 +767,10 @@ namespace ts {
                     pos = tag.typeExpression.end;
                 }
 
-                if (tag.postParameterName) {
-                    pushCommentRange(pos, tag.postParameterName.pos - pos);
-                    pushClassification(tag.postParameterName.pos, tag.postParameterName.end - tag.postParameterName.pos, ClassificationType.parameterName);
-                    pos = tag.postParameterName.end;
+                if (!tag.isNameFirst) {
+                    pushCommentRange(pos, tag.name.pos - pos);
+                    pushClassification(tag.name.pos, tag.name.end - tag.name.pos, ClassificationType.parameterName);
+                    pos = tag.name.end;
                 }
             }
         }

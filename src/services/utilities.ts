@@ -2,7 +2,6 @@
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
-    export const emptyArray: any[] = [];
 
     export const enum SemanticMeaning {
         None = 0x0,
@@ -177,7 +176,6 @@ namespace ts {
 
         switch (node.parent.kind) {
             case SyntaxKind.TypeReference:
-            case SyntaxKind.JSDocTypeReference:
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
@@ -205,7 +203,7 @@ namespace ts {
 
     export function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
-            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
+            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.escapedText === labelName) {
                 return (<LabeledStatement>referenceNode).label;
             }
             referenceNode = referenceNode.parent;
@@ -1092,7 +1090,7 @@ namespace ts {
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
-        return moduleSymbol.getUnescapedName().charCodeAt(0) === CharacterCodes.doubleQuote;
+        return moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
@@ -1241,10 +1239,13 @@ namespace ts {
     }
 
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
-        writeDisplayParts(displayPartWriter);
-        const result = displayPartWriter.displayParts();
-        displayPartWriter.clear();
-        return result;
+        try {
+            writeDisplayParts(displayPartWriter);
+            return displayPartWriter.displayParts();
+        }
+        finally {
+            displayPartWriter.clear();
+        }
     }
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {

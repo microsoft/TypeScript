@@ -62,9 +62,21 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(123,20
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(132,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(136,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(152,68): error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
+  Type '"d"' is not assignable to type 'Keys'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(159,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+  Types of property ''a'' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(162,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(163,35): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(164,51): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(165,51): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'NeedsFoo<number>' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (54 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (62 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
@@ -175,7 +187,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(136,39
     
     // No type guard in if statement
     if (hasNoTypeGuard(a)) {
-        a.propB; 
+        a.propB;
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
     }
@@ -208,7 +220,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(136,39
         return true;
     };
     
-    // No matching signature 
+    // No matching signature
     var assign3: (p1, p2) => p1 is A;
     assign3 = function(p1, p2, p3): p1 is A {
     ~~~~~~~
@@ -327,3 +339,46 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(136,39
     if (hasMissingParameter()) {
         x.propA;
     }
+    
+    // repro #17297
+    
+    type Keys = 'a'|'b'|'c'
+    type KeySet<T extends Keys> = { [k in T]: true }
+    
+    // expected an error, since Keys doesn't have a 'd'
+    declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
+                                                                       ~~~~~
+!!! error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
+!!! error TS2344:   Type '"d"' is not assignable to type 'Keys'.
+    
+    type Foo = { 'a': string; }
+    type Bar = { 'a': number; }
+    
+    interface NeedsFoo<T extends Foo> {
+        foo: T;
+        isFoo(): this is NeedsFoo<Bar>; // should error
+                                  ~~~
+!!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+!!! error TS2344:   Types of property ''a'' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
+    };
+    
+    declare var anError: NeedsFoo<Bar>; // error, as expected
+                                  ~~~
+!!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+    declare var alsoAnError: NeedsFoo<number>; // also error, as expected
+                                      ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+    declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
+                                                      ~~~
+!!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+    declare function newError2(x: any): x is NeedsFoo<number>; // should error
+                                                      ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+    declare function newError3(x: number): x is NeedsFoo<number>; // should error
+                                                ~~~~~~~~~~~~~~~~
+!!! error TS2677: A type predicate's type must be assignable to its parameter's type.
+!!! error TS2677:   Type 'NeedsFoo<number>' is not assignable to type 'number'.
+                                                         ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+    

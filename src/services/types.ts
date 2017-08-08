@@ -22,10 +22,15 @@ namespace ts {
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
 
+    export interface Identifier {
+        readonly text: string;
+    }
+
     export interface Symbol {
+        readonly name: string;
         getFlags(): SymbolFlags;
-        getName(): __String;
-        getUnescapedName(): string;
+        getEscapedName(): __String;
+        getName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
@@ -164,8 +169,8 @@ namespace ts {
          * LS host can optionally implement these methods to support completions for module specifiers.
          * Without these methods, only completions for ambient modules will be provided.
          */
-        readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[];
-        readFile?(path: string, encoding?: string): string;
+        readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        readFile?(path: string, encoding?: string): string | undefined;
         fileExists?(path: string): boolean;
 
         /*

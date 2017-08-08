@@ -85,6 +85,7 @@ namespace ts.server.typingsInstaller {
         private readonly missingTypingsSet: Map<true> = createMap<true>();
         private readonly knownCachesSet: Map<true> = createMap<true>();
         private readonly projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
+        private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
 
         private installRunCount = 1;
@@ -93,10 +94,10 @@ namespace ts.server.typingsInstaller {
         abstract readonly typesRegistry: Map<void>;
 
         constructor(
-            readonly installTypingHost: InstallTypingHost,
-            readonly globalCachePath: string,
-            readonly safeListPath: Path,
-            readonly throttleLimit: number,
+            protected readonly installTypingHost: InstallTypingHost,
+            private readonly globalCachePath: string,
+            private readonly safeListPath: Path,
+            private readonly throttleLimit: number,
             protected readonly log = nullLog) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);
@@ -143,11 +144,15 @@ namespace ts.server.typingsInstaller {
                 this.processCacheLocation(req.cachePath);
             }
 
+            if (this.safeList === undefined) {
+                this.safeList = JsTyping.loadSafeList(this.installTypingHost, this.safeListPath);
+            }
             const discoverTypingsResult = JsTyping.discoverTypings(
                 this.installTypingHost,
+                this.log.isEnabled() ? this.log.writeLine : undefined,
                 req.fileNames,
                 req.projectRootPath,
-                this.safeListPath,
+                this.safeList,
                 this.packageNameToTypingLocation,
                 req.typeAcquisition,
                 req.unresolvedImports);

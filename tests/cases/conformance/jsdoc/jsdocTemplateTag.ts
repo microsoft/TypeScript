@@ -1,11 +1,12 @@
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
+// @Filename: forgot.js
 /**
  * @param {T} a
  * @template T
  */
-function f<T>(a: T) {
+function f(a) {
     return () => a
 }
 let n = f(1)()
@@ -15,7 +16,7 @@ let n = f(1)()
  * @template T
  * @returns {function(): T}
  */
-function g<T>(a: T) {
+function g(a) {
     return () => a
 }
 let s = g('hi')()

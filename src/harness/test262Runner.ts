@@ -4,19 +4,19 @@
 /* tslint:disable:no-null-keyword */
 
 class Test262BaselineRunner extends RunnerBase {
-    private static basePath = "internal/cases/test262";
-    private static helpersFilePath = "tests/cases/test262-harness/helpers.d.ts";
-    private static helperFile: Harness.Compiler.TestFile = {
+    private static readonly basePath = "internal/cases/test262";
+    private static readonly helpersFilePath = "tests/cases/test262-harness/helpers.d.ts";
+    private static readonly helperFile: Harness.Compiler.TestFile = {
         unitName: Test262BaselineRunner.helpersFilePath,
         content: Harness.IO.readFile(Test262BaselineRunner.helpersFilePath),
     };
-    private static testFileExtensionRegex = /\.js$/;
-    private static options: ts.CompilerOptions = {
+    private static readonly testFileExtensionRegex = /\.js$/;
+    private static readonly options: ts.CompilerOptions = {
         allowNonTsExtensions: true,
         target: ts.ScriptTarget.Latest,
         module: ts.ModuleKind.CommonJS
     };
-    private static baselineOptions: Harness.Baseline.BaselineOptions = {
+    private static readonly baselineOptions: Harness.Baseline.BaselineOptions = {
         Subfolder: "test262",
         Baselinefolder: "internal/baselines"
     };

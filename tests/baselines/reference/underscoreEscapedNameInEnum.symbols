@@ -1,0 +1,10 @@
+=== tests/cases/compiler/underscoreEscapedNameInEnum.ts ===
+enum E {
+>E : Symbol(E, Decl(underscoreEscapedNameInEnum.ts, 0, 0))
+
+    "__foo" = 1,
+    bar = E["__foo"] + 1
+>bar : Symbol(E.bar, Decl(underscoreEscapedNameInEnum.ts, 1, 16))
+>E : Symbol(E, Decl(underscoreEscapedNameInEnum.ts, 0, 0))
+}
+
