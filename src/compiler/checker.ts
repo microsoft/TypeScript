@@ -17120,15 +17120,15 @@ namespace ts {
             if (strict && source.flags & (TypeFlags.Any | TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null)) {
                 return false;
             }
-            return kind & TypeFlags.NumberLike && isTypeAssignableTo(source, numberType) ||
-                kind & TypeFlags.StringLike && isTypeAssignableTo(source, stringType) ||
-                kind & TypeFlags.BooleanLike && isTypeAssignableTo(source, booleanType) ||
-                kind & TypeFlags.Void && isTypeAssignableTo(source, voidType) ||
-                kind & TypeFlags.Never && isTypeAssignableTo(source, neverType) ||
-                kind & TypeFlags.Null && isTypeAssignableTo(source, nullType) ||
-                kind & TypeFlags.Undefined && isTypeAssignableTo(source, undefinedType) ||
-                kind & TypeFlags.ESSymbol && isTypeAssignableTo(source, esSymbolType) ||
-                kind & TypeFlags.NonPrimitive && isTypeAssignableTo(source, nonPrimitiveType);
+            return (kind & TypeFlags.NumberLike && isTypeAssignableTo(source, numberType)) ||
+                (kind & TypeFlags.StringLike && isTypeAssignableTo(source, stringType)) ||
+                (kind & TypeFlags.BooleanLike && isTypeAssignableTo(source, booleanType)) ||
+                (kind & TypeFlags.Void && isTypeAssignableTo(source, voidType)) ||
+                (kind & TypeFlags.Never && isTypeAssignableTo(source, neverType)) ||
+                (kind & TypeFlags.Null && isTypeAssignableTo(source, nullType)) ||
+                (kind & TypeFlags.Undefined && isTypeAssignableTo(source, undefinedType)) ||
+                (kind & TypeFlags.ESSymbol && isTypeAssignableTo(source, esSymbolType)) ||
+                (kind & TypeFlags.NonPrimitive && isTypeAssignableTo(source, nonPrimitiveType));
         }
 
         function isConstEnumObjectType(type: Type): boolean {
