@@ -1346,7 +1346,9 @@ namespace ts {
 
             emitExpression(node.left);
             increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
+            emitLeadingCommentsOfPosition(node.operatorToken.pos);
             writeTokenNode(node.operatorToken);
+            emitTrailingCommentsOfPosition(node.operatorToken.end);
             increaseIndentIf(indentAfterOperator, " ");
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
