@@ -9,7 +9,7 @@ namespace ts.server {
         newLine: "\n",
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
-        readFile(): string { return void 0; },
+        readFile: () => undefined,
         writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,
@@ -26,18 +26,6 @@ namespace ts.server {
         setImmediate: () => 0,
         clearImmediate: noop,
         createHash: Harness.LanguageService.mockHash,
-    };
-
-    const mockLogger: Logger = {
-        close: noop,
-        hasLevel(): boolean { return false; },
-        loggingEnabled(): boolean { return false; },
-        perftrc: noop,
-        info: noop,
-        startGroup: noop,
-        endGroup: noop,
-        msg: noop,
-        getLogFileName: (): string => undefined
     };
 
     class TestSession extends Session {
@@ -58,7 +46,7 @@ namespace ts.server {
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
-                logger: mockLogger,
+                logger: projectSystem.nullLogger,
                 canUseEvents: true
             };
             return new TestSession(opts);
@@ -408,7 +396,7 @@ namespace ts.server {
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: mockLogger,
+                    logger: projectSystem.nullLogger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler(this.customHandler, () => {
@@ -475,7 +463,7 @@ namespace ts.server {
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: mockLogger,
+                    logger: projectSystem.nullLogger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({

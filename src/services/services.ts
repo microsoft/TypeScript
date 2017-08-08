@@ -304,7 +304,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
-        name: __String;
+        escapedName: __String;
         declarations?: Declaration[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -317,19 +317,23 @@ namespace ts {
 
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
-            this.name = name;
+            this.escapedName = name;
         }
 
         getFlags(): SymbolFlags {
             return this.flags;
         }
 
-        getName(): __String {
-            return this.name;
+        get name(): string {
+            return unescapeLeadingUnderscores(this.escapedName);
         }
 
-        getUnescapedName(): string {
-            return unescapeLeadingUnderscores(this.name);
+        getEscapedName(): __String {
+            return this.escapedName;
+        }
+
+        getName(): string {
+            return this.name;
         }
 
         getDeclarations(): Declaration[] | undefined {
@@ -364,7 +368,7 @@ namespace ts {
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
-        public text: __String;
+        public escapedText: __String;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -374,6 +378,10 @@ namespace ts {
         /*@internal*/typeArguments: NodeArray<TypeNode>;
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
+        }
+
+        get text(): string {
+            return unescapeLeadingUnderscores(this.escapedText);
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
@@ -601,7 +609,7 @@ namespace ts {
                     if (name.kind === SyntaxKind.ComputedPropertyName) {
                         const expr = (<ComputedPropertyName>name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return unescapeLeadingUnderscores((<PropertyAccessExpression>expr).name.text);
+                            return (<PropertyAccessExpression>expr).name.text;
                         }
 
                         return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
@@ -1149,7 +1157,7 @@ namespace ts {
                         !!hostCache.getEntryByPath(path) :
                         (host.fileExists && host.fileExists(fileName));
                 },
-                readFile: (fileName): string => {
+                readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     if (hostCache.containsEntryByPath(path)) {
@@ -1250,7 +1258,7 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + path);
+                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.", path);
 
                         return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
@@ -1770,19 +1778,12 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
+            const rulesProvider = getRuleProvider(formatOptions);
 
-            let allFixes: CodeAction[] = [];
-
-            forEach(deduplicate(errorCodes), errorCode => {
+            return flatMap(deduplicate(errorCodes), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                const rulesProvider = getRuleProvider(formatOptions);
-                const fixes = codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
-                if (fixes) {
-                    allFixes = allFixes.concat(fixes);
-                }
+                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
             });
-
-            return allFixes;
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
@@ -1841,7 +1842,8 @@ namespace ts {
             const fileContents = sourceFile.text;
             const result: TodoComment[] = [];
 
-            if (descriptors.length > 0) {
+            // Exclude node_modules files as we don't want to show the todos of external libraries.
+            if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
                 const regExp = getTodoCommentsRegExp();
 
                 let matchArray: RegExpExecArray;
@@ -1965,6 +1967,12 @@ namespace ts {
                     (char >= CharacterCodes.A && char <= CharacterCodes.Z) ||
                     (char >= CharacterCodes._0 && char <= CharacterCodes._9);
             }
+
+            function isNodeModulesFile(path: string): boolean {
+                const node_modulesFolderName = "/node_modules/";
+
+                return path.indexOf(node_modulesFolderName) !== -1;
+            }
         }
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
@@ -2063,42 +2071,33 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createUnderscoreEscapedMap<number>();
-
-        walk(sourceFile);
-        sourceFile.nameTable = nameTable;
-
-        function walk(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    setNameTable((<Identifier>node).text, node);
-                    break;
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    // We want to store any numbers/strings if they were a name that could be
-                    // related to a declaration.  So, if we have 'import x = require("something")'
-                    // then we want 'something' to be in the name table.  Similarly, if we have
-                    // "a['propname']" then we want to store "propname" in the name table.
-                    if (isDeclarationName(node) ||
-                        node.parent.kind === SyntaxKind.ExternalModuleReference ||
-                        isArgumentOfElementAccessExpression(node) ||
-                        isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable(getEscapedTextOfIdentifierOrLiteral((<LiteralExpression>node)), node);
-                    }
-                    break;
-                default:
-                    forEachChild(node, walk);
-                    if (node.jsDoc) {
-                        for (const jsDoc of node.jsDoc) {
-                            forEachChild(jsDoc, walk);
-                        }
-                    }
+        const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
+        sourceFile.forEachChild(function walk(node) {
+            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteral(node) && literalIsName(node)) {
+                const text = getEscapedTextOfIdentifierOrLiteral(node);
+                nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
-        }
 
-        function setNameTable(text: __String, node: ts.Node): void {
-            nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
-        }
+            forEachChild(node, walk);
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    forEachChild(jsDoc, walk);
+                }
+            }
+        });
+    }
+
+    /**
+     * We want to store any numbers/strings if they were a name that could be
+     * related to a declaration.  So, if we have 'import x = require("something")'
+     * then we want 'something' to be in the name table.  Similarly, if we have
+     * "a['propname']" then we want to store "propname" in the name table.
+     */
+    function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
+        return isDeclarationName(node) ||
+            node.parent.kind === SyntaxKind.ExternalModuleReference ||
+            isArgumentOfElementAccessExpression(node) ||
+            isLiteralComputedPropertyDeclarationName(node);
     }
 
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {

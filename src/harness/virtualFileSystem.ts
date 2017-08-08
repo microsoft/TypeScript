@@ -209,14 +209,14 @@ namespace Utils {
             }
         }
 
-        readFile(path: string): string {
+        readFile(path: string): string | undefined {
             const value = this.traversePath(path);
             if (value && value.isFile()) {
                 return value.content.content;
             }
         }
 
-        readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number) {
+        readDirectory(path: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth: number) {
             return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, (path: string) => this.getAccessibleFileSystemEntries(path));
         }
     }

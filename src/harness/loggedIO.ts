@@ -64,11 +64,11 @@ interface IOLog {
     }[];
     directoriesRead: {
         path: string,
-        extensions: string[],
-        exclude: string[],
-        include: string[],
+        extensions: ReadonlyArray<string>,
+        exclude: ReadonlyArray<string>,
+        include: ReadonlyArray<string>,
         depth: number,
-        result: string[]
+        result: ReadonlyArray<string>,
     }[];
 }
 

@@ -34,18 +34,17 @@ namespace ts.projectSystem {
     }
 
     export const nullLogger: server.Logger = {
-        close: () => void 0,
-        hasLevel: () => void 0,
+        close: noop,
+        hasLevel: () => false,
         loggingEnabled: () => false,
-        perftrc: () => void 0,
-        info: () => void 0,
-        startGroup: () => void 0,
-        endGroup: () => void 0,
-        msg: () => void 0,
+        perftrc: noop,
+        info: noop,
+        err: noop,
+        group: noop,
         getLogFileName: (): string => undefined
     };
 
-    export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
+    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
         content: libFileContent
@@ -118,7 +117,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function getExecutingFilePathFromLibFile(): string {
+    function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
@@ -130,7 +129,7 @@ namespace ts.projectSystem {
         return map(fileNames, toExternalFile);
     }
 
-    export class TestServerEventManager {
+    class TestServerEventManager {
         public events: server.ProjectServiceEvent[] = [];
 
         handler: server.ProjectServiceEventHandler = (event: server.ProjectServiceEvent) => {
@@ -143,7 +142,7 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface TestServerHostCreationParameters {
+    interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
@@ -205,7 +204,7 @@ namespace ts.projectSystem {
         return new TestSession(opts);
     }
 
-    export interface CreateProjectServiceParameters {
+    interface CreateProjectServiceParameters {
         cancellationToken?: HostCancellationToken;
         logger?: server.Logger;
         useSingleInferredProject?: boolean;
@@ -253,15 +252,15 @@ namespace ts.projectSystem {
         entries: FSEntry[];
     }
 
-    export function isFolder(s: FSEntry): s is Folder {
+    function isFolder(s: FSEntry): s is Folder {
         return isArray((<Folder>s).entries);
     }
 
-    export function isFile(s: FSEntry): s is File {
+    function isFile(s: FSEntry): s is File {
         return typeof (<File>s).content === "string";
     }
 
-    export function addFolder(fullPath: string, toPath: (s: string) => Path, fs: Map<FSEntry>): Folder {
+    function addFolder(fullPath: string, toPath: (s: string) => Path, fs: Map<FSEntry>): Folder {
         const path = toPath(fullPath);
         if (fs.has(path)) {
             Debug.assert(isFolder(fs.get(path)));
@@ -279,29 +278,29 @@ namespace ts.projectSystem {
         return entry;
     }
 
-    export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
-    export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
+    function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
         assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${JSON.stringify(expectedFileNames)}, got ${actualFileNames}`);
         for (const f of expectedFileNames) {
             assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${JSON.stringify(actualFileNames)}`);
         }
     }
 
-    export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
+    function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.configuredProjects.length, expected, `expected ${expected} configured project(s)`);
     }
 
-    export function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
+    function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.externalProjects.length, expected, `expected ${expected} external project(s)`);
     }
 
-    export function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
+    function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.inferredProjects.length, expected, `expected ${expected} inferred project(s)`);
     }
 
@@ -315,7 +314,7 @@ namespace ts.projectSystem {
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[]) {
+    function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[]) {
         checkMapKeys("watchedDirectories", host.watchedDirectories, expectedDirectories);
     }
 
@@ -323,11 +322,11 @@ namespace ts.projectSystem {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    export function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
+    function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
-    export class Callbacks {
+    class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
 
@@ -363,7 +362,7 @@ namespace ts.projectSystem {
         }
     }
 
-    export type TimeOutCallback = () => any;
+    type TimeOutCallback = () => any;
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
@@ -438,24 +437,22 @@ namespace ts.projectSystem {
             }
         }
 
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
             return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
-                const result: FileSystemEntries = {
-                    directories: [],
-                    files: []
-                };
+                const directories: string[] = [];
+                const files: string[] = [];
                 const dirEntry = this.fs.get(this.toPath(dir));
                 if (isFolder(dirEntry)) {
                     dirEntry.entries.forEach((entry) => {
                         if (isFolder(entry)) {
-                            result.directories.push(entry.fullPath);
+                            directories.push(entry.fullPath);
                         }
                         else if (isFile(entry)) {
-                            result.files.push(entry.fullPath);
+                            files.push(entry.fullPath);
                         }
                     });
                 }
-                return result;
+                return { directories, files };
             });
         }
 
@@ -563,7 +560,7 @@ namespace ts.projectSystem {
         }
 
         clearOutput() {
-            this.output.length = 0;
+            clear(this.output);
         }
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
@@ -2333,6 +2330,50 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(f1.path);
             assert.equal(navbar[0].spans[0].length, f1.content.length);
+        });
+
+        it("deleting config file opened from the external project works", () => {
+            const site = {
+                path: "/user/someuser/project/js/site.js",
+                content: ""
+            };
+            const configFile = {
+                path: "/user/someuser/project/tsconfig.json",
+                content: "{}"
+            };
+            const projectFileName = "/user/someuser/project/WebApplication6.csproj";
+            const host = createServerHost([libFile, site, configFile]);
+            const projectService = createProjectService(host);
+
+            const externalProject: protocol.ExternalProject = {
+                projectFileName,
+                rootFiles: [toExternalFile(site.path), toExternalFile(configFile.path)],
+                options: { allowJs: false },
+                typeAcquisition: { "include": [] }
+            };
+
+            projectService.openExternalProjects([externalProject]);
+
+            let knownProjects = projectService.synchronizeProjectList([]);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, externalProjects: 0, inferredProjects: 0 });
+
+            const configProject = projectService.configuredProjects[0];
+            checkProjectActualFiles(configProject, [libFile.path]);
+
+            const diagnostics = configProject.getAllProjectErrors();
+            assert.equal(diagnostics[0].code, Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+
+            host.reloadFS([libFile, site]);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Deleted);
+
+            knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info));
+            checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 0, inferredProjects: 0 });
+
+            externalProject.rootFiles.length = 1;
+            projectService.openExternalProjects([externalProject]);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 1, inferredProjects: 0 });
+            checkProjectActualFiles(projectService.externalProjects[0], [site.path, libFile.path]);
         });
     });
 

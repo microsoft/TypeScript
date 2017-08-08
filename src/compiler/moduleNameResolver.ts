@@ -13,12 +13,6 @@ namespace ts {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    /** Array that is only intended to be pushed to, never read. */
-    /* @internal */
-    export interface Push<T> {
-        push(value: T): void;
-    }
-
     /**
      * Result of trying to resolve a module.
      * At least one of `ts` and `js` should be defined, or the whole thing should be `undefined`.
@@ -52,10 +46,6 @@ namespace ts {
             resolvedModule: resolved && { resolvedFileName: resolved.path, extension: resolved.extension, isExternalLibraryImport },
             failedLookupLocations
         };
-    }
-
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
     }
 
     interface ModuleResolutionState {
@@ -266,6 +256,8 @@ namespace ts {
                         for (const typeDirectivePath of host.getDirectories(root)) {
                             const normalized = normalizePath(typeDirectivePath);
                             const packageJsonPath = pathToPackageJson(combinePaths(root, normalized));
+                            // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
+                            // See `createNotNeededPackageJSON` in the types-publisher` repo.
                             // tslint:disable-next-line:no-null-keyword
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
                             if (!isNotNeededPackage) {
@@ -318,7 +310,7 @@ namespace ts {
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string) {
-            if (!moduleHasNonRelativeName(nonRelativeModuleName)) {
+            if (isExternalModuleNameRelative(nonRelativeModuleName)) {
                 return undefined;
             }
             let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
@@ -535,7 +527,7 @@ namespace ts {
     function tryLoadModuleUsingOptionalResolutionSettings(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader,
         failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
 
-        if (moduleHasNonRelativeName(moduleName)) {
+        if (!isExternalModuleNameRelative(moduleName)) {
             return tryLoadModuleUsingBaseUrl(extensions, moduleName, loader, failedLookupLocations, state);
         }
         else {
@@ -686,7 +678,7 @@ namespace ts {
         const { resolvedModule, failedLookupLocations } =
             nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
         if (!resolvedModule) {
-            throw new Error(`Could not resolve JS module ${moduleName} starting at ${initialDir}. Looked in: ${failedLookupLocations.join(", ")}`);
+            throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations.join(", ")}`);
         }
         return resolvedModule.resolvedFileName;
     }
@@ -711,7 +703,7 @@ namespace ts {
                 return toSearchResult({ resolved, isExternalLibraryImport: false });
             }
 
-            if (moduleHasNonRelativeName(moduleName)) {
+            if (!isExternalModuleNameRelative(moduleName)) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, Extensions[extensions]);
                 }
@@ -1024,7 +1016,7 @@ namespace ts {
             }
             const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
 
-            if (moduleHasNonRelativeName(moduleName)) {
+            if (!isExternalModuleNameRelative(moduleName)) {
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
                     const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, traceEnabled, host);

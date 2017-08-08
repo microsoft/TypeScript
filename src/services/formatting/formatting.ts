@@ -1152,7 +1152,7 @@ namespace ts.formatting {
         }
     }
 
-    function getOpenTokenForList(node: Node, list: Node[]) {
+    function getOpenTokenForList(node: Node, list: ReadonlyArray<Node>) {
         switch (node.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionDeclaration:

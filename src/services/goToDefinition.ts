@@ -26,7 +26,7 @@ namespace ts.GoToDefinition {
 
         // Labels
         if (isJumpStatementTarget(node)) {
-            const labelName = unescapeLeadingUnderscores((<Identifier>node).text);
+            const labelName = (<Identifier>node).text;
             const label = getTargetLabel((<BreakOrContinueStatement>node.parent), labelName);
             return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
         }
@@ -191,7 +191,7 @@ namespace ts.GoToDefinition {
             return false;
         }
 
-        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddSignature(signatureDeclarations: ReadonlyArray<Declaration> | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             if (!signatureDeclarations) {
                 return false;
             }
