@@ -139,8 +139,6 @@ namespace ts.server {
     class Logger implements server.Logger {
         private fd = -1;
         private seq = 0;
-        private inGroup = false;
-        private firstInGroup = true;
 
         constructor(private readonly logFilename: string,
             private readonly traceToConsole: boolean,
@@ -170,22 +168,24 @@ namespace ts.server {
         }
 
         perftrc(s: string) {
-            this.msg(s, Msg.Perf);
+            this.msg(s, "Perf");
         }
 
         info(s: string) {
-            this.msg(s, Msg.Info);
+            this.msg(s, "Info");
         }
 
-        startGroup() {
-            this.inGroup = true;
-            this.firstInGroup = true;
+        err(s: string) {
+            this.msg(s, "Err");
         }
 
-        endGroup() {
-            this.inGroup = false;
+        group(logGroupEntries: (log: (msg: string) => void) => void) {
+            let firstInGroup = false;
+            logGroupEntries(s => {
+                this.msg(s, "Info", /*inGroup*/ true, firstInGroup);
+                firstInGroup = false;
+            });
             this.seq++;
-            this.firstInGroup = true;
         }
 
         loggingEnabled() {
@@ -196,26 +196,32 @@ namespace ts.server {
             return this.loggingEnabled() && this.level >= level;
         }
 
-        msg(s: string, type: Msg.Types = Msg.Err) {
-            if (this.fd >= 0 || this.traceToConsole) {
-                s = `[${nowString()}] ${s}\n`;
+        private msg(s: string, type: string, inGroup = false, firstInGroup = false) {
+            if (!this.canWrite) return;
+
+            s = `[${nowString()}] ${s}\n`;
+            if (!inGroup || firstInGroup) {
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
-                if (this.firstInGroup) {
-                    s = prefix + s;
-                    this.firstInGroup = false;
-                }
-                if (!this.inGroup) {
-                    this.seq++;
-                    this.firstInGroup = true;
-                }
-                if (this.fd >= 0) {
-                    const buf = new Buffer(s);
-                    // tslint:disable-next-line no-null-keyword
-                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
-                }
-                if (this.traceToConsole) {
-                    console.warn(s);
-                }
+                s = prefix + s;
+            }
+            this.write(s);
+            if (!inGroup) {
+                this.seq++;
+            }
+        }
+
+        private get canWrite() {
+            return this.fd >= 0 || this.traceToConsole;
+        }
+
+        private write(s: string) {
+            if (this.fd >= 0) {
+                const buf = new Buffer(s);
+                // tslint:disable-next-line no-null-keyword
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
+            }
+            if (this.traceToConsole) {
+                console.warn(s);
             }
         }
     }

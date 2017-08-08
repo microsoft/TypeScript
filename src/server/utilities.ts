@@ -17,20 +17,9 @@ namespace ts.server {
         loggingEnabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;
-        startGroup(): void;
-        endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
+        err(s: string): void;
+        group(logGroupEntries: (log: (msg: string) => void) => void): void;
         getLogFileName(): string;
-    }
-
-    export namespace Msg {
-        export type Err = "Err";
-        export const Err: Err = "Err";
-        export type Info = "Info";
-        export const Info: Info = "Info";
-        export type Perf = "Perf";
-        export const Perf: Perf = "Perf";
-        export type Types = Err | Info | Perf;
     }
 
     function getProjectRootPath(project: Project): Path {
