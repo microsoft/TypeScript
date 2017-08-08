@@ -963,7 +963,7 @@ namespace ts.projectSystem {
                     endLine: 2,
                     endOffset: 0
                 }
-            }
+            };
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLength(1);
             host.runQueuedTimeoutCallbacks();

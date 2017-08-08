@@ -164,12 +164,13 @@ namespace ts {
     }
 
     // A generated code block
-    interface CodeBlock {
+    type CodeBlock = | ExceptionBlock | LabeledBlock | SwitchBlock | LoopBlock | WithBlock;
+    interface CodeBlockBase {
         kind: CodeBlockKind;
     }
 
     // a generated exception block, used for 'try' statements
-    interface ExceptionBlock extends CodeBlock {
+    interface ExceptionBlock extends CodeBlockBase {
         state: ExceptionBlockState;
         startLabel: Label;
         catchVariable?: Identifier;
@@ -179,27 +180,27 @@ namespace ts {
     }
 
     // A generated code that tracks the target for 'break' statements in a LabeledStatement.
-    interface LabeledBlock extends CodeBlock {
+    interface LabeledBlock extends CodeBlockBase {
         labelText: string;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the target for 'break' statements in a 'switch' statement
-    interface SwitchBlock extends CodeBlock {
+    interface SwitchBlock extends CodeBlockBase {
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the targets for 'break' and 'continue' statements, used for iteration statements
-    interface LoopBlock extends CodeBlock {
+    interface LoopBlock extends CodeBlockBase {
         continueLabel: Label;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block associated with a 'with' statement
-    interface WithBlock extends CodeBlock {
+    interface WithBlock extends CodeBlockBase {
         expression: Identifier;
         startLabel: Label;
         endLabel: Label;
@@ -2015,7 +2016,7 @@ namespace ts {
          *
          * @param block Information about the block.
          */
-        function beginBlock<T extends CodeBlock>(block: T): number {
+        function beginBlock(block: CodeBlock): number {
             if (!blocks) {
                 blocks = [];
                 blockActions = [];
@@ -2070,7 +2071,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock<WithBlock>({
+            beginBlock({
                 kind: CodeBlockKind.With,
                 expression,
                 startLabel,
@@ -2098,7 +2099,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock<ExceptionBlock>({
+            beginBlock({
                 kind: CodeBlockKind.Exception,
                 state: ExceptionBlockState.Try,
                 startLabel,
@@ -2199,7 +2200,7 @@ namespace ts {
          * @param labelText Names from containing labeled statements.
          */
         function beginScriptLoopBlock(): void {
-            beginBlock<LoopBlock>({
+            beginBlock({
                 kind: CodeBlockKind.Loop,
                 isScript: true,
                 breakLabel: -1,
@@ -2217,7 +2218,7 @@ namespace ts {
          */
         function beginLoopBlock(continueLabel: Label): Label {
             const breakLabel = defineLabel();
-            beginBlock<LoopBlock>({
+            beginBlock({
                 kind: CodeBlockKind.Loop,
                 isScript: false,
                 breakLabel,
@@ -2245,7 +2246,7 @@ namespace ts {
          *
          */
         function beginScriptSwitchBlock(): void {
-            beginBlock<SwitchBlock>({
+            beginBlock({
                 kind: CodeBlockKind.Switch,
                 isScript: true,
                 breakLabel: -1
@@ -2259,7 +2260,7 @@ namespace ts {
          */
         function beginSwitchBlock(): Label {
             const breakLabel = defineLabel();
-            beginBlock<SwitchBlock>({
+            beginBlock({
                 kind: CodeBlockKind.Switch,
                 isScript: false,
                 breakLabel,
@@ -2280,7 +2281,7 @@ namespace ts {
         }
 
         function beginScriptLabeledBlock(labelText: string) {
-            beginBlock<LabeledBlock>({
+            beginBlock({
                 kind: CodeBlockKind.Labeled,
                 isScript: true,
                 labelText,
@@ -2290,7 +2291,7 @@ namespace ts {
 
         function beginLabeledBlock(labelText: string) {
             const breakLabel = defineLabel();
-            beginBlock<LabeledBlock>({
+            beginBlock({
                 kind: CodeBlockKind.Labeled,
                 isScript: false,
                 labelText,
