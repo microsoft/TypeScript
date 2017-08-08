@@ -862,7 +862,9 @@ namespace ts {
             startLexicalEnvironment();
             addExtendsHelperIfNeeded(statements, node, extendsClauseElement);
             addConstructor(statements, node, extendsClauseElement);
-            addClassMembers(statements, node);
+            const memberNames: MemberName[] = [];
+            addClassMembers(statements, node, memberNames);
+            addNamesHelperIfNeeded(statements, node, memberNames);
 
             // Create a synthetic text range for the return statement.
             const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
@@ -903,6 +905,12 @@ namespace ts {
                         /*location*/ extendsClauseElement
                     )
                 );
+            }
+        }
+
+        function addNamesHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, memberNames: MemberName[]) {
+            if (memberNames && memberNames.length) {
+                statements.push(createStatement(createNamesHelper(context, createPropertyAccess(getInternalName(node), "prototype"), memberNames)));
             }
         }
 
@@ -1570,6 +1578,8 @@ namespace ts {
             return statements;
         }
 
+        type MemberName = Identifier | StringLiteral | NumericLiteral;
+
         /**
          * Adds statements to the class body function for a class to define the members of the
          * class.
@@ -1577,17 +1587,17 @@ namespace ts {
          * @param statements The statements for the class body function.
          * @param node The ClassExpression or ClassDeclaration node.
          */
-        function addClassMembers(statements: Statement[], node: ClassExpression | ClassDeclaration): void {
+        function addClassMembers(statements: Statement[], node: ClassExpression | ClassDeclaration, memberNames: Push<MemberName>): void {
             for (const member of node.members) {
                 switch (member.kind) {
                     case SyntaxKind.SemicolonClassElement:
                         statements.push(transformSemicolonClassElementToStatement(<SemicolonClassElement>member));
                         break;
 
-                    case SyntaxKind.MethodDeclaration:
-                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), <MethodDeclaration>member, node));
+                    case SyntaxKind.MethodDeclaration: {
+                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), <MethodDeclaration>member, node, memberNames));
                         break;
-
+                    }
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         const accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
@@ -1623,11 +1633,11 @@ namespace ts {
          * @param receiver The receiver for the member.
          * @param member The MethodDeclaration node.
          */
-        function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
+        function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node, memberNames: Push<MemberName>) {
             const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
-            const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
+            const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name, hasModifier(member, ModifierFlags.Static) ? undefined : memberNames, context);
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
             setEmitFlags(memberFunction, EmitFlags.NoComments);
             setSourceMapRange(memberFunction, sourceMapRange);
@@ -2643,7 +2653,11 @@ namespace ts {
 
                 expressions.push(assignment);
 
-                addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
+                const memberNames: MemberName[] = [];
+                addObjectLiteralMembers(expressions, node, temp, numInitialProperties, memberNames);
+                if (memberNames && memberNames.length) {
+                    expressions.push(createNamesHelper(context, temp, memberNames));
+                }
 
                 // We need to clone the temporary identifier so that we can write it on a
                 // new line
@@ -3068,7 +3082,7 @@ namespace ts {
          * @param numInitialNonComputedProperties The number of initial properties without
          *                                        computed property names.
          */
-        function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, start: number) {
+        function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, start: number, memberNames: Push<MemberName>) {
             const properties = node.properties;
             const numProperties = properties.length;
             for (let i = start; i < numProperties; i++) {
@@ -3084,7 +3098,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(<MethodDeclaration>property, receiver, node, node.multiLine));
+                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(<MethodDeclaration>property, receiver, node, node.multiLine, memberNames));
                         break;
 
                     case SyntaxKind.PropertyAssignment:
@@ -3153,12 +3167,15 @@ namespace ts {
          * @param method The MethodDeclaration node.
          * @param receiver The receiver for the assignment.
          */
-        function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, container: Node, startsOnNewLine: boolean) {
+        function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, container: Node, startsOnNewLine: boolean, memberNames: Push<MemberName>) {
             const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
-                    visitNode(method.name, visitor, isPropertyName)
+                    visitNode(method.name, visitor, isPropertyName),
+                    /* location */ undefined,
+                    memberNames,
+                    context
                 ),
                 transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined, container)
             );
@@ -4096,6 +4113,39 @@ namespace ts {
                     extendStatics(d, b);
                     function __() { this.constructor = d; }
                     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+                };
+            })();`
+    };
+
+    function createNamesHelper(context: TransformationContext, proto: PropertyAccessExpression | Identifier, names: (Identifier | StringLiteral | NumericLiteral)[]) {
+        context.requestEmitHelper(nameHelper);
+        return createCall(
+            getHelperName("__names"),
+            /* typeArguments */ undefined,
+            [
+                proto,
+                createArrayLiteral(names)
+            ]
+        );
+    }
+
+    const nameHelper: EmitHelper = {
+        name: "typescript:name",
+        scoped: false,
+        priority: 0,
+        text: `
+            var __names = (this && this.__names) || (function() {
+                var name = Object.defineProperty ? (function(proto, name) {
+                    Object.defineProperty(proto[name], 'name', { 
+                        value: name, configurable: true, writable: false, enumerable: false
+                    });
+                }) : (function(proto, name) {
+                    proto[name].name = name;
+                });
+                return function (proto, keys) {
+                    for (var i = keys.length - 1; i >= 0; i--) {
+                        name(proto, keys[i])
+                    }
                 };
             })();`
     };
