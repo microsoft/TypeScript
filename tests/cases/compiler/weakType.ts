@@ -7,13 +7,13 @@ function getDefaultSettings() {
     return { timeout: 1000 };
 }
 interface CtorOnly {
-    new(s: string): string
+    new(s: string): { timeout: 1000 }
 }
 
 function doSomething(settings: Settings) { /* ... */ }
 // forgot to call `getDefaultSettings`
 doSomething(getDefaultSettings);
-doSomething(() => { });
+doSomething(() => ({ timeout: 1000 }));
 doSomething(null as CtorOnly);
 doSomething(12);
 doSomething('completely wrong');

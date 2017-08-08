@@ -1,6 +1,6 @@
-tests/cases/compiler/weakType.ts(15,13): error TS2559: Type '() => { timeout: number; }' has no properties in common with type 'Settings'.
-tests/cases/compiler/weakType.ts(16,13): error TS2559: Type '() => void' has no properties in common with type 'Settings'.
-tests/cases/compiler/weakType.ts(17,13): error TS2559: Type 'CtorOnly' has no properties in common with type 'Settings'.
+tests/cases/compiler/weakType.ts(15,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+tests/cases/compiler/weakType.ts(16,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+tests/cases/compiler/weakType.ts(17,13): error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
 tests/cases/compiler/weakType.ts(18,13): error TS2559: Type '12' has no properties in common with type 'Settings'.
 tests/cases/compiler/weakType.ts(19,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
 tests/cases/compiler/weakType.ts(20,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
@@ -21,20 +21,20 @@ tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wron
         return { timeout: 1000 };
     }
     interface CtorOnly {
-        new(s: string): string
+        new(s: string): { timeout: 1000 }
     }
     
     function doSomething(settings: Settings) { /* ... */ }
     // forgot to call `getDefaultSettings`
     doSomething(getDefaultSettings);
                 ~~~~~~~~~~~~~~~~~~
-!!! error TS2559: Type '() => { timeout: number; }' has no properties in common with type 'Settings'.
-    doSomething(() => { });
-                ~~~~~~~~~
-!!! error TS2559: Type '() => void' has no properties in common with type 'Settings'.
+!!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+    doSomething(() => ({ timeout: 1000 }));
+                ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
     doSomething(null as CtorOnly);
                 ~~~~~~~~~~~~~~~~
-!!! error TS2559: Type 'CtorOnly' has no properties in common with type 'Settings'.
+!!! error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
     doSomething(12);
                 ~~
 !!! error TS2559: Type '12' has no properties in common with type 'Settings'.
