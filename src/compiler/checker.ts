@@ -1086,7 +1086,10 @@ namespace ts {
                 location = location.parent;
             }
 
-            if (result && nameNotFoundMessage && noUnusedIdentifiers) {
+            // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
+            // If `result === lastLocation.symbol`, that means that we are somewhere inside `lastLocation` looking up a name, and resolving to `lastLocation` itself.
+            // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
+            if (result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastLocation.symbol) {
                 result.isReferenced = true;
             }
 
@@ -10800,17 +10803,6 @@ namespace ts {
             return undefined;
         }
 
-        function getLeftmostIdentifierOrThis(node: Node): Node {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                case SyntaxKind.ThisKeyword:
-                    return node;
-                case SyntaxKind.PropertyAccessExpression:
-                    return getLeftmostIdentifierOrThis((<PropertyAccessExpression>node).expression);
-            }
-            return undefined;
-        }
-
         function getBindingElementNameText(element: BindingElement): string | undefined {
             if (element.parent.kind === SyntaxKind.ObjectBindingPattern) {
                 const name = element.propertyName || element.name;
@@ -18518,15 +18510,6 @@ namespace ts {
                     return forEach((<ClassLikeDeclaration>n).members, containsSuperCallAsComputedPropertyName);
                 }
                 return forEachChild(n, containsSuperCall);
-            }
-
-            function markThisReferencesAsErrors(n: Node): void {
-                if (n.kind === SyntaxKind.ThisKeyword) {
-                    error(n, Diagnostics.this_cannot_be_referenced_in_current_location);
-                }
-                else if (n.kind !== SyntaxKind.FunctionExpression && n.kind !== SyntaxKind.FunctionDeclaration) {
-                    forEachChild(n, markThisReferencesAsErrors);
-                }
             }
 
             function isInstancePropertyWithInitializer(n: Node): boolean {

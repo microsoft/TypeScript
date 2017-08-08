@@ -125,22 +125,6 @@ function dir(dirPath: string, spec?: string, options?: any) {
     }
 }
 
-// fs.rmdirSync won't delete directories with files in it
-function deleteFolderRecursive(dirPath: string) {
-    if (fs.existsSync(dirPath)) {
-        fs.readdirSync(dirPath).forEach((file) => {
-            const curPath = path.join(dirPath, file);
-            if (fs.statSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            }
-            else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(dirPath);
-    }
-};
-
 function writeFile(path: string, data: any) {
     ensureDirectoriesExist(getDirectoryPath(path));
     fs.writeFileSync(path, data);
