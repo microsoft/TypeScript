@@ -1446,14 +1446,10 @@ namespace ts {
                 }
             }
             else {
-                // If no includes were specified, exclude common package folders and the outDir
-                const specs = includeSpecs ? [] : ["node_modules", "bower_components", "jspm_packages"];
-
                 const outDir = raw["compilerOptions"] && raw["compilerOptions"]["outDir"];
                 if (outDir) {
-                    specs.push(outDir);
+                    excludeSpecs = [outDir];
                 }
-                excludeSpecs = specs;
             }
 
             if (fileNames === undefined && includeSpecs === undefined) {

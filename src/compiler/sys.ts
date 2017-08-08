@@ -4,6 +4,18 @@ declare function setTimeout(handler: (...args: any[]) => void, timeout: number):
 declare function clearTimeout(handle: any): void;
 
 namespace ts {
+    /**
+     * Set a high stack trace limit to provide more information in case of an error.
+     * Called for command-line and server use cases.
+     * Not called if TypeScript is used as a library.
+     */
+    /* @internal */
+    export function setStackTraceLimit() {
+        if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
+            (Error as any).stackTraceLimit = 100;
+        }
+    }
+
     export enum FileWatcherEventKind {
         Created,
         Changed,

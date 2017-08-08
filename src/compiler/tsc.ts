@@ -665,6 +665,8 @@ namespace ts {
     }
 }
 
+ts.setStackTraceLimit();
+
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();
 }
