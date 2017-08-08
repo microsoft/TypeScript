@@ -114,7 +114,7 @@ namespace ts {
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
-                children && mapDefined(children, transformJsxChildToExpression),
+                mapDefined(children, transformJsxChildToExpression),
                 node,
                 location
             );

@@ -515,13 +515,15 @@ namespace ts {
         return result || array;
     }
 
-    export function mapDefined<T, U>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => U | undefined): U[] {
+    export function mapDefined<T, U>(array: ReadonlyArray<T> | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
         const result: U[] = [];
-        for (let i = 0; i < array.length; i++) {
-            const item = array[i];
-            const mapped = mapFn(item, i);
-            if (mapped !== undefined) {
-                result.push(mapped);
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const mapped = mapFn(item, i);
+                if (mapped !== undefined) {
+                    result.push(mapped);
+                }
             }
         }
         return result;
