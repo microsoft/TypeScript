@@ -64,7 +64,7 @@ class C9 extends B9 {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -131,7 +131,7 @@ var C1 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -204,7 +204,7 @@ var C2 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -277,7 +277,7 @@ var C3 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -371,7 +371,7 @@ var C4 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -472,7 +472,7 @@ var C5 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -545,7 +545,7 @@ var C6 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -612,7 +612,7 @@ var C7 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
@@ -682,7 +682,7 @@ var C8 = (function () {
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;

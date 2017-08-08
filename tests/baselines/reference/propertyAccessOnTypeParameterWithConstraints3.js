@@ -61,7 +61,7 @@ var r4 = b.foo(new B()); // valid call to an invalid function
 var __names = (this && this.__names) || (function() {
     var name = Object.defineProperty ? (function(proto, name) {
         Object.defineProperty(proto[name], 'name', { 
-            value: name, configurable: true, writable: false, enumerable: false
+            value: name, configurable: true
         });
     }) : (function(proto, name) {
         proto[name].name = name;
