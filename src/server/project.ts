@@ -54,7 +54,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: Diagnostic[];
+        projectErrors: ReadonlyArray<Diagnostic>;
     }
 
     export class UnresolvedImportsMap {
@@ -147,7 +147,7 @@ namespace ts.server {
 
         private typingFiles: SortedReadonlyArray<string>;
 
-        protected projectErrors: Diagnostic[];
+        protected projectErrors: ReadonlyArray<Diagnostic>;
 
         public typesVersion = 0;
 
@@ -1044,7 +1044,7 @@ namespace ts.server {
             return getDirectoryPath(this.getConfigFilePath());
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 
@@ -1188,7 +1188,7 @@ namespace ts.server {
             return this.typeAcquisition;
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 
