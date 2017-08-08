@@ -116,8 +116,6 @@ namespace ts.server {
         birthtime: Date;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
-
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
