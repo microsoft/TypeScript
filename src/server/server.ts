@@ -760,8 +760,16 @@ namespace ts.server {
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
     const npmLocation = findArgument(Arguments.NpmLocation);
 
-    const globalPlugins = (findArgument("--globalPlugins") || "").split(",");
-    const pluginProbeLocations = (findArgument("--pluginProbeLocations") || "").split(",");
+    function parseStringArray(argName: string): string[] {
+        const arg = findArgument(argName);
+        if (arg === undefined) {
+            return emptyArray as string[]; // TODO: https://github.com/Microsoft/TypeScript/issues/16312
+        }
+        return arg.split(",").filter(name => name !== "");
+    }
+
+    const globalPlugins = parseStringArray("--globalPlugins");
+    const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
