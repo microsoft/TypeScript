@@ -30,6 +30,20 @@ var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 
 
 //// [destructuringParameterProperties2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C1 = (function () {
     function C1(k, _a) {
         var a = _a[0], b = _a[1], c = _a[2];
@@ -47,6 +61,7 @@ var C1 = (function () {
     C1.prototype.getC = function () {
         return this.c;
     };
+    __names(C1.prototype, ["getA", "getB", "getC"]);
     return C1;
 }());
 var x = new C1(undefined, [0, undefined, ""]);

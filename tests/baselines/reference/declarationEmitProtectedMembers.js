@@ -50,6 +50,20 @@ class C4 {
 }
 
 //// [declarationEmitProtectedMembers.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -86,6 +100,7 @@ var C1 = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(C1.prototype, ["f"]);
     return C1;
 }());
 // Derived class overriding protected members
@@ -100,6 +115,7 @@ var C2 = (function (_super) {
     C2.sf = function () {
         return _super.sf.call(this) + this.sx;
     };
+    __names(C2.prototype, ["f"]);
     return C2;
 }(C1));
 // Derived class making protected members public
@@ -119,6 +135,7 @@ var C3 = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    __names(C3.prototype, ["f"]);
     return C3;
 }(C2));
 // Protected properties in constructors

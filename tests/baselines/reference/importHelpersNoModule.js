@@ -48,6 +48,7 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__names(C.prototype, ["method"]);
     tslib_1.__decorate([
         tslib_1.__param(0, dec),
         tslib_1.__metadata("design:type", Function),
@@ -68,6 +69,20 @@ var __extends = (this && this.__extends) || (function () {
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
     };
 })();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -99,6 +114,7 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    __names(C.prototype, ["method"]);
     __decorate([
         __param(0, dec),
         __metadata("design:type", Function),

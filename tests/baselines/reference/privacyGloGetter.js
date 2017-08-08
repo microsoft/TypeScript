@@ -89,6 +89,20 @@ class C7_public {
 }
 
 //// [privacyGloGetter.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var m1;
 (function (m1) {
     var C1_public = (function () {
@@ -96,6 +110,7 @@ var m1;
         }
         C1_public.prototype.f1 = function () {
         };
+        __names(C1_public.prototype, ["f1"]);
         return C1_public;
     }());
     m1.C1_public = C1_public;

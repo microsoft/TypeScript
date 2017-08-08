@@ -24,6 +24,20 @@ class D2 extends C implements I { // error
 } 
 
 //// [interfaceExtendsClassWithPrivate2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -39,6 +53,7 @@ var C = (function () {
         this.x = 1;
     }
     C.prototype.foo = function (x) { return x; };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 var D = (function (_super) {
@@ -52,6 +67,7 @@ var D = (function (_super) {
     D.prototype.foo = function (x) { return x; };
     D.prototype.other = function (x) { return x; };
     D.prototype.bar = function () { };
+    __names(D.prototype, ["foo", "other", "bar"]);
     return D;
 }(C));
 var D2 = (function (_super) {
@@ -64,5 +80,6 @@ var D2 = (function (_super) {
     D2.prototype.foo = function (x) { return x; };
     D2.prototype.other = function (x) { return x; };
     D2.prototype.bar = function () { };
+    __names(D2.prototype, ["foo", "other", "bar"]);
     return D2;
 }(C));

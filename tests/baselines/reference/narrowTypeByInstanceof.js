@@ -26,12 +26,27 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 
 
 //// [narrowTypeByInstanceof.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Match = (function () {
     function Match() {
     }
     Match.prototype.range = function () {
         return undefined;
     };
+    __names(Match.prototype, ["range"]);
     return Match;
 }());
 var FileMatch = (function () {
@@ -40,6 +55,7 @@ var FileMatch = (function () {
     FileMatch.prototype.resource = function () {
         return undefined;
     };
+    __names(FileMatch.prototype, ["resource"]);
     return FileMatch;
 }());
 var elementA, elementB;

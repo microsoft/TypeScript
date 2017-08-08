@@ -38,6 +38,20 @@ s.foo() + ss.foo();
 
 
 //// [super.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -58,6 +72,7 @@ var Base = (function () {
     Base.prototype.bar = function () {
         return "basebar";
     };
+    __names(Base.prototype, ["foo", "bar"]);
     return Base;
 }());
 var Sub1 = (function (_super) {
@@ -68,6 +83,7 @@ var Sub1 = (function (_super) {
     Sub1.prototype.foo = function () {
         return "sub1" + _super.prototype.foo.call(this) + _super.prototype.bar.call(this);
     };
+    __names(Sub1.prototype, ["foo"]);
     return Sub1;
 }(Base));
 var SubSub1 = (function (_super) {
@@ -78,6 +94,7 @@ var SubSub1 = (function (_super) {
     SubSub1.prototype.foo = function () {
         return "subsub1" + _super.prototype.foo.call(this);
     };
+    __names(SubSub1.prototype, ["foo"]);
     return SubSub1;
 }(Sub1));
 var Base2 = (function () {
@@ -86,6 +103,7 @@ var Base2 = (function () {
     Base2.prototype.foo = function () {
         _super.prototype.foo.call(this);
     };
+    __names(Base2.prototype, ["foo"]);
     return Base2;
 }());
 var s = new Sub1();

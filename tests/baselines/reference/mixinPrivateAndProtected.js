@@ -101,6 +101,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var A = (function () {
     function A() {
         this.pb = 2;
@@ -167,6 +181,7 @@ var Person = (function () {
     Person.prototype.myProtectedFunction = function () {
         // do something
     };
+    __names(Person.prototype, ["myProtectedFunction"]);
     return Person;
 }());
 function PersonMixin(Base) {
@@ -183,6 +198,7 @@ function PersonMixin(Base) {
             _super.prototype.myProtectedFunction.call(this);
             // do more things
         };
+        __names(class_4.prototype, ["myProtectedFunction"]);
         return class_4;
     }(Base));
 }
@@ -193,5 +209,6 @@ var Customer = (function (_super) {
     }
     Customer.prototype.f = function () {
     };
+    __names(Customer.prototype, ["f"]);
     return Customer;
 }(PersonMixin(Person)));

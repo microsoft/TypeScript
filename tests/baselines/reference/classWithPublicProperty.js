@@ -22,6 +22,20 @@ var r7: string = C.f();
 var r8: string = C.g();
 
 //// [classWithPublicProperty.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C = (function () {
     function C() {
         this.a = '';
@@ -30,6 +44,7 @@ var C = (function () {
     }
     C.prototype.c = function () { return ''; };
     C.f = function () { return ''; };
+    __names(C.prototype, ["c"]);
     C.g = function () { return ''; };
     return C;
 }());

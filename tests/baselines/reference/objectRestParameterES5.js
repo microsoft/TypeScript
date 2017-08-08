@@ -22,6 +22,20 @@ foobar({ bar: { greeting: 'hello' } });
 
 
 //// [objectRestParameterES5.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -58,6 +72,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(C.prototype, ["m"]);
     return C;
 }());
 function foobar(_a) {

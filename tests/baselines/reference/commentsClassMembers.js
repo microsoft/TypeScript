@@ -218,6 +218,20 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 
 //// [commentsClassMembers.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 /** This is comment for c1*/
 var c1 = (function () {
     /** Constructor method*/
@@ -411,6 +425,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(c1.prototype, ["p2", "pp2", "nc_p2", "nc_pp2", "a_p2", "a_pp2", "b_p2", "b_pp2"]);
     return c1;
 }());
 var i1 = new c1();

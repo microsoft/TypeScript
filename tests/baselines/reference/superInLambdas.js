@@ -68,6 +68,20 @@ class RegisteredUser4 extends User {
 }
 
 //// [superInLambdas.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -85,6 +99,7 @@ var User = (function () {
     User.prototype.sayHello = function () {
         //console.log("Hello, " + this.name);
     };
+    __names(User.prototype, ["sayHello"]);
     return User;
 }());
 var RegisteredUser = (function (_super) {
@@ -105,6 +120,7 @@ var RegisteredUser = (function (_super) {
         // super call in a lambda in a method
         var x = function () { return _super.prototype.sayHello.call(_this); };
     };
+    __names(RegisteredUser.prototype, ["sayHello"]);
     return RegisteredUser;
 }(User));
 var RegisteredUser2 = (function (_super) {
@@ -121,6 +137,7 @@ var RegisteredUser2 = (function (_super) {
         // super call in a nested lambda in a method
         var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
     };
+    __names(RegisteredUser2.prototype, ["sayHello"]);
     return RegisteredUser2;
 }(User));
 var RegisteredUser3 = (function (_super) {
@@ -137,6 +154,7 @@ var RegisteredUser3 = (function (_super) {
         // super property in a nested lambda in a method
         var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
     };
+    __names(RegisteredUser3.prototype, ["sayHello"]);
     return RegisteredUser3;
 }(User));
 var RegisteredUser4 = (function (_super) {
@@ -153,5 +171,6 @@ var RegisteredUser4 = (function (_super) {
         // super in a nested lambda in a method
         var x = function () { return function () { return _super.prototype.; }; };
     };
+    __names(RegisteredUser4.prototype, ["sayHello"]);
     return RegisteredUser4;
 }(User));

@@ -12,11 +12,26 @@ class Hello extends Greeter { }
 
 //// [importAsBaseClass_0.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 exports.__esModule = true;
 var Greeter = (function () {
     function Greeter() {
     }
     Greeter.prototype.greet = function () { return 'greet'; };
+    __names(Greeter.prototype, ["greet"]);
     return Greeter;
 }());
 exports.Greeter = Greeter;

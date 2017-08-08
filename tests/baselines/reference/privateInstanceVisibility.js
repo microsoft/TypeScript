@@ -39,6 +39,20 @@ class C {
 
 
 //// [privateInstanceVisibility.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Test;
 (function (Test) {
     var Example = (function () {
@@ -50,6 +64,7 @@ var Test;
                 var num = that.someNumber;
             }
         };
+        __names(Example.prototype, ["doSomething"]);
         return Example;
     }());
     Test.Example = Example;
@@ -61,5 +76,6 @@ var C = (function () {
     C.prototype.clone = function (other) {
         this.x = other.x;
     };
+    __names(C.prototype, ["getX", "clone"]);
     return C;
 }());

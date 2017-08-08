@@ -23,6 +23,20 @@ class Main {
 new Main();
 
 //// [capturedLetConstInLoop13.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Main = (function () {
     function Main() {
         this.register("a", "b", "c");
@@ -47,6 +61,7 @@ var Main = (function () {
     };
     Main.prototype.bar = function (a) { };
     Main.prototype.foo = function (name) { };
+    __names(Main.prototype, ["register", "bar", "foo"]);
     return Main;
 }());
 new Main();

@@ -13,6 +13,20 @@ function M() {
 }
 
 //// [classExpressionTest2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function M() {
     var m = (function () {
         function C() {
@@ -22,6 +36,7 @@ function M() {
             var x;
             return { t: t, x: x };
         };
+        __names(C.prototype, ["f"]);
         return C;
     }());
     var v = new m();

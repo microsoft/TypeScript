@@ -9,6 +9,20 @@ class C extends Base {
 }
 
 //// [computedPropertyNames24_ES5.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -25,6 +39,7 @@ var Base = (function () {
     Base.prototype.bar = function () {
         return 0;
     };
+    __names(Base.prototype, ["bar"]);
     return Base;
 }());
 var C = (function (_super) {
@@ -32,6 +47,8 @@ var C = (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C.prototype[_super.bar.call(this)] = function () { };
+    C.prototype[_a = _super.bar.call(this)] = function () { };
+    __names(C.prototype, [_a]);
     return C;
+    var _a;
 }(Base));

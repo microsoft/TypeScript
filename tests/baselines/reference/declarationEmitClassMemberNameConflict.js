@@ -37,6 +37,20 @@ export class C4 {
 
 //// [declarationEmitClassMemberNameConflict.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var C1 = (function () {
     function C1() {
@@ -46,6 +60,7 @@ var C1 = (function () {
         return function (t) {
         };
     };
+    __names(C1.prototype, ["C1", "bar"]);
     return C1;
 }());
 exports.C1 = C1;
@@ -56,6 +71,7 @@ var C2 = (function () {
         return function (t) {
         };
     };
+    __names(C2.prototype, ["bar"]);
     return C2;
 }());
 exports.C2 = C2;
@@ -72,6 +88,7 @@ var C3 = (function () {
         return function (t) {
         };
     };
+    __names(C3.prototype, ["bar"]);
     return C3;
 }());
 exports.C3 = C3;
@@ -88,6 +105,7 @@ var C4 = (function () {
         return function (t) {
         };
     };
+    __names(C4.prototype, ["bar"]);
     return C4;
 }());
 exports.C4 = C4;

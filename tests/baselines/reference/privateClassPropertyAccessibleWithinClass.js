@@ -33,6 +33,20 @@ class C2 {
 
 //// [privateClassPropertyAccessibleWithinClass.js]
 // no errors
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C = (function () {
     function C() {
     }
@@ -51,6 +65,7 @@ var C = (function () {
     });
     C.foo = function () { return this.foo; };
     C.bar = function () { this.foo(); };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 // added level of function nesting
@@ -95,5 +110,6 @@ var C2 = (function () {
         var _this = this;
         (function () { return _this.foo(); });
     };
+    __names(C2.prototype, ["foo"]);
     return C2;
 }());

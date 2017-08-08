@@ -22,6 +22,20 @@ class C {
 }
 
 //// [thisBinding.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var M;
 (function (M) {
     var C = (function () {
@@ -33,6 +47,7 @@ var M;
             x.e; // e not found
             x.z; // ok 
         };
+        __names(C.prototype, ["f"]);
         return C;
     }());
     M.C = C;
@@ -42,5 +57,6 @@ var C = (function () {
     }
     C.prototype.f = function (x) {
     };
+    __names(C.prototype, ["f"]);
     return C;
 }());

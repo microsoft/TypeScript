@@ -298,6 +298,20 @@ module TypeScript {
 //// [parserRealSource4.js]
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
@@ -387,6 +401,7 @@ var TypeScript;
                 return (null);
             }
         };
+        __names(StringHashTable.prototype, ["getAllKeys", "add", "addOrUpdate", "map", "every", "some", "count", "lookup"]);
         return StringHashTable;
     }());
     TypeScript.StringHashTable = StringHashTable;
@@ -440,6 +455,7 @@ var TypeScript;
                 return this.secondaryTable.lookup(key);
             }
         };
+        __names(DualStringHashTable.prototype, ["getAllKeys", "add", "addOrUpdate", "map", "every", "some", "count", "lookup"]);
         return DualStringHashTable;
     }());
     TypeScript.DualStringHashTable = DualStringHashTable;
@@ -525,6 +541,7 @@ var TypeScript;
             }
             return (null);
         };
+        __names(HashTable.prototype, ["add", "remove", "count", "lookup"]);
         return HashTable;
     }());
     TypeScript.HashTable = HashTable;
@@ -558,6 +575,7 @@ var TypeScript;
             this.values[this.values.length] = data;
             return true;
         };
+        __names(SimpleHashTable.prototype, ["lookup", "add"]);
         return SimpleHashTable;
     }());
     TypeScript.SimpleHashTable = SimpleHashTable;

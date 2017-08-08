@@ -33,6 +33,20 @@ class C {
 
 //// [duplicateVariablesByScope.js]
 // duplicate local variables are only reported at global scope
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var M;
 (function (M) {
     for (var j = 0; j < 10; j++) {
@@ -61,5 +75,6 @@ var C = (function () {
             var x = 2;
         }
     };
+    __names(C.prototype, ["foo"]);
     return C;
 }());

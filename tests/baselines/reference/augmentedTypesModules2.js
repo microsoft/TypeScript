@@ -29,6 +29,20 @@ module m2g { export class C { foo() { } } }
 
 
 //// [augmentedTypesModules2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function m2() { }
 ; // ok since the module is not instantiated
 var m2a;
@@ -63,6 +77,7 @@ function m2g() { }
         function C() {
         }
         C.prototype.foo = function () { };
+        __names(C.prototype, ["foo"]);
         return C;
     }());
     m2g.C = C;

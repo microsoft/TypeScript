@@ -36,6 +36,20 @@ class C5 {
 }
 
 //// [mixingStaticAndInstanceOverloads.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C1 = (function () {
     function C1() {
     }
@@ -46,12 +60,14 @@ var C2 = (function () {
     function C2() {
     }
     C2.prototype.foo2 = function (a) { };
+    __names(C2.prototype, ["foo2"]);
     return C2;
 }());
 var C3 = (function () {
     function C3() {
     }
     C3.prototype.foo3 = function (a) { };
+    __names(C3.prototype, ["foo3"]);
     return C3;
 }());
 var C4 = (function () {
@@ -65,5 +81,6 @@ var C5 = (function () {
     }
     C5.prototype.foo5 = function (a) { };
     C5.foo5 = function (a) { };
+    __names(C5.prototype, ["foo5"]);
     return C5;
 }());

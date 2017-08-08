@@ -60,6 +60,20 @@ arr_any = i1; // should be an error - is
 
 
 //// [arrayAssignmentTest2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -75,6 +89,7 @@ var C1 = (function () {
     }
     C1.prototype.IM1 = function () { return null; };
     C1.prototype.C1M1 = function () { return null; };
+    __names(C1.prototype, ["IM1", "C1M1"]);
     return C1;
 }());
 var C2 = (function (_super) {
@@ -83,12 +98,14 @@ var C2 = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     C2.prototype.C2M1 = function () { return null; };
+    __names(C2.prototype, ["C2M1"]);
     return C2;
 }(C1));
 var C3 = (function () {
     function C3() {
     }
     C3.prototype.CM3M1 = function () { return 3; };
+    __names(C3.prototype, ["CM3M1"]);
     return C3;
 }());
 /*

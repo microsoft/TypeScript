@@ -57,6 +57,20 @@ class Derived extends Base {
 
 
 //// [optionalMethods.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -89,6 +103,7 @@ var Bar = (function () {
     Bar.prototype.h = function () {
         return 2;
     };
+    __names(Bar.prototype, ["f", "h"]);
     return Bar;
 }());
 function test2(x) {
@@ -118,6 +133,7 @@ var Derived = (function (_super) {
         return _this;
     }
     Derived.prototype.f = function () { return 1; };
+    __names(Derived.prototype, ["f"]);
     return Derived;
 }(Base));
 

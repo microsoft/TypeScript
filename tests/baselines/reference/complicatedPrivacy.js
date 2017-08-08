@@ -105,6 +105,20 @@ module mglo5 {
 
 
 //// [complicatedPrivacy.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var m1;
 (function (m1) {
     var m2;
@@ -130,6 +144,7 @@ var m1;
             C2.prototype.f55 = function () {
                 return "Hello world";
             };
+            __names(C2.prototype, ["f55"]);
             return C2;
         }());
         m2.C2 = C2;
@@ -179,6 +194,7 @@ var m2;
             c_pr.prototype.f1 = function () {
                 return "Hello";
             };
+            __names(c_pr.prototype, ["f1"]);
             return c_pr;
         }());
         m3.c_pr = c_pr;

@@ -21,5 +21,6 @@ var C = (function () {
             }
         }); }); };
     };
+    __names(C.prototype, ["method"]);
     return C;
 }());

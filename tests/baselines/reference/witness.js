@@ -137,6 +137,20 @@ var qq: any;
 
 
 //// [witness.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // Initializers
 var varInit = varInit; // any
 var pInit;
@@ -152,6 +166,7 @@ var InitClass = (function () {
         var y = this.x;
         var y;
     };
+    __names(InitClass.prototype, ["fn"]);
     return InitClass;
 }());
 // Return type
@@ -226,6 +241,7 @@ var C = (function () {
         var a;
         return new a(this.fn3);
     };
+    __names(C.prototype, ["fn1", "fn2", "fn3"]);
     return C;
 }());
 function fn5() {

@@ -19,6 +19,20 @@ class b2 extends a {
 }
 
 //// [collisionThisExpressionAndLocalVarWithSuperExperssion.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -34,6 +48,7 @@ var a = (function () {
     }
     a.prototype.foo = function () {
     };
+    __names(a.prototype, ["foo"]);
     return a;
 }());
 var b = (function (_super) {
@@ -46,6 +61,7 @@ var b = (function (_super) {
         var _this = 10;
         var f = function () { return _super.prototype.foo.call(_this); };
     };
+    __names(b.prototype, ["foo"]);
     return b;
 }(a));
 var b2 = (function (_super) {
@@ -60,5 +76,6 @@ var b2 = (function (_super) {
             return _super.prototype.foo.call(_this);
         };
     };
+    __names(b2.prototype, ["foo"]);
     return b2;
 }(a));

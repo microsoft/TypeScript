@@ -41,6 +41,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Red = (function (_super) {
     __extends(Red, _super);
     function Red() {
@@ -51,6 +65,7 @@ var Red = (function (_super) {
         var getHue = function () { return _this.hue(); };
         return getHue() + " red";
     };
+    __names(Red.prototype, ["shade"]);
     return Red;
 }(Color));
 var Color = (function () {
@@ -58,6 +73,7 @@ var Color = (function () {
     }
     Color.prototype.shade = function () { return "some shade"; };
     Color.prototype.hue = function () { return "some hue"; };
+    __names(Color.prototype, ["shade", "hue"]);
     return Color;
 }());
 var Blue = (function (_super) {
@@ -70,6 +86,7 @@ var Blue = (function (_super) {
         var getHue = function () { return _this.hue(); };
         return getHue() + " blue";
     };
+    __names(Blue.prototype, ["shade"]);
     return Blue;
 }(Color));
 var r = new Red();

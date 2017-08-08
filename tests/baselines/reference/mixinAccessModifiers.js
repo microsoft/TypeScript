@@ -118,6 +118,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Private = (function () {
     function Private() {
         var args = [];
@@ -227,6 +241,7 @@ var C4 = (function (_super) {
         C5.s;
         C6.s;
     };
+    __names(C4.prototype, ["f"]);
     return C4;
 }(Mix(Protected, Protected2)));
 var C5 = (function (_super) {
@@ -244,6 +259,7 @@ var C5 = (function (_super) {
         C5.s;
         C6.s;
     };
+    __names(C5.prototype, ["f"]);
     return C5;
 }(Mix(Protected, Public)));
 var C6 = (function (_super) {
@@ -261,6 +277,7 @@ var C6 = (function (_super) {
         C5.s;
         C6.s;
     };
+    __names(C6.prototype, ["f"]);
     return C6;
 }(Mix(Public, Public2)));
 

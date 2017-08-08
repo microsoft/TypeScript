@@ -28,6 +28,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var B = (function () {
     function B(y) {
         this.y = y;
@@ -44,5 +58,6 @@ var C = (function (_super) {
     }
     C.prototype.liftxyz = function () { return x + z + this.y; };
     C.prototype.liftxylocllz = function () { return x + z + this.y + this.ll; };
+    __names(C.prototype, ["liftxyz", "liftxylocllz"]);
     return C;
 }(B));

@@ -531,6 +531,20 @@ export function f12_public(): C5_private { //error
 
 
 //// [privacyGloFunc.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
@@ -541,6 +555,7 @@ define(["require", "exports"], function (require, exports) {
             }
             C1_public.prototype.f1 = function () {
             };
+            __names(C1_public.prototype, ["f1"]);
             return C1_public;
         }());
         m1.C1_public = C1_public;
@@ -584,6 +599,7 @@ define(["require", "exports"], function (require, exports) {
             C3_public.prototype.f12_public = function () {
                 return new C2_private(); //error
             };
+            __names(C3_public.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
             return C3_public;
         }());
         m1.C3_public = C3_public;
@@ -622,6 +638,7 @@ define(["require", "exports"], function (require, exports) {
             C4_private.prototype.f12_public = function () {
                 return new C2_private();
             };
+            __names(C4_private.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
             return C4_private;
         }());
         var C5_public = (function () {
@@ -692,6 +709,7 @@ define(["require", "exports"], function (require, exports) {
             }
             m2_C1_public.prototype.f = function () {
             };
+            __names(m2_C1_public.prototype, ["f"]);
             return m2_C1_public;
         }());
         m2.m2_C1_public = m2_C1_public;
@@ -735,6 +753,7 @@ define(["require", "exports"], function (require, exports) {
             m2_C3_public.prototype.f12_public = function () {
                 return new m2_C2_private();
             };
+            __names(m2_C3_public.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
             return m2_C3_public;
         }());
         m2.m2_C3_public = m2_C3_public;
@@ -773,6 +792,7 @@ define(["require", "exports"], function (require, exports) {
             m2_C4_private.prototype.f12_public = function () {
                 return new m2_C2_private();
             };
+            __names(m2_C4_private.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
             return m2_C4_private;
         }());
         var m2_C5_public = (function () {
@@ -841,6 +861,7 @@ define(["require", "exports"], function (require, exports) {
         }
         C5_private.prototype.f = function () {
         };
+        __names(C5_private.prototype, ["f"]);
         return C5_private;
     }());
     var C6_public = (function () {
@@ -884,6 +905,7 @@ define(["require", "exports"], function (require, exports) {
         C7_public.prototype.f12_public = function () {
             return new C5_private(); //error
         };
+        __names(C7_public.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
         return C7_public;
     }());
     exports.C7_public = C7_public;
@@ -922,6 +944,7 @@ define(["require", "exports"], function (require, exports) {
         C8_private.prototype.f12_public = function () {
             return new C5_private();
         };
+        __names(C8_private.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
         return C8_private;
     }());
     var C9_public = (function () {

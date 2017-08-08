@@ -142,6 +142,20 @@ interface MimicGuardInterface {
 
 
 //// [typeGuardFunctionOfFormThis.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -161,6 +175,7 @@ var RoyalGuard = (function () {
     RoyalGuard.prototype.isFollower = function () {
         return this instanceof FollowerGuard;
     };
+    __names(RoyalGuard.prototype, ["isLeader", "isFollower"]);
     return RoyalGuard;
 }());
 var LeadGuard = (function (_super) {
@@ -170,6 +185,7 @@ var LeadGuard = (function (_super) {
     }
     LeadGuard.prototype.lead = function () { };
     ;
+    __names(LeadGuard.prototype, ["lead"]);
     return LeadGuard;
 }(RoyalGuard));
 var FollowerGuard = (function (_super) {
@@ -179,6 +195,7 @@ var FollowerGuard = (function (_super) {
     }
     FollowerGuard.prototype.follow = function () { };
     ;
+    __names(FollowerGuard.prototype, ["follow"]);
     return FollowerGuard;
 }(RoyalGuard));
 var a = new FollowerGuard();
@@ -232,6 +249,7 @@ var ArrowElite = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ArrowElite.prototype.defend = function () { };
+    __names(ArrowElite.prototype, ["defend"]);
     return ArrowElite;
 }(ArrowGuard));
 var ArrowMedic = (function (_super) {
@@ -240,6 +258,7 @@ var ArrowMedic = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ArrowMedic.prototype.heal = function () { };
+    __names(ArrowMedic.prototype, ["heal"]);
     return ArrowMedic;
 }(ArrowGuard));
 var guard = new ArrowGuard();
@@ -266,6 +285,7 @@ var MimicGuard = (function () {
     ;
     MimicGuard.prototype.isFollower = function () { return this instanceof MimicFollower; };
     ;
+    __names(MimicGuard.prototype, ["isLeader", "isFollower"]);
     return MimicGuard;
 }());
 var MimicLeader = (function (_super) {
@@ -274,6 +294,7 @@ var MimicLeader = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     MimicLeader.prototype.lead = function () { };
+    __names(MimicLeader.prototype, ["lead"]);
     return MimicLeader;
 }(MimicGuard));
 var MimicFollower = (function (_super) {
@@ -282,6 +303,7 @@ var MimicFollower = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     MimicFollower.prototype.follow = function () { };
+    __names(MimicFollower.prototype, ["follow"]);
     return MimicFollower;
 }(MimicGuard));
 var mimic = new MimicGuard();

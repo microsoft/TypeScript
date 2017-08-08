@@ -85,6 +85,20 @@ namespace N {
 
 //// [unusedLocalsAndParameters.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 exports.__esModule = true;
 // function declaration paramter
 function f(a) {
@@ -110,6 +124,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(C.prototype, ["method"]);
     return C;
 }());
 var E = (function () {
@@ -125,6 +140,7 @@ var E = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(class_1.prototype, ["method"]);
     return class_1;
 }());
 var o = {

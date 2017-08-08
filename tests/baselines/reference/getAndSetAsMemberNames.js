@@ -22,6 +22,20 @@ class C5 {
 
 
 //// [getAndSetAsMemberNames.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C1 = (function () {
     function C1() {
         this.get = 1;
@@ -39,6 +53,7 @@ var C3 = (function () {
     C3.prototype.set = function (x) {
         return x + 1;
     };
+    __names(C3.prototype, ["set"]);
     return C3;
 }());
 var C4 = (function () {
@@ -57,5 +72,6 @@ var C5 = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(C5.prototype, ["get"]);
     return C5;
 }());

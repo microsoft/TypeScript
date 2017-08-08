@@ -14,6 +14,20 @@ var a2: c;
 var r2 = a2.groupBy();
 
 //// [indexerReturningTypeParameter1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var a;
 var r = a.groupBy();
 var c = (function () {
@@ -22,6 +36,7 @@ var c = (function () {
     c.prototype.groupBy = function () {
         return null;
     };
+    __names(c.prototype, ["groupBy"]);
     return c;
 }());
 var a2;

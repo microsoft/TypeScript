@@ -27,6 +27,20 @@ var b = {
 
 //// [restParametersOfNonArrayTypes.js]
 // Rest parameters must be an array type if they have a type annotation, so all these are errors
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function foo() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -54,6 +68,7 @@ var C = (function () {
             x[_i] = arguments[_i];
         }
     };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 var a;

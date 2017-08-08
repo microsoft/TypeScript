@@ -40,6 +40,20 @@ module M3 {
 
 //// [scopeResolutionIdentifiers.js]
 // EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var s;
 var M1;
 (function (M1) {
@@ -65,6 +79,7 @@ var C = (function () {
         var p = this.n;
         var p;
     };
+    __names(C.prototype, ["x"]);
     return C;
 }());
 var M3;

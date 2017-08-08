@@ -21,6 +21,20 @@ class Foo {
 }
 
 //// [thisInOuterClassBody.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Foo = (function () {
     function Foo() {
         this.x = this;
@@ -36,6 +50,7 @@ var Foo = (function () {
         var a = this.y;
         var b = this.x;
     };
+    __names(Foo.prototype, ["bar"]);
     Foo.y = this;
     return Foo;
 }());

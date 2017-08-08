@@ -66,6 +66,20 @@ yy[1] = "abc";  // Error
 yy["foo"] = "abc";
 
 //// [readonlyMembers.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var x = { a: 0 };
 x.a = 1; // Error
 x.b = 1; // Error
@@ -92,6 +106,7 @@ var C = (function () {
         this.b = 1; // Error
         this.c = 1; // Error
     };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 var o = {

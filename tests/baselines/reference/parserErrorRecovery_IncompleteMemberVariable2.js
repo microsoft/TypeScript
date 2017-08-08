@@ -29,6 +29,20 @@ var dist = p.getDist();
 
 
 //// [parserErrorRecovery_IncompleteMemberVariable2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // Module
 var Shapes;
 (function (Shapes) {
@@ -42,6 +56,7 @@ var Shapes;
         }
         // Instance member
         Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };
+        __names(Point.prototype, ["getDist"]);
         // Static member
         Point.origin = new Point(0, 0);
         return Point;

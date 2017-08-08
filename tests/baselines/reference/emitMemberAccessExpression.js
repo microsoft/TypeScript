@@ -27,6 +27,20 @@ module Microsoft.PeopleAtWork.Model {
 //// [emitMemberAccessExpression_file2.js]
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Microsoft;
 (function (Microsoft) {
     var PeopleAtWork;
@@ -39,6 +53,7 @@ var Microsoft;
                 _Person.prototype.populate = function (raw) {
                     var res = Model.KnockoutExtentions;
                 };
+                __names(_Person.prototype, ["populate"]);
                 return _Person;
             }());
             Model._Person = _Person;

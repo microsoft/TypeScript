@@ -47,6 +47,20 @@ module TypeScript.Syntax {
 
 
 //// [moduleMemberWithoutTypeAnnotation1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var TypeScript;
 (function (TypeScript) {
     var Parser;
@@ -57,6 +71,7 @@ var TypeScript;
             SyntaxCursor.prototype.currentNode = function () {
                 return null;
             };
+            __names(SyntaxCursor.prototype, ["currentNode"]);
             return SyntaxCursor;
         }());
     })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
@@ -70,6 +85,7 @@ var TypeScript;
         PositionedElement.prototype.childIndex = function (child) {
             return TypeScript.Syntax.childIndex();
         };
+        __names(PositionedElement.prototype, ["childIndex"]);
         return PositionedElement;
     }());
     TypeScript.PositionedElement = PositionedElement;
@@ -92,6 +108,7 @@ var TypeScript;
         SyntaxNode.prototype.findTokenInternal = function (x, y, z) {
             return null;
         };
+        __names(SyntaxNode.prototype, ["findToken", "findTokenInternal"]);
         return SyntaxNode;
     }());
     TypeScript.SyntaxNode = SyntaxNode;
@@ -107,6 +124,7 @@ var TypeScript;
             VariableWidthTokenWithTrailingTrivia.prototype.findTokenInternal = function (parent, position, fullStart) {
                 return new TypeScript.PositionedToken(parent, this, fullStart);
             };
+            __names(VariableWidthTokenWithTrailingTrivia.prototype, ["findTokenInternal"]);
             return VariableWidthTokenWithTrailingTrivia;
         }());
         Syntax.VariableWidthTokenWithTrailingTrivia = VariableWidthTokenWithTrailingTrivia;

@@ -458,6 +458,20 @@ module TypeScript {
 //// [parserRealSource10.js]
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -825,6 +839,7 @@ var TypeScript;
             }
             return TokenClass.Punctuation;
         };
+        __names(Token.prototype, ["toString", "print", "getText", "classification"]);
         return Token;
     }());
     TypeScript.Token = Token;
@@ -842,6 +857,7 @@ var TypeScript;
         NumberLiteralToken.prototype.classification = function () {
             return TokenClass.Literal;
         };
+        __names(NumberLiteralToken.prototype, ["getText", "classification"]);
         return NumberLiteralToken;
     }(Token));
     TypeScript.NumberLiteralToken = NumberLiteralToken;
@@ -858,6 +874,7 @@ var TypeScript;
         StringLiteralToken.prototype.classification = function () {
             return TokenClass.Literal;
         };
+        __names(StringLiteralToken.prototype, ["getText", "classification"]);
         return StringLiteralToken;
     }(Token));
     TypeScript.StringLiteralToken = StringLiteralToken;
@@ -875,6 +892,7 @@ var TypeScript;
         IdentifierToken.prototype.classification = function () {
             return TokenClass.Identifier;
         };
+        __names(IdentifierToken.prototype, ["getText", "classification"]);
         return IdentifierToken;
     }(Token));
     TypeScript.IdentifierToken = IdentifierToken;
@@ -891,6 +909,7 @@ var TypeScript;
         WhitespaceToken.prototype.classification = function () {
             return TokenClass.Whitespace;
         };
+        __names(WhitespaceToken.prototype, ["getText", "classification"]);
         return WhitespaceToken;
     }(Token));
     TypeScript.WhitespaceToken = WhitespaceToken;
@@ -911,6 +930,7 @@ var TypeScript;
         CommentToken.prototype.classification = function () {
             return TokenClass.Comment;
         };
+        __names(CommentToken.prototype, ["getText", "classification"]);
         return CommentToken;
     }(Token));
     TypeScript.CommentToken = CommentToken;
@@ -927,6 +947,7 @@ var TypeScript;
         RegularExpressionLiteralToken.prototype.classification = function () {
             return TokenClass.Literal;
         };
+        __names(RegularExpressionLiteralToken.prototype, ["getText", "classification"]);
         return RegularExpressionLiteralToken;
     }(Token));
     TypeScript.RegularExpressionLiteralToken = RegularExpressionLiteralToken;

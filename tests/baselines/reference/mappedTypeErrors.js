@@ -145,6 +145,20 @@ let f: Foo2<O, 'x'> = {
 
 
 //// [mappedTypeErrors.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function f1(x) {
     var y; // Error
 }
@@ -204,6 +218,7 @@ var C = (function () {
             this.state[k] = props[k];
         }
     };
+    __names(C.prototype, ["setState"]);
     return C;
 }());
 var c = new C();

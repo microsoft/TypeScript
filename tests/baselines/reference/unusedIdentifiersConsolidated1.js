@@ -102,6 +102,20 @@ namespace Greeter {
 }
 
 //// [unusedIdentifiersConsolidated1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -128,6 +142,7 @@ var Dummy = (function () {
     };
     Dummy.prototype.unUsedPrivateFunction = function () {
     };
+    __names(Dummy.prototype, ["greeter", "usedPrivateFunction", "unUsedPrivateFunction"]);
     return Dummy;
 }());
 var user = "Jane User";
@@ -144,6 +159,7 @@ var Validation;
         };
         LettersOnlyValidator.prototype.unUsedPrivateFunction = function () {
         };
+        __names(LettersOnlyValidator.prototype, ["isAcceptable", "unUsedPrivateFunction"]);
         return LettersOnlyValidator;
     }());
     Validation.LettersOnlyValidator = LettersOnlyValidator;
@@ -153,6 +169,7 @@ var Validation;
         ZipCodeValidator.prototype.isAcceptable = function (s3) {
             return s3.length === 5;
         };
+        __names(ZipCodeValidator.prototype, ["isAcceptable"]);
         return ZipCodeValidator;
     }());
     Validation.ZipCodeValidator = ZipCodeValidator;

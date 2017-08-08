@@ -756,6 +756,20 @@ module Formatting {
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 ///<reference path='formatting.ts' />
 var Formatting;
 (function (Formatting) {
@@ -1339,6 +1353,7 @@ var Formatting;
             return token.tokenID === TypeScript.TokenID.StringLiteral &&
                 this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition());
         };
+        __names(Indenter.prototype, ["GetIndentationEdits", "GetIndentationEditsWorker", "GetCommentIndentationEdits", "GetSpecialCaseIndentation", "GetSpecialCaseIndentationForLCurly", "GetSpecialCaseIndentationForSemicolon", "GetSpecialCaseIndentationForComment", "CanIndentComment", "ApplyScriptBlockIndentation", "GetIndentEdit", "ApplyIndentationLevel", "GetIndentString", "ApplyIndentationDeltaFromParent", "ApplyIndentationDelta1", "ApplyIndentationDelta2", "GetIndentationDelta", "FillInheritedIndentation", "GetLineIndentationForOffset", "RegisterIndentation", "RegisterIndentation2", "AdjustStartOffsetIfNeeded", "IsMultiLineString"]);
         return Indenter;
     }());
     Formatting.Indenter = Indenter;

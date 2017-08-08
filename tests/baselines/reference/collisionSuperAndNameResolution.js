@@ -22,6 +22,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var console;
 var _super = 10; // No error
 var base = (function () {
@@ -37,5 +51,6 @@ var Foo = (function (_super) {
     Foo.prototype.x = function () {
         console.log(_super); // Error as this doesnt not resolve to user defined _super
     };
+    __names(Foo.prototype, ["x"]);
     return Foo;
 }(base));

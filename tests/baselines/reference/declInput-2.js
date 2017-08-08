@@ -22,6 +22,20 @@ module M {
 }
 
 //// [declInput-2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var M;
 (function (M) {
     var C = (function () {
@@ -44,6 +58,7 @@ var M;
         D.prototype.m26 = function (i) { };
         D.prototype.m262 = function (i) { };
         D.prototype.m3 = function () { return new C(); };
+        __names(D.prototype, ["m232", "m242", "m252", "m26", "m262", "m3"]);
         return D;
     }());
     M.D = D;

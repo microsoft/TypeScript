@@ -64,23 +64,40 @@ var a3: {
 
 
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function foo(x) { }
 var C = (function () {
     function C() {
     }
     C.prototype.foo = function (x) { };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 var C2 = (function () {
     function C2() {
     }
     C2.prototype.foo = function (x) { };
+    __names(C2.prototype, ["foo"]);
     return C2;
 }());
 var C3 = (function () {
     function C3() {
     }
     C3.prototype.foo = function (x) { };
+    __names(C3.prototype, ["foo"]);
     return C3;
 }());
 var a;

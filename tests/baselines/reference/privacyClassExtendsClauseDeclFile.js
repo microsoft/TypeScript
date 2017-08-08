@@ -98,6 +98,20 @@ class publicClassExtendingPublicClassInGlobal extends publicClassInGlobal {
 
 //// [privacyClassExtendsClauseDeclFile_externalModule.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -116,6 +130,7 @@ var publicModule;
         }
         publicClassInPublicModule.prototype.f1 = function () {
         };
+        __names(publicClassInPublicModule.prototype, ["f1"]);
         return publicClassInPublicModule;
     }());
     publicModule.publicClassInPublicModule = publicClassInPublicModule;
@@ -177,6 +192,7 @@ var privateModule;
         }
         publicClassInPrivateModule.prototype.f1 = function () {
         };
+        __names(publicClassInPrivateModule.prototype, ["f1"]);
         return publicClassInPrivateModule;
     }());
     privateModule.publicClassInPrivateModule = publicClassInPrivateModule;
@@ -236,6 +252,7 @@ var publicClass = (function () {
     }
     publicClass.prototype.f1 = function () {
     };
+    __names(publicClass.prototype, ["f1"]);
     return publicClass;
 }());
 exports.publicClass = publicClass;
@@ -290,6 +307,20 @@ var publicClassExtendingFromPrivateModuleClass = (function (_super) {
 }(privateModule.publicClassInPrivateModule));
 exports.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -307,6 +338,7 @@ var publicModuleInGlobal;
         }
         publicClassInPublicModule.prototype.f1 = function () {
         };
+        __names(publicClassInPublicModule.prototype, ["f1"]);
         return publicClassInPublicModule;
     }());
     publicModuleInGlobal.publicClassInPublicModule = publicClassInPublicModule;

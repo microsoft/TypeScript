@@ -578,6 +578,20 @@ module TypeScript {
 //// [parserRealSource14.js]
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
@@ -939,6 +953,7 @@ var TypeScript;
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.Block &&
                 this.asts[this.top - 0].isStatementBlock === false;
         };
+        __names(AstPath.prototype, ["clone", "pop", "push", "up", "down", "nodeType", "ast", "parent", "count", "get", "isNameOfClass", "isNameOfInterface", "isNameOfArgument", "isNameOfVariable", "isNameOfModule", "isNameOfFunction", "isChildOfScript", "isChildOfModule", "isChildOfClass", "isArgumentOfClassConstructor", "isChildOfInterface", "isTopLevelImplicitModule", "isBodyOfTopLevelImplicitModule", "isBodyOfScript", "isBodyOfSwitch", "isBodyOfModule", "isBodyOfClass", "isBodyOfFunction", "isBodyOfInterface", "isBodyOfBlock", "isBodyOfFor", "isBodyOfCase", "isBodyOfTry", "isBodyOfCatch", "isBodyOfDoWhile", "isBodyOfWhile", "isBodyOfForIn", "isBodyOfWith", "isBodyOfFinally", "isCaseOfSwitch", "isDefaultCaseOfSwitch", "isListOfObjectLit", "isBodyOfObjectLit", "isEmptyListOfObjectLit", "isMemberOfObjectLit", "isNameOfMemberOfObjectLit", "isListOfArrayLit", "isTargetOfMember", "isMemberOfMember", "isItemOfList", "isThenOfIf", "isElseOfIf", "isBodyOfDefaultCase", "isSingleStatementList", "isArgumentListOfFunction", "isArgumentOfFunction", "isArgumentListOfCall", "isArgumentListOfNew", "isSynthesizedBlock"]);
         return AstPath;
     }());
     TypeScript.AstPath = AstPath;

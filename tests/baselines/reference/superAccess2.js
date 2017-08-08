@@ -25,6 +25,20 @@ class Q extends P {
 }
 
 //// [superAccess2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -40,6 +54,7 @@ var P = (function () {
     }
     P.prototype.x = function () { };
     P.y = function () { };
+    __names(P.prototype, ["x"]);
     return P;
 }());
 var Q = (function (_super) {
@@ -64,6 +79,7 @@ var Q = (function (_super) {
         _super.x.call(this); // error
         _super.y.call(this);
     };
+    __names(Q.prototype, ["foo"]);
     Q.yy = _super.; // error for static initializer accessing super
     return Q;
 }(P));

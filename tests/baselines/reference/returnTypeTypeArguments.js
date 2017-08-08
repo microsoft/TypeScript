@@ -77,6 +77,20 @@ declare var a: {
 
 
 //// [returnTypeTypeArguments.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var One = (function () {
     function One() {
     }
@@ -107,6 +121,7 @@ var C = (function () {
     C.prototype.B1 = function () { return null; };
     C.prototype.B2 = function () { return null; };
     C.prototype.B3 = function () { return null; };
+    __names(C.prototype, ["A1", "A2", "A3", "B1", "B2", "B3"]);
     return C;
 }());
 var D = (function () {
@@ -117,6 +132,7 @@ var D = (function () {
     D.prototype.B1 = function () { return null; };
     D.prototype.B2 = function () { return null; };
     D.prototype.B3 = function () { return null; };
+    __names(D.prototype, ["A2", "A3", "B1", "B2", "B3"]);
     return D;
 }());
 var Y = (function () {

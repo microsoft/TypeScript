@@ -35,12 +35,27 @@ interface i4 {
 
 //// [augmentedTypesInterface.js]
 // interface then interface
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var i2 = (function () {
     function i2() {
     }
     i2.prototype.bar = function () {
         return 1;
     };
+    __names(i2.prototype, ["bar"]);
     return i2;
 }());
 var i3;

@@ -27,12 +27,27 @@ var person = new ObjectField({
 person.fields.id;
 
 //// [inferentialTypingUsingApparentType3.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var CharField = (function () {
     function CharField() {
     }
     CharField.prototype.clean = function (input) {
         return "Yup";
     };
+    __names(CharField.prototype, ["clean"]);
     return CharField;
 }());
 var NumberField = (function () {
@@ -41,6 +56,7 @@ var NumberField = (function () {
     NumberField.prototype.clean = function (input) {
         return 123;
     };
+    __names(NumberField.prototype, ["clean"]);
     return NumberField;
 }());
 var ObjectField = (function () {

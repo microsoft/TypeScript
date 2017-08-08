@@ -36,6 +36,20 @@ var cookieMonster: IceCreamMonster;
 cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");
 
 //// [matchReturnTypeInAllBranches.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // Represents a monster who enjoys ice cream
 var IceCreamMonster = (function () {
     function IceCreamMonster(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
@@ -61,6 +75,7 @@ var IceCreamMonster = (function () {
             return 12345;
         }
     };
+    __names(IceCreamMonster.prototype, ["eatIceCream"]);
     return IceCreamMonster;
 }());
 var cookieMonster;

@@ -175,6 +175,20 @@ var c5_i_2 = new c5("hello");
 
 
 //// [commentsOverloads.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function f1(aOrb) {
     return 10;
 }
@@ -218,6 +232,7 @@ var c = (function () {
     c.prototype.prop5 = function (aorb) {
         return 10;
     };
+    __names(c.prototype, ["prop1", "prop2", "prop3", "prop4", "prop5"]);
     return c;
 }());
 var c1 = (function () {

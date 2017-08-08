@@ -79,6 +79,20 @@ var bar3 = <any>0;
 var array = <any>[null, undefined];
 
 //// [implicitAnyCastedValue.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var x = function () {
     return 0; // this should not be an error
 };
@@ -103,6 +117,7 @@ var C = (function () {
     C.prototype.returnFooWithCase = function () {
         return this.foo; // this should not be an error
     };
+    __names(C.prototype, ["returnBarWithCase", "returnFooWithCase"]);
     return C;
 }());
 var C1 = (function () {

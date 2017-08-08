@@ -142,6 +142,20 @@ module Editor {
 }
 
 //// [genericClassWithStaticFactory.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Editor;
 (function (Editor) {
     var List = (function () {
@@ -229,6 +243,7 @@ var Editor;
             var entry = this.listFactory.MakeEntry(data);
             return this.insertEntryBefore(entry);
         };
+        __names(List.prototype, ["add", "count", "isEmpty", "first", "pushEntry", "push", "popEntry", "insertEntry", "insertAfter", "insertEntryBefore", "insertBefore"]);
         return List;
     }());
     Editor.List = List;
@@ -261,6 +276,7 @@ var Editor;
                 return entry;
             }
         };
+        __names(ListFactory.prototype, ["MakeHead", "MakeEntry", "RemoveEntry"]);
         return ListFactory;
     }());
     Editor.ListFactory = ListFactory;

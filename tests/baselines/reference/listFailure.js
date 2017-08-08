@@ -42,6 +42,20 @@ module Editor {
 }
 
 //// [listFailure.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Editor;
 (function (Editor) {
     var Buffer = (function () {
@@ -53,6 +67,7 @@ var Editor;
             var lineEntry = this.lines.add(line);
             return lineEntry;
         };
+        __names(Buffer.prototype, ["addLine"]);
         return Buffer;
     }());
     Editor.Buffer = Buffer;
@@ -78,6 +93,7 @@ var Editor;
         List.prototype.popEntry = function (head) {
             return (ListRemoveEntry(this.next));
         };
+        __names(List.prototype, ["add", "popEntry"]);
         return List;
     }());
     var Line = (function () {

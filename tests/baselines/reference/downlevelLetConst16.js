@@ -229,6 +229,20 @@ function foo12() {
 
 //// [downlevelLetConst16.js]
 'use strict';
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var x = 10;
 var y;
 var z;
@@ -276,6 +290,7 @@ var A = (function () {
         }
         use(x);
     };
+    __names(A.prototype, ["m1", "m2"]);
     return A;
 }());
 var B = (function () {
@@ -300,6 +315,7 @@ var B = (function () {
         }
         use(x);
     };
+    __names(B.prototype, ["m1", "m2"]);
     return B;
 }());
 function bar1() {

@@ -92,6 +92,20 @@ class C {
 }
 
 //// [noImplicitAnyParametersInClass.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C = (function () {
     function C() {
         // No implicit-'any' errors.
@@ -194,5 +208,6 @@ var C = (function () {
         }
     };
     C.prototype.priv_f8 = function (x3, y3) { };
+    __names(C.prototype, ["pub_f1", "pub_f2", "pub_f3", "pub_f4", "pub_f5", "pub_f6", "pub_f7", "pub_f8", "priv_f1", "priv_f2", "priv_f3", "priv_f4", "priv_f5", "priv_f6", "priv_f7", "priv_f8"]);
     return C;
 }());

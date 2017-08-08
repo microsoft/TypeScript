@@ -63,6 +63,20 @@ var d: D<number>;
 var r2 = d.foo(2); // error
 
 //// [memberFunctionsWithPublicPrivateOverloads.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C = (function () {
     function C() {
     }
@@ -72,6 +86,7 @@ var C = (function () {
     C.prototype.baz = function (x, y) { };
     C.bar = function (x, y) { };
     C.baz = function (x, y) { };
+    __names(C.prototype, ["foo", "bar", "baz"]);
     return C;
 }());
 var D = (function () {
@@ -83,6 +98,7 @@ var D = (function () {
     D.foo = function (x, y) { };
     D.bar = function (x, y) { };
     D.baz = function (x, y) { };
+    __names(D.prototype, ["foo", "bar", "baz"]);
     return D;
 }());
 var c;

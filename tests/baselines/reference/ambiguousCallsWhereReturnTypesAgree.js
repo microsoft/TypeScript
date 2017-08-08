@@ -29,6 +29,20 @@ class TestClass2 {
 
 
 //// [ambiguousCallsWhereReturnTypesAgree.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var TestClass = (function () {
     function TestClass() {
     }
@@ -37,6 +51,7 @@ var TestClass = (function () {
     TestClass.prototype.foo = function (x) {
         this.bar(x); // should not error
     };
+    __names(TestClass.prototype, ["bar", "foo"]);
     return TestClass;
 }());
 var TestClass2 = (function () {
@@ -48,5 +63,6 @@ var TestClass2 = (function () {
     TestClass2.prototype.foo = function (x) {
         return this.bar(x); // should not error
     };
+    __names(TestClass2.prototype, ["bar", "foo"]);
     return TestClass2;
 }());

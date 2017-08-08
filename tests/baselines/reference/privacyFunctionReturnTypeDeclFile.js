@@ -1194,6 +1194,20 @@ module publicModuleInGlobal {
 
 //// [privacyFunctionReturnTypeDeclFile_externalModule.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
@@ -1233,6 +1247,7 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
     publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new privateClass();
     };
+    __names(publicClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
     return publicClassWithWithPrivateParmeterTypes;
 }());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
@@ -1263,6 +1278,7 @@ var publicClassWithWithPublicParmeterTypes = (function () {
     publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new publicClass();
     };
+    __names(publicClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
     return publicClassWithWithPublicParmeterTypes;
 }());
 exports.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
@@ -1293,6 +1309,7 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
     privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new privateClass();
     };
+    __names(privateClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
     return privateClassWithWithPrivateParmeterTypes;
 }());
 var privateClassWithWithPublicParmeterTypes = (function () {
@@ -1322,6 +1339,7 @@ var privateClassWithWithPublicParmeterTypes = (function () {
     privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new publicClass();
     };
+    __names(privateClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
     return privateClassWithWithPublicParmeterTypes;
 }());
 function publicFunctionWithPrivateParmeterTypes() {
@@ -1367,6 +1385,7 @@ var publicClassWithPrivateModuleParameterTypes = (function () {
     publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
         return new privateModule.publicClass();
     };
+    __names(publicClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
     return publicClassWithPrivateModuleParameterTypes;
 }());
 exports.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
@@ -1393,6 +1412,7 @@ var privateClassWithPrivateModuleParameterTypes = (function () {
     privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
         return new privateModule.publicClass();
     };
+    __names(privateClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
     return privateClassWithPrivateModuleParameterTypes;
 }());
 function privateFunctionWithPrivateModuleParameterTypes() {
@@ -1441,6 +1461,7 @@ var publicModule;
         publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
         };
+        __names(publicClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return publicClassWithWithPrivateParmeterTypes;
     }());
     publicModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
@@ -1471,6 +1492,7 @@ var publicModule;
         publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
         };
+        __names(publicClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return publicClassWithWithPublicParmeterTypes;
     }());
     publicModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
@@ -1501,6 +1523,7 @@ var publicModule;
         privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
         };
+        __names(privateClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return privateClassWithWithPrivateParmeterTypes;
     }());
     var privateClassWithWithPublicParmeterTypes = (function () {
@@ -1530,6 +1553,7 @@ var publicModule;
         privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
         };
+        __names(privateClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return privateClassWithWithPublicParmeterTypes;
     }());
     function publicFunctionWithPrivateParmeterTypes() {
@@ -1575,6 +1599,7 @@ var publicModule;
         publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
         };
+        __names(publicClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
         return publicClassWithPrivateModuleParameterTypes;
     }());
     publicModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
@@ -1601,6 +1626,7 @@ var publicModule;
         privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
         };
+        __names(privateClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
         return privateClassWithPrivateModuleParameterTypes;
     }());
     function privateFunctionWithPrivateModuleParameterTypes() {
@@ -1650,6 +1676,7 @@ var privateModule;
         publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
         };
+        __names(publicClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return publicClassWithWithPrivateParmeterTypes;
     }());
     privateModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
@@ -1680,6 +1707,7 @@ var privateModule;
         publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
         };
+        __names(publicClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return publicClassWithWithPublicParmeterTypes;
     }());
     privateModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
@@ -1710,6 +1738,7 @@ var privateModule;
         privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
         };
+        __names(privateClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return privateClassWithWithPrivateParmeterTypes;
     }());
     var privateClassWithWithPublicParmeterTypes = (function () {
@@ -1739,6 +1768,7 @@ var privateModule;
         privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
         };
+        __names(privateClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return privateClassWithWithPublicParmeterTypes;
     }());
     function publicFunctionWithPrivateParmeterTypes() {
@@ -1784,6 +1814,7 @@ var privateModule;
         publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
         };
+        __names(publicClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
         return publicClassWithPrivateModuleParameterTypes;
     }());
     privateModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
@@ -1810,6 +1841,7 @@ var privateModule;
         privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
         };
+        __names(privateClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
         return privateClassWithPrivateModuleParameterTypes;
     }());
     function privateFunctionWithPrivateModuleParameterTypes() {
@@ -1820,6 +1852,20 @@ var privateModule;
     }
 })(privateModule || (privateModule = {}));
 //// [privacyFunctionReturnTypeDeclFile_GlobalFile.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {
     }
@@ -1852,6 +1898,7 @@ var publicClassWithWithPublicParmeterTypesInGlobal = (function () {
     publicClassWithWithPublicParmeterTypesInGlobal.prototype.myPrivateMethod1 = function () {
         return new publicClassInGlobal();
     };
+    __names(publicClassWithWithPublicParmeterTypesInGlobal.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
     return publicClassWithWithPublicParmeterTypesInGlobal;
 }());
 function publicFunctionWithPublicParmeterTypesInGlobal() {
@@ -1913,6 +1960,7 @@ var publicModuleInGlobal;
             publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new privateClass();
             };
+            __names(publicClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
             return publicClassWithWithPrivateParmeterTypes;
         }());
         privateModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
@@ -1943,6 +1991,7 @@ var publicModuleInGlobal;
             publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new publicClass();
             };
+            __names(publicClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
             return publicClassWithWithPublicParmeterTypes;
         }());
         privateModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
@@ -1973,6 +2022,7 @@ var publicModuleInGlobal;
             privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new privateClass();
             };
+            __names(privateClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
             return privateClassWithWithPrivateParmeterTypes;
         }());
         var privateClassWithWithPublicParmeterTypes = (function () {
@@ -2002,6 +2052,7 @@ var publicModuleInGlobal;
             privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new publicClass();
             };
+            __names(privateClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
             return privateClassWithWithPublicParmeterTypes;
         }());
         function publicFunctionWithPrivateParmeterTypes() {
@@ -2047,6 +2098,7 @@ var publicModuleInGlobal;
             publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
                 return new privateModule.publicClass();
             };
+            __names(publicClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
             return publicClassWithPrivateModuleParameterTypes;
         }());
         privateModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
@@ -2073,6 +2125,7 @@ var publicModuleInGlobal;
             privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
                 return new privateModule.publicClass();
             };
+            __names(privateClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
             return privateClassWithPrivateModuleParameterTypes;
         }());
         function privateFunctionWithPrivateModuleParameterTypes() {
@@ -2109,6 +2162,7 @@ var publicModuleInGlobal;
         publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
         };
+        __names(publicClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return publicClassWithWithPrivateParmeterTypes;
     }());
     publicModuleInGlobal.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
@@ -2139,6 +2193,7 @@ var publicModuleInGlobal;
         publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
         };
+        __names(publicClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return publicClassWithWithPublicParmeterTypes;
     }());
     publicModuleInGlobal.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
@@ -2169,6 +2224,7 @@ var publicModuleInGlobal;
         privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
         };
+        __names(privateClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return privateClassWithWithPrivateParmeterTypes;
     }());
     var privateClassWithWithPublicParmeterTypes = (function () {
@@ -2198,6 +2254,7 @@ var publicModuleInGlobal;
         privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
         };
+        __names(privateClassWithWithPublicParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
         return privateClassWithWithPublicParmeterTypes;
     }());
     function publicFunctionWithPrivateParmeterTypes() {
@@ -2243,6 +2300,7 @@ var publicModuleInGlobal;
         publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
         };
+        __names(publicClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
         return publicClassWithPrivateModuleParameterTypes;
     }());
     publicModuleInGlobal.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
@@ -2269,6 +2327,7 @@ var publicModuleInGlobal;
         privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
         };
+        __names(privateClassWithPrivateModuleParameterTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
         return privateClassWithPrivateModuleParameterTypes;
     }());
     function privateFunctionWithPrivateModuleParameterTypes() {

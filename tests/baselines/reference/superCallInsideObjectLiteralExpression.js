@@ -13,6 +13,20 @@ class B extends A {
 }
 
 //// [superCallInsideObjectLiteralExpression.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -28,6 +42,7 @@ var A = (function () {
     }
     A.prototype.foo = function () {
     };
+    __names(A.prototype, ["foo"]);
     return A;
 }());
 var B = (function (_super) {

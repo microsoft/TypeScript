@@ -59,6 +59,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var MyView = (function (_super) {
     __extends(MyView, _super);
     function MyView() {
@@ -69,5 +83,6 @@ var MyView = (function (_super) {
         var allSeries = _.pluck(data, "series");
         return _.map(allSeries, _.first);
     };
+    __names(MyView.prototype, ["getDataSeries"]);
     return MyView;
 }(View));

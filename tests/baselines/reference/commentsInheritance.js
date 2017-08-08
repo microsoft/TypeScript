@@ -151,6 +151,20 @@ i2_i = i3_i;
 
 
 //// [commentsInheritance.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -175,6 +189,7 @@ var c1 = (function () {
     /** c1_nc_f1*/
     c1.prototype.nc_f1 = function () {
     };
+    __names(c1.prototype, ["i1_f1", "i1_nc_f1", "f1", "nc_f1"]);
     return c1;
 }());
 var i1_i;
@@ -226,6 +241,7 @@ var c2 = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(c2.prototype, ["c2_f1", "c2_nc_f1", "f1", "nc_f1"]);
     return c2;
 }());
 var c3 = (function (_super) {
@@ -253,6 +269,7 @@ var c3 = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    __names(c3.prototype, ["f1", "nc_f1"]);
     return c3;
 }(c2));
 var c2_i = new c2(10);

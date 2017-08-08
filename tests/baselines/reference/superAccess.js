@@ -24,6 +24,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var MyBase = (function () {
     function MyBase() {
         this.S2 = "test";
@@ -42,5 +56,6 @@ var MyDerived = (function (_super) {
         var l4 = _super.prototype.S2; // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
         var l5 = _super.prototype.f.call(this); // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
     };
+    __names(MyDerived.prototype, ["foo"]);
     return MyDerived;
 }(MyBase));

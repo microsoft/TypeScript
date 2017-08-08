@@ -44,6 +44,20 @@ export class D {
     exports.foo = foo;
 });
 //// [1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 (function (factory) {
     if (typeof module === "object" && typeof module.exports === "object") {
         var v = factory(require, exports);
@@ -71,6 +85,7 @@ export class D {
         C.prototype.method = function () {
             var loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); });
         };
+        __names(C.prototype, ["method"]);
         return C;
     }());
     var D = (function () {
@@ -79,6 +94,7 @@ export class D {
         D.prototype.method = function () {
             var loadAsync = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); });
         };
+        __names(D.prototype, ["method"]);
         return D;
     }());
     exports.D = D;

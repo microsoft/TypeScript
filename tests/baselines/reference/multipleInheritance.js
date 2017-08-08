@@ -49,6 +49,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var B1 = (function () {
     function B1() {
     }
@@ -104,6 +118,7 @@ var Good = (function () {
         this.f = function () { return 0; };
     }
     Good.prototype.g = function () { return 0; };
+    __names(Good.prototype, ["g"]);
     return Good;
 }());
 var Baad = (function (_super) {
@@ -113,5 +128,6 @@ var Baad = (function (_super) {
     }
     Baad.prototype.f = function () { return 0; };
     Baad.prototype.g = function (n) { return 0; };
+    __names(Baad.prototype, ["f", "g"]);
     return Baad;
 }(Good));

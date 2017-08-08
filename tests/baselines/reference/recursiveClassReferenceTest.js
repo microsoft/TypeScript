@@ -105,6 +105,20 @@ module Sample.Thing.Languages.PlainText {
 //// [recursiveClassReferenceTest.js]
 // Scenario 1: Test reqursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -130,6 +144,7 @@ var Sample;
                     StartFindAction.prototype.run = function (Thing) {
                         return true;
                     };
+                    __names(StartFindAction.prototype, ["getId", "run"]);
                     return StartFindAction;
                 }());
                 Find.StartFindAction = StartFindAction;
@@ -157,6 +172,7 @@ var Sample;
                 };
                 FindWidget.prototype.destroy = function () {
                 };
+                __names(FindWidget.prototype, ["gar", "getDomNode", "destroy"]);
                 return FindWidget;
             }());
             Widgets.FindWidget = FindWidget;
@@ -167,6 +183,7 @@ var AbstractMode = (function () {
     function AbstractMode() {
     }
     AbstractMode.prototype.getInitialState = function () { return null; };
+    __names(AbstractMode.prototype, ["getInitialState"]);
     return AbstractMode;
 }());
 (function (Sample) {
@@ -187,6 +204,7 @@ var AbstractMode = (function () {
                         return this === other;
                     };
                     State.prototype.getMode = function () { return mode; };
+                    __names(State.prototype, ["clone", "equals", "getMode"]);
                     return State;
                 }());
                 PlainText.State = State;
@@ -199,6 +217,7 @@ var AbstractMode = (function () {
                     Mode.prototype.getInitialState = function () {
                         return new State(self);
                     };
+                    __names(Mode.prototype, ["getInitialState"]);
                     return Mode;
                 }(AbstractMode));
                 PlainText.Mode = Mode;

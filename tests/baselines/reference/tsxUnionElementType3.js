@@ -48,6 +48,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 exports.__esModule = true;
 var React = require("react");
 var RC1 = (function (_super) {
@@ -58,6 +72,7 @@ var RC1 = (function (_super) {
     RC1.prototype.render = function () {
         return null;
     };
+    __names(RC1.prototype, ["render"]);
     return RC1;
 }(React.Component));
 var RC2 = (function (_super) {
@@ -69,6 +84,7 @@ var RC2 = (function (_super) {
         return null;
     };
     RC2.prototype.method = function () { };
+    __names(RC2.prototype, ["render", "method"]);
     return RC2;
 }(React.Component));
 var RC3 = (function (_super) {
@@ -79,6 +95,7 @@ var RC3 = (function (_super) {
     RC3.prototype.render = function () {
         return null;
     };
+    __names(RC3.prototype, ["render"]);
     return RC3;
 }(React.Component));
 var RC4 = (function (_super) {
@@ -89,6 +106,7 @@ var RC4 = (function (_super) {
     RC4.prototype.render = function () {
         return null;
     };
+    __names(RC4.prototype, ["render"]);
     return RC4;
 }(React.Component));
 var EmptyRCComp = RC3 || RC4;

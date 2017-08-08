@@ -57,6 +57,20 @@ var r3: typeof D;
 var r4: typeof d;
 
 //// [typeQueryOnClass.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C = (function () {
     function C(x) {
         var _this = this;
@@ -99,6 +113,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(C.prototype, ["baz"]);
     C.sa = 1;
     C.sb = function () { return 1; };
     return C;
@@ -112,6 +127,7 @@ var D = (function () {
         this.y = y;
     }
     D.prototype.foo = function () { };
+    __names(D.prototype, ["foo"]);
     return D;
 }());
 var d;

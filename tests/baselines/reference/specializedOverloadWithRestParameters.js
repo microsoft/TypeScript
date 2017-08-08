@@ -13,6 +13,20 @@ function g(tagName: any): Base {
 }
 
 //// [specializedOverloadWithRestParameters.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -27,6 +41,7 @@ var Base = (function () {
     function Base() {
     }
     Base.prototype.foo = function () { };
+    __names(Base.prototype, ["foo"]);
     return Base;
 }());
 var Derived1 = (function (_super) {
@@ -35,6 +50,7 @@ var Derived1 = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived1.prototype.bar = function () { };
+    __names(Derived1.prototype, ["bar"]);
     return Derived1;
 }(Base));
 function f(tagName) {

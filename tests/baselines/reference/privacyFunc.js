@@ -229,6 +229,20 @@ function f10_public(): C6_public {
 
 
 //// [privacyFunc.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var m1;
 (function (m1) {
     var C1_public = (function () {
@@ -236,6 +250,7 @@ var m1;
         }
         C1_public.prototype.f1 = function () {
         };
+        __names(C1_public.prototype, ["f1"]);
         return C1_public;
     }());
     m1.C1_public = C1_public;
@@ -279,6 +294,7 @@ var m1;
         C3_public.prototype.f12_public = function () {
             return new C2_private(); //error
         };
+        __names(C3_public.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
         return C3_public;
     }());
     m1.C3_public = C3_public;
@@ -317,6 +333,7 @@ var m1;
         C4_private.prototype.f12_public = function () {
             return new C2_private();
         };
+        __names(C4_private.prototype, ["f1_private", "f2_public", "f3_private", "f4_public", "f5_private", "f6_public", "f7_private", "f8_public", "f9_private", "f10_public", "f11_private", "f12_public"]);
         return C4_private;
     }());
     var C5_public = (function () {
@@ -404,6 +421,7 @@ var C7_public = (function () {
     C7_public.prototype.f10_public = function () {
         return new C6_public();
     };
+    __names(C7_public.prototype, ["f1_private", "f2_public", "f5_private", "f6_public", "f9_private", "f10_public"]);
     return C7_public;
 }());
 var C9_public = (function () {

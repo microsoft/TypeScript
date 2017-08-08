@@ -38,6 +38,20 @@ function foo<C, T extends { content: C }>(x: C, y: T['content']) {
 //// [indexedAccessTypeConstraints.js]
 "use strict";
 // Repro from #14557
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -55,6 +69,7 @@ var Parent = (function () {
     Parent.prototype.getData = function () {
         return this.data;
     };
+    __names(Parent.prototype, ["getData"]);
     return Parent;
 }());
 var Foo = (function (_super) {
@@ -65,6 +80,7 @@ var Foo = (function (_super) {
     Foo.prototype.getContent = function () {
         return this.getData().get('content');
     };
+    __names(Foo.prototype, ["getContent"]);
     return Foo;
 }(Parent));
 exports.Foo = Foo;
@@ -76,6 +92,7 @@ var Bar = (function (_super) {
     Bar.prototype.getContent = function () {
         return this.getData().get('content');
     };
+    __names(Bar.prototype, ["getContent"]);
     return Bar;
 }(Parent));
 exports.Bar = Bar;

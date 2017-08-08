@@ -280,6 +280,20 @@ TypeScriptAllInOne.Program.Main();
 
 
 //// [constructorWithIncompleteTypeAnnotation.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -334,6 +348,7 @@ var TypeScriptAllInOne;
         Program.prototype["catch"] = function (e) {
             console.log(e);
         };
+        __names(Program.prototype, ["if", "catch"]);
         return Program;
     }());
     TypeScriptAllInOne.Program = Program;
@@ -487,6 +502,7 @@ var BasicFeatures = (function () {
         else
             return 1;
     };
+    __names(BasicFeatures.prototype, ["VARIABLES", "STATEMENTS", "TYPES", "OPERATOR"]);
     return BasicFeatures;
 }());
 var CLASS = (function () {
@@ -510,6 +526,7 @@ var CLASS = (function () {
         else
             return false;
     };
+    __names(CLASS.prototype, ["Member", "Foo"]);
     return CLASS;
 }());
 // todo: use these
@@ -534,6 +551,7 @@ var B = (function (_super) {
     B.prototype.method2 = function () {
         return this.method1(2);
     };
+    __names(B.prototype, ["method2"]);
     return B;
 }(A));
 var Overloading = (function () {

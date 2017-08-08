@@ -42,6 +42,20 @@ var whitespace3 = <div>
 
 
 //// [file.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var p;
 var selfClosed1 = React.createElement("div", null);
 var selfClosed2 = React.createElement("div", { x: "1" });
@@ -67,6 +81,7 @@ var SomeClass = (function () {
         var rewrites5 = React.createElement("div", { a: [p].concat(p, [p]) });
         var rewrites6 = React.createElement("div", { a: { p: p } });
     };
+    __names(SomeClass.prototype, ["f"]);
     return SomeClass;
 }());
 var whitespace1 = React.createElement("div", null, "      ");

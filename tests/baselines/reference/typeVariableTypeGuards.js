@@ -85,6 +85,20 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 //// [typeVariableTypeGuards.js]
 "use strict";
 // Repro from #14091
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -101,6 +115,7 @@ var A = (function () {
     A.prototype.doSomething = function () {
         this.props.foo && this.props.foo();
     };
+    __names(A.prototype, ["doSomething"]);
     return A;
 }());
 var Monkey = (function () {
@@ -111,6 +126,7 @@ var Monkey = (function () {
             this.a.color;
         }
     };
+    __names(Monkey.prototype, ["render"]);
     return Monkey;
 }());
 var BigMonkey = (function (_super) {
@@ -123,6 +139,7 @@ var BigMonkey = (function (_super) {
             this.a.color;
         }
     };
+    __names(BigMonkey.prototype, ["render"]);
     return BigMonkey;
 }(Monkey));
 function f1(obj) {

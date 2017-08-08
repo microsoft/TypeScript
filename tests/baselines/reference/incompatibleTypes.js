@@ -76,12 +76,27 @@ var fp1: () =>any = a => 0;
 
 
 //// [incompatibleTypes.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C1 = (function () {
     function C1() {
     }
     C1.prototype.p1 = function () {
         return "s";
     };
+    __names(C1.prototype, ["p1"]);
     return C1;
 }());
 var C2 = (function () {
@@ -90,6 +105,7 @@ var C2 = (function () {
     C2.prototype.p1 = function (n) {
         return 0;
     };
+    __names(C2.prototype, ["p1"]);
     return C2;
 }());
 var C3 = (function () {

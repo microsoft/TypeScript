@@ -35,6 +35,20 @@ class ItemSetEvent extends Event {
 
 
 //// [lambdaArgCrash.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -56,6 +70,7 @@ var Event = (function () {
         /// <param name="listener">The callback function to register.</param>
         this._listeners.push(listener);
     };
+    __names(Event.prototype, ["add"]);
     return Event;
 }());
 var ItemSetEvent = (function (_super) {
@@ -66,5 +81,6 @@ var ItemSetEvent = (function (_super) {
     ItemSetEvent.prototype.add = function (listener) {
         _super.prototype.add.call(this, listener);
     };
+    __names(ItemSetEvent.prototype, ["add"]);
     return ItemSetEvent;
 }(Event));

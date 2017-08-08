@@ -125,6 +125,20 @@ fnOpt2(1, [2, 3], [1], true);
 
 //// [optionalParamArgsTest.js]
 // Optional parameter and default argument tests
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -161,6 +175,7 @@ var C1 = (function () {
         if (C1M5A2 === void 0) { C1M5A2 = 0; }
         return C1M5A1 + C1M5A2;
     };
+    __names(C1.prototype, ["C1M1", "C1M2", "C1M3", "C1M4", "C1M5", "C1M5"]);
     return C1;
 }());
 var C2 = (function (_super) {

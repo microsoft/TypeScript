@@ -12,6 +12,20 @@ class Component {
 
 //// [index.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./jsx");
 var skate;
@@ -22,6 +36,7 @@ var Component = (function () {
     Component.prototype.renderCallback = function () {
         return skate.h("div", null, "test");
     };
+    __names(Component.prototype, ["renderCallback"]);
     return Component;
 }());
 ;

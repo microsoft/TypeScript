@@ -93,6 +93,20 @@ var r11 = i.foo8(); // {}
 
 //// [genericCallTypeArgumentInference.js]
 // Basic type inference with generic calls, no errors expected
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function foo(t) {
     return t;
 }
@@ -138,6 +152,7 @@ var C = (function () {
         var x;
         return x;
     };
+    __names(C.prototype, ["foo", "foo2", "foo3", "foo4", "foo5", "foo6", "foo7", "foo8"]);
     return C;
 }());
 var c = new C('', 1);

@@ -233,6 +233,20 @@ var m3eVar: mAmbient.m3.e;
 
 
 //// [moduledecl.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var m0;
 (function (m0) {
     function f1() {
@@ -263,6 +277,7 @@ var m1;
         c1.prototype.d = function () {
             return "Hello";
         };
+        __names(c1.prototype, ["d"]);
         return c1;
     }());
     m1.c1 = c1;
@@ -312,6 +327,7 @@ var exportTests;
         C1_public.prototype.f3 = function () {
             return "string";
         };
+        __names(C1_public.prototype, ["f2", "f3"]);
         return C1_public;
     }());
     exportTests.C1_public = C1_public;
@@ -324,6 +340,7 @@ var exportTests;
         C2_private.prototype.f3 = function () {
             return "string";
         };
+        __names(C2_private.prototype, ["f2", "f3"]);
         return C2_private;
     }());
     var C3_public = (function () {
@@ -353,6 +370,7 @@ var exportTests;
             enumerable: true,
             configurable: true
         });
+        __names(C3_public.prototype, ["getC2_private", "setC2_private", "getC1_public", "setC1_public"]);
         return C3_public;
     }());
     exportTests.C3_public = C3_public;

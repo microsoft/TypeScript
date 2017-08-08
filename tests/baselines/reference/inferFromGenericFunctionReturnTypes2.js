@@ -96,6 +96,20 @@ const t2 = testSet.transform(
 
 
 //// [inferFromGenericFunctionReturnTypes2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var f1 = function (s) { return s.length; };
 var f2 = wrap(function (s) { return s.length; });
 var f3 = arrayize(wrap(function (s) { return s.length; }));
@@ -120,6 +134,7 @@ var SetOf = (function () {
     SetOf.prototype.forEach = function (fn) {
         this._store.forEach(function (a, i) { return fn(a, i); });
     };
+    __names(SetOf.prototype, ["add", "transform", "forEach"]);
     return SetOf;
 }());
 /* ... etc ... */

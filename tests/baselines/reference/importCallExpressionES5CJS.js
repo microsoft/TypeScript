@@ -35,6 +35,20 @@ function foo() { return "foo"; }
 exports.foo = foo;
 //// [1.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 Promise.resolve().then(function () { return require("./0"); });
 var p1 = Promise.resolve().then(function () { return require("./0"); });
@@ -51,6 +65,7 @@ var C = (function () {
     C.prototype.method = function () {
         var loadAsync = Promise.resolve().then(function () { return require("./0"); });
     };
+    __names(C.prototype, ["method"]);
     return C;
 }());
 var D = (function () {
@@ -59,6 +74,7 @@ var D = (function () {
     D.prototype.method = function () {
         var loadAsync = Promise.resolve().then(function () { return require("./0"); });
     };
+    __names(D.prototype, ["method"]);
     return D;
 }());
 exports.D = D;

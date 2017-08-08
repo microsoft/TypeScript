@@ -48,10 +48,25 @@ class C4 {
 
 
 //// [declarationFiles.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C1 = (function () {
     function C1(x) {
     }
     C1.prototype.f = function (x) { return undefined; };
+    __names(C1.prototype, ["f"]);
     return C1;
 }());
 var C2 = (function () {
@@ -85,5 +100,6 @@ var C4 = (function () {
         var _this = this;
         return function () { return _this; };
     };
+    __names(C4.prototype, ["f1", "f2", "f3", "f4"]);
     return C4;
 }());

@@ -36,6 +36,20 @@ module e6b { export var y = 2; } // should be error
 //import e7 = require(''); // should be error
 
 //// [augmentedTypesEnum.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // enum then var
 var e1111;
 (function (e1111) {
@@ -62,6 +76,7 @@ var e4 = (function () {
     function e4() {
     }
     e4.prototype.foo = function () { };
+    __names(e4.prototype, ["foo"]);
     return e4;
 }()); // error
 // enum then enum

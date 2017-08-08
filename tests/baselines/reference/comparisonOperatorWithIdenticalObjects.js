@@ -195,6 +195,20 @@ var r8b6 = b5 !== a5;
 var r8b7 = b6 !== a6;
 
 //// [comparisonOperatorWithIdenticalObjects.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -211,6 +225,7 @@ var A1 = (function () {
     A1.prototype.fn = function (a) {
         return null;
     };
+    __names(A1.prototype, ["fn"]);
     return A1;
 }());
 var B1 = (function () {
@@ -219,6 +234,7 @@ var B1 = (function () {
     B1.prototype.fn = function (b) {
         return null;
     };
+    __names(B1.prototype, ["fn"]);
     return B1;
 }());
 var Base = (function () {
@@ -227,6 +243,7 @@ var Base = (function () {
     Base.prototype.fn = function (b) {
         return null;
     };
+    __names(Base.prototype, ["fn"]);
     return Base;
 }());
 var A2 = (function (_super) {

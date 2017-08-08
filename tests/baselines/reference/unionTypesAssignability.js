@@ -84,6 +84,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var unionNumberString;
 var C = (function () {
     function C() {
@@ -96,6 +110,7 @@ var D = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     D.prototype.foo1 = function () { };
+    __names(D.prototype, ["foo1"]);
     return D;
 }(C));
 var E = (function (_super) {
@@ -104,6 +119,7 @@ var E = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     E.prototype.foo2 = function () { };
+    __names(E.prototype, ["foo2"]);
     return E;
 }(C));
 var unionDE;

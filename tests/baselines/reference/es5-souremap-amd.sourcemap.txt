@@ -8,11 +8,25 @@ sources: es5-souremap-amd.ts
 emittedFile:tests/cases/compiler/es5-souremap-amd.js
 sourceFile:es5-souremap-amd.ts
 -------------------------------------------------------------------
+>>>var __names = (this && this.__names) || (function() {
+>>>    var name = Object.defineProperty ? (function(proto, name) {
+>>>        Object.defineProperty(proto[name], 'name', { 
+>>>            value: name, configurable: true, writable: false, enumerable: false
+>>>        });
+>>>    }) : (function(proto, name) {
+>>>        proto[name].name = name;
+>>>    });
+>>>    return function (proto, keys) {
+>>>        for (var i = keys.length - 1; i >= 0; i--) {
+>>>            name(proto, keys[i])
+>>>        }
+>>>    };
+>>>})();
 >>>var A = (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+1 >Emitted(15, 1) Source(1, 1) + SourceIndex(0)
 ---
 >>>    function A() {
 1->^^^^
@@ -20,7 +34,7 @@ sourceFile:es5-souremap-amd.ts
 1->class A
   >{
   >    
-1->Emitted(2, 5) Source(3, 5) + SourceIndex(0)
+1->Emitted(16, 5) Source(3, 5) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -31,8 +45,8 @@ sourceFile:es5-souremap-amd.ts
   >
   >    
 2 >    }
-1->Emitted(3, 5) Source(6, 5) + SourceIndex(0)
-2 >Emitted(3, 6) Source(6, 6) + SourceIndex(0)
+1->Emitted(17, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(17, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    A.prototype.B = function () {
 1->^^^^
@@ -43,9 +57,9 @@ sourceFile:es5-souremap-amd.ts
   >    public 
 2 >    B
 3 >                 
-1->Emitted(4, 5) Source(8, 12) + SourceIndex(0)
-2 >Emitted(4, 18) Source(8, 13) + SourceIndex(0)
-3 >Emitted(4, 21) Source(8, 5) + SourceIndex(0)
+1->Emitted(18, 5) Source(8, 12) + SourceIndex(0)
+2 >Emitted(18, 18) Source(8, 13) + SourceIndex(0)
+3 >Emitted(18, 21) Source(8, 5) + SourceIndex(0)
 ---
 >>>        return 42;
 1 >^^^^^^^^
@@ -60,30 +74,31 @@ sourceFile:es5-souremap-amd.ts
 3 >               
 4 >               42
 5 >                 ;
-1 >Emitted(5, 9) Source(10, 9) + SourceIndex(0)
-2 >Emitted(5, 15) Source(10, 15) + SourceIndex(0)
-3 >Emitted(5, 16) Source(10, 16) + SourceIndex(0)
-4 >Emitted(5, 18) Source(10, 18) + SourceIndex(0)
-5 >Emitted(5, 19) Source(10, 19) + SourceIndex(0)
+1 >Emitted(19, 9) Source(10, 9) + SourceIndex(0)
+2 >Emitted(19, 15) Source(10, 15) + SourceIndex(0)
+3 >Emitted(19, 16) Source(10, 16) + SourceIndex(0)
+4 >Emitted(19, 18) Source(10, 18) + SourceIndex(0)
+5 >Emitted(19, 19) Source(10, 19) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >    }
-1 >Emitted(6, 5) Source(11, 5) + SourceIndex(0)
-2 >Emitted(6, 6) Source(11, 6) + SourceIndex(0)
+1 >Emitted(20, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(20, 6) Source(11, 6) + SourceIndex(0)
 ---
+>>>    __names(A.prototype, ["B"]);
 >>>    return A;
 1->^^^^
 2 >    ^^^^^^^^
 1->
   >
 2 >    }
-1->Emitted(7, 5) Source(12, 1) + SourceIndex(0)
-2 >Emitted(7, 13) Source(12, 2) + SourceIndex(0)
+1->Emitted(22, 5) Source(12, 1) + SourceIndex(0)
+2 >Emitted(22, 13) Source(12, 2) + SourceIndex(0)
 ---
 >>>}());
 1 >
@@ -106,9 +121,9 @@ sourceFile:es5-souremap-amd.ts
   >         return 42;
   >     }
   > }
-1 >Emitted(8, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(8, 2) Source(12, 2) + SourceIndex(0)
-3 >Emitted(8, 2) Source(1, 1) + SourceIndex(0)
-4 >Emitted(8, 6) Source(12, 2) + SourceIndex(0)
+1 >Emitted(23, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(23, 2) Source(12, 2) + SourceIndex(0)
+3 >Emitted(23, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(23, 6) Source(12, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=es5-souremap-amd.js.map

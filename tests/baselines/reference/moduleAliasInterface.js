@@ -56,6 +56,20 @@ module B1 {
 
 
 //// [moduleAliasInterface.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var _modes;
 (function (_modes) {
     var Mode = (function () {
@@ -75,6 +89,7 @@ var editor;
         } // should be an error on p2 - it's not exported
         Bug.prototype.foo = function (p1) {
         };
+        __names(Bug.prototype, ["foo"]);
         return Bug;
     }());
 })(editor || (editor = {}));

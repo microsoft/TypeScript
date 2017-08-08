@@ -101,6 +101,20 @@ function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type 
 // A parameter declaration may specify either an identifier or a binding pattern.
 // The identifiers specified in parameter declarations and binding patterns
 // in a parameter list must be unique within that parameter list.
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // If the declaration includes a type annotation, the parameter is of that type
 function a1(_a) {
     var a = _a[0], b = _a[1], c = _a[2][0][0];
@@ -186,6 +200,7 @@ var C2 = (function () {
     C2.prototype.e0 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     };
+    __names(C2.prototype, ["d3", "d4", "e0"]);
     return C2;
 }());
 var C3 = (function () {
@@ -200,6 +215,7 @@ var C3 = (function () {
     C3.prototype.e0 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     };
+    __names(C3.prototype, ["d3", "d4", "e0"]);
     return C3;
 }());
 function d5(_a) {

@@ -208,6 +208,20 @@ class C8_private {
 }
 
 //// [privacyGetter.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -218,6 +232,7 @@ define(["require", "exports"], function (require, exports) {
             }
             C1_public.prototype.f1 = function () {
             };
+            __names(C1_public.prototype, ["f1"]);
             return C1_public;
         }());
         m1.C1_public = C1_public;
@@ -317,6 +332,7 @@ define(["require", "exports"], function (require, exports) {
             }
             m2_C1_public.prototype.f1 = function () {
             };
+            __names(m2_C1_public.prototype, ["f1"]);
             return m2_C1_public;
         }());
         m2.m2_C1_public = m2_C1_public;
@@ -414,6 +430,7 @@ define(["require", "exports"], function (require, exports) {
         }
         C5_private.prototype.f = function () {
         };
+        __names(C5_private.prototype, ["f"]);
         return C5_private;
     }());
     var C6_public = (function () {

@@ -31,6 +31,7 @@ var db = (function () {
     }
     db.prototype.doSomething = function () {
     };
+    __names(db.prototype, ["doSomething"]);
     return db;
 }());
 exports.db = db;

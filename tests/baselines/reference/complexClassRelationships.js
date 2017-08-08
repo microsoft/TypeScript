@@ -58,6 +58,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // There should be no errors in this file
 var Derived = (function (_super) {
     __extends(Derived, _super);
@@ -119,6 +133,7 @@ var Foo = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(Foo.prototype, ["populate"]);
     return Foo;
 }());
 var GenericType = (function () {
@@ -131,5 +146,6 @@ var FooBase = (function () {
     }
     FooBase.prototype.populate = function () {
     };
+    __names(FooBase.prototype, ["populate"]);
     return FooBase;
 }());

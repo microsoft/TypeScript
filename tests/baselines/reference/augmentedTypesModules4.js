@@ -23,6 +23,20 @@ module m5 { export interface I { foo(): void } } // should already be reasonably
 
 
 //// [augmentedTypesModules4.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var m4;
 (function (m4) {
 })(m4 || (m4 = {}));
@@ -50,6 +64,7 @@ var m4d;
         function C() {
         }
         C.prototype.foo = function () { };
+        __names(C.prototype, ["foo"]);
         return C;
     }());
 })(m4d || (m4d = {}));

@@ -72,6 +72,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Control = (function () {
     function Control() {
     }
@@ -83,6 +97,7 @@ var Button = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Button.prototype.select = function () { };
+    __names(Button.prototype, ["select"]);
     return Button;
 }(Control));
 var TextBox = (function (_super) {
@@ -91,6 +106,7 @@ var TextBox = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     TextBox.prototype.select = function () { };
+    __names(TextBox.prototype, ["select"]);
     return TextBox;
 }(Control));
 var ImageBase = (function (_super) {
@@ -111,12 +127,14 @@ var Locations = (function () {
     function Locations() {
     }
     Locations.prototype.select = function () { };
+    __names(Locations.prototype, ["select"]);
     return Locations;
 }());
 var Locations1 = (function () {
     function Locations1() {
     }
     Locations1.prototype.select = function () { };
+    __names(Locations1.prototype, ["select"]);
     return Locations1;
 }());
 var sc;

@@ -51,6 +51,20 @@ enum E {
 }
 
 //// [methodContainingLocalFunction.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 var BugExhibition = (function () {
     function BugExhibition() {
@@ -60,6 +74,7 @@ var BugExhibition = (function () {
         var x;
         x = localFunction;
     };
+    __names(BugExhibition.prototype, ["exhibitBug"]);
     return BugExhibition;
 }());
 var BugExhibition2 = (function () {
@@ -85,6 +100,7 @@ var BugExhibition3 = (function () {
         var x;
         x = localGenericFunction;
     };
+    __names(BugExhibition3.prototype, ["exhibitBug"]);
     return BugExhibition3;
 }());
 var C = (function () {
@@ -95,6 +111,7 @@ var C = (function () {
         var x;
         x = funcExpr;
     };
+    __names(C.prototype, ["exhibit"]);
     return C;
 }());
 var M;

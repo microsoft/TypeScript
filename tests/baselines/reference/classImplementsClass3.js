@@ -15,6 +15,20 @@ c = c2;
 c2 = c;
 
 //// [classImplementsClass3.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -29,6 +43,7 @@ var A = (function () {
     function A() {
     }
     A.prototype.foo = function () { return 1; };
+    __names(A.prototype, ["foo"]);
     return A;
 }());
 var C = (function () {
@@ -37,6 +52,7 @@ var C = (function () {
     C.prototype.foo = function () {
         return 1;
     };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 var C2 = (function (_super) {

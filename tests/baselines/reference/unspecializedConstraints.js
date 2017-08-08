@@ -164,6 +164,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var ts;
 (function (ts) {
     var Symbol = (function () {
@@ -233,6 +247,7 @@ var ts;
         };
         Type.prototype.isSubTypeOf = function (type) {
         };
+        __names(Type.prototype, ["equals", "getProperties", "getProperty", "getPropertyByName", "getPropertyCount", "getSignature", "getSignatureCount", "getSignatures", "isPrimitive", "isObjectType", "isTypeParameter", "isSubTypeOf"]);
         return Type;
     }(Symbol));
     var Property = (function (_super) {
@@ -249,6 +264,7 @@ var ts;
                 this.flags === other.flags &&
                 this.type.equals(other.type);
         };
+        __names(Property.prototype, ["equals"]);
         return Property;
     }(Symbol));
     var PropertyFlags;
@@ -275,6 +291,7 @@ var ts;
             return this.equalsNoReturn(other) &&
                 this.returnType.equals(other.returnType);
         };
+        __names(Signature.prototype, ["equalsNoReturn", "equals"]);
         return Signature;
     }(Symbol));
     var Parameter = (function (_super) {
@@ -291,6 +308,7 @@ var ts;
                 this.flags === other.flags &&
                 this.type.equals(other.type);
         };
+        __names(Parameter.prototype, ["equals"]);
         return Parameter;
     }(Symbol));
     var ParameterFlags;

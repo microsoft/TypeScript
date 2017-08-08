@@ -19,6 +19,7 @@ var MyClass = (function () {
     }
     MyClass.prototype.doSomething = function () {
     };
+    __names(MyClass.prototype, ["doSomething"]);
     __decorate([
         decorator,
         __metadata("design:type", Function),

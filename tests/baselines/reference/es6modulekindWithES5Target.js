@@ -20,6 +20,20 @@ export {E};
 
 
 //// [es6modulekindWithES5Target.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -31,6 +45,7 @@ var C = (function () {
         this.p = 1;
     }
     C.prototype.method = function () { };
+    __names(C.prototype, ["method"]);
     C.s = 0;
     return C;
 }());
@@ -41,6 +56,7 @@ var D = (function () {
         this.p = 1;
     }
     D.prototype.method = function () { };
+    __names(D.prototype, ["method"]);
     D.s = 0;
     D = __decorate([
         foo

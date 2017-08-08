@@ -18,6 +18,20 @@ class B {
 
 
 //// [emitDecoratorMetadata_restArgs.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -40,6 +54,7 @@ var A = (function () {
             args[_i] = arguments[_i];
         }
     };
+    __names(A.prototype, ["method"]);
     __decorate([
         MyMethodDecorator,
         __metadata("design:type", Function),
@@ -65,6 +80,7 @@ var B = (function () {
             args[_i] = arguments[_i];
         }
     };
+    __names(B.prototype, ["method"]);
     __decorate([
         MyMethodDecorator,
         __metadata("design:type", Function),

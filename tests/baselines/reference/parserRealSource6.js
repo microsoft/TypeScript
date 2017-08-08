@@ -224,6 +224,20 @@ module TypeScript {
 //// [parserRealSource6.js]
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
@@ -292,6 +306,7 @@ var TypeScript;
             }
             return this.scriptFragment;
         };
+        __names(EnclosingScopeContext.prototype, ["getScope", "getObjectLiteralScope", "getScopeAST", "getScopePosition", "getScriptFragmentStartAST", "getScriptFragmentPosition", "getScriptFragment"]);
         return EnclosingScopeContext;
     }());
     TypeScript.EnclosingScopeContext = EnclosingScopeContext;

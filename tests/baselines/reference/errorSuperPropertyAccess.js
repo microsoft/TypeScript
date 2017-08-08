@@ -129,6 +129,20 @@ var obj = { n: super.wat, p: super.foo() };
 
 
 //// [errorSuperPropertyAccess.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -169,6 +183,7 @@ var NoBase = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(NoBase.prototype, ["fn"]);
     return NoBase;
 }());
 var SomeBase = (function () {
@@ -180,6 +195,7 @@ var SomeBase = (function () {
     SomeBase.prototype.publicFunc = function () { };
     SomeBase.privateStaticFunc = function () { };
     SomeBase.publicStaticFunc = function () { };
+    __names(SomeBase.prototype, ["privateFunc", "publicFunc"]);
     SomeBase.privateStaticMember = 0;
     SomeBase.publicStaticMember = 0;
     return SomeBase;
@@ -217,6 +233,7 @@ var SomeDerived1 = (function (_super) {
             test: function () { return _super.publicFunc.call(this); }
         };
     };
+    __names(SomeDerived1.prototype, ["fn", "fn2"]);
     return SomeDerived1;
 }(SomeBase));
 //super.privateProperty in constructor of derived class
@@ -243,6 +260,7 @@ var SomeDerived2 = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    __names(SomeDerived2.prototype, ["fn"]);
     return SomeDerived2;
 }(SomeBase));
 //super.publicStaticMemberNotFunction in static member function of derived class

@@ -2096,6 +2096,20 @@ module Harness {
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -2286,6 +2300,7 @@ var Harness;
         Logger.prototype.error = function (test, error) { };
         Logger.prototype.comment = function (comment) { };
         Logger.prototype.verify = function (test, passed, actual, expected, message) { };
+        __names(Logger.prototype, ["start", "end", "scenarioStart", "scenarioEnd", "testStart", "pass", "bug", "fail", "error", "comment", "verify"]);
         return Logger;
     }());
     Harness.Logger = Logger;
@@ -2376,6 +2391,7 @@ var Harness;
                 errorHandlerStack[errorHandlerStack.length - 1](e);
             }
         };
+        __names(Runnable.prototype, ["addChild", "call", "run", "runBlock", "runChild"]);
         // The current stack of Runnable objects
         Runnable.currentStack = [];
         Runnable.errorHandlerStack = [];
@@ -2414,6 +2430,7 @@ var Harness;
                 });
             }
         };
+        __names(TestCase.prototype, ["addChild", "run"]);
         return TestCase;
     }(Runnable));
     Harness.TestCase = TestCase;
@@ -2470,6 +2487,7 @@ var Harness;
             emitLog('scenarioEnd', metadata);
             done();
         };
+        __names(Scenario.prototype, ["run", "runChildren"]);
         return Scenario;
     }(Runnable));
     Harness.Scenario = Scenario;
@@ -2501,6 +2519,7 @@ var Harness;
             Perf.runBenchmarks();
             emitLog('end');
         };
+        __names(Run.prototype, ["run", "runChildren"]);
         return Run;
     }(Runnable));
     Harness.Run = Run;
@@ -2536,6 +2555,7 @@ var Harness;
                 // Set time to MS.
                 this.time = (Clock.now() - this.startTime) / Clock.resolution * 1000;
             };
+            __names(Timer.prototype, ["start", "end"]);
             return Timer;
         }());
         Perf.Timer = Timer;
@@ -2579,6 +2599,7 @@ var Harness;
                 }
                 return Math.sqrt(sumOfSquares / this.data.length);
             };
+            __names(Dataset.prototype, ["add", "mean", "min", "max", "stdDev"]);
             return Dataset;
         }());
         Perf.Dataset = Dataset;
@@ -2598,6 +2619,7 @@ var Harness;
                 this.results[name] = this.results[name] || new Dataset();
                 this.results[name].add(timing);
             };
+            __names(Benchmark.prototype, ["bench", "before", "beforeEach", "after", "afterEach", "addTimingFor"]);
             return Benchmark;
         }());
         Perf.Benchmark = Benchmark;
@@ -2679,6 +2701,7 @@ var Harness;
                 this.lines = [];
                 this.currentLine = "";
             };
+            __names(WriterAggregator.prototype, ["Write", "WriteLine", "Close", "reset"]);
             return WriterAggregator;
         }());
         Compiler.WriterAggregator = WriterAggregator;
@@ -2715,6 +2738,7 @@ var Harness;
                 }
                 return result;
             };
+            __names(EmitterIOHost.prototype, ["createFile", "directoryExists", "fileExists", "resolvePath", "reset", "toArray"]);
             return EmitterIOHost;
         }());
         Compiler.EmitterIOHost = EmitterIOHost;
@@ -2879,6 +2903,7 @@ var Harness;
                     _this.assertNotAssignmentCompatibleWith(notThese);
                 });
             };
+            __names(Type.prototype, ["normalizeToArray", "compilesOk", "isSubtypeOf", "assertSubtypeOf", "assertNotSubtypeOf", "isAssignmentCompatibleWith", "assertAssignmentCompatibleWith", "assertNotAssignmentCompatibleWith", "assertThisCanBeAssignedTo"]);
             return Type;
         }());
         Compiler.Type = Type;
@@ -3020,6 +3045,7 @@ var Harness;
                     assert.equal(actualType.type, expectedType);
                 });
             };
+            __names(TypeFactory.prototype, ["get", "getTypeInfoName", "isOfType"]);
             return TypeFactory;
         }());
         Compiler.TypeFactory = TypeFactory;
@@ -3116,6 +3142,7 @@ var Harness;
                 }
                 return false;
             };
+            __names(CompilerResult.prototype, ["isErrorAt"]);
             return CompilerResult;
         }());
         Compiler.CompilerResult = CompilerResult;
@@ -3130,6 +3157,7 @@ var Harness;
             CompilerError.prototype.toString = function () {
                 return this.file + "(" + this.line + "," + this.column + "): " + this.message;
             };
+            __names(CompilerError.prototype, ["toString"]);
             return CompilerError;
         }());
         Compiler.CompilerError = CompilerError;
@@ -3458,6 +3486,7 @@ var Harness;
             var aggDelta = entries.map(function (x) { return x.editRange.delta; }).reduce(function (prev, current) { return prev + current; });
             return new TypeScript.ScriptEditRange(minDistFromStart, entries[0].length - minDistFromEnd, aggDelta);
         };
+        __names(ScriptInfo.prototype, ["updateContent", "editContent", "getEditRangeSinceVersion"]);
         return ScriptInfo;
     }());
     Harness.ScriptInfo = ScriptInfo;
@@ -3660,6 +3689,7 @@ var Harness;
         TypeScriptLS.prototype.getHostSettings = function () {
             return JSON.stringify({ usePullLanguageService: Harness.usePull });
         };
+        __names(TypeScriptLS.prototype, ["addDefaultLibrary", "addFile", "addScript", "updateScript", "editScript", "getScriptContent", "information", "debug", "warning", "error", "fatal", "log", "getCompilationSettings", "getScriptCount", "getScriptSourceText", "getScriptSourceLength", "getScriptId", "getScriptIsResident", "getScriptVersion", "getScriptEditRangeSinceVersion", "getLanguageService", "parseSourceText", "parseFile", "lineColToPosition", "positionToZeroBasedLineCol", "checkEdits", "applyEdits", "normalizeEdits", "getHostSettings"]);
         return TypeScriptLS;
     }());
     Harness.TypeScriptLS = TypeScriptLS;

@@ -31,6 +31,20 @@ test.tags();
 
 //// [emitClassExpressionInDeclarationFile2.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -48,6 +62,7 @@ exports.noPrivates = (_a = (function () {
         }
         class_1.getTags = function () { };
         class_1.prototype.tags = function () { };
+        __names(class_1.prototype, ["tags"]);
         return class_1;
     }()),
     _a.ps = -1,
@@ -58,6 +73,7 @@ var FooItem = (function () {
         this.property = "capitalism";
     }
     FooItem.prototype.foo = function () { };
+    __names(FooItem.prototype, ["foo"]);
     return FooItem;
 }());
 exports.FooItem = FooItem;
@@ -69,6 +85,7 @@ function WithTags(Base) {
         }
         class_2.getTags = function () { };
         class_2.prototype.tags = function () { };
+        __names(class_2.prototype, ["tags"]);
         return class_2;
     }(Base));
 }

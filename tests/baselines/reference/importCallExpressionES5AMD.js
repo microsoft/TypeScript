@@ -36,6 +36,20 @@ define(["require", "exports"], function (require, exports) {
     exports.foo = foo;
 });
 //// [1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -54,6 +68,7 @@ define(["require", "exports"], function (require, exports) {
         C.prototype.method = function () {
             var loadAsync = new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); });
         };
+        __names(C.prototype, ["method"]);
         return C;
     }());
     var D = (function () {
@@ -62,6 +77,7 @@ define(["require", "exports"], function (require, exports) {
         D.prototype.method = function () {
             var loadAsync = new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); });
         };
+        __names(D.prototype, ["method"]);
         return D;
     }());
     exports.D = D;

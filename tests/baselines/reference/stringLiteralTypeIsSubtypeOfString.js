@@ -102,6 +102,20 @@ function f16<T extends String, U extends T>(x: any) { }
 
 //// [stringLiteralTypeIsSubtypeOfString.js]
 // string literal types are subtypes of string, any
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function f1(x) { }
 function f2(x) { }
 function f3(x) { }
@@ -140,6 +154,7 @@ var C = (function () {
     C.prototype.trim = function () { return null; };
     C.prototype.substr = function (from, length) { return null; };
     C.prototype.valueOf = function () { return null; };
+    __names(C.prototype, ["toString", "charAt", "charCodeAt", "concat", "indexOf", "lastIndexOf", "localeCompare", "match", "replace", "search", "slice", "split", "substring", "toLowerCase", "toLocaleLowerCase", "toUpperCase", "toLocaleUpperCase", "trim", "substr", "valueOf"]);
     return C;
 }());
 function f10(x) { }

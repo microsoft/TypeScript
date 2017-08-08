@@ -23,6 +23,20 @@ export class B extends A {
 }
 
 //// [a.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
@@ -32,6 +46,7 @@ define(["require", "exports"], function (require, exports) {
         A.prototype.setProtected = function (val) {
             this.protected = val;
         };
+        __names(A.prototype, ["setProtected"]);
         return A;
     }());
     exports.A = A;
@@ -47,6 +62,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 define(["require", "exports", "./a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
@@ -57,6 +86,7 @@ define(["require", "exports", "./a"], function (require, exports, a_1) {
         }
         B.prototype.setProtected = function () {
         };
+        __names(B.prototype, ["setProtected"]);
         return B;
     }(a_1.A));
     exports.B = B;

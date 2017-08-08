@@ -38,6 +38,20 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 
 //// [typeInferenceLiteralUnion.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 exports.__esModule = true;
 // Not very useful, but meets Numeric
 var NumCoercible = (function () {
@@ -47,6 +61,7 @@ var NumCoercible = (function () {
     NumCoercible.prototype.valueOf = function () {
         return this.a;
     };
+    __names(NumCoercible.prototype, ["valueOf"]);
     return NumCoercible;
 }());
 /**

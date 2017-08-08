@@ -38,6 +38,20 @@ var r7 = i2.f(1);
 
 //// [callGenericFunctionWithZeroTypeArguments.js]
 // valid invocations of generic functions with no explicit type arguments provided 
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function f(x) { return null; }
 var r = f(1);
 var f2 = function (x) { return null; };
@@ -50,6 +64,7 @@ var C = (function () {
     C.prototype.f = function (x) {
         return null;
     };
+    __names(C.prototype, ["f"]);
     return C;
 }());
 var r4 = (new C()).f(1);
@@ -61,6 +76,7 @@ var C2 = (function () {
     C2.prototype.f = function (x) {
         return null;
     };
+    __names(C2.prototype, ["f"]);
     return C2;
 }());
 var r6 = (new C2()).f(1);

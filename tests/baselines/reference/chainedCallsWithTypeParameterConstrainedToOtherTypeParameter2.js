@@ -42,6 +42,20 @@ class Chain2<T extends I> {
 }
 
 //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Chain = (function () {
     function Chain(value) {
         this.value = value;
@@ -58,6 +72,7 @@ var Chain = (function () {
         (new Chain(s)).then(function (ss) { return s; }).then(function (ss) { return s; }).then(function (ss) { return s; });
         return null;
     };
+    __names(Chain.prototype, ["then"]);
     return Chain;
 }());
 var Chain2 = (function () {
@@ -77,5 +92,6 @@ var Chain2 = (function () {
         (new Chain2(i)).then(function (ii) { return s; }).then(function (ss) { return s; }).then(function (ss) { return s; }).then(function (ss) { return s; }).value.x = "";
         return null;
     };
+    __names(Chain2.prototype, ["then"]);
     return Chain2;
 }());

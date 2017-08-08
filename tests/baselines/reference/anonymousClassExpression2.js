@@ -19,6 +19,20 @@ while (0) {
 
 
 //// [anonymousClassExpression2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // Fixes #14860
 // note: repros with `while (0);` too
 // but it's less inscrutable and more obvious to put it *inside* the loop
@@ -29,6 +43,7 @@ while (0) {
         A.prototype.methodA = function () {
             this; //note: a this reference of some kind is required to trigger the bug
         };
+        __names(A.prototype, ["methodA"]);
         return A;
     }());
     var B = (function () {
@@ -38,6 +53,7 @@ while (0) {
             this.methodA; // error
             this.methodB; // ok
         };
+        __names(B.prototype, ["methodB"]);
         return B;
     }());
 }

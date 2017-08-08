@@ -29,6 +29,7 @@ var A = (function () {
     A.prototype.__foo = function (bar) {
         // do something with bar
     };
+    __names(A.prototype, ["__foo"]);
     __decorate([
         dec()
     ], A.prototype, "__foo");

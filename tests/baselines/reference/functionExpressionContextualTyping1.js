@@ -59,6 +59,20 @@ class C<T, U> {
 //// [functionExpressionContextualTyping1.js]
 // When a function expression with no type parameters and no parameter type annotations 
 // is contextually typed (section 4.19) by a type T and a contextual signature S can be extracted from T
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var E;
 (function (E) {
     E[E["red"] = 0] = "red";
@@ -74,6 +88,7 @@ var Class = (function () {
     function Class() {
     }
     Class.prototype.foo = function () { };
+    __names(Class.prototype, ["foo"]);
     return Class;
 }());
 var a1 = function (a1) {

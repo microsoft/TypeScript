@@ -130,6 +130,20 @@ l\u0061bel4:
     a .. \u0061
     z .. \u00za
 */
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // var decl
 var \u0061 = 1;
 a++;
@@ -185,6 +199,7 @@ var testClass = (function () {
         arg\u0033 = true;
         arg4 = 2;
     };
+    __names(testClass.prototype, ["func"]);
     return testClass;
 }());
 // constructors

@@ -39,6 +39,20 @@ module y5c { export interface I { foo(): void } } // should be an error
 //import y6 = require('');
 
 //// [augmentedTypesFunction.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // function then var
 function y1() { } // error
 var y1 = 1; // error
@@ -59,6 +73,7 @@ var y3a = (function () {
     function y3a() {
     }
     y3a.prototype.foo = function () { };
+    __names(y3a.prototype, ["foo"]);
     return y3a;
 }()); // error
 // function then enum

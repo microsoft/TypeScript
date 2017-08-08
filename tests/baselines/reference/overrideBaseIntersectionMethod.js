@@ -43,6 +43,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var WithLocation = function (Base) { return (function (_super) {
     __extends(class_1, _super);
     function class_1() {
@@ -52,6 +66,7 @@ var WithLocation = function (Base) { return (function (_super) {
         var _a = _super.prototype.getLocation.call(this), x = _a[0], y = _a[1];
         return [this.x | x, this.y | y];
     };
+    __names(class_1.prototype, ["getLocation"]);
     return class_1;
 }(Base)); };
 var Point = (function () {
@@ -62,6 +77,7 @@ var Point = (function () {
     Point.prototype.getLocation = function () {
         return [0, 0];
     };
+    __names(Point.prototype, ["getLocation"]);
     return Point;
 }());
 var Foo = (function (_super) {
@@ -78,5 +94,6 @@ var Foo = (function (_super) {
     Foo.prototype.whereAmI = function () {
         return this.getLocation();
     };
+    __names(Foo.prototype, ["calculate", "getLocation", "whereAmI"]);
     return Foo;
 }(WithLocation(Point)));

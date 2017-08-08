@@ -57,6 +57,20 @@ class C3 {
 
 
 //// [thisTypeErrors.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var x1;
 var x2;
 var x3;
@@ -100,5 +114,6 @@ var C3 = (function () {
             }
         };
     };
+    __names(C3.prototype, ["f"]);
     return C3;
 }());

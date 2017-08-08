@@ -98,6 +98,20 @@ module m6 { export var y = 2; }
 
 
 //// [augmentedTypesModules.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var m1 = 1; // Should be allowed
 var m1a;
 (function (m1a) {
@@ -116,6 +130,7 @@ var m1d;
         function I() {
         }
         I.prototype.foo = function () { };
+        __names(I.prototype, ["foo"]);
         return I;
     }());
     m1d.I = I;
@@ -150,6 +165,7 @@ function m2g() { }
         function C() {
         }
         C.prototype.foo = function () { };
+        __names(C.prototype, ["foo"]);
         return C;
     }());
     m2g.C = C;
@@ -167,12 +183,14 @@ var m3a = (function () {
     function m3a() {
     }
     m3a.prototype.foo = function () { };
+    __names(m3a.prototype, ["foo"]);
     return m3a;
 }()); // error, class isn't ambient or declared before the module
 var m3b = (function () {
     function m3b() {
     }
     m3b.prototype.foo = function () { };
+    __names(m3b.prototype, ["foo"]);
     return m3b;
 }());
 (function (m3b) {
@@ -182,6 +200,7 @@ var m3c = (function () {
     function m3c() {
     }
     m3c.prototype.foo = function () { };
+    __names(m3c.prototype, ["foo"]);
     return m3c;
 }());
 (function (m3c) {
@@ -201,6 +220,7 @@ var m3g;
         function C() {
         }
         C.prototype.foo = function () { };
+        __names(C.prototype, ["foo"]);
         return C;
     }());
     m3g.C = C;
@@ -232,6 +252,7 @@ var m4d;
         function C() {
         }
         C.prototype.foo = function () { };
+        __names(C.prototype, ["foo"]);
         return C;
     }());
 })(m4d || (m4d = {}));

@@ -565,6 +565,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Shape = (function () {
     function Shape() {
     }
@@ -624,6 +638,7 @@ var Component = (function () {
     Component.prototype.setProperty = function (key, value) {
         this.props[key] = value;
     };
+    __names(Component.prototype, ["getProperty", "setProperty"]);
     return Component;
 }());
 function f20(component) {
@@ -770,6 +785,7 @@ var C1 = (function () {
         this.set("x", 42);
         setProperty(this, "x", 42);
     };
+    __names(C1.prototype, ["get", "set", "foo"]);
     return C1;
 }());
 function f90(x1, x2, x3, x4) {
@@ -800,6 +816,7 @@ var Base = (function () {
     Base.prototype.set = function (prop, value) {
         this[prop] = value;
     };
+    __names(Base.prototype, ["get", "set"]);
     return Base;
 }());
 var Person = (function (_super) {
@@ -812,6 +829,7 @@ var Person = (function (_super) {
     Person.prototype.getParts = function () {
         return this.get("parts");
     };
+    __names(Person.prototype, ["getParts"]);
     return Person;
 }(Base));
 var OtherPerson = (function () {
@@ -821,6 +839,7 @@ var OtherPerson = (function () {
     OtherPerson.prototype.getParts = function () {
         return getProperty(this, "parts");
     };
+    __names(OtherPerson.prototype, ["getParts"]);
     return OtherPerson;
 }());
 function path(obj) {
@@ -896,6 +915,7 @@ var B = (function (_super) {
     B.prototype.f = function (p) {
         p.x;
     };
+    __names(B.prototype, ["f"]);
     return B;
 }(A));
 // Repro from #13749
@@ -905,6 +925,7 @@ var Form = (function () {
     Form.prototype.set = function (prop, value) {
         this.childFormFactories[prop](value);
     };
+    __names(Form.prototype, ["set"]);
     return Form;
 }());
 // Repro from #13787
@@ -925,6 +946,7 @@ var AnotherSampleClass = (function (_super) {
     AnotherSampleClass.prototype.brokenMethod = function () {
         this.props.foo.concat;
     };
+    __names(AnotherSampleClass.prototype, ["brokenMethod"]);
     return AnotherSampleClass;
 }(SampleClass));
 new AnotherSampleClass({});

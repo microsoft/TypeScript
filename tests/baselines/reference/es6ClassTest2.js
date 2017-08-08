@@ -159,6 +159,20 @@ var ccwc = new ChildClassWithoutConstructor(1, "s");
 
 
 //// [es6ClassTest2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -178,6 +192,7 @@ var BasicMonster = (function () {
     BasicMonster.prototype.attack = function (target) {
         // WScript.Echo("Attacks " + target);
     };
+    __names(BasicMonster.prototype, ["attack"]);
     return BasicMonster;
 }());
 var m1 = new BasicMonster("1", 100);
@@ -214,6 +229,7 @@ var GetSetMonster = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(GetSetMonster.prototype, ["attack"]);
     return GetSetMonster;
 }());
 var m3 = new BasicMonster("1", 100);
@@ -230,6 +246,7 @@ var OverloadedMonster = (function () {
     OverloadedMonster.prototype.attack = function (target) {
         //WScript.Echo("Attacks " + target);
     };
+    __names(OverloadedMonster.prototype, ["attack"]);
     return OverloadedMonster;
 }());
 var m5 = new OverloadedMonster("1");
@@ -250,6 +267,7 @@ var SplatMonster = (function () {
             args[_i - 1] = arguments[_i];
         }
     };
+    __names(SplatMonster.prototype, ["roar"]);
     return SplatMonster;
 }());
 function foo() { return true; }
@@ -267,6 +285,7 @@ var SuperParent = (function () {
     };
     SuperParent.prototype.c = function () {
     };
+    __names(SuperParent.prototype, ["b", "c"]);
     return SuperParent;
 }());
 var SuperChild = (function (_super) {
@@ -280,6 +299,7 @@ var SuperChild = (function (_super) {
     SuperChild.prototype.c = function () {
         _super.prototype.c.call(this);
     };
+    __names(SuperChild.prototype, ["b", "c"]);
     return SuperChild;
 }(SuperParent));
 var Statics = (function () {
@@ -306,6 +326,7 @@ var Visibility = (function () {
     }
     Visibility.prototype.foo = function () { };
     Visibility.prototype.bar = function () { };
+    __names(Visibility.prototype, ["foo", "bar"]);
     return Visibility;
 }());
 var BaseClassWithConstructor = (function () {

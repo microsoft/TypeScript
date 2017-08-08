@@ -34,6 +34,20 @@ define(["require", "exports"], function (require, exports) {
     })(Models = exports.Models || (exports.Models = {}));
 });
 //// [requireEmitSemicolon_1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
     "use strict";
     exports.__esModule = true;
@@ -45,6 +59,7 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
             DB.prototype.findPerson = function (id) {
                 return new P.Models.Person("Rock");
             };
+            __names(DB.prototype, ["findPerson"]);
             return DB;
         }());
         Database.DB = DB;

@@ -119,6 +119,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Base = (function () {
     function Base() {
     }
@@ -191,6 +205,7 @@ var C = (function () {
         var x;
         return x;
     };
+    __names(C.prototype, ["foo", "foo2", "foo3", "foo4", "foo5", "foo6", "foo7", "foo8"]);
     return C;
 }());
 var c = new C(b, d1);

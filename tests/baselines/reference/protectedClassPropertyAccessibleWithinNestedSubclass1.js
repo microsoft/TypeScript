@@ -115,6 +115,20 @@ d3.x;                   // Error, neither within their declaring class nor class
 d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
 
 //// [protectedClassPropertyAccessibleWithinNestedSubclass1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -144,9 +158,11 @@ var Base = (function () {
                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
                 d4.x; // OK, accessed within their declaring class
             };
+            __names(A.prototype, ["methoda"]);
             return A;
         }());
     };
+    __names(Base.prototype, ["method"]);
     return Base;
 }());
 var Derived1 = (function (_super) {
@@ -170,9 +186,11 @@ var Derived1 = (function (_super) {
                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
                 d4.x; // Error, isn't accessed through an instance of the enclosing class
             };
+            __names(B.prototype, ["method1b"]);
             return B;
         }());
     };
+    __names(Derived1.prototype, ["method1"]);
     return Derived1;
 }(Base));
 var Derived2 = (function (_super) {
@@ -196,9 +214,11 @@ var Derived2 = (function (_super) {
                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
                 d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
             };
+            __names(C.prototype, ["method2c"]);
             return C;
         }());
     };
+    __names(Derived2.prototype, ["method2"]);
     return Derived2;
 }(Base));
 var Derived3 = (function (_super) {
@@ -222,9 +242,11 @@ var Derived3 = (function (_super) {
                 d3.x; // OK, accessed within their declaring class
                 d4.x; // Error, isn't accessed through an instance of the enclosing class
             };
+            __names(D.prototype, ["method3d"]);
             return D;
         }());
     };
+    __names(Derived3.prototype, ["method3"]);
     return Derived3;
 }(Derived1));
 var Derived4 = (function (_super) {
@@ -248,9 +270,11 @@ var Derived4 = (function (_super) {
                 d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
                 d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
             };
+            __names(E.prototype, ["method4e"]);
             return E;
         }());
     };
+    __names(Derived4.prototype, ["method4"]);
     return Derived4;
 }(Derived2));
 var b;

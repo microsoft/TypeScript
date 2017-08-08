@@ -73,6 +73,20 @@ testSet.transform(
 
 //// [inferFromGenericFunctionReturnTypes1.js]
 // Repro from #15680
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // This is a contrived class. We could do the same thing with Observables, etc.
 var SetOf = (function () {
     function SetOf() {
@@ -86,6 +100,7 @@ var SetOf = (function () {
     SetOf.prototype.forEach = function (fn) {
         this._store.forEach(function (a, i) { return fn(a, i); });
     };
+    __names(SetOf.prototype, ["add", "transform", "forEach"]);
     return SetOf;
 }());
 /* ... etc ... */

@@ -109,6 +109,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function f1() {
     var x1 = new Mixed1("hello");
     var x2 = new Mixed1(42);
@@ -177,6 +191,7 @@ var C3 = (function (_super) {
         return _this;
     }
     C3.prototype.f = function () { return _super.prototype.f.call(this); };
+    __names(C3.prototype, ["f"]);
     return C3;
 }(Mixed3));
 

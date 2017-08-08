@@ -19,10 +19,25 @@ module m3g { export class C { foo() { } } }
 
 
 //// [augmentedTypesModules3b.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var m3b = (function () {
     function m3b() {
     }
     m3b.prototype.foo = function () { };
+    __names(m3b.prototype, ["foo"]);
     return m3b;
 }());
 (function (m3b) {
@@ -32,6 +47,7 @@ var m3c = (function () {
     function m3c() {
     }
     m3c.prototype.foo = function () { };
+    __names(m3c.prototype, ["foo"]);
     return m3c;
 }());
 (function (m3c) {
@@ -51,6 +67,7 @@ var m3g;
         function C() {
         }
         C.prototype.foo = function () { };
+        __names(C.prototype, ["foo"]);
         return C;
     }());
     m3g.C = C;

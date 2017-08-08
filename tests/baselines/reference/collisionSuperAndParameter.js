@@ -63,6 +63,20 @@ class Foo4 extends Foo {
 }
 
 //// [collisionSuperAndParameter.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -94,6 +108,7 @@ var Foo = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(Foo.prototype, ["a", "b"]);
     return Foo;
 }());
 var Foo2 = (function (_super) {
@@ -124,6 +139,7 @@ var Foo2 = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    __names(Foo2.prototype, ["x", "y"]);
     return Foo2;
 }(Foo));
 var Foo4 = (function (_super) {
@@ -137,5 +153,6 @@ var Foo4 = (function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
+    __names(Foo4.prototype, ["y"]);
     return Foo4;
 }(Foo));

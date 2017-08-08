@@ -78,6 +78,20 @@ interface I2<T extends Date> {
 
 //// [typeParametersAreIdenticalToThemselves.js]
 // type parameters from the same declaration are identical to themself
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function foo1(x) { }
 function foo2(x) { }
 function foo3(x, y) {
@@ -91,6 +105,7 @@ var C = (function () {
     C.prototype.foo2 = function (a, x) { };
     C.prototype.foo3 = function (x) { };
     C.prototype.foo4 = function (x) { };
+    __names(C.prototype, ["foo1", "foo2", "foo3", "foo4"]);
     return C;
 }());
 var C2 = (function () {
@@ -99,5 +114,6 @@ var C2 = (function () {
     C2.prototype.foo1 = function (x) { };
     C2.prototype.foo2 = function (a, x) { };
     C2.prototype.foo3 = function (x) { };
+    __names(C2.prototype, ["foo1", "foo2", "foo3"]);
     return C2;
 }());

@@ -25,6 +25,20 @@ module A
 
 //// [moduleMerge.js]
 // This should not compile both B classes are in the same module this should be a collission
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var A;
 (function (A) {
     var B = (function () {
@@ -33,6 +47,7 @@ var A;
         B.prototype.Hello = function () {
             return "from private B";
         };
+        __names(B.prototype, ["Hello"]);
         return B;
     }());
 })(A || (A = {}));
@@ -43,6 +58,7 @@ var A;
         B.prototype.Hello = function () {
             return "from export B";
         };
+        __names(B.prototype, ["Hello"]);
         return B;
     }());
     A.B = B;

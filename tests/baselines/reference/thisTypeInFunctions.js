@@ -195,6 +195,20 @@ function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; }
 
 
 //// [thisTypeInFunctions.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -227,6 +241,7 @@ var C = (function () {
     C.prototype.explicitVoid = function (m) {
         return m + 1;
     };
+    __names(C.prototype, ["explicitThis", "explicitC", "explicitProperty", "explicitVoid"]);
     return C;
 }());
 var D = (function (_super) {
@@ -336,6 +351,7 @@ var Base1 = (function () {
     Base1.prototype.polymorphic = function () { return this.x; };
     Base1.prototype.explicit = function () { return this.x; };
     Base1.explicitStatic = function () { return this.y; };
+    __names(Base1.prototype, ["polymorphic", "explicit"]);
     return Base1;
 }());
 var Derived1 = (function (_super) {
@@ -350,6 +366,7 @@ var Base2 = (function () {
     }
     Base2.prototype.polymorphic = function () { return this.y; };
     Base2.prototype.explicit = function () { return this.x; };
+    __names(Base2.prototype, ["polymorphic", "explicit"]);
     return Base2;
 }());
 var Derived2 = (function (_super) {

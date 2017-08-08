@@ -32,6 +32,20 @@ class c44 {
 
 //// [augmentedTypesClass2.js]
 // Checking class with other things in type space not value space
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // class then interface
 var c11 = (function () {
     function c11() {
@@ -39,6 +53,7 @@ var c11 = (function () {
     c11.prototype.foo = function () {
         return 1;
     };
+    __names(c11.prototype, ["foo"]);
     return c11;
 }());
 // class then class - covered
@@ -49,6 +64,7 @@ var c33 = (function () {
     c33.prototype.foo = function () {
         return 1;
     };
+    __names(c33.prototype, ["foo"]);
     return c33;
 }());
 (function (c33) {
@@ -62,5 +78,6 @@ var c44 = (function () {
     c44.prototype.foo = function () {
         return 1;
     };
+    __names(c44.prototype, ["foo"]);
     return c44;
 }());

@@ -191,6 +191,20 @@ interface I2 {
 
 //// [declFileMethods_0.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var c1 = (function () {
     function c1() {
@@ -271,10 +285,25 @@ var c1 = (function () {
     c1.privateStaticFooWithOverloads = function (a) {
         return a;
     };
+    __names(c1.prototype, ["foo", "fooWithParameters", "fooWithRestParameters", "fooWithOverloads", "privateFoo", "privateFooWithParameters", "privateFooWithRestParameters", "privateFooWithOverloads"]);
     return c1;
 }());
 exports.c1 = c1;
 //// [declFileMethods_1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var c2 = (function () {
     function c2() {
     }
@@ -354,6 +383,7 @@ var c2 = (function () {
     c2.privateStaticFooWithOverloads = function (a) {
         return a;
     };
+    __names(c2.prototype, ["foo", "fooWithParameters", "fooWithRestParameters", "fooWithOverloads", "privateFoo", "privateFooWithParameters", "privateFooWithRestParameters", "privateFooWithOverloads"]);
     return c2;
 }());
 

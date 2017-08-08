@@ -46,6 +46,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var _this = this;
 exports.__esModule = true;
 var React = require("react");
@@ -57,6 +71,7 @@ var Poisoned = (function (_super) {
     Poisoned.prototype.render = function () {
         return <div>Hello</div>;
     };
+    __names(Poisoned.prototype, ["render"]);
     return Poisoned;
 }(React.Component));
 var obj = {
@@ -73,6 +88,7 @@ var EmptyProp = (function (_super) {
     EmptyProp.prototype.render = function () {
         return <div>Default hi</div>;
     };
+    __names(EmptyProp.prototype, ["render"]);
     return EmptyProp;
 }(React.Component));
 // OK

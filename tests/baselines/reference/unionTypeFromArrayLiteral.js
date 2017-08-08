@@ -28,6 +28,20 @@ var arr9 = [e, f]; // (E|F)[]
 // If the array literal is empty, the resulting type is an array type with the element type Undefined.
 // Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.
 // Otherwise, the resulting type is an array type with an element type that is the union of the types of the element expressions.
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -48,12 +62,14 @@ var C = (function () {
     function C() {
     }
     C.prototype.foo = function () { };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 var D = (function () {
     function D() {
     }
     D.prototype.foo2 = function () { };
+    __names(D.prototype, ["foo2"]);
     return D;
 }());
 var E = (function (_super) {
@@ -62,6 +78,7 @@ var E = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     E.prototype.foo3 = function () { };
+    __names(E.prototype, ["foo3"]);
     return E;
 }(C));
 var F = (function (_super) {
@@ -70,6 +87,7 @@ var F = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     F.prototype.foo4 = function () { };
+    __names(F.prototype, ["foo4"]);
     return F;
 }(C));
 var c, d, e, f;

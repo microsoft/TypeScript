@@ -192,6 +192,20 @@ module TestOnDefaultExportedClass_10 {
 }
 
 //// [staticPropertyNameConflicts.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // name
 var StaticName = (function () {
     function StaticName() {
@@ -203,6 +217,7 @@ var StaticNameFn = (function () {
     }
     StaticNameFn.name = function () { }; // error
     StaticNameFn.prototype.name = function () { }; // ok
+    __names(StaticNameFn.prototype, ["name"]);
     return StaticNameFn;
 }());
 // length
@@ -216,6 +231,7 @@ var StaticLengthFn = (function () {
     }
     StaticLengthFn.length = function () { }; // error
     StaticLengthFn.prototype.length = function () { }; // ok
+    __names(StaticLengthFn.prototype, ["length"]);
     return StaticLengthFn;
 }());
 // prototype
@@ -229,6 +245,7 @@ var StaticPrototypeFn = (function () {
     }
     StaticPrototypeFn.prototype = function () { }; // error
     StaticPrototypeFn.prototype.prototype = function () { }; // ok
+    __names(StaticPrototypeFn.prototype, ["prototype"]);
     return StaticPrototypeFn;
 }());
 // caller
@@ -242,6 +259,7 @@ var StaticCallerFn = (function () {
     }
     StaticCallerFn.caller = function () { }; // error
     StaticCallerFn.prototype.caller = function () { }; // ok
+    __names(StaticCallerFn.prototype, ["caller"]);
     return StaticCallerFn;
 }());
 // arguments
@@ -255,6 +273,7 @@ var StaticArgumentsFn = (function () {
     }
     StaticArgumentsFn.arguments = function () { }; // error
     StaticArgumentsFn.prototype.arguments = function () { }; // ok
+    __names(StaticArgumentsFn.prototype, ["arguments"]);
     return StaticArgumentsFn;
 }());
 // === Static properties on anonymous classes ===
@@ -269,6 +288,7 @@ var StaticNameFn_Anonymous = (function () {
     }
     class_2.name = function () { }; // error
     class_2.prototype.name = function () { }; // ok
+    __names(class_2.prototype, ["name"]);
     return class_2;
 }());
 // length
@@ -282,6 +302,7 @@ var StaticLengthFn_Anonymous = (function () {
     }
     class_4.length = function () { }; // error
     class_4.prototype.length = function () { }; // ok
+    __names(class_4.prototype, ["length"]);
     return class_4;
 }());
 // prototype
@@ -295,6 +316,7 @@ var StaticPrototypeFn_Anonymous = (function () {
     }
     class_6.prototype = function () { }; // error
     class_6.prototype.prototype = function () { }; // ok
+    __names(class_6.prototype, ["prototype"]);
     return class_6;
 }());
 // caller
@@ -308,6 +330,7 @@ var StaticCallerFn_Anonymous = (function () {
     }
     class_8.caller = function () { }; // error
     class_8.prototype.caller = function () { }; // ok
+    __names(class_8.prototype, ["caller"]);
     return class_8;
 }());
 // arguments
@@ -321,6 +344,7 @@ var StaticArgumentsFn_Anonymous = (function () {
     }
     class_10.arguments = function () { }; // error
     class_10.prototype.arguments = function () { }; // ok
+    __names(class_10.prototype, ["arguments"]);
     return class_10;
 }());
 // === Static properties on default exported classes ===
@@ -340,6 +364,7 @@ var TestOnDefaultExportedClass_2;
         }
         StaticNameFn.name = function () { }; // error
         StaticNameFn.prototype.name = function () { }; // ok
+        __names(StaticNameFn.prototype, ["name"]);
         return StaticNameFn;
     }());
 })(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
@@ -360,6 +385,7 @@ var TestOnDefaultExportedClass_4;
         }
         StaticLengthFn.length = function () { }; // error
         StaticLengthFn.prototype.length = function () { }; // ok
+        __names(StaticLengthFn.prototype, ["length"]);
         return StaticLengthFn;
     }());
     TestOnDefaultExportedClass_4.StaticLengthFn = StaticLengthFn;
@@ -381,6 +407,7 @@ var TestOnDefaultExportedClass_6;
         }
         StaticPrototypeFn.prototype = function () { }; // error
         StaticPrototypeFn.prototype.prototype = function () { }; // ok
+        __names(StaticPrototypeFn.prototype, ["prototype"]);
         return StaticPrototypeFn;
     }());
     TestOnDefaultExportedClass_6.StaticPrototypeFn = StaticPrototypeFn;
@@ -402,6 +429,7 @@ var TestOnDefaultExportedClass_8;
         }
         StaticCallerFn.caller = function () { }; // error
         StaticCallerFn.prototype.caller = function () { }; // ok
+        __names(StaticCallerFn.prototype, ["caller"]);
         return StaticCallerFn;
     }());
     TestOnDefaultExportedClass_8.StaticCallerFn = StaticCallerFn;
@@ -423,6 +451,7 @@ var TestOnDefaultExportedClass_10;
         }
         StaticArgumentsFn.arguments = function () { }; // error
         StaticArgumentsFn.prototype.arguments = function () { }; // ok
+        __names(StaticArgumentsFn.prototype, ["arguments"]);
         return StaticArgumentsFn;
     }());
     TestOnDefaultExportedClass_10.StaticArgumentsFn = StaticArgumentsFn;

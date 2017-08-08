@@ -10,11 +10,25 @@ class C {
 }
 
 //// [computedPropertyNames3_ES5.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var id;
 var C = (function () {
     function C() {
     }
-    C.prototype[0 + 1] = function () { };
+    C.prototype[_a = 0 + 1] = function () { };
     C[function () { }] = function () { };
     Object.defineProperty(C.prototype, delete id, {
         get: function () { },
@@ -36,5 +50,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(C.prototype, [_a]);
     return C;
+    var _a;
 }());

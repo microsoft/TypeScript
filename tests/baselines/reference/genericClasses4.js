@@ -18,6 +18,20 @@ class Vec2_T<A>
 }
 
 //// [genericClasses4.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // once caused stack overflow
 var Vec2_T = (function () {
     function Vec2_T(x, y) {
@@ -36,5 +50,6 @@ var Vec2_T = (function () {
         var retval = new Vec2_T(x, y);
         return retval;
     };
+    __names(Vec2_T.prototype, ["fmap", "apply"]);
     return Vec2_T;
 }());

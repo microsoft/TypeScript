@@ -106,22 +106,39 @@ function foo15(x: any) { }
 // Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
 // optional or rest) and types, and identical return types.
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var A = (function () {
     function A() {
     }
     A.prototype.foo = function (x) { return null; };
+    __names(A.prototype, ["foo"]);
     return A;
 }());
 var B = (function () {
     function B() {
     }
     B.prototype.foo = function (x) { return null; };
+    __names(B.prototype, ["foo"]);
     return B;
 }());
 var C = (function () {
     function C() {
     }
     C.prototype.foo = function (x) { return null; };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 var a;

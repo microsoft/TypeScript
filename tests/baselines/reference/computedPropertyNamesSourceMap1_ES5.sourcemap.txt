@@ -8,22 +8,36 @@ sources: computedPropertyNamesSourceMap1_ES5.ts
 emittedFile:tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap1_ES5.js
 sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 -------------------------------------------------------------------
+>>>var __names = (this && this.__names) || (function() {
+>>>    var name = Object.defineProperty ? (function(proto, name) {
+>>>        Object.defineProperty(proto[name], 'name', { 
+>>>            value: name, configurable: true, writable: false, enumerable: false
+>>>        });
+>>>    }) : (function(proto, name) {
+>>>        proto[name].name = name;
+>>>    });
+>>>    return function (proto, keys) {
+>>>        for (var i = keys.length - 1; i >= 0; i--) {
+>>>            name(proto, keys[i])
+>>>        }
+>>>    };
+>>>})();
 >>>var C = (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+1 >Emitted(15, 1) Source(1, 1) + SourceIndex(0)
 ---
 >>>    function C() {
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
+1->Emitted(16, 5) Source(1, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    ["hello"]() {
   >        debugger;
@@ -33,25 +47,25 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
   >    }
   >
 2 >    }
-1->Emitted(3, 5) Source(8, 1) + SourceIndex(0)
-2 >Emitted(3, 6) Source(8, 2) + SourceIndex(0)
+1->Emitted(17, 5) Source(8, 1) + SourceIndex(0)
+2 >Emitted(17, 6) Source(8, 2) + SourceIndex(0)
 ---
->>>    C.prototype["hello"] = function () {
+>>>    C.prototype[_a = "hello"] = function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^
-3 >                ^^^^^^^
-4 >                       ^
-5 >                        ^^^
+2 >    ^^^^^^^^^^^^^^^^^
+3 >                     ^^^^^^^
+4 >                            ^
+5 >                             ^^^
 1->
 2 >    [
-3 >                "hello"
-4 >                       ]
-5 >                        
-1->Emitted(4, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(4, 17) Source(2, 6) + SourceIndex(0)
-3 >Emitted(4, 24) Source(2, 13) + SourceIndex(0)
-4 >Emitted(4, 25) Source(2, 14) + SourceIndex(0)
-5 >Emitted(4, 28) Source(2, 5) + SourceIndex(0)
+3 >                     "hello"
+4 >                            ]
+5 >                             
+1->Emitted(18, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(18, 22) Source(2, 6) + SourceIndex(0)
+3 >Emitted(18, 29) Source(2, 13) + SourceIndex(0)
+4 >Emitted(18, 30) Source(2, 14) + SourceIndex(0)
+5 >Emitted(18, 33) Source(2, 5) + SourceIndex(0)
 ---
 >>>        debugger;
 1 >^^^^^^^^
@@ -61,9 +75,9 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
   >        
 2 >        debugger
 3 >                ;
-1 >Emitted(5, 9) Source(3, 9) + SourceIndex(0)
-2 >Emitted(5, 17) Source(3, 17) + SourceIndex(0)
-3 >Emitted(5, 18) Source(3, 18) + SourceIndex(0)
+1 >Emitted(19, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(19, 17) Source(3, 17) + SourceIndex(0)
+3 >Emitted(19, 18) Source(3, 18) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -72,8 +86,8 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 1 >
   >    
 2 >    }
-1 >Emitted(6, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(6, 6) Source(4, 6) + SourceIndex(0)
+1 >Emitted(20, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(20, 6) Source(4, 6) + SourceIndex(0)
 ---
 >>>    Object.defineProperty(C.prototype, "goodbye", {
 1->^^^^
@@ -83,15 +97,15 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
   >    
 2 >    get 
 3 >                          ["goodbye"]
-1->Emitted(7, 5) Source(5, 5) + SourceIndex(0)
-2 >Emitted(7, 27) Source(5, 9) + SourceIndex(0)
-3 >Emitted(7, 49) Source(5, 20) + SourceIndex(0)
+1->Emitted(21, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(21, 27) Source(5, 9) + SourceIndex(0)
+3 >Emitted(21, 49) Source(5, 20) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
 2 >             ^^^^^^^^^->
 1 >
-1 >Emitted(8, 14) Source(5, 5) + SourceIndex(0)
+1 >Emitted(22, 14) Source(5, 5) + SourceIndex(0)
 ---
 >>>            return 0;
 1->^^^^^^^^^^^^
@@ -105,11 +119,11 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 3 >                   
 4 >                   0
 5 >                    ;
-1->Emitted(9, 13) Source(6, 3) + SourceIndex(0)
-2 >Emitted(9, 19) Source(6, 9) + SourceIndex(0)
-3 >Emitted(9, 20) Source(6, 10) + SourceIndex(0)
-4 >Emitted(9, 21) Source(6, 11) + SourceIndex(0)
-5 >Emitted(9, 22) Source(6, 12) + SourceIndex(0)
+1->Emitted(23, 13) Source(6, 3) + SourceIndex(0)
+2 >Emitted(23, 19) Source(6, 9) + SourceIndex(0)
+3 >Emitted(23, 20) Source(6, 10) + SourceIndex(0)
+4 >Emitted(23, 21) Source(6, 11) + SourceIndex(0)
+5 >Emitted(23, 22) Source(6, 12) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^
@@ -118,26 +132,28 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 1 >
   >    
 2 >        }
-1 >Emitted(10, 9) Source(7, 5) + SourceIndex(0)
-2 >Emitted(10, 10) Source(7, 6) + SourceIndex(0)
+1 >Emitted(24, 9) Source(7, 5) + SourceIndex(0)
+2 >Emitted(24, 10) Source(7, 6) + SourceIndex(0)
 ---
 >>>        enumerable: true,
 >>>        configurable: true
 >>>    });
 1->^^^^^^^
-2 >       ^^^^^^^->
+2 >       ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
-1->Emitted(13, 8) Source(7, 6) + SourceIndex(0)
+1->Emitted(27, 8) Source(7, 6) + SourceIndex(0)
 ---
+>>>    __names(C.prototype, [_a]);
 >>>    return C;
 1->^^^^
 2 >    ^^^^^^^^
 1->
   >
 2 >    }
-1->Emitted(14, 5) Source(8, 1) + SourceIndex(0)
-2 >Emitted(14, 13) Source(8, 2) + SourceIndex(0)
+1->Emitted(29, 5) Source(8, 1) + SourceIndex(0)
+2 >Emitted(29, 13) Source(8, 2) + SourceIndex(0)
 ---
+>>>    var _a;
 >>>}());
 1 >
 2 >^
@@ -155,9 +171,9 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
   > 		return 0;
   >     }
   > }
-1 >Emitted(15, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(15, 2) Source(8, 2) + SourceIndex(0)
-3 >Emitted(15, 2) Source(1, 1) + SourceIndex(0)
-4 >Emitted(15, 6) Source(8, 2) + SourceIndex(0)
+1 >Emitted(31, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(31, 2) Source(8, 2) + SourceIndex(0)
+3 >Emitted(31, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(31, 6) Source(8, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=computedPropertyNamesSourceMap1_ES5.js.map

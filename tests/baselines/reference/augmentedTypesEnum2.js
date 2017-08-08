@@ -20,6 +20,20 @@ class e2 { // error
 //enum then import - covered
 
 //// [augmentedTypesEnum2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // enum then interface
 var e1;
 (function (e1) {
@@ -38,6 +52,7 @@ var e2 = (function () {
     e2.prototype.foo = function () {
         return 1;
     };
+    __names(e2.prototype, ["foo"]);
     return e2;
 }());
 //enum then enum - covered

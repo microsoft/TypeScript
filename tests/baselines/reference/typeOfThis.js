@@ -178,6 +178,20 @@ this.spaaaaace = 4;
 
 
 //// [typeOfThis.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var _this = this;
 var MyTestClass = (function () {
     function MyTestClass() {
@@ -247,6 +261,7 @@ var MyTestClass = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(MyTestClass.prototype, ["memberFunc"]);
     return MyTestClass;
 }());
 var MyGenericTestClass = (function () {
@@ -317,6 +332,7 @@ var MyGenericTestClass = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(MyGenericTestClass.prototype, ["memberFunc"]);
     return MyGenericTestClass;
 }());
 //type of 'this' in a function declaration param list is Any

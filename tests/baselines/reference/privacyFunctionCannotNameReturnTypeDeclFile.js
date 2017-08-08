@@ -214,6 +214,20 @@ function createExportedWidget4() {
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionReturnTypeDeclFile_consumer.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 exports.__esModule = true;
 var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = (function () {
@@ -249,6 +263,7 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
         return exporter.createExportedWidget3();
         ;
     };
+    __names(publicClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
     return publicClassWithWithPrivateParmeterTypes;
 }());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
@@ -285,6 +300,7 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
         return exporter.createExportedWidget3();
         ;
     };
+    __names(privateClassWithWithPrivateParmeterTypes.prototype, ["myPublicMethod", "myPrivateMethod", "myPublicMethod1", "myPrivateMethod1"]);
     return privateClassWithWithPrivateParmeterTypes;
 }());
 function publicFunctionWithPrivateParmeterTypes() {
@@ -316,6 +332,7 @@ var publicClassWithPrivateModuleReturnTypes = (function () {
     publicClassWithPrivateModuleReturnTypes.prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
     };
+    __names(publicClassWithPrivateModuleReturnTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
     return publicClassWithPrivateModuleReturnTypes;
 }());
 exports.publicClassWithPrivateModuleReturnTypes = publicClassWithPrivateModuleReturnTypes;
@@ -342,6 +359,7 @@ var privateClassWithPrivateModuleReturnTypes = (function () {
     privateClassWithPrivateModuleReturnTypes.prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
     };
+    __names(privateClassWithPrivateModuleReturnTypes.prototype, ["myPublicMethod", "myPublicMethod1"]);
     return privateClassWithPrivateModuleReturnTypes;
 }());
 function privateFunctionWithPrivateModuleReturnTypes() {

@@ -118,6 +118,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var EmptyTypes;
 (function (EmptyTypes) {
     var base = (function () {
@@ -174,6 +188,7 @@ var EmptyTypes;
             var b3 = [baseObj, ifaceObj, base2Obj];
             var b4 = [ifaceObj, baseObj, base2Obj];
         };
+        __names(f.prototype, ["voidIfAny", "x"]);
         return f;
     }());
 })(EmptyTypes || (EmptyTypes = {}));
@@ -233,6 +248,7 @@ var NonEmptyTypes;
             var b3 = [baseObj, ifaceObj, base2Obj];
             var b4 = [ifaceObj, baseObj, base2Obj];
         };
+        __names(f.prototype, ["voidIfAny", "x"]);
         return f;
     }());
 })(NonEmptyTypes || (NonEmptyTypes = {}));

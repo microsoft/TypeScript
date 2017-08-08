@@ -20,6 +20,20 @@ class MyClass {
 
 //// [genericWithCallSignatures_0.js]
 //// [genericWithCallSignatures_1.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 ///<reference path="genericWithCallSignatures_0.ts"/>
 var MyClass = (function () {
     function MyClass() {
@@ -27,5 +41,6 @@ var MyClass = (function () {
     MyClass.prototype.myMethod = function () {
         var x = this.callableThing();
     };
+    __names(MyClass.prototype, ["myMethod"]);
     return MyClass;
 }());

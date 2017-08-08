@@ -11,12 +11,26 @@ sourceFile:out-flag.ts
 >>>//// @out: bin\
 1 >
 2 >^^^^^^^^^^^^^^^
-3 >               ^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >//// @out: bin\
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
 ---
+>>>var __names = (this && this.__names) || (function() {
+>>>    var name = Object.defineProperty ? (function(proto, name) {
+>>>        Object.defineProperty(proto[name], 'name', { 
+>>>            value: name, configurable: true, writable: false, enumerable: false
+>>>        });
+>>>    }) : (function(proto, name) {
+>>>        proto[name].name = name;
+>>>    });
+>>>    return function (proto, keys) {
+>>>        for (var i = keys.length - 1; i >= 0; i--) {
+>>>            name(proto, keys[i])
+>>>        }
+>>>    };
+>>>})();
 >>>// my class comments
 1->
 2 >^^^^^^^^^^^^^^^^^^^^
@@ -25,21 +39,21 @@ sourceFile:out-flag.ts
   >
   >
 2 >// my class comments
-1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
+1->Emitted(16, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(16, 21) Source(3, 21) + SourceIndex(0)
 ---
 >>>var MyClass = (function () {
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+1->Emitted(17, 1) Source(4, 1) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+1->Emitted(18, 5) Source(4, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -59,8 +73,8 @@ sourceFile:out-flag.ts
   >    }
   >
 2 >    }
-1->Emitted(5, 5) Source(16, 1) + SourceIndex(0)
-2 >Emitted(5, 6) Source(16, 2) + SourceIndex(0)
+1->Emitted(19, 5) Source(16, 1) + SourceIndex(0)
+2 >Emitted(19, 6) Source(16, 2) + SourceIndex(0)
 ---
 >>>    // my function comments
 1->^^^^
@@ -68,8 +82,8 @@ sourceFile:out-flag.ts
 3 >                           ^^^^^^^^^^^^^^^^^->
 1->
 2 >    // my function comments
-1->Emitted(6, 5) Source(6, 5) + SourceIndex(0)
-2 >Emitted(6, 28) Source(6, 28) + SourceIndex(0)
+1->Emitted(20, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(20, 28) Source(6, 28) + SourceIndex(0)
 ---
 >>>    MyClass.prototype.Count = function () {
 1->^^^^
@@ -79,9 +93,9 @@ sourceFile:out-flag.ts
   >    public 
 2 >    Count
 3 >                           
-1->Emitted(7, 5) Source(7, 12) + SourceIndex(0)
-2 >Emitted(7, 28) Source(7, 17) + SourceIndex(0)
-3 >Emitted(7, 31) Source(7, 5) + SourceIndex(0)
+1->Emitted(21, 5) Source(7, 12) + SourceIndex(0)
+2 >Emitted(21, 28) Source(7, 17) + SourceIndex(0)
+3 >Emitted(21, 31) Source(7, 5) + SourceIndex(0)
 ---
 >>>        return 42;
 1 >^^^^^^^^
@@ -96,11 +110,11 @@ sourceFile:out-flag.ts
 3 >               
 4 >               42
 5 >                 ;
-1 >Emitted(8, 9) Source(9, 9) + SourceIndex(0)
-2 >Emitted(8, 15) Source(9, 15) + SourceIndex(0)
-3 >Emitted(8, 16) Source(9, 16) + SourceIndex(0)
-4 >Emitted(8, 18) Source(9, 18) + SourceIndex(0)
-5 >Emitted(8, 19) Source(9, 19) + SourceIndex(0)
+1 >Emitted(22, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(22, 15) Source(9, 15) + SourceIndex(0)
+3 >Emitted(22, 16) Source(9, 16) + SourceIndex(0)
+4 >Emitted(22, 18) Source(9, 18) + SourceIndex(0)
+5 >Emitted(22, 19) Source(9, 19) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -109,8 +123,8 @@ sourceFile:out-flag.ts
 1 >
   >    
 2 >    }
-1 >Emitted(9, 5) Source(10, 5) + SourceIndex(0)
-2 >Emitted(9, 6) Source(10, 6) + SourceIndex(0)
+1 >Emitted(23, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(23, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>    MyClass.prototype.SetCount = function (value) {
 1->^^^^
@@ -125,11 +139,11 @@ sourceFile:out-flag.ts
 3 >                              
 4 >                                 public SetCount(
 5 >                                           value: number
-1->Emitted(10, 5) Source(12, 12) + SourceIndex(0)
-2 >Emitted(10, 31) Source(12, 20) + SourceIndex(0)
-3 >Emitted(10, 34) Source(12, 5) + SourceIndex(0)
-4 >Emitted(10, 44) Source(12, 21) + SourceIndex(0)
-5 >Emitted(10, 49) Source(12, 34) + SourceIndex(0)
+1->Emitted(24, 5) Source(12, 12) + SourceIndex(0)
+2 >Emitted(24, 31) Source(12, 20) + SourceIndex(0)
+3 >Emitted(24, 34) Source(12, 5) + SourceIndex(0)
+4 >Emitted(24, 44) Source(12, 21) + SourceIndex(0)
+5 >Emitted(24, 49) Source(12, 34) + SourceIndex(0)
 ---
 >>>        //
 1 >^^^^^^^^
@@ -138,27 +152,28 @@ sourceFile:out-flag.ts
   >    {
   >        
 2 >        //
-1 >Emitted(11, 9) Source(14, 9) + SourceIndex(0)
-2 >Emitted(11, 11) Source(14, 11) + SourceIndex(0)
+1 >Emitted(25, 9) Source(14, 9) + SourceIndex(0)
+2 >Emitted(25, 11) Source(14, 11) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >    }
-1 >Emitted(12, 5) Source(15, 5) + SourceIndex(0)
-2 >Emitted(12, 6) Source(15, 6) + SourceIndex(0)
+1 >Emitted(26, 5) Source(15, 5) + SourceIndex(0)
+2 >Emitted(26, 6) Source(15, 6) + SourceIndex(0)
 ---
+>>>    __names(MyClass.prototype, ["Count", "SetCount"]);
 >>>    return MyClass;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^
 1->
   >
 2 >    }
-1->Emitted(13, 5) Source(16, 1) + SourceIndex(0)
-2 >Emitted(13, 19) Source(16, 2) + SourceIndex(0)
+1->Emitted(28, 5) Source(16, 1) + SourceIndex(0)
+2 >Emitted(28, 19) Source(16, 2) + SourceIndex(0)
 ---
 >>>}());
 1 >
@@ -182,9 +197,9 @@ sourceFile:out-flag.ts
   >         //
   >     }
   > }
-1 >Emitted(14, 1) Source(16, 1) + SourceIndex(0)
-2 >Emitted(14, 2) Source(16, 2) + SourceIndex(0)
-3 >Emitted(14, 2) Source(4, 1) + SourceIndex(0)
-4 >Emitted(14, 6) Source(16, 2) + SourceIndex(0)
+1 >Emitted(29, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(29, 2) Source(16, 2) + SourceIndex(0)
+3 >Emitted(29, 2) Source(4, 1) + SourceIndex(0)
+4 >Emitted(29, 6) Source(16, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=out-flag.js.map

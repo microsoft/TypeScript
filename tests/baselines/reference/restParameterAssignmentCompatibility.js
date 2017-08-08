@@ -27,6 +27,20 @@ var t1: T1;
 t1 = s; // Similar to above, but optionality does not matter here.
 
 //// [restParameterAssignmentCompatibility.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var T = (function () {
     function T() {
     }
@@ -36,6 +50,7 @@ var T = (function () {
             p3[_i] = arguments[_i];
         }
     };
+    __names(T.prototype, ["m"]);
     return T;
 }());
 var S = (function () {
@@ -43,6 +58,7 @@ var S = (function () {
     }
     S.prototype.m = function (p1, p2) {
     };
+    __names(S.prototype, ["m"]);
     return S;
 }());
 var t;
@@ -55,6 +71,7 @@ var T1 = (function () {
     }
     T1.prototype.m = function (p1, p2) {
     };
+    __names(T1.prototype, ["m"]);
     return T1;
 }());
 var t1;

@@ -40,6 +40,20 @@ class C2<T extends Date, U extends Date> {
 //// [innerTypeParameterShadowingOuterOne2.js]
 // inner type parameters shadow outer ones of the same name
 // no errors expected
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var C = (function () {
     function C() {
     }
@@ -51,6 +65,7 @@ var C = (function () {
         var x;
         x.getDate();
     };
+    __names(C.prototype, ["g", "h"]);
     return C;
 }());
 var C2 = (function () {
@@ -64,6 +79,7 @@ var C2 = (function () {
         var x;
         x.getDate();
     };
+    __names(C2.prototype, ["g", "h"]);
     return C2;
 }());
 //class C2<T extends Date, U extends T> {

@@ -100,6 +100,20 @@ function tryCatchFn() {
 
 
 //// [arrowFunctionExpressions.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = function (p) { return p.length; };
 var a = function (p) { return p.length; };
@@ -155,6 +169,7 @@ var MyClass = (function () {
         var m = function (n) { return n + 1; };
         var p = function (n) { return n && _this; };
     };
+    __names(MyClass.prototype, ["fn"]);
     return MyClass;
 }());
 // Arrow function used in arrow function

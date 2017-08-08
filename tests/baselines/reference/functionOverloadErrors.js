@@ -119,6 +119,20 @@ function initExpr() { }
 
 
 //// [functionOverloadErrors.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function fn1() { }
 function fn2a() {
 }
@@ -140,6 +154,7 @@ var cls = (function () {
     }
     cls.prototype.f = function () { };
     cls.prototype.g = function () { };
+    __names(cls.prototype, ["f", "g"]);
     return cls;
 }());
 //Function overloads with differing export

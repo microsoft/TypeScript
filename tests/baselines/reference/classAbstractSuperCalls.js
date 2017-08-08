@@ -27,6 +27,20 @@ abstract class BB extends AA {
 
 
 //// [classAbstractSuperCalls.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -41,6 +55,7 @@ var A = (function () {
     function A() {
     }
     A.prototype.foo = function () { return 1; };
+    __names(A.prototype, ["foo"]);
     return A;
 }());
 var B = (function (_super) {
@@ -50,6 +65,7 @@ var B = (function (_super) {
     }
     B.prototype.bar = function () { _super.prototype.foo.call(this); };
     B.prototype.baz = function () { return this.foo; };
+    __names(B.prototype, ["bar", "baz"]);
     return B;
 }(A));
 var C = (function (_super) {
@@ -60,6 +76,7 @@ var C = (function (_super) {
     C.prototype.foo = function () { return 2; };
     C.prototype.qux = function () { return _super.prototype.foo.call(this) || _super.prototype.foo; }; // 2 errors, foo is abstract
     C.prototype.norf = function () { return _super.prototype.bar.call(this); };
+    __names(C.prototype, ["foo", "qux", "norf"]);
     return C;
 }(B));
 var AA = (function () {
@@ -67,6 +84,7 @@ var AA = (function () {
     }
     AA.prototype.foo = function () { return 1; };
     AA.prototype.bar = function () { return this.foo(); };
+    __names(AA.prototype, ["foo", "bar"]);
     return AA;
 }());
 var BB = (function (_super) {

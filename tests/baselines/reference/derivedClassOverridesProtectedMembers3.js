@@ -71,6 +71,20 @@ class Derived10 extends Base {
 }
 
 //// [derivedClassOverridesProtectedMembers3.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -100,6 +114,7 @@ var Base = (function () {
         enumerable: true,
         configurable: true
     });
+    __names(Base.prototype, ["b"]);
     return Base;
 }());
 // Errors
@@ -117,6 +132,7 @@ var Derived2 = (function (_super) {
         return _super.call(this, a) || this;
     }
     Derived2.prototype.b = function (a) { };
+    __names(Derived2.prototype, ["b"]);
     return Derived2;
 }(Base));
 var Derived3 = (function (_super) {

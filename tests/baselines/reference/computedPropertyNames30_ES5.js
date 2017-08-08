@@ -26,6 +26,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Base = (function () {
     function Base() {
     }
@@ -40,9 +54,9 @@ var C = (function (_super) {
                 // Ideally, we would capture this. But the reference is
                 // illegal, and not capturing this is consistent with
                 //treatment of other similar violations.
-                _a[(_this = _super.call(this) || this, "prop")] = function () { },
+                _a[_b = (_this = _super.call(this) || this, "prop")] = function () { }, __names(_a, [_b]),
                 _a);
-            var _a;
+            var _a, _b;
         });
         return _this;
     }

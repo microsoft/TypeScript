@@ -37,6 +37,20 @@ module x6b { export var y = 2; } // error
 
 
 //// [augmentedTypesVar.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 // var then var
 var x1 = 1;
 var x1 = 2;
@@ -57,6 +71,7 @@ var x4a = (function () {
     function x4a() {
     }
     x4a.prototype.foo = function () { };
+    __names(x4a.prototype, ["foo"]);
     return x4a;
 }()); // error
 // var then enum

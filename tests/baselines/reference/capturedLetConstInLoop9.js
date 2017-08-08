@@ -139,6 +139,20 @@ function foo3 () {
 }
 
 //// [capturedLetConstInLoop9.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var _loop_1 = function (x) {
     var x_1;
     (function () { return x_1; });
@@ -170,6 +184,7 @@ var _loop_1 = function (x) {
         A.prototype.m = function () {
             return x_1 + 1;
         };
+        __names(A.prototype, ["m"]);
         return A;
     }());
 };
@@ -284,6 +299,7 @@ var C = (function () {
             _loop_5(i);
         }
     };
+    __names(C.prototype, ["foo"]);
     return C;
 }());
 function foo3() {

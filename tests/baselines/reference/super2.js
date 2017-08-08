@@ -51,6 +51,20 @@ results1.x() + results1.y() + results2.y();
 
 
 //// [super2.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -71,6 +85,7 @@ var Base5 = (function () {
     Base5.prototype.y = function () {
         return "BaseY";
     };
+    __names(Base5.prototype, ["x", "y"]);
     return Base5;
 }());
 var Sub5 = (function (_super) {
@@ -81,6 +96,7 @@ var Sub5 = (function (_super) {
     Sub5.prototype.x = function () {
         return "SubX";
     };
+    __names(Sub5.prototype, ["x"]);
     return Sub5;
 }(Base5));
 var SubSub5 = (function (_super) {
@@ -94,6 +110,7 @@ var SubSub5 = (function (_super) {
     SubSub5.prototype.y = function () {
         return _super.prototype.y.call(this);
     };
+    __names(SubSub5.prototype, ["x", "y"]);
     return SubSub5;
 }(Sub5));
 // Case 6
@@ -103,6 +120,7 @@ var Base6 = (function () {
     Base6.prototype.x = function () {
         return "BaseX";
     };
+    __names(Base6.prototype, ["x"]);
     return Base6;
 }());
 var Sub6 = (function (_super) {
@@ -113,6 +131,7 @@ var Sub6 = (function (_super) {
     Sub6.prototype.y = function () {
         return "SubY";
     };
+    __names(Sub6.prototype, ["y"]);
     return Sub6;
 }(Base6));
 var SubSub6 = (function (_super) {
@@ -123,6 +142,7 @@ var SubSub6 = (function (_super) {
     SubSub6.prototype.y = function () {
         return _super.prototype.y.call(this);
     };
+    __names(SubSub6.prototype, ["y"]);
     return SubSub6;
 }(Sub6));
 var results1 = new SubSub5();

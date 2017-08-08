@@ -13,6 +13,20 @@ export declare class Bar2 {
 
 //// [noImplicitAnyDestructuringInPrivateMethod.js]
 "use strict";
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 exports.__esModule = true;
 var Bar = (function () {
     function Bar() {
@@ -21,6 +35,7 @@ var Bar = (function () {
         var a = _a.a;
         return a;
     };
+    __names(Bar.prototype, ["bar"]);
     return Bar;
 }());
 exports.Bar = Bar;

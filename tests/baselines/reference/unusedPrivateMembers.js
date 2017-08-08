@@ -49,6 +49,20 @@ class Test5<T> {
 
 
 //// [unusedPrivateMembers.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 var Test1 = (function () {
     function Test1() {
     }
@@ -58,6 +72,7 @@ var Test1 = (function () {
         var x = new Test1();
         x.initializeInternal();
     };
+    __names(Test1.prototype, ["initializeInternal", "test"]);
     return Test1;
 }());
 var Test2 = (function () {
@@ -68,6 +83,7 @@ var Test2 = (function () {
         var x = new Test2();
         x.p;
     };
+    __names(Test2.prototype, ["test"]);
     return Test2;
 }());
 var Test3 = (function () {
@@ -84,6 +100,7 @@ var Test3 = (function () {
         var x = new Test3();
         x.x;
     };
+    __names(Test3.prototype, ["test"]);
     return Test3;
 }());
 var Test4 = (function () {
@@ -100,6 +117,7 @@ var Test4 = (function () {
         var x = new Test4();
         x.x;
     };
+    __names(Test4.prototype, ["test"]);
     return Test4;
 }());
 var Test5 = (function () {
@@ -109,5 +127,6 @@ var Test5 = (function () {
         var x = new Test5();
         x.p;
     };
+    __names(Test5.prototype, ["test"]);
     return Test5;
 }());

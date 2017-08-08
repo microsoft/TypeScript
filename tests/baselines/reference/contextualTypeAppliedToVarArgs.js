@@ -17,6 +17,20 @@ class Foo{
 
 
 //// [contextualTypeAppliedToVarArgs.js]
+var __names = (this && this.__names) || (function() {
+    var name = Object.defineProperty ? (function(proto, name) {
+        Object.defineProperty(proto[name], 'name', { 
+            value: name, configurable: true, writable: false, enumerable: false
+        });
+    }) : (function(proto, name) {
+        proto[name].name = name;
+    });
+    return function (proto, keys) {
+        for (var i = keys.length - 1; i >= 0; i--) {
+            name(proto, keys[i])
+        }
+    };
+})();
 function delegate(instance, method, data) {
     return function () { };
 }
@@ -29,5 +43,6 @@ var Foo = (function () {
             var b = args2.node;
         });
     };
+    __names(Foo.prototype, ["Bar"]);
     return Foo;
 }());
