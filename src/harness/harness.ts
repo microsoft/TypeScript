@@ -420,7 +420,7 @@ namespace Utils {
 
     const maxHarnessFrames = 1;
 
-    export function filterStack(error: Error, stackTraceLimit: number = Infinity) {
+    export function filterStack(error: Error, stackTraceLimit = Infinity) {
         const stack = <string>(<any>error).stack;
         if (stack) {
             const lines = stack.split(/\r\n?|\n/g);

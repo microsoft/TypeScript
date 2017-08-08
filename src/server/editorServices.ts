@@ -326,8 +326,8 @@ namespace ts.server {
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
-        globalPlugins?: string[];
-        pluginProbeLocations?: string[];
+        globalPlugins?: ReadonlyArray<string>;
+        pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
     }
 
@@ -928,26 +928,24 @@ namespace ts.server {
                 return;
             }
 
-            this.logger.startGroup();
+            this.logger.group(info => {
+                let counter = 0;
+                counter = printProjects(this.externalProjects, info, counter);
+                counter = printProjects(this.configuredProjects, info, counter);
+                printProjects(this.inferredProjects, info, counter);
 
-            let counter = 0;
-            counter = printProjects(this.logger, this.externalProjects, counter);
-            counter = printProjects(this.logger, this.configuredProjects, counter);
-            counter = printProjects(this.logger, this.inferredProjects, counter);
+                info("Open files: ");
+                for (const rootFile of this.openFiles) {
+                    info(`\t${rootFile.fileName}`);
+                }
+            });
 
-            this.logger.info("Open files: ");
-            for (const rootFile of this.openFiles) {
-                this.logger.info(`\t${rootFile.fileName}`);
-            }
-
-            this.logger.endGroup();
-
-            function printProjects(logger: Logger, projects: Project[], counter: number) {
+            function printProjects(projects: Project[], info: (msg: string) => void, counter: number): number {
                 for (const project of projects) {
                     project.updateGraph();
-                    logger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
-                    logger.info(project.filesToString());
-                    logger.info("-----------------------------------------------");
+                    info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
+                    info(project.filesToString());
+                    info("-----------------------------------------------");
                     counter++;
                 }
                 return counter;
