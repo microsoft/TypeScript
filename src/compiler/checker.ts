@@ -17148,7 +17148,7 @@ namespace ts {
             // and the right operand to be of type Any, a subtype of the 'Function' interface type, or have a call or construct signature.
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (!(leftType.flags & TypeFlags.Any) && isTypeAssignableToKind(leftType, TypeFlags.Primitive)) {
+            if (!isTypeAny(leftType) && isTypeAssignableToKind(leftType, TypeFlags.Primitive)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
