@@ -403,7 +403,7 @@ namespace ts.server {
         }
     }
 
-    class LineIndex implements LineIndexForTest {
+    export class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy
         checkEdits = false;
@@ -574,20 +574,6 @@ namespace ts.server {
             return { lines, lineMap };
         }
     }
-
-    export interface LineIndexForTestStatic {
-        linesFromText(text: string): { lines: string[], lineMap: number[] };
-        new(): LineIndexForTest;
-    }
-    export interface LineIndexForTest {
-        absolutePositionOfStartOfLine(line: number): number;
-        positionToLineOffset(position: number): protocol.Location;
-        edit(pos: number, deleteLength: number, newText: string): LineIndexForTest;
-        getText(rangeStart: number, rangeLength: number): string;
-        getLength(): number;
-        load(lines: string[]): void;
-    }
-    export const LineIndexForTest: LineIndexForTestStatic = LineIndex;
 
     class LineNode implements LineCollection {
         totalChars = 0;

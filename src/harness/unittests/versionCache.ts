@@ -6,11 +6,11 @@ namespace ts {
         return source.substring(0, position) + newText + source.substring(position + deletedLength, source.length);
     }
 
-    function lineColToPosition(lineIndex: server.LineIndexForTest, line: number, col: number) {
+    function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
         return lineIndex.absolutePositionOfStartOfLine(line) + (col - 1);
     }
 
-    function validateEdit(lineIndex: server.LineIndexForTest, sourceText: string, position: number, deleteLength: number, insertString: string): void {
+    function validateEdit(lineIndex: server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
         const checkText = editFlat(position, deleteLength, insertString, sourceText);
         const snapshot = lineIndex.edit(position, deleteLength, insertString);
         const editedText = snapshot.getText(0, snapshot.getLength());
@@ -33,10 +33,10 @@ k=y;
 var p:Point=new Point();
 var q:Point=<Point>p;`;
 
-            const { lines } = server.LineIndexForTest.linesFromText(testContent);
+            const { lines } = server.LineIndex.linesFromText(testContent);
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-            const lineIndex = new server.LineIndexForTest();
+            const lineIndex = new server.LineIndex();
             lineIndex.load(lines);
 
             validateEditAtLineCharIndex = (line: number, char: number, deleteLength: number, insertString: string) => {
@@ -87,10 +87,10 @@ that ate the grass
 that was purple at the tips
 and grew 1cm per day`;
 
-            ({ lines, lineMap } = server.LineIndexForTest.linesFromText(testContent));
+            ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-            const lineIndex = new server.LineIndexForTest();
+            const lineIndex = new server.LineIndex();
             lineIndex.load(lines);
 
             validateEditAtPosition = (position: number, deleteLength: number, insertString: string) => {
@@ -189,7 +189,7 @@ and grew 1cm per day`;
         // const iterationCount = 20000; // uncomment for testing
         let lines: string[];
         let lineMap: number[];
-        let lineIndex: server.LineIndexForTest;
+        let lineIndex: server.LineIndex;
         let testContent: string;
 
         before(() => {
@@ -199,10 +199,10 @@ and grew 1cm per day`;
             const totalChars = testContent.length;
             assert.isTrue(totalChars > 0, "Failed to read test file.");
 
-            ({ lines, lineMap } = server.LineIndexForTest.linesFromText(testContent));
+            ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-            lineIndex = new server.LineIndexForTest();
+            lineIndex = new server.LineIndex();
             lineIndex.load(lines);
 
             let etotalChars = totalChars;
