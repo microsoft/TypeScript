@@ -2021,16 +2021,16 @@ namespace ts {
 
                     componentPattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
 
-                    // Patterns should not include subfolders like node_modules unless they are 
+                    // Patterns should not include subfolders like node_modules unless they are
                     // explicitly included as part of the path.
                     //
-                    // As an optimization, if the component pattern is the same as the component, 
+                    // As an optimization, if the component pattern is the same as the component,
                     // then there definitely were no wildcard characters and we do not need to
                     // add the exclusion pattern.
                     if (componentPattern !== component) {
                         subpattern += implicitExcludePathRegexPattern;
                     }
-                    
+
                     subpattern += componentPattern;
                 }
                 else {

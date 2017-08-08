@@ -1322,7 +1322,7 @@ namespace ts {
                 });
             });
         });
-        
+
         describe("with files or folders that begin with a .", () => {
             it("that are not explicitly included", () => {
                 const json = {
