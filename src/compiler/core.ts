@@ -2,6 +2,8 @@
 /// <reference path="performance.ts" />
 
 namespace ts {
+    // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
+    // If changing the text in this section, be sure to test `configureNightly` too.
     export const versionMajorMinor = "2.5";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
@@ -9,20 +11,6 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    /**
-     * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
-     */
-    export const enum Ternary {
-        False = 0,
-        Maybe = 1,
-        True = -1
-    }
 
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
     export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
@@ -57,7 +45,7 @@ namespace ts {
         const result = createMap<Symbol>() as SymbolTable;
         if (symbols) {
             for (const symbol of symbols) {
-                result.set(symbol.name, symbol);
+                result.set(symbol.escapedName, symbol);
             }
         }
         return result;
@@ -384,6 +372,10 @@ namespace ts {
         array.length = outIndex;
     }
 
+    export function clear(array: {}[]): void {
+        array.length = 0;
+    }
+
     export function map<T, U>(array: ReadonlyArray<T>, f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {
@@ -585,7 +577,7 @@ namespace ts {
         return result;
     }
 
-    export function mapEntries<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
+    export function mapEntries<T, U>(map: ReadonlyMap<T>, f: (key: string, value: T) => [string, U]): Map<U> {
         if (!map) {
             return undefined;
         }
@@ -705,7 +697,7 @@ namespace ts {
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
         outer: for (; offsetB < arrayB.length; offsetB++) {
@@ -998,9 +990,9 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T> | Map<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: ReadonlyMap<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T> | ReadonlyMap<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
@@ -1013,9 +1005,9 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: UnderscoreEscapedMap<{}> | Map<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
+    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: ReadonlyMap<{}>, callback: (key: string) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}> | ReadonlyMap<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
             const result = callback(key as string & __String);
@@ -1027,8 +1019,8 @@ namespace ts {
     }
 
     /** Copy entries from `source` to `target`. */
-    export function copyEntries<T>(source: UnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
-    export function copyEntries<T>(source: Map<T>, target: Map<T>): void;
+    export function copyEntries<T>(source: ReadonlyUnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
+    export function copyEntries<T>(source: ReadonlyMap<T>, target: Map<T>): void;
     export function copyEntries<T, U extends UnderscoreEscapedMap<T> | Map<T>>(source: U, target: U): void {
         (source as Map<T>).forEach((value, key) => {
             (target as Map<T>).set(key, value);
@@ -1106,8 +1098,8 @@ namespace ts {
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;
-    export function cloneMap<T>(map: Map<T>): Map<T>;
-    export function cloneMap<T>(map: Map<T> | SymbolTable): Map<T> | SymbolTable {
+    export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
+    export function cloneMap<T>(map: ReadonlyMap<T> | SymbolTable): Map<T> | SymbolTable {
         const clone = createMap<T>();
         copyEntries(map as Map<T>, clone);
         return clone;
@@ -1883,14 +1875,54 @@ namespace ts {
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
-    /**
-     * Matches any single directory segment unless it is the last segment and a .min.js file
-     * Breakdown:
-     *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
-     *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
-     */
-    const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
-    const singleAsteriskRegexFragmentOther = "[^/]*";
+    /* @internal */
+    export const commonPackageFolders: ReadonlyArray<string> = ["node_modules", "bower_components", "jspm_packages"];
+
+    const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
+
+    interface WildcardMatcher {
+        singleAsteriskRegexFragment: string;
+        doubleAsteriskRegexFragment: string;
+        replaceWildcardCharacter: (match: string) => string;
+    }
+
+    const filesMatcher: WildcardMatcher = {
+        /**
+         * Matches any single directory segment unless it is the last segment and a .min.js file
+         * Breakdown:
+         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
+         */
+        singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment)
+    };
+
+    const directoriesMatcher: WildcardMatcher = {
+        singleAsteriskRegexFragment: "[^/]*",
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment)
+    };
+
+    const excludeMatcher: WildcardMatcher = {
+        singleAsteriskRegexFragment: "[^/]*",
+        doubleAsteriskRegexFragment: "(/.+?)?",
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment)
+    };
+
+    const wildcardMatchers = {
+        files: filesMatcher,
+        directories: directoriesMatcher,
+        exclude: excludeMatcher
+    };
 
     export function getRegularExpressionForWildcard(specs: ReadonlyArray<string>, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
         const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
@@ -1909,17 +1941,8 @@ namespace ts {
             return undefined;
         }
 
-        const replaceWildcardCharacter = usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
-        const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
-
-        /**
-         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
-         * files or directories, does not match subdirectories that start with a . character
-         */
-        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
-
         return flatMap(specs, spec =>
-            spec && getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter));
+            spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]));
     }
 
     /**
@@ -1930,7 +1953,7 @@ namespace ts {
         return !/[.*?]/.test(lastPathComponent);
     }
 
-    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", singleAsteriskRegexFragment: string, doubleAsteriskRegexFragment: string, replaceWildcardCharacter: (match: string) => string): string | undefined {
+    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
         let subpattern = "";
         let hasRecursiveDirectoryWildcard = false;
         let hasWrittenComponent = false;
@@ -1969,20 +1992,36 @@ namespace ts {
                 }
 
                 if (usage !== "exclude") {
+                    let componentPattern = "";
                     // The * and ? wildcards should not match directories or files that start with . if they
                     // appear first in a component. Dotted directories and files can be included explicitly
                     // like so: **/.*/.*
                     if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                        subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                        componentPattern += "([^./]" + singleAsteriskRegexFragment + ")?";
                         component = component.substr(1);
                     }
                     else if (component.charCodeAt(0) === CharacterCodes.question) {
-                        subpattern += "[^./]";
+                        componentPattern += "[^./]";
                         component = component.substr(1);
                     }
-                }
 
-                subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                    componentPattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+
+                    // Patterns should not include subfolders like node_modules unless they are
+                    // explicitly included as part of the path.
+                    //
+                    // As an optimization, if the component pattern is the same as the component,
+                    // then there definitely were no wildcard characters and we do not need to
+                    // add the exclusion pattern.
+                    if (componentPattern !== component) {
+                        subpattern += implicitExcludePathRegexPattern;
+                    }
+
+                    subpattern += componentPattern;
+                }
+                else {
+                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                }
             }
 
             hasWrittenComponent = true;
@@ -1994,14 +2033,6 @@ namespace ts {
         }
 
         return subpattern;
-    }
-
-    function replaceWildCardCharacterFiles(match: string) {
-        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentFiles);
-    }
-
-    function replaceWildCardCharacterOther(match: string) {
-        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentOther);
     }
 
     function replaceWildcardCharacter(match: string, singleAsteriskRegexFragment: string) {
@@ -2300,7 +2331,7 @@ namespace ts {
 
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
-        this.name = name;
+        this.escapedName = name;
         this.declarations = undefined;
     }
 

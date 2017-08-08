@@ -10,6 +10,8 @@ p1.then(zero => {
     return zero.foo();
 });
 
+export var p2 = import("./0");
+
 function foo() {
     const p2 = import("./0");
 }
@@ -24,12 +26,14 @@ define(["require", "exports"], function (require, exports) {
 //// [1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); });
     var p1 = new Promise(function (resolve_2, reject_2) { require(["./0"], resolve_2, reject_2); });
     p1.then(zero => {
         return zero.foo();
     });
+    exports.p2 = new Promise(function (resolve_3, reject_3) { require(["./0"], resolve_3, reject_3); });
     function foo() {
-        const p2 = new Promise(function (resolve_3, reject_3) { require(["./0"], resolve_3, reject_3); });
+        const p2 = new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
     }
 });

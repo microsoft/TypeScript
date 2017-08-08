@@ -217,7 +217,7 @@ namespace ts.server {
             return !this.project.isWatchedMissingFile(path) && this.host.fileExists(file);
         }
 
-        readFile(fileName: string): string {
+        readFile(fileName: string): string | undefined {
             return this.host.readFile(fileName);
         }
 
