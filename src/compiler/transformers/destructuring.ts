@@ -332,7 +332,7 @@ namespace ts {
             );
         }
         else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)
-            || every(elements, (element) => isOmittedExpression(element))) {
+            || every(elements, isOmittedExpression)) {
             // For anything other than a single-element destructuring we need to generate a temporary
             // to ensure value is evaluated exactly once. Additionally, if we have zero elements
             // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
