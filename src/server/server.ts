@@ -201,7 +201,7 @@ namespace ts.server {
         private msg(s: string, type: string, inGroup = false, firstInGroup = false) {
             if (!this.canWrite) return;
 
-            s = s + "\n";
+            s = `[${nowString()}] ${s}\n`;
             if (!inGroup || firstInGroup) {
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
                 s = prefix + s;
@@ -226,6 +226,12 @@ namespace ts.server {
                 console.warn(s);
             }
         }
+    }
+
+    // E.g. "12:34:56.789"
+    function nowString() {
+        const d = new Date();
+        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 
     class NodeTypingsInstaller implements ITypingsInstaller {
@@ -756,6 +762,8 @@ namespace ts.server {
     if (localeStr) {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
+
+    setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
     const npmLocation = findArgument(Arguments.NpmLocation);

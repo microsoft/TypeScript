@@ -108,7 +108,7 @@ namespace Harness.LanguageService {
     }
 
     class DefaultHostCancellationToken implements ts.HostCancellationToken {
-        public static Instance = new DefaultHostCancellationToken();
+        public static readonly Instance = new DefaultHostCancellationToken();
 
         public isCancellationRequested() {
             return false;

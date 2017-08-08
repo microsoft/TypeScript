@@ -924,7 +924,7 @@ namespace ts {
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, importCallExpressionVisitor),
-                                node.members
+                                visitNodes(node.members, importCallExpressionVisitor)
                             ),
                             node
                         ),
@@ -1225,7 +1225,7 @@ namespace ts {
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
             const name = getDeclarationName(decl);
-            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.text));
+            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.escapedText));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);

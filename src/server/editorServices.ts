@@ -239,10 +239,7 @@ namespace ts.server {
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: (fileName, extraFileExtensions) => {
-            const mixedContentExtensions = map(filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
-            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension));
-        }
+        hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -373,7 +370,7 @@ namespace ts.server {
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
-        private static safelist: SafeList = defaultTypeSafeList;
+        private safelist: SafeList = defaultTypeSafeList;
 
         private changedFiles: ScriptInfo[];
 
@@ -703,15 +700,15 @@ namespace ts.server {
 
             switch (project.projectKind) {
                 case ProjectKind.External:
-                    removeItemFromSet(this.externalProjects, <ExternalProject>project);
+                    unorderedRemoveItem(this.externalProjects, <ExternalProject>project);
                     this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
                     break;
                 case ProjectKind.Configured:
-                    removeItemFromSet(this.configuredProjects, <ConfiguredProject>project);
+                    unorderedRemoveItem(this.configuredProjects, <ConfiguredProject>project);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
                 case ProjectKind.Inferred:
-                    removeItemFromSet(this.inferredProjects, <InferredProject>project);
+                    unorderedRemoveItem(this.inferredProjects, <InferredProject>project);
                     break;
             }
         }
@@ -790,7 +787,7 @@ namespace ts.server {
             // to the disk, and the server's version of the file can be out of sync.
             info.close();
 
-            removeItemFromSet(this.openFiles, info);
+            unorderedRemoveItem(this.openFiles, info);
 
             // collect all projects that should be removed
             let projectsToRemove: Project[];
@@ -939,7 +936,7 @@ namespace ts.server {
 
                 info("Open files: ");
                 for (const rootFile of this.openFiles) {
-                    info(rootFile.fileName);
+                    info(`\t${rootFile.fileName}`);
                 }
             });
 
@@ -1615,13 +1612,13 @@ namespace ts.server {
         }
 
         /** Makes a filename safe to insert in a RegExp */
-        private static filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
+        private static readonly filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
         private static escapeFilenameForRegex(filename: string) {
             return filename.replace(this.filenameEscapeRegexp, "\\$&");
         }
 
         resetSafeList(): void {
-            ProjectService.safelist = defaultTypeSafeList;
+            this.safelist = defaultTypeSafeList;
         }
 
         loadSafeList(fileName: string): void {
@@ -1631,7 +1628,7 @@ namespace ts.server {
                 raw[k].match = new RegExp(raw[k].match as {} as string, "i");
             }
             // raw is now fixed and ready
-            ProjectService.safelist = raw;
+            this.safelist = raw;
         }
 
         applySafeList(proj: protocol.ExternalProject): void {
@@ -1642,8 +1639,8 @@ namespace ts.server {
 
             const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
 
-            for (const name of Object.keys(ProjectService.safelist)) {
-                const rule = ProjectService.safelist[name];
+            for (const name of Object.keys(this.safelist)) {
+                const rule = this.safelist[name];
                 for (const root of normalizedNames) {
                     if (rule.match.test(root)) {
                         this.logger.info(`Excluding files based on rule ${name}`);

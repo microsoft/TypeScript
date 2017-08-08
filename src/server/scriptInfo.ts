@@ -232,7 +232,7 @@ namespace ts.server {
                     }
                     break;
                 default:
-                    removeItemFromSet(this.containingProjects, project);
+                    unorderedRemoveItem(this.containingProjects, project);
                     break;
             }
         }
@@ -242,7 +242,7 @@ namespace ts.server {
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*detachFromProjects*/ false);
             }
-            this.containingProjects.length = 0;
+            clear(this.containingProjects);
         }
 
         getDefaultProject() {

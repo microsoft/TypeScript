@@ -15,7 +15,7 @@
                 "end": 14,
                 "flags": "JSDoc",
                 "originalKeywordKind": "ThisKeyword",
-                "text": "this"
+                "escapedText": "this"
             },
             "type": {
                 "kind": "TypeReference",
@@ -32,14 +32,14 @@
                         "pos": 15,
                         "end": 16,
                         "flags": "JSDoc",
-                        "text": "a"
+                        "escapedText": "a"
                     },
                     "right": {
                         "kind": "Identifier",
                         "pos": 17,
                         "end": 18,
                         "flags": "JSDoc",
-                        "text": "b"
+                        "escapedText": "b"
                     }
                 }
             }

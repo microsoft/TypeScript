@@ -87,20 +87,20 @@ class Y {
 >mistake : any
     }
     m() {
->m : any
+>m : () => void
     }
     constructor() {
         this.m = this.m.bind(this);
 >this.m = this.m.bind(this) : any
->this.m : any
+>this.m : () => void
 >this : this
->m : any
+>m : () => void
 >this.m.bind(this) : any
->this.m.bind : any
->this.m : any
+>this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
+>this.m : () => void
 >this : this
->m : any
->bind : any
+>m : () => void
+>bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this : this
 
         this.mistake = 'even more nonsense';
@@ -126,10 +126,10 @@ let y = new Y();
 >Y : typeof Y
 
 y.m();
->y.m() : any
->y.m : any
+>y.m() : void
+>y.m : () => void
 >y : Y
->m : any
+>m : () => void
 
 y.mistake();
 >y.mistake() : any
