@@ -34,6 +34,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
             switch (methodName) {
                 case "apply":
                 case "assert":
+                case "assertEqual":
                 case "call":
                 case "equal":
                 case "fail":
@@ -69,7 +70,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
 
         const ranges = ts.getTrailingCommentRanges(sourceFile.text, arg.pos) || ts.getLeadingCommentRanges(sourceFile.text, arg.pos);
         if (ranges === undefined || ranges.length !== 1 || ranges[0].kind !== ts.SyntaxKind.MultiLineCommentTrivia) {
-            ctx.addFailureAtNode(arg, "Tag boolean argument with parameter name");
+            ctx.addFailureAtNode(arg, "Tag argument with parameter name");
             return;
         }
 
