@@ -17,7 +17,7 @@ namespace ts.server {
         lineText: string | undefined;
     }
 
-    enum CharRangeSection {
+    const enum CharRangeSection {
         PreStart,
         Start,
         Entire,
