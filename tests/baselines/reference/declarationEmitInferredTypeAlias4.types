@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declarationEmitInferredTypeAlias4.ts ===
+function f<A>() {
+>f : <A>() => A[] | { x: A[] | any; }
+>A : A
+
+    type Foo<T> = T | { x: Foo<T> };
+>Foo : T | { x: T | any; }
+>T : T
+>T : T
+>x : T | { x: T | any; }
+>Foo : T | { x: T | any; }
+>T : T
+
+    var x: Foo<A[]>;
+>x : A[] | { x: A[] | any; }
+>Foo : T | { x: T | any; }
+>A : A
+
+    return x;
+>x : A[] | { x: A[] | any; }
+}

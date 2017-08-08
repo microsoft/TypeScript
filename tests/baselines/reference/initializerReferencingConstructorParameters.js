@@ -44,7 +44,6 @@ var E = (function () {
     function E(x) {
         this.x = x;
         this.a = this.x; // ok
-        this.b = this.x; // error
     }
     return E;
 }());

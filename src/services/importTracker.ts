@@ -180,7 +180,7 @@ namespace ts.FindAllReferences {
      * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
      */
     function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-        const exportName = exportSymbol.name;
+        const exportName = exportSymbol.escapedName;
         const importSearches: Array<[Identifier, Symbol]> = [];
         const singleReferences: Identifier[] = [];
         function addSearch(location: Identifier, symbol: Symbol): void {
@@ -238,7 +238,7 @@ namespace ts.FindAllReferences {
                 const { name } = importClause;
                 // If a default import has the same name as the default export, allow to rename it.
                 // Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-                if (name && (!isForRename || name.text === symbolName(exportSymbol))) {
+                if (name && (!isForRename || name.escapedText === symbolName(exportSymbol))) {
                     const defaultImportAlias = checker.getSymbolAtLocation(name);
                     addSearch(name, defaultImportAlias);
                 }
@@ -258,7 +258,7 @@ namespace ts.FindAllReferences {
          */
         function handleNamespaceImportLike(importName: Identifier): void {
             // Don't rename an import that already has a different name than the export.
-            if (exportKind === ExportKind.ExportEquals && (!isForRename || importName.text === exportName)) {
+            if (exportKind === ExportKind.ExportEquals && (!isForRename || importName.escapedText === exportName)) {
                 addSearch(importName, checker.getSymbolAtLocation(importName));
             }
         }
@@ -267,7 +267,7 @@ namespace ts.FindAllReferences {
             if (namedBindings) {
                 for (const element of namedBindings.elements) {
                     const { name, propertyName } = element;
-                    if ((propertyName || name).text !== exportName) {
+                    if ((propertyName || name).escapedText !== exportName) {
                         continue;
                     }
 
@@ -453,7 +453,7 @@ namespace ts.FindAllReferences {
                 }
             }
             else {
-                const exportNode = getExportNode(parent);
+                const exportNode = getExportNode(parent, node);
                 if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
                     if (isImportEqualsDeclaration(exportNode) && exportNode.moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
@@ -521,11 +521,11 @@ namespace ts.FindAllReferences {
             // Search on the local symbol in the exporting module, not the exported symbol.
             importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
             // Similarly, skip past the symbol for 'export ='
-            if (importedSymbol.name === "export=") {
+            if (importedSymbol.escapedName === "export=") {
                 importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
             }
 
-            if (symbolName(importedSymbol) === symbol.name) { // If this is a rename import, do not continue searching.
+            if (symbolName(importedSymbol) === symbol.escapedName) { // If this is a rename import, do not continue searching.
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
@@ -558,10 +558,11 @@ namespace ts.FindAllReferences {
 
     // If a reference is a class expression, the exported node would be its parent.
     // If a reference is a variable declaration, the exported node would be the variable statement.
-    function getExportNode(parent: Node): Node | undefined {
+    function getExportNode(parent: Node, node: Node): Node | undefined {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
             const p = parent as ts.VariableDeclaration;
-            return p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+            return p.name !== node ? undefined :
+                p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
         else {
             return parent;
@@ -594,16 +595,16 @@ namespace ts.FindAllReferences {
     }
 
     function symbolName(symbol: Symbol): __String | undefined {
-        if (symbol.name !== "default") {
-            return symbol.getName();
+        if (symbol.escapedName !== "default") {
+            return symbol.escapedName;
         }
 
         return forEach(symbol.declarations, decl => {
             if (isExportAssignment(decl)) {
-                return isIdentifier(decl.expression) ? decl.expression.text : undefined;
+                return isIdentifier(decl.expression) ? decl.expression.escapedText : undefined;
             }
             const name = getNameOfDeclaration(decl);
-            return name && name.kind === SyntaxKind.Identifier && name.text;
+            return name && name.kind === SyntaxKind.Identifier && name.escapedText;
         });
     }
 

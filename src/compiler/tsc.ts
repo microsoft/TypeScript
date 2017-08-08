@@ -61,7 +61,7 @@ namespace ts {
     }
 
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine + sys.newLine);
+        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine);
     }
 
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
@@ -664,6 +664,8 @@ namespace ts {
         return;
     }
 }
+
+ts.setStackTraceLimit();
 
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();
