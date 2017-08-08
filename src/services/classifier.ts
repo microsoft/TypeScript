@@ -260,11 +260,11 @@ namespace ts {
                                     templateStack.pop();
                                 }
                                 else {
-                                    Debug.assert(token === SyntaxKind.TemplateMiddle, "Should have been a template middle. Was " + token);
+                                    Debug.assertEqual(token, SyntaxKind.TemplateMiddle, "Should have been a template middle.");
                                 }
                             }
                             else {
-                                Debug.assert(lastTemplateStackToken === SyntaxKind.OpenBraceToken, "Should have been an open brace. Was: " + token);
+                                Debug.assertEqual(lastTemplateStackToken, SyntaxKind.OpenBraceToken, "Should have been an open brace");
                                 templateStack.pop();
                             }
                         }

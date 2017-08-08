@@ -326,8 +326,8 @@ namespace ts.server {
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
-        globalPlugins?: string[];
-        pluginProbeLocations?: string[];
+        globalPlugins?: ReadonlyArray<string>;
+        pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
     }
 

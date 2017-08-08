@@ -1290,12 +1290,12 @@ namespace ts {
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
         const end = start + length;
 
-        Debug.assert(start >= 0, "start must be non-negative, is " + start);
-        Debug.assert(length >= 0, "length must be non-negative, is " + length);
+        Debug.assertGreaterThanOrEqual(start, 0);
+        Debug.assertGreaterThanOrEqual(length, 0);
 
         if (file) {
-            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${start} > ${file.text.length}`);
-            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${end} > ${file.text.length}`);
+            Debug.assertLessThanOrEqual(start, file.text.length);
+            Debug.assertLessThanOrEqual(end, file.text.length);
         }
 
         let text = getLocaleSpecificMessage(message);
@@ -2389,12 +2389,37 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string, stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
             if (!expression) {
                 if (verboseDebugInfo) {
-                    message += "\r\nVerbose Debug Information: " + verboseDebugInfo();
+                    message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
                 }
                 fail(message ? "False expression: " + message : "False expression.", stackCrawlMark || assert);
+            }
+        }
+
+        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
+            if (a !== b) {
+                const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
+                fail(`Expected ${a} === ${b}. ${message}`);
+            }
+        }
+
+        export function assertLessThan(a: number, b: number, msg?: string): void {
+            if (a >= b) {
+                fail(`Expected ${a} < ${b}. ${msg || ""}`);
+            }
+        }
+
+        export function assertLessThanOrEqual(a: number, b: number): void {
+            if (a > b) {
+                fail(`Expected ${a} <= ${b}`);
+            }
+        }
+
+        export function assertGreaterThanOrEqual(a: number, b: number): void {
+            if (a < b) {
+                fail(`Expected ${a} >= ${b}`);
             }
         }
 
