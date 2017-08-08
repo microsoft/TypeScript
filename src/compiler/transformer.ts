@@ -311,24 +311,26 @@ namespace ts {
         }
 
         function hasLeadingComments(node: Node) {
-            node = getParseTreeNode(node);
-            if (!node) {
+            const realNode = getParseTreeNode(node);
+            if (!realNode) {
                 return node && node.emitNode && !!node.emitNode.leadingComments;
             }
-            const ranges = getLeadingCommentRangesOfNode(node, getSourceFileOfNode(node));
+            const ranges = getLeadingCommentRangesOfNode(realNode, getSourceFileOfNode(realNode));
             return ranges && ranges.length > 0;
         }
 
-        function chunkVariableDeclarationsBySyntheticComments(declarations: VariableDeclaration[]): VariableDeclaration[][] {
+        function groupVariableDeclarationsByLeadingCommentPresence(declarations: VariableDeclaration[]): VariableDeclaration[][] {
             return groupBy(declarations, decl => decl.emitNode && decl.emitNode.commentContext && hasLeadingComments(decl.emitNode.commentContext)
-                ? "" + getNodeId(decl.emitNode.commentContext)
-                : "no-comment"
+                ? getNodeId(decl.emitNode.commentContext)
+                : -1
             );
         }
 
         function createSimpleVariableStatement(declarations: VariableDeclaration[]) {
             const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(declarations));
             // Bring forward comments on declarations whose statements are omitted due to variable hoisting and place them on the hoisted declaration
+            // All declarations in the same group have the same comment context, since that's what they were grouped by;
+            // so checking the first is sufficient
             if (declarations[0] && declarations[0].emitNode && declarations[0].emitNode.commentContext) {
                 setCommentRange(statement, declarations[0].emitNode.commentContext);
             }
@@ -351,7 +353,7 @@ namespace ts {
                 }
 
                 if (lexicalEnvironmentVariableDeclarations) {
-                    const newStatements = map(chunkVariableDeclarationsBySyntheticComments(lexicalEnvironmentVariableDeclarations), createSimpleVariableStatement);
+                    const newStatements = map(groupVariableDeclarationsByLeadingCommentPresence(lexicalEnvironmentVariableDeclarations), createSimpleVariableStatement);
 
                     if (!statements) {
                         statements = newStatements;

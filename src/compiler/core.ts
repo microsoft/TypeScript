@@ -600,27 +600,30 @@ namespace ts {
         return result;
     }
 
-    export function groupBy<T>(array: ReadonlyArray<T>, predicate: (elem: T, index: number) => string): T[][] {
+    export function groupBy<T>(array: ReadonlyArray<T> | undefined, getGroupId: (elem: T, index: number) => number): T[][] | undefined {
         if (!array) {
             return undefined;
         }
 
-        const collection = createMap<T[]>();
-        let result: T[][];
-        array.forEach((value, index) => {
-            const key = predicate(value, index);
-            if (collection.has(key)) {
-                collection.get(key).push(value);
+        const groupIdToGroup: T[][] = []; // Sparse array for combining entried with the same id
+        let result: T[][]; // Compacted array for return value
+        for (let index = 0; index < array.length; index++) {
+            const value = array[index];
+            const key = getGroupId(value, index);
+            if (groupIdToGroup[key]) {
+                groupIdToGroup[key].push(value);
             }
             else {
                 const newGroup = [value];
-                collection.set(key, newGroup);
+                groupIdToGroup[key] = newGroup;
                 if (!result) {
-                    result = [];
+                    result = [newGroup];
                 }
-                result.push(newGroup);
+                else {
+                    result.push(newGroup);
+                }
             }
-        });
+        }
 
         return result;
     }
