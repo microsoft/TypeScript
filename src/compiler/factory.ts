@@ -114,7 +114,7 @@ namespace ts {
     export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode>): Identifier;
     export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-        node.text = escapeLeadingUnderscores(text);
+        node.escapedText = escapeLeadingUnderscores(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
@@ -126,7 +126,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.text), typeArguments), node)
+        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.escapedText), typeArguments), node)
         : node;
     }
 
@@ -664,7 +664,7 @@ namespace ts {
 
     export function createArrayTypeNode(elementType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-        node.elementType = parenthesizeElementTypeMember(elementType);
+        node.elementType = parenthesizeArrayTypeMember(elementType);
         return node;
     }
 
@@ -2863,12 +2863,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.text));
-            right.text = jsxFactory.right.text;
+            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.escapedText));
+            right.escapedText = jsxFactory.right.escapedText;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.text), parent);
+            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.escapedText), parent);
         }
     }
 
@@ -3477,7 +3477,7 @@ namespace ts {
     }
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
-        return (node.expression as StringLiteral).text === "use strict";
+        return isStringLiteral(node.expression) && node.expression.text === "use strict";
     }
 
     /**
@@ -3896,6 +3896,15 @@ namespace ts {
                 return createParenthesizedType(member);
         }
         return member;
+    }
+
+    export function parenthesizeArrayTypeMember(member: TypeNode) {
+        switch (member.kind) {
+            case SyntaxKind.TypeQuery:
+            case SyntaxKind.TypeOperator:
+                return createParenthesizedType(member);
+        }
+        return parenthesizeElementTypeMember(member);
     }
 
     export function parenthesizeElementTypeMembers(members: ReadonlyArray<TypeNode>) {

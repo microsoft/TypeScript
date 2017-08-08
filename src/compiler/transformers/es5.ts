@@ -111,7 +111,7 @@ namespace ts {
          * @param name An Identifier
          */
         function trySubstituteReservedName(name: Identifier) {
-            const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(unescapeLeadingUnderscores(name.text)) : undefined);
+            const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(unescapeLeadingUnderscores(name.escapedText)) : undefined);
             if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
                 return setTextRange(createLiteral(name), name);
             }
