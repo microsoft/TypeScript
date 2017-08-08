@@ -1875,14 +1875,54 @@ namespace ts {
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
-    /**
-     * Matches any single directory segment unless it is the last segment and a .min.js file
-     * Breakdown:
-     *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
-     *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
-     */
-    const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
-    const singleAsteriskRegexFragmentOther = "[^/]*";
+    /* @internal */
+    export const commonPackageFolders: ReadonlyArray<string> = ["node_modules", "bower_components", "jspm_packages"];
+
+    const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
+
+    interface WildcardMatcher {
+        singleAsteriskRegexFragment: string;
+        doubleAsteriskRegexFragment: string;
+        replaceWildcardCharacter: (match: string) => string;
+    }
+
+    const filesMatcher: WildcardMatcher = {
+        /**
+         * Matches any single directory segment unless it is the last segment and a .min.js file
+         * Breakdown:
+         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
+         */
+        singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment)
+    };
+
+    const directoriesMatcher: WildcardMatcher = {
+        singleAsteriskRegexFragment: "[^/]*",
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment)
+    };
+
+    const excludeMatcher: WildcardMatcher = {
+        singleAsteriskRegexFragment: "[^/]*",
+        doubleAsteriskRegexFragment: "(/.+?)?",
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment)
+    };
+
+    const wildcardMatchers = {
+        files: filesMatcher,
+        directories: directoriesMatcher,
+        exclude: excludeMatcher
+    };
 
     export function getRegularExpressionForWildcard(specs: ReadonlyArray<string>, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
         const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
@@ -1901,17 +1941,8 @@ namespace ts {
             return undefined;
         }
 
-        const replaceWildcardCharacter = usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
-        const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
-
-        /**
-         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
-         * files or directories, does not match subdirectories that start with a . character
-         */
-        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
-
         return flatMap(specs, spec =>
-            spec && getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter));
+            spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]));
     }
 
     /**
@@ -1922,7 +1953,7 @@ namespace ts {
         return !/[.*?]/.test(lastPathComponent);
     }
 
-    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", singleAsteriskRegexFragment: string, doubleAsteriskRegexFragment: string, replaceWildcardCharacter: (match: string) => string): string | undefined {
+    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
         let subpattern = "";
         let hasRecursiveDirectoryWildcard = false;
         let hasWrittenComponent = false;
@@ -1961,20 +1992,36 @@ namespace ts {
                 }
 
                 if (usage !== "exclude") {
+                    let componentPattern = "";
                     // The * and ? wildcards should not match directories or files that start with . if they
                     // appear first in a component. Dotted directories and files can be included explicitly
                     // like so: **/.*/.*
                     if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                        subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                        componentPattern += "([^./]" + singleAsteriskRegexFragment + ")?";
                         component = component.substr(1);
                     }
                     else if (component.charCodeAt(0) === CharacterCodes.question) {
-                        subpattern += "[^./]";
+                        componentPattern += "[^./]";
                         component = component.substr(1);
                     }
-                }
 
-                subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                    componentPattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+
+                    // Patterns should not include subfolders like node_modules unless they are
+                    // explicitly included as part of the path.
+                    //
+                    // As an optimization, if the component pattern is the same as the component,
+                    // then there definitely were no wildcard characters and we do not need to
+                    // add the exclusion pattern.
+                    if (componentPattern !== component) {
+                        subpattern += implicitExcludePathRegexPattern;
+                    }
+
+                    subpattern += componentPattern;
+                }
+                else {
+                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                }
             }
 
             hasWrittenComponent = true;
@@ -1986,14 +2033,6 @@ namespace ts {
         }
 
         return subpattern;
-    }
-
-    function replaceWildCardCharacterFiles(match: string) {
-        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentFiles);
-    }
-
-    function replaceWildCardCharacterOther(match: string) {
-        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentOther);
     }
 
     function replaceWildcardCharacter(match: string, singleAsteriskRegexFragment: string) {
