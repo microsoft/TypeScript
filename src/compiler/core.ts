@@ -2595,12 +2595,4 @@ namespace ts {
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
-
-    /**
-     * The identity function.
-     * Also useful to provide a contextual type for an object literal.
-     */
-    export function id<T>(value: T) {
-        return value;
-    }
 }
