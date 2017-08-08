@@ -2034,11 +2034,14 @@ namespace ts {
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
             if (jsonSourceFile && jsonSourceFile.jsonObject) {
-                const element = forEach(getPropertyAssignment(jsonSourceFile.jsonObject, specKey), property =>
-                    isArrayLiteralExpression(property.initializer) && find(property.initializer.elements, element =>
-                        element.kind === SyntaxKind.StringLiteral && (<StringLiteral>element).text === spec));
-                if (element) {
-                    return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
+                for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
+                    if (isArrayLiteralExpression(property.initializer)) {
+                        for (const element of property.initializer.elements) {
+                            if (isStringLiteral(element) && element.text === spec) {
+                                return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
+                            }
+                        }
+                    }
                 }
             }
             return createCompilerDiagnostic(message, spec);
