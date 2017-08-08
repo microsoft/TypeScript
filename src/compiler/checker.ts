@@ -13128,9 +13128,10 @@ namespace ts {
          */
         function getInstantiatedContextualType(node: Expression, checkMode?: CheckMode): Type {
             if (checkMode === CheckMode.Inferential && node.contextualType && node.contextualMapper) {
-                return instantiateType(node.contextualType, node.contextualMapper);
+                const type = instantiateType(node.contextualType, node.contextualMapper);
+                return type && getApparentType(type);
             }
-            return getContextualType(node, checkMode);
+            return getApparentTypeOfContextualType(node, checkMode);
         }
 
         /**
