@@ -28,7 +28,7 @@ namespace ts.projectSystem {
         })
     };
 
-    interface PostExecAction {
+    export interface PostExecAction {
         readonly success: boolean;
         readonly callback: TI.RequestCompletedAction;
     }
