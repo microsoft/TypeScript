@@ -10,12 +10,6 @@ namespace ts {
         return lineIndex.absolutePositionOfStartOfLine(line) + (col - 1);
     }
 
-    function foo(lineIndex: server.LineIndex) {
-        lineIndex.load([]);
-        lineIndex.positionToLineOffset(0);
-    }
-    foo;
-
     function validateEdit(lineIndex: server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
         const checkText = editFlat(position, deleteLength, insertString, sourceText);
         const snapshot = lineIndex.edit(position, deleteLength, insertString);
@@ -58,7 +52,7 @@ var q:Point=<Point>p;`;
         it("handles empty lines array", () => {
             const lineIndex = new server.LineIndex();
             lineIndex.load([]);
-            assert.equal(lineIndex.positionToLineOffset(0), { line: 0, offset: 0 });
+            assert.deepEqual(lineIndex.positionToLineOffset(0), { line: 1, offset: 1 });
         });
 
         it(`change 9 1 0 1 {"y"}`, () => {
