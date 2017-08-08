@@ -176,7 +176,7 @@ namespace ts.server {
         }
 
         private complete() {
-            if (this.requestId) {
+            if (this.requestId !== undefined) {
                 this.operationHost.sendRequestCompletedEvent(this.requestId);
                 this.requestId = undefined;
             }
