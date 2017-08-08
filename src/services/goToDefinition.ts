@@ -38,16 +38,6 @@ namespace ts.GoToDefinition {
             return [createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration)];
         }
 
-        // If the node is an identifier in bindingelement of ObjectBindingPattern (Note: ArrayBindingPattern can only declaration)
-        // instead of just return the declaration symbol which is itself. We should try to get to the original type of the ObjectBindingPattern and return the property declaration.
-        // For example:
-        //      import('./foo').then(({ b/*goto*/ar }) => undefined); => should get use to the declaration in file "./foo"
-        //
-        //      function bar<T>(onfulfilled: (value: T) => void) { //....}
-        //      interface Test {
-        //          pr/*destination*/op1: number
-        //      }
-        //      bar<Test>(({pr/*goto*/op1})=>{});
         let symbol = typeChecker.getSymbolAtLocation(node);
 
         // Could not find a symbol e.g. node is string or number keyword,
@@ -84,6 +74,26 @@ namespace ts.GoToDefinition {
             const shorthandContainerName = typeChecker.symbolToString(symbol.parent, node);
             return map(shorthandDeclarations,
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+        }
+
+        // If the node is an identifier in bindingelement of ObjectBindingPattern (Note: ArrayBindingPattern can only declaration)
+        // instead of just return the declaration symbol which is itself. We should try to get to the original type of the ObjectBindingPattern and return the property declaration.
+        // For example:
+        //      import('./foo').then(({ b/*goto*/ar }) => undefined); => should get use to the declaration in file "./foo"
+        //
+        //      function bar<T>(onfulfilled: (value: T) => void) { //....}
+        //      interface Test {
+        //          pr/*destination*/op1: number
+        //      }
+        //      bar<Test>(({pr/*goto*/op1})=>{});
+        if (isPropertyName(node) && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent) && (node.parent.propertyName ? node.parent.propertyName === node : node.parent.name === node)) {
+            const type = typeChecker.getTypeAtLocation(node.parent.parent);
+            if (type) {
+                const propSymbols = getPropertySymbolsFromType(type, node);
+                if (propSymbols) {
+                    return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
+                }
+            }
         }
 
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
