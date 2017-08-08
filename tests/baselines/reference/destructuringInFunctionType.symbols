@@ -29,7 +29,7 @@ type T2 = ({ a });
 
 type F2 = ({ a }) => void;
 >F2 : Symbol(F2, Decl(destructuringInFunctionType.ts, 7, 18))
->a : Symbol(a)
+>a : Symbol(a, Decl(destructuringInFunctionType.ts, 8, 12))
 
 type T3 = ([{ a: b }, { b: a }]);
 >T3 : Symbol(T3, Decl(destructuringInFunctionType.ts, 8, 26))

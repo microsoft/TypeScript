@@ -14,7 +14,7 @@ import R from "./m1";
 >R : Symbol(R, Decl(m2.ts, 0, 6))
 
 const { __esmodule, __proto__ } = R;
->__esmodule : Symbol("__esmodule", Decl(m1.ts, 1, 20))
->__proto__ : Symbol("__proto__", Decl(m1.ts, 2, 23))
+>__esmodule : Symbol(__esmodule, Decl(m2.ts, 1, 7))
+>__proto__ : Symbol(__proto__, Decl(m2.ts, 1, 19))
 >R : Symbol(R, Decl(m2.ts, 0, 6))
 

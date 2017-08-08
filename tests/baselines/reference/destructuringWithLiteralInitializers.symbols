@@ -2,8 +2,8 @@
 // (arg: { x: any, y: any }) => void
 function f1({ x, y }) { }
 >f1 : Symbol(f1, Decl(destructuringWithLiteralInitializers.ts, 0, 0))
->x : Symbol(x)
->y : Symbol(y)
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 1, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 1, 16))
 
 f1({ x: 1, y: 1 });
 >f1 : Symbol(f1, Decl(destructuringWithLiteralInitializers.ts, 0, 0))
@@ -13,8 +13,8 @@ f1({ x: 1, y: 1 });
 // (arg: { x: any, y?: number }) => void
 function f2({ x, y = 0 }) { }
 >f2 : Symbol(f2, Decl(destructuringWithLiteralInitializers.ts, 2, 19))
->x : Symbol(x)
->y : Symbol(y)
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 5, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 5, 16))
 
 f2({ x: 1 });
 >f2 : Symbol(f2, Decl(destructuringWithLiteralInitializers.ts, 2, 19))
@@ -28,8 +28,8 @@ f2({ x: 1, y: 1 });
 // (arg: { x?: number, y?: number }) => void
 function f3({ x = 0, y = 0 }) { }
 >f3 : Symbol(f3, Decl(destructuringWithLiteralInitializers.ts, 7, 19))
->x : Symbol(x)
->y : Symbol(y)
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 10, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 10, 20))
 
 f3({});
 >f3 : Symbol(f3, Decl(destructuringWithLiteralInitializers.ts, 7, 19))
@@ -50,8 +50,8 @@ f3({ x: 1, y: 1 });
 // (arg?: { x: number, y: number }) => void
 function f4({ x, y } = { x: 0, y: 0 }) { }
 >f4 : Symbol(f4, Decl(destructuringWithLiteralInitializers.ts, 14, 19))
->x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 17, 24))
->y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 17, 30))
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 17, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 17, 16))
 >x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 17, 24))
 >y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 17, 30))
 
@@ -66,8 +66,8 @@ f4({ x: 1, y: 1 });
 // (arg?: { x: number, y?: number }) => void
 function f5({ x, y = 0 } = { x: 0 }) { }
 >f5 : Symbol(f5, Decl(destructuringWithLiteralInitializers.ts, 19, 19))
->x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 22, 28))
->y : Symbol(y)
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 22, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 22, 16))
 >x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 22, 28))
 
 f5();
@@ -85,8 +85,8 @@ f5({ x: 1, y: 1 });
 // (arg?: { x?: number, y?: number }) => void
 function f6({ x = 0, y = 0 } = {}) { }
 >f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
->x : Symbol(x)
->y : Symbol(y)
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 28, 13))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 28, 20))
 
 f6();
 >f6 : Symbol(f6, Decl(destructuringWithLiteralInitializers.ts, 25, 19))
@@ -111,8 +111,8 @@ f6({ x: 1, y: 1 });
 function f7({ a: { x = 0, y = 0 } } = { a: {} }) { }
 >f7 : Symbol(f7, Decl(destructuringWithLiteralInitializers.ts, 33, 19))
 >a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 36, 39))
->x : Symbol(x)
->y : Symbol(y)
+>x : Symbol(x, Decl(destructuringWithLiteralInitializers.ts, 36, 18))
+>y : Symbol(y, Decl(destructuringWithLiteralInitializers.ts, 36, 25))
 >a : Symbol(a, Decl(destructuringWithLiteralInitializers.ts, 36, 39))
 
 f7();

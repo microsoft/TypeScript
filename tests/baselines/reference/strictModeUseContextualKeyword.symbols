@@ -23,7 +23,7 @@ function H() {
 >H : Symbol(H, Decl(strictModeUseContextualKeyword.ts, 8, 1))
 
     let {as} = { as: 1 };
->as : Symbol(as, Decl(strictModeUseContextualKeyword.ts, 10, 16))
+>as : Symbol(as, Decl(strictModeUseContextualKeyword.ts, 10, 9))
 >as : Symbol(as, Decl(strictModeUseContextualKeyword.ts, 10, 16))
 }
 

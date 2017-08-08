@@ -344,17 +344,17 @@ function f6() {
 >f6 : Symbol(f6, Decl(literalTypes2.ts, 98, 1))
 
     const { c1 = true, c2 = 0, c3 = "foo" } = { c1: false, c2: 1, c3: "bar" };
->c1 : Symbol(c1, Decl(literalTypes2.ts, 101, 47))
->c2 : Symbol(c2, Decl(literalTypes2.ts, 101, 58))
->c3 : Symbol(c3, Decl(literalTypes2.ts, 101, 65))
+>c1 : Symbol(c1, Decl(literalTypes2.ts, 101, 11))
+>c2 : Symbol(c2, Decl(literalTypes2.ts, 101, 22))
+>c3 : Symbol(c3, Decl(literalTypes2.ts, 101, 30))
 >c1 : Symbol(c1, Decl(literalTypes2.ts, 101, 47))
 >c2 : Symbol(c2, Decl(literalTypes2.ts, 101, 58))
 >c3 : Symbol(c3, Decl(literalTypes2.ts, 101, 65))
 
     let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
->x1 : Symbol(x1, Decl(literalTypes2.ts, 102, 45))
->x2 : Symbol(x2, Decl(literalTypes2.ts, 102, 56))
->x3 : Symbol(x3, Decl(literalTypes2.ts, 102, 63))
+>x1 : Symbol(x1, Decl(literalTypes2.ts, 102, 9))
+>x2 : Symbol(x2, Decl(literalTypes2.ts, 102, 20))
+>x3 : Symbol(x3, Decl(literalTypes2.ts, 102, 28))
 >x1 : Symbol(x1, Decl(literalTypes2.ts, 102, 45))
 >x2 : Symbol(x2, Decl(literalTypes2.ts, 102, 56))
 >x3 : Symbol(x3, Decl(literalTypes2.ts, 102, 63))

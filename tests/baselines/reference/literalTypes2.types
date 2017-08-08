@@ -480,11 +480,11 @@ function f6() {
 >f6 : () => void
 
     const { c1 = true, c2 = 0, c3 = "foo" } = { c1: false, c2: 1, c3: "bar" };
->c1 : false
+>c1 : boolean
 >true : true
->c2 : 1
+>c2 : 1 | 0
 >0 : 0
->c3 : "bar"
+>c3 : "foo" | "bar"
 >"foo" : "foo"
 >{ c1: false, c2: 1, c3: "bar" } : { c1?: false; c2?: 1; c3?: "bar"; }
 >c1 : boolean
@@ -495,7 +495,7 @@ function f6() {
 >"bar" : "bar"
 
     let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
->x1 : false
+>x1 : boolean
 >true : true
 >x2 : number
 >0 : 0

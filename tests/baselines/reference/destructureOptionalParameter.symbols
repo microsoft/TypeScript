@@ -8,8 +8,8 @@ declare function f1({ a, b }?: { a: number, b: string }): void;
 
 function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {
 >f2 : Symbol(f2, Decl(destructureOptionalParameter.ts, 0, 63))
->a : Symbol(a, Decl(destructureOptionalParameter.ts, 2, 23))
->b : Symbol(b, Decl(destructureOptionalParameter.ts, 2, 34))
+>a : Symbol(a, Decl(destructureOptionalParameter.ts, 2, 13))
+>b : Symbol(b, Decl(destructureOptionalParameter.ts, 2, 16))
 >a : Symbol(a, Decl(destructureOptionalParameter.ts, 2, 23))
 >b : Symbol(b, Decl(destructureOptionalParameter.ts, 2, 34))
 >a : Symbol(a, Decl(destructureOptionalParameter.ts, 2, 50))

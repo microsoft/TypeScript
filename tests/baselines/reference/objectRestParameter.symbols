@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/rest/objectRestParameter.ts ===
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 >cloneAgain : Symbol(cloneAgain, Decl(objectRestParameter.ts, 0, 0))
->a : Symbol(a, Decl(objectRestParameter.ts, 0, 38))
+>a : Symbol(a, Decl(objectRestParameter.ts, 0, 21))
 >clone : Symbol(clone, Decl(objectRestParameter.ts, 0, 24))
 >a : Symbol(a, Decl(objectRestParameter.ts, 0, 38))
 >b : Symbol(b, Decl(objectRestParameter.ts, 0, 49))
@@ -28,7 +28,7 @@ suddenly(({ x: a, ...rest }) => rest.y);
 suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
 >suddenly : Symbol(suddenly, Decl(objectRestParameter.ts, 1, 1))
 >x : Symbol(x, Decl(objectRestParameter.ts, 3, 34))
->z : Symbol(z, Decl(objectRestParameter.ts, 3, 39))
+>z : Symbol(z, Decl(objectRestParameter.ts, 5, 16))
 >nested : Symbol(nested, Decl(objectRestParameter.ts, 5, 24))
 >rest : Symbol(rest, Decl(objectRestParameter.ts, 5, 37))
 >x : Symbol(x, Decl(objectRestParameter.ts, 5, 51))
@@ -47,7 +47,7 @@ class C {
 
     m({ a, ...clone }: { a: number, b: string}): void {
 >m : Symbol(C.m, Decl(objectRestParameter.ts, 7, 9))
->a : Symbol(a, Decl(objectRestParameter.ts, 8, 24))
+>a : Symbol(a, Decl(objectRestParameter.ts, 8, 7))
 >clone : Symbol(clone, Decl(objectRestParameter.ts, 8, 10))
 >a : Symbol(a, Decl(objectRestParameter.ts, 8, 24))
 >b : Symbol(b, Decl(objectRestParameter.ts, 8, 35))
@@ -56,7 +56,7 @@ class C {
     }
     set p({ a, ...clone }: { a: number, b: string}) {
 >p : Symbol(C.p, Decl(objectRestParameter.ts, 10, 5))
->a : Symbol(a, Decl(objectRestParameter.ts, 11, 28))
+>a : Symbol(a, Decl(objectRestParameter.ts, 11, 11))
 >clone : Symbol(clone, Decl(objectRestParameter.ts, 11, 14))
 >a : Symbol(a, Decl(objectRestParameter.ts, 11, 28))
 >b : Symbol(b, Decl(objectRestParameter.ts, 11, 39))

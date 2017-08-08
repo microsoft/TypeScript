@@ -36,7 +36,7 @@ let { a = "foo" } = { a: "foo" };
 >"foo" : "foo"
 
 let { b = "foo" as "foo" } = { b: "bar" };
->b : "bar"
+>b : "foo" | "bar"
 >"foo" as "foo" : "foo"
 >"foo" : "foo"
 >{ b: "bar" } : { b?: "bar"; }
@@ -44,7 +44,7 @@ let { b = "foo" as "foo" } = { b: "bar" };
 >"bar" : "bar"
 
 let { c = "foo" } = { c: "bar" as "bar" };
->c : "bar"
+>c : "foo" | "bar"
 >"foo" : "foo"
 >{ c: "bar" as "bar" } : { c?: "bar"; }
 >c : "bar"
@@ -52,7 +52,7 @@ let { c = "foo" } = { c: "bar" as "bar" };
 >"bar" : "bar"
 
 let { d = "foo" as "foo" } = { d: "bar" as "bar" };
->d : "bar"
+>d : "foo" | "bar"
 >"foo" as "foo" : "foo"
 >"foo" : "foo"
 >{ d: "bar" as "bar" } : { d?: "bar"; }

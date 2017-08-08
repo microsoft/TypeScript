@@ -9,12 +9,12 @@ var { ...clone } = o;
 >o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
 
 var { a, ...justB } = o;
->a : Symbol(a, Decl(objectRest.ts, 0, 9))
+>a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
 >justB : Symbol(justB, Decl(objectRest.ts, 2, 8))
 >o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
 
 var { a, b: renamed, ...empty } = o;
->a : Symbol(a, Decl(objectRest.ts, 0, 9))
+>a : Symbol(a, Decl(objectRest.ts, 2, 5), Decl(objectRest.ts, 3, 5))
 >b : Symbol(b, Decl(objectRest.ts, 0, 15))
 >renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
 >empty : Symbol(empty, Decl(objectRest.ts, 3, 20))
@@ -46,7 +46,7 @@ let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed, ...d } = o2;
 >d : Symbol(d, Decl(objectRest.ts, 8, 31))
 >renamed : Symbol(renamed, Decl(objectRest.ts, 3, 8), Decl(objectRest.ts, 4, 5), Decl(objectRest.ts, 5, 5), Decl(objectRest.ts, 9, 5))
->d : Symbol(d, Decl(objectRest.ts, 8, 31))
+>d : Symbol(d, Decl(objectRest.ts, 9, 17))
 >o2 : Symbol(o2, Decl(objectRest.ts, 8, 3))
 
 let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
@@ -62,14 +62,14 @@ let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number 
 >restrest : Symbol(restrest, Decl(objectRest.ts, 11, 100))
 
 var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
->x : Symbol(x, Decl(objectRest.ts, 11, 17))
+>x : Symbol(x, Decl(objectRest.ts, 12, 5), Decl(objectRest.ts, 17, 5))
 >n1 : Symbol(n1, Decl(objectRest.ts, 11, 28))
->y : Symbol(y, Decl(objectRest.ts, 11, 34))
+>y : Symbol(y, Decl(objectRest.ts, 12, 14))
 >n2 : Symbol(n2, Decl(objectRest.ts, 11, 45))
->z : Symbol(z, Decl(objectRest.ts, 11, 51))
+>z : Symbol(z, Decl(objectRest.ts, 12, 23))
 >n3 : Symbol(n3, Decl(objectRest.ts, 11, 62))
 >nr : Symbol(nr, Decl(objectRest.ts, 12, 32))
->restrest : Symbol(restrest, Decl(objectRest.ts, 11, 100))
+>restrest : Symbol(restrest, Decl(objectRest.ts, 12, 45))
 >nestedrest : Symbol(nestedrest, Decl(objectRest.ts, 11, 3))
 
 let complex: { x: { ka, ki }, y: number };
@@ -81,7 +81,7 @@ let complex: { x: { ka, ki }, y: number };
 
 var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >x : Symbol(x, Decl(objectRest.ts, 14, 14))
->ka : Symbol(ka, Decl(objectRest.ts, 14, 19))
+>ka : Symbol(ka, Decl(objectRest.ts, 15, 10))
 >nested : Symbol(nested, Decl(objectRest.ts, 15, 14))
 >y : Symbol(y, Decl(objectRest.ts, 14, 29))
 >other : Symbol(other, Decl(objectRest.ts, 15, 27))
@@ -98,7 +98,7 @@ var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >complex : Symbol(complex, Decl(objectRest.ts, 14, 3))
 
 var { x, ...fresh } = { x: 1, y: 2 };
->x : Symbol(x, Decl(objectRest.ts, 17, 23))
+>x : Symbol(x, Decl(objectRest.ts, 12, 5), Decl(objectRest.ts, 17, 5))
 >fresh : Symbol(fresh, Decl(objectRest.ts, 17, 8))
 >x : Symbol(x, Decl(objectRest.ts, 17, 23))
 >y : Symbol(y, Decl(objectRest.ts, 17, 29))
@@ -155,7 +155,7 @@ var removable = new Removable();
 >Removable : Symbol(Removable, Decl(objectRest.ts, 18, 35))
 
 var { removed, ...removableRest } = removable;
->removed : Symbol(Removable.removed, Decl(objectRest.ts, 26, 11))
+>removed : Symbol(removed, Decl(objectRest.ts, 36, 5), Decl(objectRest.ts, 38, 5))
 >removableRest : Symbol(removableRest, Decl(objectRest.ts, 36, 14))
 >removable : Symbol(removable, Decl(objectRest.ts, 35, 3))
 
@@ -165,7 +165,7 @@ var i: I = removable;
 >removable : Symbol(removable, Decl(objectRest.ts, 35, 3))
 
 var { removed, ...removableRest2 } = i;
->removed : Symbol(I.removed, Decl(objectRest.ts, 31, 14))
+>removed : Symbol(removed, Decl(objectRest.ts, 36, 5), Decl(objectRest.ts, 38, 5))
 >removableRest2 : Symbol(removableRest2, Decl(objectRest.ts, 38, 14))
 >i : Symbol(i, Decl(objectRest.ts, 37, 3))
 
@@ -193,7 +193,7 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 
 var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
 >noContextualType : Symbol(noContextualType, Decl(objectRest.ts, 45, 3))
->aNumber : Symbol(aNumber)
+>aNumber : Symbol(aNumber, Decl(objectRest.ts, 45, 25))
 >notEmptyObject : Symbol(notEmptyObject, Decl(objectRest.ts, 45, 39))
 >aNumber : Symbol(aNumber, Decl(objectRest.ts, 45, 25))
 >notEmptyObject : Symbol(notEmptyObject, Decl(objectRest.ts, 45, 39))

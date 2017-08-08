@@ -24,7 +24,7 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 >render : Symbol(MyComponent.render, Decl(file.tsx, 6, 63))
 
         const { AnyComponent } = this.props;
->AnyComponent : Symbol(ComponentProps.AnyComponent, Decl(file.tsx, 2, 26))
+>AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 8, 15))
 >this.props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
 >this : Symbol(MyComponent, Decl(file.tsx, 4, 1))
 >props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))

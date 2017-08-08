@@ -8,7 +8,7 @@ interface Show {
 }
 function f({ show = v => v.toString() }: Show) {}
 >f : Symbol(f, Decl(contextuallyTypedBindingInitializer.ts, 2, 1))
->show : Symbol(Show.show, Decl(contextuallyTypedBindingInitializer.ts, 0, 16))
+>show : Symbol(show, Decl(contextuallyTypedBindingInitializer.ts, 3, 12))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 3, 19))
 >v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 3, 19))
@@ -43,7 +43,7 @@ interface Nested {
 }
 function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >ff : Symbol(ff, Decl(contextuallyTypedBindingInitializer.ts, 9, 1))
->nested : Symbol(Nested.nested, Decl(contextuallyTypedBindingInitializer.ts, 7, 18))
+>nested : Symbol(nested, Decl(contextuallyTypedBindingInitializer.ts, 10, 13))
 >show : Symbol(show, Decl(contextuallyTypedBindingInitializer.ts, 10, 24))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 10, 30))
 >v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
@@ -59,7 +59,7 @@ interface Tuples {
 }
 function g({ prop = ["hello", 1234] }: Tuples) {}
 >g : Symbol(g, Decl(contextuallyTypedBindingInitializer.ts, 14, 1))
->prop : Symbol(Tuples.prop, Decl(contextuallyTypedBindingInitializer.ts, 12, 18))
+>prop : Symbol(prop, Decl(contextuallyTypedBindingInitializer.ts, 15, 12))
 >Tuples : Symbol(Tuples, Decl(contextuallyTypedBindingInitializer.ts, 10, 64))
 
 interface StringUnion {
@@ -70,7 +70,7 @@ interface StringUnion {
 }
 function h({ prop = "foo" }: StringUnion) {}
 >h : Symbol(h, Decl(contextuallyTypedBindingInitializer.ts, 19, 1))
->prop : Symbol(StringUnion.prop, Decl(contextuallyTypedBindingInitializer.ts, 17, 23))
+>prop : Symbol(prop, Decl(contextuallyTypedBindingInitializer.ts, 20, 12))
 >StringUnion : Symbol(StringUnion, Decl(contextuallyTypedBindingInitializer.ts, 15, 49))
 
 interface StringIdentity {

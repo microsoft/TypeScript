@@ -11,7 +11,7 @@ export class Bar {
 
     private bar({ a, }: Arg): number {
 >bar : Symbol(Bar.bar, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 3, 18))
->a : Symbol(a, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 0, 12))
+>a : Symbol(a, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 4, 17))
 >Arg : Symbol(Arg, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 0, 0))
 
         return a;
@@ -23,5 +23,5 @@ export declare class Bar2 {
 
     private bar({ a, });
 >bar : Symbol(Bar2.bar, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 8, 27))
->a : Symbol(a)
+>a : Symbol(a, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 9, 17))
 }

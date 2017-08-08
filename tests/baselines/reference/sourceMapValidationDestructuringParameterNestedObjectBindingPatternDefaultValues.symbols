@@ -93,7 +93,7 @@ function foo2(
 }
 function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
 >foo3 : Symbol(foo3, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 30, 1))
->skills : Symbol(Robot.skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 31, 15))
 >primary : Symbol(primary, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 31, 26))
 >secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 31, 48))
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 2, 1))

@@ -16,7 +16,7 @@ function rootConnection(name: string) {
 >args : Symbol(args, Decl(objectRest2.ts, 4, 28))
 
         const { objects } = await { objects: 12 };
->objects : Symbol(objects, Decl(objectRest2.ts, 5, 35))
+>objects : Symbol(objects, Decl(objectRest2.ts, 5, 15))
 >objects : Symbol(objects, Decl(objectRest2.ts, 5, 35))
 
       return {

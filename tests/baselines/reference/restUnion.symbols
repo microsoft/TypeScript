@@ -12,7 +12,7 @@ var rest1: { c: boolean } | { b: string };
 >b : Symbol(b, Decl(restUnion.ts, 2, 29))
 
 var {a, ...rest1 } = union;
->a : Symbol(a, Decl(restUnion.ts, 0, 12), Decl(restUnion.ts, 0, 40))
+>a : Symbol(a, Decl(restUnion.ts, 3, 5))
 >rest1 : Symbol(rest1, Decl(restUnion.ts, 2, 3), Decl(restUnion.ts, 3, 7))
 >union : Symbol(union, Decl(restUnion.ts, 0, 3))
 
@@ -25,7 +25,7 @@ var rest2: {};
 >rest2 : Symbol(rest2, Decl(restUnion.ts, 7, 3), Decl(restUnion.ts, 8, 7))
 
 var {n, ...rest2 } = undefinedUnion;
->n : Symbol(n, Decl(restUnion.ts, 6, 21))
+>n : Symbol(n, Decl(restUnion.ts, 8, 5), Decl(restUnion.ts, 13, 5))
 >rest2 : Symbol(rest2, Decl(restUnion.ts, 7, 3), Decl(restUnion.ts, 8, 7))
 >undefinedUnion : Symbol(undefinedUnion, Decl(restUnion.ts, 6, 3))
 
@@ -38,7 +38,7 @@ var rest3: {};
 >rest3 : Symbol(rest3, Decl(restUnion.ts, 12, 3), Decl(restUnion.ts, 13, 7))
 
 var {n, ...rest3 } = nullUnion;
->n : Symbol(n, Decl(restUnion.ts, 11, 16))
+>n : Symbol(n, Decl(restUnion.ts, 8, 5), Decl(restUnion.ts, 13, 5))
 >rest3 : Symbol(rest3, Decl(restUnion.ts, 12, 3), Decl(restUnion.ts, 13, 7))
 >nullUnion : Symbol(nullUnion, Decl(restUnion.ts, 11, 3))
 

@@ -8,7 +8,7 @@
 >map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 
   ({ x }) => x
->x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 3, 2))
+>x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 4, 4))
 >x : Symbol(x, Decl(controlFlowDestructuringParameters.ts, 4, 4))
 
 );
