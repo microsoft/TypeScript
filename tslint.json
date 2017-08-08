@@ -7,6 +7,7 @@
             "check-space"
         ],
         "curly":[true, "ignore-same-line"],
+        "debug-assert": true,
         "indent": [true,
             "spaces"
         ],

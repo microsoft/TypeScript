@@ -1,8 +1,6 @@
 ///<reference path='services.ts' />
 /* @internal */
 namespace ts.SignatureHelp {
-    const emptyArray: any[] = [];
-
     export const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
@@ -67,14 +65,14 @@ namespace ts.SignatureHelp {
                 ? (<PropertyAccessExpression>expression).name
                 : undefined;
 
-        if (!name || !name.text) {
+        if (!name || !name.escapedText) {
             return undefined;
         }
 
         const typeChecker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = nameToDeclarations.get(unescapeLeadingUnderscores(name.text));
+            const declarations = nameToDeclarations.get(name.text);
 
             if (declarations) {
                 for (const declaration of declarations) {
@@ -138,7 +136,9 @@ namespace ts.SignatureHelp {
 
             const kind = invocation.typeArguments && invocation.typeArguments.pos === list.pos ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments;
             const argumentCount = getArgumentCount(list);
-            Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+            if (argumentIndex !== 0) {
+                Debug.assertLessThan(argumentIndex, argumentCount);
+            }
             const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
             return { kind, invocation, argumentsSpan, argumentIndex, argumentCount };
         }
@@ -272,7 +272,9 @@ namespace ts.SignatureHelp {
             ? 1
             : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
 
-        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+        if (argumentIndex !== 0) {
+            Debug.assertLessThan(argumentIndex, argumentCount);
+        }
         return {
             kind: ArgumentListKind.TaggedTemplateArguments,
             invocation: tagExpression,
@@ -404,7 +406,9 @@ namespace ts.SignatureHelp {
             };
         });
 
-        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+        if (argumentIndex !== 0) {
+            Debug.assertLessThan(argumentIndex, argumentCount);
+        }
 
         const selectedItemIndex = candidates.indexOf(resolvedSignature);
         Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.
@@ -416,7 +420,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
             return {
-                name: parameter.getUnescapedName(),
+                name: parameter.name,
                 documentation: parameter.getDocumentationComment(),
                 displayParts,
                 isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
@@ -428,7 +432,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
             return {
-                name: typeParameter.symbol.getUnescapedName(),
+                name: typeParameter.symbol.name,
                 documentation: emptyArray,
                 displayParts,
                 isOptional: false

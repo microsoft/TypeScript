@@ -162,19 +162,13 @@ namespace ts.server {
      * Represents operation that can schedule its next step to be executed later.
      * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed.
      */
-    class MultistepOperation {
+    class MultistepOperation implements NextStep {
         private requestId: number;
         private timerHandle: any;
         private immediateId: any;
         private completed = true;
-        private readonly next: NextStep;
 
-        constructor(private readonly operationHost: MultistepOperationHost) {
-            this.next = {
-                immediate: action => this.immediate(action),
-                delay: (ms, action) => this.delay(ms, action)
-            };
-        }
+        constructor(private readonly operationHost: MultistepOperationHost) {}
 
         public startNew(action: (next: NextStep) => void) {
             this.complete();
@@ -194,7 +188,7 @@ namespace ts.server {
             this.setImmediateId(undefined);
         }
 
-        private immediate(action: () => void) {
+        public immediate(action: () => void) {
             const requestId = this.requestId;
             Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id");
             this.setImmediateId(this.operationHost.getServerHost().setImmediate(() => {
@@ -203,7 +197,7 @@ namespace ts.server {
             }));
         }
 
-        private delay(ms: number, action: () => void) {
+        public delay(ms: number, action: () => void) {
             const requestId = this.requestId;
             Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id");
             this.setTimerHandle(this.operationHost.getServerHost().setTimeout(() => {
@@ -219,7 +213,7 @@ namespace ts.server {
                     stop = true;
                 }
                 else {
-                    action(this.next);
+                    action(this);
                 }
             }
             catch (e) {
@@ -343,7 +337,7 @@ namespace ts.server {
                 case ContextEvent:
                     const { project, fileName } = event.data;
                     this.projectService.logger.info(`got context event, updating diagnostics for ${fileName}`);
-                    this.errorCheck.startNew(next => this.updateErrorCheck(next, [{ fileName, project }], this.changeSeq, (n) => n === this.changeSeq, 100));
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, [{ fileName, project }], 100));
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName, diagnostics } = event.data;
@@ -459,22 +453,23 @@ namespace ts.server {
             }
         }
 
-        private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
+        private updateProjectStructure() {
+            const ms = 1500;
+            const seq = this.changeSeq;
             this.host.setTimeout(() => {
-                if (matchSeq(seq)) {
+                if (this.changeSeq === seq) {
                     this.projectService.refreshInferredProjects();
                 }
             }, ms);
         }
 
-        private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], seq: number, matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200, requireOpen = true) {
-            if (followMs > ms) {
-                followMs = ms;
-            }
+        private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
+            const seq = this.changeSeq;
+            const followMs = Math.min(ms, 200);
 
             let index = 0;
             const checkOne = () => {
-                if (matchSeq(seq)) {
+                if (this.changeSeq === seq) {
                     const checkSpec = checkList[index];
                     index++;
                     if (checkSpec.project.containsFile(checkSpec.fileName, requireOpen)) {
@@ -489,7 +484,7 @@ namespace ts.server {
                 }
             };
 
-            if ((checkList.length > index) && (matchSeq(seq))) {
+            if (checkList.length > index && this.changeSeq === seq) {
                 next.delay(ms, checkOne);
             }
         }
@@ -1268,14 +1263,14 @@ namespace ts.server {
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
-            const checkList = mapDefined(fileNames, uncheckedFileName => {
+            const checkList = mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
                 const project = this.projectService.getDefaultProjectForFile(fileName, /*refreshInferredProjects*/ true);
                 return project && { fileName, project };
             });
 
             if (checkList.length > 0) {
-                this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n === this.changeSeq, delay);
+                this.updateErrorCheck(next, checkList, delay);
             }
         }
 
@@ -1289,7 +1284,7 @@ namespace ts.server {
                     scriptInfo.editContent(start, end, args.insertString);
                     this.changeSeq++;
                 }
-                this.updateProjectStructure(this.changeSeq, n => n === this.changeSeq);
+                this.updateProjectStructure();
             }
         }
 
@@ -1644,7 +1639,7 @@ namespace ts.server {
                 const checkList = fileNamesInProject.map(fileName => ({ fileName, project }));
                 // Project level error analysis runs on background files too, therefore
                 // doesn't require the file to be opened
-                this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n === this.changeSeq, delay, 200, /*requireOpen*/ false);
+                this.updateErrorCheck(next, checkList, delay, /*requireOpen*/ false);
             }
         }
 

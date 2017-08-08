@@ -647,7 +647,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return node;
             }
-            if (node.text !== "arguments" || !resolver.isArgumentsLocalBinding(node)) {
+            if (node.escapedText !== "arguments" || !resolver.isArgumentsLocalBinding(node)) {
                 return node;
             }
             return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
@@ -661,7 +661,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(unescapeLeadingUnderscores(node.label.text))) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(unescapeLeadingUnderscores(node.label.escapedText))) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -679,12 +679,12 @@ namespace ts {
                     }
                     else {
                         if (node.kind === SyntaxKind.BreakStatement) {
-                            labelMarker = `break-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ true, unescapeLeadingUnderscores(node.label.text), labelMarker);
+                            labelMarker = `break-${node.label.escapedText}`;
+                            setLabeledJump(convertedLoopState, /*isBreak*/ true, unescapeLeadingUnderscores(node.label.escapedText), labelMarker);
                         }
                         else {
-                            labelMarker = `continue-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ false, unescapeLeadingUnderscores(node.label.text), labelMarker);
+                            labelMarker = `continue-${node.label.escapedText}`;
+                            setLabeledJump(convertedLoopState, /*isBreak*/ false, unescapeLeadingUnderscores(node.label.escapedText), labelMarker);
                         }
                     }
                     let returnExpression: Expression = createLiteral(labelMarker);
@@ -2236,11 +2236,11 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), true);
+            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.escapedText), true);
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.text), false);
+            convertedLoopState.labels.set(unescapeLeadingUnderscores(node.label.escapedText), false);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
@@ -3053,7 +3053,7 @@ namespace ts {
             else {
                 loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
-                    const outParamName = createUniqueName("out_" + unescapeLeadingUnderscores(name.text));
+                    const outParamName = createUniqueName("out_" + unescapeLeadingUnderscores(name.escapedText));
                     loopOutParameters.push({ originalName: name, outParamName });
                 }
             }
@@ -3591,7 +3591,7 @@ namespace ts {
                     if (isCallExpression(firstSegment)
                         && isIdentifier(firstSegment.expression)
                         && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
-                        && firstSegment.expression.text === "___spread") {
+                        && firstSegment.expression.escapedText === "___spread") {
                         return segments[0];
                     }
                 }
@@ -3842,7 +3842,7 @@ namespace ts {
         }
 
         function visitMetaProperty(node: MetaProperty) {
-            if (node.keywordToken === SyntaxKind.NewKeyword && node.name.text === "target") {
+            if (node.keywordToken === SyntaxKind.NewKeyword && node.name.escapedText === "target") {
                 if (hierarchyFacts & HierarchyFacts.ComputedPropertyName) {
                     hierarchyFacts |= HierarchyFacts.NewTargetInComputedPropertyName;
                 }
@@ -4067,7 +4067,7 @@ namespace ts {
             }
 
             const expression = (<SpreadElement>callArgument).expression;
-            return isIdentifier(expression) && expression.text === "arguments";
+            return isIdentifier(expression) && expression.escapedText === "arguments";
         }
     }
 
