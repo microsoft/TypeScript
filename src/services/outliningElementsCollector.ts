@@ -12,6 +12,7 @@ namespace ts.OutliningElementsCollector {
         const regionEnd = new RegExp("// #endregion *");
 
         walk(sourceFile);
+        gatherRegions();
         return elements;
 
         /** If useFullStart is true, then the collapsing span includes leading whitespace, including linebreaks. */
@@ -127,7 +128,10 @@ namespace ts.OutliningElementsCollector {
         }
 
         function addRegionsNearNode(n: Node) {
-            const comments = ts.getLeadingCommentRangesOfNode(n, sourceFile);
+            const precedingToken = ts.findPrecedingToken(n.pos, sourceFile);
+            const trailingComments = precedingToken && ts.getTrailingCommentRanges(sourceFile.text, precedingToken.end);
+            const leadingComments = ts.getLeadingCommentRangesOfNode(n, sourceFile);
+            const comments = concatenate(trailingComments, leadingComments);
 
             if (n.kind !== SyntaxKind.SourceFile && comments) {
                 for (const currentComment of comments) {
@@ -148,9 +152,56 @@ namespace ts.OutliningElementsCollector {
 
                             if (region) {
                                 region.end = currentComment.end;
-                                addOutliningSpanRegions(region);
+                                // addOutliningSpanRegions(region);
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        function isRegionStartBoundaries(start: number, end: number) {
+            const comment = sourceFile.text.substring(start, end);
+            const result = comment.match(regionStart);
+
+            if (result && result.length > 0) {
+                const name = result[0].substring(10).trim();
+                if (name) {
+                    return name;
+                }
+                else {
+                    return regionText;
+                }
+            }
+            return "";
+        }
+
+        function isRegionEndBoundaries(start: number, end: number) {
+            const comment = sourceFile.text.substring(start, end);
+            return comment.match(regionEnd);
+        }
+
+        function gatherRegions(): void {
+            const lineStarts = sourceFile.getLineStarts();
+
+            for (const currentLineStart of lineStarts) {
+                const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
+
+                const name = isRegionStartBoundaries(currentLineStart, lineEnd);
+                if (name) {
+                    const region: RegionRange = {
+                        pos: currentLineStart,
+                        end: lineEnd,
+                        name,
+                    };
+                    regions.push(region);
+                }
+                else if (isRegionEndBoundaries(currentLineStart, lineEnd)) {
+                    const region = regions.pop();
+
+                    if (region) {
+                        region.end = lineEnd;
+                        addOutliningSpanRegions(region);
                     }
                 }
             }
