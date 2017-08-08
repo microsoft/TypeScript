@@ -6,5 +6,6 @@
 
 //// [parserGreaterThanTokenAmbiguity20.js]
 1
-    >>>=
+    // Before
+    >>>=// after
         2;

@@ -105,7 +105,7 @@ namespace ts.server {
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ScriptInfo> = createMap<ScriptInfo>();
-        private program: ts.Program;
+        private program: Program;
         private externalFiles: SortedReadonlyArray<string>;
         private missingFilesMap: Map<FileWatcher> = createMap<FileWatcher>();
 
@@ -180,14 +180,14 @@ namespace ts.server {
             private readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
-            private documentRegistry: ts.DocumentRegistry,
+            private documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean) {
 
             if (!this.compilerOptions) {
-                this.compilerOptions = ts.getDefaultCompilerOptions();
+                this.compilerOptions = getDefaultCompilerOptions();
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
@@ -201,7 +201,7 @@ namespace ts.server {
             this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(this.compilerOptions);
 
-            this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry);
+            this.languageService = createLanguageService(this.lsHost, this.documentRegistry);
 
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
@@ -554,7 +554,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedReadonlyArray(result);
+                this.lastCachedUnresolvedImportsList = toSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 
@@ -783,7 +783,7 @@ namespace ts.server {
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
             // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            const referencedFiles = createMap<boolean>();
+            const referencedFiles = createMap<true>();
             if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = this.program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
@@ -837,7 +837,7 @@ namespace ts.server {
      */
     export class InferredProject extends Project {
 
-        private static newName = (() => {
+        private static readonly newName = (() => {
             let nextId = 1;
             return () => {
                 const id = nextId;
@@ -875,7 +875,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -936,9 +936,9 @@ namespace ts.server {
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
         private projectFileWatcher: FileWatcher;
-        private directoryWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<FileWatcher>;
-        private typeRootsWatchers: FileWatcher[];
+        private directoryWatcher: FileWatcher | undefined;
+        private directoriesWatchedForWildcards: Map<FileWatcher> | undefined;
+        private typeRootsWatchers: FileWatcher[] | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         private plugins: PluginModule[] = [];
@@ -948,7 +948,7 @@ namespace ts.server {
 
         constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
-            documentRegistry: ts.DocumentRegistry,
+            documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
             private wildcardDirectories: Map<WatchDirectoryFlags>,
@@ -1057,7 +1057,7 @@ namespace ts.server {
         }
 
         getExternalFiles(): SortedReadonlyArray<string> {
-            return toSortedReadonlyArray(flatMap(this.plugins, plugin => {
+            return toSortedArray(flatMap(this.plugins, plugin => {
                 if (typeof plugin.getExternalFiles !== "function") return;
                 try {
                     return plugin.getExternalFiles(this);
@@ -1134,10 +1134,12 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            this.directoriesWatchedForWildcards.forEach(watcher => {
-                watcher.close();
-            });
-            this.directoriesWatchedForWildcards = undefined;
+            if (this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards.forEach(watcher => {
+                    watcher.close();
+                });
+                this.directoriesWatchedForWildcards = undefined;
+            }
 
             this.stopWatchingDirectory();
         }
@@ -1152,7 +1154,7 @@ namespace ts.server {
         }
 
         getEffectiveTypeRoots() {
-            return ts.getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host) || [];
+            return getEffectiveTypeRoots(this.getCompilerOptions(), this.projectService.host) || [];
         }
     }
 
@@ -1164,7 +1166,7 @@ namespace ts.server {
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
-            documentRegistry: ts.DocumentRegistry,
+            documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,

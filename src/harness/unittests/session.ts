@@ -9,7 +9,7 @@ namespace ts.server {
         newLine: "\n",
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
-        readFile(): string { return void 0; },
+        readFile: () => undefined,
         writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,

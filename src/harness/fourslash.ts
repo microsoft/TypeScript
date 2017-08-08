@@ -130,7 +130,7 @@ namespace FourSlash {
         // 0 - cancelled
         // >0 - not cancelled
         // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
-        private static NotCanceled: number = -1;
+        private static readonly NotCanceled: number = -1;
         private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCanceled;
 
         public isCancellationRequested(): boolean {
@@ -1806,7 +1806,14 @@ namespace FourSlash {
                 this.editScriptAndUpdateMarkers(fileName, offsetStart, offsetEnd, edit.newText);
                 const editDelta = edit.newText.length - edit.span.length;
                 if (offsetStart <= this.currentCaretPosition) {
-                    this.currentCaretPosition += editDelta;
+                    if (offsetEnd <= this.currentCaretPosition) {
+                        // The entirety of the edit span falls before the caret position, shift the caret accordingly
+                        this.currentCaretPosition += editDelta;
+                    }
+                    else {
+                        // The span being replaced includes the caret position, place the caret at the beginning of the span
+                        this.currentCaretPosition = offsetStart;
+                    }
                 }
                 runningOffset += editDelta;
                 // TODO: Consider doing this at least some of the time for higher fidelity. Currently causes a failure (bug 707150)
@@ -2354,7 +2361,7 @@ namespace FourSlash {
         private applyCodeActions(actions: ts.CodeAction[], index?: number): void {
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
-                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found.`);
+                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : "" }`);
                 }
                 index = 0;
             }
@@ -2398,7 +2405,7 @@ namespace FourSlash {
             const sortedActualArray = actualTextArray.sort();
             if (!ts.arrayIsEqualTo(sortedExpectedArray, sortedActualArray)) {
                 this.raiseError(
-                    `Actual text array doesn't match expected text array. \nActual: \n"${sortedActualArray.join("\n\n")}"\n---\nExpected: \n'${sortedExpectedArray.join("\n\n")}'`);
+                    `Actual text array doesn't match expected text array. \nActual: \n'${sortedActualArray.join("\n\n")}'\n---\nExpected: \n'${sortedExpectedArray.join("\n\n")}'`);
             }
         }
 
