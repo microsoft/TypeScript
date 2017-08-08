@@ -660,7 +660,10 @@ namespace ts.server {
         // Input position is relative to the start of this node.
         // Output line number is absolute.
         charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): { oneBasedLine: number, zeroBasedColumn: number, lineText: string | undefined } {
-            Debug.assert(this.children.length !== 0);
+            if (this.children.length === 0) {
+                // Root node might have no children if this is an empty document.
+                return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: undefined };
+            }
 
             for (const child of this.children) {
                 if (child.charCount() > relativePosition) {
