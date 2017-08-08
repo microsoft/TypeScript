@@ -15,8 +15,8 @@ namespace ts.server {
         typingSafeListLocation: string;
         npmLocation: string | undefined;
         telemetryEnabled: boolean;
-        globalPlugins: string[];
-        pluginProbeLocations: string[];
+        globalPlugins: ReadonlyArray<string>;
+        pluginProbeLocations: ReadonlyArray<string>;
         allowLocalPluginLoads: boolean;
     }
 
@@ -760,10 +760,10 @@ namespace ts.server {
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
     const npmLocation = findArgument(Arguments.NpmLocation);
 
-    function parseStringArray(argName: string): string[] {
+    function parseStringArray(argName: string): ReadonlyArray<string> {
         const arg = findArgument(argName);
         if (arg === undefined) {
-            return emptyArray as string[]; // TODO: https://github.com/Microsoft/TypeScript/issues/16312
+            return emptyArray;
         }
         return arg.split(",").filter(name => name !== "");
     }
