@@ -11,20 +11,6 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    /**
-     * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
-     */
-    export const enum Ternary {
-        False = 0,
-        Maybe = 1,
-        True = -1
-    }
 
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
     export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
