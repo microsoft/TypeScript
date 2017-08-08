@@ -14107,11 +14107,8 @@ namespace ts {
          */
         function resolveCustomJsxElementAttributesType(openingLikeElement: JsxOpeningLikeElement,
             shouldIncludeAllStatelessAttributesType: boolean,
-            elementType?: Type,
+            elementType: Type = checkExpression(openingLikeElement.tagName),
             elementClassType?: Type): Type {
-            if (!elementType) {
-                elementType = checkExpression(openingLikeElement.tagName);
-            }
 
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
@@ -14245,11 +14242,12 @@ namespace ts {
          */
         function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, shouldIncludeAllStatelessAttributesType: boolean): Type {
             const links = getNodeLinks(node);
-            if (!links.resolvedJsxElementAttributesType) {
+            const linkLocation = shouldIncludeAllStatelessAttributesType ? "resolvedJsxElementAllAttributesType" : "resolvedJsxElementAttributesType";
+            if (!links[linkLocation]) {
                 const elemClassType = getJsxGlobalElementClassType();
-                return links.resolvedJsxElementAttributesType = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, /*elementType*/ undefined, elemClassType);
+                return links[linkLocation] = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, /*elementType*/ undefined, elemClassType);
             }
-            return links.resolvedJsxElementAttributesType;
+            return links[linkLocation];
         }
 
         /**
