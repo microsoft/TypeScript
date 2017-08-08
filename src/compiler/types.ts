@@ -2037,6 +2037,10 @@ namespace ts {
         end: -1;
     }
 
+    export interface RegionRange extends TextRange {
+        name?: string;
+    }
+
     // represents a top level: { type } expression in a JSDoc comment.
     export interface JSDocTypeExpression extends TypeNode {
         kind: SyntaxKind.JSDocTypeExpression;

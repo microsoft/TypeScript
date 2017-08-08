@@ -6,6 +6,10 @@ namespace ts.OutliningElementsCollector {
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         let depth = 0;
+        const regions: RegionRange[] = [];
+        const regionText = "#region";
+        const regionStart = new RegExp("// #region( .+| *)", "g");
+        const regionEnd = new RegExp("// #endregion *");
 
         walk(sourceFile);
         return elements;
@@ -30,6 +34,18 @@ namespace ts.OutliningElementsCollector {
                     hintSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
                     bannerText: collapseText,
                     autoCollapse,
+                };
+                elements.push(span);
+            }
+        }
+
+        function addOutliningSpanRegions(regionSpan: RegionRange) {
+            if (regionSpan) {
+                const span: OutliningSpan = {
+                    textSpan: createTextSpanFromBounds(regionSpan.pos, regionSpan.end),
+                    hintSpan: createTextSpanFromBounds(regionSpan.pos, regionSpan.end),
+                    bannerText: regionSpan.name,
+                    autoCollapse: false,
                 };
                 elements.push(span);
             }
@@ -89,11 +105,64 @@ namespace ts.OutliningElementsCollector {
             return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
         }
 
+        function isRegionStart(range: CommentRange) {
+            const comment = sourceFile.text.substring(range.pos, range.end);
+            const result = comment.match(regionStart);
+
+            if (result && result.length > 0) {
+                const name = result[0].substring(10).trim();
+                if (name) {
+                    return name;
+                }
+                else {
+                    return regionText;
+                }
+            }
+            return "";
+        }
+
+        function isRegionEnd(range: CommentRange) {
+            const comment = sourceFile.text.substring(range.pos, range.end);
+            return comment.match(regionEnd);
+        }
+
+        function addRegionsNearNode(n: Node) {
+            const comments = ts.getLeadingCommentRangesOfNode(n, sourceFile);
+
+            if (n.kind !== SyntaxKind.SourceFile && comments) {
+                for (const currentComment of comments) {
+                    cancellationToken.throwIfCancellationRequested();
+
+                    if (currentComment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                        const name = isRegionStart(currentComment);
+                        if (name) {
+                            const region: RegionRange = {
+                                pos: currentComment.pos,
+                                end: currentComment.end,
+                                name,
+                            };
+                            regions.push(region);
+                        }
+                        else if (isRegionEnd(currentComment)) {
+                            const region = regions.pop();
+
+                            if (region) {
+                                region.end = currentComment.end;
+                                addOutliningSpanRegions(region);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         function walk(n: Node): void {
             cancellationToken.throwIfCancellationRequested();
             if (depth > maxDepth) {
                 return;
             }
+
+            addRegionsNearNode(n);
 
             if (isDeclaration(n)) {
                 addOutliningForLeadingCommentsForNode(n);
