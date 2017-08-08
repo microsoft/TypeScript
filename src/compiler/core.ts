@@ -361,11 +361,11 @@ namespace ts {
         return false;
     }
 
-    export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
+    export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
         let outIndex = 0;
-        for (const item of array) {
-            if (f(item)) {
-                array[outIndex] = item;
+        for (let i = 0; i < array.length; i++) {
+            if (f(array[i], i, array)) {
+                array[outIndex] = array[i];
                 outIndex++;
             }
         }

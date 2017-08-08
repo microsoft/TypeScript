@@ -495,7 +495,7 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -555,7 +555,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedArray(result);
+                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 

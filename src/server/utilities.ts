@@ -262,6 +262,15 @@ namespace ts.server {
         return arr as SortedArray<T>;
     }
 
+    export function toDeduplicatedSortedArray(arr: string[]): SortedArray<string> {
+        arr.sort();
+        filterMutate(arr, isNonDuplicateInSortedArray);
+        return arr as SortedArray<string>;
+    }
+    function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
+        return index === 0 || value !== array[index - 1];
+    }
+
     export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
         compare = compare || compareValues;
         let newIndex = 0;
