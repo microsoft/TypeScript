@@ -2105,13 +2105,14 @@ namespace ts {
                 setCommentRange(declarationList, node);
 
                 if (node.transformFlags & TransformFlags.ContainsBindingPattern
-                    && (isBindingPattern(node.declarations[0].name)
-                        || isBindingPattern(lastOrUndefined(node.declarations).name))) {
+                    && (isBindingPattern(node.declarations[0].name) || isBindingPattern(lastOrUndefined(node.declarations).name))) {
                     // If the first or last declaration is a binding pattern, we need to modify
                     // the source map range for the declaration list.
                     const firstDeclaration = firstOrUndefined(declarations);
-                    const lastDeclaration = lastOrUndefined(declarations);
-                    setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+                    if (firstDeclaration) {
+                        const lastDeclaration = lastOrUndefined(declarations);
+                        setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+                    }
                 }
 
                 return declarationList;
