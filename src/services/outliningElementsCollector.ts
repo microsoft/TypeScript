@@ -106,61 +106,7 @@ namespace ts.OutliningElementsCollector {
             return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
         }
 
-        function isRegionStart(range: CommentRange) {
-            const comment = sourceFile.text.substring(range.pos, range.end);
-            const result = comment.match(regionStart);
-
-            if (result && result.length > 0) {
-                const name = result[0].substring(10).trim();
-                if (name) {
-                    return name;
-                }
-                else {
-                    return regionText;
-                }
-            }
-            return "";
-        }
-
-        function isRegionEnd(range: CommentRange) {
-            const comment = sourceFile.text.substring(range.pos, range.end);
-            return comment.match(regionEnd);
-        }
-
-        function addRegionsNearNode(n: Node) {
-            const precedingToken = ts.findPrecedingToken(n.pos, sourceFile);
-            const trailingComments = precedingToken && ts.getTrailingCommentRanges(sourceFile.text, precedingToken.end);
-            const leadingComments = ts.getLeadingCommentRangesOfNode(n, sourceFile);
-            const comments = concatenate(trailingComments, leadingComments);
-
-            if (n.kind !== SyntaxKind.SourceFile && comments) {
-                for (const currentComment of comments) {
-                    cancellationToken.throwIfCancellationRequested();
-
-                    if (currentComment.kind === SyntaxKind.SingleLineCommentTrivia) {
-                        const name = isRegionStart(currentComment);
-                        if (name) {
-                            const region: RegionRange = {
-                                pos: currentComment.pos,
-                                end: currentComment.end,
-                                name,
-                            };
-                            regions.push(region);
-                        }
-                        else if (isRegionEnd(currentComment)) {
-                            const region = regions.pop();
-
-                            if (region) {
-                                region.end = currentComment.end;
-                                // addOutliningSpanRegions(region);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        function isRegionStartBoundaries(start: number, end: number) {
+        function isRegionStart(start: number, end: number) {
             const comment = sourceFile.text.substring(start, end);
             const result = comment.match(regionStart);
 
@@ -187,7 +133,7 @@ namespace ts.OutliningElementsCollector {
             return "";
         }
 
-        function isRegionEndBoundaries(start: number, end: number) {
+        function isRegionEnd(start: number, end: number) {
             const comment = sourceFile.text.substring(start, end);
             return comment.match(regionEnd);
         }
@@ -198,7 +144,7 @@ namespace ts.OutliningElementsCollector {
             for (const currentLineStart of lineStarts) {
                 const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
 
-                const name = isRegionStartBoundaries(currentLineStart, lineEnd);
+                const name = isRegionStart(currentLineStart, lineEnd);
                 if (name) {
                     const region: RegionRange = {
                         pos: currentLineStart,
@@ -207,7 +153,7 @@ namespace ts.OutliningElementsCollector {
                     };
                     regions.push(region);
                 }
-                else if (isRegionEndBoundaries(currentLineStart, lineEnd)) {
+                else if (isRegionEnd(currentLineStart, lineEnd)) {
                     const region = regions.pop();
 
                     if (region) {
@@ -223,8 +169,6 @@ namespace ts.OutliningElementsCollector {
             if (depth > maxDepth) {
                 return;
             }
-
-            addRegionsNearNode(n);
 
             if (isDeclaration(n)) {
                 addOutliningForLeadingCommentsForNode(n);
