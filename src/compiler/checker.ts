@@ -8592,7 +8592,7 @@ namespace ts {
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 if (target.typePredicate) {
                     if (source.typePredicate) {
-                        result &= compareTypePredicateRelatedTo(source.typePredicate, target.typePredicate, reportErrors, errorReporter, compareTypes);
+                        result &= compareTypePredicateRelatedTo(source.typePredicate, target.typePredicate, source.declaration, target.declaration, reportErrors, errorReporter, compareTypes);
                     }
                     else if (isIdentifierTypePredicate(target.typePredicate)) {
                         if (reportErrors) {
@@ -8614,8 +8614,11 @@ namespace ts {
             return result;
         }
 
-        function compareTypePredicateRelatedTo(source: TypePredicate,
+        function compareTypePredicateRelatedTo(
+            source: TypePredicate,
             target: TypePredicate,
+            sourceDeclaration: SignatureDeclaration,
+            targetDeclaration: SignatureDeclaration,
             reportErrors: boolean,
             errorReporter: ErrorReporter,
             compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
@@ -8628,11 +8631,13 @@ namespace ts {
             }
 
             if (source.kind === TypePredicateKind.Identifier) {
-                const sourceIdentifierPredicate = source as IdentifierTypePredicate;
-                const targetIdentifierPredicate = target as IdentifierTypePredicate;
-                if (sourceIdentifierPredicate.parameterIndex !== targetIdentifierPredicate.parameterIndex) {
+                const sourcePredicate = source as IdentifierTypePredicate;
+                const targetPredicate = target as IdentifierTypePredicate;
+                const sourceIndex = sourcePredicate.parameterIndex - (getThisParameter(sourceDeclaration) ? 1 : 0);
+                const targetIndex = targetPredicate.parameterIndex - (getThisParameter(targetDeclaration) ? 1 : 0);
+                if (sourceIndex !== targetIndex) {
                     if (reportErrors) {
-                        errorReporter(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourceIdentifierPredicate.parameterName, targetIdentifierPredicate.parameterName);
+                        errorReporter(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourcePredicate.parameterName, targetPredicate.parameterName);
                         errorReporter(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typePredicateToString(source), typePredicateToString(target));
                     }
                     return Ternary.False;
