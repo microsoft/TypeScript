@@ -8,8 +8,8 @@ namespace ts.OutliningElementsCollector {
         let depth = 0;
         const regions: RegionRange[] = [];
         const regionText = "#region";
-        const regionStart = new RegExp("//\\s*#region(\\s+.*)?$", "gm");
-        const regionEnd = new RegExp("//\\s*#endregion(\\s|$)", "gm");
+        const regionStart = new RegExp("^\\s*//\\s*#region(\\s+.*)?$", "gm");
+        const regionEnd = new RegExp("^\\s*//\\s*#endregion(\\s|$)", "gm");
 
         walk(sourceFile);
         gatherRegions();
