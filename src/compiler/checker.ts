@@ -8405,16 +8405,19 @@ namespace ts {
             if (forEach(node.parameters, p => !getEffectiveTypeAnnotationNode(p))) {
                 return true;
             }
-            // For arrow functions we now know we're not context sensitive.
-            if (node.kind === SyntaxKind.ArrowFunction) {
-                return false;
+            if (node.kind !== SyntaxKind.ArrowFunction) {
+                // If the first parameter is not an explicit 'this' parameter, then the function has
+                // an implicit 'this' parameter which is subject to contextual typing. Otherwise we
+                // know that all parameters (including 'this') have type annotations and nothing is
+                // subject to contextual typing.
+                const parameter = firstOrUndefined(node.parameters);
+                if (!(parameter && parameterIsThisKeyword(parameter))) {
+                    return true;
+                }
             }
-            // If the first parameter is not an explicit 'this' parameter, then the function has
-            // an implicit 'this' parameter which is subject to contextual typing. Otherwise we
-            // know that all parameters (including 'this') have type annotations and nothing is
-            // subject to contextual typing.
-            const parameter = firstOrUndefined(node.parameters);
-            return !(parameter && parameterIsThisKeyword(parameter));
+
+            // TODO(anhans): A block should be context-sensitive if it has a context-sentitive return value.
+            return node.body.kind === SyntaxKind.Block ? false : isContextSensitive(node.body);
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
