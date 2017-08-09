@@ -15705,9 +15705,10 @@ namespace ts {
             //
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
+            const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
             let excludeArgument: boolean[];
             let excludeCount = 0;
-            if (!isDecorator) {
+            if (!isDecorator && !isSingleNonGenericCandidate) {
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
                 for (let i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
@@ -15860,6 +15861,19 @@ namespace ts {
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
+
+                if (isSingleNonGenericCandidate) {
+                    const candidate = candidates[0];
+                    if (!hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
+                        return undefined;
+                    }
+                    if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        candidateForArgumentError = candidate;
+                        return undefined;
+                    }
+                    return candidate;
+                }
+
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                     const originalCandidate = candidates[candidateIndex];
                     if (!hasCorrectArity(node, args, originalCandidate, signatureHelpTrailingComma)) {
@@ -15907,7 +15921,6 @@ namespace ts {
 
                 return undefined;
             }
-
         }
 
         function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
