@@ -11421,10 +11421,7 @@ namespace ts {
                 const funcType = checkNonNullExpression(node.expression);
                 if (funcType !== silentNeverType) {
                     const apparentType = getApparentType(funcType);
-                    if (apparentType !== unknownType) {
-                        const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-                        return some(callSignatures, sig => signatureHasTypePredicate(sig));
-                    }
+                    return apparentType !== unknownType && some(getSignaturesOfType(apparentType, SignatureKind.Call), signatureHasTypePredicate);
                 }
             }
             return false;
