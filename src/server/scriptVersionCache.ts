@@ -5,7 +5,7 @@
 namespace ts.server {
     const lineCollectionCapacity = 4;
 
-    export interface LineCollection {
+    interface LineCollection {
         charCount(): number;
         lineCount(): number;
         isLeaf(): this is LineLeaf;
@@ -17,7 +17,7 @@ namespace ts.server {
         lineText: string | undefined;
     }
 
-    export enum CharRangeSection {
+    const enum CharRangeSection {
         PreStart,
         Start,
         Entire,
@@ -26,7 +26,7 @@ namespace ts.server {
         PostEnd
     }
 
-    export interface ILineIndexWalker {
+    interface ILineIndexWalker {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -243,7 +243,7 @@ namespace ts.server {
     }
 
     // text change information
-    export class TextChange {
+    class TextChange {
         constructor(public pos: number, public deleteLen: number, public insertedText?: string) {
         }
 
@@ -285,17 +285,6 @@ namespace ts.server {
             }
         }
 
-        latest() {
-            return this.versions[this.currentVersionToIndex()];
-        }
-
-        latestVersion() {
-            if (this.changes.length > 0) {
-                this.getSnapshot();
-            }
-            return this.currentVersion;
-        }
-
         // reload whole script, leaving no change history behind reload
         reload(script: string) {
             this.currentVersion++;
@@ -314,7 +303,9 @@ namespace ts.server {
             this.minVersion = this.currentVersion;
         }
 
-        getSnapshot() {
+        getSnapshot(): IScriptSnapshot { return this._getSnapshot(); }
+
+        private _getSnapshot(): LineIndexSnapshot {
             let snap = this.versions[this.currentVersionToIndex()];
             if (this.changes.length > 0) {
                 let snapIndex = snap.index;
@@ -332,6 +323,29 @@ namespace ts.server {
                 }
             }
             return snap;
+        }
+
+        getSnapshotVersion(): number {
+            return this._getSnapshot().version;
+        }
+
+        getLineInfo(line: number): AbsolutePositionAndLineText {
+            return this._getSnapshot().index.lineNumberToInfo(line);
+        }
+
+        lineOffsetToPosition(line: number, column: number): number {
+            return this._getSnapshot().index.absolutePositionOfStartOfLine(line) + (column - 1);
+        }
+
+        positionToLineOffset(position: number): protocol.Location {
+            return this._getSnapshot().index.positionToLineOffset(position);
+        }
+
+        lineToTextSpan(line: number): TextSpan {
+            const index = this._getSnapshot().index;
+            const { lineText, absolutePosition } = index.lineNumberToInfo(line + 1);
+            const len = lineText !== undefined ? lineText.length : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
+            return createTextSpan(absolutePosition, len);
         }
 
         getTextChangesBetweenVersions(oldVersion: number, newVersion: number) {
@@ -365,7 +379,7 @@ namespace ts.server {
         }
     }
 
-    export class LineIndexSnapshot implements IScriptSnapshot {
+    class LineIndexSnapshot implements IScriptSnapshot {
         constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: ReadonlyArray<TextChange> = emptyArray) {
         }
 
@@ -389,6 +403,7 @@ namespace ts.server {
         }
     }
 
+    /* @internal */
     export class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy
@@ -561,7 +576,7 @@ namespace ts.server {
         }
     }
 
-    export class LineNode implements LineCollection {
+    class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
 
@@ -844,7 +859,7 @@ namespace ts.server {
         }
     }
 
-    export class LineLeaf implements LineCollection {
+    class LineLeaf implements LineCollection {
         constructor(public text: string) {
         }
 
