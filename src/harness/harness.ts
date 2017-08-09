@@ -1295,7 +1295,11 @@ namespace Harness {
 
             let firstLine = true;
             function newLine() {
-                return firstLine ? (firstLine = false, "") : "\r\n";
+                if (firstLine) {
+                    firstLine = false;
+                    return "";
+                }
+                return "\r\n";
             }
 
             function outputErrorText(error: ts.Diagnostic) {
