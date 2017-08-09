@@ -467,27 +467,28 @@ namespace ts.server {
         }
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
-            // ignore this settings if we are not creating inferred projects per project root.
-            if (projectRootPath && !this.useInferredProjectPerProjectRoot) return;
+            Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
-            const compilerOptionsForInferredProjects = convertCompilerOptions(projectCompilerOptions);
+            const compilerOptions = convertCompilerOptions(projectCompilerOptions);
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
-            compilerOptionsForInferredProjects.allowNonTsExtensions = true;
+            compilerOptions.allowNonTsExtensions = true;
 
             if (projectRootPath) {
-                this.compilerOptionsForInferredProjectsPerProjectRoot.set(projectRootPath, compilerOptionsForInferredProjects);
+                this.compilerOptionsForInferredProjectsPerProjectRoot.set(projectRootPath, compilerOptions);
             }
             else {
-                this.compilerOptionsForInferredProjects = compilerOptionsForInferredProjects;
+                this.compilerOptionsForInferredProjects = compilerOptions;
             }
 
             const updatedProjects: Project[] = [];
             for (const project of this.inferredProjects) {
-                if (project.projectRootPath === projectRootPath || (project.projectRootPath && !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath))) {
-                    project.setCompilerOptions(compilerOptionsForInferredProjects);
-                    project.compileOnSaveEnabled = compilerOptionsForInferredProjects.compileOnSave;
+                if (projectRootPath ? 
+                        project.projectRootPath === projectRootPath : 
+                        !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
+                    project.setCompilerOptions(compilerOptions);
+                    project.compileOnSaveEnabled = compilerOptions.compileOnSave;
                     updatedProjects.push(project);
                 }
             }
@@ -1319,7 +1320,8 @@ namespace ts.server {
                 return this.createInferredProject(/*isSingleInferredProject*/ false, projectRootPath);
             }
 
-            // we don't have an explicit root path, so we should try to find an inferred project that best matches the file.
+            // we don't have an explicit root path, so we should try to find an inferred project 
+            // that more closely contains the file.
             let bestMatch: InferredProject;
             for (const project of this.inferredProjects) {
                 // ignore single inferred projects (handled elsewhere)
@@ -1340,6 +1342,14 @@ namespace ts.server {
                 return undefined;
             }
 
+            // If `useInferredProjectPerProjectRoot` is not enabled, then there will only be one 
+            // inferred project for all files. If `useInferredProjectPerProjectRoot` is enabled 
+            // then we want to put all files that are not opened with a `projectRootPath` into
+            // the same inferred project.
+            // 
+            // To avoid the cost of searching through the array and to optimize for the case where
+            // `useInferredProjectPerProjectRoot` is not enabled, we will always put the inferred
+            // project for non-rooted files at the front of the array.
             if (this.inferredProjects.length > 0 && this.inferredProjects[0].projectRootPath === undefined) {
                 return this.inferredProjects[0];
             }

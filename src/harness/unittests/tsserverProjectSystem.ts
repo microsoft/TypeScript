@@ -188,23 +188,26 @@ namespace ts.projectSystem {
 
     export function createSession(host: server.ServerHost, opts: Partial<server.SessionOptions> = {}) {
         if (opts.typingsInstaller === undefined) {
-            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
+            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
         }
+        
         if (opts.eventHandler !== undefined) {
             opts.canUseEvents = true;
         }
-        return new TestSession({
+
+        const sessionOptions: server.SessionOptions = {
             host,
             cancellationToken: server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: opts.typingsInstaller,
+            typingsInstaller: undefined,
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger,
-            canUseEvents: false,
-            ...opts
-        });
+            canUseEvents: false
+        };
+
+        return new TestSession({ ...sessionOptions, ...opts });
     }
 
     export interface CreateProjectServiceParameters {
