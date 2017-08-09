@@ -1,24 +1,23 @@
-tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(3,13): error TS1005: '(' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(6,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(12,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(13,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(22,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(26,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(2,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(6,12): error TS1005: 'finally' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(10,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(11,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(15,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(17,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(19,20): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (6 errors) ====
+==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (7 errors) ====
     function fn() {
-        try {
-        } catch { // syntax error, missing '(x)'
-                ~
-!!! error TS1005: '(' expected.
-        }
-    
         catch(x) { } // error missing try
         ~~~~~
 !!! error TS1005: 'try' expected.
     
-        finally{ } // potential error; can be absorbed by the 'catch'
+        finally { } // potential error; can be absorbed by the 'catch'
+    
+        try { }; // error missing finally
+               ~
+!!! error TS1005: 'finally' expected.
     }
     
     function fn2() {
@@ -28,22 +27,18 @@ tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts(26,5):
         catch (x) { } // error missing try
         ~~~~~
 !!! error TS1005: 'try' expected.
+        
+        try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
     
-        // no error
-        try {
-        }
-        finally {
-        }
-    
-        // error missing try
-        finally {
+        finally { } // error missing try
         ~~~~~~~
 !!! error TS1005: 'try' expected.
-        }
-    
-        // error missing try
-        catch (x) {
+        
+        catch (x) { } // error missing try
         ~~~~~
 !!! error TS1005: 'try' expected.
-        }
+    
+        try { } catch () { } // error missing catch binding
+                       ~
+!!! error TS1003: Identifier expected.
     }

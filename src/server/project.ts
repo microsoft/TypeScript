@@ -170,7 +170,8 @@ namespace ts.server {
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
             if (result.error) {
-                log(`Failed to load module: ${JSON.stringify(result.error)}`);
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                log(`Failed to load module '${moduleName}': ${err}`);
                 return undefined;
             }
             return result.module;
@@ -362,7 +363,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
-                    Debug.assert(false, `scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' is missing.`);
                 }
                 return scriptInfo;
             });
@@ -494,7 +495,7 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -554,7 +555,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedArray(result);
+                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 

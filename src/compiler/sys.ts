@@ -153,7 +153,7 @@ namespace ts {
                         return;
                     }
                     watcher = _fs.watch(
-                        dirPath,
+                        dirPath || ".",
                         { persistent: true },
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
                     );

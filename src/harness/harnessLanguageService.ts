@@ -683,11 +683,11 @@ namespace Harness.LanguageService {
         }
 
         info(message: string): void {
-            return this.host.log(message);
+            this.host.log(message);
         }
 
-        msg(message: string) {
-            return this.host.log(message);
+        err(message: string): void {
+            this.host.log(message);
         }
 
         loggingEnabled() {
@@ -702,15 +702,10 @@ namespace Harness.LanguageService {
             return false;
         }
 
-
-        endGroup(): void {
-        }
+        group() { throw ts.notImplemented(); }
 
         perftrc(message: string): void {
             return this.host.log(message);
-        }
-
-        startGroup(): void {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
@@ -797,7 +792,7 @@ namespace Harness.LanguageService {
                 default:
                     return {
                         module: undefined,
-                        error: "Could not resolve module"
+                        error: new Error("Could not resolve module")
                     };
             }
 
