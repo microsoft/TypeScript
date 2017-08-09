@@ -46,7 +46,7 @@ var v = {
 >true : true
 
     [`hello bye`]() { },
->`hello bye` : string
+>`hello bye` : "hello bye"
 
     [`hello ${a} bye`]() { }
 >`hello ${a} bye` : string
