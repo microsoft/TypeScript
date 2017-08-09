@@ -8,7 +8,7 @@ namespace ts {
         setWriter(writer: EmitTextWriter): void;
         emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
-        emitTrailingCommentsOfPosition(pos: number): void;
+        emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean): void;
         emitLeadingCommentsOfPosition(pos: number): void;
     }
 
@@ -306,7 +306,7 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentsOfPosition(pos: number) {
+        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean) {
             if (disabled) {
                 return;
             }
@@ -315,7 +315,7 @@ namespace ts {
                 performance.mark("beforeEmitTrailingCommentsOfPosition");
             }
 
-            forEachTrailingCommentToEmit(pos, emitTrailingCommentOfPosition);
+            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
 
             if (extendedDiagnostics) {
                 performance.measure("commentTime", "beforeEmitTrailingCommentsOfPosition");

@@ -2491,7 +2491,7 @@ namespace ts {
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
             const values = createValuesHelper(context, expression, node.expression);
-            const next = createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, []);
+            const next = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
 
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
@@ -3173,6 +3173,7 @@ namespace ts {
         function visitCatchClause(node: CatchClause): CatchClause {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
+            Debug.assert(!!node.variableDeclaration, "Catch clause variable should always be present when downleveling ES2015.");
             if (isBindingPattern(node.variableDeclaration.name)) {
                 const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const newVariableDeclaration = createVariableDeclaration(temp);
