@@ -2904,7 +2904,10 @@ namespace ts {
     function computeCatchClause(node: CatchClause, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
 
-        if (node.variableDeclaration && isBindingPattern(node.variableDeclaration.name)) {
+        if (!node.variableDeclaration) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+        else if (isBindingPattern(node.variableDeclaration.name)) {
             transformFlags |= TransformFlags.AssertES2015;
         }
 

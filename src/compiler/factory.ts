@@ -2128,14 +2128,14 @@ namespace ts {
             : node;
     }
 
-    export function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block) {
+    export function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
         const node = <CatchClause>createSynthesizedNode(SyntaxKind.CatchClause);
         node.variableDeclaration = typeof variableDeclaration === "string" ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
         node.block = block;
         return node;
     }
 
-    export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block) {
+    export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block) {
         return node.variableDeclaration !== variableDeclaration
             || node.block !== block
             ? updateNode(createCatchClause(variableDeclaration, block), node)

@@ -4799,11 +4799,16 @@ namespace ts {
         function parseCatchClause(): CatchClause {
             const result = <CatchClause>createNode(SyntaxKind.CatchClause);
             parseExpected(SyntaxKind.CatchKeyword);
-            if (parseExpected(SyntaxKind.OpenParenToken)) {
+
+            if (parseOptional(SyntaxKind.OpenParenToken)) {
                 result.variableDeclaration = parseVariableDeclaration();
+                parseExpected(SyntaxKind.CloseParenToken);
+            }
+            else {
+                // Keep shape of node to avoid degrading performance.
+                result.variableDeclaration = undefined;
             }
 
-            parseExpected(SyntaxKind.CloseParenToken);
             result.block = parseBlock(/*ignoreMissingOpenBrace*/ false);
             return finishNode(result);
         }

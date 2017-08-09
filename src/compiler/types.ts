@@ -1808,7 +1808,7 @@ namespace ts {
     export interface CatchClause extends Node {
         kind: SyntaxKind.CatchClause;
         parent?: TryStatement;
-        variableDeclaration: VariableDeclaration;
+        variableDeclaration?: VariableDeclaration;
         block: Block;
     }
 
@@ -3069,6 +3069,7 @@ namespace ts {
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
+        resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
@@ -3317,6 +3318,11 @@ namespace ts {
         promiseTypeOfPromiseConstructor?: Type;
         promisedTypeOfPromise?: Type;
         awaitedTypeOfType?: Type;
+    }
+
+    /* @internal */
+    export interface SyntheticDefaultModuleType extends Type {
+        syntheticType?: Type;
     }
 
     export interface TypeVariable extends Type {
@@ -4021,7 +4027,6 @@ namespace ts {
         ContainsBindingPattern = 1 << 23,
         ContainsYield = 1 << 24,
         ContainsHoistedDeclarationOrCompletion = 1 << 25,
-
         ContainsDynamicImport = 1 << 26,
 
         // Please leave this as 1 << 29.

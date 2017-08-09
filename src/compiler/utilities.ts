@@ -3856,6 +3856,20 @@ namespace ts {
         return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 
+    export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
+        if (isBindingPattern(node)) {
+            return every(node.elements, isEmptyBindingElement);
+        }
+        return false;
+    }
+
+    export function isEmptyBindingElement(node: BindingElement): boolean {
+        if (isOmittedExpression(node)) {
+            return true;
+        }
+        return isEmptyBindingPattern(node.name);
+    }
+
     function walkUpBindingElementsAndPatterns(node: Node): Node {
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
             node = node.parent;

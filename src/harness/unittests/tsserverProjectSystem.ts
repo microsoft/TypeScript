@@ -34,14 +34,13 @@ namespace ts.projectSystem {
     }
 
     export const nullLogger: server.Logger = {
-        close: () => void 0,
-        hasLevel: () => void 0,
+        close: noop,
+        hasLevel: () => false,
         loggingEnabled: () => false,
-        perftrc: () => void 0,
-        info: () => void 0,
-        startGroup: () => void 0,
-        endGroup: () => void 0,
-        msg: () => void 0,
+        perftrc: noop,
+        info: noop,
+        err: noop,
+        group: noop,
         getLogFileName: (): string => undefined
     };
 
