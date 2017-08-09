@@ -914,7 +914,7 @@ namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
 
     /**
