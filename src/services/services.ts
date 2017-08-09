@@ -440,7 +440,7 @@ namespace ts {
         parameters: Symbol[];
         thisParameter: Symbol;
         resolvedReturnType: Type;
-        resolvedTypePredicate: TypePredicate | void & { __unresolvedTypePredicate: void } | undefined;
+        resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount: number;
         minArgumentCount: number;
         hasRestParameter: boolean;
