@@ -5096,8 +5096,8 @@ namespace ts {
                     return unknownType;
                 }
 
-                const declaration = <JSDocTypedefTag | TypeAliasDeclaration>findDeclaration(
-                    symbol, d => d.kind === SyntaxKind.JSDocTypedefTag || d.kind === SyntaxKind.TypeAliasDeclaration);
+                const declaration = <JSDocTypedefTag | TypeAliasDeclaration>find(symbol.declarations, d =>
+                    d.kind === SyntaxKind.JSDocTypedefTag || d.kind === SyntaxKind.TypeAliasDeclaration);
                 let type = getTypeFromTypeNode(declaration.kind === SyntaxKind.JSDocTypedefTag ? declaration.typeExpression : declaration.type);
 
                 if (popTypeResolution()) {

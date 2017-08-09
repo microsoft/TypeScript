@@ -27,20 +27,6 @@ namespace ts {
         return undefined;
     }
 
-    export function findDeclaration<T extends Declaration>(symbol: Symbol, predicate: (node: Declaration) => node is T): T | undefined;
-    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined;
-    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined {
-        const declarations = symbol.declarations;
-        if (declarations) {
-            for (const declaration of declarations) {
-                if (predicate(declaration)) {
-                    return declaration;
-                }
-            }
-        }
-        return undefined;
-    }
-
     export interface StringSymbolWriter extends SymbolWriter {
         string(): string;
     }
@@ -112,19 +98,16 @@ namespace ts {
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
-    /* @internal */
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
             oldResolution.extension === newResolution.extension &&
             oldResolution.resolvedFileName === newResolution.resolvedFileName;
     }
 
-    /* @internal */
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
     }
 
-    /* @internal */
     export function hasChangesInResolutions<T>(
         names: ReadonlyArray<string>,
         newResolutions: ReadonlyArray<T>,
@@ -201,14 +184,6 @@ namespace ts {
         const file = getSourceFileOfNode(node);
         const loc = getLineAndCharacterOfPosition(file, node.pos);
         return `${file.fileName}(${loc.line + 1},${loc.character + 1})`;
-    }
-
-    export function getStartPosOfNode(node: Node): number {
-        return node.pos;
-    }
-
-    export function isDefined(value: any): boolean {
-        return value !== undefined;
     }
 
     export function getEndLinePosition(line: number, sourceFile: SourceFileLike): number {
@@ -463,7 +438,7 @@ namespace ts {
         return isExternalModule(node) || compilerOptions.isolatedModules;
     }
 
-    export function isBlockScope(node: Node, parentNode: Node) {
+    function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
             case SyntaxKind.CaseBlock:
@@ -664,10 +639,6 @@ namespace ts {
         return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
     }
 
-    export function getLeadingCommentRangesOfNodeFromText(node: Node, text: string) {
-        return getLeadingCommentRanges(text, node.pos);
-    }
-
     export function getJSDocCommentRanges(node: Node, text: string) {
         const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
@@ -675,7 +646,7 @@ namespace ts {
             node.kind === SyntaxKind.ArrowFunction ||
             node.kind === SyntaxKind.ParenthesizedExpression) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
-            getLeadingCommentRangesOfNodeFromText(node, text);
+            getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'
         return filter(commentRanges, comment =>
             text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
@@ -683,10 +654,10 @@ namespace ts {
             text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
     }
 
-    export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export let fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export let fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export let defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
+    export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
+    export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
 
     export function isPartOfTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -2095,10 +2066,6 @@ namespace ts {
         return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
     }
 
-    export function getOriginalSourceFiles(sourceFiles: ReadonlyArray<SourceFile>) {
-        return sameMap(sourceFiles, getOriginalSourceFile);
-    }
-
     export const enum Associativity {
         Left,
         Right
@@ -3090,24 +3057,6 @@ namespace ts {
         return false;
     }
 
-    // Returns false if this heritage clause element's expression contains something unsupported
-    // (i.e. not a name or dotted name).
-    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
-        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
-    }
-
-    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
-        if (node.kind === SyntaxKind.Identifier) {
-            return true;
-        }
-        else if (isPropertyAccessExpression(node)) {
-            return isSupportedExpressionWithTypeArgumentsRest(node.expression);
-        }
-        else {
-            return false;
-        }
-    }
-
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
@@ -3245,81 +3194,6 @@ namespace ts {
     }
 
     /**
-     * Tests whether a node and its subtree is simple enough to have its position
-     * information ignored when emitting source maps in a destructuring assignment.
-     *
-     * @param node The expression to test.
-     */
-    export function isSimpleExpression(node: Expression): boolean {
-        return isSimpleExpressionWorker(node, 0);
-    }
-
-    function isSimpleExpressionWorker(node: Expression, depth: number): boolean {
-        if (depth <= 5) {
-            const kind = node.kind;
-            if (kind === SyntaxKind.StringLiteral
-                || kind === SyntaxKind.NumericLiteral
-                || kind === SyntaxKind.RegularExpressionLiteral
-                || kind === SyntaxKind.NoSubstitutionTemplateLiteral
-                || kind === SyntaxKind.Identifier
-                || kind === SyntaxKind.ThisKeyword
-                || kind === SyntaxKind.SuperKeyword
-                || kind === SyntaxKind.TrueKeyword
-                || kind === SyntaxKind.FalseKeyword
-                || kind === SyntaxKind.NullKeyword) {
-                return true;
-            }
-            else if (kind === SyntaxKind.PropertyAccessExpression) {
-                return isSimpleExpressionWorker((<PropertyAccessExpression>node).expression, depth + 1);
-            }
-            else if (kind === SyntaxKind.ElementAccessExpression) {
-                return isSimpleExpressionWorker((<ElementAccessExpression>node).expression, depth + 1)
-                    && isSimpleExpressionWorker((<ElementAccessExpression>node).argumentExpression, depth + 1);
-            }
-            else if (kind === SyntaxKind.PrefixUnaryExpression
-                || kind === SyntaxKind.PostfixUnaryExpression) {
-                return isSimpleExpressionWorker((<PrefixUnaryExpression | PostfixUnaryExpression>node).operand, depth + 1);
-            }
-            else if (kind === SyntaxKind.BinaryExpression) {
-                return (<BinaryExpression>node).operatorToken.kind !== SyntaxKind.AsteriskAsteriskToken
-                    && isSimpleExpressionWorker((<BinaryExpression>node).left, depth + 1)
-                    && isSimpleExpressionWorker((<BinaryExpression>node).right, depth + 1);
-            }
-            else if (kind === SyntaxKind.ConditionalExpression) {
-                return isSimpleExpressionWorker((<ConditionalExpression>node).condition, depth + 1)
-                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenTrue, depth + 1)
-                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenFalse, depth + 1);
-            }
-            else if (kind === SyntaxKind.VoidExpression
-                || kind === SyntaxKind.TypeOfExpression
-                || kind === SyntaxKind.DeleteExpression) {
-                return isSimpleExpressionWorker((<VoidExpression | TypeOfExpression | DeleteExpression>node).expression, depth + 1);
-            }
-            else if (kind === SyntaxKind.ArrayLiteralExpression) {
-                return (<ArrayLiteralExpression>node).elements.length === 0;
-            }
-            else if (kind === SyntaxKind.ObjectLiteralExpression) {
-                return (<ObjectLiteralExpression>node).properties.length === 0;
-            }
-            else if (kind === SyntaxKind.CallExpression) {
-                if (!isSimpleExpressionWorker((<CallExpression>node).expression, depth + 1)) {
-                    return false;
-                }
-
-                for (const argument of (<CallExpression>node).arguments) {
-                    if (!isSimpleExpressionWorker(argument, depth + 1)) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Formats an enum value as a string for debugging and debug assertions.
      */
     function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
@@ -3391,24 +3265,6 @@ namespace ts {
         return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
     }
 
-    export function getRangePos(range: TextRange | undefined) {
-        return range ? range.pos : -1;
-    }
-
-    export function getRangeEnd(range: TextRange | undefined) {
-        return range ? range.end : -1;
-    }
-
-    /**
-     * Increases (or decreases) a position by the provided amount.
-     *
-     * @param pos The position.
-     * @param value The delta.
-     */
-    export function movePos(pos: number, value: number) {
-        return positionIsSynthesized(pos) ? -1 : pos + value;
-    }
-
     /**
      * Creates a new TextRange from the provided pos and end.
      *
@@ -3464,26 +3320,6 @@ namespace ts {
      */
     export function isCollapsedRange(range: TextRange) {
         return range.pos === range.end;
-    }
-
-    /**
-     * Creates a new TextRange from a provided range with its end position collapsed to its
-     * start position.
-     *
-     * @param range A TextRange.
-     */
-    export function collapseRangeToStart(range: TextRange): TextRange {
-        return isCollapsedRange(range) ? range : moveRangeEnd(range, range.pos);
-    }
-
-    /**
-     * Creates a new TextRange from a provided range with its start position collapsed to its
-     * end position.
-     *
-     * @param range A TextRange.
-     */
-    export function collapseRangeToEnd(range: TextRange): TextRange {
-        return isCollapsedRange(range) ? range : moveRangePos(range, range.end);
     }
 
     /**
@@ -3547,31 +3383,6 @@ namespace ts {
 
     function isInitializedVariable(node: VariableDeclaration) {
         return node.initializer !== undefined;
-    }
-
-    /**
-     * Gets a value indicating whether a node is merged with a class declaration in the same scope.
-     */
-    export function isMergedWithClass(node: Node) {
-        if (node.symbol) {
-            for (const declaration of node.symbol.declarations) {
-                if (declaration.kind === SyntaxKind.ClassDeclaration && declaration !== node) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets a value indicating whether a node is the first declaration of its kind.
-     *
-     * @param node A Declaration node.
-     * @param kind The SyntaxKind to find among related declarations.
-     */
-    export function isFirstDeclarationOfKind(node: Node, kind: SyntaxKind) {
-        return node.symbol && getDeclarationOfKind(node.symbol, kind) === node;
     }
 
     export function isWatchSet(options: CompilerOptions) {
