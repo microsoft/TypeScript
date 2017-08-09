@@ -8,8 +8,8 @@ namespace ts.OutliningElementsCollector {
         let depth = 0;
         const regions: RegionRange[] = [];
         const regionText = "#region";
-        const regionStart = new RegExp("// #region( .+| *)", "g");
-        const regionEnd = new RegExp("// #endregion *");
+        const regionStart = new RegExp("//\\s*#region(\\s+.*)?$", "gm");
+        const regionEnd = new RegExp("//\\s*#endregion(\\s|$)", "gm");
 
         walk(sourceFile);
         gatherRegions();
@@ -165,12 +165,23 @@ namespace ts.OutliningElementsCollector {
             const result = comment.match(regionStart);
 
             if (result && result.length > 0) {
-                const name = result[0].substring(10).trim();
-                if (name) {
-                    return name;
+                const sections = result[0].split(" ").filter(function (s) { return s !== ""; });
+
+                if (sections[0] === "//") {
+                    if (sections.length > 2) {
+                        return result[0].substring(result[0].indexOf(sections[2]));
+                    }
+                    else {
+                        return regionText;
+                    }
                 }
                 else {
-                    return regionText;
+                    if (sections.length > 1) {
+                        return result[0].substring(result[0].indexOf(sections[1]));
+                    }
+                    else {
+                        return regionText;
+                    }
                 }
             }
             return "";
