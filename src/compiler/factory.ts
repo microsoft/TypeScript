@@ -2339,13 +2339,13 @@ namespace ts {
             : node;
     }
 
-    export function createBundle(sourceFiles: SourceFile[]) {
+    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.sourceFiles = sourceFiles;
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: SourceFile[]) {
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>) {
         if (node.sourceFiles !== sourceFiles) {
             return createBundle(sourceFiles);
         }

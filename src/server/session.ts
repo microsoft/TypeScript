@@ -423,7 +423,7 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
-                let diags: Diagnostic[] = [];
+                let diags: ReadonlyArray<Diagnostic> = emptyArray;
                 if (!isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                     diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }

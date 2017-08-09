@@ -257,7 +257,7 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
-    function findReferenceInPosition(refs: FileReference[], pos: number): FileReference {
+    function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference {
         for (const ref of refs) {
             if (ref.pos <= pos && pos <= ref.end) {
                 return ref;

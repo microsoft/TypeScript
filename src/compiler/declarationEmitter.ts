@@ -60,7 +60,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
-        let currentLineMap: number[];
+        let currentLineMap: ReadonlyArray<number>;
         let currentIdentifiers: Map<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;

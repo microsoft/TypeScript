@@ -205,13 +205,15 @@ namespace ts {
     }
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
-        let diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
-            program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-            program.getGlobalDiagnostics(cancellationToken),
-            program.getSemanticDiagnostics(sourceFile, cancellationToken));
+        let diagnostics = [
+            ...program.getOptionsDiagnostics(cancellationToken),
+            ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+            ...program.getGlobalDiagnostics(cancellationToken),
+            ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+        ];
 
         if (program.getCompilerOptions().declaration) {
-            diagnostics = diagnostics.concat(program.getDeclarationDiagnostics(sourceFile, cancellationToken));
+            diagnostics = [...diagnostics, ...program.getDeclarationDiagnostics(sourceFile, cancellationToken)];
         }
 
         return sortAndDeduplicateDiagnostics(diagnostics);
@@ -223,7 +225,7 @@ namespace ts {
         getNewLine(): string;
     }
 
-    export function formatDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
+    export function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
         let output = "";
 
         for (const diagnostic of diagnostics) {
@@ -399,7 +401,7 @@ namespace ts {
      * @param oldProgram - Reuses an old program structure.
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -996,7 +998,7 @@ namespace ts {
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
-            let declarationDiagnostics: Diagnostic[] = [];
+            let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
             if (options.noEmit) {
                 return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
@@ -1006,10 +1008,12 @@ namespace ts {
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
             // get any preEmit diagnostics, not just the ones
             if (options.noEmitOnError) {
-                const diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
-                    program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-                    program.getGlobalDiagnostics(cancellationToken),
-                    program.getSemanticDiagnostics(sourceFile, cancellationToken));
+                const diagnostics = [
+                    ...program.getOptionsDiagnostics(cancellationToken),
+                    ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                    ...program.getGlobalDiagnostics(cancellationToken),
+                    ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+                ];
 
                 if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
                     declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
@@ -1060,8 +1064,8 @@ namespace ts {
 
         function getDiagnosticsHelper(
             sourceFile: SourceFile,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[],
-            cancellationToken: CancellationToken): Diagnostic[] {
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => ReadonlyArray<Diagnostic>,
+            cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
@@ -1073,15 +1077,15 @@ namespace ts {
             }));
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
@@ -1092,7 +1096,7 @@ namespace ts {
             }
         }
 
-        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<Diagnostic> {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
             if (isSourceFileJavaScript(sourceFile)) {

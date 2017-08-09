@@ -493,7 +493,7 @@ namespace ts {
         public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
-        public lineMap: number[];
+        public lineMap: ReadonlyArray<number>;
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
@@ -543,7 +543,7 @@ namespace ts {
             return ts.getLineAndCharacterOfPosition(this, position);
         }
 
-        public getLineStarts(): number[] {
+        public getLineStarts(): ReadonlyArray<number> {
             return getLineStarts(this);
         }
 
@@ -1334,10 +1334,10 @@ namespace ts {
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(fileName: string) {
+        function getSyntacticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
         }
 
         /**
@@ -1354,18 +1354,17 @@ namespace ts {
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
-                return semanticDiagnostics;
+                return semanticDiagnostics.slice();
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-            return concatenate(semanticDiagnostics, declarationDiagnostics);
+            return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getOptionsDiagnostics(cancellationToken).concat(
-                   program.getGlobalDiagnostics(cancellationToken));
+            return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {

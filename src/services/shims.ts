@@ -563,7 +563,7 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
@@ -636,7 +636,7 @@ namespace ts {
                 });
         }
 
-        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
+        private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }

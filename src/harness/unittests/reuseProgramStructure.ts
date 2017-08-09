@@ -21,7 +21,7 @@ namespace ts {
     }
 
     interface ProgramWithSourceTexts extends Program {
-        sourceTexts?: NamedSourceText[];
+        sourceTexts?: ReadonlyArray<NamedSourceText>;
         host: TestCompilerHost;
     }
 
@@ -106,7 +106,7 @@ namespace ts {
         return file;
     }
 
-    function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
+    function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
@@ -162,7 +162,7 @@ namespace ts {
         return program;
     }
 
-    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
+    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
         if (!newTexts) {
             newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
         }

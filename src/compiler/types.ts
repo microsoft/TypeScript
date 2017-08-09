@@ -2251,7 +2251,7 @@ namespace ts {
      */
     export interface SourceFileLike {
         readonly text: string;
-        lineMap: number[];
+        lineMap: ReadonlyArray<number>;
     }
 
 
@@ -2283,16 +2283,16 @@ namespace ts {
          */
         /* @internal */ redirectInfo?: RedirectInfo | undefined;
 
-        amdDependencies: AmdDependency[];
+        amdDependencies: ReadonlyArray<AmdDependency>;
         moduleName: string;
-        referencedFiles: FileReference[];
-        typeReferenceDirectives: FileReference[];
+        referencedFiles: ReadonlyArray<FileReference>;
+        typeReferenceDirectives: ReadonlyArray<FileReference>;
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
-        renamedDependencies?: Map<string>;
+        renamedDependencies?: ReadonlyMap<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -2328,12 +2328,12 @@ namespace ts {
         /* @internal */ jsDocDiagnostics?: Diagnostic[];
 
         // Stores additional file-level diagnostics reported by the program
-        /* @internal */ additionalSyntacticDiagnostics?: Diagnostic[];
+        /* @internal */ additionalSyntacticDiagnostics?: ReadonlyArray<Diagnostic>;
 
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
-        /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: UnderscoreEscapedMap<true>;
+        /* @internal */ lineMap: ReadonlyArray<number>;
+        /* @internal */ classifiableNames?: ReadonlyUnderscoreEscapedMap<true>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -2348,7 +2348,7 @@ namespace ts {
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
-        sourceFiles: SourceFile[];
+        sourceFiles: ReadonlyArray<SourceFile>;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -2395,19 +2395,19 @@ namespace ts {
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
-        getRootFileNames(): string[];
+        getRootFileNames(): ReadonlyArray<string>;
 
         /**
          * Get a list of files in the program
          */
-        getSourceFiles(): SourceFile[];
+        getSourceFiles(): ReadonlyArray<SourceFile>;
 
         /**
          * Get a list of file names that were passed to 'createProgram' or referenced in a
          * program source file but could not be located.
          */
         /* @internal */
-        getMissingFilePaths(): Path[];
+        getMissingFilePaths(): ReadonlyArray<Path>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -2421,11 +2421,11 @@ namespace ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
 
-        getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
-        getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
 
         /**
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -2519,7 +2519,7 @@ namespace ts {
     export interface EmitResult {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
-        diagnostics: Diagnostic[];
+        diagnostics: ReadonlyArray<Diagnostic>;
         emittedFiles: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
@@ -2528,9 +2528,9 @@ namespace ts {
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
-        getSourceFiles(): SourceFile[];
+        getSourceFiles(): ReadonlyArray<SourceFile>;
         getSourceFile(fileName: string): SourceFile;
-        getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
     }
 
     export interface TypeChecker {
@@ -4114,7 +4114,7 @@ namespace ts {
     export interface SourceMapSource {
         fileName: string;
         text: string;
-        /* @internal */ lineMap: number[];
+        /* @internal */ lineMap: ReadonlyArray<number>;
         skipTrivia?: (pos: number) => number;
     }
 
@@ -4221,7 +4221,7 @@ namespace ts {
 
     /* @internal */
     export interface EmitHost extends ScriptReferenceHost {
-        getSourceFiles(): SourceFile[];
+        getSourceFiles(): ReadonlyArray<SourceFile>;
 
         /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
