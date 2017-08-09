@@ -7,5 +7,5 @@
 //// [parserGreaterThanTokenAmbiguity15.js]
 1
     // before
-    >>=// after
+    >>= // after
         2;
