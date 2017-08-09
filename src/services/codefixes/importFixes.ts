@@ -174,7 +174,7 @@ namespace ts.codefix {
                 if (localSymbol && localSymbol.escapedName === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol);
-                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isDefault*/ true));
+                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isNamespaceImport*/ true));
                 }
             }
 
@@ -396,7 +396,7 @@ namespace ts.codefix {
                         : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
                 const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
                 if (!lastImportDeclaration) {
-                    changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
+                    changeTracker.insertNodeAt(sourceFile, getSourceFileImportLocation(sourceFile), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
                 }
                 else {
                     changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: context.newLineCharacter });
@@ -412,6 +412,28 @@ namespace ts.codefix {
                     "NewImport",
                     moduleSpecifierWithoutQuotes
                 );
+
+                function getSourceFileImportLocation(node: SourceFile) {
+                    // For a source file, it is possible there are detached comments we should not skip
+                    const text = node.text;
+                    let ranges = getLeadingCommentRanges(text, 0);
+                    if (!ranges) return 0;
+                    let position = 0;
+                    // However we should still skip a pinned comment at the top
+                    if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+                        position = ranges[0].end + 1;
+                        ranges = ranges.slice(1);
+                    }
+                    // As well as any triple slash references
+                    for (const range of ranges) {
+                        if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
+                            position = range.end + 1;
+                            continue;
+                        }
+                        break;
+                    }
+                    return position;
+                }
 
                 function getModuleSpecifierForNewImport() {
                     const fileName = sourceFile.fileName;
@@ -562,8 +584,8 @@ namespace ts.codefix {
 
                 function getNodeModulePathParts(fullPath: string) {
                     // If fullPath can't be valid module file within node_modules, returns undefined.
-                    // Example of expected pattern: /base/path/node_modules/[otherpackage/node_modules/]package/[subdirectory/]file.js
-                    // Returns indices:                       ^            ^                                   ^             ^
+                    // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
+                    // Returns indices:                       ^            ^                                                      ^             ^
 
                     let topLevelNodeModulesIndex = 0;
                     let topLevelPackageNameIndex = 0;
@@ -573,6 +595,7 @@ namespace ts.codefix {
                     const enum States {
                         BeforeNodeModules,
                         NodeModules,
+                        Scope,
                         PackageContent
                     }
 
@@ -592,8 +615,14 @@ namespace ts.codefix {
                                 }
                                 break;
                             case States.NodeModules:
-                                packageRootIndex = partEnd;
-                                state = States.PackageContent;
+                            case States.Scope:
+                                if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
+                                    state = States.Scope;
+                                }
+                                else {
+                                    packageRootIndex = partEnd;
+                                    state = States.PackageContent;
+                                }
                                 break;
                             case States.PackageContent:
                                 if (fullPath.indexOf("/node_modules/", partStart) === partStart) {

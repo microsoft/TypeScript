@@ -1908,6 +1908,10 @@
         "category": "Error",
         "code": 2559
     },
+    "Value of type '{0}' has no properties in common with type '{1}'. Did you mean to call it?": {
+        "category": "Error",
+        "code": 2560
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2191,6 +2195,10 @@
     "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
         "category": "Error",
         "code": 2712
+    },
+    "Cannot access '{0}.{1}' because '{0}' is a type, but not a namespace. Did you mean to retrieve the type of the property '{1}' in '{0}' with '{0}[\"{1}\"]'?": {
+        "category": "Error",
+        "code": 2713
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3455,6 +3463,10 @@
         "category": "Error",
         "code": 8012
     },
+    "'non-null assertions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8015
@@ -3652,6 +3664,10 @@
     "Prefix '{0}' with an underscore.": {
         "category": "Message",
         "code": 90025
+    },
+    "Rewrite as the indexed access type '{0}'.": {
+        "category": "Message",
+        "code": 90026
     },
 
     "Convert function to an ES2015 class": {

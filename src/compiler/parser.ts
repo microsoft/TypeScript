@@ -1163,7 +1163,7 @@ namespace ts {
             return node;
         }
 
-        function createMissingNode(kind: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T {
             if (reportAtCurrentPosition) {
                 parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
             }
@@ -1172,15 +1172,15 @@ namespace ts {
             }
 
             const result = createNode(kind, scanner.getStartPos());
-            switch (kind) {
-                case SyntaxKind.Identifier:
-                    (result as Identifier).escapedText = "" as __String;
-                    break;
-                default: // TODO: GH#17346
-                    (result as LiteralLikeNode).text = "";
-                    break;
+
+            if (kind === SyntaxKind.Identifier) {
+                (result as Identifier).escapedText = "" as __String;
             }
-            return finishNode(result);
+            else if (isLiteralKind(kind) || isTemplateLiteralKind(kind)) {
+                (result as LiteralLikeNode).text = "";
+            }
+
+            return finishNode(result) as T;
         }
 
         function internIdentifier(text: string): string {
@@ -1208,7 +1208,7 @@ namespace ts {
                 return finishNode(node);
             }
 
-            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
+            return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
@@ -2002,7 +2002,7 @@ namespace ts {
                     // Report that we need an identifier.  However, report it right after the dot,
                     // and not on the next token.  This is because the next token might actually
                     // be an identifier and the error would be quite confusing.
-                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
+                    return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
                 }
             }
 
@@ -2061,7 +2061,7 @@ namespace ts {
             return <TemplateMiddle | TemplateTail>fragment;
         }
 
-        function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
+        function parseLiteralLikeNode(kind: SyntaxKind): LiteralExpression | LiteralLikeNode {
             const node = <LiteralExpression>createNode(kind);
             const text = scanner.getTokenValue();
             node.text = text;
@@ -2611,11 +2611,31 @@ namespace ts {
             return token() === SyntaxKind.DotToken ? undefined : node;
         }
 
-        function parseLiteralTypeNode(): LiteralTypeNode {
-            const node = <LiteralTypeNode>createNode(SyntaxKind.LiteralType);
-            node.literal = parseSimpleUnaryExpression();
-            finishNode(node);
-            return node;
+        function parseLiteralTypeNode(negative?: boolean): LiteralTypeNode {
+            const node = createNode(SyntaxKind.LiteralType) as LiteralTypeNode;
+            let unaryMinusExpression: PrefixUnaryExpression;
+            if (negative) {
+                unaryMinusExpression = createNode(SyntaxKind.PrefixUnaryExpression) as PrefixUnaryExpression;
+                unaryMinusExpression.operator = SyntaxKind.MinusToken;
+                nextToken();
+            }
+            let expression: UnaryExpression;
+            switch (token()) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                    expression = parseLiteralLikeNode(token()) as LiteralExpression;
+                    break;
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                    expression = parseTokenNode();
+            }
+            if (negative) {
+                unaryMinusExpression.operand = expression;
+                finishNode(unaryMinusExpression);
+                expression = unaryMinusExpression;
+            }
+            node.literal = expression;
+            return finishNode(node);
         }
 
         function nextTokenIsNumericLiteral() {
@@ -2650,7 +2670,7 @@ namespace ts {
                 case SyntaxKind.FalseKeyword:
                     return parseLiteralTypeNode();
                 case SyntaxKind.MinusToken:
-                    return lookAhead(nextTokenIsNumericLiteral) ? parseLiteralTypeNode() : parseTypeReference();
+                    return lookAhead(nextTokenIsNumericLiteral) ? parseLiteralTypeNode(/*negative*/ true) : parseTypeReference();
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.NullKeyword:
                     return parseTokenNode<TypeNode>();
@@ -2700,6 +2720,7 @@ namespace ts {
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.AsteriskToken:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);
@@ -3161,7 +3182,7 @@ namespace ts {
             return addJSDocComment(finishNode(node));
         }
 
-        function tryParseParenthesizedArrowFunctionExpression(): Expression {
+        function tryParseParenthesizedArrowFunctionExpression(): Expression | undefined {
             const triState = isParenthesizedArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
@@ -3324,7 +3345,7 @@ namespace ts {
             return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
         }
 
-        function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction {
+        function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction | undefined {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token() === SyntaxKind.AsyncKeyword) {
                 const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
@@ -4398,7 +4419,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration {
+        function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration | undefined {
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
                 return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers);
             }
@@ -4511,7 +4532,7 @@ namespace ts {
             return addJSDocComment(finishNode(node));
         }
 
-        function parseOptionalIdentifier() {
+        function parseOptionalIdentifier(): Identifier | undefined {
             return isIdentifier() ? parseIdentifier() : undefined;
         }
 
@@ -4778,11 +4799,16 @@ namespace ts {
         function parseCatchClause(): CatchClause {
             const result = <CatchClause>createNode(SyntaxKind.CatchClause);
             parseExpected(SyntaxKind.CatchKeyword);
-            if (parseExpected(SyntaxKind.OpenParenToken)) {
+
+            if (parseOptional(SyntaxKind.OpenParenToken)) {
                 result.variableDeclaration = parseVariableDeclaration();
+                parseExpected(SyntaxKind.CloseParenToken);
+            }
+            else {
+                // Keep shape of node to avoid degrading performance.
+                result.variableDeclaration = undefined;
             }
 
-            parseExpected(SyntaxKind.CloseParenToken);
             result.block = parseBlock(/*ignoreMissingOpenBrace*/ false);
             return finishNode(result);
         }
@@ -5534,7 +5560,7 @@ namespace ts {
 
             if (decorators || modifiers) {
                 // treat this as a property declaration with a missing name.
-                const name = <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                const name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                 return parsePropertyDeclaration(fullStart, decorators, modifiers, name, /*questionToken*/ undefined);
             }
 
@@ -5576,7 +5602,7 @@ namespace ts {
             return addJSDocComment(finishNode(node));
         }
 
-        function parseNameOfClassDeclarationOrExpression(): Identifier {
+        function parseNameOfClassDeclarationOrExpression(): Identifier | undefined {
             // implements is a future reserved word so
             // 'class implements' might mean either
             // - class expression with omitted name, 'implements' starts heritage clause
@@ -6116,7 +6142,7 @@ namespace ts {
         }
 
         export namespace JSDocParser {
-            export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
+            export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS);
                 scanner.setText(content, start, length);
@@ -6141,7 +6167,7 @@ namespace ts {
                 return finishNode(result);
             }
 
-            export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
+            export function parseIsolatedJSDocComment(content: string, start: number, length: number): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
                 const jsDoc = parseJSDocCommentWorker(start, length);
@@ -6476,7 +6502,7 @@ namespace ts {
                     tags.end = tag.end;
                 }
 
-                function tryParseTypeExpression(): JSDocTypeExpression {
+                function tryParseTypeExpression(): JSDocTypeExpression | undefined {
                     return tryParse(() => {
                         skipWhitespace();
                         if (token() !== SyntaxKind.OpenBraceToken) {
@@ -6767,7 +6793,7 @@ namespace ts {
                     return false;
                 }
 
-                function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag {
+                function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
                         parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
@@ -6829,14 +6855,12 @@ namespace ts {
                     return entity;
                 }
 
-                function parseJSDocIdentifierName(createIfMissing = false): Identifier {
-                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token()), createIfMissing);
-                }
-
-                function createJSDocIdentifier(isIdentifier: boolean, createIfMissing: boolean): Identifier {
-                    if (!isIdentifier) {
+                function parseJSDocIdentifierName(): Identifier | undefined;
+                function parseJSDocIdentifierName(createIfMissing: true): Identifier;
+                function parseJSDocIdentifierName(createIfMissing = false): Identifier | undefined {
+                    if (!tokenIsIdentifierOrKeyword(token())) {
                         if (createIfMissing) {
-                            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
+                            return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
                         }
                         else {
                             parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
@@ -7215,7 +7239,7 @@ namespace ts {
                 }
             }
 
-            function getLastChildWorker(node: Node): Node {
+            function getLastChildWorker(node: Node): Node | undefined {
                 let last: Node = undefined;
                 forEachChild(node, child => {
                     if (nodeIsPresent(child)) {

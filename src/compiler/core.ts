@@ -11,20 +11,6 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    /**
-     * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
-     */
-    export const enum Ternary {
-        False = 0,
-        Maybe = 1,
-        True = -1
-    }
 
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
     export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
@@ -375,11 +361,11 @@ namespace ts {
         return false;
     }
 
-    export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
+    export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
         let outIndex = 0;
-        for (const item of array) {
-            if (f(item)) {
-                array[outIndex] = item;
+        for (let i = 0; i < array.length; i++) {
+            if (f(array[i], i, array)) {
+                array[outIndex] = array[i];
                 outIndex++;
             }
         }
@@ -713,7 +699,7 @@ namespace ts {
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
         outer: for (; offsetB < arrayB.length; offsetB++) {
@@ -1306,12 +1292,12 @@ namespace ts {
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
         const end = start + length;
 
-        Debug.assert(start >= 0, "start must be non-negative, is " + start);
-        Debug.assert(length >= 0, "length must be non-negative, is " + length);
+        Debug.assertGreaterThanOrEqual(start, 0);
+        Debug.assertGreaterThanOrEqual(length, 0);
 
         if (file) {
-            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${start} > ${file.text.length}`);
-            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${end} > ${file.text.length}`);
+            Debug.assertLessThanOrEqual(start, file.text.length);
+            Debug.assertLessThanOrEqual(end, file.text.length);
         }
 
         let text = getLocaleSpecificMessage(message);
@@ -1891,14 +1877,54 @@ namespace ts {
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
-    /**
-     * Matches any single directory segment unless it is the last segment and a .min.js file
-     * Breakdown:
-     *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
-     *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
-     */
-    const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
-    const singleAsteriskRegexFragmentOther = "[^/]*";
+    /* @internal */
+    export const commonPackageFolders: ReadonlyArray<string> = ["node_modules", "bower_components", "jspm_packages"];
+
+    const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
+
+    interface WildcardMatcher {
+        singleAsteriskRegexFragment: string;
+        doubleAsteriskRegexFragment: string;
+        replaceWildcardCharacter: (match: string) => string;
+    }
+
+    const filesMatcher: WildcardMatcher = {
+        /**
+         * Matches any single directory segment unless it is the last segment and a .min.js file
+         * Breakdown:
+         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
+         */
+        singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment)
+    };
+
+    const directoriesMatcher: WildcardMatcher = {
+        singleAsteriskRegexFragment: "[^/]*",
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment)
+    };
+
+    const excludeMatcher: WildcardMatcher = {
+        singleAsteriskRegexFragment: "[^/]*",
+        doubleAsteriskRegexFragment: "(/.+?)?",
+        replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment)
+    };
+
+    const wildcardMatchers = {
+        files: filesMatcher,
+        directories: directoriesMatcher,
+        exclude: excludeMatcher
+    };
 
     export function getRegularExpressionForWildcard(specs: ReadonlyArray<string>, basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
         const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
@@ -1917,17 +1943,8 @@ namespace ts {
             return undefined;
         }
 
-        const replaceWildcardCharacter = usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
-        const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
-
-        /**
-         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
-         * files or directories, does not match subdirectories that start with a . character
-         */
-        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
-
         return flatMap(specs, spec =>
-            spec && getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter));
+            spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]));
     }
 
     /**
@@ -1938,7 +1955,7 @@ namespace ts {
         return !/[.*?]/.test(lastPathComponent);
     }
 
-    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", singleAsteriskRegexFragment: string, doubleAsteriskRegexFragment: string, replaceWildcardCharacter: (match: string) => string): string | undefined {
+    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
         let subpattern = "";
         let hasRecursiveDirectoryWildcard = false;
         let hasWrittenComponent = false;
@@ -1977,20 +1994,36 @@ namespace ts {
                 }
 
                 if (usage !== "exclude") {
+                    let componentPattern = "";
                     // The * and ? wildcards should not match directories or files that start with . if they
                     // appear first in a component. Dotted directories and files can be included explicitly
                     // like so: **/.*/.*
                     if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                        subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                        componentPattern += "([^./]" + singleAsteriskRegexFragment + ")?";
                         component = component.substr(1);
                     }
                     else if (component.charCodeAt(0) === CharacterCodes.question) {
-                        subpattern += "[^./]";
+                        componentPattern += "[^./]";
                         component = component.substr(1);
                     }
-                }
 
-                subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                    componentPattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+
+                    // Patterns should not include subfolders like node_modules unless they are
+                    // explicitly included as part of the path.
+                    //
+                    // As an optimization, if the component pattern is the same as the component,
+                    // then there definitely were no wildcard characters and we do not need to
+                    // add the exclusion pattern.
+                    if (componentPattern !== component) {
+                        subpattern += implicitExcludePathRegexPattern;
+                    }
+
+                    subpattern += componentPattern;
+                }
+                else {
+                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                }
             }
 
             hasWrittenComponent = true;
@@ -2002,14 +2035,6 @@ namespace ts {
         }
 
         return subpattern;
-    }
-
-    function replaceWildCardCharacterFiles(match: string) {
-        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentFiles);
-    }
-
-    function replaceWildCardCharacterOther(match: string) {
-        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentOther);
     }
 
     function replaceWildcardCharacter(match: string, singleAsteriskRegexFragment: string) {
@@ -2366,12 +2391,37 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string, stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
             if (!expression) {
                 if (verboseDebugInfo) {
-                    message += "\r\nVerbose Debug Information: " + verboseDebugInfo();
+                    message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
                 }
                 fail(message ? "False expression: " + message : "False expression.", stackCrawlMark || assert);
+            }
+        }
+
+        export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
+            if (a !== b) {
+                const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
+                fail(`Expected ${a} === ${b}. ${message}`);
+            }
+        }
+
+        export function assertLessThan(a: number, b: number, msg?: string): void {
+            if (a >= b) {
+                fail(`Expected ${a} < ${b}. ${msg || ""}`);
+            }
+        }
+
+        export function assertLessThanOrEqual(a: number, b: number): void {
+            if (a > b) {
+                fail(`Expected ${a} <= ${b}`);
+            }
+        }
+
+        export function assertGreaterThanOrEqual(a: number, b: number): void {
+            if (a < b) {
+                fail(`Expected ${a} >= ${b}`);
             }
         }
 

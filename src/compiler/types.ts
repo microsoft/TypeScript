@@ -1808,7 +1808,7 @@ namespace ts {
     export interface CatchClause extends Node {
         kind: SyntaxKind.CatchClause;
         parent?: TryStatement;
-        variableDeclaration: VariableDeclaration;
+        variableDeclaration?: VariableDeclaration;
         block: Block;
     }
 
@@ -3067,6 +3067,7 @@ namespace ts {
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
+        resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
@@ -3317,6 +3318,11 @@ namespace ts {
         awaitedTypeOfType?: Type;
     }
 
+    /* @internal */
+    export interface SyntheticDefaultModuleType extends Type {
+        syntheticType?: Type;
+    }
+
     export interface TypeVariable extends Type {
         /* @internal */
         resolvedBaseConstraint: Type;
@@ -3425,11 +3431,29 @@ namespace ts {
         AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
+    /**
+     * Ternary values are defined such that
+     * x & y is False if either x or y is False.
+     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+     * x & y is True if both x and y are True.
+     * x | y is False if both x and y are False.
+     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+     * x | y is True if either x or y is True.
+     */
+    export const enum Ternary {
+        False = 0,
+        Maybe = 1,
+        True = -1
+    }
+
+    export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
+
     /* @internal */
     export interface InferenceContext extends TypeMapper {
         signature: Signature;               // Generic signature for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
+        compareTypes: TypeComparer;         // Type comparer function
     }
 
     /* @internal */
@@ -4001,7 +4025,6 @@ namespace ts {
         ContainsBindingPattern = 1 << 23,
         ContainsYield = 1 << 24,
         ContainsHoistedDeclarationOrCompletion = 1 << 25,
-
         ContainsDynamicImport = 1 << 26,
 
         // Please leave this as 1 << 29.

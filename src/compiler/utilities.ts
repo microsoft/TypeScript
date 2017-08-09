@@ -3,6 +3,7 @@
 /* @internal */
 namespace ts {
     export const emptyArray: never[] = [] as never[];
+    export const emptyMap: ReadonlyMap<never> = createMap<never>();
 
     export const externalHelpersModuleNameText = "tslib";
 
@@ -234,6 +235,32 @@ namespace ts {
 
     export function nodeIsPresent(node: Node) {
         return !nodeIsMissing(node);
+    }
+
+    /**
+     * Determine if the given comment is a triple-slash
+     *
+     * @return true if the comment is a triple-slash comment else false
+     */
+    export function isRecognizedTripleSlashComment(text: string, commentPos: number, commentEnd: number) {
+        // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+        // so that we don't end up computing comment string and doing match for all // comments
+        if (text.charCodeAt(commentPos + 1) === CharacterCodes.slash &&
+            commentPos + 2 < commentEnd &&
+            text.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
+            const textSubStr = text.substring(commentPos, commentEnd);
+            return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
+                textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ||
+                textSubStr.match(fullTripleSlashReferenceTypeReferenceDirectiveRegEx) ||
+                textSubStr.match(defaultLibReferenceRegEx) ?
+                true : false;
+        }
+        return false;
+    }
+
+    export function isPinnedComment(text: string, comment: CommentRange) {
+        return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
     }
 
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
@@ -628,8 +655,9 @@ namespace ts {
     }
 
     export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
+    const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
     export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
 
     export function isPartOfTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -892,21 +920,11 @@ namespace ts {
     }
 
     export function getContainingFunction(node: Node): FunctionLike {
-        while (true) {
-            node = node.parent;
-            if (!node || isFunctionLike(node)) {
-                return <FunctionLike>node;
-            }
-        }
+        return findAncestor(node.parent, isFunctionLike);
     }
 
     export function getContainingClass(node: Node): ClassLikeDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || isClassLike(node)) {
-                return <ClassLikeDeclaration>node;
-            }
-        }
+        return findAncestor(node.parent, isClassLike);
     }
 
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
@@ -1751,7 +1769,8 @@ namespace ts {
                 // Property name in binding element or import specifier
                 return (<BindingElement | ImportSpecifier>parent).propertyName === node;
             case SyntaxKind.ExportSpecifier:
-                // Any name in an export specifier
+            case SyntaxKind.JsxAttribute:
+                // Any name in an export specifier or JSX Attribute
                 return true;
         }
         return false;
@@ -1825,7 +1844,7 @@ namespace ts {
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
         const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        const isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegEx.source, "gim");
         if (simpleReferenceRegEx.test(comment)) {
             if (isNoDefaultLibRegEx.test(comment)) {
                 return { isNoDefaultLib: true };
@@ -2798,7 +2817,7 @@ namespace ts {
             //
             //      var x = 10;
             if (node.pos === 0) {
-                leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedComment);
+                leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedCommentLocal);
             }
         }
         else {
@@ -2844,9 +2863,8 @@ namespace ts {
 
         return currentDetachedCommentInfo;
 
-        function isPinnedComment(comment: CommentRange) {
-            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+        function isPinnedCommentLocal(comment: CommentRange) {
+            return isPinnedComment(text, comment);
         }
 
     }
@@ -3673,6 +3691,20 @@ namespace ts {
 
     export function isParameterPropertyDeclaration(node: Node): boolean {
         return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+    }
+
+    export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
+        if (isBindingPattern(node)) {
+            return every(node.elements, isEmptyBindingElement);
+        }
+        return false;
+    }
+
+    export function isEmptyBindingElement(node: BindingElement): boolean {
+        if (isOmittedExpression(node)) {
+            return true;
+        }
+        return isEmptyBindingPattern(node.name);
     }
 
     function walkUpBindingElementsAndPatterns(node: Node): Node {
