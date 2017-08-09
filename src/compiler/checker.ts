@@ -280,7 +280,7 @@ namespace ts {
         const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
-        const unresolvedTypePredicate: void & { __unresolvedTypePredicate: void } = (() => {
+        const noTypePredicate: void & { __noTypePredicate: void } = (() => {
             const tp: IdentifierTypePredicate = { kind: TypePredicateKind.Identifier, parameterName: "<<unresolved>>", parameterIndex: 0, type: anyType };
             return tp as any;
         })();
@@ -5437,7 +5437,7 @@ namespace ts {
         }
 
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
-            resolvedReturnType: Type | undefined, resolvedTypePredicate: TypePredicate | void & { __unresolvedTypePredicate: void } | undefined, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature {
+            resolvedReturnType: Type | undefined, resolvedTypePredicate: TypePredicate | void & { __noTypePredicate: void } | undefined, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
@@ -6550,14 +6550,17 @@ namespace ts {
         }
 
         function signatureHasTypePredicate(signature: Signature): boolean {
-            return signature.resolvedTypePredicate !== undefined;
+            return signature.resolvedTypePredicate !== noTypePredicate;
         }
 
         function getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined {
-            if (signature.resolvedTypePredicate === unresolvedTypePredicate) {
+            if (signature.resolvedTypePredicate === noTypePredicate) {
+                return undefined;
+            }
+            if (signature.resolvedTypePredicate === undefined) {
                 signature.resolvedTypePredicate = instantiateTypePredicate(getTypePredicateOfSignature(signature.target), signature.mapper);
             }
-            return signature.resolvedTypePredicate as TypePredicate | undefined;
+            return signature.resolvedTypePredicate as TypePredicate;
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -8155,7 +8158,7 @@ namespace ts {
                 signature.thisParameter && instantiateSymbol(signature.thisParameter, mapper),
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 /*resolvedReturnType*/ undefined,
-                /*resolvedTypePredicate*/ signatureHasTypePredicate(signature) ? unresolvedTypePredicate : undefined,
+                /*resolvedTypePredicate*/ signatureHasTypePredicate(signature) ? undefined : noTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasLiteralTypes);
             result.target = signature;
             result.mapper = mapper;

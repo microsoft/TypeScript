@@ -3373,10 +3373,11 @@ namespace ts {
         resolvedReturnType: Type | undefined; // Lazily set by `getReturnTypeOfSignature`.
         /* @internal */
         // Lazily set by `getTypePredicateOfSignature`.
-        // Unlike `resolvedReturnType`, `undefined` is a valid value, so we use a special sentinel TypePredicate-like instead to indicate a type predicate that must still be computed.
+        // `undefined` indicates a type predicate that has not yet been computed.
+        // Uses a special `noTypePredicate` sentinel value to indicate that there is no type predicate. This looks like a TypePredicate at runtime to avoid polymorphism.
         // (See https://github.com/Microsoft/TypeScript/pull/17600#discussion_r132059173)
         // Uses a funny type signature to help ensure that this value is not accidentally used as a valid TypePredicate.
-        resolvedTypePredicate: TypePredicate | void & { __unresolvedTypePredicate: void } | undefined;
+        resolvedTypePredicate: TypePredicate | void & { __noTypePredicate: void } | undefined;
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
