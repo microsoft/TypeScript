@@ -22,7 +22,7 @@ namespace ts.server {
 
     export interface ConfigFileDiagEvent {
         eventName: typeof ConfigFileDiagEvent;
-        data: { triggerFile: string, configFileName: string, diagnostics: Diagnostic[] };
+        data: { triggerFile: string, configFileName: string, diagnostics: ReadonlyArray<Diagnostic> };
     }
 
     export interface ProjectLanguageServiceStateEvent {
@@ -200,7 +200,7 @@ namespace ts.server {
     /**
      * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
-    export function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
+    export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
         const result = flatMap(projects, action).sort(comparer);
         return projects.length > 1 ? deduplicate(result, areEqual) : result;
     }
@@ -220,14 +220,14 @@ namespace ts.server {
 
     interface OpenConfigFileResult {
         success: boolean;
-        errors?: Diagnostic[];
+        errors?: ReadonlyArray<Diagnostic>;
 
         project?: ConfiguredProject;
     }
 
     export interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;
-        configFileErrors?: Diagnostic[];
+        configFileErrors?: ReadonlyArray<Diagnostic>;
     }
 
     interface FilePropertyReader<T> {
@@ -1100,18 +1100,18 @@ namespace ts.server {
             }
         }
 
-        private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
+        private reportConfigFileDiagnostics(configFileName: string, diagnostics: ReadonlyArray<Diagnostic>, triggerFile: string) {
             if (!this.eventHandler) {
                 return;
             }
 
             this.eventHandler(<ConfigFileDiagEvent>{
                 eventName: ConfigFileDiagEvent,
-                data: { configFileName, diagnostics: diagnostics || [], triggerFile }
+                data: { configFileName, diagnostics: diagnostics || emptyArray, triggerFile }
             });
         }
 
-        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: Diagnostic[], clientFileName?: string) {
+        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, configFileErrors: ReadonlyArray<Diagnostic>, clientFileName?: string) {
             const sizeLimitExceeded = this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
                 configFileName,
@@ -1143,7 +1143,7 @@ namespace ts.server {
             }
         }
 
-        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: Diagnostic[]): void {
+        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: ReadonlyArray<Diagnostic>): void {
             let errors: Diagnostic[];
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
@@ -1456,7 +1456,7 @@ namespace ts.server {
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
-            let configFileErrors: Diagnostic[];
+            let configFileErrors: ReadonlyArray<Diagnostic>;
 
             let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
             if (!project) {
