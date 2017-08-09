@@ -101,7 +101,12 @@ namespace ts {
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
             oldResolution.extension === newResolution.extension &&
-            oldResolution.resolvedFileName === newResolution.resolvedFileName;
+            oldResolution.resolvedFileName === newResolution.resolvedFileName &&
+            packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
+    }
+
+    function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
+        return a === b || a && b && a.name === b.name && a.version === b.version;
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {

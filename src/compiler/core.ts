@@ -2210,20 +2210,14 @@ namespace ts {
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
     export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
-    const allSupportedExtensions = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
+    const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ReadonlyArray<string> {
         const needAllExtensions = options && options.allowJs;
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const extensions: string[] = allSupportedExtensions.slice(0);
-        for (const extInfo of extraFileExtensions) {
-            if (extensions.indexOf(extInfo.extension) === -1) {
-                extensions.push(extInfo.extension);
-            }
-        }
-        return extensions;
+        return deduplicate([...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)]);
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -2590,6 +2584,11 @@ namespace ts {
         }
         Debug.fail(`File ${path} has unknown extension.`);
     }
+
+    export function isAnySupportedFileExtension(path: string): boolean {
+        return tryGetExtensionFromPath(path) !== undefined;
+    }
+
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
         return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
     }
