@@ -165,12 +165,10 @@ namespace ts {
 
     // A generated code block
     type CodeBlock = | ExceptionBlock | LabeledBlock | SwitchBlock | LoopBlock | WithBlock;
-    interface CodeBlockBase {
-        kind: CodeBlockKind;
-    }
 
     // a generated exception block, used for 'try' statements
-    interface ExceptionBlock extends CodeBlockBase {
+    interface ExceptionBlock {
+        kind: CodeBlockKind.Exception;
         state: ExceptionBlockState;
         startLabel: Label;
         catchVariable?: Identifier;
@@ -180,27 +178,31 @@ namespace ts {
     }
 
     // A generated code that tracks the target for 'break' statements in a LabeledStatement.
-    interface LabeledBlock extends CodeBlockBase {
+    interface LabeledBlock {
+        kind: CodeBlockKind.Labeled;
         labelText: string;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the target for 'break' statements in a 'switch' statement
-    interface SwitchBlock extends CodeBlockBase {
+    interface SwitchBlock {
+        kind: CodeBlockKind.Switch;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the targets for 'break' and 'continue' statements, used for iteration statements
-    interface LoopBlock extends CodeBlockBase {
+    interface LoopBlock {
+        kind: CodeBlockKind.Loop;
         continueLabel: Label;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block associated with a 'with' statement
-    interface WithBlock extends CodeBlockBase {
+    interface WithBlock {
+        kind: CodeBlockKind.With;
         expression: Identifier;
         startLabel: Label;
         endLabel: Label;
@@ -2088,10 +2090,6 @@ namespace ts {
             markLabel(block.endLabel);
         }
 
-        function isWithBlock(block: CodeBlock): block is WithBlock {
-            return block.kind === CodeBlockKind.With;
-        }
-
         /**
          * Begins a code block for a generated `try` statement.
          */
@@ -2187,10 +2185,6 @@ namespace ts {
             markLabel(exception.endLabel);
             emitNop();
             exception.state = ExceptionBlockState.Done;
-        }
-
-        function isExceptionBlock(block: CodeBlock): block is ExceptionBlock {
-            return block.kind === CodeBlockKind.Exception;
         }
 
         /**
@@ -2879,34 +2873,37 @@ namespace ts {
                 for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
                     const block = blocks[blockIndex];
                     const blockAction = blockActions[blockIndex];
-                    if (isExceptionBlock(block)) {
-                        if (blockAction === BlockAction.Open) {
-                            if (!exceptionBlockStack) {
-                                exceptionBlockStack = [];
-                            }
+                    switch (block.kind) {
+                        case CodeBlockKind.Exception:
+                            if (blockAction === BlockAction.Open) {
+                                if (!exceptionBlockStack) {
+                                    exceptionBlockStack = [];
+                                }
 
-                            if (!statements) {
-                                statements = [];
-                            }
+                                if (!statements) {
+                                    statements = [];
+                                }
 
-                            exceptionBlockStack.push(currentExceptionBlock);
-                            currentExceptionBlock = block;
-                        }
-                        else if (blockAction === BlockAction.Close) {
-                            currentExceptionBlock = exceptionBlockStack.pop();
-                        }
-                    }
-                    else if (isWithBlock(block)) {
-                        if (blockAction === BlockAction.Open) {
-                            if (!withBlockStack) {
-                                withBlockStack = [];
+                                exceptionBlockStack.push(currentExceptionBlock);
+                                currentExceptionBlock = block;
                             }
+                            else if (blockAction === BlockAction.Close) {
+                                currentExceptionBlock = exceptionBlockStack.pop();
+                            }
+                            break;
+                        case CodeBlockKind.With:
+                            if (blockAction === BlockAction.Open) {
+                                if (!withBlockStack) {
+                                    withBlockStack = [];
+                                }
 
-                            withBlockStack.push(block);
-                        }
-                        else if (blockAction === BlockAction.Close) {
-                            withBlockStack.pop();
-                        }
+                                withBlockStack.push(block);
+                            }
+                            else if (blockAction === BlockAction.Close) {
+                                withBlockStack.pop();
+                            }
+                            break;
+                        // default: do nothing
                     }
                 }
             }
