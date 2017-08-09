@@ -8407,9 +8407,7 @@ namespace ts {
             }
             if (node.kind !== SyntaxKind.ArrowFunction) {
                 // If the first parameter is not an explicit 'this' parameter, then the function has
-                // an implicit 'this' parameter which is subject to contextual typing. Otherwise we
-                // know that all parameters (including 'this') have type annotations and nothing is
-                // subject to contextual typing.
+                // an implicit 'this' parameter which is subject to contextual typing.
                 const parameter = firstOrUndefined(node.parameters);
                 if (!(parameter && parameterIsThisKeyword(parameter))) {
                     return true;
