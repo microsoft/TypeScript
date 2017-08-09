@@ -8414,7 +8414,7 @@ namespace ts {
                 }
             }
 
-            // TODO(anhans): A block should be context-sensitive if it has a context-sentitive return value.
+            // TODO(anhans): A block should be context-sensitive if it has a context-sensitive return value.
             return node.body.kind === SyntaxKind.Block ? false : isContextSensitive(node.body);
         }
 
