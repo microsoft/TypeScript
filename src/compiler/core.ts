@@ -2188,8 +2188,7 @@ namespace ts {
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ReadonlyArray<string> {
         const needAllExtensions = options && options.allowJs;
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
-            // TODO: Return a ReadonlyArray<string> from this function to avoid casts. https://github.com/Microsoft/TypeScript/issues/16312
-            return needAllExtensions ? allSupportedExtensions as Extension[] : supportedTypeScriptExtensions as Extension[];
+            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
         return deduplicate([...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)]);
     }

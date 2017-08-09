@@ -73,6 +73,14 @@ namespace ts {
         traceEnabled: boolean;
     }
 
+    interface PackageJson {
+        name?: string;
+        version?: string;
+        typings?: string;
+        types?: string;
+        main?: string;
+    }
+
     /** Reads from "main" or "types"/"typings" depending on `extensions`. */
     function tryReadPackageJsonFields(readTypes: boolean, jsonContent: PackageJson, baseDirectory: string, state: ModuleResolutionState): string | undefined {
         return readTypes ? tryReadFromField("typings") || tryReadFromField("types") : tryReadFromField("main");
@@ -101,7 +109,6 @@ namespace ts {
         }
     }
 
-    interface PackageJson { name?: string; version?: string; typings?: string; types?: string; main?: string; }
     function readJson(path: string, host: ModuleResolutionHost): PackageJson {
         try {
             const jsonText = host.readFile(path);

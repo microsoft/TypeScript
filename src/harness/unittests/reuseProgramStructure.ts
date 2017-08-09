@@ -110,7 +110,9 @@ namespace ts {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
-                if (oldFile && oldFile.redirectInfo) oldFile = oldFile.redirectInfo.unredirected;
+                if (oldFile && oldFile.redirectInfo) {
+                    oldFile = oldFile.redirectInfo.unredirected;
+                }
                 if (oldFile && oldFile.sourceText.getVersion() === t.text.getVersion()) {
                     return oldFile;
                 }
@@ -170,6 +172,11 @@ namespace ts {
         program.sourceTexts = newTexts;
         program.host = host;
         return program;
+    }
+
+    function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
+        const file = find(files, f => f.name === fileName)!;
+        file.text = file.text.updateProgram(newProgramText);
     }
 
     function checkResolvedTypeDirective(expected: ResolvedTypeReferenceDirective, actual: ResolvedTypeReferenceDirective): boolean {
@@ -838,7 +845,7 @@ namespace ts {
 
                 const program_2 = updateRedirectProgram(program_1, files => {
                     updateProgramText(files, bxIndex, "export default class X { private x: number; private y: number; }");
-                    updateProgramText(files, bxPackage, JSON.stringify('{ name: "x", version: "1.2.4" }'));
+                    updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.4" }));
                 });
                 assert.equal(program_1.structureIsReused, StructureIsReused.Not);
                 assert.lengthOf(program_2.getSemanticDiagnostics(), 1);
@@ -856,11 +863,6 @@ namespace ts {
             });
         });
     });
-
-    function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
-        const file = find(files, f => f.name === fileName)!;
-        file.text = file.text.updateProgram(newProgramText);
-    }
 
     describe("host is optional", () => {
         it("should work if host is not provided", () => {
