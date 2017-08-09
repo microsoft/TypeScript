@@ -16,6 +16,18 @@ namespace ts.OutliningElementsCollector {
             }
         }
 
+        function addOutliningForObjectLiteralsInArray(startElement: Node, endElement: Node, autoCollapse: boolean) {
+            if (startElement && endElement) {
+                const span: OutliningSpan = {
+                    textSpan: createTextSpanFromBounds(startElement.getStart(), endElement.end),
+                    hintSpan: createTextSpanFromBounds(startElement.getStart(), endElement.end),
+                    bannerText: collapseText,
+                    autoCollapse
+                };
+                elements.push(span);
+            }
+        }
+
         function addOutliningSpanComments(commentSpan: CommentRange, autoCollapse: boolean) {
             if (commentSpan) {
                 const span: OutliningSpan = {
@@ -161,6 +173,10 @@ namespace ts.OutliningElementsCollector {
                 case SyntaxKind.CaseBlock: {
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                     const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                    if (n.kind === SyntaxKind.ObjectLiteralExpression && n.parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                        addOutliningForObjectLiteralsInArray(openBrace, closeBrace, autoCollapse(n));
+                        break;
+                    }
                     addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n));
                     break;
                 }
