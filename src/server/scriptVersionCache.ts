@@ -675,45 +675,29 @@ namespace ts.server {
         // Input position is relative to the start of this node.
         // Output line number is absolute.
         charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): { oneBasedLine: number, zeroBasedColumn: number, lineText: string | undefined } {
-            const childInfo = this.childFromCharOffset(lineNumberAccumulator, relativePosition);
-            if (!childInfo.child) {
-                return {
-                    oneBasedLine: lineNumberAccumulator,
-                    zeroBasedColumn: relativePosition,
-                    lineText: undefined,
-                };
+            if (this.children.length === 0) {
+                // Root node might have no children if this is an empty document.
+                return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: undefined };
             }
-            else if (childInfo.childIndex < this.children.length) {
-                if (childInfo.child.isLeaf()) {
-                    return {
-                        oneBasedLine: childInfo.lineNumberAccumulator,
-                        zeroBasedColumn: childInfo.relativePosition,
-                        lineText: childInfo.child.text,
-                    };
+
+            for (const child of this.children) {
+                if (child.charCount() > relativePosition) {
+                    if (child.isLeaf()) {
+                        return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: child.text };
+                    }
+                    else {
+                        return (<LineNode>child).charOffsetToLineInfo(lineNumberAccumulator, relativePosition);
+                    }
                 }
                 else {
-                    const lineNode = <LineNode>(childInfo.child);
-                    return lineNode.charOffsetToLineInfo(childInfo.lineNumberAccumulator, childInfo.relativePosition);
+                    relativePosition -= child.charCount();
+                    lineNumberAccumulator += child.lineCount();
                 }
             }
-            else {
-                const lineInfo = this.lineNumberToInfo(this.lineCount(), 0);
-                return { oneBasedLine: this.lineCount(), zeroBasedColumn: lineInfo.leaf.charCount(), lineText: undefined };
-            }
-        }
 
-        lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number, leaf: LineLeaf | undefined } {
-            const childInfo = this.childFromLineNumber(relativeOneBasedLine, positionAccumulator);
-            if (!childInfo.child) {
-                return { position: positionAccumulator, leaf: undefined };
-            }
-            else if (childInfo.child.isLeaf()) {
-                return { position: childInfo.positionAccumulator, leaf: childInfo.child };
-            }
-            else {
-                const lineNode = <LineNode>(childInfo.child);
-                return lineNode.lineNumberToInfo(childInfo.relativeOneBasedLine, childInfo.positionAccumulator);
-            }
+            // Skipped all children
+            const { leaf } = this.lineNumberToInfo(this.lineCount(), 0);
+            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf.charCount(), lineText: undefined };
         }
 
         /**
@@ -721,39 +705,19 @@ namespace ts.server {
          * Output line number is relative to the child.
          * positionAccumulator will be an absolute position once relativeLineNumber reaches 0.
          */
-        private childFromLineNumber(relativeOneBasedLine: number, positionAccumulator: number): { child: LineCollection, relativeOneBasedLine: number, positionAccumulator: number } {
-            let child: LineCollection;
-            let i: number;
-            for (i = 0; i < this.children.length; i++) {
-                child = this.children[i];
+        lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number, leaf: LineLeaf | undefined } {
+            for (const child of this.children) {
                 const childLineCount = child.lineCount();
                 if (childLineCount >= relativeOneBasedLine) {
-                    break;
+                    return child.isLeaf() ? { position: positionAccumulator, leaf: child } : (<LineNode>child).lineNumberToInfo(relativeOneBasedLine, positionAccumulator);
                 }
                 else {
                     relativeOneBasedLine -= childLineCount;
                     positionAccumulator += child.charCount();
                 }
             }
-            return { child, relativeOneBasedLine, positionAccumulator };
-        }
 
-        private childFromCharOffset(lineNumberAccumulator: number, relativePosition: number
-            ): { child: LineCollection, childIndex: number, relativePosition: number, lineNumberAccumulator: number } {
-            let child: LineCollection;
-            let i: number;
-            let len: number;
-            for (i = 0, len = this.children.length; i < len; i++) {
-                child = this.children[i];
-                if (child.charCount() > relativePosition) {
-                    break;
-                }
-                else {
-                    relativePosition -= child.charCount();
-                    lineNumberAccumulator += child.lineCount();
-                }
-            }
-            return { child, childIndex: i, relativePosition, lineNumberAccumulator };
+            return { position: positionAccumulator, leaf: undefined };
         }
 
         private splitAfter(childIndex: number) {
