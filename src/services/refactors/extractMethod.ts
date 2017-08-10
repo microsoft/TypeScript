@@ -235,7 +235,7 @@ namespace ts.refactor.extractMethod {
                 return { errors };
             }
 
-            // If our selection is the expression in an ExrpessionStatement, expand
+            // If our selection is the expression in an ExpressionStatement, expand
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
             // and eliminates double semicolon insertion in certain scenarios)
@@ -458,9 +458,9 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function isValidExtractionTarget(node: Node) {
+    function isValidExtractionTarget(node: Node): node is Scope {
         // Note that we don't use isFunctionLike because we don't want to put the extracted closure *inside* a method
-        return (node.kind === SyntaxKind.FunctionDeclaration) || (node.kind === SyntaxKind.Constructor) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
+        return (node.kind === SyntaxKind.FunctionDeclaration) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
     }
 
     /**
@@ -488,7 +488,7 @@ namespace ts.refactor.extractMethod {
             //  * Class declaration or expression
             //  * Module/namespace or source file
             if (current !== start && isValidExtractionTarget(current)) {
-                (scopes = scopes || []).push(current as FunctionLikeDeclaration);
+                (scopes = scopes || []).push(current);
             }
 
             // A function parameter's initializer is actually in the outer scope, not the function declaration
@@ -613,16 +613,8 @@ namespace ts.refactor.extractMethod {
         const checker = context.program.getTypeChecker();
 
         // Make a unique name for the extracted function
-        let functionNameText: __String;
-        if (isClassLike(scope)) {
-            const type = range.facts & RangeFacts.InStaticRegion ? checker.getTypeOfSymbolAtLocation(scope.symbol, scope) : checker.getDeclaredTypeOfSymbol(scope.symbol);
-            const props = checker.getPropertiesOfType(type);
-            functionNameText = getUniqueName(n => props.every(p => p.name !== n));
-        }
-        else {
-            const file = scope.getSourceFile();
-            functionNameText = getUniqueName(n => !file.identifiers.has(n as string));
-        }
+        const file = scope.getSourceFile();
+        const functionNameText: __String = getUniqueName(n => !file.identifiers.has(n as string));
         const isJS = isInJavaScriptFile(scope);
 
         const functionName = createIdentifier(functionNameText as string);
@@ -669,11 +661,11 @@ namespace ts.refactor.extractMethod {
         if (isClassLike(scope)) {
             // always create private method in TypeScript files
             const modifiers: Modifier[] = isJS ? [] : [createToken(SyntaxKind.PrivateKeyword)];
-            if (range.facts & RangeFacts.IsAsyncFunction) {
-                modifiers.push(createToken(SyntaxKind.AsyncKeyword));
-            }
             if (range.facts & RangeFacts.InStaticRegion) {
                 modifiers.push(createToken(SyntaxKind.StaticKeyword));
+            }
+            if (range.facts & RangeFacts.IsAsyncFunction) {
+                modifiers.push(createToken(SyntaxKind.AsyncKeyword));
             }
             newFunction = createMethod(
                 /*decorators*/ undefined,

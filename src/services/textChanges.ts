@@ -153,13 +153,11 @@ namespace ts.textChanges {
     }
 
     export function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
-        if (options.useNonAdjustedEndPosition) {
+        if (options.useNonAdjustedEndPosition || isExpression(node)) {
             return node.getEnd();
         }
         const end = node.getEnd();
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
-        // check if last character before newPos is linebreak
-        // if yes - considered all skipped trivia to be trailing trivia of the node
         return newEnd !== end && isLineBreak(sourceFile.text.charCodeAt(newEnd - 1))
             ? newEnd
             : end;
