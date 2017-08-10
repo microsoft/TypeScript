@@ -16757,7 +16757,9 @@ namespace ts {
                     .map((arg, i) => ({ arg, symbol: getSymbolAtLocation(arg), i }))
                     .filter(({ symbol }) => symbol && symbol.valueDeclaration === parameter)
                 if (!usages.length) return
-                const sig = getSignatureFromDeclaration(getSymbolAtLocation(invocation.expression).valueDeclaration as FunctionLikeDeclaration)
+                const funcSymbol = getSymbolAtLocation(invocation.expression)
+                if (!funcSymbol) return
+                const sig = getSignatureFromDeclaration(funcSymbol.valueDeclaration as FunctionLikeDeclaration)
                 const parameterTypes = sig.parameters.map(getTypeOfParameter)
                 const argumentTypes = usages.map(({ i }) => parameterTypes[i])
                 usageTypes.splice(0, 0, ...argumentTypes);
