@@ -171,7 +171,6 @@ namespace ts.codefix {
         let lastImportDeclaration: Node;
         const { symbolName: name, sourceFile, getCanonicalFileName, newLineCharacter, host, checker, symbolToken, compilerOptions } = context;
         getCanonicalFileName;
-        newLineCharacter;
         host;
         const cachedImportDeclarations = context.cachedImportDeclarations || [];
 
@@ -373,10 +372,10 @@ namespace ts.codefix {
                     : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
             const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
             if (!lastImportDeclaration) {
-                changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
+                changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(), importDecl, { suffix: `${newLineCharacter}${newLineCharacter}` });
             }
             else {
-                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: context.newLineCharacter });
+                changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: newLineCharacter });
             }
 
             // if this file doesn't have any import statements, insert an import statement and then insert a new line
