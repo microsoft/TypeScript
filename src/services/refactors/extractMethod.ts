@@ -890,7 +890,6 @@ namespace ts.refactor.extractMethod {
             errorsPerScope.push([]);
         }
         const seenUsages = createMap<Usage>();
-        let valueUsage = Usage.Read;
         const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
         const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent) ? scopes[0] : getEnclosingBlockScopeContainer(scopes[0]);
 
@@ -926,31 +925,22 @@ namespace ts.refactor.extractMethod {
 
         return { target, usagesPerScope, errorsPerScope };
 
-        function collectUsages(node: Node) {
+        function collectUsages(node: Node, valueUsage = Usage.Read) {
             if (isDeclaration(node) && node.symbol) {
                 visibleDeclarationsInExtractedRange.push(node.symbol);
             }
 
             if (isAssignmentExpression(node)) {
-                const savedValueUsage = valueUsage;
                 // use 'write' as default usage for values
-                valueUsage = Usage.Write;
-                collectUsages(node.left);
-                valueUsage = savedValueUsage;
+                collectUsages(node.left, Usage.Write);
                 collectUsages(node.right);
             }
             else if (isUnaryExpressionWithWrite(node)) {
-                const savedValueUsage = valueUsage;
-                valueUsage = Usage.Write;
-                collectUsages(node.operand);
-                valueUsage = savedValueUsage;
+                collectUsages(node.operand, Usage.Write);
             }
             else if (isPropertyAccessExpression(node) || isElementAccessExpression(node)) {
-                const savedValueUsage = valueUsage;
                 // use 'write' as default usage for values
-                valueUsage = Usage.Read;
                 forEachChild(node, collectUsages);
-                valueUsage = savedValueUsage;
             }
             else if (isIdentifier(node)) {
                 if (!node.parent) {
