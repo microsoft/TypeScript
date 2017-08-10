@@ -624,7 +624,7 @@ namespace ts.server {
 
             const definitions = project.getLanguageService().getTypeDefinitionAtPosition(file, position);
             if (!definitions) {
-                return undefined;
+                return emptyArray;
             }
 
             return definitions.map(def => {
@@ -714,7 +714,7 @@ namespace ts.server {
             const documentHighlights = project.getLanguageService().getDocumentHighlights(file, position, args.filesToSearch);
 
             if (!documentHighlights) {
-                return undefined;
+                return emptyArray;
             }
 
             if (simplifiedResult) {
@@ -809,7 +809,7 @@ namespace ts.server {
                 // The rename info should be the same for every project
                 const renameInfo = defaultProject.getLanguageService().getRenameInfo(file, position);
                 if (!renameInfo) {
-                    return undefined;
+                    return emptyArray;
                 }
 
                 if (!renameInfo.canRename) {
@@ -901,7 +901,7 @@ namespace ts.server {
             }
         }
 
-        private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | ReadonlyArray<ReferencedSymbol> {
+        private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | undefined | ReadonlyArray<ReferencedSymbol> {
             const file = toNormalizedPath(args.file);
             const projects = this.getProjects(args);
 
@@ -911,7 +911,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
                 if (!nameInfo) {
-                    return emptyArray;
+                    return undefined;
                 }
 
                 const displayString = displayPartsToString(nameInfo.displayParts);
@@ -1165,7 +1165,7 @@ namespace ts.server {
             });
         }
 
-        private getCompletions(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CompletionEntry> | CompletionInfo {
+        private getCompletions(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CompletionEntry> | CompletionInfo | undefined {
             const prefix = args.prefix || "";
             const { file, project } = this.getFileAndProject(args);
 
@@ -1173,11 +1173,8 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
-            if (!completions) {
-                return emptyArray;
-            }
             if (simplifiedResult) {
-                return mapDefined(completions.entries, entry => {
+                return mapDefined(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                         const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
