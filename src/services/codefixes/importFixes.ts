@@ -138,7 +138,23 @@ namespace ts.codefix {
         }
     }
 
+    function convertToImportCodeFixContext(context: CodeFixContext) {
+        const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
+        const checker = context.program.getTypeChecker();
+        const token = getTokenAtPosition(context.sourceFile, context.span.start);
+        return <ImportCodeFixContext>{
+            ...context,
+            checker,
+            compilerOptions: context.program.getCompilerOptions(),
+            cachedImportDeclarations: [],
+            getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
+            symbolName: token.getText(),
+            symbolToken: token
+        };
+    }
+
     function getImportCodeActions(context: CodeFixContext): ImportCodeAction[] {
+        convertToImportCodeFixContext;
         const sourceFile = context.sourceFile;
         const checker = context.program.getTypeChecker();
         const allSourceFiles = context.program.getSourceFiles();
