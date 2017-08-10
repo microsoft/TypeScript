@@ -207,39 +207,6 @@ namespace ts.codefix {
 
         return symbolIdActionMap.getAllActions();
 
-        function getImportDeclarations(moduleSymbol: Symbol) {
-            const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
-
-            const cached = cachedImportDeclarations[moduleSymbolId];
-            if (cached) {
-                return cached;
-            }
-
-            const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
-            for (const importModuleSpecifier of sourceFile.imports) {
-                const importSymbol = checker.getSymbolAtLocation(importModuleSpecifier);
-                if (importSymbol === moduleSymbol) {
-                    existingDeclarations.push(getImportDeclaration(importModuleSpecifier));
-                }
-            }
-            cachedImportDeclarations[moduleSymbolId] = existingDeclarations;
-            return existingDeclarations;
-
-            function getImportDeclaration(moduleSpecifier: LiteralExpression) {
-                let node: Node = moduleSpecifier;
-                while (node) {
-                    if (node.kind === SyntaxKind.ImportDeclaration) {
-                        return <ImportDeclaration>node;
-                    }
-                    if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                        return <ImportEqualsDeclaration>node;
-                    }
-                    node = node.parent;
-                }
-                return undefined;
-            }
-        }
-
         function getUniqueSymbolId(symbol: Symbol) {
             return getSymbolId(skipAlias(symbol, checker));
         }
@@ -257,6 +224,39 @@ namespace ts.codefix {
             }
             else {
                 return [getCodeActionForNewImport()];
+            }
+
+            function getImportDeclarations(moduleSymbol: Symbol) {
+                const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
+
+                const cached = cachedImportDeclarations[moduleSymbolId];
+                if (cached) {
+                    return cached;
+                }
+
+                const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
+                for (const importModuleSpecifier of sourceFile.imports) {
+                    const importSymbol = checker.getSymbolAtLocation(importModuleSpecifier);
+                    if (importSymbol === moduleSymbol) {
+                        existingDeclarations.push(getImportDeclaration(importModuleSpecifier));
+                    }
+                }
+                cachedImportDeclarations[moduleSymbolId] = existingDeclarations;
+                return existingDeclarations;
+
+                function getImportDeclaration(moduleSpecifier: LiteralExpression) {
+                    let node: Node = moduleSpecifier;
+                    while (node) {
+                        if (node.kind === SyntaxKind.ImportDeclaration) {
+                            return <ImportDeclaration>node;
+                        }
+                        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+                            return <ImportEqualsDeclaration>node;
+                        }
+                        node = node.parent;
+                    }
+                    return undefined;
+                }
             }
 
             function getCodeActionsForExistingImport(declarations: (ImportDeclaration | ImportEqualsDeclaration)[]): ImportCodeAction[] {
