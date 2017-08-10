@@ -26,7 +26,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, request, keywordFilters } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, request, keywordFilters, symbolToOriginInfoMap } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX &&
             location && location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
@@ -58,7 +58,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, symbolToOriginInfoMap);
             getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
         else {
@@ -66,7 +66,7 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
+            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, symbolToOriginInfoMap);
         }
 
         // TODO add filter for keyword based on type/value/namespace and also location
@@ -136,7 +136,8 @@ namespace ts.Completions {
         };
     }
 
-    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log): Map<true> {
+    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log, symbolToOriginInfoMap?: Map<SymbolOriginInfo>): Map<true> {
+        symbolToOriginInfoMap;
         const start = timestamp();
         const uniqueNames = createMap<true>();
         if (symbols) {
@@ -304,7 +305,8 @@ namespace ts.Completions {
         // Compute all the completion symbols again.
         const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (completionData) {
-            const { symbols, location } = completionData;
+            const { symbols, location, symbolToOriginInfoMap } = completionData;
+            symbolToOriginInfoMap;
 
             // Find the symbol with the matching entry name.
             // We don't need to perform character checks here because we're only comparing the
@@ -367,6 +369,7 @@ namespace ts.Completions {
         isRightOfDot: boolean;
         request?: Request;
         keywordFilters: KeywordCompletionFilters;
+        symbolToOriginInfoMap: Map<SymbolOriginInfo>;
     }
     type Request = { kind: "JsDocTagName" } | { kind: "JsDocTag" } | { kind: "JsDocParameterName", tag: JSDocParameterTag };
 
@@ -442,7 +445,7 @@ namespace ts.Completions {
             }
 
             if (request) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, request, keywordFilters: KeywordCompletionFilters.None };
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, request, keywordFilters: KeywordCompletionFilters.None, symbolToOriginInfoMap: undefined };
             }
 
             if (!insideJsDocTagTypeExpression) {
@@ -542,6 +545,7 @@ namespace ts.Completions {
         let isNewIdentifierLocation: boolean;
         let keywordFilters = KeywordCompletionFilters.None;
         let symbols: Symbol[] = [];
+        const symbolToOriginInfoMap = createMap<SymbolOriginInfo>();
 
         if (isRightOfDot) {
             getTypeScriptMemberSymbols();
@@ -578,7 +582,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters, symbolToOriginInfoMap };
 
         type JSDocTagWithTypeExpression = JSDocAugmentsTag | JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
@@ -835,6 +839,7 @@ namespace ts.Completions {
         }
 
         function getSymbolsFromOtherSourceFileExports(_tokenText: string) {
+            symbolToOriginInfoMap;
             allSourceFiles;
         }
 
