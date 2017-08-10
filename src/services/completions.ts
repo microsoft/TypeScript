@@ -3,6 +3,8 @@
 /* @internal */
 namespace ts.Completions {
     export type Log = (message: string) => void;
+    
+    export type SymbolOriginInfo = { moduleSymbol: Symbol, isDefaultExport?: boolean };
 
     const enum KeywordCompletionFilters {
         None,
