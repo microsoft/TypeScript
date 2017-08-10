@@ -11,9 +11,25 @@ namespace ts.codefix {
     });
 
     type ImportCodeActionKind = "CodeChange" | "InsertingIntoExistingImport" | "NewImport";
+    type ImportDeclarationMap = (ImportDeclaration | ImportEqualsDeclaration)[][];
+
     interface ImportCodeAction extends CodeAction {
         kind: ImportCodeActionKind;
         moduleSpecifier?: string;
+    }
+
+    export interface ImportCodeFixContext {
+        host: LanguageServiceHost;
+        symbolName: string;
+        newLineCharacter: string;
+        rulesProvider: formatting.RulesProvider;
+        sourceFile: SourceFile;
+        checker: TypeChecker;
+        compilerOptions: CompilerOptions;
+        getCanonicalFileName: (fileName: string) => string;
+        // this is a module id -> module import declaration map
+        cachedImportDeclarations?: ImportDeclarationMap;
+        symbolToken?: Node;
     }
 
     enum ModuleSpecifierComparison {
