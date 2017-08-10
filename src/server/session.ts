@@ -1180,9 +1180,15 @@ namespace ts.server {
             if (simplifiedResult) {
                 return mapDefined(completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+
+                        const newEntry: protocol.CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                        // avoid serialization when hasAction = false
+                        if (hasAction) {
+                            newEntry.hasAction = true;
+                        }
+                        return newEntry;
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }

@@ -1635,6 +1635,11 @@ namespace ts.server.protocol {
          * this span should be used instead of the default one.
          */
         replacementSpan?: TextSpan;
+        /**
+         * Indicating if commiting this completion entry will require additional code action to be
+         * made to avoid errors. The code action is normally adding an additional import statement.
+         */
+        hasAction?: true;
     }
 
     /**
