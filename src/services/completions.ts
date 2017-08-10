@@ -309,7 +309,6 @@ namespace ts.Completions {
         const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (completionData) {
             const { symbols, location, symbolToOriginInfoMap } = completionData;
-            symbolToOriginInfoMap;
 
             // Find the symbol with the matching entry name.
             // We don't need to perform character checks here because we're only comparing the
@@ -320,6 +319,22 @@ namespace ts.Completions {
             if (symbol) {
                 let codeActions: CodeAction[];
                 if (host && rulesProvider) {
+                    const symbolOriginInfo = symbolToOriginInfoMap.get(getUniqueSymbolIdAsString(symbol, typeChecker));
+                    if (symbolOriginInfo) {
+                        const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+                        const context: codefix.ImportCodeFixContext = {
+                            host,
+                            checker: typeChecker,
+                            newLineCharacter: host.getNewLine(),
+                            compilerOptions,
+                            sourceFile,
+                            rulesProvider,
+                            symbolName: symbol.name,
+                            getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames)
+                        };
+
+                        codeActions = codefix.getCodeActionForImport(/*moduleSymbol*/ symbolOriginInfo.moduleSymbol, context, /*isDefault*/ symbolOriginInfo.isDefaultExport);
+                    }
                 }
 
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
@@ -844,7 +859,6 @@ namespace ts.Completions {
         }
 
         function getSymbolsFromOtherSourceFileExports(tokenText: string) {
-            // TODO: I think we can consolidate this with the stuff in importFixes.ts
             const tokenTextLowerCase = tokenText.toLowerCase();
             const symbolIdMap = arrayToMap(symbols, s => getUniqueSymbolIdAsString(s, typeChecker));
 
