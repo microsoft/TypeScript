@@ -4327,10 +4327,14 @@ namespace ts {
                 return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ false, /*reportErrors*/ true);
             }
 
-            const inferredType = getParameterTypeFromBody(<ParameterDeclaration>declaration)
+            // Important to do this *after* attempt has been made to resolve via initializer
+            if (declaration.kind === SyntaxKind.Parameter) {
+                const inferredType = getParameterTypeFromBody(<ParameterDeclaration>declaration)
+                if (inferredType) return inferredType
+            }
 
             // No type specified and nothing can be inferred
-            return inferredType || undefined;
+            return undefined;
         }
 
         function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
