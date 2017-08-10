@@ -76,8 +76,9 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
-        // If the node is an identifier in bindingelement of ObjectBindingPattern (Note: ArrayBindingPattern can only declaration)
-        // instead of just return the declaration symbol which is itself. We should try to get to the original type of the ObjectBindingPattern and return the property declaration.
+        // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
+        // declaration the symbol (which is itself), we should try to get to the original type of the ObjectBindingPattern
+        // and return the property declaration for the referenced property.
         // For example:
         //      import('./foo').then(({ b/*goto*/ar }) => undefined); => should get use to the declaration in file "./foo"
         //
@@ -86,7 +87,8 @@ namespace ts.GoToDefinition {
         //          pr/*destination*/op1: number
         //      }
         //      bar<Test>(({pr/*goto*/op1})=>{});
-        if (isPropertyName(node) && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent) && (node.parent.propertyName ? node.parent.propertyName === node : node.parent.name === node)) {
+        if (isPropertyName(node) && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent) &&
+             (node === (node.parent.propertyName || node.parent.name))) {
             const type = typeChecker.getTypeAtLocation(node.parent.parent);
             if (type) {
                 const propSymbols = getPropertySymbolsFromType(type, node);
