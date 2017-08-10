@@ -1375,8 +1375,9 @@ namespace ts {
 
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string, formattingOptions?: FormatCodeSettings): CompletionEntryDetails {
             synchronizeHostData();
-            formattingOptions;
-            return Completions.getCompletionEntryDetails(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles());
+            const ruleProvider = formattingOptions ? getRuleProvider(formattingOptions) : undefined;
+            return Completions.getCompletionEntryDetails(
+                program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles(), host, ruleProvider);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
