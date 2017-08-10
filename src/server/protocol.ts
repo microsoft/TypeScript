@@ -1667,6 +1667,11 @@ namespace ts.server.protocol {
          * JSDoc tags for the symbol.
          */
         tags: JSDocTagInfo[];
+
+        /**
+         * The associated code actions for this entry
+         */
+        codeActions?: CodeAction[];
     }
 
     export interface CompletionsResponse extends Response {

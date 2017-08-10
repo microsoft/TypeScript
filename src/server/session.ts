@@ -1195,9 +1195,17 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
-
-            return mapDefined(args.entryNames, entryName =>
-                project.getLanguageService().getCompletionEntryDetails(file, position, entryName));
+            
+            return mapDefined(args.entryNames, entryName => {
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName);
+                if (details) {
+                    const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
+                    return { ...details, codeActions: mappedCodeActions };
+                }
+                else {
+                    return undefined;
+                }
+            });
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): protocol.CompileOnSaveAffectedFileListSingleProject[] {
