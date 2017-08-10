@@ -2766,7 +2766,7 @@ namespace FourSlash {
             const isAvailable = refactors.length > 0;
 
             if (negative && isAvailable) {
-                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
+                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some: ${refactors.map(r => r.name).join(", ")}`);
             }
             else if (!negative && !isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);

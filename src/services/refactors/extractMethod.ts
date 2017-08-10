@@ -21,7 +21,7 @@ namespace ts.refactor.extractMethod {
             return undefined;
         }
 
-        const extractions = extractRange(targetRange, context);
+        const extractions = getPossibleExtractions(targetRange, context);
         if (extractions === undefined) {
             // No extractions possible
             return undefined;
@@ -37,15 +37,19 @@ namespace ts.refactor.extractMethod {
                 continue;
             }
 
-            // Don't issue refactorings with duplicated names
+            // Don't issue refactorings with duplicated names.
+            // Scopes come back in "innermost first" order, so extractions will
+            // preferentially go into nearer scopes
             const description = formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [extr.scopeDescription]);
-            if (!usedNames.get(description)) {
+            if (!usedNames.has(description)) {
                 usedNames.set(description, true);
                 actions.push({
                     description,
                     name: `scope_${i}`
                 });
             }
+            // *do* increment i anyway because we'll look for the i-th scope
+            // later when actually doing the refactoring if the user requests it
             i++;
         }
 
@@ -66,21 +70,14 @@ namespace ts.refactor.extractMethod {
         const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length });
         const targetRange: TargetRange = rangeToExtract.targetRange;
 
-        const parsedIndexMatch = /scope_(\d+)/.exec(actionName);
-        if (!parsedIndexMatch) {
-            throw new Error("Expected to match the regexp");
-        }
+        const parsedIndexMatch = /^scope_(\d+)$/.exec(actionName);
+        Debug.assert(!!parsedIndexMatch, "Scope name should have matched the regexp");
         const index = +parsedIndexMatch[1];
-        if (!isFinite(index)) {
-            throw new Error("Expected to parse a number from the scope index");
-        }
+        Debug.assert(isFinite(index), "Expected to parse a finite number from the scope index");
 
-        const extractions = extractRange(targetRange, context, index);
-        if (extractions === undefined) {
-            // Scope is no longer valid from when the user issued the refactor
-            // return undefined;
-            return undefined;
-        }
+        const extractions = getPossibleExtractions(targetRange, context, index);
+        // Scope is no longer valid from when the user issued the refactor (??)
+        Debug.assert(extractions !== undefined, "The extraction went missing? How?");
         return ({ edits: extractions[0].changes });
     }
 
@@ -229,7 +226,7 @@ namespace ts.refactor.extractMethod {
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
         else {
-            // We have a single expression (start)
+            // We have a single node (start)
             const errors = checkRootNode(start) || checkNode(start);
             if (errors) {
                 return { errors };
@@ -243,7 +240,7 @@ namespace ts.refactor.extractMethod {
                 ? [start]
                 : start.parent && start.parent.kind === SyntaxKind.ExpressionStatement
                     ? [start.parent as Statement]
-                    : <Expression>start;
+                    : start as Expression;
 
             return { targetRange: { range, facts: rangeFacts, declarations } };
         }
@@ -257,6 +254,31 @@ namespace ts.refactor.extractMethod {
                 return [createDiagnosticForNode(node, Messages.InsufficientSelection)];
             }
             return undefined;
+        }
+
+        function checkForStaticContext(nodeToCheck: Node, containingClass: Node) {
+            let current: Node = nodeToCheck;
+            while (current !== containingClass) {
+                if (current.kind === SyntaxKind.PropertyDeclaration) {
+                    if (hasModifier(current, ModifierFlags.Static)) {
+                        rangeFacts |= RangeFacts.InStaticRegion;
+                    }
+                    break;
+                }
+                else if (current.kind === SyntaxKind.Parameter) {
+                    const ctorOrMethod = getContainingFunction(current);
+                    if (ctorOrMethod.kind === SyntaxKind.Constructor) {
+                        rangeFacts |= RangeFacts.InStaticRegion;
+                    }
+                    break;
+                }
+                else if (current.kind === SyntaxKind.MethodDeclaration) {
+                    if (hasModifier(current, ModifierFlags.Static)) {
+                        rangeFacts |= RangeFacts.InStaticRegion;
+                    }
+                }
+                current = current.parent;
+            }
         }
 
         // Verifies whether we can actually extract this node or not.
@@ -275,31 +297,10 @@ namespace ts.refactor.extractMethod {
                 return [createDiagnosticForNode(nodeToCheck, Messages.CannotExtractAmbientBlock)];
             }
 
-            // If we're in a class, see if we're in a static region (static property initializer, static method, class constructor parameter default) or not
-            const stoppingPoint: Node = getContainingClass(nodeToCheck);
-            if (stoppingPoint) {
-                let current: Node = nodeToCheck;
-                while (current !== stoppingPoint) {
-                    if (current.kind === SyntaxKind.PropertyDeclaration) {
-                        if (hasModifier(current, ModifierFlags.Static)) {
-                            rangeFacts |= RangeFacts.InStaticRegion;
-                        }
-                        break;
-                    }
-                    else if (current.kind === SyntaxKind.Parameter) {
-                        const ctorOrMethod = getContainingFunction(current);
-                        if (ctorOrMethod.kind === SyntaxKind.Constructor) {
-                            rangeFacts |= RangeFacts.InStaticRegion;
-                        }
-                        break;
-                    }
-                    else if (current.kind === SyntaxKind.MethodDeclaration) {
-                        if (hasModifier(current, ModifierFlags.Static)) {
-                            rangeFacts |= RangeFacts.InStaticRegion;
-                        }
-                    }
-                    current = current.parent;
-                }
+            // If we're in a class, see whether we're in a static region (static property initializer, static method, class constructor parameter default)
+            const containingClass: Node = getContainingClass(nodeToCheck);
+            if (containingClass) {
+                checkForStaticContext(nodeToCheck, containingClass);
             }
 
             let errors: Diagnostic[];
@@ -319,7 +320,7 @@ namespace ts.refactor.extractMethod {
                 if (isDeclaration(node)) {
                     const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
                     if (hasModifier(declaringNode, ModifierFlags.Export)) {
-                        (errors || (errors = []).push(createDiagnosticForNode(node, Messages.CannotExtractExportedEntity)));
+                        (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractExportedEntity));
                         return true;
                     }
                     declarations.push(node.symbol);
@@ -494,7 +495,7 @@ namespace ts.refactor.extractMethod {
             // A function parameter's initializer is actually in the outer scope, not the function declaration
             if (current && current.parent && current.parent.kind === SyntaxKind.Parameter) {
                 // Skip all the way to the outer scope of the function that declared this parameter
-                current = current.parent.parent.parent;
+                current = findAncestor(current, parent => isFunctionLike(parent)).parent;
             }
             else {
                 current = current.parent;
@@ -509,7 +510,7 @@ namespace ts.refactor.extractMethod {
      * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
      * or an error explaining why we can't extract into that scope.
      */
-    export function extractRange(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number = undefined): ReadonlyArray<ExtractResultForScope> | undefined {
+    export function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number = undefined): ReadonlyArray<ExtractResultForScope> | undefined {
         const { file: sourceFile } = context;
 
         if (targetRange === undefined) {

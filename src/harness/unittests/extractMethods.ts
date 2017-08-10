@@ -575,12 +575,12 @@ namespace A {
                 };
                 const result = refactor.extractMethod.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
                 assert.equal(result.errors, undefined, "expect no errors");
-                const results = refactor.extractMethod.extractRange(result.targetRange, context);
+                const results = refactor.extractMethod.getPossibleExtractions(result.targetRange, context);
                 const data: string[] = [];
                 data.push(`==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
-                    const changes = refactor.extractMethod.extractRange(result.targetRange, context, results.indexOf(r))[0].changes;
+                    const changes = refactor.extractMethod.getPossibleExtractions(result.targetRange, context, results.indexOf(r))[0].changes;
                     data.push(`==SCOPE::${r.scopeDescription}==`);
                     data.push(textChanges.applyChanges(sourceFile.text, changes[0].textChanges));
                 }
