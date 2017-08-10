@@ -946,7 +946,7 @@ compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", [], function() {
     // Shell out to `gulp`, since we do the work to handle sourcemaps correctly w/o inline maps there
-    var cmd = 'gulp browserify';
+    var cmd = 'gulp browserify --silent';
     exec(cmd);
 }, { async: true });
 
