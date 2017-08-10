@@ -12806,9 +12806,7 @@ namespace ts {
 
         function getParameterTypeFromBody(parameter: ParameterDeclaration): Type {
             const func = <FunctionLikeDeclaration>parameter.parent
-            if (!func.body) {
-                return unknownType;
-            }
+            if (!func.body || isRestParameter(parameter)) return
 
             let type: Type;
             let types: Type[];
