@@ -11,3 +11,12 @@ declare function swapNumberString(n: number): string;
 function subs(s) {
   return swapNumberString(s);
 }
+
+// CASE 3
+function f(x: number){
+   return x;
+}
+
+function g(x){ return x};
+
+function h(x){ return f(x); };
