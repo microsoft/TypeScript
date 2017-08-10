@@ -34,19 +34,41 @@ function subs(s) {
 // => (s: string) => number & (s: number) => string
 
 // CASE 3
-function f(x: number){
->f : Symbol(f, Decl(parameterInference.ts, 12, 1))
->x : Symbol(x, Decl(parameterInference.ts, 18, 11))
+function f3(x: number){
+>f3 : Symbol(f3, Decl(parameterInference.ts, 12, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 18, 12))
 
    return x;
->x : Symbol(x, Decl(parameterInference.ts, 18, 11))
+>x : Symbol(x, Decl(parameterInference.ts, 18, 12))
 }
 
-function g(x){ return f(x); };
->g : Symbol(g, Decl(parameterInference.ts, 20, 1))
->x : Symbol(x, Decl(parameterInference.ts, 22, 11))
->f : Symbol(f, Decl(parameterInference.ts, 12, 1))
->x : Symbol(x, Decl(parameterInference.ts, 22, 11))
+function g3(x){ return f3(x); };
+>g3 : Symbol(g3, Decl(parameterInference.ts, 20, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 22, 12))
+>f3 : Symbol(f3, Decl(parameterInference.ts, 12, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 22, 12))
 
-// => function g(x: number): number
+// => function g3(x: number): number
+
+// CASE 4
+declare function f4(g: Function)
+>f4 : Symbol(f4, Decl(parameterInference.ts, 22, 32))
+>g : Symbol(g, Decl(parameterInference.ts, 26, 20))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+function g4(x) {
+>g4 : Symbol(g4, Decl(parameterInference.ts, 26, 32))
+>x : Symbol(x, Decl(parameterInference.ts, 27, 12))
+
+  f4(() => {
+>f4 : Symbol(f4, Decl(parameterInference.ts, 22, 32))
+
+    Math.sqrt(x)
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(parameterInference.ts, 27, 12))
+
+  })
+}
 

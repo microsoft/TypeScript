@@ -36,20 +36,45 @@ function subs(s) {
 // => (s: string) => number & (s: number) => string
 
 // CASE 3
-function f(x: number){
->f : (x: number) => number
+function f3(x: number){
+>f3 : (x: number) => number
 >x : number
 
    return x;
 >x : number
 }
 
-function g(x){ return f(x); };
->g : (x: number) => number
+function g3(x){ return f3(x); };
+>g3 : (x: number) => number
 >x : number
->f(x) : number
->f : (x: number) => number
+>f3(x) : number
+>f3 : (x: number) => number
 >x : number
 
-// => function g(x: number): number
+// => function g3(x: number): number
+
+// CASE 4
+declare function f4(g: Function)
+>f4 : (g: Function) => any
+>g : Function
+>Function : Function
+
+function g4(x) {
+>g4 : (x: number) => void
+>x : number
+
+  f4(() => {
+>f4(() => {    Math.sqrt(x)  }) : any
+>f4 : (g: Function) => any
+>() => {    Math.sqrt(x)  } : () => void
+
+    Math.sqrt(x)
+>Math.sqrt(x) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>x : number
+
+  })
+}
 
