@@ -73,12 +73,12 @@ namespace ts.server.typingsInstaller {
     }
 
     export type RequestCompletedAction = (success: boolean) => void;
-    type PendingRequest = {
+    interface PendingRequest {
         requestId: number;
         args: string[];
         cwd: string;
         onRequestCompleted: RequestCompletedAction;
-    };
+    }
 
     export abstract class TypingsInstaller {
         private readonly packageNameToTypingLocation: Map<string> = createMap<string>();

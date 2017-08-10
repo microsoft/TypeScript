@@ -1,6 +1,12 @@
 /* @internal */
 namespace ts.NavigateTo {
-    type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
+    interface RawNavigateToItem {
+        name: string;
+        fileName: string;
+        matchKind: PatternMatchKind;
+        isCaseSensitive: boolean;
+        declaration: Declaration;
+    }
 
     export function getNavigateToItems(sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
