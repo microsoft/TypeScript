@@ -757,6 +757,20 @@ namespace ts {
         return false;
     }
 
+    export function forEachInvocation<T>(body: Block, visitor: (stmt: CallExpression) => T): T {
+
+        return traverse(body);
+
+        function traverse(node: Node): T {
+            switch (node.kind) {
+                case SyntaxKind.CallExpression:
+                    return visitor(<CallExpression>node)
+                default:
+                    return forEachChild(node, traverse);
+            }
+        }
+    }
+
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {

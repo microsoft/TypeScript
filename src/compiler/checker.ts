@@ -4298,7 +4298,7 @@ namespace ts {
                     type = getContextualThisParameterType(func);
                 }
                 else {
-                    type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                    type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration)
                 }
                 if (type) {
                     return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
@@ -4327,8 +4327,10 @@ namespace ts {
                 return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ false, /*reportErrors*/ true);
             }
 
+            const inferredType = getParameterTypeFromBody(<ParameterDeclaration>declaration)
+
             // No type specified and nothing can be inferred
-            return undefined;
+            return inferredType || undefined;
         }
 
         function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
@@ -12798,6 +12800,20 @@ namespace ts {
             return undefined;
         }
 
+        function getParameterTypeFromBody(parameter: ParameterDeclaration): Type {
+            const func = <FunctionLikeDeclaration>parameter.parent
+            if (!func.body) {
+                return unknownType;
+            }
+
+            let type: Type;
+            let types: Type[];
+            types = checkAndAggregateParameterExpressionTypes(parameter)
+            type = types ? getWidenedType(getIntersectionType(types)) : undefined;
+
+            return type;
+        }
+
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
@@ -16727,6 +16743,22 @@ namespace ts {
                 return false;
             }
             return true;
+        }
+
+        function checkAndAggregateParameterExpressionTypes(parameter: ParameterDeclaration): Type[] {
+            const func = <FunctionLikeDeclaration>parameter.parent
+            const usageTypes: Type[] = []
+            forEachInvocation(<Block>func.body, invocation => {
+                const usages = invocation.arguments
+                    .map((arg, i) => ({ arg, symbol: getSymbolAtLocation(arg), i }))
+                    .filter(({ symbol }) => symbol && symbol.valueDeclaration === parameter)
+                if (!usages.length) return
+                const sig = getSignatureFromDeclaration(getSymbolAtLocation(invocation.expression).valueDeclaration as FunctionLikeDeclaration)
+                const parameterTypes = sig.parameters.map(getTypeOfParameter)
+                const argumentTypes = usages.map(({ i }) => parameterTypes[i])
+                usageTypes.splice(0, 0, ...argumentTypes);
+            });
+            return usageTypes;
         }
 
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
