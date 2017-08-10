@@ -224,7 +224,7 @@ namespace ts {
             getSuggestionForNonexistentSymbol: (location, name, meaning) => unescapeLeadingUnderscores(getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning)),
             getBaseConstraintOfType,
             resolveName(name, location, meaning) {
-                return resolveName(location, name as __String, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
         };
