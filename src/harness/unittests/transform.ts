@@ -78,28 +78,43 @@ namespace ts {
         testBaseline("synthesizedNamespace", () => {
             return ts.transpileModule(`namespace Reflect { const x = 1; }`, {
                 transformers: {
-                    before: [forceSyntheticModuleDeclaration],
+                    before: [forceNamespaceRewrite],
                 },
                 compilerOptions: {
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
-
-            function forceSyntheticModuleDeclaration(context: ts.TransformationContext) {
-                return (sourceFile: ts.SourceFile): ts.SourceFile => {
-                    return visitNode(sourceFile);
-
-                    function visitNode<T extends ts.Node>(node: T): T {
-                        if (node.kind === ts.SyntaxKind.ModuleBlock) {
-                            const block = node as T & ts.ModuleBlock;
-                            const statements = ts.createNodeArray([...block.statements]);
-                            return ts.updateModuleBlock(block, statements) as typeof block;
-                        }
-                        return ts.visitEachChild(node, visitNode, context);
-                    }
-                };
-            }
         });
+
+        testBaseline("synthesizedNamespaceFollowingClass", () => {
+            return ts.transpileModule(`
+            class C { foo = 10; static bar = 20 }
+            namespace C { export let x = 10; }
+            `, {
+                transformers: {
+                    before: [forceNamespaceRewrite],
+                },
+                compilerOptions: {
+                    target: ts.ScriptTarget.ESNext,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+        });
+
+        function forceNamespaceRewrite(context: ts.TransformationContext) {
+            return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                return visitNode(sourceFile);
+
+                function visitNode<T extends ts.Node>(node: T): T {
+                    if (node.kind === ts.SyntaxKind.ModuleBlock) {
+                        const block = node as T & ts.ModuleBlock;
+                        const statements = ts.createNodeArray([...block.statements]);
+                        return ts.updateModuleBlock(block, statements) as typeof block;
+                    }
+                    return ts.visitEachChild(node, visitNode, context);
+                }
+            };
+        }
     });
 }
 
