@@ -238,7 +238,7 @@ namespace ts.codefix {
             newLineCharacter;
             host;
             symbolToken;
-            const existingDeclarations = getImportDeclarations(moduleSymbol);
+            const existingDeclarations = getImportDeclarations();
             if (existingDeclarations.length > 0) {
                 // With an existing import statement, there are more than one actions the user can do.
                 return getCodeActionsForExistingImport(existingDeclarations);
@@ -247,7 +247,7 @@ namespace ts.codefix {
                 return [getCodeActionForNewImport()];
             }
 
-            function getImportDeclarations(moduleSymbol: Symbol) {
+            function getImportDeclarations() {
                 const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
 
                 const cached = cachedImportDeclarations[moduleSymbolId];
