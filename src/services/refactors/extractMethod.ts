@@ -289,7 +289,7 @@ namespace ts.refactor.extractMethod {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) && !(isExpression(nodeToCheck) && isLegalExpressionExtraction(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
@@ -592,13 +592,13 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function getUniqueName(isNameOkay: (name: __String) => boolean) {
-        let functionNameText = "newFunction" as __String;
+    function getUniqueName(isNameOkay: (name: string) => boolean) {
+        let functionNameText = "newFunction";
         if (isNameOkay(functionNameText)) {
             return functionNameText;
         }
         let i = 1;
-        while (!isNameOkay(functionNameText = `newFunction_${i}` as __String)) {
+        while (!isNameOkay(functionNameText = `newFunction_${i}`)) {
             i++;
         }
         return functionNameText;
@@ -615,7 +615,7 @@ namespace ts.refactor.extractMethod {
 
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();
-        const functionNameText: __String = getUniqueName(n => !file.identifiers.has(n as string));
+        const functionNameText: string = getUniqueName(n => !file.identifiers.has(n));
         const isJS = isInJavaScriptFile(scope);
 
         const functionName = createIdentifier(functionNameText as string);
@@ -937,7 +937,6 @@ namespace ts.refactor.extractMethod {
                 valueUsage = Usage.Write;
                 collectUsages(node.left);
                 valueUsage = savedValueUsage;
-
                 collectUsages(node.right);
             }
             else if (isUnaryExpressionWithWrite(node)) {
@@ -1086,10 +1085,9 @@ namespace ts.refactor.extractMethod {
     }
 
     function getParentNodeInSpan(node: Node, file: SourceFile, span: TextSpan): Node {
-        while (node) {
-            if (!node.parent) {
-                return undefined;
-            }
+        if (!node) return undefined;
+
+        while (node.parent) {
             if (isSourceFile(node.parent) || !spanContainsNode(span, node.parent, file)) {
                 return node;
             }
@@ -1110,7 +1108,7 @@ namespace ts.refactor.extractMethod {
      * such as `import x from 'y'` -- the 'y' is a StringLiteral but is *not* an expression
      * in the sense of something that you could extract on
      */
-    function isLegalExpressionExtraction(node: Node): boolean {
+    function isExtractableExpression(node: Node): boolean {
         switch (node.parent.kind) {
             case SyntaxKind.EnumMember:
                 return false;
@@ -1128,7 +1126,8 @@ namespace ts.refactor.extractMethod {
 
             case SyntaxKind.Identifier:
                 return node.parent.kind !== SyntaxKind.BindingElement &&
-                    node.parent.kind !== SyntaxKind.ImportSpecifier;
+                    node.parent.kind !== SyntaxKind.ImportSpecifier &&
+                    node.parent.kind !== SyntaxKind.ExportSpecifier;
         }
         return true;
     }
