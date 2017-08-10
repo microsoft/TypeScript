@@ -107,12 +107,14 @@ namespace ts {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
-                Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
+                if (token === SyntaxKind.EndOfFileToken) {
+                    return pos;
+                }
             }
             return pos;
         }
