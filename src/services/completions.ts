@@ -3,7 +3,7 @@
 /* @internal */
 namespace ts.Completions {
     export type Log = (message: string) => void;
-    
+
     export type SymbolOriginInfo = { moduleSymbol: Symbol, isDefaultExport?: boolean };
 
     const enum KeywordCompletionFilters {
@@ -13,7 +13,6 @@ namespace ts.Completions {
     }
 
     export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: Log, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, allSourceFiles: SourceFile[]): CompletionInfo | undefined {
-        allSourceFiles; // unused
         if (isInReferenceComment(sourceFile, position)) {
             return PathCompletions.getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
         }
@@ -22,7 +21,7 @@ namespace ts.Completions {
             return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (!completionData) {
             return undefined;
         }
@@ -301,9 +300,9 @@ namespace ts.Completions {
         }
     }
 
-    export function getCompletionEntryDetails(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): CompletionEntryDetails {
+    export function getCompletionEntryDetails(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string, allSourceFiles: SourceFile[]): CompletionEntryDetails {
         // Compute all the completion symbols again.
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (completionData) {
             const { symbols, location } = completionData;
 
@@ -349,9 +348,9 @@ namespace ts.Completions {
         return undefined;
     }
 
-    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): Symbol | undefined {
+    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string, allSourceFiles: SourceFile[]): Symbol | undefined {
         // Compute all the completion symbols again.
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         // Find the symbol with the matching entry name.
         // We don't need to perform character checks here because we're only comparing the
         // name against 'entryName' (which is known to be good), not building a new
@@ -371,7 +370,7 @@ namespace ts.Completions {
     }
     type Request = { kind: "JsDocTagName" } | { kind: "JsDocTag" } | { kind: "JsDocParameterName", tag: JSDocParameterTag };
 
-    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number): CompletionData | undefined {
+    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number, allSourceFiles: SourceFile[]): CompletionData | undefined {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
         let request: Request | undefined;
@@ -525,7 +524,6 @@ namespace ts.Completions {
                             break;
                         }
                     // falls through
-
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
                     case SyntaxKind.JsxOpeningElement:
@@ -756,6 +754,8 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
             symbols = filterGlobalCompletion(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings));
 
+            getSymbolsFromOtherSourceFileExports(previousToken === undefined ? "" : previousToken.getText());
+
             return true;
         }
 
@@ -832,6 +832,10 @@ namespace ts.Completions {
                 // symbol can be referenced at locations where type is allowed
                 return forEach(exportedSymbols, symbolCanBeReferencedAtTypeLocation);
             }
+        }
+
+        function getSymbolsFromOtherSourceFileExports(_tokenText: string) {
+            allSourceFiles;
         }
 
         /**

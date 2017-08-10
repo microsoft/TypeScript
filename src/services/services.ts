@@ -1376,12 +1376,12 @@ namespace ts {
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string, formattingOptions?: FormatCodeSettings): CompletionEntryDetails {
             synchronizeHostData();
             formattingOptions;
-            return Completions.getCompletionEntryDetails(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
+            return Completions.getCompletionEntryDetails(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles());
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
+            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles());
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
