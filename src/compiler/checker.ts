@@ -16752,10 +16752,10 @@ namespace ts {
                 forEachInvocation(f, invocation => {
                     invocations.push(invocation);
                     invocation.arguments.filter(isFunctionExpressionOrArrowFunction).forEach(arg => seekInvocations(<Block>arg.body));
-                })
+                });
             }
 
-            seekInvocations(<Block>func.body)
+            seekInvocations(<Block>func.body);
 
             invocations.forEach(invocation => {
                 const usages = invocation.arguments
