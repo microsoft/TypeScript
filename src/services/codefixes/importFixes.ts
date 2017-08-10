@@ -171,7 +171,6 @@ namespace ts.codefix {
         let lastImportDeclaration: Node;
         const { symbolName: name, sourceFile, getCanonicalFileName, newLineCharacter, host, checker, symbolToken, compilerOptions } = context;
         getCanonicalFileName;
-        host;
         const cachedImportDeclarations = context.cachedImportDeclarations || [];
 
         const existingDeclarations = getImportDeclarations();
@@ -462,7 +461,7 @@ namespace ts.codefix {
                 }
 
                 function tryGetModuleNameFromTypeRoots() {
-                    const typeRoots = getEffectiveTypeRoots(options, context.host);
+                    const typeRoots = getEffectiveTypeRoots(options, host);
                     if (typeRoots) {
                         const normalizedTypeRoots = map(typeRoots, typeRoot => toPath(typeRoot, /*basePath*/ undefined, getCanonicalFileName));
                         for (const typeRoot of normalizedTypeRoots) {
@@ -499,8 +498,8 @@ namespace ts.codefix {
                         // If the file is the main module, it can be imported by the package name
                         const packageRootPath = path.substring(0, parts.packageRootIndex);
                         const packageJsonPath = combinePaths(packageRootPath, "package.json");
-                        if (context.host.fileExists(packageJsonPath)) {
-                            const packageJsonContent = JSON.parse(context.host.readFile(packageJsonPath));
+                        if (host.fileExists(packageJsonPath)) {
+                            const packageJsonContent = JSON.parse(host.readFile(packageJsonPath));
                             if (packageJsonContent) {
                                 const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
                                 if (mainFileRelative) {
