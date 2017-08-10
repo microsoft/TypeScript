@@ -844,6 +844,7 @@ namespace ts.Completions {
         }
 
         function getSymbolsFromOtherSourceFileExports(tokenText: string) {
+            // TODO: I think we can consolidate this with the stuff in importFixes.ts
             const tokenTextLowerCase = tokenText.toLowerCase();
             const symbolIdMap = arrayToMap(symbols, s => getUniqueSymbolIdAsString(s, typeChecker));
 
