@@ -137,6 +137,20 @@ namespace ts.codefix {
             return ModuleSpecifierComparison.Equal;
         }
     }
+    
+    function createCodeAction(
+        description: DiagnosticMessage,
+        diagnosticArgs: string[],
+        changes: FileTextChanges[],
+        kind: ImportCodeActionKind,
+        moduleSpecifier?: string): ImportCodeAction {
+        return {
+            description: formatMessage.apply(undefined, [undefined, description].concat(<any[]>diagnosticArgs)),
+            changes,
+            kind,
+            moduleSpecifier
+        };
+    }
 
     function convertToImportCodeFixContext(context: CodeFixContext) {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
@@ -688,20 +702,6 @@ namespace ts.codefix {
                 }
             }
 
-        }
-
-        function createCodeAction(
-            description: DiagnosticMessage,
-            diagnosticArgs: string[],
-            changes: FileTextChanges[],
-            kind: ImportCodeActionKind,
-            moduleSpecifier?: string): ImportCodeAction {
-            return {
-                description: formatMessage.apply(undefined, [undefined, description].concat(<any[]>diagnosticArgs)),
-                changes,
-                kind,
-                moduleSpecifier
-            };
         }
     }
 }
