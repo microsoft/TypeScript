@@ -16758,7 +16758,7 @@ namespace ts {
                 const argumentTypes = usages.map(({ i }) => parameterTypes[i])
                 usageTypes.splice(0, 0, ...argumentTypes);
             });
-            return usageTypes;
+            return usageTypes.length ? usageTypes : undefined;
         }
 
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
