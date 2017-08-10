@@ -16746,7 +16746,18 @@ namespace ts {
         function checkAndAggregateParameterExpressionTypes(parameter: ParameterDeclaration): Type[] {
             const func = <FunctionLikeDeclaration>parameter.parent;
             const usageTypes: Type[] = [];
-            forEachInvocation(<Block>func.body, invocation => {
+            const invocations: CallExpression[] = [];
+
+            function seekInvocations(f: FunctionBody) {
+                forEachInvocation(f, invocation => {
+                    invocations.push(invocation);
+                    invocation.arguments.filter(isFunctionExpressionOrArrowFunction).forEach(arg => seekInvocations(<Block>arg.body));
+                })
+            }
+
+            seekInvocations(<Block>func.body)
+
+            invocations.forEach(invocation => {
                 const usages = invocation.arguments
                     .map((arg, i) => ({ arg, symbol: getSymbolAtLocation(arg), i }))
                     .filter(({ symbol }) => symbol && symbol.valueDeclaration === parameter);
@@ -16758,6 +16769,7 @@ namespace ts {
                 const argumentTypes = usages.map(({ i }) => parameterTypes[i]).filter(t => !!t);
                 usageTypes.splice(0, 0, ...argumentTypes);
             });
+
             return usageTypes.length ? usageTypes : undefined;
         }
 

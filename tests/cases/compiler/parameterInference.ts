@@ -22,3 +22,10 @@ function f(x: number){
 
 function g(x){ return f(x); };
 // => function g(x: number): number
+// CASE 4
+declare function f4(g: Function)
+function g4(x) {
+  f4(() => {
+    Math.sqrt(x)
+  })
+}
