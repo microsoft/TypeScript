@@ -1367,6 +1367,10 @@ namespace ts {
         }
 
         function writeVariableStatement(node: VariableStatement) {
+            // If binding pattern doesn't have name, then there is nothing to be emitted for declaration file i.e. const [,] = [1,2].
+            if (every(node.declarationList && node.declarationList.declarations, decl => decl.name && isEmptyBindingPattern(decl.name))) {
+                return;
+            }
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isLet(node.declarationList)) {

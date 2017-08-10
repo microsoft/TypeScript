@@ -331,11 +331,14 @@ namespace ts {
                 location
             );
         }
-        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)) {
+        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)
+            || every(elements, isOmittedExpression)) {
             // For anything other than a single-element destructuring we need to generate a temporary
             // to ensure value is evaluated exactly once. Additionally, if we have zero elements
             // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
             // so in that case, we'll intentionally create that temporary.
+            // Or all the elements of the binding pattern are omitted expression such as "var [,] = [1,2]",
+            // then we will create temporary variable.
             const reuseIdentifierExpressions = !isDeclarationBindingElement(parent) || numElements !== 0;
             value = ensureIdentifier(flattenContext, value, reuseIdentifierExpressions, location);
         }
