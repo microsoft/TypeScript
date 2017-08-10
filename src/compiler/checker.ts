@@ -17757,21 +17757,6 @@ namespace ts {
             return getBestChoiceType(type1, type2);
         }
 
-        function checkLiteralExpression(node: LiteralExpression | Token<SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword>): Type {
-            switch (node.kind) {
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.StringLiteral:
-                    return getFreshTypeOfLiteralType(getLiteralType(node.text));
-                case SyntaxKind.NumericLiteral:
-                    checkGrammarNumericLiteral(<NumericLiteral>node);
-                    return getFreshTypeOfLiteralType(getLiteralType(+node.text));
-                case SyntaxKind.TrueKeyword:
-                    return trueType;
-                case SyntaxKind.FalseKeyword:
-                    return falseType;
-            }
-        }
-
         function checkTemplateExpression(node: TemplateExpression): Type {
             // We just want to check each expressions, but we are unconcerned with
             // the type of each expression, as any value may be coerced into a string.
@@ -17984,10 +17969,14 @@ namespace ts {
                     return nullWideningType;
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
+                    return getFreshTypeOfLiteralType(getLiteralType((node as LiteralExpression).text));
                 case SyntaxKind.NumericLiteral:
+                    checkGrammarNumericLiteral(node as NumericLiteral);
+                    return getFreshTypeOfLiteralType(getLiteralType(+(node as NumericLiteral).text));
                 case SyntaxKind.TrueKeyword:
+                    return trueType;
                 case SyntaxKind.FalseKeyword:
-                    return checkLiteralExpression(node as LiteralExpression);
+                    return falseType;
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.RegularExpressionLiteral:
