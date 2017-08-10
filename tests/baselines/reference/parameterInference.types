@@ -1,0 +1,55 @@
+=== tests/cases/compiler/parameterInference.ts ===
+// CASE 1
+function foo(s) {
+>foo : (s: number) => void
+>s : number
+
+    Math.sqrt(s)
+>Math.sqrt(s) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>s : number
+}
+// => function foo(s: number): void
+
+// CASE 2
+declare function swapNumberString(n: string): number;
+>swapNumberString : { (n: string): number; (n: number): string; }
+>n : string
+
+declare function swapNumberString(n: number): string;
+>swapNumberString : { (n: string): number; (n: number): string; }
+>n : number
+
+function subs(s) {
+>subs : (s: string) => number
+>s : string
+
+  return swapNumberString(s);
+>swapNumberString(s) : number
+>swapNumberString : { (n: string): number; (n: number): string; }
+>s : string
+}
+// => function subs(s: string): number
+// NOTE: Still broken, needs to deal with overloads. Should have been inferred as:
+// => (s: string) => number & (s: number) => string
+
+// CASE 3
+function f(x: number){
+>f : (x: number) => number
+>x : number
+
+   return x;
+>x : number
+}
+
+function g(x){ return f(x); };
+>g : (x: number) => number
+>x : number
+>f(x) : number
+>f : (x: number) => number
+>x : number
+
+// => function g(x: number): number
+

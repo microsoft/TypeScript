@@ -1,0 +1,52 @@
+=== tests/cases/compiler/parameterInference.ts ===
+// CASE 1
+function foo(s) {
+>foo : Symbol(foo, Decl(parameterInference.ts, 0, 0))
+>s : Symbol(s, Decl(parameterInference.ts, 1, 13))
+
+    Math.sqrt(s)
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(parameterInference.ts, 1, 13))
+}
+// => function foo(s: number): void
+
+// CASE 2
+declare function swapNumberString(n: string): number;
+>swapNumberString : Symbol(swapNumberString, Decl(parameterInference.ts, 3, 1), Decl(parameterInference.ts, 7, 53))
+>n : Symbol(n, Decl(parameterInference.ts, 7, 34))
+
+declare function swapNumberString(n: number): string;
+>swapNumberString : Symbol(swapNumberString, Decl(parameterInference.ts, 3, 1), Decl(parameterInference.ts, 7, 53))
+>n : Symbol(n, Decl(parameterInference.ts, 8, 34))
+
+function subs(s) {
+>subs : Symbol(subs, Decl(parameterInference.ts, 8, 53))
+>s : Symbol(s, Decl(parameterInference.ts, 10, 14))
+
+  return swapNumberString(s);
+>swapNumberString : Symbol(swapNumberString, Decl(parameterInference.ts, 3, 1), Decl(parameterInference.ts, 7, 53))
+>s : Symbol(s, Decl(parameterInference.ts, 10, 14))
+}
+// => function subs(s: string): number
+// NOTE: Still broken, needs to deal with overloads. Should have been inferred as:
+// => (s: string) => number & (s: number) => string
+
+// CASE 3
+function f(x: number){
+>f : Symbol(f, Decl(parameterInference.ts, 12, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 18, 11))
+
+   return x;
+>x : Symbol(x, Decl(parameterInference.ts, 18, 11))
+}
+
+function g(x){ return f(x); };
+>g : Symbol(g, Decl(parameterInference.ts, 20, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 22, 11))
+>f : Symbol(f, Decl(parameterInference.ts, 12, 1))
+>x : Symbol(x, Decl(parameterInference.ts, 22, 11))
+
+// => function g(x: number): number
+
