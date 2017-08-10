@@ -470,7 +470,7 @@ namespace ts.refactor.extractMethod {
      * depending on what's in the extracted body.
      */
     export function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
-        let current: Node = isArray(range.range) ? firstOrUndefined(range.range) : range.range;
+        let current: Node = isReadonlyArray(range.range) ? firstOrUndefined(range.range) : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
@@ -747,7 +747,7 @@ namespace ts.refactor.extractMethod {
             if (range.facts & RangeFacts.HasReturn) {
                 newNodes.push(createReturn(call));
             }
-            else if (isArray(range.range)) {
+            else if (isReadonlyArray(range.range)) {
                 newNodes.push(createStatement(call));
             }
             else {
@@ -755,7 +755,7 @@ namespace ts.refactor.extractMethod {
             }
         }
 
-        if (isArray(range.range)) {
+        if (isReadonlyArray(range.range)) {
             changeTracker.replaceNodesWithNodes(context.file, range.range, newNodes, {
                 nodeSeparator: context.newLineCharacter,
                 suffix: context.newLineCharacter // insert newline only when replacing statements
@@ -909,7 +909,7 @@ namespace ts.refactor.extractMethod {
                 }
             });
 
-            if (hasWrite && !isArray(targetRange.range) && isExpression(targetRange.range)) {
+            if (hasWrite && !isReadonlyArray(targetRange.range) && isExpression(targetRange.range)) {
                 errorsPerScope[i].push(createDiagnosticForNode(targetRange.range, Messages.CannotCombineWritesAndReturns));
             }
             else if (readonlyClassPropertyWrite && i > 0) {
@@ -1042,7 +1042,7 @@ namespace ts.refactor.extractMethod {
 
         function checkForUsedDeclarations(node: Node) {
             // If this node is entirely within the original extraction range, we don't need to do anything.
-            if (node === targetRange.range || (isArray(targetRange.range) && targetRange.range.indexOf(node as Statement) >= 0)) {
+            if (node === targetRange.range || (isReadonlyArray(targetRange.range) && targetRange.range.indexOf(node as Statement) >= 0)) {
                 return;
             }
 
