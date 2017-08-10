@@ -333,7 +333,7 @@ namespace ts.Completions {
                             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames)
                         };
 
-                        codeActions = codefix.getCodeActionForImport(/*moduleSymbol*/ symbolOriginInfo.moduleSymbol, context, /*isDefault*/ symbolOriginInfo.isDefaultExport);
+                        codeActions = codefix.getCodeActionForImport(/*moduleSymbol*/ symbolOriginInfo.moduleSymbol, context, context.symbolName, /*isDefault*/ symbolOriginInfo.isDefaultExport);
                     }
                 }
 

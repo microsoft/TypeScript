@@ -627,16 +627,17 @@ namespace ts.codefix {
     }
 
     function getImportCodeActions(context: CodeFixContext): ImportCodeAction[] {
-        convertToImportCodeFixContext;
         const sourceFile = context.sourceFile;
-        const checker = context.program.getTypeChecker();
         const allSourceFiles = context.program.getSourceFiles();
+        const importFixContext = convertToImportCodeFixContext(context);
 
-        const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
-        const name = token.getText();
+        const checker = importFixContext.checker;
+        const token = importFixContext.symbolToken;
         const symbolIdActionMap = new ImportCodeActionMap();
-
         const currentTokenMeaning = getMeaningFromLocation(token);
+
+        const name = importFixContext.symbolName;
+
         if (context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code) {
             const umdSymbol = checker.getSymbolAtLocation(token);
             let symbol: ts.Symbol;
@@ -654,7 +655,7 @@ namespace ts.codefix {
                 Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
             }
 
-            return getCodeActionForImport(symbol, undefined, symbolName, /*isDefault*/ false, /*isNamespaceImport*/ true);
+            return getCodeActionForImport(symbol, importFixContext, symbolName, /*isDefault*/ false, /*isNamespaceImport*/ true);
         }
 
         const candidateModules = checker.getAmbientModules();
@@ -674,7 +675,7 @@ namespace ts.codefix {
                 if (localSymbol && localSymbol.escapedName === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol, checker);
-                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, undefined, name, /*isNamespaceImport*/ true));
+                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, importFixContext, name, /*isNamespaceImport*/ true));
                 }
             }
 
@@ -685,7 +686,7 @@ namespace ts.codefix {
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(name, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName, checker);
-                symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, undefined, name));
+                symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, importFixContext, name));
             }
         }
 
