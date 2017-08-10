@@ -12808,12 +12808,8 @@ namespace ts {
             const func = <FunctionLikeDeclaration>parameter.parent
             if (!func.body || isRestParameter(parameter)) return
 
-            let type: Type;
-            let types: Type[];
-            types = checkAndAggregateParameterExpressionTypes(parameter)
-            type = types ? getWidenedType(getIntersectionType(types)) : undefined;
-
-            return type;
+            const types = checkAndAggregateParameterExpressionTypes(parameter)
+            return types ? getWidenedType(getIntersectionType(types)) : undefined
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
@@ -16754,7 +16750,8 @@ namespace ts {
                 const usages = invocation.arguments
                     .map((arg, i) => ({ arg, symbol: getSymbolAtLocation(arg), i }))
                     .filter(({ symbol }) => symbol && symbol.valueDeclaration === parameter)
-                if (!usages.length) return
+                if (!usages.length)
+                    return
                 const funcSymbol = getSymbolAtLocation(invocation.expression)
                 if (!funcSymbol || !isFunctionDeclaration(funcSymbol.valueDeclaration))
                     return
