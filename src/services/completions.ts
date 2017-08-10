@@ -840,9 +840,33 @@ namespace ts.Completions {
             }
         }
 
-        function getSymbolsFromOtherSourceFileExports(_tokenText: string) {
-            symbolToOriginInfoMap;
-            allSourceFiles;
+        function getSymbolsFromOtherSourceFileExports(tokenText: string) {
+            const tokenTextLowerCase = tokenText.toLowerCase();
+            const symbolIdMap = arrayToMap(symbols, s => getUniqueSymbolIdAsString(s, typeChecker));
+
+            const allPotentialModules = getOtherModuleSymbols(allSourceFiles, sourceFile, typeChecker);
+            for (const moduleSymbol of allPotentialModules) {
+                // check the default export
+                const defaultExport = typeChecker.tryGetMemberInModuleExports("default", moduleSymbol);
+                if (defaultExport) {
+                    const localSymbol = getLocalSymbolForExportDefault(defaultExport);
+                    if (localSymbol && !symbolIdMap.has(getUniqueSymbolIdAsString(localSymbol, typeChecker)) && startsWith(localSymbol.name.toLowerCase(), tokenTextLowerCase)) {
+                        symbols.push(localSymbol);
+                        symbolToOriginInfoMap.set(getUniqueSymbolIdAsString(localSymbol, typeChecker), { moduleSymbol, isDefaultExport: true });
+                    }
+                }
+
+                // check exports with the same name
+                const allExportedSymbols = typeChecker.getExportsOfModule(moduleSymbol);
+                if (allExportedSymbols) {
+                    for (const exportedSymbol of allExportedSymbols) {
+                        if (exportedSymbol.name && !symbolIdMap.has(getUniqueSymbolIdAsString(exportedSymbol, typeChecker)) && startsWith(exportedSymbol.name.toLowerCase(), tokenTextLowerCase)) {
+                            symbols.push(exportedSymbol);
+                            symbolToOriginInfoMap.set(getUniqueSymbolIdAsString(exportedSymbol, typeChecker), { moduleSymbol });
+                        }
+                    }
+                }
+            }
         }
 
         /**
