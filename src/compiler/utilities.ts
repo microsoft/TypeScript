@@ -764,7 +764,7 @@ namespace ts {
         function traverse(node: Node): T {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
-                    return visitor(<CallExpression>node)
+                    return visitor(<CallExpression>node);
                 default:
                     return forEachChild(node, traverse);
             }
