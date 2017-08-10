@@ -16757,7 +16757,7 @@ namespace ts {
                     return
                 const sig = getSignatureFromDeclaration(funcSymbol.valueDeclaration)
                 const parameterTypes = sig.parameters.map(getTypeOfParameter)
-                const argumentTypes = usages.map(({ i }) => parameterTypes[i])
+                const argumentTypes = usages.map(({ i }) => parameterTypes[i]).filter(t => !!t)
                 usageTypes.splice(0, 0, ...argumentTypes);
             });
             return usageTypes.length ? usageTypes : undefined;
