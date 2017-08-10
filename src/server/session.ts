@@ -1201,9 +1201,10 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
-            
+            const formattingOptions = project.projectService.getFormatCodeOptions(file);
+
             return mapDefined(args.entryNames, entryName => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName);
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
                 if (details) {
                     const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
                     return { ...details, codeActions: mappedCodeActions };
