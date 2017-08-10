@@ -141,7 +141,7 @@ namespace ts.codefix {
     function convertToImportCodeFixContext(context: CodeFixContext) {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const checker = context.program.getTypeChecker();
-        const token = getTokenAtPosition(context.sourceFile, context.span.start);
+        const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         return <ImportCodeFixContext>{
             ...context,
             checker,
@@ -186,7 +186,7 @@ namespace ts.codefix {
                 Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
             }
 
-            return getCodeActionForImport(symbol, symbolName, /*isDefault*/ false, /*isNamespaceImport*/ true);
+            return getCodeActionForImport(symbol, undefined, symbolName, /*isDefault*/ false, /*isNamespaceImport*/ true);
         }
 
         const candidateModules = checker.getAmbientModules();
@@ -206,7 +206,7 @@ namespace ts.codefix {
                 if (localSymbol && localSymbol.escapedName === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol);
-                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isNamespaceImport*/ true));
+                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, undefined, name, /*isNamespaceImport*/ true));
                 }
             }
 
@@ -217,7 +217,7 @@ namespace ts.codefix {
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(name, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName);
-                symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name));
+                symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, undefined, name));
             }
         }
 
@@ -232,7 +232,12 @@ namespace ts.codefix {
             return declarations ? some(symbol.declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning)) : false;
         }
 
-        function getCodeActionForImport(moduleSymbol: Symbol, symbolName: string, isDefault?: boolean, isNamespaceImport?: boolean): ImportCodeAction[] {
+        function getCodeActionForImport(moduleSymbol: Symbol, context: ImportCodeFixContext, symbolName: string, isDefault?: boolean, isNamespaceImport?: boolean): ImportCodeAction[] {
+            const { symbolName: name, sourceFile, getCanonicalFileName, newLineCharacter, host, checker, symbolToken, compilerOptions } = context;
+            getCanonicalFileName;
+            newLineCharacter;
+            host;
+            symbolToken;
             const existingDeclarations = getImportDeclarations(moduleSymbol);
             if (existingDeclarations.length > 0) {
                 // With an existing import statement, there are more than one actions the user can do.
@@ -453,7 +458,7 @@ namespace ts.codefix {
                     const fileName = sourceFile.fileName;
                     const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
                     const sourceDirectory = getDirectoryPath(fileName);
-                    const options = context.program.getCompilerOptions();
+                    const options = compilerOptions;
 
                     return tryGetModuleNameFromAmbientModule() ||
                         tryGetModuleNameFromTypeRoots() ||
