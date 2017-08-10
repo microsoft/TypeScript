@@ -196,8 +196,8 @@ function hyphenToCamelCase(string) {
  * Determines if the specified string consists entirely of whitespace.
  */
 function isEmpty(string) {
->isEmpty : (string: any) => boolean
->string : any
+>isEmpty : (string: string) => boolean
+>string : string
 
    return !/[^\s]/.test(string);
 >!/[^\s]/.test(string) : boolean
@@ -205,7 +205,7 @@ function isEmpty(string) {
 >/[^\s]/.test : (string: string) => boolean
 >/[^\s]/ : RegExp
 >test : (string: string) => boolean
->string : any
+>string : string
 }
 
 /**
@@ -216,15 +216,15 @@ function isEmpty(string) {
  * @return {boolean}
  */
 function isConvertiblePixelValue(value) {
->isConvertiblePixelValue : (value: any) => boolean
->value : any
+>isConvertiblePixelValue : (value: string) => boolean
+>value : string
 
   return /^\d+px$/.test(value);
 >/^\d+px$/.test(value) : boolean
 >/^\d+px$/.test : (string: string) => boolean
 >/^\d+px$/ : RegExp
 >test : (string: string) => boolean
->value : any
+>value : string
 }
 
 export class HTMLtoJSX {
