@@ -16753,7 +16753,7 @@ namespace ts {
                 if (!usages.length)
                     return
                 const funcSymbol = getSymbolAtLocation(invocation.expression)
-                if (!funcSymbol || !isFunctionDeclaration(funcSymbol.valueDeclaration))
+                if (!funcSymbol || !isFunctionLike(funcSymbol.valueDeclaration))
                     return
                 const sig = getSignatureFromDeclaration(funcSymbol.valueDeclaration)
                 const parameterTypes = sig.parameters.map(getTypeOfParameter)
