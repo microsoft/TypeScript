@@ -4,25 +4,13 @@ namespace ts.OutliningElementsCollector {
         const elements: OutliningSpan[] = [];
         const collapseText = "...";
 
-        function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
+        function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean, fullStart: boolean) {
             if (hintSpanNode && startElement && endElement) {
                 const span: OutliningSpan = {
-                    textSpan: createTextSpanFromBounds(startElement.pos, endElement.end),
-                    hintSpan: createTextSpanFromNode(hintSpanNode, sourceFile),
-                    bannerText: collapseText,
-                    autoCollapse,
-                };
-                elements.push(span);
-            }
-        }
-
-        function addOutliningForObjectLiteralsInArray(startElement: Node, endElement: Node, autoCollapse: boolean) {
-            if (startElement && endElement) {
-                const span: OutliningSpan = {
-                    textSpan: createTextSpanFromBounds(startElement.getStart(), endElement.end),
+                    textSpan: createTextSpanFromBounds(fullStart ? startElement.pos : startElement.getStart(), endElement.end),
                     hintSpan: createTextSpanFromBounds(startElement.getStart(), endElement.end),
                     bannerText: collapseText,
-                    autoCollapse
+                    autoCollapse,
                 };
                 elements.push(span);
             }
@@ -125,7 +113,7 @@ namespace ts.OutliningElementsCollector {
                             parent.kind === SyntaxKind.WithStatement ||
                             parent.kind === SyntaxKind.CatchClause) {
 
-                            addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                            addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n), /* fullStart */ true);
                             break;
                         }
 
@@ -133,13 +121,13 @@ namespace ts.OutliningElementsCollector {
                             // Could be the try-block, or the finally-block.
                             const tryStatement = <TryStatement>parent;
                             if (tryStatement.tryBlock === n) {
-                                addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                                addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n), /* fullStart */ true);
                                 break;
                             }
                             else if (tryStatement.finallyBlock === n) {
                                 const finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
                                 if (finallyKeyword) {
-                                    addOutliningSpan(finallyKeyword, openBrace, closeBrace, autoCollapse(n));
+                                    addOutliningSpan(finallyKeyword, openBrace, closeBrace, autoCollapse(n), /* fullStart */ true);
                                     break;
                                 }
                             }
@@ -163,27 +151,27 @@ namespace ts.OutliningElementsCollector {
                 case SyntaxKind.ModuleBlock: {
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                     const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
-                    addOutliningSpan(n.parent, openBrace, closeBrace, autoCollapse(n));
+                    addOutliningSpan(n.parent, openBrace, closeBrace, autoCollapse(n), /* fullStart */ true);
                     break;
                 }
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.CaseBlock: {
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                     const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
-                    if (n.kind === SyntaxKind.ObjectLiteralExpression && n.parent.kind === SyntaxKind.ArrayLiteralExpression) {
-                        addOutliningForObjectLiteralsInArray(openBrace, closeBrace, autoCollapse(n));
-                        break;
-                    }
-                    addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n));
+                    addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n), /* fullStart */ true);
                     break;
                 }
+                case SyntaxKind.ObjectLiteralExpression:
+                    const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                    const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                    addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n), /* fullStart */ n.parent.kind !== SyntaxKind.ArrayLiteralExpression);
+                    break;
                 case SyntaxKind.ArrayLiteralExpression:
                     const openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
                     const closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
-                    addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n));
+                    addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n), /* fullStart */ n.parent.kind !== SyntaxKind.ArrayLiteralExpression);
                     break;
             }
             depth++;
