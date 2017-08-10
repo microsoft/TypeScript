@@ -172,7 +172,6 @@ namespace ts.codefix {
         const sourceFile = context.sourceFile;
         const checker = context.program.getTypeChecker();
         const allSourceFiles = context.program.getSourceFiles();
-        const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
 
         const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const name = token.getText();
@@ -439,7 +438,6 @@ namespace ts.codefix {
                     }
                 }
 
-                const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
                 const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport());
                 const changeTracker = createChangeTracker();
                 const importClause = isDefault
