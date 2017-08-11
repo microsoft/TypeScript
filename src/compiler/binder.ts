@@ -806,11 +806,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return <FlowCondition>{
-                flags,
-                expression,
-                antecedent
-            };
+            return { flags, expression, antecedent };
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -818,31 +814,18 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return <FlowSwitchClause>{
-                flags: FlowFlags.SwitchClause,
-                switchStatement,
-                clauseStart,
-                clauseEnd,
-                antecedent
-            };
+            return { flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent };
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return <FlowAssignment>{
-                flags: FlowFlags.Assignment,
-                antecedent,
-                node
-            };
+            return { flags: FlowFlags.Assignment, antecedent, node };
         }
 
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return <FlowArrayMutation>{
-                flags: FlowFlags.ArrayMutation,
-                antecedent,
-                node
-            };
+            const res: FlowArrayMutation = { flags: FlowFlags.ArrayMutation, antecedent, node };
+            return res;
         }
 
         function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -2921,7 +2904,10 @@ namespace ts {
     function computeCatchClause(node: CatchClause, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
 
-        if (node.variableDeclaration && isBindingPattern(node.variableDeclaration.name)) {
+        if (!node.variableDeclaration) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+        else if (isBindingPattern(node.variableDeclaration.name)) {
             transformFlags |= TransformFlags.AssertES2015;
         }
 

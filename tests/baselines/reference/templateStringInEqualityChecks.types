@@ -5,13 +5,13 @@ var x = `abc${0}abc` === `abc` ||
 >`abc${0}abc` === `abc` : boolean
 >`abc${0}abc` : string
 >0 : 0
->`abc` : string
+>`abc` : "abc"
 
         `abc` !== `abc${0}abc` &&
 >`abc` !== `abc${0}abc` &&        `abc${0}abc` == "abc0abc" &&        "abc0abc" !== `abc${0}abc` : boolean
 >`abc` !== `abc${0}abc` &&        `abc${0}abc` == "abc0abc" : boolean
 >`abc` !== `abc${0}abc` : boolean
->`abc` : string
+>`abc` : "abc"
 >`abc${0}abc` : string
 >0 : 0
 

@@ -1195,7 +1195,9 @@ namespace ts {
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
-                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                const dotToken = createToken(SyntaxKind.DotToken);
+                dotToken.pos = dotRangeStart;
+                dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
@@ -1346,7 +1348,9 @@ namespace ts {
 
             emitExpression(node.left);
             increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
+            emitLeadingCommentsOfPosition(node.operatorToken.pos);
             writeTokenNode(node.operatorToken);
+            emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
             increaseIndentIf(indentAfterOperator, " ");
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -1570,8 +1574,20 @@ namespace ts {
             write(";");
         }
 
+        function emitTokenWithComment(token: SyntaxKind, pos: number, contextNode?: Node) {
+            const node = contextNode && getParseTreeNode(contextNode);
+            if (node && node.kind === contextNode.kind) {
+                pos = skipTrivia(currentSourceFile.text, pos);
+            }
+            pos = writeToken(token, pos, /*contextNode*/ contextNode);
+            if (node && node.kind === contextNode.kind) {
+                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
+            }
+            return pos;
+        }
+
         function emitReturnStatement(node: ReturnStatement) {
-            writeToken(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
+            emitTokenWithComment(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
             emitExpressionWithPrefix(" ", node.expression);
             write(";");
         }
@@ -2131,10 +2147,12 @@ namespace ts {
         function emitCatchClause(node: CatchClause) {
             const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
             write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos);
-            emit(node.variableDeclaration);
-            writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : openParenPos);
-            write(" ");
+            if (node.variableDeclaration) {
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                emit(node.variableDeclaration);
+                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration.end);
+                write(" ");
+            }
             emit(node.block);
         }
 

@@ -1908,6 +1908,10 @@
         "category": "Error",
         "code": 2559
     },
+    "Value of type '{0}' has no properties in common with type '{1}'. Did you mean to call it?": {
+        "category": "Error",
+        "code": 2560
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

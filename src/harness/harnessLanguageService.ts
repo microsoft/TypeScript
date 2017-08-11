@@ -193,7 +193,9 @@ namespace Harness.LanguageService {
         }
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
-        getScriptFileNames(): string[] { return this.getFilenames(); }
+        getScriptFileNames(): string[] {
+            return this.getFilenames().filter(ts.isAnySupportedFileExtension);
+        }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
@@ -681,11 +683,11 @@ namespace Harness.LanguageService {
         }
 
         info(message: string): void {
-            return this.host.log(message);
+            this.host.log(message);
         }
 
-        msg(message: string) {
-            return this.host.log(message);
+        err(message: string): void {
+            this.host.log(message);
         }
 
         loggingEnabled() {
@@ -700,15 +702,10 @@ namespace Harness.LanguageService {
             return false;
         }
 
-
-        endGroup(): void {
-        }
+        group() { throw ts.notImplemented(); }
 
         perftrc(message: string): void {
             return this.host.log(message);
-        }
-
-        startGroup(): void {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
@@ -795,7 +792,7 @@ namespace Harness.LanguageService {
                 default:
                     return {
                         module: undefined,
-                        error: "Could not resolve module"
+                        error: new Error("Could not resolve module")
                     };
             }
 
