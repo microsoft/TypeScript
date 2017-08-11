@@ -394,7 +394,9 @@ namespace ts.codefix {
                     : isNamespaceImport
                         ? createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(symbolName)))
                         : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
+                const moduleSpecifierLiteral = createLiteral(moduleSpecifierWithoutQuotes);
+                moduleSpecifierLiteral.singleQuote = getSingleQuoteStyleFromExistingImports();
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifierLiteral);
                 if (!lastImportDeclaration) {
                     changeTracker.insertNodeAt(sourceFile, getSourceFileImportLocation(sourceFile), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
                 }
@@ -433,6 +435,23 @@ namespace ts.codefix {
                         break;
                     }
                     return position;
+                }
+
+                function getSingleQuoteStyleFromExistingImports() {
+                    const firstModuleSpecifier = forEach(sourceFile.statements, node => {
+                        switch (node.kind) {
+                            case SyntaxKind.ImportDeclaration:
+                                return (<ImportDeclaration>node).moduleSpecifier;
+                            case SyntaxKind.ImportEqualsDeclaration:
+                                const moduleReference = (<ImportEqualsDeclaration>node).moduleReference;
+                                return moduleReference.kind === SyntaxKind.ExternalModuleReference ? moduleReference.expression : undefined;
+                            case SyntaxKind.ExportDeclaration:
+                                return (<ExportDeclaration>node).moduleSpecifier;
+                        }
+                    });
+                    if (firstModuleSpecifier && isStringLiteral(firstModuleSpecifier)) {
+                        return sourceFile.text.charCodeAt(skipTrivia(sourceFile.text, firstModuleSpecifier.pos)) === CharacterCodes.singleQuote;
+                    }
                 }
 
                 function getModuleSpecifierForNewImport() {
