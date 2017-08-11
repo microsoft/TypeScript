@@ -443,7 +443,8 @@ namespace ts {
         return isExternalModule(node) || compilerOptions.isolatedModules;
     }
 
-    function isBlockScope(node: Node, parentNode: Node) {
+    /* @internal */
+    export function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
             case SyntaxKind.CaseBlock:
@@ -1502,8 +1503,8 @@ namespace ts {
                 parent.parent.kind === SyntaxKind.VariableStatement;
             const variableStatementNode =
                 isInitializerOfVariableDeclarationInStatement ? parent.parent.parent :
-                isVariableOfVariableDeclarationStatement ? parent.parent :
-                undefined;
+                    isVariableOfVariableDeclarationStatement ? parent.parent :
+                        undefined;
             if (variableStatementNode) {
                 getJSDocCommentsAndTagsWorker(variableStatementNode);
             }
@@ -1617,7 +1618,7 @@ namespace ts {
         if (isInJavaScriptFile(node)) {
             if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
                 forEach(getJSDocParameterTags(node),
-                        t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
+                    t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
                 return true;
             }
         }
@@ -4983,6 +4984,19 @@ namespace ts {
         return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
 
+    /* @internal */
+    export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpression | PostfixUnaryExpression {
+        switch (expr.kind) {
+            case SyntaxKind.PostfixUnaryExpression:
+                return true;
+            case SyntaxKind.PrefixUnaryExpression:
+                return (<PrefixUnaryExpression>expr).operator === SyntaxKind.PlusPlusToken ||
+                    (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusMinusToken;
+            default:
+                return false;
+        }
+    }
+
     function isExpressionKind(kind: SyntaxKind) {
         return kind === SyntaxKind.ConditionalExpression
             || kind === SyntaxKind.YieldExpression
@@ -5197,7 +5211,17 @@ namespace ts {
         const kind = node.kind;
         return isStatementKindButNotDeclarationKind(kind)
             || isDeclarationStatementKind(kind)
-            || kind === SyntaxKind.Block;
+            || isBlockStatement(node);
+    }
+
+    function isBlockStatement(node: Node): node is Block {
+        if (node.kind !== SyntaxKind.Block) return false;
+        if (node.parent !== undefined) {
+            if (node.parent.kind === SyntaxKind.TryStatement || node.parent.kind === SyntaxKind.CatchClause) {
+                return false;
+            }
+        }
+        return !isFunctionBlock(node);
     }
 
     // Module references
