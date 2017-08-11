@@ -90,7 +90,6 @@
         "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {
-        "buffer": false,
         "fs": false,
         "os": false,
         "path": false

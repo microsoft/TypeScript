@@ -67,17 +67,16 @@ namespace Utils {
 
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
-    const Buffer: typeof global.Buffer = currentExecutionEnvironment !== ExecutionEnvironment.Browser
-        ? require("buffer").Buffer
-        : undefined;
+    // Thanks to browserify, Buffer is always available nowadays
+    const Buffer: typeof global.Buffer = require("buffer").Buffer;
 
     export function encodeString(s: string): string {
-        return Buffer ? (new Buffer(s)).toString("utf8") : s;
+        return (Buffer.from(s)).toString("utf8");
     }
 
     export function byteLength(s: string, encoding?: string): number {
         // stub implementation if Buffer is not available (in-browser case)
-        return Buffer ? Buffer.byteLength(s, encoding) : s.length;
+        return Buffer.byteLength(s, encoding);
     }
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -703,16 +702,18 @@ namespace Harness {
                 return response.status === 200;
             }
 
-            export let listFiles = Utils.memoize((path: string, spec?: RegExp): string[] => {
+            export let listFiles = Utils.memoize((path: string, spec?: RegExp, options?: { recursive?: boolean }): string[] => {
                 const response = Http.getFileFromServerSync(serverRoot + path);
                 if (response.status === 200) {
-                    const results = response.responseText.split(",");
+                    let results = response.responseText.split(",");
                     if (spec) {
-                        return results.filter(file => spec.test(file));
+                        ts.getDirectoryPath;
+                        results = results.filter(file => spec.test(file));
                     }
-                    else {
-                        return results;
+                    if (options && !options.recursive) {
+                        results = results.filter(file => (ts.getDirectoryPath(ts.normalizeSlashes(file)) === path));
                     }
+                    return results;
                 }
                 else {
                     return [""];
@@ -1989,7 +1990,7 @@ namespace Harness {
                     IO.writeFile(actualFileName + ".delete", "");
                 }
                 else {
-                    IO.writeFile(actualFileName, actual);
+                    IO.writeFile(actualFileName, encoded_actual);
                 }
                 throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
