@@ -132,17 +132,16 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T): T {
+    export function memoize<T extends Function>(f: T, memoKey?: (...anything: any[]) => string): T {
         const cache: { [idx: string]: any } = {};
 
-        return <any>(function(this: any) {
-            const key = Array.prototype.join.call(arguments);
-            const cachedResult = cache[key];
-            if (cachedResult) {
-                return cachedResult;
+        return <any>(function(this: any, ...args: any[]) {
+            const key = memoKey ? memoKey(...args) : Array.prototype.join.call(args);
+            if (key in cache) {
+                return cache[key];
             }
             else {
-                return cache[key] = f.apply(this, arguments);
+                return cache[key] = f.apply(this, args);
             }
         });
     }
@@ -718,7 +717,7 @@ namespace Harness {
                 else {
                     return [""];
                 }
-            });
+            }, (path: string, spec?: RegExp, options?: { recursive?: boolean }) => `${path}${spec}${options ? options.recursive : undefined}`);
 
             export function readFile(file: string): string | undefined {
                 const response = Http.getFileFromServerSync(serverRoot + file);
