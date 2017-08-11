@@ -439,18 +439,19 @@ namespace ts.codefix {
 
                 function getSingleQuoteStyleFromExistingImports() {
                     const firstModuleSpecifier = forEach(sourceFile.statements, node => {
-                        switch (node.kind) {
-                            case SyntaxKind.ImportDeclaration:
-                                return (<ImportDeclaration>node).moduleSpecifier;
-                            case SyntaxKind.ImportEqualsDeclaration:
-                                const moduleReference = (<ImportEqualsDeclaration>node).moduleReference;
-                                return moduleReference.kind === SyntaxKind.ExternalModuleReference ? moduleReference.expression : undefined;
-                            case SyntaxKind.ExportDeclaration:
-                                return (<ExportDeclaration>node).moduleSpecifier;
+                        if (isImportDeclaration(node) || isExportDeclaration(node)) {
+                            if (node.moduleSpecifier && isStringLiteral(node.moduleSpecifier)) {
+                                return node.moduleSpecifier;
+                            }
+                        }
+                        else if (isImportEqualsDeclaration(node)) {
+                            if (isExternalModuleReference(node.moduleReference) && isStringLiteral(node.moduleReference.expression)) {
+                                return node.moduleReference.expression;
+                            }
                         }
                     });
-                    if (firstModuleSpecifier && isStringLiteral(firstModuleSpecifier)) {
-                        return sourceFile.text.charCodeAt(skipTrivia(sourceFile.text, firstModuleSpecifier.pos)) === CharacterCodes.singleQuote;
+                    if (firstModuleSpecifier) {
+                        return sourceFile.text.charCodeAt(firstModuleSpecifier.getStart()) === CharacterCodes.singleQuote;
                     }
                 }
 
