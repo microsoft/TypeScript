@@ -1094,6 +1094,13 @@ namespace ts {
             }
 
             if (!result) {
+                if (lastLocation) {
+                    Debug.assert(lastLocation.kind === SyntaxKind.SourceFile);
+                    if ((lastLocation as SourceFile).commonJsModuleIndicator && name === "exports") {
+                        return lastLocation.symbol;
+                    }
+                }
+
                 result = lookup(globals, name, meaning);
             }
 

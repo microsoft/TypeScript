@@ -8,14 +8,18 @@ declare var module: any, exports: any;
 >exports : Symbol(exports, Decl(node.d.ts, 1, 24))
 
 === tests/cases/conformance/salsa/a-ext.js ===
-exports.A = function () {
->exports : Symbol(A, Decl(a-ext.js, 0, 0))
+function A() {
 >A : Symbol(A, Decl(a-ext.js, 0, 0))
 
     this.x = 1;
->x : Symbol((Anonymous function).x, Decl(a-ext.js, 0, 25))
+>x : Symbol(A.x, Decl(a-ext.js, 0, 14))
 
 };
+exports.A = A;
+>exports.A : Symbol(A, Decl(a-ext.js, 2, 2))
+>exports : Symbol(A, Decl(a-ext.js, 2, 2))
+>A : Symbol(A, Decl(a-ext.js, 2, 2))
+>A : Symbol(A, Decl(a-ext.js, 0, 0))
 
 === tests/cases/conformance/salsa/a.js ===
 const { A } = require("./a-ext");
@@ -27,12 +31,13 @@ const { A } = require("./a-ext");
 function a(p) { p.x; }
 >a : Symbol(a, Decl(a.js, 0, 33))
 >p : Symbol(p, Decl(a.js, 3, 11))
->p.x : Symbol((Anonymous function).x, Decl(a-ext.js, 0, 25))
+>p.x : Symbol(A.x, Decl(a-ext.js, 0, 14))
 >p : Symbol(p, Decl(a.js, 3, 11))
->x : Symbol((Anonymous function).x, Decl(a-ext.js, 0, 25))
+>x : Symbol(A.x, Decl(a-ext.js, 0, 14))
 
 === tests/cases/conformance/salsa/b-ext.js ===
 exports.B = class {
+>exports.B : Symbol(B, Decl(b-ext.js, 0, 0))
 >exports : Symbol(B, Decl(b-ext.js, 0, 0))
 >B : Symbol(B, Decl(b-ext.js, 0, 0))
 

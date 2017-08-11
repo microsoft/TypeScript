@@ -1,0 +1,13 @@
+=== /a.js ===
+exports.x = 0;
+>exports.x = 0 : 0
+>exports.x : number
+>exports : typeof "/a"
+>x : number
+>0 : 0
+
+exports.x;
+>exports.x : number
+>exports : typeof "/a"
+>x : number
+
