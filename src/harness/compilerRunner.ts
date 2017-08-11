@@ -11,19 +11,13 @@ const enum CompilerTestType {
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = "tests/cases";
     private testSuiteName: TestRunnerKind;
-    private errors: boolean;
     private emit: boolean;
-    private decl: boolean;
-    private output: boolean;
 
     public options: string;
 
     constructor(public testType: CompilerTestType) {
         super();
-        this.errors = true;
         this.emit = true;
-        this.decl = true;
-        this.output = true;
         if (testType === CompilerTestType.Conformance) {
             this.testSuiteName = "conformance";
         }
@@ -214,25 +208,13 @@ class CompilerBaselineRunner extends RunnerBase {
 
     private parseOptions() {
         if (this.options && this.options.length > 0) {
-            this.errors = false;
             this.emit = false;
-            this.decl = false;
-            this.output = false;
 
             const opts = this.options.split(",");
             for (let i = 0; i < opts.length; i++) {
                 switch (opts[i]) {
-                    case "error":
-                        this.errors = true;
-                        break;
                     case "emit":
                         this.emit = true;
-                        break;
-                    case "decl":
-                        this.decl = true;
-                        break;
-                    case "output":
-                        this.output = true;
                         break;
                     default:
                         throw new Error("unsupported flag");

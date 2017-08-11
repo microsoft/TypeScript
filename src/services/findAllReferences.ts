@@ -175,7 +175,7 @@ namespace ts.FindAllReferences {
         return {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
-            isWriteAccess: isWriteAccess(node),
+            isWriteAccess: isWriteAccessForReference(node),
             isDefinition: isAnyDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
             isInString
         };
@@ -222,7 +222,7 @@ namespace ts.FindAllReferences {
 
         const { node, isInString } = entry;
         const fileName = entry.node.getSourceFile().fileName;
-        const writeAccess = isWriteAccess(node);
+        const writeAccess = isWriteAccessForReference(node);
         const span: HighlightSpan = {
             textSpan: getTextSpan(node),
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
@@ -242,21 +242,8 @@ namespace ts.FindAllReferences {
     }
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
-    function isWriteAccess(node: Node): boolean {
-        if (isAnyDeclarationName(node)) {
-            return true;
-        }
-
-        const { parent } = node;
-        switch (parent && parent.kind) {
-            case SyntaxKind.PostfixUnaryExpression:
-            case SyntaxKind.PrefixUnaryExpression:
-                return true;
-            case SyntaxKind.BinaryExpression:
-                return (<BinaryExpression>parent).left === node && isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
-            default:
-                return false;
-        }
+    function isWriteAccessForReference(node: Node): boolean {
+        return isAnyDeclarationName(node) || isWriteAccess(node, /*isWriteOnly*/ false);
     }
 }
 

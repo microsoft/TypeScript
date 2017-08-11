@@ -3466,6 +3466,32 @@ namespace ts {
     export function getCombinedLocalAndExportSymbolFlags(symbol: Symbol): SymbolFlags {
         return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
     }
+
+    /**
+     * @param writeOnly If set, return true for `x++;` but not for `f(x++);`, which uses `x` in addition to writing to it.
+     */
+    export function isWriteAccess(node: Node, writeOnly: boolean): boolean {
+        const { parent } = node;
+        if (!parent) return false;
+
+        switch (parent.kind) {
+            case SyntaxKind.PostfixUnaryExpression:
+            case SyntaxKind.PrefixUnaryExpression:
+                const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
+                return (operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken) &&
+                    // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
+                    (!writeOnly || parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement);
+            case SyntaxKind.BinaryExpression: {
+                const { left, operatorToken } = parent as BinaryExpression;
+                return left === node && isAssignmentOperator(operatorToken.kind) &&
+                    (!writeOnly || parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement);
+            }
+            case SyntaxKind.PropertyAccessExpression:
+                return (parent as PropertyAccessExpression).name === node && isWriteAccess(parent, writeOnly);
+            default:
+                return false;
+        }
+    }
 }
 
 namespace ts {

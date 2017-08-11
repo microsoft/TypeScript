@@ -3,7 +3,7 @@
 //// class Foo {
 ////     constructor(protected [|{| "isWriteAccess": true, "isDefinition": true |}protectedParam|]: number) {
 ////         let localProtected = [|protectedParam|];
-////         this.[|protectedParam|] += 10;
+////         this.[|{| "isWriteAccess": true |}protectedParam|] += 10;
 ////     }
 //// }
 

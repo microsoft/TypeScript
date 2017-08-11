@@ -10,6 +10,6 @@ tests/cases/compiler/unusedPrivateVariableInClass5.ts(3,13): error TS6133: 'y' i
         public  z: string;
     
         constructor() {
-            this.x = "dummy value";
+            this.x;
         }
     }

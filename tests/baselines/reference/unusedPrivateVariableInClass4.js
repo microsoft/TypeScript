@@ -5,7 +5,7 @@ class greeter {
     public  z: string;
 
     public method1() {
-        this.x = "dummy value";
+        this.x;
     }
 }
 
@@ -14,7 +14,7 @@ var greeter = (function () {
     function greeter() {
     }
     greeter.prototype.method1 = function () {
-        this.x = "dummy value";
+        this.x;
     };
     return greeter;
 }());
