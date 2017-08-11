@@ -1306,9 +1306,9 @@ namespace ts.server.protocol {
         options: ExternalProjectCompilerOptions;
 
         /**
-         * Specifies the project root path used to scope commpiler options.
-         * This message is ignored if this property has been specified and the server is not
-         * configured to create an inferred project per project root.
+         * Specifies the project root path used to scope compiler options.
+         * It is an error to provide this property if the server has not been started with
+         * `useInferredProjectPerProjectRoot` enabled.
          */
         projectRootPath?: string;
     }
