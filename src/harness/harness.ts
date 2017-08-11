@@ -71,7 +71,7 @@ namespace Utils {
     const Buffer: typeof global.Buffer = require("buffer").Buffer;
 
     export function encodeString(s: string): string {
-        return (Buffer.from(s)).toString("utf8");
+        return Buffer.from(s).toString("utf8");
     }
 
     export function byteLength(s: string, encoding?: string): number {
@@ -132,16 +132,18 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T, memoKey?: (...anything: any[]) => string): T {
-        const cache: { [idx: string]: any } = {};
+    export function memoize<T extends Function>(f: T, memoKey: (...anything: any[]) => string): T {
+        const cache = ts.createMap<any>();
 
         return <any>(function(this: any, ...args: any[]) {
-            const key = memoKey ? memoKey(...args) : Array.prototype.join.call(args);
-            if (key in cache) {
-                return cache[key];
+            const key = memoKey(...args);
+            if (cache.has(key)) {
+                return cache.get(key);
             }
             else {
-                return cache[key] = f.apply(this, args);
+                const value = f.apply(this, args);
+                cache.set(key, value);
+                return value;
             }
         });
     }
@@ -684,7 +686,7 @@ namespace Harness {
 
                 return dirPath;
             }
-            export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl);
+            export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl, path => path);
 
             export function resolvePath(path: string) {
                 const response = Http.getFileFromServerSync(serverRoot + path + "?resolve=true");
@@ -701,12 +703,11 @@ namespace Harness {
                 return response.status === 200;
             }
 
-            export let listFiles = Utils.memoize((path: string, spec?: RegExp, options?: { recursive?: boolean }): string[] => {
+            export const listFiles = Utils.memoize((path: string, spec?: RegExp, options?: { recursive?: boolean }): string[] => {
                 const response = Http.getFileFromServerSync(serverRoot + path);
                 if (response.status === 200) {
                     let results = response.responseText.split(",");
                     if (spec) {
-                        ts.getDirectoryPath;
                         results = results.filter(file => spec.test(file));
                     }
                     if (options && !options.recursive) {
@@ -717,7 +718,7 @@ namespace Harness {
                 else {
                     return [""];
                 }
-            }, (path: string, spec?: RegExp, options?: { recursive?: boolean }) => `${path}${spec}${options ? options.recursive : undefined}`);
+            }, (path: string, spec?: RegExp, options?: { recursive?: boolean }) => `${path}|${spec}|${options ? options.recursive : undefined}`);
 
             export function readFile(file: string): string | undefined {
                 const response = Http.getFileFromServerSync(serverRoot + file);
