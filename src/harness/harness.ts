@@ -564,7 +564,7 @@ namespace Harness {
             }
 
             export let listFiles: typeof IO.listFiles = (path, spec?, options?) => {
-                options = options || <{ recursive?: boolean; }>{};
+                options = options || {};
 
                 function filesInFolder(folder: string): string[] {
                     let paths: string[] = [];

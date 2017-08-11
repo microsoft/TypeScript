@@ -2975,8 +2975,12 @@ namespace ts {
         return getModifierFlags(node) !== ModifierFlags.None;
     }
 
-    export function hasModifier(node: Node, flags: ModifierFlags) {
-        return (getModifierFlags(node) & flags) !== 0;
+    export function hasModifier(node: Node, flags: ModifierFlags): boolean {
+        return !!getSelectedModifierFlags(node, flags);
+    }
+
+    export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
+        return getModifierFlags(node) & flags;
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {

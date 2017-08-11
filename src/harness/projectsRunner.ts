@@ -431,13 +431,12 @@ class ProjectRunner extends RunnerBase {
                 }
             }
 
-            const inputFiles = ts.map(inputSourceFiles,
-                sourceFile => <Harness.Compiler.TestFile>{
-                    unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
-                        RunnerBase.removeFullPaths(sourceFile.fileName) :
-                        sourceFile.fileName,
-                    content: sourceFile.text
-                });
+            const inputFiles = inputSourceFiles.map<Harness.Compiler.TestFile>(sourceFile => ({
+                unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
+                    RunnerBase.removeFullPaths(sourceFile.fileName) :
+                    sourceFile.fileName,
+                content: sourceFile.text
+            }));
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }
