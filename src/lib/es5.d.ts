@@ -3967,7 +3967,7 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
-        format(value: number): string;
+        format(value: number | string): string;
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
