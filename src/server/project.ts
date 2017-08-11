@@ -1153,22 +1153,25 @@ namespace ts.server {
                     createNewValue: (directory, flags) => {
                         return {
                             watcher: this.projectService.addDirectoryWatcher(
-                                WatchType.WildCardDirectories, this, directory,
+                                WatchType.WildcardDirectories, this, directory,
                                 path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
                                 flags
                             ),
                             flags
                         };
                     },
-                    // Close existing watch thats not needed any more or doesnt match recursive flags
-                    onDeleteExistingValue: (directory, wildcardDirectoryWatcher, isNotSame) =>
-                        this.closeWildcardDirectoryWatcher(directory, wildcardDirectoryWatcher, isNotSame ? WatcherCloseReason.RecursiveChanged : WatcherCloseReason.NotNeeded),
+                    // Close existing watch thats not needed any more
+                    onDeleteExistingValue: (directory, wildcardDirectoryWatcher) =>
+                        this.closeWildcardDirectoryWatcher(directory, wildcardDirectoryWatcher, WatcherCloseReason.NotNeeded),
+                    // Close existing watch that doesnt match in the recursive flags
+                    onDeleteExistingMismatchValue: (directory, wildcardDirectoryWatcher) =>
+                        this.closeWildcardDirectoryWatcher(directory, wildcardDirectoryWatcher, WatcherCloseReason.RecursiveChanged),
                 }
             );
         }
 
         private closeWildcardDirectoryWatcher(directory: string, { watcher, flags }: WildcardDirectoryWatcher, closeReason: WatcherCloseReason) {
-            this.projectService.closeDirectoryWatcher(WatchType.WildCardDirectories, this, directory, watcher, flags, closeReason);
+            this.projectService.closeDirectoryWatcher(WatchType.WildcardDirectories, this, directory, watcher, flags, closeReason);
         }
 
         stopWatchingWildCards(reason: WatcherCloseReason) {

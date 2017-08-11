@@ -534,7 +534,7 @@ namespace ts.projectSystem {
         }
 
         /**
-         * This will call the directory watcher for the foldeFullPath and recursive directory watchers for this and base folders
+         * This will call the directory watcher for the folderFullPath and recursive directory watchers for this and base folders
          */
         private invokeDirectoryWatcher(folderFullPath: string, fileName: string) {
             const relativePath = this.getRelativePathToDirectory(folderFullPath, fileName);

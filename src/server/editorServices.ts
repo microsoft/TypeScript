@@ -246,7 +246,7 @@ namespace ts.server {
     export const enum WatchType {
         ConfigFilePath = "Config file for the program",
         MissingFilePath = "Missing file from program",
-        WildCardDirectories = "Wild card directory",
+        WildcardDirectories = "Wild card directory",
         TypeRoot = "Type root of the project",
         ClosedScriptInfo = "Closed Script info",
         ConfigFileForInferredRoot = "Config file for the inferred project root"
@@ -363,7 +363,7 @@ namespace ts.server {
          * - Or it is present if we have configured project open with config file at that location
          *   In this case the exists property is always true
          */
-        private readonly mapOfConfigFileExistenceInfo = createMap<ConfigFileExistenceInfo>();
+        private readonly configFileExistenceInfoCache = createMap<ConfigFileExistenceInfo>();
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
@@ -693,7 +693,7 @@ namespace ts.server {
         }
 
         private onConfigChangedForConfiguredProject(project: ConfiguredProject, eventKind: FileWatcherEventKind) {
-            const configFileExistenceInfo = this.mapOfConfigFileExistenceInfo.get(project.canonicalConfigFilePath);
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath);
             if (eventKind === FileWatcherEventKind.Deleted) {
                 // Update the cached status
                 // We arent updating or removing the cached config file presence info as that will be taken care of by
@@ -725,7 +725,7 @@ namespace ts.server {
         private onConfigFileChangeForOpenScriptInfo(configFileName: NormalizedPath, eventKind: FileWatcherEventKind) {
             // This callback is called only if we dont have config file project for this config file
             const canonicalConfigPath = normalizedPathToPath(configFileName, this.currentDirectory, this.toCanonicalFileName);
-            const configFileExistenceInfo = this.mapOfConfigFileExistenceInfo.get(canonicalConfigPath);
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigPath);
             configFileExistenceInfo.exists = (eventKind !== FileWatcherEventKind.Deleted);
             this.logConfigFileWatchUpdate(configFileName, canonicalConfigPath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
 
@@ -852,7 +852,7 @@ namespace ts.server {
         }
 
         private configFileExists(configFileName: NormalizedPath, canonicalConfigFilePath: string, info: ScriptInfo) {
-            let configFileExistenceInfo = this.mapOfConfigFileExistenceInfo.get(canonicalConfigFilePath);
+            let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
             if (configFileExistenceInfo) {
                 // By default the info would get impacted by presence of config file since its in the detection path
                 // Only adding the info as a root to inferred project will need the existence to be watched by file watcher
@@ -877,13 +877,13 @@ namespace ts.server {
             openFilesImpactedByConfigFile.set(info.path, false);
             const exists = this.host.fileExists(configFileName);
             configFileExistenceInfo = { exists, openFilesImpactedByConfigFile };
-            this.mapOfConfigFileExistenceInfo.set(canonicalConfigFilePath, configFileExistenceInfo);
+            this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
             this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.OpenFilesImpactedByConfigFileAdd);
             return exists;
         }
 
         private setConfigFileExistenceByNewConfiguredProject(project: ConfiguredProject) {
-            const configFileExistenceInfo = this.mapOfConfigFileExistenceInfo.get(project.canonicalConfigFilePath);
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath);
             if (configFileExistenceInfo) {
                 Debug.assert(configFileExistenceInfo.exists);
                 // close existing watcher
@@ -900,7 +900,7 @@ namespace ts.server {
             else {
                 // We could be in this scenario if project is the configured project tracked by external project
                 // Since that route doesnt check if the config file is present or not
-                this.mapOfConfigFileExistenceInfo.set(project.canonicalConfigFilePath, {
+                this.configFileExistenceInfoCache.set(project.canonicalConfigFilePath, {
                     exists: true,
                     openFilesImpactedByConfigFile: createMap<boolean>()
                 });
@@ -915,7 +915,7 @@ namespace ts.server {
         }
 
         private setConfigFileExistenceInfoByClosedConfiguredProject(closedProject: ConfiguredProject) {
-            const configFileExistenceInfo = this.mapOfConfigFileExistenceInfo.get(closedProject.canonicalConfigFilePath);
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(closedProject.canonicalConfigFilePath);
             Debug.assert(!!configFileExistenceInfo);
             if (configFileExistenceInfo.openFilesImpactedByConfigFile.size) {
                 const configFileName = closedProject.getConfigFilePath();
@@ -933,7 +933,7 @@ namespace ts.server {
             }
             else {
                 // There is not a single file open thats tracking the status of this config file. Remove from cache
-                this.mapOfConfigFileExistenceInfo.delete(closedProject.canonicalConfigFilePath);
+                this.configFileExistenceInfoCache.delete(closedProject.canonicalConfigFilePath);
             }
         }
 
@@ -983,7 +983,7 @@ namespace ts.server {
         private stopWatchingConfigFilesForClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.isScriptOpen());
             this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
-                const configFileExistenceInfo = this.mapOfConfigFileExistenceInfo.get(canonicalConfigFilePath);
+                const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (configFileExistenceInfo) {
                     const infoIsRootOfInferredProject = configFileExistenceInfo.openFilesImpactedByConfigFile.get(info.path);
 
@@ -1006,7 +1006,7 @@ namespace ts.server {
                     if (!configFileExistenceInfo.openFilesImpactedByConfigFile.size &&
                         !this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath)) {
                         Debug.assert(!configFileExistenceInfo.configFileWatcherForRootOfInferredProject);
-                        this.mapOfConfigFileExistenceInfo.delete(canonicalConfigFilePath);
+                        this.configFileExistenceInfoCache.delete(canonicalConfigFilePath);
                     }
                 }
             });
@@ -1019,14 +1019,14 @@ namespace ts.server {
         startWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
             this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
-                let configFilePresenceInfo = this.mapOfConfigFileExistenceInfo.get(canonicalConfigFilePath);
+                let configFilePresenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (!configFilePresenceInfo) {
                     // Create the cache
                     configFilePresenceInfo = {
                         exists: this.host.fileExists(configFileName),
                         openFilesImpactedByConfigFile: createMap<boolean>()
                     };
-                    this.mapOfConfigFileExistenceInfo.set(canonicalConfigFilePath, configFilePresenceInfo);
+                    this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFilePresenceInfo);
                 }
 
                 // Set this file as the root of inferred project
@@ -1050,7 +1050,7 @@ namespace ts.server {
         /* @internal */
         stopWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo, reason: WatcherCloseReason) {
             this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
-                const configFileExistenceInfo = this.mapOfConfigFileExistenceInfo.get(canonicalConfigFilePath);
+                const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (configFileExistenceInfo && configFileExistenceInfo.openFilesImpactedByConfigFile.has(info.path)) {
                     Debug.assert(info.isScriptOpen());
 
@@ -1607,14 +1607,14 @@ namespace ts.server {
 
         /* @internal */
         closeDirectoryWatcher(watchType: WatchType, project: Project, directory: string, watcher: FileWatcher, flags: WatchDirectoryFlags, reason: WatcherCloseReason) {
-            const recursive = isRecursiveDirectoryWatch(flags);
+            const recursive = (flags & WatchDirectoryFlags.Recursive) !== 0;
             this.logger.info(`DirectoryWatcher ${recursive ? "recursive" : ""}:: Close: ${directory} Project: ${project.getProjectName()} WatchType: ${watchType} Reason: ${reason}`);
             watcher.close();
         }
 
         /* @internal */
         addDirectoryWatcher(watchType: WatchType, project: Project, directory: string, cb: ServerDirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            const recursive = isRecursiveDirectoryWatch(flags);
+            const recursive = (flags & WatchDirectoryFlags.Recursive) !== 0;
             this.logger.info(`DirectoryWatcher ${recursive ? "recursive" : ""}:: Added: ${directory} Project: ${project.getProjectName()} WatchType: ${watchType}`);
             return this.host.watchDirectory(directory, fileName => {
                 const path = toNormalizedPath(getNormalizedAbsolutePath(fileName, directory));

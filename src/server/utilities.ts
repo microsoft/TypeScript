@@ -299,14 +299,14 @@ namespace ts.server {
     }
 
     /**
-     * clears already present map (!== undefined) by calling onDeleteExistingValue callback before deleting that key/value
+     * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
     export function clearMap<T>(map: Map<T>, onDeleteExistingValue: (key: string, existingValue: T) => void) {
         // Remove all
         map.forEach((existingValue, key) => {
-            map.delete(key);
             onDeleteExistingValue(key, existingValue);
         });
+        map.clear();
     }
 
     export interface MutateMapOptions<T, U> {
@@ -314,6 +314,7 @@ namespace ts.server {
         onDeleteExistingValue(key: string, existingValue: T, isNotSame?: boolean): void;
 
         isSameValue?(existingValue: T, valueInNewMap: U): boolean;
+        onDeleteExistingMismatchValue?(key: string, existingValue: T): void;
     }
 
     /**
@@ -322,16 +323,20 @@ namespace ts.server {
     export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
         // If there are new values update them
         if (newMap) {
-            const { isSameValue, createNewValue, onDeleteExistingValue } = options;
+            const { isSameValue, createNewValue, onDeleteExistingValue, onDeleteExistingMismatchValue } = options;
             // Needs update
             map.forEach((existingValue, key) => {
                 const valueInNewMap = newMap.get(key);
-                if (valueInNewMap === undefined ||
-                    // different value - remove it
-                    (isSameValue && !isSameValue(existingValue, valueInNewMap))) {
-                    const isNotSame = valueInNewMap !== undefined;
+                // Not present any more in new map, remove it
+                if (valueInNewMap === undefined) {
                     map.delete(key);
-                    onDeleteExistingValue(key, existingValue, isNotSame);
+                    onDeleteExistingValue(key, existingValue);
+                }
+                // different value - remove it
+                else if (isSameValue && !isSameValue(existingValue, valueInNewMap)) {
+                    Debug.assert(!!onDeleteExistingMismatchValue);
+                    map.delete(key);
+                    onDeleteExistingMismatchValue(key, existingValue);
                 }
             });
 

@@ -1482,6 +1482,7 @@ namespace ts {
         return error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
     }
 
+    /*@internal*/
     export function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName: string | undefined) {
         return createCompilerDiagnostic(
             Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
@@ -1928,9 +1929,9 @@ namespace ts {
     /**
      * Expands an array of file specifications.
      *
-     * @param fileNames The literal file names to include.
-     * @param include The wildcard file specifications to include.
-     * @param exclude The wildcard file specifications to exclude.
+     * @param filesSpecs The literal file names to include.
+     * @param includeSpecs The wildcard file specifications to include.
+     * @param excludeSpecs The wildcard file specifications to exclude.
      * @param basePath The base path for any relative file specifications.
      * @param options Compiler options.
      * @param host The host used to resolve files and directories.
