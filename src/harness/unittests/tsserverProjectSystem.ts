@@ -190,7 +190,7 @@ namespace ts.projectSystem {
         if (opts.typingsInstaller === undefined) {
             opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
         }
-        
+
         if (opts.eventHandler !== undefined) {
             opts.canUseEvents = true;
         }

@@ -484,8 +484,16 @@ namespace ts.server {
 
             const updatedProjects: Project[] = [];
             for (const project of this.inferredProjects) {
-                if (projectRootPath ? 
-                        project.projectRootPath === projectRootPath : 
+                // Only update compiler options in the following cases:
+                // - Inferred projects without a projectRootPath, if the new options do not apply to
+                //   a workspace root
+                // - Inferred projects with a projectRootPath, if the new options do not apply to a
+                //   workspace root and there is no more specific set of options for that project's
+                //   root path
+                // - Inferred projects with a projectRootPath, if the new options apply to that
+                //   project root path.
+                if (projectRootPath ?
+                        project.projectRootPath === projectRootPath :
                         !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                     project.setCompilerOptions(compilerOptions);
                     project.compileOnSaveEnabled = compilerOptions.compileOnSave;
@@ -1320,7 +1328,7 @@ namespace ts.server {
                 return this.createInferredProject(/*isSingleInferredProject*/ false, projectRootPath);
             }
 
-            // we don't have an explicit root path, so we should try to find an inferred project 
+            // we don't have an explicit root path, so we should try to find an inferred project
             // that more closely contains the file.
             let bestMatch: InferredProject;
             for (const project of this.inferredProjects) {
@@ -1342,11 +1350,11 @@ namespace ts.server {
                 return undefined;
             }
 
-            // If `useInferredProjectPerProjectRoot` is not enabled, then there will only be one 
-            // inferred project for all files. If `useInferredProjectPerProjectRoot` is enabled 
+            // If `useInferredProjectPerProjectRoot` is not enabled, then there will only be one
+            // inferred project for all files. If `useInferredProjectPerProjectRoot` is enabled
             // then we want to put all files that are not opened with a `projectRootPath` into
             // the same inferred project.
-            // 
+            //
             // To avoid the cost of searching through the array and to optimize for the case where
             // `useInferredProjectPerProjectRoot` is not enabled, we will always put the inferred
             // project for non-rooted files at the front of the array.
