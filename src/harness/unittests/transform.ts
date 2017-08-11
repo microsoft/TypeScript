@@ -75,7 +75,7 @@ namespace ts {
             }).outputText;
         });
 
-        testBaseline("synthesizedNamespace", () => {
+        testBaseline("rewrittenNamespace", () => {
             return ts.transpileModule(`namespace Reflect { const x = 1; }`, {
                 transformers: {
                     before: [forceNamespaceRewrite],
@@ -86,7 +86,7 @@ namespace ts {
             }).outputText;
         });
 
-        testBaseline("synthesizedNamespaceFollowingClass", () => {
+        testBaseline("rewrittenNamespaceFollowingClass", () => {
             return ts.transpileModule(`
             class C { foo = 10; static bar = 20 }
             namespace C { export let x = 10; }
@@ -99,6 +99,29 @@ namespace ts {
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
+        });
+
+        testBaseline("synthesizedClassAndNamespaceCombination", () => {
+            return ts.transpileModule("", {
+                transformers: {
+                    before: [replaceWithClassAndNamespace],
+                },
+                compilerOptions: {
+                    target: ts.ScriptTarget.ESNext,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function replaceWithClassAndNamespace() {
+                return (sourceFile: ts.SourceFile) => {
+                    const result = getMutableClone(sourceFile);
+                    result.statements = ts.createNodeArray([
+                        ts.createClassDeclaration(undefined, undefined, "Foo", undefined, undefined, undefined),
+                        ts.createModuleDeclaration(undefined, undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
+                    ]);
+                    return result;
+                }
+            }
         });
 
         function forceNamespaceRewrite(context: ts.TransformationContext) {
