@@ -443,7 +443,8 @@ namespace ts {
         return isExternalModule(node) || compilerOptions.isolatedModules;
     }
 
-    function isBlockScope(node: Node, parentNode: Node) {
+    /* @internal */
+    export function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
             case SyntaxKind.CaseBlock:
