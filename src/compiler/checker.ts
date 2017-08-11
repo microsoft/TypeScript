@@ -16344,7 +16344,7 @@ namespace ts {
         }
 
         function getJavaScriptClassType(symbol: Symbol): Type | undefined {
-            if (symbol && isDeclarationOfFunctionOrClassExpression(symbol)) {
+            if (isDeclarationOfFunctionOrClassExpression(symbol)) {
                 symbol = getSymbolOfNode((<VariableDeclaration>symbol.valueDeclaration).initializer);
             }
             if (isJavaScriptConstructor(symbol.valueDeclaration)) {
