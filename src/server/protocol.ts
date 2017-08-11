@@ -2429,6 +2429,7 @@ namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;

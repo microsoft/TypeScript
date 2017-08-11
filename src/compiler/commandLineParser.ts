@@ -340,7 +340,6 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl
-
         },
         {
             // this option can only be specified in tsconfig.json
@@ -383,6 +382,12 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
+        },
+        {
+            name: "preserveSymlinks",
+            type: "boolean",
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Do_not_resolve_the_real_path_of_symlinks,
         },
 
         // Source Maps
