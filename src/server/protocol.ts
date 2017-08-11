@@ -2377,6 +2377,7 @@ namespace ts.server.protocol {
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceAfterTypeAssertion?: boolean;
         insertSpaceBeforeFunctionParenthesis?: boolean;
+        indentConditionalExpressionFalseBranch?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
