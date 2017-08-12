@@ -184,6 +184,10 @@ namespace ts {
         }
 
         if (isWatchSet(commandLine.options)) {
+            if (sys.clearScreen) {
+                sys.clearScreen();
+            }
+
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -402,6 +406,9 @@ namespace ts {
         }
 
         function recompile() {
+            if (sys.clearScreen()) {
+                sys.clearScreen();
+            }
             timerHandleForRecompilation = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
