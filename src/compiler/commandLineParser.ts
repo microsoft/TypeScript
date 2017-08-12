@@ -340,7 +340,6 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl
-
         },
         {
             // this option can only be specified in tsconfig.json
@@ -383,6 +382,12 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
+        },
+        {
+            name: "preserveSymlinks",
+            type: "boolean",
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Do_not_resolve_the_real_path_of_symlinks,
         },
 
         // Source Maps
@@ -1448,14 +1453,10 @@ namespace ts {
                 }
             }
             else {
-                // If no includes were specified, exclude common package folders and the outDir
-                const specs = includeSpecs ? [] : ["node_modules", "bower_components", "jspm_packages"];
-
                 const outDir = raw["compilerOptions"] && raw["compilerOptions"]["outDir"];
                 if (outDir) {
-                    specs.push(outDir);
+                    excludeSpecs = [outDir];
                 }
-                excludeSpecs = specs;
             }
 
             if (filesSpecs === undefined && includeSpecs === undefined) {
@@ -2049,23 +2050,13 @@ namespace ts {
     }
 
     function validateSpecs(specs: ReadonlyArray<string>, errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: JsonSourceFile, specKey: string): ReadonlyArray<string> {
-        const validSpecs: string[] = [];
-        for (const spec of specs) {
-            if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
-                errors.push(createDiagnostic(Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec));
+        return specs.filter(spec => {
+            const diag = specToDiagnostic(spec, allowTrailingRecursion);
+            if (diag !== undefined) {
+                errors.push(createDiagnostic(diag, spec));
             }
-            else if (invalidMultipleRecursionPatterns.test(spec)) {
-                errors.push(createDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, spec));
-            }
-            else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
-                errors.push(createDiagnostic(Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec));
-            }
-            else {
-                validSpecs.push(spec);
-            }
-        }
-
-        return validSpecs;
+            return diag === undefined;
+        });
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
             if (jsonSourceFile && jsonSourceFile.jsonObject) {
@@ -2080,6 +2071,18 @@ namespace ts {
                 }
             }
             return createCompilerDiagnostic(message, spec);
+        }
+    }
+
+    function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): ts.DiagnosticMessage | undefined {
+        if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
+            return Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
+        }
+        else if (invalidMultipleRecursionPatterns.test(spec)) {
+            return Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0;
+        }
+        else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
+            return Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
         }
     }
 

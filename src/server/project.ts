@@ -54,7 +54,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: Diagnostic[];
+        projectErrors: ReadonlyArray<Diagnostic>;
     }
 
     export class UnresolvedImportsMap {
@@ -181,7 +181,8 @@ namespace ts.server {
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
             if (result.error) {
-                log(`Failed to load module: ${JSON.stringify(result.error)}`);
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                log(`Failed to load module '${moduleName}': ${err}`);
                 return undefined;
             }
             return result.module;
@@ -386,7 +387,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
-                    Debug.assert(false, `scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' is missing.`);
                 }
                 return scriptInfo;
             });
@@ -524,7 +525,7 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -584,7 +585,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedArray(result);
+                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 
@@ -879,7 +880,6 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
-
         private static readonly newName = (() => {
             let nextId = 1;
             return () => {
@@ -915,7 +915,7 @@ namespace ts.server {
             super.setCompilerOptions(newOptions);
         }
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, public readonly projectRootPath?: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -946,9 +946,11 @@ namespace ts.server {
         }
 
         isProjectWithSingleRoot() {
-            // - when useSingleInferredProject is not set, we can guarantee that this will be the only root
+            // - when useSingleInferredProject is not set and projectRootPath is not set,
+            //   we can guarantee that this will be the only root
             // - other wise it has single root if it has single root script info
-            return !this.projectService.useSingleInferredProject || this.getRootScriptInfos().length === 1;
+            return (!this.projectRootPath && !this.projectService.useSingleInferredProject) ||
+                this.getRootScriptInfos().length === 1;
         }
 
         getProjectRootPath() {
@@ -956,8 +958,7 @@ namespace ts.server {
             if (this.projectService.useSingleInferredProject) {
                 return undefined;
             }
-            const rootFiles = this.getRootFiles();
-            return getDirectoryPath(rootFiles[0]);
+            return this.projectRootPath || getDirectoryPath(this.getRootFiles()[0]);
         }
 
         close() {
@@ -1278,10 +1279,6 @@ namespace ts.server {
 
         getTypeAcquisition() {
             return this.typeAcquisition;
-        }
-
-        setProjectErrors(projectErrors: Diagnostic[]) {
-            this.projectErrors = projectErrors;
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
