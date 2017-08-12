@@ -17,20 +17,9 @@ namespace ts.server {
         loggingEnabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;
-        startGroup(): void;
-        endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
+        err(s: string): void;
+        group(logGroupEntries: (log: (msg: string) => void) => void): void;
         getLogFileName(): string;
-    }
-
-    export namespace Msg {
-        export type Err = "Err";
-        export const Err: Err = "Err";
-        export type Info = "Info";
-        export const Info: Info = "Info";
-        export type Perf = "Perf";
-        export const Perf: Perf = "Perf";
-        export type Types = Err | Info | Perf;
     }
 
     function getProjectRootPath(project: Project): Path {
@@ -227,6 +216,11 @@ namespace ts.server {
 
 /* @internal */
 namespace ts.server {
+    export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
+        const base = getBaseFileName(configFilePath);
+        return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
+    }
+
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
         if (array.length === 0) {
             array.push(insert);
@@ -260,6 +254,15 @@ namespace ts.server {
     export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
         arr.sort(comparer);
         return arr as SortedArray<T>;
+    }
+
+    export function toDeduplicatedSortedArray(arr: string[]): SortedArray<string> {
+        arr.sort();
+        filterMutate(arr, isNonDuplicateInSortedArray);
+        return arr as SortedArray<string>;
+    }
+    function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
+        return index === 0 || value !== array[index - 1];
     }
 
     export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {

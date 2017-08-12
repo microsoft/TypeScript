@@ -241,7 +241,7 @@ namespace ts {
         let needsReload: boolean;                                           // true if the config file changed and needs to reload it from the disk
         let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
         let configFileWatcher: FileWatcher;                                 // watcher for the config file
-        let watchedWildCardDirectories: Map<WildCardDirectoryWatchers>;     // map of watchers for the wild card directories in the config file
+        let watchedWildcardDirectories: Map<WildcardDirectoryWatchers>;     // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
@@ -301,7 +301,7 @@ namespace ts {
             builder.onProgramUpdateGraph(program, hasInvalidatedResolution);
 
             // Update watches
-            missingFilesMap = updateMissingFilePathsWatch(program, missingFilesMap, watchMissingFilePath, closeMissingFilePathWatcher);
+            updateMissingFilePathsWatch(program, missingFilesMap || (missingFilesMap = createMap()), watchMissingFilePath, closeMissingFilePathWatcher);
             if (missingFilePathsRequestedForRelease) {
                 // These are the paths that program creater told us as not in use any more but were missing on the disk.
                 // We didnt remove the entry for them from sourceFiles cache so that we dont have to do File IO,
@@ -591,21 +591,22 @@ namespace ts {
         }
 
         function watchConfigFileWildCardDirectories() {
-            const wildcards = createMapFromTemplate(configFileWildCardDirectories);
-            watchedWildCardDirectories = updateWatchingWildcardDirectories(
-                watchedWildCardDirectories, wildcards,
-                watchWildCardDirectory, stopWatchingWildCardDirectory
+            updateWatchingWildcardDirectories(
+                watchedWildcardDirectories || (watchedWildcardDirectories = createMap()),
+                createMapFromTemplate(configFileWildCardDirectories),
+                watchWildCardDirectory,
+                stopWatchingWildCardDirectory
             );
         }
 
-        function watchWildCardDirectory(directory: string, recursive: boolean) {
+        function watchWildCardDirectory(directory: string, flags: WatchDirectoryFlags) {
             return host.watchDirectory(directory, fileName =>
                 onFileAddOrRemoveInWatchedDirectory(getNormalizedAbsolutePath(fileName, directory)),
-                recursive);
+                (flags & WatchDirectoryFlags.Recursive) !== 0);
         }
 
-        function stopWatchingWildCardDirectory(_directory: string, fileWatcher: FileWatcher, _recursive: boolean, _recursiveChanged: boolean) {
-            fileWatcher.close();
+        function stopWatchingWildCardDirectory(_directory: string, { watcher }: WildcardDirectoryWatchers, _recursiveChanged: boolean) {
+            watcher.close();
         }
 
         function onFileAddOrRemoveInWatchedDirectory(fileName: string) {

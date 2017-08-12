@@ -4,19 +4,15 @@
 
 namespace ts.tscWatch {
 
-    export import WatchedSystem = ts.TestFSWithWatch.TestServerHost;
-    export type TestServerHostCreationParameters = ts.TestFSWithWatch.TestServerHostCreationParameters;
-    export type File = ts.TestFSWithWatch.File;
-    export type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    export type Folder = ts.TestFSWithWatch.Folder;
-    export type FSEntry = ts.TestFSWithWatch.FSEntry;
-    export import createWatchedSystem = ts.TestFSWithWatch.createWatchedSystem;
-    export import checkFileNames = ts.TestFSWithWatch.checkFileNames;
-    export import libFile = ts.TestFSWithWatch.libFile;
-    export import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
-    export import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
-    export import checkOutputContains = ts.TestFSWithWatch.checkOutputContains;
-    export import checkOutputDoesNotContain = ts.TestFSWithWatch.checkOutputDoesNotContain;
+    import WatchedSystem = ts.TestFSWithWatch.TestServerHost;
+    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
+    import createWatchedSystem = ts.TestFSWithWatch.createWatchedSystem;
+    import checkFileNames = ts.TestFSWithWatch.checkFileNames;
+    import libFile = ts.TestFSWithWatch.libFile;
+    import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
+    import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
+    import checkOutputContains = ts.TestFSWithWatch.checkOutputContains;
+    import checkOutputDoesNotContain = ts.TestFSWithWatch.checkOutputDoesNotContain;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkFileNames(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);

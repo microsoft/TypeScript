@@ -456,51 +456,66 @@ namespace ts {
     /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
      */
-    export function updateMissingFilePathsWatch(program: Program, existingMap: Map<FileWatcher>,
+    export function updateMissingFilePathsWatch(
+        program: Program,
+        missingFileWatches: Map<FileWatcher>,
         createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
-        closeExistingMissingFilePathFileWatcher: (missingFilePath: Path, fileWatcher: FileWatcher) => void) {
-
+        closeExistingMissingFilePathFileWatcher: (missingFilePath: Path, fileWatcher: FileWatcher) => void
+    ) {
         const missingFilePaths = program.getMissingFilePaths();
         const newMissingFilePathMap = arrayToSet(missingFilePaths);
         // Update the missing file paths watcher
-        return mutateExistingMapWithNewSet(
-            existingMap, newMissingFilePathMap,
-            // Watch the missing files
-            createMissingFileWatch,
-            // Files that are no longer missing (e.g. because they are no longer required)
-            // should no longer be watched.
-            closeExistingMissingFilePathFileWatcher
+        mutateMap(
+            missingFileWatches,
+            newMissingFilePathMap,
+            {
+                // Watch the missing files
+                createNewValue: createMissingFileWatch,
+                // Files that are no longer missing (e.g. because they are no longer required)
+                // should no longer be watched.
+                onDeleteExistingValue: closeExistingMissingFilePathFileWatcher
+            }
         );
     }
 
-    export type WildCardDirectoryWatchers = { watcher: FileWatcher, recursive: boolean };
+    export interface WildcardDirectoryWatchers {
+        watcher: FileWatcher;
+        flags: WatchDirectoryFlags;
+    }
 
     /**
      * Updates the existing wild card directory watcyhes with the new set of wild card directories from the config file after new program is created
      */
-    export function updateWatchingWildcardDirectories(existingWatchedForWildcards: Map<WildCardDirectoryWatchers>, wildcardDirectories: Map<WatchDirectoryFlags>,
-        watchDirectory: (directory: string, recursive: boolean) => FileWatcher,
-        closeDirectoryWatcher: (directory: string, watcher: FileWatcher, recursive: boolean, recursiveChanged: boolean) => void) {
-        return mutateExistingMap(
-            existingWatchedForWildcards, wildcardDirectories,
-            // Create new watch and recursive info
-            (directory, flag) => {
-                const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                return {
-                    watcher: watchDirectory(directory, recursive),
-                    recursive
-                };
-            },
-            // Close existing watch thats not needed any more
-            (directory, { watcher, recursive }) => closeDirectoryWatcher(directory, watcher, recursive, /*recursiveChanged*/ false),
-            // Watcher is same if the recursive flags match
-            ({ recursive: existingRecursive }, flag) => {
-                // If the recursive dont match, it needs update
-                const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                return existingRecursive !== recursive;
-            },
-            // Close existing watch that doesnt match in recursive flag
-            (directory, { watcher, recursive }) => closeDirectoryWatcher(directory, watcher, recursive, /*recursiveChanged*/ true)
+    export function updateWatchingWildcardDirectories(
+        existingWatchedForWildcards: Map<WildcardDirectoryWatchers>,
+        wildcardDirectories: Map<WatchDirectoryFlags>,
+        watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
+        closeDirectoryWatcher: (directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatchers, flagsChanged: boolean) => void
+    ) {
+        mutateMap(
+            existingWatchedForWildcards,
+            wildcardDirectories,
+            {
+                // Create new watch and recursive info
+                createNewValue: (directory, flags) => {
+                    return {
+                        watcher: watchDirectory(directory, flags),
+                        flags
+                    };
+                },
+                // Close existing watch thats not needed any more
+                onDeleteExistingValue: (directory, wildcardDirectoryWatcher) =>
+                    closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ false),
+                // Close existing watch that doesnt match in the flags
+                shouldDeleteExistingValue: (directory, wildcardDirectoryWatcher, flags) => {
+                    // Watcher is same if the recursive flags match
+                    if (wildcardDirectoryWatcher.flags === flags) {
+                        return false;
+                    }
+                    closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ true);
+                    return true;
+                }
+            }
         );
     }
 
@@ -591,6 +606,15 @@ namespace ts {
             resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(checkAllDefined(typeReferenceDirectiveNames), containingFile, loader);
         }
 
+        // Map from a stringified PackageId to the source file with that id.
+        // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
+        // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
+        const packageIdToSourceFile = createMap<SourceFile>();
+        // Maps from a SourceFile's `.path` to the name of the package it was imported with.
+        let sourceFileToPackageName = createMap<string>();
+        // See `sourceFileIsRedirectedTo`.
+        let redirectTargetsSet = createMap<true>();
+
         const filesByName = createMap<SourceFile | undefined>();
         let missingFilePaths: Path[];
         // stores 'filename -> file association' ignoring case
@@ -680,6 +704,8 @@ namespace ts {
             isSourceFileFromExternalLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
+            sourceFileToPackageName,
+            redirectTargetsSet,
         };
 
         verifyCompilerOptions();
@@ -912,8 +938,12 @@ namespace ts {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
-            for (const oldSourceFile of oldProgram.getSourceFiles()) {
-                const newSourceFile = host.getSourceFileByPath
+            const oldSourceFiles = oldProgram.getSourceFiles();
+            const enum SeenPackageName { Exists, Modified }
+            const seenPackageNames = createMap<SeenPackageName>();
+
+            for (const oldSourceFile of oldSourceFiles) {
+                let newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target, /*onError*/ undefined, shouldCreateNewSourceFile)
                     : host.getSourceFile(oldSourceFile.fileName, options.target, /*onError*/ undefined, shouldCreateNewSourceFile);
 
@@ -921,10 +951,46 @@ namespace ts {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
                 }
 
+                Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
+
+                let fileChanged: boolean;
+                if (oldSourceFile.redirectInfo) {
+                    // We got `newSourceFile` by path, so it is actually for the unredirected file.
+                    // This lets us know if the unredirected file has changed. If it has we should break the redirect.
+                    if (newSourceFile !== oldSourceFile.redirectInfo.unredirected) {
+                        // Underlying file has changed. Might not redirect anymore. Must rebuild program.
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
+                    fileChanged = false;
+                    newSourceFile = oldSourceFile; // Use the redirect.
+                }
+                else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
+                    // If a redirected-to source file changes, the redirect may be broken.
+                    if (newSourceFile !== oldSourceFile) {
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
+                    fileChanged = false;
+                }
+                else {
+                    fileChanged = newSourceFile !== oldSourceFile;
+                }
+
                 newSourceFile.path = oldSourceFile.path;
                 filePaths.push(newSourceFile.path);
 
-                if (oldSourceFile !== newSourceFile) {
+                const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
+                if (packageName !== undefined) {
+                    // If there are 2 different source files for the same package name and at least one of them changes,
+                    // they might become redirects. So we must rebuild the program.
+                    const prevKind = seenPackageNames.get(packageName);
+                    const newKind = fileChanged ? SeenPackageName.Modified : SeenPackageName.Exists;
+                    if ((prevKind !== undefined && newKind === SeenPackageName.Modified) || prevKind === SeenPackageName.Modified) {
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
+                    seenPackageNames.set(packageName, newKind);
+                }
+
+                if (fileChanged) {
                     // The `newSourceFile` object was created for the new program.
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
@@ -1029,6 +1095,9 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+
+            sourceFileToPackageName = oldProgram.sourceFileToPackageName;
+            redirectTargetsSet = oldProgram.redirectTargetsSet;
 
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
@@ -1670,7 +1739,7 @@ namespace ts {
         /** This has side effects through `findSourceFile`. */
         function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
             getSourceFileFromReferenceWorker(fileName,
-                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, refFile, refPos, refEnd),
+                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, refFile, refPos, refEnd, /*packageId*/ undefined),
                 (diagnostic, ...args) => {
                     fileProcessingDiagnostics.add(refFile !== undefined && refEnd !== undefined && refPos !== undefined
                         ? createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...args)
@@ -1689,8 +1758,26 @@ namespace ts {
             }
         }
 
+        function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path): SourceFile {
+            const redirect: SourceFile = Object.create(redirectTarget);
+            redirect.fileName = fileName;
+            redirect.path = path;
+            redirect.redirectInfo = { redirectTarget, unredirected };
+            Object.defineProperties(redirect, {
+                id: {
+                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.id; },
+                    set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo.redirectTarget.id = value; },
+                },
+                symbol: {
+                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.symbol; },
+                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo.redirectTarget.symbol = value; },
+                },
+            });
+            return redirect;
+        }
+
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile: SourceFile, refPos: number, refEnd: number, packageId: PackageId | undefined): SourceFile | undefined {
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1732,6 +1819,26 @@ namespace ts {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
             }, shouldCreateNewSourceFile);
+
+            if (packageId) {
+                const packageIdKey = `${packageId.name}@${packageId.version}`;
+                const fileFromPackageId = packageIdToSourceFile.get(packageIdKey);
+                if (fileFromPackageId) {
+                    // Some other SourceFile already exists with this package name and version.
+                    // Instead of creating a duplicate, just redirect to the existing one.
+                    const dupFile = createRedirectSourceFile(fileFromPackageId, file, fileName, path);
+                    redirectTargetsSet.set(fileFromPackageId.path, true);
+                    filesByName.set(path, dupFile);
+                    sourceFileToPackageName.set(path, packageId.name);
+                    files.push(dupFile);
+                    return dupFile;
+                }
+                else if (file) {
+                    // This is the first source file to have this packageId.
+                    packageIdToSourceFile.set(packageIdKey, file);
+                    sourceFileToPackageName.set(path, packageId.name);
+                }
+            }
 
             filesByName.set(path, file);
             if (file) {
@@ -1895,7 +2002,7 @@ namespace ts {
                     else if (shouldAddFile) {
                         const path = toPath(resolvedFileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);
-                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, file, pos, file.imports[i].end);
+                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, file, pos, file.imports[i].end, resolution.packageId);
                     }
 
                     if (isFromNodeModulesSearch) {

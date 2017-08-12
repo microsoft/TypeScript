@@ -4,12 +4,12 @@
 
 namespace ts.projectSystem {
     describe("Project errors", () => {
-        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: string[]) {
+        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: ReadonlyArray<string>): void {
             assert.isTrue(projectFiles !== undefined, "missing project files");
             checkProjectErrorsWorker(projectFiles.projectErrors, expectedErrors);
         }
 
-        function checkProjectErrorsWorker(errors: Diagnostic[], expectedErrors: string[]) {
+        function checkProjectErrorsWorker(errors: ReadonlyArray<Diagnostic>, expectedErrors: ReadonlyArray<string>): void {
             assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
             if (expectedErrors.length) {
                 for (let i = 0; i < errors.length; i++) {
@@ -23,11 +23,9 @@ namespace ts.projectSystem {
         function checkDiagnosticsWithLinePos(errors: server.protocol.DiagnosticWithLinePosition[], expectedErrors: string[]) {
             assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
             if (expectedErrors.length) {
-                for (let i = 0; i < errors.length; i++) {
-                    const actualMessage = errors[i].message;
-                    const expectedMessage = expectedErrors[i];
-                    assert.isTrue(actualMessage.indexOf(errors[i].message) === 0, `error message does not match, expected ${actualMessage} to start with ${expectedMessage}`);
-                }
+                zipWith(errors, expectedErrors, ({ message: actualMessage }, expectedMessage) => {
+                    assert.isTrue(startsWith(actualMessage, actualMessage), `error message does not match, expected ${actualMessage} to start with ${expectedMessage}`);
+                });
             }
         }
 
@@ -40,12 +38,11 @@ namespace ts.projectSystem {
                 path: "/a/b/applib.ts",
                 content: ""
             };
-            // only file1 exists - expect error
             const host = createServerHost([file1, libFile]);
             const session = createSession(host);
             const projectService = session.getProjectService();
             const projectFileName = "/a/b/test.csproj";
-            const compilerOptionsRequest = <server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const compilerOptionsRequest: server.protocol.CompilerOptionsDiagnosticsRequest = {
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
@@ -61,19 +58,20 @@ namespace ts.projectSystem {
 
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
                 const diags = session.executeCommand(compilerOptionsRequest).response;
+                // only file1 exists - expect error
                 checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
             }
-            // only file2 exists - expect error
             host.reloadFS([file2, libFile]);
             {
+                // only file2 exists - expect error
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
                 const diags = session.executeCommand(compilerOptionsRequest).response;
                 checkDiagnosticsWithLinePos(diags, ["File '/a/b/app.ts' not found."]);
             }
 
-            // both files exist - expect no errors
             host.reloadFS([file1, file2, libFile]);
             {
+                // both files exist - expect no errors
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
                 const diags = session.executeCommand(compilerOptionsRequest).response;
                 checkDiagnosticsWithLinePos(diags, []);
@@ -99,7 +97,7 @@ namespace ts.projectSystem {
             openFilesForSession([file1], session);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
-            const compilerOptionsRequest = <server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const compilerOptionsRequest: server.protocol.CompilerOptionsDiagnosticsRequest = {
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,

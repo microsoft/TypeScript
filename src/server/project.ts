@@ -54,7 +54,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: Diagnostic[];
+        projectErrors: ReadonlyArray<Diagnostic>;
     }
 
     export class UnresolvedImportsMap {
@@ -184,7 +184,8 @@ namespace ts.server {
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
             if (result.error) {
-                log(`Failed to load module: ${JSON.stringify(result.error)}`);
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                log(`Failed to load module '${moduleName}': ${err}`);
                 return undefined;
             }
             return result.module;
@@ -382,10 +383,12 @@ namespace ts.server {
             this.lsHost = undefined;
 
             // Clean up file watchers waiting for missing files
-            cleanExistingMap(this.missingFilesMap, (missingFilePath, fileWatcher) => {
-                this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.ProjectClose);
-            });
-            this.missingFilesMap = undefined;
+            if (this.missingFilesMap) {
+                clearMap(this.missingFilesMap, (missingFilePath, fileWatcher) => {
+                    this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.ProjectClose);
+                });
+                this.missingFilesMap = undefined;
+            }
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -439,7 +442,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
-                    Debug.assert(false, `scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' is missing.`);
                 }
                 return scriptInfo;
             });
@@ -525,13 +528,12 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
-            if (!this.isRoot(info)) {
-                this.rootFiles.push(info);
-                this.rootFilesMap.set(info.path, info);
-                info.attachToProject(this);
+            Debug.assert(!this.isRoot(info));
+            this.rootFiles.push(info);
+            this.rootFilesMap.set(info.path, info);
+            info.attachToProject(this);
 
-                this.markAsDirty();
-            }
+            this.markAsDirty();
         }
 
         // add a root file to project
@@ -563,7 +565,7 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -624,7 +626,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedArray(result);
+                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 
@@ -683,7 +685,9 @@ namespace ts.server {
                 }
 
                 // Update the missing file paths watcher
-                this.missingFilesMap = updateMissingFilePathsWatch(this.program, this.missingFilesMap,
+                updateMissingFilePathsWatch(
+                    this.program,
+                    this.missingFilesMap || (this.missingFilesMap = createMap()),
                     // Watch the missing files
                     missingFilePath => this.addMissingFileWatcher(missingFilePath),
                     // Files that are no longer missing (e.g. because they are no longer required)
@@ -922,7 +926,6 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
-
         private static readonly newName = (() => {
             let nextId = 1;
             return () => {
@@ -958,7 +961,7 @@ namespace ts.server {
             super.setCompilerOptions(newOptions);
         }
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, public readonly projectRootPath?: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -989,9 +992,11 @@ namespace ts.server {
         }
 
         isProjectWithSingleRoot() {
-            // - when useSingleInferredProject is not set, we can guarantee that this will be the only root
+            // - when useSingleInferredProject is not set and projectRootPath is not set,
+            //   we can guarantee that this will be the only root
             // - other wise it has single root if it has single root script info
-            return !this.projectService.useSingleInferredProject || this.getRootScriptInfos().length === 1;
+            return (!this.projectRootPath && !this.projectService.useSingleInferredProject) ||
+                this.getRootScriptInfos().length === 1;
         }
 
         getProjectRootPath() {
@@ -999,8 +1004,7 @@ namespace ts.server {
             if (this.projectService.useSingleInferredProject) {
                 return undefined;
             }
-            const rootFiles = this.getRootFiles();
-            return getDirectoryPath(rootFiles[0]);
+            return this.projectRootPath || getDirectoryPath(this.getRootFiles()[0]);
         }
 
         close() {
@@ -1017,7 +1021,10 @@ namespace ts.server {
         }
     }
 
-    type WildCardDirectoryWatchers = { watcher: FileWatcher, recursive: boolean };
+    interface WildcardDirectoryWatcher {
+        watcher: FileWatcher;
+        flags: WatchDirectoryFlags;
+    }
 
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
@@ -1028,7 +1035,7 @@ namespace ts.server {
         private typeAcquisition: TypeAcquisition;
         /* @internal */
         configFileWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<WildCardDirectoryWatchers> | undefined;
+        private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         private typeRootsWatchers: Map<FileWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
@@ -1183,55 +1190,64 @@ namespace ts.server {
         }
 
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
-            this.directoriesWatchedForWildcards = updateWatchingWildcardDirectories(this.directoriesWatchedForWildcards,
+            updateWatchingWildcardDirectories(
+                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
                 wildcardDirectories,
                 // Create new directory watcher
-                (directory, recursive) => this.projectService.addDirectoryWatcher(
-                    WatchType.WildCardDirectories, this, directory,
+                (directory, flags) => this.projectService.addDirectoryWatcher(
+                    WatchType.WildcardDirectories, this, directory,
                     path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
-                    recursive
+                    flags
                 ),
                 // Close directory watcher
-                (directory, watcher, recursive, recursiveChanged) => this.projectService.closeDirectoryWatcher(
-                    WatchType.WildCardDirectories, this, directory, watcher, recursive,
-                    recursiveChanged ? WatcherCloseReason.RecursiveChanged : WatcherCloseReason.NotNeeded
+                (directory, wildcardDirectoryWatcher, flagsChanged) => this.closeWildcardDirectoryWatcher(
+                    directory, wildcardDirectoryWatcher, flagsChanged ? WatcherCloseReason.RecursiveChanged : WatcherCloseReason.NotNeeded
                 )
             );
         }
 
+        private closeWildcardDirectoryWatcher(directory: string, { watcher, flags }: WildcardDirectoryWatcher, closeReason: WatcherCloseReason) {
+            this.projectService.closeDirectoryWatcher(WatchType.WildcardDirectories, this, directory, watcher, flags, closeReason);
+        }
+
         stopWatchingWildCards(reason: WatcherCloseReason) {
-            cleanExistingMap(
-                this.directoriesWatchedForWildcards,
-                (directory, { watcher, recursive }) =>
-                    this.projectService.closeDirectoryWatcher(WatchType.WildCardDirectories, this,
-                        directory, watcher, recursive, reason)
-            );
-            this.directoriesWatchedForWildcards = undefined;
+            if (this.directoriesWatchedForWildcards) {
+                clearMap(
+                    this.directoriesWatchedForWildcards,
+                    (directory, wildcardDirectoryWatcher) => this.closeWildcardDirectoryWatcher(directory, wildcardDirectoryWatcher, reason)
+                );
+                this.directoriesWatchedForWildcards = undefined;
+            }
         }
 
         watchTypeRoots() {
             const newTypeRoots = arrayToSet(this.getEffectiveTypeRoots(), dir => this.projectService.toCanonicalFileName(dir));
-            this.typeRootsWatchers = mutateExistingMapWithNewSet(
-                this.typeRootsWatchers, newTypeRoots,
-                // Create new watch
-                root => this.projectService.addDirectoryWatcher(WatchType.TypeRoot, this, root,
-                    path => this.projectService.onTypeRootFileChanged(this, path), /*recursive*/ false
-                ),
-                // Close existing watch thats not needed any more
-                (directory, watcher) => this.projectService.closeDirectoryWatcher(
-                    WatchType.TypeRoot, this, directory, watcher, /*recursive*/ false, WatcherCloseReason.NotNeeded
-                )
+            mutateMap(
+                this.typeRootsWatchers || (this.typeRootsWatchers = createMap()),
+                newTypeRoots,
+                {
+                    // Create new watch
+                    createNewValue: root => this.projectService.addDirectoryWatcher(WatchType.TypeRoot, this, root,
+                        path => this.projectService.onTypeRootFileChanged(this, path), WatchDirectoryFlags.None
+                    ),
+                    // Close existing watch thats not needed any more
+                    onDeleteExistingValue: (directory, watcher) => this.projectService.closeDirectoryWatcher(
+                        WatchType.TypeRoot, this, directory, watcher, WatchDirectoryFlags.None, WatcherCloseReason.NotNeeded
+                    )
+                }
             );
         }
 
         stopWatchingTypeRoots(reason: WatcherCloseReason) {
-            cleanExistingMap(
-                this.typeRootsWatchers,
-                (directory, watcher) =>
-                    this.projectService.closeDirectoryWatcher(WatchType.TypeRoot, this,
-                        directory, watcher, /*recursive*/ false, reason)
-            );
-            this.typeRootsWatchers = undefined;
+            if (this.typeRootsWatchers) {
+                clearMap(
+                    this.typeRootsWatchers,
+                    (directory, watcher) =>
+                        this.projectService.closeDirectoryWatcher(WatchType.TypeRoot, this,
+                            directory, watcher, WatchDirectoryFlags.None, reason)
+                );
+                this.typeRootsWatchers = undefined;
+            }
         }
 
         close() {
@@ -1257,6 +1273,16 @@ namespace ts.server {
 
         getEffectiveTypeRoots() {
             return getEffectiveTypeRoots(this.getCompilerOptions(), this.lsHost.host) || [];
+        }
+
+        /*@internal*/
+        updateErrorOnNoInputFiles(hasFileNames: boolean) {
+            if (hasFileNames) {
+                filterMutate(this.projectErrors, error => !isErrorNoInputFiles(error));
+            }
+            else if (!this.configFileSpecs.filesSpecs && !some(this.projectErrors, isErrorNoInputFiles)) {
+                this.projectErrors.push(getErrorForNoInputFiles(this.configFileSpecs, this.getConfigFilePath()));
+            }
         }
     }
 
@@ -1288,10 +1314,6 @@ namespace ts.server {
 
         getTypeAcquisition() {
             return this.typeAcquisition;
-        }
-
-        setProjectErrors(projectErrors: Diagnostic[]) {
-            this.projectErrors = projectErrors;
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {

@@ -1,7 +1,7 @@
 /// <reference path="harness.ts" />
 
 namespace ts.TestFSWithWatch {
-    export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
+    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
         content: libFileContent
@@ -19,11 +19,11 @@ namespace ts.TestFSWithWatch {
         })
     };
 
-    export function getExecutingFilePathFromLibFile(): string {
+    function getExecutingFilePathFromLibFile(): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
-    export interface TestServerHostCreationParameters {
+    interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
@@ -62,48 +62,40 @@ namespace ts.TestFSWithWatch {
         fileSize?: number;
     }
 
-    export interface FSEntry {
+    interface FSEntry {
         path: Path;
         fullPath: string;
     }
 
-    export interface File extends FSEntry {
+    interface File extends FSEntry {
         content: string;
         fileSize?: number;
     }
 
-    export interface Folder extends FSEntry {
+    interface Folder extends FSEntry {
         entries: FSEntry[];
     }
 
-    export function isFolder(s: FSEntry): s is Folder {
+    function isFolder(s: FSEntry): s is Folder {
         return s && isArray((<Folder>s).entries);
     }
 
-    export function isFile(s: FSEntry): s is File {
+    function isFile(s: FSEntry): s is File {
         return s && isString((<File>s).content);
     }
 
-    function invokeDirectoryWatcher(callbacks: DirectoryWatcherCallback[], getRelativeFilePath: () => string) {
+    function invokeWatcherCallbacks<T>(callbacks: T[], invokeCallback: (cb: T) => void): void {
         if (callbacks) {
+            // The array copy is made to ensure that even if one of the callback removes the callbacks,
+            // we dont miss any callbacks following it
             const cbs = callbacks.slice();
             for (const cb of cbs) {
-                const fileName = getRelativeFilePath();
-                cb(fileName);
+                invokeCallback(cb);
             }
         }
     }
 
-    function invokeFileWatcher(callbacks: FileWatcherCallback[], fileName: string, eventId: FileWatcherEventKind) {
-        if (callbacks) {
-            const cbs = callbacks.slice();
-            for (const cb of cbs) {
-                cb(fileName, eventId);
-            }
-        }
-    }
-
-    export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}`);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
@@ -145,7 +137,7 @@ namespace ts.TestFSWithWatch {
         }
     }
 
-    export class Callbacks {
+    class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
 
@@ -181,7 +173,7 @@ namespace ts.TestFSWithWatch {
         }
     }
 
-    export type TimeOutCallback = () => any;
+    type TimeOutCallback = () => any;
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
@@ -318,8 +310,12 @@ namespace ts.TestFSWithWatch {
             }
             else {
                 Debug.assert(fileOrFolder.entries.length === 0);
-                invokeDirectoryWatcher(this.watchedDirectories.get(fileOrFolder.path), () => this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath));
-                invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(fileOrFolder.path), () => this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath));
+                const relativePath = this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath);
+                // Invoke directory and recursive directory watcher for the folder
+                // Here we arent invoking recursive directory watchers for the base folders
+                // since that is something we would want to do for both file as well as folder we are deleting
+                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrFolder.path), cb => cb(relativePath));
+                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrFolder.path), cb => cb(relativePath));
             }
 
             if (basePath !== fileOrFolder.path) {
@@ -332,22 +328,31 @@ namespace ts.TestFSWithWatch {
             }
         }
 
-        private invokeFileWatcher(fileFullPath: string, eventId: FileWatcherEventKind) {
+        private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
-            invokeFileWatcher(callbacks, getBaseFileName(fileFullPath), eventId);
+            const fileName = getBaseFileName(fileFullPath);
+            invokeWatcherCallbacks(callbacks, cb => cb(fileName, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
             return getRelativePathToDirectoryOrUrl(directoryFullPath, fileFullPath, this.currentDirectory, this.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         }
 
+        /**
+         * This will call the directory watcher for the folderFullPath and recursive directory watchers for this and base folders
+         */
         private invokeDirectoryWatcher(folderFullPath: string, fileName: string) {
-            invokeDirectoryWatcher(this.watchedDirectories.get(this.toPath(folderFullPath)), () => this.getRelativePathToDirectory(folderFullPath, fileName));
+            const relativePath = this.getRelativePathToDirectory(folderFullPath, fileName);
+            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => cb(relativePath));
             this.invokeRecursiveDirectoryWatcher(folderFullPath, fileName);
         }
 
+        /**
+         * This will call the recursive directory watcher for this directory as well as all the base directories
+         */
         private invokeRecursiveDirectoryWatcher(fullPath: string, fileName: string) {
-            invokeDirectoryWatcher(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), () => this.getRelativePathToDirectory(fullPath, fileName));
+            const relativePath = this.getRelativePathToDirectory(fullPath, fileName);
+            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), cb => cb(relativePath));
             const basePath = getDirectoryPath(fullPath);
             if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
                 this.invokeRecursiveDirectoryWatcher(basePath, fileName);
@@ -501,7 +506,7 @@ namespace ts.TestFSWithWatch {
             const baseFolder = this.fs.get(base) as Folder;
             Debug.assert(isFolder(baseFolder));
 
-            Debug.assert(!this.fs.get(folder.path), isFile(this.fs.get(folder.path)) ? `Found the file ${folder.path}` : `Found the folder ${folder.path}`);
+            Debug.assert(!this.fs.get(folder.path));
             this.addFileOrFolderInFolder(baseFolder, folder);
         }
 

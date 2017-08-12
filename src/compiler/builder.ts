@@ -97,14 +97,17 @@ namespace ts {
             }
 
             changedFilesSinceLastEmit = changedFilesSinceLastEmit || createMap<true>();
-            fileInfos = mutateExistingMapWithSameExistingValues(
-                fileInfos, arrayToMap(program.getSourceFiles(), sourceFile => sourceFile.path),
-                // Add new file info
-                (_path, sourceFile) => addNewFileInfo(program, sourceFile),
-                // Remove existing file info
-                removeExistingFileInfo,
-                // We will update in place instead of deleting existing value and adding new one
-                (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
+            mutateMap(
+                fileInfos || (fileInfos = createMap()),
+                arrayToMap(program.getSourceFiles(), sourceFile => sourceFile.path),
+                {
+                    // Add new file info
+                    createNewValue: (_path, sourceFile) => addNewFileInfo(program, sourceFile),
+                    // Remove existing file info
+                    onDeleteExistingValue: removeExistingFileInfo,
+                    // We will update in place instead of deleting existing value and adding new one
+                    onExistingValue: (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
+                }
             );
         }
 
@@ -370,27 +373,31 @@ namespace ts {
             const references = createMap<Map<true>>();
             const referencedBy = createMultiMap<Path>();
             return {
-                addScriptInfo: setReferences,
+                addScriptInfo: (program, sourceFile) => {
+                    const refs = createMap<true>();
+                    references.set(sourceFile.path, refs);
+                    setReferences(program, sourceFile, refs);
+                },
                 removeScriptInfo,
-                updateScriptInfo: setReferences,
+                updateScriptInfo: (program, sourceFile) => setReferences(program, sourceFile, references.get(sourceFile.path)),
                 getFilesAffectedByUpdatedShape
             };
 
-            function setReferences(program: Program, sourceFile: SourceFile) {
+            function setReferences(program: Program, sourceFile: SourceFile, existingReferences: Map<true>) {
                 const path = sourceFile.path;
-                references.set(path,
-                    mutateExistingMapWithNewSet<true>(
-                        // Existing references
-                        references.get(path),
-                        // Updated references
-                        getReferencedFiles(program, sourceFile),
+                mutateMap(
+                    // Existing references
+                    existingReferences,
+                    // Updated references
+                    getReferencedFiles(program, sourceFile),
+                    {
                         // Creating new Reference: as sourceFile references file with path 'key'
                         // in other words source file (path) is referenced by 'key'
-                        key => { referencedBy.add(key, path); return true; },
+                        createNewValue: (key): true => { referencedBy.add(key, path); return true; },
                         // Remove existing reference by entry: source file doesnt reference file 'key' any more
                         // in other words source file (path) is not referenced by 'key'
-                        (key, _existingValue) => { referencedBy.remove(key, path); }
-                    )
+                        onDeleteExistingValue: (key, _existingValue) => { referencedBy.remove(key, path); }
+                    }
                 );
             }
 
