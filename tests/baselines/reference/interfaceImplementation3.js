@@ -19,6 +19,7 @@ class C4 implements I1 {
 var C4 = (function () {
     function C4() {
     }
-    C4.prototype.iFn = function () { };
+    var proto_1 = C4.prototype;
+    proto_1.iFn = function () { };
     return C4;
 }());

@@ -69,7 +69,8 @@ f2(1, 2);
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) { };
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) { };
     return C;
 }());
 var c;

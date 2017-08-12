@@ -11,6 +11,7 @@ let cls = class implements Foo {
 var cls = (function () {
     function class_1() {
     }
-    class_1.prototype.doThing = function () { };
+    var proto_1 = class_1.prototype;
+    proto_1.doThing = function () { };
     return class_1;
 }());

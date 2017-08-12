@@ -265,25 +265,26 @@ var TypeScript;
             this.publicsOnly = true;
             this.useFullAst = false;
         }
-        EnclosingScopeContext.prototype.getScope = function () {
+        var proto_1 = EnclosingScopeContext.prototype;
+        proto_1.getScope = function () {
             return this.scopeGetter();
         };
-        EnclosingScopeContext.prototype.getObjectLiteralScope = function () {
+        proto_1.getObjectLiteralScope = function () {
             return this.objectLiteralScopeGetter();
         };
-        EnclosingScopeContext.prototype.getScopeAST = function () {
+        proto_1.getScopeAST = function () {
             return this.scopeStartAST;
         };
-        EnclosingScopeContext.prototype.getScopePosition = function () {
+        proto_1.getScopePosition = function () {
             return this.scopeStartAST.minChar;
         };
-        EnclosingScopeContext.prototype.getScriptFragmentStartAST = function () {
+        proto_1.getScriptFragmentStartAST = function () {
             return this.scopeStartAST;
         };
-        EnclosingScopeContext.prototype.getScriptFragmentPosition = function () {
+        proto_1.getScriptFragmentPosition = function () {
             return this.getScriptFragmentStartAST().minChar;
         };
-        EnclosingScopeContext.prototype.getScriptFragment = function () {
+        proto_1.getScriptFragment = function () {
             if (this.scriptFragment == null) {
                 var ast = this.getScriptFragmentStartAST();
                 var minChar = ast.minChar;

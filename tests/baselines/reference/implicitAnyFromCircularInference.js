@@ -84,7 +84,8 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    Object.defineProperty(D.prototype, "x", {
+    var proto_1 = D.prototype;
+    Object.defineProperty(proto_1, "x", {
         // Error expected
         get: function () {
             return this.x;

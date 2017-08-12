@@ -56,7 +56,8 @@ var ObjectLiteral;
 var F = (function () {
     function F() {
     }
-    F.prototype.test = function () { return ""; };
+    var proto_1 = F.prototype;
+    proto_1.test = function () { return ""; };
     return F;
 }());
 var SuperObjectTest = (function (_super) {
@@ -64,7 +65,8 @@ var SuperObjectTest = (function (_super) {
     function SuperObjectTest() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SuperObjectTest.prototype.testing = function () {
+    var proto_2 = SuperObjectTest.prototype;
+    proto_2.testing = function () {
         var test = {
             get F() {
                 return _super.test.call(this);

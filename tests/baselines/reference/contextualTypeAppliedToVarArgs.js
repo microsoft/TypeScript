@@ -23,7 +23,8 @@ function delegate(instance, method, data) {
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.Bar = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.Bar = function () {
         delegate(this, function (source, args2) {
             var a = source.node;
             var b = args2.node;

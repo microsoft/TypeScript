@@ -39,14 +39,15 @@ var Test;
     var Bug = (function () {
         function Bug() {
         }
-        Bug.prototype.onEnter = function (line, state, offset) {
+        var proto_1 = Bug.prototype;
+        proto_1.onEnter = function (line, state, offset) {
             var lineTokens = this.tokenize(line, state, true);
             var tokens = lineTokens.tokens;
             if (tokens.length === 0) {
                 return this.onEnter(line, tokens, offset); // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
             }
         };
-        Bug.prototype.tokenize = function (line, state, includeStates) {
+        proto_1.tokenize = function (line, state, includeStates) {
             return null;
         };
         return Bug;

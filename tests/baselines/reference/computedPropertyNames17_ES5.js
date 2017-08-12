@@ -14,7 +14,8 @@ var b;
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, b, {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, b, {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
@@ -24,12 +25,12 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, [], {
+    Object.defineProperty(proto_1, [], {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, {}, {
+    Object.defineProperty(proto_1, {}, {
         set: function (v) { },
         enumerable: true,
         configurable: true
@@ -39,7 +40,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, null, {
+    Object.defineProperty(proto_1, null, {
         set: function (v) { },
         enumerable: true,
         configurable: true

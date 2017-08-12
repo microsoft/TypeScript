@@ -12,7 +12,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.where = function (filter) {
+    var proto_1 = C.prototype;
+    proto_1.where = function (filter) {
         var _this = this;
         return fromDoWhile(function (test) {
             var index = 0;

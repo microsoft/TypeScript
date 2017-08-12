@@ -10,7 +10,8 @@ exports.__esModule = true;
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.Bar = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.Bar = function () {
     };
     return Foo;
 }());

@@ -23,7 +23,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var A = (function () {
     function A(hi) {
     }
-    A.prototype.method = function (there) { };
+    var proto_1 = A.prototype;
+    proto_1.method = function (there) { };
     __decorate([
         MyMethodDecorator,
         __metadata("design:type", Function),

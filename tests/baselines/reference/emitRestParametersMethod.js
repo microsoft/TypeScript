@@ -21,13 +21,14 @@ var C = (function () {
             rest[_i - 1] = arguments[_i];
         }
     }
-    C.prototype.bar = function () {
+    var proto_1 = C.prototype;
+    proto_1.bar = function () {
         var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }
     };
-    C.prototype.foo = function (x) {
+    proto_1.foo = function (x) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
@@ -42,13 +43,14 @@ var D = (function () {
             rest[_i] = arguments[_i];
         }
     }
-    D.prototype.bar = function () {
+    var proto_2 = D.prototype;
+    proto_2.bar = function () {
         var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             rest[_i] = arguments[_i];
         }
     };
-    D.prototype.foo = function (x) {
+    proto_2.foo = function (x) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];

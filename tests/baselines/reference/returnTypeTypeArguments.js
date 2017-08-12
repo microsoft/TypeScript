@@ -101,22 +101,24 @@ function B3() { return null; }
 var C = (function () {
     function C() {
     }
-    C.prototype.A1 = function () { return null; };
-    C.prototype.A2 = function () { return null; };
-    C.prototype.A3 = function () { return null; };
-    C.prototype.B1 = function () { return null; };
-    C.prototype.B2 = function () { return null; };
-    C.prototype.B3 = function () { return null; };
+    var proto_1 = C.prototype;
+    proto_1.A1 = function () { return null; };
+    proto_1.A2 = function () { return null; };
+    proto_1.A3 = function () { return null; };
+    proto_1.B1 = function () { return null; };
+    proto_1.B2 = function () { return null; };
+    proto_1.B3 = function () { return null; };
     return C;
 }());
 var D = (function () {
     function D() {
     }
-    D.prototype.A2 = function () { return null; };
-    D.prototype.A3 = function () { return null; };
-    D.prototype.B1 = function () { return null; };
-    D.prototype.B2 = function () { return null; };
-    D.prototype.B3 = function () { return null; };
+    var proto_2 = D.prototype;
+    proto_2.A2 = function () { return null; };
+    proto_2.A3 = function () { return null; };
+    proto_2.B1 = function () { return null; };
+    proto_2.B2 = function () { return null; };
+    proto_2.B3 = function () { return null; };
     return D;
 }());
 var Y = (function () {

@@ -23,16 +23,17 @@ var a;
 var C = (function () {
     function C() {
     }
-    C.prototype[s] = function () { };
-    C.prototype[n] = function () { };
+    var proto_1 = C.prototype;
+    proto_1[s] = function () { };
+    proto_1[n] = function () { };
     C[s + s] = function () { };
-    C.prototype[s + n] = function () { };
-    C.prototype[+s] = function () { };
+    proto_1[s + n] = function () { };
+    proto_1[+s] = function () { };
     C[""] = function () { };
-    C.prototype[0] = function () { };
-    C.prototype[a] = function () { };
+    proto_1[0] = function () { };
+    proto_1[a] = function () { };
     C[true] = function () { };
-    C.prototype["hello bye"] = function () { };
+    proto_1["hello bye"] = function () { };
     C["hello " + a + " bye"] = function () { };
     return C;
 }());

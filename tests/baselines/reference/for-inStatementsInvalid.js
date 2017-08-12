@@ -95,7 +95,8 @@ for (var x in function (x, y) { return x + y; }) { }
 var A = (function () {
     function A() {
     }
-    A.prototype.biz = function () {
+    var proto_1 = A.prototype;
+    proto_1.biz = function () {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }
@@ -114,7 +115,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.boz = function () {
+    var proto_2 = B.prototype;
+    proto_2.boz = function () {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }

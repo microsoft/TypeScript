@@ -60,7 +60,8 @@ var __extends = (this && this.__extends) || (function () {
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () { return ''; };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { return ''; };
     return A;
 }());
 var B = (function (_super) {
@@ -68,7 +69,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.bar = function () { return ''; };
+    var proto_2 = B.prototype;
+    proto_2.bar = function () { return ''; };
     return B;
 }(A));
 var Foo = (function () {

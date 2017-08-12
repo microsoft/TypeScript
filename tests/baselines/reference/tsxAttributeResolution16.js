@@ -43,7 +43,8 @@ var AddressComp = (function (_super) {
     function AddressComp() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    AddressComp.prototype.render = function () {
+    var proto_1 = AddressComp.prototype;
+    proto_1.render = function () {
         return null;
     };
     return AddressComp;

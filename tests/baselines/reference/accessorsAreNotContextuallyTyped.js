@@ -18,7 +18,8 @@ var r = c.x(''); // string
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "x", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () {
             return function (x) { return ""; };
         },

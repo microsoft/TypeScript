@@ -28,7 +28,8 @@ var symbol;
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype[symbol] = function () {
+    var proto_1 = Foo.prototype;
+    proto_1[symbol] = function () {
         return 0;
     };
     return Foo;
@@ -38,7 +39,8 @@ var Bar = (function (_super) {
     function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Bar.prototype[symbol] = function () {
+    var proto_2 = Bar.prototype;
+    proto_2[symbol] = function () {
         return _super.prototype[symbol].call(this);
     };
     return Bar;

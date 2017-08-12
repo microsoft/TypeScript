@@ -43,7 +43,8 @@ function f(b) {
                 Foo.x = function () {
                     new Foo();
                 };
-                Foo.prototype.m = function () {
+                var proto_1 = Foo.prototype;
+                proto_1.m = function () {
                     new Foo();
                 };
                 return Foo;
@@ -59,7 +60,8 @@ function f(b) {
             Foo.x = function () {
                 new Foo();
             };
-            Foo.prototype.m = function () {
+            var proto_2 = Foo.prototype;
+            proto_2.m = function () {
                 new Foo();
             };
             Foo.y = new Foo();

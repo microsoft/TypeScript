@@ -24,7 +24,8 @@ function bar() { }
 var Foo2 = (function () {
     function Foo2() {
     }
-    Foo2.prototype.method = function () { };
+    var proto_1 = Foo2.prototype;
+    proto_1.method = function () { };
     return Foo2;
 }());
 (function (a) { });

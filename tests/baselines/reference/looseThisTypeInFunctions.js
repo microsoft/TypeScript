@@ -52,13 +52,14 @@ i.explicitThis = function(m) {
 var C = (function () {
     function C() {
     }
-    C.prototype.explicitThis = function (m) {
+    var proto_1 = C.prototype;
+    proto_1.explicitThis = function (m) {
         return this.n + m;
     };
-    C.prototype.implicitThis = function (m) {
+    proto_1.implicitThis = function (m) {
         return this.n + m;
     };
-    C.prototype.explicitVoid = function (m) {
+    proto_1.explicitVoid = function (m) {
         return m + 1;
     };
     return C;

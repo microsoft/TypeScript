@@ -33,12 +33,13 @@ var Point = (function () {
         this.x = x;
         this.y = y;
     }
-    Point.prototype.move = function (xo, yo) {
+    var proto_1 = Point.prototype;
+    proto_1.move = function (xo, yo) {
         this.x += xo;
         this.y += yo;
         return this;
     };
-    Point.prototype.toString = function () {
+    proto_1.toString = function () {
         return ("(" + this.x + "," + this.y + ")");
     };
     return Point;

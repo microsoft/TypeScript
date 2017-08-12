@@ -9,7 +9,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function (arguments) {
+    var proto_1 = C.prototype;
+    proto_1.f = function (arguments) {
         var a = function () { return arguments; };
     };
     return C;

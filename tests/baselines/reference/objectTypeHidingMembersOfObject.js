@@ -32,7 +32,8 @@ var r4: void = b.valueOf();
 var C = (function () {
     function C() {
     }
-    C.prototype.valueOf = function () { };
+    var proto_1 = C.prototype;
+    proto_1.valueOf = function () { };
     return C;
 }());
 var c;

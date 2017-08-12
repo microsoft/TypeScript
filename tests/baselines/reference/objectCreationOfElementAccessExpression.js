@@ -71,7 +71,8 @@ var Food = (function () {
         this.name = name;
         this.amount = 100;
     }
-    Food.prototype.eat = function (amountToEat) {
+    var proto_1 = Food.prototype;
+    proto_1.eat = function (amountToEat) {
         this.amount -= amountToEat;
         if (this.amount <= 0) {
             this.amount = 0;

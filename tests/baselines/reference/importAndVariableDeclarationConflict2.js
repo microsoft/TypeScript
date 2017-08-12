@@ -20,7 +20,8 @@ var x = m.m;
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         var x = '';
     };
     return C;

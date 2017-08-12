@@ -54,7 +54,8 @@ var C = (function () {
             }
         };
     }
-    C.prototype.foo = function () { return "this never gets used."; };
+    var proto_1 = C.prototype;
+    proto_1.foo = function () { return "this never gets used."; };
     return C;
 }());
 var D = (function (_super) {

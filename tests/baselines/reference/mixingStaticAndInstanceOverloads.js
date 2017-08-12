@@ -45,13 +45,15 @@ var C1 = (function () {
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.foo2 = function (a) { };
+    var proto_1 = C2.prototype;
+    proto_1.foo2 = function (a) { };
     return C2;
 }());
 var C3 = (function () {
     function C3() {
     }
-    C3.prototype.foo3 = function (a) { };
+    var proto_2 = C3.prototype;
+    proto_2.foo3 = function (a) { };
     return C3;
 }());
 var C4 = (function () {
@@ -63,7 +65,8 @@ var C4 = (function () {
 var C5 = (function () {
     function C5() {
     }
-    C5.prototype.foo5 = function (a) { };
+    var proto_3 = C5.prototype;
+    proto_3.foo5 = function (a) { };
     C5.foo5 = function (a) { };
     return C5;
 }());

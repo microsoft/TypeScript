@@ -26,10 +26,11 @@ var Test;
     var Bug = (function () {
         function Bug() {
         }
-        Bug.prototype.getName = function () {
+        var proto_1 = Bug.prototype;
+        proto_1.getName = function () {
             return "name";
         };
-        Bug.prototype.bug = function () {
+        proto_1.bug = function () {
             var name = null;
             if ((name = this.getName()).length > 0) {
                 console.log(name);

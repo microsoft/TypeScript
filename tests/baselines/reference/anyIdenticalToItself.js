@@ -17,7 +17,8 @@ function foo(x, y) { }
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "X", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "X", {
         get: function () {
             var y;
             return y;

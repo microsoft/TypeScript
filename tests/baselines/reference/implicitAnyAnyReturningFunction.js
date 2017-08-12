@@ -31,10 +31,11 @@ function B() {
 var C = (function () {
     function C() {
     }
-    C.prototype.A = function () {
+    var proto_1 = C.prototype;
+    proto_1.A = function () {
         return "";
     };
-    C.prototype.B = function () {
+    proto_1.B = function () {
         var someLocal = {};
         return someLocal;
     };

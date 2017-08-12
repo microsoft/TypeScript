@@ -195,42 +195,43 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var c1 = (function () {
     function c1() {
     }
+    var proto_1 = c1.prototype;
     /** This comment should appear for foo*/
-    c1.prototype.foo = function () {
+    proto_1.foo = function () {
     };
     /** This is comment for function signature*/
-    c1.prototype.fooWithParameters = function (/** this is comment about a*/ a, 
+    proto_1.fooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
     };
-    c1.prototype.fooWithRestParameters = function (a) {
+    proto_1.fooWithRestParameters = function (a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     };
-    c1.prototype.fooWithOverloads = function (a) {
+    proto_1.fooWithOverloads = function (a) {
         return a;
     };
     /** This comment should appear for privateFoo*/
-    c1.prototype.privateFoo = function () {
+    proto_1.privateFoo = function () {
     };
     /** This is comment for function signature*/
-    c1.prototype.privateFooWithParameters = function (/** this is comment about a*/ a, 
+    proto_1.privateFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
     };
-    c1.prototype.privateFooWithRestParameters = function (a) {
+    proto_1.privateFooWithRestParameters = function (a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     };
-    c1.prototype.privateFooWithOverloads = function (a) {
+    proto_1.privateFooWithOverloads = function (a) {
         return a;
     };
     /** This comment should appear for static foo*/
@@ -278,42 +279,43 @@ exports.c1 = c1;
 var c2 = (function () {
     function c2() {
     }
+    var proto_1 = c2.prototype;
     /** This comment should appear for foo*/
-    c2.prototype.foo = function () {
+    proto_1.foo = function () {
     };
     /** This is comment for function signature*/
-    c2.prototype.fooWithParameters = function (/** this is comment about a*/ a, 
+    proto_1.fooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
     };
-    c2.prototype.fooWithRestParameters = function (a) {
+    proto_1.fooWithRestParameters = function (a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     };
-    c2.prototype.fooWithOverloads = function (a) {
+    proto_1.fooWithOverloads = function (a) {
         return a;
     };
     /** This comment should appear for privateFoo*/
-    c2.prototype.privateFoo = function () {
+    proto_1.privateFoo = function () {
     };
     /** This is comment for function signature*/
-    c2.prototype.privateFooWithParameters = function (/** this is comment about a*/ a, 
+    proto_1.privateFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
     };
-    c2.prototype.privateFooWithRestParameters = function (a) {
+    proto_1.privateFooWithRestParameters = function (a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     };
-    c2.prototype.privateFooWithOverloads = function (a) {
+    proto_1.privateFooWithOverloads = function (a) {
         return a;
     };
     /** This comment should appear for static foo*/

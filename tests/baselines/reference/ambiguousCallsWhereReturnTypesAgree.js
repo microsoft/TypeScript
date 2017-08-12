@@ -32,9 +32,10 @@ class TestClass2 {
 var TestClass = (function () {
     function TestClass() {
     }
-    TestClass.prototype.bar = function (x) {
+    var proto_1 = TestClass.prototype;
+    proto_1.bar = function (x) {
     };
-    TestClass.prototype.foo = function (x) {
+    proto_1.foo = function (x) {
         this.bar(x); // should not error
     };
     return TestClass;
@@ -42,10 +43,11 @@ var TestClass = (function () {
 var TestClass2 = (function () {
     function TestClass2() {
     }
-    TestClass2.prototype.bar = function (x) {
+    var proto_2 = TestClass2.prototype;
+    proto_2.bar = function (x) {
         return 0;
     };
-    TestClass2.prototype.foo = function (x) {
+    proto_2.foo = function (x) {
         return this.bar(x); // should not error
     };
     return TestClass2;

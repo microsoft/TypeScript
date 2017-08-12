@@ -29,7 +29,8 @@ define(["require", "exports"], function (require, exports) {
             this.callback = callback;
             var child = new B(this);
         }
-        A.prototype.AAA = function (callback) {
+        var proto_1 = A.prototype;
+        proto_1.AAA = function (callback) {
             var child = new B(this);
         };
         return A;

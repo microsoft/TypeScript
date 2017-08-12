@@ -81,28 +81,32 @@ var A = (function () {
     function A() {
         return;
     }
-    A.prototype.foo = function () { };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { };
     return A;
 }());
 var B = (function () {
     function B() {
         return 1; // error
     }
-    B.prototype.foo = function () { };
+    var proto_2 = B.prototype;
+    proto_2.foo = function () { };
     return B;
 }());
 var C = (function () {
     function C() {
         return this;
     }
-    C.prototype.foo = function () { };
+    var proto_3 = C.prototype;
+    proto_3.foo = function () { };
     return C;
 }());
 var D = (function () {
     function D() {
         return "test"; // error
     }
-    D.prototype.foo = function () { };
+    var proto_4 = D.prototype;
+    proto_4.foo = function () { };
     return D;
 }());
 var E = (function () {
@@ -121,8 +125,9 @@ var G = (function () {
     function G() {
         this.test = 2;
     }
-    G.prototype.test1 = function () { };
-    G.prototype.foo = function () { };
+    var proto_5 = G.prototype;
+    proto_5.test1 = function () { };
+    proto_5.foo = function () { };
     return G;
 }());
 var H = (function (_super) {

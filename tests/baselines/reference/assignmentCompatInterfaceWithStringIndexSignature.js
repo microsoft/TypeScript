@@ -20,7 +20,8 @@ Biz(new Foo());
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.Boz = function () { };
+    var proto_1 = Foo.prototype;
+    proto_1.Boz = function () { };
     return Foo;
 }());
 function Biz(map) { }

@@ -84,7 +84,8 @@ var Base = (function () {
 var Thing = (function () {
     function Thing() {
     }
-    Object.defineProperty(Thing.prototype, "Components", {
+    var proto_1 = Thing.prototype;
+    Object.defineProperty(proto_1, "Components", {
         get: function () { return null; },
         enumerable: true,
         configurable: true
@@ -102,17 +103,18 @@ var ComponentCollection = (function () {
 var Foo = (function () {
     function Foo() {
     }
-    Object.defineProperty(Foo.prototype, "prop1", {
+    var proto_2 = Foo.prototype;
+    Object.defineProperty(proto_2, "prop1", {
         get: function () {
             return new GenericType(this);
         },
         enumerable: true,
         configurable: true
     });
-    Foo.prototype.populate = function () {
+    proto_2.populate = function () {
         this.prop2;
     };
-    Object.defineProperty(Foo.prototype, "prop2", {
+    Object.defineProperty(proto_2, "prop2", {
         get: function () {
             return new BaseCollection(Derived.createEmpty);
         },
@@ -129,7 +131,8 @@ var GenericType = (function () {
 var FooBase = (function () {
     function FooBase() {
     }
-    FooBase.prototype.populate = function () {
+    var proto_3 = FooBase.prototype;
+    proto_3.populate = function () {
     };
     return FooBase;
 }());

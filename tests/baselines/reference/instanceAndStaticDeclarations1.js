@@ -19,7 +19,8 @@ var Point = (function () {
         this.x = x;
         this.y = y;
     }
-    Point.prototype.distance = function (p) {
+    var proto_1 = Point.prototype;
+    proto_1.distance = function (p) {
         var dx = this.x - p.x;
         var dy = this.y - p.y;
         return Math.sqrt(dx * dx + dy * dy);

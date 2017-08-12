@@ -51,7 +51,8 @@ var Event = (function () {
         this._listeners = [];
         this._listeners = [];
     }
-    Event.prototype.add = function (listener) {
+    var proto_1 = Event.prototype;
+    proto_1.add = function (listener) {
         /// <summary>Registers a new listener for the event.</summary>
         /// <param name="listener">The callback function to register.</param>
         this._listeners.push(listener);
@@ -63,7 +64,8 @@ var ItemSetEvent = (function (_super) {
     function ItemSetEvent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ItemSetEvent.prototype.add = function (listener) {
+    var proto_2 = ItemSetEvent.prototype;
+    proto_2.add = function (listener) {
         _super.prototype.add.call(this, listener);
     };
     return ItemSetEvent;

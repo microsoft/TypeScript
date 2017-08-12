@@ -73,8 +73,9 @@ var __extends = (this && this.__extends) || (function () {
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.IM1 = function () { return null; };
-    C1.prototype.C1M1 = function () { return null; };
+    var proto_1 = C1.prototype;
+    proto_1.IM1 = function () { return null; };
+    proto_1.C1M1 = function () { return null; };
     return C1;
 }());
 var C2 = (function (_super) {
@@ -82,13 +83,15 @@ var C2 = (function (_super) {
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C2.prototype.C2M1 = function () { return null; };
+    var proto_2 = C2.prototype;
+    proto_2.C2M1 = function () { return null; };
     return C2;
 }(C1));
 var C3 = (function () {
     function C3() {
     }
-    C3.prototype.CM3M1 = function () { return 3; };
+    var proto_3 = C3.prototype;
+    proto_3.CM3M1 = function () { return 3; };
     return C3;
 }());
 /*

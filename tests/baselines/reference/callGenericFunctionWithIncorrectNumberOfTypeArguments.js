@@ -59,7 +59,8 @@ var r3b = f3(1, '');
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function (x, y) {
+    var proto_1 = C.prototype;
+    proto_1.f = function (x, y) {
         return null;
     };
     return C;
@@ -72,7 +73,8 @@ var r5b = i.f(1, '');
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.f = function (x, y) {
+    var proto_2 = C2.prototype;
+    proto_2.f = function (x, y) {
         return null;
     };
     return C2;

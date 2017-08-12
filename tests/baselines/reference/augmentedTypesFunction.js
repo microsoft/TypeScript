@@ -58,7 +58,8 @@ function y3a() { } // error
 var y3a = (function () {
     function y3a() {
     }
-    y3a.prototype.foo = function () { };
+    var proto_1 = y3a.prototype;
+    proto_1.foo = function () { };
     return y3a;
 }()); // error
 // function then enum

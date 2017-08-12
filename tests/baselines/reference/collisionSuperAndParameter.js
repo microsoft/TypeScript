@@ -76,19 +76,20 @@ var __extends = (this && this.__extends) || (function () {
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.a = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.a = function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Foo.prototype.b = function (_super) {
+    proto_1.b = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Object.defineProperty(Foo.prototype, "c", {
+    Object.defineProperty(proto_1, "c", {
         set: function (_super) {
         },
         enumerable: true,
@@ -106,19 +107,20 @@ var Foo2 = (function (_super) {
         };
         return _this;
     }
-    Foo2.prototype.x = function () {
+    var proto_2 = Foo2.prototype;
+    proto_2.x = function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Foo2.prototype.y = function (_super) {
+    proto_2.y = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Object.defineProperty(Foo2.prototype, "z", {
+    Object.defineProperty(proto_2, "z", {
         set: function (_super) {
         },
         enumerable: true,
@@ -131,7 +133,8 @@ var Foo4 = (function (_super) {
     function Foo4(_super) {
         return _super.call(this) || this;
     }
-    Foo4.prototype.y = function (_super) {
+    var proto_3 = Foo4.prototype;
+    proto_3.y = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture

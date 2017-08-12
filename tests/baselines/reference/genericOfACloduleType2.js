@@ -19,7 +19,8 @@ module N {
 var G = (function () {
     function G() {
     }
-    G.prototype.bar = function (x) { return x; };
+    var proto_1 = G.prototype;
+    proto_1.bar = function (x) { return x; };
     return G;
 }());
 var M;
@@ -27,7 +28,8 @@ var M;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () { };
+        var proto_2 = C.prototype;
+        proto_2.foo = function () { };
         return C;
     }());
     M.C = C;

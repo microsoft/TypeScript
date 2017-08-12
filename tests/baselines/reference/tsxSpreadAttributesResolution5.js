@@ -52,7 +52,8 @@ var Poisoned = (function (_super) {
     function Poisoned() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Poisoned.prototype.render = function () {
+    var proto_1 = Poisoned.prototype;
+    proto_1.render = function () {
         return <div>Hello</div>;
     };
     return Poisoned;
@@ -68,7 +69,8 @@ var EmptyProp = (function (_super) {
     function EmptyProp() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    EmptyProp.prototype.render = function () {
+    var proto_2 = EmptyProp.prototype;
+    proto_2.render = function () {
         return <div>Default hi</div>;
     };
     return EmptyProp;

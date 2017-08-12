@@ -18,7 +18,8 @@ try {
 var A = (function () {
     function A() {
     }
-    A.prototype.method = function () { };
+    var proto_1 = A.prototype;
+    proto_1.method = function () { };
     return A;
 }());
 var a = null;

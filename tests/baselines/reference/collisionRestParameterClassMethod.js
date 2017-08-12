@@ -42,24 +42,25 @@ class c3 {
 var c1 = (function () {
     function c1() {
     }
-    c1.prototype.foo = function (_i) {
+    var proto_1 = c1.prototype;
+    proto_1.foo = function (_i) {
         var restParameters = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
         var _i = 10; // no error
     };
-    c1.prototype.fooNoError = function (_i) {
+    proto_1.fooNoError = function (_i) {
         var _i = 10; // no error
     };
-    c1.prototype.f4 = function (_i) {
+    proto_1.f4 = function (_i) {
         var rest = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             rest[_a - 1] = arguments[_a];
         }
         var _i; // no error
     };
-    c1.prototype.f4NoError = function (_i) {
+    proto_1.f4NoError = function (_i) {
         var _i; // no error
     };
     return c1;
@@ -67,14 +68,15 @@ var c1 = (function () {
 var c3 = (function () {
     function c3() {
     }
-    c3.prototype.foo = function () {
+    var proto_2 = c3.prototype;
+    proto_2.foo = function () {
         var restParameters = [];
         for (var _a = 0; _a < arguments.length; _a++) {
             restParameters[_a] = arguments[_a];
         }
         var _i = 10; // no error
     };
-    c3.prototype.fooNoError = function () {
+    proto_2.fooNoError = function () {
         var _i = 10; // no error
     };
     return c3;

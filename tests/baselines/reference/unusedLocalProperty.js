@@ -17,7 +17,8 @@ var Animal = (function () {
     function Animal(species) {
         this.species = species;
     }
-    Animal.prototype.printSpecies = function () {
+    var proto_1 = Animal.prototype;
+    proto_1.printSpecies = function () {
         var species = this.species;
         console.log(species);
     };

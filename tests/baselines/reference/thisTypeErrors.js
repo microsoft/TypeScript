@@ -90,7 +90,8 @@ var C3 = (function () {
             }
         };
     }
-    C3.prototype.f = function () {
+    var proto_1 = C3.prototype;
+    proto_1.f = function () {
         function g(x) {
             return undefined;
         }

@@ -98,7 +98,8 @@ var __extends = (this && this.__extends) || (function () {
 var A = (function () {
     function A() {
     }
-    A.prototype.doSomething = function () {
+    var proto_1 = A.prototype;
+    proto_1.doSomething = function () {
         this.props.foo && this.props.foo();
     };
     return A;
@@ -106,7 +107,8 @@ var A = (function () {
 var Monkey = (function () {
     function Monkey() {
     }
-    Monkey.prototype.render = function () {
+    var proto_2 = Monkey.prototype;
+    proto_2.render = function () {
         if (this.a) {
             this.a.color;
         }
@@ -118,7 +120,8 @@ var BigMonkey = (function (_super) {
     function BigMonkey() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    BigMonkey.prototype.render = function () {
+    var proto_3 = BigMonkey.prototype;
+    proto_3.render = function () {
         if (this.a) {
             this.a.color;
         }

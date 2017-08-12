@@ -39,7 +39,8 @@ var Point = (function () {
         this.x = x;
         this.y = y;
     }
-    Point.prototype.getDist = function () {
+    var proto_1 = Point.prototype;
+    proto_1.getDist = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     };
     Point.origin = new Point(0, 0);
@@ -52,7 +53,8 @@ var Point3D = (function (_super) {
         _this.z = z;
         return _this;
     }
-    Point3D.prototype.getDist = function () {
+    var proto_2 = Point3D.prototype;
+    proto_2.getDist = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.m);
     };
     return Point3D;

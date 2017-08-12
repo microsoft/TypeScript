@@ -33,7 +33,8 @@ var Foo = (function (_super) {
     function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    class_1.prototype.render = function () {
+    var proto_1 = class_1.prototype;
+    proto_1.render = function () {
         return React.createElement("span", null, "Hello, world!");
     };
     return class_1;

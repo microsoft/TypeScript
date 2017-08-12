@@ -38,7 +38,8 @@ var __extends = (this && this.__extends) || (function () {
 var P = (function () {
     function P() {
     }
-    P.prototype.x = function () { };
+    var proto_1 = P.prototype;
+    proto_1.x = function () { };
     P.y = function () { };
     return P;
 }());
@@ -54,7 +55,8 @@ var Q = (function (_super) {
         _this.xx = _super.prototype.;
         return _this;
     }
-    Q.prototype.foo = function (zz) {
+    var proto_2 = Q.prototype;
+    proto_2.foo = function (zz) {
         if (zz === void 0) { zz = _super.prototype.; }
         _super.prototype.x.call(this);
         _super.prototype.y.call(this); // error

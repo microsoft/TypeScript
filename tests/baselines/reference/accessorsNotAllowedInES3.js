@@ -9,7 +9,8 @@ var y = { get foo() { return 3; } };
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "x", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () { return 1; },
         enumerable: true,
         configurable: true

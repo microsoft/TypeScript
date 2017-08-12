@@ -167,7 +167,8 @@ var _loop_1 = function (x) {
     var A = (function () {
         function A() {
         }
-        A.prototype.m = function () {
+        var proto_1 = A.prototype;
+        proto_1.m = function () {
             return x_1 + 1;
         };
         return A;
@@ -275,7 +276,8 @@ var C = (function () {
     function C(N) {
         this.N = N;
     }
-    C.prototype.foo = function () {
+    var proto_2 = C.prototype;
+    proto_2.foo = function () {
         var _this = this;
         var _loop_5 = function (i) {
             var f = function () { return _this.N * i; };

@@ -37,7 +37,8 @@ module.exports = Car;
 var Road = (function () {
     function Road() {
     }
-    Road.prototype.AddCars = function (cars) {
+    var proto_1 = Road.prototype;
+    proto_1.AddCars = function (cars) {
         this.cars = cars;
     };
     return Road;

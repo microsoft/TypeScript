@@ -20,7 +20,8 @@ var r2 = r('');
 var C = (function () {
     function C(x) {
     }
-    C.prototype.foo = function (x) {
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) {
         function bar(x) {
             return x;
         }

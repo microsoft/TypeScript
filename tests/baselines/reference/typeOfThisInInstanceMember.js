@@ -41,10 +41,11 @@ var C = (function () {
         t.z;
         var r = t.foo();
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         return this;
     };
-    Object.defineProperty(C.prototype, "y", {
+    Object.defineProperty(proto_1, "y", {
         get: function () {
             return this;
         },

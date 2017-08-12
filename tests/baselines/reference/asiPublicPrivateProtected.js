@@ -45,14 +45,16 @@ public;
 var NonPublicClass = (function () {
     function NonPublicClass() {
     }
-    NonPublicClass.prototype.s = function () {
+    var proto_1 = NonPublicClass.prototype;
+    proto_1.s = function () {
     };
     return NonPublicClass;
 }());
 var NonPublicClass2 = (function () {
     function NonPublicClass2() {
     }
-    NonPublicClass2.prototype.nonPublicFunction = function () {
+    var proto_2 = NonPublicClass2.prototype;
+    proto_2.nonPublicFunction = function () {
     };
     return NonPublicClass2;
 }());
@@ -60,14 +62,16 @@ private;
 var NonPrivateClass = (function () {
     function NonPrivateClass() {
     }
-    NonPrivateClass.prototype.s = function () {
+    var proto_3 = NonPrivateClass.prototype;
+    proto_3.s = function () {
     };
     return NonPrivateClass;
 }());
 var NonPrivateClass2 = (function () {
     function NonPrivateClass2() {
     }
-    NonPrivateClass2.prototype.nonPrivateFunction = function () {
+    var proto_4 = NonPrivateClass2.prototype;
+    proto_4.nonPrivateFunction = function () {
     };
     return NonPrivateClass2;
 }());
@@ -75,14 +79,16 @@ protected;
 var NonProtectedClass = (function () {
     function NonProtectedClass() {
     }
-    NonProtectedClass.prototype.s = function () {
+    var proto_5 = NonProtectedClass.prototype;
+    proto_5.s = function () {
     };
     return NonProtectedClass;
 }());
 var NonProtectedClass2 = (function () {
     function NonProtectedClass2() {
     }
-    NonProtectedClass2.prototype.nonProtectedFunction = function () {
+    var proto_6 = NonProtectedClass2.prototype;
+    proto_6.nonProtectedFunction = function () {
     };
     return NonProtectedClass2;
 }());

@@ -52,7 +52,8 @@ var M;
     var c = (function () {
         function c() {
         }
-        Object.defineProperty(c.prototype, "Z", {
+        var proto_1 = c.prototype;
+        Object.defineProperty(proto_1, "Z", {
             set: function (M) {
                 this.y = M_1.x;
             },
@@ -66,7 +67,8 @@ var M;
     var d = (function () {
         function d() {
         }
-        Object.defineProperty(d.prototype, "Z", {
+        var proto_2 = d.prototype;
+        Object.defineProperty(proto_2, "Z", {
             set: function (p) {
                 var M = 10;
                 this.y = M_2.x;
@@ -81,7 +83,8 @@ var M;
     var e = (function () {
         function e() {
         }
-        Object.defineProperty(e.prototype, "M", {
+        var proto_3 = e.prototype;
+        Object.defineProperty(proto_3, "M", {
             set: function (p) {
                 this.y = M.x;
             },
@@ -95,7 +98,8 @@ var M;
     var f = (function () {
         function f() {
         }
-        Object.defineProperty(f.prototype, "Z", {
+        var proto_4 = f.prototype;
+        Object.defineProperty(proto_4, "Z", {
             get: function () {
                 var M = 10;
                 return M_3.x;
@@ -110,7 +114,8 @@ var M;
     var e = (function () {
         function e() {
         }
-        Object.defineProperty(e.prototype, "M", {
+        var proto_5 = e.prototype;
+        Object.defineProperty(proto_5, "M", {
             get: function () {
                 return M.x;
             },

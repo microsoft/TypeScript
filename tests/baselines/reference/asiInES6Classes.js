@@ -29,7 +29,8 @@ var Foo = (function () {
             done: false
         };
     }
-    Foo.prototype.bar = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.bar = function () {
         return 3;
     };
     return Foo;

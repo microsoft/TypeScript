@@ -67,7 +67,8 @@ var E = (function (_super) {
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    E.prototype.foo = function () { return this.t; };
+    var proto_1 = E.prototype;
+    proto_1.foo = function () { return this.t; };
     return E;
 }(A));
 var F = (function (_super) {
@@ -75,7 +76,8 @@ var F = (function (_super) {
     function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    F.prototype.bar = function (t) { };
+    var proto_2 = F.prototype;
+    proto_2.bar = function (t) { };
     return F;
 }(A));
 var G = (function (_super) {
@@ -83,7 +85,8 @@ var G = (function (_super) {
     function G() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    G.prototype.foo = function () { return this.t; };
-    G.prototype.bar = function (t) { };
+    var proto_3 = G.prototype;
+    proto_3.foo = function () { return this.t; };
+    proto_3.bar = function (t) { };
     return G;
 }(A));

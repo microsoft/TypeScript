@@ -17,7 +17,8 @@ var M;
     var C = (function () {
         function C() {
         }
-        C.prototype[Symbol.iterator] = function () { };
+        var proto_1 = C.prototype;
+        proto_1[Symbol.iterator] = function () { };
         return C;
     }());
     M.C = C;

@@ -53,9 +53,10 @@ var f8 = function (x, y) { };
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x, x) { };
-    C.prototype.foo2 = function (x, x) { };
-    C.prototype.foo3 = function (x, x) { };
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x, x) { };
+    proto_1.foo2 = function (x, x) { };
+    proto_1.foo3 = function (x, x) { };
     return C;
 }());
 var a;

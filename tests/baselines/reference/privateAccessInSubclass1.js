@@ -30,7 +30,8 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.myMethod = function () {
+    var proto_1 = D.prototype;
+    proto_1.myMethod = function () {
         this.options;
     };
     return D;

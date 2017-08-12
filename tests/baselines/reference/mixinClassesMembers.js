@@ -176,7 +176,8 @@ var C3 = (function (_super) {
         _this.f();
         return _this;
     }
-    C3.prototype.f = function () { return _super.prototype.f.call(this); };
+    var proto_1 = C3.prototype;
+    proto_1.f = function () { return _super.prototype.f.call(this); };
     return C3;
 }(Mixed3));
 

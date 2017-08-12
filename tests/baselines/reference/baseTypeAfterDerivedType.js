@@ -20,7 +20,8 @@ interface Base2 {
 var Derived2 = (function () {
     function Derived2() {
     }
-    Derived2.prototype.method = function () {
+    var proto_1 = Derived2.prototype;
+    proto_1.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];

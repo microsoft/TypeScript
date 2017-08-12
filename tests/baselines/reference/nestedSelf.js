@@ -15,7 +15,8 @@ var M;
         function C() {
             this.n = 42;
         }
-        C.prototype.foo = function () {
+        var proto_1 = C.prototype;
+        proto_1.foo = function () {
             var _this = this;
             [1, 2, 3].map(function (x) { return _this.n * x; });
         };

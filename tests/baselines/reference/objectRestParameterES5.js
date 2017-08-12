@@ -46,11 +46,12 @@ suddenly(function (_a) {
 var C = (function () {
     function C() {
     }
-    C.prototype.m = function (_a) {
+    var proto_1 = C.prototype;
+    proto_1.m = function (_a) {
         var a = _a.a, clone = __rest(_a, ["a"]);
         // actually, never mind, don't clone
     };
-    Object.defineProperty(C.prototype, "p", {
+    Object.defineProperty(proto_1, "p", {
         set: function (_a) {
             var a = _a.a, clone = __rest(_a, ["a"]);
             // actually, never mind, don't clone

@@ -26,7 +26,8 @@ var Test;
     var Bug = (function () {
         function Bug() {
         }
-        Bug.prototype.tokenize = function (line, tokens, includeStates) {
+        var proto_1 = Bug.prototype;
+        proto_1.tokenize = function (line, tokens, includeStates) {
             return null;
         };
         return Bug;

@@ -21,7 +21,8 @@ var C = (function () {
     }
     C_1 = C;
     C.x = function () { return C_1.y; };
-    C.prototype.method = function () { };
+    var proto_1 = C.prototype;
+    proto_1.method = function () { };
     C.y = 1;
     C = C_1 = __decorate([
         foo

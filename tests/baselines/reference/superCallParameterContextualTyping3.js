@@ -45,7 +45,8 @@ var __extends = (this && this.__extends) || (function () {
 var CBase = (function () {
     function CBase(param) {
     }
-    CBase.prototype.foo = function (param) {
+    var proto_1 = CBase.prototype;
+    proto_1.foo = function (param) {
     };
     return CBase;
 }());

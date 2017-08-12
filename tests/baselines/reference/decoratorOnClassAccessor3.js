@@ -15,7 +15,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "accessor", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "accessor", {
         get: function () { return 1; },
         enumerable: true,
         configurable: true

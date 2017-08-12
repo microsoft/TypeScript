@@ -209,7 +209,8 @@ var obj87: i8 = new {};
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.foo = function () { };
+    var proto_1 = Base.prototype;
+    proto_1.foo = function () { };
     return Base;
 }());
 var anyVar;

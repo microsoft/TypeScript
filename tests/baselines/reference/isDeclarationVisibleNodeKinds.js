@@ -130,14 +130,15 @@ var schema;
     var T = (function () {
         function T() {
         }
-        Object.defineProperty(T.prototype, "createValidator9", {
+        var proto_1 = T.prototype;
+        Object.defineProperty(proto_1, "createValidator9", {
             get: function () {
                 return undefined;
             },
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(T.prototype, "createValidator10", {
+        Object.defineProperty(proto_1, "createValidator10", {
             set: function (v) {
             },
             enumerable: true,

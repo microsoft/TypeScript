@@ -47,21 +47,24 @@ exports.simpleExample = (function () {
     function class_1() {
     }
     class_1.getTags = function () { };
-    class_1.prototype.tags = function () { };
+    var proto_1 = class_1.prototype;
+    proto_1.tags = function () { };
     return class_1;
 }());
 exports.circularReference = (function () {
     function C() {
     }
     C.getTags = function (c) { return c; };
-    C.prototype.tags = function (c) { return c; };
+    var proto_2 = C.prototype;
+    proto_2.tags = function (c) { return c; };
     return C;
 }());
 // repro from #15066
 var FooItem = (function () {
     function FooItem() {
     }
-    FooItem.prototype.foo = function () { };
+    var proto_3 = FooItem.prototype;
+    proto_3.foo = function () { };
     return FooItem;
 }());
 exports.FooItem = FooItem;
@@ -72,7 +75,8 @@ function WithTags(Base) {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         class_2.getTags = function () { };
-        class_2.prototype.tags = function () { };
+        var proto_4 = class_2.prototype;
+        proto_4.tags = function () { };
         return class_2;
     }(Base));
 }

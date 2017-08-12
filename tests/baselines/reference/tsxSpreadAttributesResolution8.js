@@ -53,7 +53,8 @@ var OverWriteAttr = (function (_super) {
     function OverWriteAttr() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    OverWriteAttr.prototype.render = function () {
+    var proto_1 = OverWriteAttr.prototype;
+    proto_1.render = function () {
         return <div>Hello</div>;
     };
     return OverWriteAttr;

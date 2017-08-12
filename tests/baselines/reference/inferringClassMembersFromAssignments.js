@@ -143,7 +143,8 @@ var C = (function () {
         }
         this.inMultiple = 0;
     }
-    C.prototype.method = function () {
+    var proto_1 = C.prototype;
+    proto_1.method = function () {
         var _this = this;
         if (Math.random()) {
             this.inMethod = 0;
@@ -161,7 +162,7 @@ var C = (function () {
             }
         };
     };
-    C.prototype.get = function () {
+    proto_1.get = function () {
         if (Math.random()) {
             this.inGetter = 0;
         }
@@ -170,7 +171,7 @@ var C = (function () {
         }
         this.inMultiple = false;
     };
-    C.prototype.set = function () {
+    proto_1.set = function () {
         if (Math.random()) {
             this.inSetter = 0;
         }

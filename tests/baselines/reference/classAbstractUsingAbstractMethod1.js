@@ -38,7 +38,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.foo = function () { return 1; };
+    var proto_1 = B.prototype;
+    proto_1.foo = function () { return 1; };
     return B;
 }(A));
 var C = (function (_super) {

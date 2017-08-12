@@ -50,7 +50,8 @@ var __extends = (this && this.__extends) || (function () {
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.classFooMethod = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.classFooMethod = function () {
         return this;
     };
     return Foo;
@@ -60,7 +61,8 @@ var Bar = (function (_super) {
     function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Bar.prototype.classBarMethod = function () {
+    var proto_2 = Bar.prototype;
+    proto_2.classBarMethod = function () {
         return this;
     };
     return Bar;

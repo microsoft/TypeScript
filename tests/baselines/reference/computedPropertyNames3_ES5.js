@@ -14,14 +14,15 @@ var id;
 var C = (function () {
     function C() {
     }
-    C.prototype[0 + 1] = function () { };
+    var proto_1 = C.prototype;
+    proto_1[0 + 1] = function () { };
     C[function () { }] = function () { };
-    Object.defineProperty(C.prototype, delete id, {
+    Object.defineProperty(proto_1, delete id, {
         get: function () { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, [0, 1], {
+    Object.defineProperty(proto_1, [0, 1], {
         set: function (v) { },
         enumerable: true,
         configurable: true

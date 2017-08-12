@@ -55,10 +55,11 @@ var Derived = (function (_super) {
         _this.a = _this = _super.call(this) || this;
         return _this;
     }
-    Derived.prototype.b = function () {
+    var proto_1 = Derived.prototype;
+    proto_1.b = function () {
         _this = _super.call(this) || this;
     };
-    Object.defineProperty(Derived.prototype, "C", {
+    Object.defineProperty(proto_1, "C", {
         get: function () {
             _this = _super.call(this) || this;
             return 1;

@@ -75,7 +75,8 @@ f2(1, 2);
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) {
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) {
         if (x === void 0) { x = 1; }
     };
     return C;

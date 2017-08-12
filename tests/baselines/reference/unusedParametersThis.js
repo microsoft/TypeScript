@@ -37,18 +37,19 @@ var f2 = function f2(this: A): number {
 var A = (function () {
     function A() {
     }
-    A.prototype.method = function () {
+    var proto_1 = A.prototype;
+    proto_1.method = function () {
         return this.a;
     };
-    A.prototype.method2 = function () {
+    proto_1.method2 = function () {
         return this.a;
     };
-    A.prototype.method3 = function () {
+    proto_1.method3 = function () {
         var _this = this;
         var fn = function () { return _this.a; };
         return fn();
     };
-    A.prototype.method4 = function () {
+    proto_1.method4 = function () {
         var _this = this;
         var fn = function () { return _this.a; };
         return fn();

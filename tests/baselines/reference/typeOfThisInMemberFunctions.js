@@ -35,7 +35,8 @@ class E<T extends Date> {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         var r = this;
     };
     C.bar = function () {
@@ -46,7 +47,8 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    D.prototype.foo = function () {
+    var proto_2 = D.prototype;
+    proto_2.foo = function () {
         var r = this;
     };
     D.bar = function () {
@@ -57,7 +59,8 @@ var D = (function () {
 var E = (function () {
     function E() {
     }
-    E.prototype.foo = function () {
+    var proto_3 = E.prototype;
+    proto_3.foo = function () {
         var r = this;
     };
     E.bar = function () {

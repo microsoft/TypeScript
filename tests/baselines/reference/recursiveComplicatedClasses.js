@@ -47,7 +47,8 @@ function aEnclosesB(a) {
 var Symbol = (function () {
     function Symbol() {
     }
-    Symbol.prototype.visible = function () {
+    var proto_1 = Symbol.prototype;
+    proto_1.visible = function () {
         var b;
         return aEnclosesB(b);
     };

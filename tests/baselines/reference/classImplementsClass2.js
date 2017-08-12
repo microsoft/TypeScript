@@ -27,7 +27,8 @@ var __extends = (this && this.__extends) || (function () {
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () { return 1; };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { return 1; };
     return A;
 }());
 var C = (function () {
@@ -40,7 +41,8 @@ var C2 = (function (_super) {
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C2.prototype.foo = function () {
+    var proto_2 = C2.prototype;
+    proto_2.foo = function () {
         return 1;
     };
     return C2;

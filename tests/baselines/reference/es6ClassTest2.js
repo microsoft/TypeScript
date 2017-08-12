@@ -175,7 +175,8 @@ var BasicMonster = (function () {
         this.health = health;
         this.isAlive = true;
     }
-    BasicMonster.prototype.attack = function (target) {
+    var proto_1 = BasicMonster.prototype;
+    proto_1.attack = function (target) {
         // WScript.Echo("Attacks " + target);
     };
     return BasicMonster;
@@ -190,10 +191,11 @@ var GetSetMonster = (function () {
         this.name = name;
         this._health = _health;
     }
-    GetSetMonster.prototype.attack = function (target) {
+    var proto_2 = GetSetMonster.prototype;
+    proto_2.attack = function (target) {
         // WScript.Echo("Attacks " + target);
     };
-    Object.defineProperty(GetSetMonster.prototype, "isAlive", {
+    Object.defineProperty(proto_2, "isAlive", {
         // The contextual keyword "get" followed by an identifier and
         // a curly body defines a getter in the same way that "get"
         // defines one in an object literal.
@@ -203,7 +205,7 @@ var GetSetMonster = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(GetSetMonster.prototype, "health", {
+    Object.defineProperty(proto_2, "health", {
         // Likewise, "set" can be used to define setters.
         set: function (value) {
             if (value < 0) {
@@ -227,7 +229,8 @@ var OverloadedMonster = (function () {
         this.health = health;
         this.isAlive = true;
     }
-    OverloadedMonster.prototype.attack = function (target) {
+    var proto_3 = OverloadedMonster.prototype;
+    proto_3.attack = function (target) {
         //WScript.Echo("Attacks " + target);
     };
     return OverloadedMonster;
@@ -244,7 +247,8 @@ var SplatMonster = (function () {
             args[_i] = arguments[_i];
         }
     }
-    SplatMonster.prototype.roar = function (name) {
+    var proto_4 = SplatMonster.prototype;
+    proto_4.roar = function (name) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
@@ -263,9 +267,10 @@ var PrototypeMonster = (function () {
 var SuperParent = (function () {
     function SuperParent(a) {
     }
-    SuperParent.prototype.b = function (b) {
+    var proto_5 = SuperParent.prototype;
+    proto_5.b = function (b) {
     };
-    SuperParent.prototype.c = function () {
+    proto_5.c = function () {
     };
     return SuperParent;
 }());
@@ -274,10 +279,11 @@ var SuperChild = (function (_super) {
     function SuperChild() {
         return _super.call(this, 1) || this;
     }
-    SuperChild.prototype.b = function () {
+    var proto_6 = SuperChild.prototype;
+    proto_6.b = function () {
         _super.prototype.b.call(this, 'str');
     };
-    SuperChild.prototype.c = function () {
+    proto_6.c = function () {
         _super.prototype.c.call(this);
     };
     return SuperChild;
@@ -304,8 +310,9 @@ var Visibility = (function () {
         this.x = 1;
         this.y = 2;
     }
-    Visibility.prototype.foo = function () { };
-    Visibility.prototype.bar = function () { };
+    var proto_7 = Visibility.prototype;
+    proto_7.foo = function () { };
+    proto_7.bar = function () { };
     return Visibility;
 }());
 var BaseClassWithConstructor = (function () {

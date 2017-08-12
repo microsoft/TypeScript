@@ -40,7 +40,8 @@ function fn7() { } // should be valid: any includes void
 var C = (function () {
     function C() {
     }
-    C.prototype.dispose = function () { };
+    var proto_1 = C.prototype;
+    proto_1.dispose = function () { };
     return C;
 }());
 var D = (function (_super) {

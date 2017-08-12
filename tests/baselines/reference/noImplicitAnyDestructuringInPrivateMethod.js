@@ -17,7 +17,8 @@ exports.__esModule = true;
 var Bar = (function () {
     function Bar() {
     }
-    Bar.prototype.bar = function (_a) {
+    var proto_1 = Bar.prototype;
+    proto_1.bar = function (_a) {
         var a = _a.a;
         return a;
     };

@@ -29,7 +29,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var db = (function () {
     function db() {
     }
-    db.prototype.doSomething = function () {
+    var proto_1 = db.prototype;
+    proto_1.doSomething = function () {
     };
     return db;
 }());

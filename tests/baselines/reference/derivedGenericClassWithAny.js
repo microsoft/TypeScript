@@ -56,12 +56,13 @@ var __extends = (this && this.__extends) || (function () {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "X", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "X", {
         get: function () { return null; },
         enumerable: true,
         configurable: true
     });
-    C.prototype.foo = function () {
+    proto_1.foo = function () {
         return null;
     };
     return C;
@@ -71,14 +72,15 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(D.prototype, "X", {
+    var proto_2 = D.prototype;
+    Object.defineProperty(proto_2, "X", {
         get: function () {
             return null;
         },
         enumerable: true,
         configurable: true
     });
-    D.prototype.foo = function () {
+    proto_2.foo = function () {
         return 1;
     };
     Object.defineProperty(D, "Y", {
@@ -99,13 +101,14 @@ var E = (function (_super) {
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(E.prototype, "X", {
+    var proto_3 = E.prototype;
+    Object.defineProperty(proto_3, "X", {
         get: function () { return ''; } // error
         ,
         enumerable: true,
         configurable: true
     });
-    E.prototype.foo = function () {
+    proto_3.foo = function () {
         return ''; // error
     };
     return E;

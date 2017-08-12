@@ -708,7 +708,8 @@ var import51;
 var _View_AppComponent0 = (function () {
     function _View_AppComponent0(viewUtils, parentInjector, declarationEl) {
     }
-    _View_AppComponent0.prototype.injectorGetInternal = function (token, requestNodeIndex, notFoundResult) {
+    var proto_1 = _View_AppComponent0.prototype;
+    proto_1.injectorGetInternal = function (token, requestNodeIndex, notFoundResult) {
         if (((token === import46.DefaultValueAccessor) && (3 === requestNodeIndex))) {
             return this._DefaultValueAccessor_3_3;
         }

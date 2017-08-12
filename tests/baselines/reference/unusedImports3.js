@@ -25,7 +25,8 @@ exports.__esModule = true;
 var Calculator = (function () {
     function Calculator() {
     }
-    Calculator.prototype.handleChar = function () { };
+    var proto_1 = Calculator.prototype;
+    proto_1.handleChar = function () { };
     return Calculator;
 }());
 exports.Calculator = Calculator;

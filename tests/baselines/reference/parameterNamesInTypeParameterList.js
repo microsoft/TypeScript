@@ -38,14 +38,15 @@ function f2(_a) {
 var A = (function () {
     function A() {
     }
-    A.prototype.m0 = function (a) {
+    var proto_1 = A.prototype;
+    proto_1.m0 = function (a) {
         a.b;
     };
-    A.prototype.m1 = function (_a) {
+    proto_1.m1 = function (_a) {
         var a = _a.a;
         a.b;
     };
-    A.prototype.m2 = function (_a) {
+    proto_1.m2 = function (_a) {
         var a = _a[0];
         a.b;
     };

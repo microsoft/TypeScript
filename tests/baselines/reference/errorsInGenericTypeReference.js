@@ -91,7 +91,8 @@ var Foo = (function () {
 var testClass1 = (function () {
     function testClass1() {
     }
-    testClass1.prototype.method = function () { };
+    var proto_1 = testClass1.prototype;
+    proto_1.method = function () { };
     return testClass1;
 }());
 var tc1 = new testClass1();
@@ -107,9 +108,10 @@ var tc2 = new testClass2(); // error: could not find symbol V
 var testClass3 = (function () {
     function testClass3() {
     }
-    testClass3.prototype.testMethod1 = function () { return null; }; // error: could not find symbol V
+    var proto_2 = testClass3.prototype;
+    proto_2.testMethod1 = function () { return null; }; // error: could not find symbol V
     testClass3.testMethod2 = function () { return null; }; // error: could not find symbol V
-    Object.defineProperty(testClass3.prototype, "a", {
+    Object.defineProperty(proto_2, "a", {
         set: function (value) { } // error: could not find symbol V
         ,
         enumerable: true,
@@ -132,7 +134,8 @@ var testClass4 = (function () {
 var testClass6 = (function () {
     function testClass6() {
     }
-    testClass6.prototype.method = function () { }; // error: could not find symbol V
+    var proto_3 = testClass6.prototype;
+    proto_3.method = function () { }; // error: could not find symbol V
     return testClass6;
 }());
 // in extends clause

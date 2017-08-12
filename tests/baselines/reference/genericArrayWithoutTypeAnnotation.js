@@ -11,7 +11,8 @@ class Bar {
 var Bar = (function () {
     function Bar() {
     }
-    Bar.prototype.getBar = function (foo) {
+    var proto_1 = Bar.prototype;
+    proto_1.getBar = function (foo) {
     };
     return Bar;
 }());

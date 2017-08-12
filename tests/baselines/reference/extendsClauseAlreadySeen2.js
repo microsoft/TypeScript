@@ -27,6 +27,7 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.baz = function () { };
+    var proto_1 = D.prototype;
+    proto_1.baz = function () { };
     return D;
 }(C));

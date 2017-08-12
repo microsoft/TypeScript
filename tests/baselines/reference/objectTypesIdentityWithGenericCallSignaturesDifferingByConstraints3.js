@@ -140,25 +140,29 @@ var Two = (function () {
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function (x, y) { return null; };
+    var proto_1 = A.prototype;
+    proto_1.foo = function (x, y) { return null; };
     return A;
 }());
 var B = (function () {
     function B() {
     }
-    B.prototype.foo = function (x, y) { return null; };
+    var proto_2 = B.prototype;
+    proto_2.foo = function (x, y) { return null; };
     return B;
 }());
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x, y) { return null; };
+    var proto_3 = C.prototype;
+    proto_3.foo = function (x, y) { return null; };
     return C;
 }());
 var D = (function () {
     function D() {
     }
-    D.prototype.foo = function (x, y) { return null; };
+    var proto_4 = D.prototype;
+    proto_4.foo = function (x, y) { return null; };
     return D;
 }());
 var a;

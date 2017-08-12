@@ -83,7 +83,8 @@ var Class;
     var G = (function () {
         function G() {
         }
-        G.prototype.foo = function (t, t2) {
+        var proto_1 = G.prototype;
+        proto_1.foo = function (t, t2) {
             var x;
             return x;
         };
@@ -97,7 +98,8 @@ var Class;
     var G2 = (function () {
         function G2() {
         }
-        G2.prototype.foo2 = function (t, t2) {
+        var proto_2 = G2.prototype;
+        proto_2.foo2 = function (t, t2) {
             var x;
             return x;
         };

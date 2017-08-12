@@ -22,20 +22,21 @@ var C = (function () {
     function C(t, z, x, y) {
         if (y === void 0) { y = "hello"; }
     }
-    C.prototype.foo = function (x, t) {
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x, t) {
         if (t === void 0) { t = false; }
     };
-    C.prototype.foo1 = function (x, t) {
+    proto_1.foo1 = function (x, t) {
         if (t === void 0) { t = false; }
         var rest = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             rest[_i - 2] = arguments[_i];
         }
     };
-    C.prototype.bar = function (t) {
+    proto_1.bar = function (t) {
         if (t === void 0) { t = false; }
     };
-    C.prototype.boo = function (t) {
+    proto_1.boo = function (t) {
         if (t === void 0) { t = false; }
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {

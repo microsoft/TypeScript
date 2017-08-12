@@ -29,7 +29,8 @@ define(["require", "exports"], function (require, exports) {
     var A = (function () {
         function A() {
         }
-        A.prototype.setProtected = function (val) {
+        var proto_1 = A.prototype;
+        proto_1.setProtected = function (val) {
             this.protected = val;
         };
         return A;
@@ -55,7 +56,8 @@ define(["require", "exports", "./a"], function (require, exports, a_1) {
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        B.prototype.setProtected = function () {
+        var proto_1 = B.prototype;
+        proto_1.setProtected = function () {
         };
         return B;
     }(a_1.A));

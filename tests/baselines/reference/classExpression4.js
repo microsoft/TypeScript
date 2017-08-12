@@ -11,7 +11,8 @@ let x = (new C).foo();
 var C = (function () {
     function class_1() {
     }
-    class_1.prototype.foo = function () {
+    var proto_1 = class_1.prototype;
+    proto_1.foo = function () {
         return new C();
     };
     return class_1;

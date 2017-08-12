@@ -9,6 +9,7 @@ var T = (function () {
     function T() {
     }
     T.x = function () { };
-    T.prototype.y = function () { };
+    var proto_1 = T.prototype;
+    proto_1.y = function () { };
     return T;
 }());

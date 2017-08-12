@@ -98,7 +98,8 @@ var __extends = (this && this.__extends) || (function () {
 var Bar = (function () {
     function Bar(n) {
     }
-    Bar.prototype.prop1 = function (x) {
+    var proto_1 = Bar.prototype;
+    proto_1.prop1 = function (x) {
         return x;
     };
     return Bar;
@@ -117,8 +118,9 @@ var Foo = (function (_super) {
         _this.gar = 5;
         return _this;
     }
-    Foo.prototype.bar = function () { return 0; };
-    Foo.prototype.boo = function (x) { return x; };
+    var proto_2 = Foo.prototype;
+    proto_2.bar = function () { return 0; };
+    proto_2.boo = function (x) { return x; };
     Foo.statVal = 0;
     return Foo;
 }(Bar));

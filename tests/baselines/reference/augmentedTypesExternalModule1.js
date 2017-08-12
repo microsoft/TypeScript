@@ -11,7 +11,8 @@ define(["require", "exports"], function (require, exports) {
     var c5 = (function () {
         function c5() {
         }
-        c5.prototype.foo = function () { };
+        var proto_1 = c5.prototype;
+        proto_1.foo = function () { };
         return c5;
     }());
 });

@@ -36,13 +36,14 @@ class C2 {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "y", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
         enumerable: true,
         configurable: true
     });
-    C.prototype.foo = function () { return this.foo; };
+    proto_1.foo = function () { return this.foo; };
     Object.defineProperty(C, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
@@ -57,7 +58,8 @@ var C = (function () {
 var C2 = (function () {
     function C2() {
     }
-    Object.defineProperty(C2.prototype, "y", {
+    var proto_2 = C2.prototype;
+    Object.defineProperty(proto_2, "y", {
         get: function () {
             var _this = this;
             (function () { return _this.x; });
@@ -70,7 +72,7 @@ var C2 = (function () {
         enumerable: true,
         configurable: true
     });
-    C2.prototype.foo = function () {
+    proto_2.foo = function () {
         var _this = this;
         (function () { return _this.foo; });
     };

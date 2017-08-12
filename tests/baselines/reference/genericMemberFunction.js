@@ -29,7 +29,8 @@ define(["require", "exports"], function (require, exports) {
     var BuildError = (function () {
         function BuildError() {
         }
-        BuildError.prototype.parent = function () {
+        var proto_1 = BuildError.prototype;
+        proto_1.parent = function () {
             return undefined;
         };
         return BuildError;
@@ -38,10 +39,11 @@ define(["require", "exports"], function (require, exports) {
     var FileWithErrors = (function () {
         function FileWithErrors() {
         }
-        FileWithErrors.prototype.errors = function () {
+        var proto_2 = FileWithErrors.prototype;
+        proto_2.errors = function () {
             return undefined;
         };
-        FileWithErrors.prototype.parent = function () {
+        proto_2.parent = function () {
             return undefined;
         };
         return FileWithErrors;
@@ -50,7 +52,8 @@ define(["require", "exports"], function (require, exports) {
     var BuildResult = (function () {
         function BuildResult() {
         }
-        BuildResult.prototype.merge = function (other) {
+        var proto_3 = BuildResult.prototype;
+        proto_3.merge = function (other) {
             var _this = this;
             a.b.c.d.e.f.g = 0;
             removedFiles.forEach(function (each) {

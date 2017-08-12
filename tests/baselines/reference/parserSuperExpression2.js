@@ -9,7 +9,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.M = function () {
+    var proto_1 = C.prototype;
+    proto_1.M = function () {
         _super.prototype..call(this, 0);
     };
     return C;

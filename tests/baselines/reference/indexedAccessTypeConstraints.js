@@ -52,7 +52,8 @@ exports.__esModule = true;
 var Parent = (function () {
     function Parent() {
     }
-    Parent.prototype.getData = function () {
+    var proto_1 = Parent.prototype;
+    proto_1.getData = function () {
         return this.data;
     };
     return Parent;
@@ -62,7 +63,8 @@ var Foo = (function (_super) {
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Foo.prototype.getContent = function () {
+    var proto_2 = Foo.prototype;
+    proto_2.getContent = function () {
         return this.getData().get('content');
     };
     return Foo;
@@ -73,7 +75,8 @@ var Bar = (function (_super) {
     function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Bar.prototype.getContent = function () {
+    var proto_3 = Bar.prototype;
+    proto_3.getContent = function () {
         return this.getData().get('content');
     };
     return Bar;

@@ -61,7 +61,8 @@ var X = (function () {
     function X() {
         this.value = "value";
     }
-    X.prototype.foo = function () {
+    var proto_1 = X.prototype;
+    proto_1.foo = function () {
         var _this = this;
         var outer = function () {
             var x = _this.value;

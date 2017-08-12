@@ -35,7 +35,8 @@ var e2;
 var e2 = (function () {
     function e2() {
     }
-    e2.prototype.foo = function () {
+    var proto_1 = e2.prototype;
+    proto_1.foo = function () {
         return 1;
     };
     return e2;

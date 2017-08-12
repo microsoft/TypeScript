@@ -11,10 +11,11 @@ class WebControls {
 var WebControls = (function () {
     function WebControls() {
     }
+    var proto_1 = WebControls.prototype;
     /**
      * Render a control
      */
-    WebControls.prototype.createControl = function () {
+    proto_1.createControl = function () {
     };
     return WebControls;
 }());

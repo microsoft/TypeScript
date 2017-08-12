@@ -79,7 +79,8 @@ var C = (function () {
     function C() {
         throw this;
     }
-    C.prototype.biz = function () {
+    var proto_1 = C.prototype;
+    proto_1.biz = function () {
         throw this.value;
     };
     return C;

@@ -85,7 +85,8 @@ var Good = (function () {
     function Good() {
         this.f = function () { return 0; };
     }
-    Good.prototype.g = function () { return 0; };
+    var proto_1 = Good.prototype;
+    proto_1.g = function () { return 0; };
     return Good;
 }());
 var Baad = (function (_super) {
@@ -93,7 +94,8 @@ var Baad = (function (_super) {
     function Baad() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Baad.prototype.f = function () { return 0; };
-    Baad.prototype.g = function (n) { return 0; };
+    var proto_2 = Baad.prototype;
+    proto_2.f = function () { return 0; };
+    proto_2.g = function (n) { return 0; };
     return Baad;
 }(Good));

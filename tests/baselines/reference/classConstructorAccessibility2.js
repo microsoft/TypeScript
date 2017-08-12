@@ -60,21 +60,24 @@ var BaseA = (function () {
     function BaseA(x) {
         this.x = x;
     }
-    BaseA.prototype.createInstance = function () { new BaseA(1); };
+    var proto_1 = BaseA.prototype;
+    proto_1.createInstance = function () { new BaseA(1); };
     return BaseA;
 }());
 var BaseB = (function () {
     function BaseB(x) {
         this.x = x;
     }
-    BaseB.prototype.createInstance = function () { new BaseB(2); };
+    var proto_2 = BaseB.prototype;
+    proto_2.createInstance = function () { new BaseB(2); };
     return BaseB;
 }());
 var BaseC = (function () {
     function BaseC(x) {
         this.x = x;
     }
-    BaseC.prototype.createInstance = function () { new BaseC(3); };
+    var proto_3 = BaseC.prototype;
+    proto_3.createInstance = function () { new BaseC(3); };
     BaseC.staticInstance = function () { new BaseC(4); };
     return BaseC;
 }());
@@ -85,8 +88,9 @@ var DerivedA = (function (_super) {
         _this.x = x;
         return _this;
     }
-    DerivedA.prototype.createInstance = function () { new DerivedA(5); };
-    DerivedA.prototype.createBaseInstance = function () { new BaseA(6); };
+    var proto_4 = DerivedA.prototype;
+    proto_4.createInstance = function () { new DerivedA(5); };
+    proto_4.createBaseInstance = function () { new BaseA(6); };
     DerivedA.staticBaseInstance = function () { new BaseA(7); };
     return DerivedA;
 }(BaseA));
@@ -97,8 +101,9 @@ var DerivedB = (function (_super) {
         _this.x = x;
         return _this;
     }
-    DerivedB.prototype.createInstance = function () { new DerivedB(7); };
-    DerivedB.prototype.createBaseInstance = function () { new BaseB(8); }; // ok
+    var proto_5 = DerivedB.prototype;
+    proto_5.createInstance = function () { new DerivedB(7); };
+    proto_5.createBaseInstance = function () { new BaseB(8); }; // ok
     DerivedB.staticBaseInstance = function () { new BaseB(9); }; // ok
     return DerivedB;
 }(BaseB));
@@ -109,8 +114,9 @@ var DerivedC = (function (_super) {
         _this.x = x;
         return _this;
     }
-    DerivedC.prototype.createInstance = function () { new DerivedC(9); };
-    DerivedC.prototype.createBaseInstance = function () { new BaseC(10); }; // error
+    var proto_6 = DerivedC.prototype;
+    proto_6.createInstance = function () { new DerivedC(9); };
+    proto_6.createBaseInstance = function () { new BaseC(10); }; // error
     DerivedC.staticBaseInstance = function () { new BaseC(11); }; // error
     return DerivedC;
 }(BaseC));

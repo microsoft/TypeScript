@@ -13,7 +13,8 @@ class C<T> {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         this.a++;
         for (var i, j = 0; j < 10; i++) {
         }

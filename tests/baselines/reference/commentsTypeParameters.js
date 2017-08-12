@@ -19,11 +19,12 @@ function compare</**type*/T>(a: T, b: T) {
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function (a) {
+    var proto_1 = C.prototype;
+    proto_1.method = function (a) {
     };
     C.staticmethod = function (a) {
     };
-    C.prototype.privatemethod = function (a) {
+    proto_1.privatemethod = function (a) {
     };
     C.privatestaticmethod = function (a) {
     };

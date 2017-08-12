@@ -9,7 +9,8 @@ var c2 = () => { }
 var c2 = (function () {
     function c2() {
     }
-    c2.prototype.foo = function () { };
+    var proto_1 = c2.prototype;
+    proto_1.foo = function () { };
     return c2;
 }()); // error
 function c2() { } // error

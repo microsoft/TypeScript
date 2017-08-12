@@ -12,7 +12,8 @@ class Bar {
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.banana = function (x) { };
+    var proto_1 = Foo.prototype;
+    proto_1.banana = function (x) { };
     return Foo;
 }());
 var Bar = (function () {

@@ -21,7 +21,8 @@ var Test = (function () {
         this._b = this._a; // undefined, no error/warning
         this._a = 3;
     }
-    Test.prototype.method = function () {
+    var proto_1 = Test.prototype;
+    proto_1.method = function () {
         var a = b; // Block-scoped variable 'b' used before its declaration
         var b = 3;
     };

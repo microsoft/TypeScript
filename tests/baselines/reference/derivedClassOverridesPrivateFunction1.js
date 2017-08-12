@@ -30,7 +30,8 @@ var BaseClass = (function () {
     function BaseClass() {
         this._init();
     }
-    BaseClass.prototype._init = function () {
+    var proto_1 = BaseClass.prototype;
+    proto_1._init = function () {
     };
     return BaseClass;
 }());
@@ -39,7 +40,8 @@ var DerivedClass = (function (_super) {
     function DerivedClass() {
         return _super.call(this) || this;
     }
-    DerivedClass.prototype._init = function () {
+    var proto_2 = DerivedClass.prototype;
+    proto_2._init = function () {
     };
     return DerivedClass;
 }(BaseClass));

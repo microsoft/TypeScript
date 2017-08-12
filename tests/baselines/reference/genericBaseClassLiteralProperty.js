@@ -33,7 +33,8 @@ var SubClass = (function (_super) {
     function SubClass() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SubClass.prototype.Error = function () {
+    var proto_1 = SubClass.prototype;
+    proto_1.Error = function () {
         var x = this._getValue1();
         var y = this._getValue2();
     };

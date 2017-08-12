@@ -32,7 +32,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "X", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "X", {
         get: function () {
             return "string"; // Error; get contextual type by set accessor parameter type annotation
         },
@@ -40,7 +41,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "Y", {
+    Object.defineProperty(proto_1, "Y", {
         get: function () {
             return true;
         },
@@ -48,7 +49,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "W", {
+    Object.defineProperty(proto_1, "W", {
         get: function () {
             return true;
         },
@@ -56,7 +57,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "Z", {
+    Object.defineProperty(proto_1, "Z", {
         get: function () {
             return 1;
         },

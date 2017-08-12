@@ -32,7 +32,8 @@ var x = <MyComponent bar='world' />;
 var MyComponent = (function () {
     function MyComponent() {
     }
-    MyComponent.prototype.render = function () {
+    var proto_1 = MyComponent.prototype;
+    proto_1.render = function () {
     };
     return MyComponent;
 }());

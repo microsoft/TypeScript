@@ -83,10 +83,11 @@ var Bar = (function () {
         this.e = e;
         this.c = 2;
     }
-    Bar.prototype.f = function () {
+    var proto_1 = Bar.prototype;
+    proto_1.f = function () {
         return 1;
     };
-    Bar.prototype.h = function () {
+    proto_1.h = function () {
         return 2;
     };
     return Bar;
@@ -117,7 +118,8 @@ var Derived = (function (_super) {
         _this.a = 1;
         return _this;
     }
-    Derived.prototype.f = function () { return 1; };
+    var proto_2 = Derived.prototype;
+    proto_2.f = function () { return 1; };
     return Derived;
 }(Base));
 

@@ -46,10 +46,11 @@ var __extends = (this && this.__extends) || (function () {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.fn = function () {
+    var proto_1 = Base.prototype;
+    proto_1.fn = function () {
         return '';
     };
-    Object.defineProperty(Base.prototype, "a", {
+    Object.defineProperty(proto_1, "a", {
         get: function () { return 1; },
         set: function (v) { },
         enumerable: true,
@@ -63,10 +64,11 @@ var Derived = (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived.prototype.fn = function () {
+    var proto_2 = Derived.prototype;
+    proto_2.fn = function () {
         return '';
     };
-    Object.defineProperty(Derived.prototype, "a", {
+    Object.defineProperty(proto_2, "a", {
         get: function () { return 1; },
         set: function (v) { },
         enumerable: true,

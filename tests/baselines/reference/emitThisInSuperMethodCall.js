@@ -41,7 +41,8 @@ var __extends = (this && this.__extends) || (function () {
 var User = (function () {
     function User() {
     }
-    User.prototype.sayHello = function () {
+    var proto_1 = User.prototype;
+    proto_1.sayHello = function () {
     };
     return User;
 }());
@@ -50,14 +51,15 @@ var RegisteredUser = (function (_super) {
     function RegisteredUser() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    RegisteredUser.prototype.f = function () {
+    var proto_2 = RegisteredUser.prototype;
+    proto_2.f = function () {
         (function () {
             function inner() {
                 _super.sayHello.call(this);
             }
         });
     };
-    RegisteredUser.prototype.g = function () {
+    proto_2.g = function () {
         function inner() {
             var _this = this;
             (function () {
@@ -65,7 +67,7 @@ var RegisteredUser = (function (_super) {
             });
         }
     };
-    RegisteredUser.prototype.h = function () {
+    proto_2.h = function () {
         function inner() {
             _super.sayHello.call(this);
         }

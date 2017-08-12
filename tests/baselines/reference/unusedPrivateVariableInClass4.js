@@ -13,7 +13,8 @@ class greeter {
 var greeter = (function () {
     function greeter() {
     }
-    greeter.prototype.method1 = function () {
+    var proto_1 = greeter.prototype;
+    proto_1.method1 = function () {
         this.x = "dummy value";
     };
     return greeter;

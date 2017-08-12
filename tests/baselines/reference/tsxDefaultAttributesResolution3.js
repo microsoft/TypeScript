@@ -32,7 +32,8 @@ var Poisoned = (function (_super) {
     function Poisoned() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Poisoned.prototype.render = function () {
+    var proto_1 = Poisoned.prototype;
+    proto_1.render = function () {
         return <div>Hello</div>;
     };
     return Poisoned;

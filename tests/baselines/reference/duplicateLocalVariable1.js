@@ -366,10 +366,11 @@ var TestRunner = (function () {
     TestRunner.arrayCompare = function (arg1, arg2) {
         return (arg1.every(function (val, index) { return val === arg2[index]; }));
     };
-    TestRunner.prototype.addTest = function (test) {
+    var proto_1 = TestRunner.prototype;
+    proto_1.addTest = function (test) {
         this.tests.push(test);
     };
-    TestRunner.prototype.run = function () {
+    proto_1.run = function () {
         var success = true;
         for (var test in this.tests) {
             var exception = false;

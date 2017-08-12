@@ -19,16 +19,18 @@ class B {
 var A = (function () {
     function A() {
     }
-    A.prototype.f = function () { };
-    A.prototype.m1 = function (a) {
+    var proto_1 = A.prototype;
+    proto_1.f = function () { };
+    proto_1.m1 = function (a) {
     };
     return A;
 }());
 var B = (function () {
     function B() {
     }
-    B.prototype.f = function () { };
-    B.prototype.m1 = function (a) {
+    var proto_2 = B.prototype;
+    proto_2.f = function () { };
+    proto_2.m1 = function (a) {
     };
     return B;
 }());

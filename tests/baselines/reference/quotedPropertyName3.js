@@ -11,7 +11,8 @@ class Test {
 var Test = (function () {
     function Test() {
     }
-    Test.prototype.foo = function () {
+    var proto_1 = Test.prototype;
+    proto_1.foo = function () {
         var _this = this;
         var x = function () { return _this["prop1"]; };
         var y = x();

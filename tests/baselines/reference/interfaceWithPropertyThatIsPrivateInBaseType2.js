@@ -19,12 +19,14 @@ interface Foo2<T> extends Base2<T> { // error
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.x = function () { };
+    var proto_1 = Base.prototype;
+    proto_1.x = function () { };
     return Base;
 }());
 var Base2 = (function () {
     function Base2() {
     }
-    Base2.prototype.x = function () { };
+    var proto_2 = Base2.prototype;
+    proto_2.x = function () { };
     return Base2;
 }());

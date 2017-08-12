@@ -55,7 +55,8 @@ enum E {
 var BugExhibition = (function () {
     function BugExhibition() {
     }
-    BugExhibition.prototype.exhibitBug = function () {
+    var proto_1 = BugExhibition.prototype;
+    proto_1.exhibitBug = function () {
         function localFunction() { }
         var x;
         x = localFunction;
@@ -80,7 +81,8 @@ var BugExhibition2 = (function () {
 var BugExhibition3 = (function () {
     function BugExhibition3() {
     }
-    BugExhibition3.prototype.exhibitBug = function () {
+    var proto_2 = BugExhibition3.prototype;
+    proto_2.exhibitBug = function () {
         function localGenericFunction(u) { }
         var x;
         x = localGenericFunction;
@@ -90,7 +92,8 @@ var BugExhibition3 = (function () {
 var C = (function () {
     function C() {
     }
-    C.prototype.exhibit = function () {
+    var proto_3 = C.prototype;
+    proto_3.exhibit = function () {
         var funcExpr = function (u) { };
         var x;
         x = funcExpr;

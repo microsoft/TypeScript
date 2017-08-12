@@ -18,7 +18,8 @@ var D = (function () {
     function D() {
         this.p = 1;
     }
-    D.prototype.method = function () { };
+    var proto_1 = D.prototype;
+    proto_1.method = function () { };
     D.s = 0;
     D = __decorate([
         foo

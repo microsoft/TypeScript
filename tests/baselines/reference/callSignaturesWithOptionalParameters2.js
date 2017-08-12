@@ -70,8 +70,9 @@ foo2(1, 2);
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) { };
-    C.prototype.foo2 = function (x, y) { };
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) { };
+    proto_1.foo2 = function (x, y) { };
     return C;
 }());
 var c;

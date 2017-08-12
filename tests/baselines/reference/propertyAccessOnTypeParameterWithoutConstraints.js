@@ -35,7 +35,8 @@ var r4 = b.foo(1);
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function () {
+    var proto_1 = C.prototype;
+    proto_1.f = function () {
         var x;
         var a = x['toString'](); // should be string
         return a + x.toString();

@@ -80,7 +80,8 @@ var Benchmark = (function () {
     function Benchmark() {
         this.results = {};
     }
-    Benchmark.prototype.addTimingFor = function (name, timing) {
+    var proto_1 = Benchmark.prototype;
+    proto_1.addTimingFor = function (name, timing) {
         this.results[name] = this.results[name];
     };
     return Benchmark;

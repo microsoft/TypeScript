@@ -29,7 +29,8 @@ var M;
             this.x = 0;
             ({ z: 10, f: this.f }).f(({}));
         }
-        C.prototype.f = function (x) {
+        var proto_1 = C.prototype;
+        proto_1.f = function (x) {
             x.e; // e not found
             x.z; // ok 
         };
@@ -40,7 +41,8 @@ var M;
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function (x) {
+    var proto_2 = C.prototype;
+    proto_2.f = function (x) {
     };
     return C;
 }());

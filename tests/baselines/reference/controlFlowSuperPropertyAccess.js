@@ -30,7 +30,8 @@ var C = (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C.prototype.body = function () {
+    var proto_1 = C.prototype;
+    proto_1.body = function () {
         _super.prototype.m && _super.prototype.m.call(this);
     };
     return C;

@@ -30,7 +30,8 @@ export = Adder;
 var Adder = (function () {
     function Adder() {
     }
-    Adder.prototype.add = function (a, b) {
+    var proto_1 = Adder.prototype;
+    proto_1.add = function (a, b) {
     };
     return Adder;
 }());

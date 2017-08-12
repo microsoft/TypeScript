@@ -23,7 +23,8 @@ class StringFoo3 implements IFoo<string> {
 var IFoo = (function () {
     function IFoo() {
     }
-    IFoo.prototype.foo = function (x) {
+    var proto_1 = IFoo.prototype;
+    proto_1.foo = function (x) {
         return null;
     };
     return IFoo;
@@ -31,18 +32,21 @@ var IFoo = (function () {
 var IntFooBad = (function () {
     function IntFooBad() {
     }
-    IntFooBad.prototype.foo = function (x) { return null; };
+    var proto_2 = IntFooBad.prototype;
+    proto_2.foo = function (x) { return null; };
     return IntFooBad;
 }());
 var StringFoo2 = (function () {
     function StringFoo2() {
     }
-    StringFoo2.prototype.foo = function (x) { return null; };
+    var proto_3 = StringFoo2.prototype;
+    proto_3.foo = function (x) { return null; };
     return StringFoo2;
 }());
 var StringFoo3 = (function () {
     function StringFoo3() {
     }
-    StringFoo3.prototype.foo = function (x) { return null; };
+    var proto_4 = StringFoo3.prototype;
+    proto_4.foo = function (x) { return null; };
     return StringFoo3;
 }());

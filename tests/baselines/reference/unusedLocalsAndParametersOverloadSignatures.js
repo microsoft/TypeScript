@@ -33,7 +33,8 @@ var C = (function () {
     function C(details, message) {
         details + message;
     }
-    C.prototype.method = function (details, message) {
+    var proto_1 = C.prototype;
+    proto_1.method = function (details, message) {
         return details + message;
     };
     return C;

@@ -9,13 +9,14 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype["" + ""] = function () { };
-    Object.defineProperty(C.prototype, "" + "", {
+    var proto_1 = C.prototype;
+    proto_1["" + ""] = function () { };
+    Object.defineProperty(proto_1, "" + "", {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "" + "", {
+    Object.defineProperty(proto_1, "" + "", {
         set: function (x) { },
         enumerable: true,
         configurable: true

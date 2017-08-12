@@ -12,8 +12,9 @@ class A {
 var A = (function () {
     function A() {
     }
-    A.prototype.f = function () { };
-    A.prototype.m1 = function (a) {
+    var proto_1 = A.prototype;
+    proto_1.f = function () { };
+    proto_1.m1 = function (a) {
     };
     return A;
 }());

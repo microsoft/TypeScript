@@ -57,7 +57,8 @@ var openClosed5 = <div n='m'>{p > p}</div>;
 var SomeClass = (function () {
     function SomeClass() {
     }
-    SomeClass.prototype.f = function () {
+    var proto_1 = SomeClass.prototype;
+    proto_1.f = function () {
         var _this = this;
         var rewrites1 = <div>{function () { return _this; }}</div>;
         var rewrites2 = <div>{[p].concat(p, [p])}</div>;

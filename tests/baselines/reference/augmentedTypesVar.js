@@ -56,7 +56,8 @@ var x4a = 1; // error
 var x4a = (function () {
     function x4a() {
     }
-    x4a.prototype.foo = function () { };
+    var proto_1 = x4a.prototype;
+    proto_1.foo = function () { };
     return x4a;
 }()); // error
 // var then enum

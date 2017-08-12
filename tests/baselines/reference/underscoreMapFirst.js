@@ -64,7 +64,8 @@ var MyView = (function (_super) {
     function MyView() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    MyView.prototype.getDataSeries = function () {
+    var proto_1 = MyView.prototype;
+    proto_1.getDataSeries = function () {
         var data = this.model.get("data");
         var allSeries = _.pluck(data, "series");
         return _.map(allSeries, _.first);

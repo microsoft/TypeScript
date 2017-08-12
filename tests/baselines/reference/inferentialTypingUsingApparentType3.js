@@ -30,7 +30,8 @@ person.fields.id;
 var CharField = (function () {
     function CharField() {
     }
-    CharField.prototype.clean = function (input) {
+    var proto_1 = CharField.prototype;
+    proto_1.clean = function (input) {
         return "Yup";
     };
     return CharField;
@@ -38,7 +39,8 @@ var CharField = (function () {
 var NumberField = (function () {
     function NumberField() {
     }
-    NumberField.prototype.clean = function (input) {
+    var proto_2 = NumberField.prototype;
+    proto_2.clean = function (input) {
         return 123;
     };
     return NumberField;

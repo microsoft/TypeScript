@@ -25,7 +25,8 @@ exports.DiffEditor = DiffEditor;
 var NavigateAction = (function () {
     function NavigateAction() {
     }
-    NavigateAction.prototype.f = function (editor) {
+    var proto_1 = NavigateAction.prototype;
+    proto_1.f = function (editor) {
     };
     return NavigateAction;
 }());

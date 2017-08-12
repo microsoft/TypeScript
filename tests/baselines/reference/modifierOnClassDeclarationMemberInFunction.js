@@ -14,7 +14,8 @@ function f() {
             this.baz = 1;
         }
         C.foo = function () { };
-        C.prototype.bar = function () { };
+        var proto_1 = C.prototype;
+        proto_1.bar = function () { };
         return C;
     }());
 }

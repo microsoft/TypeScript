@@ -19,7 +19,8 @@ var r = a.groupBy();
 var c = (function () {
     function c() {
     }
-    c.prototype.groupBy = function () {
+    var proto_1 = c.prototype;
+    proto_1.groupBy = function () {
         return null;
     };
     return c;

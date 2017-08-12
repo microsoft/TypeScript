@@ -47,7 +47,8 @@ function foo(a) {
 var c = (function () {
     function c(a) {
     }
-    c.prototype.foo = function (a) {
+    var proto_1 = c.prototype;
+    proto_1.foo = function (a) {
     };
     return c;
 }());

@@ -120,13 +120,14 @@ var Dummy = (function () {
         var unused2 = 22;
         this.greeting = "Dummy Message";
     }
-    Dummy.prototype.greeter = function (person) {
+    var proto_1 = Dummy.prototype;
+    proto_1.greeter = function (person) {
         var unused = 20;
         this.usedPrivateFunction();
     };
-    Dummy.prototype.usedPrivateFunction = function () {
+    proto_1.usedPrivateFunction = function () {
     };
-    Dummy.prototype.unUsedPrivateFunction = function () {
+    proto_1.unUsedPrivateFunction = function () {
     };
     return Dummy;
 }());
@@ -139,10 +140,11 @@ var Validation;
     var LettersOnlyValidator = (function () {
         function LettersOnlyValidator() {
         }
-        LettersOnlyValidator.prototype.isAcceptable = function (s2) {
+        var proto_2 = LettersOnlyValidator.prototype;
+        proto_2.isAcceptable = function (s2) {
             return lettersRegexp.test(s2);
         };
-        LettersOnlyValidator.prototype.unUsedPrivateFunction = function () {
+        proto_2.unUsedPrivateFunction = function () {
         };
         return LettersOnlyValidator;
     }());
@@ -150,7 +152,8 @@ var Validation;
     var ZipCodeValidator = (function () {
         function ZipCodeValidator() {
         }
-        ZipCodeValidator.prototype.isAcceptable = function (s3) {
+        var proto_3 = ZipCodeValidator.prototype;
+        proto_3.isAcceptable = function (s3) {
             return s3.length === 5;
         };
         return ZipCodeValidator;

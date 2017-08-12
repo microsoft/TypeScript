@@ -46,7 +46,8 @@ var Red = (function (_super) {
     function Red() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Red.prototype.shade = function () {
+    var proto_1 = Red.prototype;
+    proto_1.shade = function () {
         var _this = this;
         var getHue = function () { return _this.hue(); };
         return getHue() + " red";
@@ -56,8 +57,9 @@ var Red = (function (_super) {
 var Color = (function () {
     function Color() {
     }
-    Color.prototype.shade = function () { return "some shade"; };
-    Color.prototype.hue = function () { return "some hue"; };
+    var proto_2 = Color.prototype;
+    proto_2.shade = function () { return "some shade"; };
+    proto_2.hue = function () { return "some hue"; };
     return Color;
 }());
 var Blue = (function (_super) {
@@ -65,7 +67,8 @@ var Blue = (function (_super) {
     function Blue() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Blue.prototype.shade = function () {
+    var proto_3 = Blue.prototype;
+    proto_3.shade = function () {
         var _this = this;
         var getHue = function () { return _this.hue(); };
         return getHue() + " blue";

@@ -36,7 +36,8 @@ var Person = (function () {
 var T = (function () {
     function T() {
     }
-    T.prototype.fo = function () {
+    var proto_1 = T.prototype;
+    proto_1.fo = function () {
         var x = this;
     };
     return T;

@@ -49,7 +49,8 @@ var Button = (function (_super) {
     function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Button.prototype.render = function () {
+    var proto_1 = Button.prototype;
+    proto_1.render = function () {
         return <button>Some button</button>;
     };
     return Button;
@@ -76,7 +77,8 @@ var App = (function (_super) {
     function App() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    App.prototype.render = function () {
+    var proto_1 = App.prototype;
+    proto_1.render = function () {
         return <button_1.Button />;
     };
     return App;

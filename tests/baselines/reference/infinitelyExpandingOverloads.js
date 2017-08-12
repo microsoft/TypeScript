@@ -41,7 +41,8 @@ var ViewModel = (function () {
 var Widget = (function () {
     function Widget(viewModelType) {
     }
-    Object.defineProperty(Widget.prototype, "options", {
+    var proto_1 = Widget.prototype;
+    Object.defineProperty(proto_1, "options", {
         get: function () {
             return null;
         },

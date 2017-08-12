@@ -15,7 +15,8 @@ class TestFile {
 var TestFile = (function () {
     function TestFile() {
     }
-    TestFile.prototype.foo = function (message) {
+    var proto_1 = TestFile.prototype;
+    proto_1.foo = function (message) {
         var _this = this;
         return function () {
             /// <summary>Test summary</summary>

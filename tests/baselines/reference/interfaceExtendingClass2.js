@@ -19,8 +19,9 @@ interface I2 extends Foo { // error
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.y = function () { };
-    Object.defineProperty(Foo.prototype, "Z", {
+    var proto_1 = Foo.prototype;
+    proto_1.y = function () { };
+    Object.defineProperty(proto_1, "Z", {
         get: function () {
             return 1;
         },

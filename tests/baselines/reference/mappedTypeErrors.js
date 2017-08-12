@@ -199,7 +199,8 @@ setState(foo, { c: true }); // Error
 var C = (function () {
     function C() {
     }
-    C.prototype.setState = function (props) {
+    var proto_1 = C.prototype;
+    proto_1.setState = function (props) {
         for (var k in props) {
             this.state[k] = props[k];
         }

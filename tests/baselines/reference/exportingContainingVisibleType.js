@@ -17,7 +17,8 @@ define(["require", "exports"], function (require, exports) {
     var Foo = (function () {
         function Foo() {
         }
-        Object.defineProperty(Foo.prototype, "foo", {
+        var proto_1 = Foo.prototype;
+        Object.defineProperty(proto_1, "foo", {
             get: function () {
                 var i;
                 return i; // Should be fine (previous bug report visibility error).

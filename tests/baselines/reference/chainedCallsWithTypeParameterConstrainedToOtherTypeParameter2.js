@@ -46,7 +46,8 @@ var Chain = (function () {
     function Chain(value) {
         this.value = value;
     }
-    Chain.prototype.then = function (cb) {
+    var proto_1 = Chain.prototype;
+    proto_1.then = function (cb) {
         var t;
         var s;
         // Ok to go down the chain, but error to climb up the chain
@@ -64,7 +65,8 @@ var Chain2 = (function () {
     function Chain2(value) {
         this.value = value;
     }
-    Chain2.prototype.then = function (cb) {
+    var proto_2 = Chain2.prototype;
+    proto_2.then = function (cb) {
         var i;
         var t;
         var s;

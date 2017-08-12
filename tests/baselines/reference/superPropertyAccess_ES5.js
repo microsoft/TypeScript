@@ -42,8 +42,9 @@ var __extends = (this && this.__extends) || (function () {
 var MyBase = (function () {
     function MyBase() {
     }
-    MyBase.prototype.getValue = function () { return 1; };
-    Object.defineProperty(MyBase.prototype, "value", {
+    var proto_1 = MyBase.prototype;
+    proto_1.getValue = function () { return 1; };
+    Object.defineProperty(proto_1, "value", {
         get: function () { return 1; },
         enumerable: true,
         configurable: true
@@ -65,7 +66,8 @@ var f3 = d.value;
 var A = (function () {
     function A() {
     }
-    Object.defineProperty(A.prototype, "property", {
+    var proto_2 = A.prototype;
+    Object.defineProperty(proto_2, "property", {
         get: function () { return this._property; },
         set: function (value) { this._property = value; },
         enumerable: true,
@@ -78,7 +80,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(B.prototype, "property", {
+    var proto_3 = B.prototype;
+    Object.defineProperty(proto_3, "property", {
         set: function (value) {
             _super.prototype.property = value + " addition";
         },

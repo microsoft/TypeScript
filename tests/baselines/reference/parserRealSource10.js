@@ -801,16 +801,17 @@ var TypeScript;
         function Token(tokenId) {
             this.tokenId = tokenId;
         }
-        Token.prototype.toString = function () {
+        var proto_1 = Token.prototype;
+        proto_1.toString = function () {
             return "token: " + this.tokenId + " " + this.getText() + " (" + TokenID._map[this.tokenId] + ")";
         };
-        Token.prototype.print = function (line, outfile) {
+        proto_1.print = function (line, outfile) {
             outfile.WriteLine(this.toString() + ",on line" + line);
         };
-        Token.prototype.getText = function () {
+        proto_1.getText = function () {
             return TypeScript.tokenTable[this.tokenId].text;
         };
-        Token.prototype.classification = function () {
+        proto_1.classification = function () {
             if (this.tokenId <= TokenID.LimKeyword) {
                 return TokenClass.Keyword;
             }
@@ -836,10 +837,11 @@ var TypeScript;
             _this.hasEmptyFraction = hasEmptyFraction;
             return _this;
         }
-        NumberLiteralToken.prototype.getText = function () {
+        var proto_2 = NumberLiteralToken.prototype;
+        proto_2.getText = function () {
             return this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString();
         };
-        NumberLiteralToken.prototype.classification = function () {
+        proto_2.classification = function () {
             return TokenClass.Literal;
         };
         return NumberLiteralToken;
@@ -852,10 +854,11 @@ var TypeScript;
             _this.value = value;
             return _this;
         }
-        StringLiteralToken.prototype.getText = function () {
+        var proto_3 = StringLiteralToken.prototype;
+        proto_3.getText = function () {
             return this.value;
         };
-        StringLiteralToken.prototype.classification = function () {
+        proto_3.classification = function () {
             return TokenClass.Literal;
         };
         return StringLiteralToken;
@@ -869,10 +872,11 @@ var TypeScript;
             _this.hasEscapeSequence = hasEscapeSequence;
             return _this;
         }
-        IdentifierToken.prototype.getText = function () {
+        var proto_4 = IdentifierToken.prototype;
+        proto_4.getText = function () {
             return this.value;
         };
-        IdentifierToken.prototype.classification = function () {
+        proto_4.classification = function () {
             return TokenClass.Identifier;
         };
         return IdentifierToken;
@@ -885,10 +889,11 @@ var TypeScript;
             _this.value = value;
             return _this;
         }
-        WhitespaceToken.prototype.getText = function () {
+        var proto_5 = WhitespaceToken.prototype;
+        proto_5.getText = function () {
             return this.value;
         };
-        WhitespaceToken.prototype.classification = function () {
+        proto_5.classification = function () {
             return TokenClass.Whitespace;
         };
         return WhitespaceToken;
@@ -905,10 +910,11 @@ var TypeScript;
             _this.endsLine = endsLine;
             return _this;
         }
-        CommentToken.prototype.getText = function () {
+        var proto_6 = CommentToken.prototype;
+        proto_6.getText = function () {
             return this.value;
         };
-        CommentToken.prototype.classification = function () {
+        proto_6.classification = function () {
             return TokenClass.Comment;
         };
         return CommentToken;
@@ -921,10 +927,11 @@ var TypeScript;
             _this.regex = regex;
             return _this;
         }
-        RegularExpressionLiteralToken.prototype.getText = function () {
+        var proto_7 = RegularExpressionLiteralToken.prototype;
+        proto_7.getText = function () {
             return this.regex.toString();
         };
-        RegularExpressionLiteralToken.prototype.classification = function () {
+        proto_7.classification = function () {
             return TokenClass.Literal;
         };
         return RegularExpressionLiteralToken;

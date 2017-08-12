@@ -7,7 +7,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "Foo", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "Foo", {
         set: function () {
             var a = [];
             for (var _i = 0; _i < arguments.length; _i++) {

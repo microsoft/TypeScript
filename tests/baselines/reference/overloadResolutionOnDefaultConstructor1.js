@@ -9,7 +9,8 @@ class Bar {
 var Bar = (function () {
     function Bar() {
     }
-    Bar.prototype.clone = function () {
+    var proto_1 = Bar.prototype;
+    proto_1.clone = function () {
         return new Bar(0);
     };
     return Bar;

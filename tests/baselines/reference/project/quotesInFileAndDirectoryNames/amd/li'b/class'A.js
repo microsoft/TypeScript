@@ -3,7 +3,8 @@ var test;
     var ClassA = (function () {
         function ClassA() {
         }
-        ClassA.prototype.method = function () { };
+        var proto_1 = ClassA.prototype;
+        proto_1.method = function () { };
         return ClassA;
     }());
     test.ClassA = ClassA;

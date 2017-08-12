@@ -141,7 +141,8 @@ var C = (function () {
         this *= value;
         this += value;
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         this *= value;
         this += value;
     };
@@ -206,7 +207,8 @@ var Derived = (function (_super) {
         _super.prototype. += value;
         return _this;
     }
-    Derived.prototype.foo = function () {
+    var proto_2 = Derived.prototype;
+    proto_2.foo = function () {
         _super.prototype. *= value;
         _super.prototype. += value;
     };

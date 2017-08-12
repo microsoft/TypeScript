@@ -542,7 +542,8 @@ var TypeScript;
             this.goNextSibling = true;
             this.reverseSiblings = false; // visit siblings in reverse execution order
         }
-        AstWalkOptions.prototype.stopWalk = function (stop) {
+        var proto_1 = AstWalkOptions.prototype;
+        proto_1.stopWalk = function (stop) {
             if (stop === void 0) { stop = true; }
             this.goChildren = !stop;
             this.goNextSibling = !stop;
@@ -558,7 +559,8 @@ var TypeScript;
             this.options = options;
             this.state = state;
         }
-        AstWalker.prototype.walk = function (ast, parent) {
+        var proto_2 = AstWalker.prototype;
+        proto_2.walk = function (ast, parent) {
             var preAst = this.pre(ast, parent, this);
             if (preAst === undefined) {
                 preAst = ast;
@@ -592,19 +594,20 @@ var TypeScript;
             this.childrenWalkers = [];
             this.initChildrenWalkers();
         }
-        AstWalkerFactory.prototype.walk = function (ast, pre, post, options, state) {
+        var proto_3 = AstWalkerFactory.prototype;
+        proto_3.walk = function (ast, pre, post, options, state) {
             return this.getWalker(pre, post, options, state).walk(ast, null);
         };
-        AstWalkerFactory.prototype.getWalker = function (pre, post, options, state) {
+        proto_3.getWalker = function (pre, post, options, state) {
             return this.getSlowWalker(pre, post, options, state);
         };
-        AstWalkerFactory.prototype.getSlowWalker = function (pre, post, options, state) {
+        proto_3.getSlowWalker = function (pre, post, options, state) {
             if (!options) {
                 options = new AstWalkOptions();
             }
             return new AstWalker(this.childrenWalkers, pre, post, options, state);
         };
-        AstWalkerFactory.prototype.initChildrenWalkers = function () {
+        proto_3.initChildrenWalkers = function () {
             this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;

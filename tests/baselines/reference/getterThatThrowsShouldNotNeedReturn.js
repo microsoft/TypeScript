@@ -13,14 +13,15 @@ class Greeter {
 var Greeter = (function () {
     function Greeter() {
     }
-    Object.defineProperty(Greeter.prototype, "greet", {
+    var proto_1 = Greeter.prototype;
+    Object.defineProperty(proto_1, "greet", {
         get: function () {
             throw ''; // should not raise an error
         },
         enumerable: true,
         configurable: true
     });
-    Greeter.prototype.greeting = function () {
+    proto_1.greeting = function () {
         throw ''; // should not raise an error
     };
     return Greeter;

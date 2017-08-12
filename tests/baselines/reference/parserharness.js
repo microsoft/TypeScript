@@ -2275,17 +2275,18 @@ var Harness;
     var Logger = (function () {
         function Logger() {
         }
-        Logger.prototype.start = function (fileName, priority) { };
-        Logger.prototype.end = function (fileName) { };
-        Logger.prototype.scenarioStart = function (scenario) { };
-        Logger.prototype.scenarioEnd = function (scenario, error) { };
-        Logger.prototype.testStart = function (test) { };
-        Logger.prototype.pass = function (test) { };
-        Logger.prototype.bug = function (test) { };
-        Logger.prototype.fail = function (test) { };
-        Logger.prototype.error = function (test, error) { };
-        Logger.prototype.comment = function (comment) { };
-        Logger.prototype.verify = function (test, passed, actual, expected, message) { };
+        var proto_1 = Logger.prototype;
+        proto_1.start = function (fileName, priority) { };
+        proto_1.end = function (fileName) { };
+        proto_1.scenarioStart = function (scenario) { };
+        proto_1.scenarioEnd = function (scenario, error) { };
+        proto_1.testStart = function (test) { };
+        proto_1.pass = function (test) { };
+        proto_1.bug = function (test) { };
+        proto_1.fail = function (test) { };
+        proto_1.error = function (test, error) { };
+        proto_1.comment = function (comment) { };
+        proto_1.verify = function (test, passed, actual, expected, message) { };
         return Logger;
     }());
     Harness.Logger = Logger;
@@ -2320,14 +2321,15 @@ var Harness;
             // A list of all our child Runnables
             this.children = [];
         }
-        Runnable.prototype.addChild = function (child) {
+        var proto_2 = Runnable.prototype;
+        proto_2.addChild = function (child) {
             this.children.push(child);
         };
         /** Call function fn, which may take a done function and may possibly execute
          *  asynchronously, calling done when finished. Returns true or false depending
          *  on whether the function was asynchronous or not.
          */
-        Runnable.prototype.call = function (fn, done) {
+        proto_2.call = function (fn, done) {
             var isAsync = true;
             try {
                 if (fn.length === 0) {
@@ -2352,11 +2354,11 @@ var Harness;
                 return false;
             }
         };
-        Runnable.prototype.run = function (done) { };
-        Runnable.prototype.runBlock = function (done) {
+        proto_2.run = function (done) { };
+        proto_2.runBlock = function (done) {
             return this.call(this.block, done);
         };
-        Runnable.prototype.runChild = function (index, done) {
+        proto_2.runChild = function (index, done) {
             var _this = this;
             return this.call((function (done) { return _this.children[index].run(done); }), done);
         };
@@ -2390,11 +2392,12 @@ var Harness;
             _this.block = block;
             return _this;
         }
-        TestCase.prototype.addChild = function (child) {
+        var proto_3 = TestCase.prototype;
+        proto_3.addChild = function (child) {
             throw new Error("Testcases may not be nested inside other testcases");
         };
         /** Run the test case block and fail the test if it raised an error. If no error is raised, the test passes. */
-        TestCase.prototype.run = function (done) {
+        proto_3.run = function (done) {
             var that = this;
             Runnable.currentStack.push(this);
             emitLog('testStart', { desc: this.description });
@@ -2425,8 +2428,9 @@ var Harness;
             _this.block = block;
             return _this;
         }
+        var proto_4 = Scenario.prototype;
         /** Run the block, and if the block doesn't raise an error, run the children. */
-        Scenario.prototype.run = function (done) {
+        proto_4.run = function (done) {
             var that = this;
             Runnable.currentStack.push(this);
             emitLog('scenarioStart', { desc: this.description });
@@ -2451,7 +2455,7 @@ var Harness;
          *  set this scenario to failed. Synchronous tests will run synchronously without
          *  adding stack frames.
          */
-        Scenario.prototype.runChildren = function (done, index) {
+        proto_4.runChildren = function (done, index) {
             if (index === void 0) { index = 0; }
             var that = this;
             var async = false;
@@ -2478,11 +2482,12 @@ var Harness;
         function Run() {
             return _super.call(this, 'Test Run', null) || this;
         }
-        Run.prototype.run = function () {
+        var proto_5 = Run.prototype;
+        proto_5.run = function () {
             emitLog('start');
             this.runChildren();
         };
-        Run.prototype.runChildren = function (index) {
+        proto_5.runChildren = function (index) {
             if (index === void 0) { index = 0; }
             var async = false;
             var that = this;
@@ -2528,11 +2533,12 @@ var Harness;
             function Timer() {
                 this.time = 0;
             }
-            Timer.prototype.start = function () {
+            var proto_6 = Timer.prototype;
+            proto_6.start = function () {
                 this.time = 0;
                 this.startTime = Clock.now();
             };
-            Timer.prototype.end = function () {
+            proto_6.end = function () {
                 // Set time to MS.
                 this.time = (Clock.now() - this.startTime) / Clock.resolution * 1000;
             };
@@ -2543,17 +2549,18 @@ var Harness;
             function Dataset() {
                 this.data = [];
             }
-            Dataset.prototype.add = function (value) {
+            var proto_7 = Dataset.prototype;
+            proto_7.add = function (value) {
                 this.data.push(value);
             };
-            Dataset.prototype.mean = function () {
+            proto_7.mean = function () {
                 var sum = 0;
                 for (var i = 0; i < this.data.length; i++) {
                     sum += this.data[i];
                 }
                 return sum / this.data.length;
             };
-            Dataset.prototype.min = function () {
+            proto_7.min = function () {
                 var min = this.data[0];
                 for (var i = 1; i < this.data.length; i++) {
                     if (this.data[i] < min) {
@@ -2562,7 +2569,7 @@ var Harness;
                 }
                 return min;
             };
-            Dataset.prototype.max = function () {
+            proto_7.max = function () {
                 var max = this.data[0];
                 for (var i = 1; i < this.data.length; i++) {
                     if (this.data[i] > max) {
@@ -2571,7 +2578,7 @@ var Harness;
                 }
                 return max;
             };
-            Dataset.prototype.stdDev = function () {
+            proto_7.stdDev = function () {
                 var sampleMean = this.mean();
                 var sumOfSquares = 0;
                 for (var i = 0; i < this.data.length; i++) {
@@ -2589,12 +2596,13 @@ var Harness;
                 this.description = "";
                 this.results = {};
             }
-            Benchmark.prototype.bench = function (subBench) { };
-            Benchmark.prototype.before = function () { };
-            Benchmark.prototype.beforeEach = function () { };
-            Benchmark.prototype.after = function () { };
-            Benchmark.prototype.afterEach = function () { };
-            Benchmark.prototype.addTimingFor = function (name, timing) {
+            var proto_8 = Benchmark.prototype;
+            proto_8.bench = function (subBench) { };
+            proto_8.before = function () { };
+            proto_8.beforeEach = function () { };
+            proto_8.after = function () { };
+            proto_8.afterEach = function () { };
+            proto_8.addTimingFor = function (name, timing) {
                 this.results[name] = this.results[name] || new Dataset();
                 this.results[name].add(timing);
             };
@@ -2662,20 +2670,21 @@ var Harness;
                 this.lines = [];
                 this.currentLine = "";
             }
-            WriterAggregator.prototype.Write = function (str) {
+            var proto_9 = WriterAggregator.prototype;
+            proto_9.Write = function (str) {
                 this.currentLine += str;
             };
-            WriterAggregator.prototype.WriteLine = function (str) {
+            proto_9.WriteLine = function (str) {
                 this.lines.push(this.currentLine + str);
                 this.currentLine = "";
             };
-            WriterAggregator.prototype.Close = function () {
+            proto_9.Close = function () {
                 if (this.currentLine.length > 0) {
                     this.lines.push(this.currentLine);
                 }
                 this.currentLine = "";
             };
-            WriterAggregator.prototype.reset = function () {
+            proto_9.reset = function () {
                 this.lines = [];
                 this.currentLine = "";
             };
@@ -2687,8 +2696,9 @@ var Harness;
             function EmitterIOHost() {
                 this.fileCollection = {};
             }
+            var proto_10 = EmitterIOHost.prototype;
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
-            EmitterIOHost.prototype.createFile = function (s, useUTF8) {
+            proto_10.createFile = function (s, useUTF8) {
                 if (this.fileCollection[s]) {
                     return this.fileCollection[s];
                 }
@@ -2696,11 +2706,11 @@ var Harness;
                 this.fileCollection[s] = writer;
                 return writer;
             };
-            EmitterIOHost.prototype.directoryExists = function (s) { return false; };
-            EmitterIOHost.prototype.fileExists = function (s) { return typeof this.fileCollection[s] !== 'undefined'; };
-            EmitterIOHost.prototype.resolvePath = function (s) { return s; };
-            EmitterIOHost.prototype.reset = function () { this.fileCollection = {}; };
-            EmitterIOHost.prototype.toArray = function () {
+            proto_10.directoryExists = function (s) { return false; };
+            proto_10.fileExists = function (s) { return typeof this.fileCollection[s] !== 'undefined'; };
+            proto_10.resolvePath = function (s) { return s; };
+            proto_10.reset = function () { this.fileCollection = {}; };
+            proto_10.toArray = function () {
                 var result = [];
                 for (var p in this.fileCollection) {
                     if (this.fileCollection.hasOwnProperty(p)) {
@@ -2770,19 +2780,20 @@ var Harness;
                 this.code = code;
                 this.identifier = identifier;
             }
-            Type.prototype.normalizeToArray = function (arg) {
+            var proto_11 = Type.prototype;
+            proto_11.normalizeToArray = function (arg) {
                 if ((Array.isArray && Array.isArray(arg)) || arg instanceof Array)
                     return arg;
                 return [arg];
             };
-            Type.prototype.compilesOk = function (testCode) {
+            proto_11.compilesOk = function (testCode) {
                 var errors = null;
                 compileString(testCode, 'test.ts', function (compilerResult) {
                     errors = compilerResult.errors;
                 });
                 return errors.length === 0;
             };
-            Type.prototype.isSubtypeOf = function (other) {
+            proto_11.isSubtypeOf = function (other) {
                 var testCode = 'class __test1__ {\n';
                 testCode += '    public test() {\n';
                 testCode += '        ' + other.code + ';\n';
@@ -2812,7 +2823,7 @@ var Harness;
             //    testCode += 'function __test__function__() { if(true) { return __test1__val__ }; return __test2__val__; }';
             //    return this.compilesOk(testCode);
             //}
-            Type.prototype.assertSubtypeOf = function (others) {
+            proto_11.assertSubtypeOf = function (others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     if (!this.isSubtypeOf(others[i])) {
@@ -2820,7 +2831,7 @@ var Harness;
                     }
                 }
             };
-            Type.prototype.assertNotSubtypeOf = function (others) {
+            proto_11.assertNotSubtypeOf = function (others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     if (this.isSubtypeOf(others[i])) {
@@ -2838,7 +2849,7 @@ var Harness;
             //        throw new Error("Expected " + this.type + " to not be identical to " + other.type);
             //    }
             //}
-            Type.prototype.isAssignmentCompatibleWith = function (other) {
+            proto_11.isAssignmentCompatibleWith = function (other) {
                 var testCode = 'module __test1__ {\n';
                 testCode += '    ' + this.code + ';\n';
                 testCode += '    export var __val__ = ' + this.identifier + ';\n';
@@ -2852,7 +2863,7 @@ var Harness;
                 testCode += '__test2__val__ = __test1__val__;';
                 return this.compilesOk(testCode);
             };
-            Type.prototype.assertAssignmentCompatibleWith = function (others) {
+            proto_11.assertAssignmentCompatibleWith = function (others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     var other = others[i];
@@ -2861,7 +2872,7 @@ var Harness;
                     }
                 }
             };
-            Type.prototype.assertNotAssignmentCompatibleWith = function (others) {
+            proto_11.assertNotAssignmentCompatibleWith = function (others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     var other = others[i];
@@ -2870,7 +2881,7 @@ var Harness;
                     }
                 }
             };
-            Type.prototype.assertThisCanBeAssignedTo = function (desc, these, notThese) {
+            proto_11.assertThisCanBeAssignedTo = function (desc, these, notThese) {
                 var _this = this;
                 it(desc + " is assignable to ", function () {
                     _this.assertAssignmentCompatibleWith(these);
@@ -2889,7 +2900,8 @@ var Harness;
                 this.string = this.get('var x : string', 'x');
                 this.boolean = this.get('var x : boolean', 'x');
             }
-            TypeFactory.prototype.get = function (code, target) {
+            var proto_12 = TypeFactory.prototype;
+            proto_12.get = function (code, target) {
                 var targetIdentifier = '';
                 var targetPosition = -1;
                 if (typeof target === "string") {
@@ -2965,7 +2977,7 @@ var Harness;
                     return matchingIdentifiers[0];
                 }
             };
-            TypeFactory.prototype.getTypeInfoName = function (ast) {
+            proto_12.getTypeInfoName = function (ast) {
                 var name = '';
                 switch (ast.nodeType) {
                     case TypeScript.NodeType.Name: // Type Name?
@@ -3014,7 +3026,7 @@ var Harness;
                 }
                 return name;
             };
-            TypeFactory.prototype.isOfType = function (expr, expectedType) {
+            proto_12.isOfType = function (expr, expectedType) {
                 var actualType = this.get('var _v_a_r_ = ' + expr, '_v_a_r_');
                 it('Expression "' + expr + '" is of type "' + expectedType + '"', function () {
                     assert.equal(actualType.type, expectedType);
@@ -3109,7 +3121,8 @@ var Harness;
                     }
                 }
             }
-            CompilerResult.prototype.isErrorAt = function (line, column, message) {
+            var proto_13 = CompilerResult.prototype;
+            proto_13.isErrorAt = function (line, column, message) {
                 for (var i = 0; i < this.errors.length; i++) {
                     if (this.errors[i].line === line && this.errors[i].column === column && this.errors[i].message === message)
                         return true;
@@ -3127,7 +3140,8 @@ var Harness;
                 this.column = column;
                 this.message = message;
             }
-            CompilerError.prototype.toString = function () {
+            var proto_14 = CompilerError.prototype;
+            proto_14.toString = function () {
                 return this.file + "(" + this.line + "," + this.column + "): " + this.message;
             };
             return CompilerError;
@@ -3419,13 +3433,14 @@ var Harness;
             this.editRanges = [];
             this.version = 1;
         }
-        ScriptInfo.prototype.updateContent = function (content, isResident) {
+        var proto_15 = ScriptInfo.prototype;
+        proto_15.updateContent = function (content, isResident) {
             this.editRanges = [];
             this.content = content;
             this.isResident = isResident;
             this.version++;
         };
-        ScriptInfo.prototype.editContent = function (minChar, limChar, newText) {
+        proto_15.editContent = function (minChar, limChar, newText) {
             // Apply edits
             var prefix = this.content.substring(0, minChar);
             var middle = newText;
@@ -3442,7 +3457,7 @@ var Harness;
             // Update version #
             this.version++;
         };
-        ScriptInfo.prototype.getEditRangeSinceVersion = function (version) {
+        proto_15.getEditRangeSinceVersion = function (version) {
             if (this.version == version) {
                 // No edits!
                 return null;
@@ -3467,20 +3482,21 @@ var Harness;
             this.scripts = [];
             this.maxScriptVersions = 100;
         }
-        TypeScriptLS.prototype.addDefaultLibrary = function () {
+        var proto_16 = TypeScriptLS.prototype;
+        proto_16.addDefaultLibrary = function () {
             this.addScript("lib.d.ts", Harness.Compiler.libText, true);
         };
-        TypeScriptLS.prototype.addFile = function (name, isResident) {
+        proto_16.addFile = function (name, isResident) {
             if (isResident === void 0) { isResident = false; }
             var code = readFile(name);
             this.addScript(name, code, isResident);
         };
-        TypeScriptLS.prototype.addScript = function (name, content, isResident) {
+        proto_16.addScript = function (name, content, isResident) {
             if (isResident === void 0) { isResident = false; }
             var script = new ScriptInfo(name, content, isResident, this.maxScriptVersions);
             this.scripts.push(script);
         };
-        TypeScriptLS.prototype.updateScript = function (name, content, isResident) {
+        proto_16.updateScript = function (name, content, isResident) {
             if (isResident === void 0) { isResident = false; }
             for (var i = 0; i < this.scripts.length; i++) {
                 if (this.scripts[i].name == name) {
@@ -3490,7 +3506,7 @@ var Harness;
             }
             this.addScript(name, content, isResident);
         };
-        TypeScriptLS.prototype.editScript = function (name, minChar, limChar, newText) {
+        proto_16.editScript = function (name, minChar, limChar, newText) {
             for (var i = 0; i < this.scripts.length; i++) {
                 if (this.scripts[i].name == name) {
                     this.scripts[i].editContent(minChar, limChar, newText);
@@ -3499,46 +3515,46 @@ var Harness;
             }
             throw new Error("No script with name '" + name + "'");
         };
-        TypeScriptLS.prototype.getScriptContent = function (scriptIndex) {
+        proto_16.getScriptContent = function (scriptIndex) {
             return this.scripts[scriptIndex].content;
         };
         //////////////////////////////////////////////////////////////////////
         // ILogger implementation
         //
-        TypeScriptLS.prototype.information = function () { return false; };
-        TypeScriptLS.prototype.debug = function () { return true; };
-        TypeScriptLS.prototype.warning = function () { return true; };
-        TypeScriptLS.prototype.error = function () { return true; };
-        TypeScriptLS.prototype.fatal = function () { return true; };
-        TypeScriptLS.prototype.log = function (s) {
+        proto_16.information = function () { return false; };
+        proto_16.debug = function () { return true; };
+        proto_16.warning = function () { return true; };
+        proto_16.error = function () { return true; };
+        proto_16.fatal = function () { return true; };
+        proto_16.log = function (s) {
             // For debugging...
             //IO.printLine("TypeScriptLS:" + s);
         };
         //////////////////////////////////////////////////////////////////////
         // ILanguageServiceShimHost implementation
         //
-        TypeScriptLS.prototype.getCompilationSettings = function () {
+        proto_16.getCompilationSettings = function () {
             return ""; // i.e. default settings
         };
-        TypeScriptLS.prototype.getScriptCount = function () {
+        proto_16.getScriptCount = function () {
             return this.scripts.length;
         };
-        TypeScriptLS.prototype.getScriptSourceText = function (scriptIndex, start, end) {
+        proto_16.getScriptSourceText = function (scriptIndex, start, end) {
             return this.scripts[scriptIndex].content.substring(start, end);
         };
-        TypeScriptLS.prototype.getScriptSourceLength = function (scriptIndex) {
+        proto_16.getScriptSourceLength = function (scriptIndex) {
             return this.scripts[scriptIndex].content.length;
         };
-        TypeScriptLS.prototype.getScriptId = function (scriptIndex) {
+        proto_16.getScriptId = function (scriptIndex) {
             return this.scripts[scriptIndex].name;
         };
-        TypeScriptLS.prototype.getScriptIsResident = function (scriptIndex) {
+        proto_16.getScriptIsResident = function (scriptIndex) {
             return this.scripts[scriptIndex].isResident;
         };
-        TypeScriptLS.prototype.getScriptVersion = function (scriptIndex) {
+        proto_16.getScriptVersion = function (scriptIndex) {
             return this.scripts[scriptIndex].version;
         };
-        TypeScriptLS.prototype.getScriptEditRangeSinceVersion = function (scriptIndex, scriptVersion) {
+        proto_16.getScriptEditRangeSinceVersion = function (scriptIndex, scriptVersion) {
             var range = this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion);
             var result = (range.minChar + "," + range.limChar + "," + range.delta);
             return result;
@@ -3546,14 +3562,14 @@ var Harness;
         /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
          */
-        TypeScriptLS.prototype.getLanguageService = function () {
+        proto_16.getLanguageService = function () {
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
             ls.refresh(true);
             this.ls = ls;
             return ls;
         };
         /** Parse file given its source text */
-        TypeScriptLS.prototype.parseSourceText = function (fileName, sourceText) {
+        proto_16.parseSourceText = function (fileName, sourceText) {
             var parser = new TypeScript.Parser();
             parser.setErrorRecovery(null);
             parser.errorCallback = function (a, b, c, d) { };
@@ -3561,7 +3577,7 @@ var Harness;
             return script;
         };
         /** Parse a file on disk given its filename */
-        TypeScriptLS.prototype.parseFile = function (fileName) {
+        proto_16.parseFile = function (fileName) {
             var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName));
             return this.parseSourceText(fileName, sourceText);
         };
@@ -3569,7 +3585,7 @@ var Harness;
          * @param line 1 based index
          * @param col 1 based index
         */
-        TypeScriptLS.prototype.lineColToPosition = function (fileName, line, col) {
+        proto_16.lineColToPosition = function (fileName, line, col) {
             var script = this.ls.languageService.getScriptAST(fileName);
             assert.notNull(script);
             assert.is(line >= 1);
@@ -3581,7 +3597,7 @@ var Harness;
          * @param line 0 based index
          * @param col 0 based index
         */
-        TypeScriptLS.prototype.positionToZeroBasedLineCol = function (fileName, position) {
+        proto_16.positionToZeroBasedLineCol = function (fileName, position) {
             var script = this.ls.languageService.getScriptAST(fileName);
             assert.notNull(script);
             var result = TypeScript.getZeroBasedLineColumnFromPosition(script, position);
@@ -3590,7 +3606,7 @@ var Harness;
             return result;
         };
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
-        TypeScriptLS.prototype.checkEdits = function (sourceFileName, baselineFileName, edits) {
+        proto_16.checkEdits = function (sourceFileName, baselineFileName, edits) {
             var script = readFile(sourceFileName);
             var formattedScript = this.applyEdits(script, edits);
             var baseline = readFile(baselineFileName);
@@ -3598,7 +3614,7 @@ var Harness;
             assert.equal(formattedScript, baseline);
         };
         /** Apply an array of text edits to a string, and return the resulting string. */
-        TypeScriptLS.prototype.applyEdits = function (content, edits) {
+        proto_16.applyEdits = function (content, edits) {
             var result = content;
             edits = this.normalizeEdits(edits);
             for (var i = edits.length - 1; i >= 0; i--) {
@@ -3611,7 +3627,7 @@ var Harness;
             return result;
         };
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
-        TypeScriptLS.prototype.normalizeEdits = function (edits) {
+        proto_16.normalizeEdits = function (edits) {
             var result = [];
             function mapEdits(edits) {
                 var result = [];
@@ -3657,7 +3673,7 @@ var Harness;
             }
             return result;
         };
-        TypeScriptLS.prototype.getHostSettings = function () {
+        proto_16.getHostSettings = function () {
             return JSON.stringify({ usePullLanguageService: Harness.usePull });
         };
         return TypeScriptLS;

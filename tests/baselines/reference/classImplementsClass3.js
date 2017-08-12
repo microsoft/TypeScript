@@ -28,13 +28,15 @@ var __extends = (this && this.__extends) || (function () {
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () { return 1; };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { return 1; };
     return A;
 }());
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
+    var proto_2 = C.prototype;
+    proto_2.foo = function () {
         return 1;
     };
     return C;

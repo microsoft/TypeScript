@@ -18,7 +18,8 @@ class Comment {
 var Comment = (function () {
     function Comment() {
     }
-    Comment.prototype.getDocCommentText = function () {
+    var proto_1 = Comment.prototype;
+    proto_1.getDocCommentText = function () {
     };
     Comment.getDocCommentText = function (comments) {
         comments[0].getDocCommentText();

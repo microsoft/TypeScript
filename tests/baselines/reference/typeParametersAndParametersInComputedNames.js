@@ -15,7 +15,8 @@ function foo(a) {
 var A = (function () {
     function A() {
     }
-    A.prototype[foo(a)] = function (a) {
+    var proto_1 = A.prototype;
+    proto_1[foo(a)] = function (a) {
     };
     return A;
 }());

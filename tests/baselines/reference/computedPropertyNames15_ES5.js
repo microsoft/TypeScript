@@ -15,8 +15,9 @@ var p3;
 var C = (function () {
     function C() {
     }
-    C.prototype[p1] = function () { };
-    C.prototype[p2] = function () { };
-    C.prototype[p3] = function () { };
+    var proto_1 = C.prototype;
+    proto_1[p1] = function () { };
+    proto_1[p2] = function () { };
+    proto_1[p3] = function () { };
     return C;
 }());

@@ -11,7 +11,8 @@ class B {
 var A = (function () {
     function A() {
     }
-    Object.defineProperty(A.prototype, "testProp", {
+    var proto_1 = A.prototype;
+    Object.defineProperty(proto_1, "testProp", {
         get: function () { return this.testProp; },
         enumerable: true,
         configurable: true
@@ -21,7 +22,8 @@ var A = (function () {
 var B = (function () {
     function B() {
     }
-    Object.defineProperty(B.prototype, "testProp", {
+    var proto_2 = B.prototype;
+    Object.defineProperty(proto_2, "testProp", {
         set: function (value) { this.testProp = value; },
         enumerable: true,
         configurable: true

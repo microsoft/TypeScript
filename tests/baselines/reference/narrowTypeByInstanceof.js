@@ -29,7 +29,8 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 var Match = (function () {
     function Match() {
     }
-    Match.prototype.range = function () {
+    var proto_1 = Match.prototype;
+    proto_1.range = function () {
         return undefined;
     };
     return Match;
@@ -37,7 +38,8 @@ var Match = (function () {
 var FileMatch = (function () {
     function FileMatch() {
     }
-    FileMatch.prototype.resource = function () {
+    var proto_2 = FileMatch.prototype;
+    proto_2.resource = function () {
         return undefined;
     };
     return FileMatch;

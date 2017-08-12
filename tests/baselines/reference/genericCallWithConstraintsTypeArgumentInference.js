@@ -164,30 +164,31 @@ var C = (function () {
         this.t = t;
         this.u = u;
     }
-    C.prototype.foo = function (t, u) {
+    var proto_1 = C.prototype;
+    proto_1.foo = function (t, u) {
         return t;
     };
-    C.prototype.foo2 = function (t, u) {
+    proto_1.foo2 = function (t, u) {
         return u;
     };
-    C.prototype.foo3 = function (t, u) {
+    proto_1.foo3 = function (t, u) {
         return t;
     };
-    C.prototype.foo4 = function (t, u) {
+    proto_1.foo4 = function (t, u) {
         return t;
     };
-    C.prototype.foo5 = function (t, u) {
+    proto_1.foo5 = function (t, u) {
         return t;
     };
-    C.prototype.foo6 = function () {
+    proto_1.foo6 = function () {
         var x;
         return x;
     };
-    C.prototype.foo7 = function (u) {
+    proto_1.foo7 = function (u) {
         var x;
         return x;
     };
-    C.prototype.foo8 = function () {
+    proto_1.foo8 = function () {
         var x;
         return x;
     };

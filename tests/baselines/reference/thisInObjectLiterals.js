@@ -23,7 +23,8 @@ var obj: { f: () => any; };
 var MyClass = (function () {
     function MyClass() {
     }
-    MyClass.prototype.fn = function () {
+    var proto_1 = MyClass.prototype;
+    proto_1.fn = function () {
         //type of 'this' in an object literal is the containing scope's this
         var t = { x: this, y: this.t };
         var t;

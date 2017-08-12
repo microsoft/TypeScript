@@ -24,13 +24,14 @@ var Vec2_T = (function () {
         this.x = x;
         this.y = y;
     }
-    Vec2_T.prototype.fmap = function (f) {
+    var proto_1 = Vec2_T.prototype;
+    proto_1.fmap = function (f) {
         var x = f(this.x);
         var y = f(this.y);
         var retval = new Vec2_T(x, y);
         return retval;
     };
-    Vec2_T.prototype.apply = function (f) {
+    proto_1.apply = function (f) {
         var x = f.x(this.x);
         var y = f.y(this.y);
         var retval = new Vec2_T(x, y);

@@ -164,7 +164,8 @@ var Person = (function () {
     function Person(name) {
         this.name = name;
     }
-    Person.prototype.myProtectedFunction = function () {
+    var proto_1 = Person.prototype;
+    proto_1.myProtectedFunction = function () {
         // do something
     };
     return Person;
@@ -179,7 +180,8 @@ function PersonMixin(Base) {
             }
             return _super.apply(this, args) || this;
         }
-        class_4.prototype.myProtectedFunction = function () {
+        var proto_2 = class_4.prototype;
+        proto_2.myProtectedFunction = function () {
             _super.prototype.myProtectedFunction.call(this);
             // do more things
         };
@@ -191,7 +193,8 @@ var Customer = (function (_super) {
     function Customer() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Customer.prototype.f = function () {
+    var proto_3 = Customer.prototype;
+    proto_3.f = function () {
     };
     return Customer;
 }(PersonMixin(Person)));

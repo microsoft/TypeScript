@@ -72,13 +72,14 @@ var Greeter = (function () {
         }
         this.greeting = greeting;
     }
-    Greeter.prototype.greet = function () {
+    var proto_1 = Greeter.prototype;
+    proto_1.greet = function () {
         return "<h1>" + this.greeting + "</h1>";
     };
-    Greeter.prototype.fn = function (x) {
+    proto_1.fn = function (x) {
         return this.greeting;
     };
-    Object.defineProperty(Greeter.prototype, "greetings", {
+    Object.defineProperty(proto_1, "greetings", {
         get: function () {
             return this.greeting;
         },

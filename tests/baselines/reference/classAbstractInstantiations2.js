@@ -70,7 +70,8 @@ var A = (function () {
 var B = (function () {
     function B() {
     }
-    B.prototype.foo = function () { return this.bar(); };
+    var proto_1 = B.prototype;
+    proto_1.foo = function () { return this.bar(); };
     return B;
 }());
 new B; // error
@@ -103,7 +104,8 @@ var E = (function (_super) {
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    E.prototype.bar = function () { return 1; };
+    var proto_2 = E.prototype;
+    proto_2.bar = function () { return 1; };
     return E;
 }(B));
 var F = (function (_super) {
@@ -111,7 +113,8 @@ var F = (function (_super) {
     function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    F.prototype.bar = function () { return 2; };
+    var proto_3 = F.prototype;
+    proto_3.bar = function () { return 2; };
     return F;
 }(B));
 var G = (function () {

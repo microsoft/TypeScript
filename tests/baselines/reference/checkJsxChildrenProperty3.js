@@ -58,7 +58,8 @@ var FetchUser = (function (_super) {
     function FetchUser() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    FetchUser.prototype.render = function () {
+    var proto_1 = FetchUser.prototype;
+    proto_1.render = function () {
         return this.state
             ? this.props.children(this.state.result)
             : null;

@@ -99,7 +99,8 @@ var obj = {
 var A = (function () {
     function A() {
     }
-    A.prototype.method = function () { };
+    var proto_1 = A.prototype;
+    proto_1.method = function () { };
     return A;
 }());
 var B = (function (_super) {
@@ -107,7 +108,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.f = function () {
+    var proto_2 = B.prototype;
+    proto_2.f = function () {
         var _this = this;
         var obj = {
             __proto__: {

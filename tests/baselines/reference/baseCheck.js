@@ -57,7 +57,8 @@ var ELocVar = (function (_super) {
     function ELocVar(x) {
         return _super.call(this, 0, loc) || this;
     }
-    ELocVar.prototype.m = function () {
+    var proto_1 = ELocVar.prototype;
+    proto_1.m = function () {
         var loc = 10;
     };
     return ELocVar;

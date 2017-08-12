@@ -29,7 +29,8 @@ i = o; // ok
 var C = (function () {
     function C() {
     }
-    C.prototype.toString = function () { };
+    var proto_1 = C.prototype;
+    proto_1.toString = function () { };
     return C;
 }());
 var c;

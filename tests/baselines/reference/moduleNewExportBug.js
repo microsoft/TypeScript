@@ -19,7 +19,8 @@ var mod1;
     var C = (function () {
         function C() {
         }
-        C.prototype.moo = function () { };
+        var proto_1 = C.prototype;
+        proto_1.moo = function () { };
         return C;
     }());
 })(mod1 || (mod1 = {}));

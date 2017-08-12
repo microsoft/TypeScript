@@ -15,7 +15,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "bar", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "bar", {
         /**
          * Getter.
          */

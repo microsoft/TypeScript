@@ -11,7 +11,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function () {
+    var proto_1 = C.prototype;
+    proto_1.method = function () {
         var _this = this;
         function other() { }
         var fn = function () { return __awaiter(_this, arguments, void 0, function () { return __generator(this, function (_a) {

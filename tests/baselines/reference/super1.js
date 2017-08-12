@@ -81,7 +81,8 @@ var __extends = (this && this.__extends) || (function () {
 var Base1 = (function () {
     function Base1() {
     }
-    Base1.prototype.foo = function () {
+    var proto_1 = Base1.prototype;
+    proto_1.foo = function () {
         return "base";
     };
     return Base1;
@@ -91,7 +92,8 @@ var Sub1 = (function (_super) {
     function Sub1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Sub1.prototype.bar = function () {
+    var proto_2 = Sub1.prototype;
+    proto_2.bar = function () {
         return "base";
     };
     return Sub1;
@@ -101,7 +103,8 @@ var SubSub1 = (function (_super) {
     function SubSub1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SubSub1.prototype.bar = function () {
+    var proto_3 = SubSub1.prototype;
+    proto_3.bar = function () {
         return _super.prototype["super"].foo;
     };
     return SubSub1;
@@ -110,7 +113,8 @@ var SubSub1 = (function (_super) {
 var Base2 = (function () {
     function Base2() {
     }
-    Base2.prototype.foo = function () {
+    var proto_4 = Base2.prototype;
+    proto_4.foo = function () {
         return "base";
     };
     return Base2;
@@ -120,7 +124,8 @@ var SubE2 = (function (_super) {
     function SubE2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SubE2.prototype.bar = function () {
+    var proto_5 = SubE2.prototype;
+    proto_5.bar = function () {
         return _super.prototype.prototype.foo = null;
     };
     return SubE2;
@@ -129,7 +134,8 @@ var SubE2 = (function (_super) {
 var Base3 = (function () {
     function Base3() {
     }
-    Base3.prototype.foo = function () {
+    var proto_6 = Base3.prototype;
+    proto_6.foo = function () {
         return "base";
     };
     return Base3;
@@ -139,7 +145,8 @@ var SubE3 = (function (_super) {
     function SubE3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SubE3.prototype.bar = function () {
+    var proto_7 = SubE3.prototype;
+    proto_7.bar = function () {
         return _super.prototype.bar.call(this);
     };
     return SubE3;
@@ -150,7 +157,8 @@ var Base4;
     var Sub4 = (function () {
         function Sub4() {
         }
-        Sub4.prototype.x = function () {
+        var proto_8 = Sub4.prototype;
+        proto_8.x = function () {
             return "hello";
         };
         return Sub4;
@@ -160,7 +168,8 @@ var Base4;
         function SubSub4() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        SubSub4.prototype.x = function () {
+        var proto_9 = SubSub4.prototype;
+        proto_9.x = function () {
             return _super.prototype.x.call(this);
         };
         return SubSub4;
@@ -169,7 +178,8 @@ var Base4;
     var Sub4E = (function () {
         function Sub4E() {
         }
-        Sub4E.prototype.x = function () {
+        var proto_10 = Sub4E.prototype;
+        proto_10.x = function () {
             return _super.prototype.x.call(this);
         };
         return Sub4E;

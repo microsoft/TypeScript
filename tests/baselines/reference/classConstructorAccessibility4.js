@@ -43,11 +43,13 @@ var __extends = (this && this.__extends) || (function () {
 var A = (function () {
     function A() {
     }
-    A.prototype.method = function () {
+    var proto_1 = A.prototype;
+    proto_1.method = function () {
         var B = (function () {
             function B() {
             }
-            B.prototype.method = function () {
+            var proto_2 = B.prototype;
+            proto_2.method = function () {
                 new A(); // OK
             };
             return B;
@@ -65,11 +67,13 @@ var A = (function () {
 var D = (function () {
     function D() {
     }
-    D.prototype.method = function () {
+    var proto_3 = D.prototype;
+    proto_3.method = function () {
         var E = (function () {
             function E() {
             }
-            E.prototype.method = function () {
+            var proto_4 = E.prototype;
+            proto_4.method = function () {
                 new D(); // OK
             };
             return E;

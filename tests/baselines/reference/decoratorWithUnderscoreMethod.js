@@ -26,7 +26,8 @@ function dec() {
 var A = (function () {
     function A() {
     }
-    A.prototype.__foo = function (bar) {
+    var proto_1 = A.prototype;
+    proto_1.__foo = function (bar) {
         // do something with bar
     };
     __decorate([

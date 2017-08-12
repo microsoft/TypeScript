@@ -202,20 +202,21 @@ var i3_i;
 var c = (function () {
     function c() {
     }
-    c.prototype.prop1 = function (aorb) {
+    var proto_1 = c.prototype;
+    proto_1.prop1 = function (aorb) {
         return 10;
     };
-    c.prototype.prop2 = function (aorb) {
+    proto_1.prop2 = function (aorb) {
         return 10;
     };
-    c.prototype.prop3 = function (aorb) {
+    proto_1.prop3 = function (aorb) {
         return 10;
     };
-    c.prototype.prop4 = function (aorb) {
+    proto_1.prop4 = function (aorb) {
         return 10;
     };
     /** Prop5 implementaion*/
-    c.prototype.prop5 = function (aorb) {
+    proto_1.prop5 = function (aorb) {
         return 10;
     };
     return c;

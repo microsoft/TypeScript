@@ -191,19 +191,20 @@ var _this = this;
 var C = (function () {
     function C() {
     }
-    C.prototype.explicitThis = function (m) {
+    var proto_1 = C.prototype;
+    proto_1.explicitThis = function (m) {
         return this.n + m;
     };
-    C.prototype.implicitThis = function (m) {
+    proto_1.implicitThis = function (m) {
         return this.n + m;
     };
-    C.prototype.explicitC = function (m) {
+    proto_1.explicitC = function (m) {
         return this.n + m;
     };
-    C.prototype.explicitProperty = function (m) {
+    proto_1.explicitProperty = function (m) {
         return this.n + m;
     };
-    C.prototype.explicitVoid = function (m) {
+    proto_1.explicitVoid = function (m) {
         return this.n + m; // 'n' doesn't exist on type 'void'.
     };
     return C;
@@ -211,10 +212,11 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    D.prototype.explicitThis = function (m) {
+    var proto_2 = D.prototype;
+    proto_2.explicitThis = function (m) {
         return this.x + m;
     };
-    D.prototype.explicitD = function (m) {
+    proto_2.explicitD = function (m) {
         return this.x + m;
     };
     return D;
@@ -293,8 +295,9 @@ c.explicitVoid = d.explicitThis;
 var Base1 = (function () {
     function Base1() {
     }
-    Base1.prototype.polymorphic = function () { return this.x; };
-    Base1.prototype.explicit = function () { return this.x; };
+    var proto_3 = Base1.prototype;
+    proto_3.polymorphic = function () { return this.x; };
+    proto_3.explicit = function () { return this.x; };
     Base1.explicitStatic = function () { return this.x; };
     return Base1;
 }());
@@ -308,8 +311,9 @@ var Derived1 = (function (_super) {
 var Base2 = (function () {
     function Base2() {
     }
-    Base2.prototype.polymorphic = function () { return this.y; };
-    Base2.prototype.explicit = function () { return this.x; };
+    var proto_4 = Base2.prototype;
+    proto_4.polymorphic = function () { return this.y; };
+    proto_4.explicit = function () { return this.x; };
     return Base2;
 }());
 var Derived2 = (function (_super) {

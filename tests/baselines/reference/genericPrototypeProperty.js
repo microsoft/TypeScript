@@ -13,7 +13,8 @@ var r3 = r.foo(null);
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) { return null; };
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) { return null; };
     return C;
 }());
 var r = C.prototype;

@@ -37,7 +37,8 @@ var __extends = (this && this.__extends) || (function () {
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () { };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { };
     return A;
 }());
 var B = (function (_super) {
@@ -50,7 +51,8 @@ var B = (function (_super) {
 var AA = (function () {
     function AA() {
     }
-    AA.prototype.foo = function () { };
+    var proto_2 = AA.prototype;
+    proto_2.foo = function () { };
     return AA;
 }());
 var BB = (function (_super) {
@@ -58,7 +60,8 @@ var BB = (function (_super) {
     function BB() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    BB.prototype.bar = function () { };
+    var proto_3 = BB.prototype;
+    proto_3.bar = function () { };
     return BB;
 }(AA));
 var CC = (function (_super) {
@@ -73,6 +76,7 @@ var DD = (function (_super) {
     function DD() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    DD.prototype.foo = function () { };
+    var proto_4 = DD.prototype;
+    proto_4.foo = function () { };
     return DD;
 }(BB));

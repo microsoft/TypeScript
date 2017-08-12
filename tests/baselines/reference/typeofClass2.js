@@ -45,7 +45,8 @@ var D = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     D.baz = function (x) { };
-    D.prototype.foo = function () { };
+    var proto_1 = D.prototype;
+    proto_1.foo = function () { };
     return D;
 }(C));
 var d;

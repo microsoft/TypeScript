@@ -32,14 +32,15 @@ var C = (function () {
         var _newTarget = this.constructor;
         this.f = function () { return _newTarget; };
     }
-    C.prototype[_newTarget] = function () { };
-    C.prototype.c = function () { var _newTarget = void 0; return _newTarget; };
-    Object.defineProperty(C.prototype, "d", {
+    var proto_1 = C.prototype;
+    proto_1[_newTarget] = function () { };
+    proto_1.c = function () { var _newTarget = void 0; return _newTarget; };
+    Object.defineProperty(proto_1, "d", {
         get: function () { var _newTarget = void 0; return _newTarget; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "e", {
+    Object.defineProperty(proto_1, "e", {
         set: function (_) { var _newTarget = void 0; _ = _newTarget; },
         enumerable: true,
         configurable: true

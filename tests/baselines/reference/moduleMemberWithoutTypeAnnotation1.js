@@ -54,7 +54,8 @@ var TypeScript;
         var SyntaxCursor = (function () {
             function SyntaxCursor() {
             }
-            SyntaxCursor.prototype.currentNode = function () {
+            var proto_1 = SyntaxCursor.prototype;
+            proto_1.currentNode = function () {
                 return null;
             };
             return SyntaxCursor;
@@ -67,7 +68,8 @@ var TypeScript;
     var PositionedElement = (function () {
         function PositionedElement() {
         }
-        PositionedElement.prototype.childIndex = function (child) {
+        var proto_2 = PositionedElement.prototype;
+        proto_2.childIndex = function (child) {
             return TypeScript.Syntax.childIndex();
         };
         return PositionedElement;
@@ -84,12 +86,13 @@ var TypeScript;
     var SyntaxNode = (function () {
         function SyntaxNode() {
         }
-        SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {
+        var proto_3 = SyntaxNode.prototype;
+        proto_3.findToken = function (position, includeSkippedTokens) {
             if (includeSkippedTokens === void 0) { includeSkippedTokens = false; }
             var positionedToken = this.findTokenInternal(null, position, 0);
             return null;
         };
-        SyntaxNode.prototype.findTokenInternal = function (x, y, z) {
+        proto_3.findTokenInternal = function (x, y, z) {
             return null;
         };
         return SyntaxNode;
@@ -104,7 +107,8 @@ var TypeScript;
         var VariableWidthTokenWithTrailingTrivia = (function () {
             function VariableWidthTokenWithTrailingTrivia() {
             }
-            VariableWidthTokenWithTrailingTrivia.prototype.findTokenInternal = function (parent, position, fullStart) {
+            var proto_4 = VariableWidthTokenWithTrailingTrivia.prototype;
+            proto_4.findTokenInternal = function (parent, position, fullStart) {
                 return new TypeScript.PositionedToken(parent, this, fullStart);
             };
             return VariableWidthTokenWithTrailingTrivia;

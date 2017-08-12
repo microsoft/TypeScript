@@ -52,9 +52,10 @@ class Test5<T> {
 var Test1 = (function () {
     function Test1() {
     }
-    Test1.prototype.initializeInternal = function () {
+    var proto_1 = Test1.prototype;
+    proto_1.initializeInternal = function () {
     };
-    Test1.prototype.test = function () {
+    proto_1.test = function () {
         var x = new Test1();
         x.initializeInternal();
     };
@@ -64,7 +65,8 @@ var Test2 = (function () {
     function Test2() {
         this.p = 0;
     }
-    Test2.prototype.test = function () {
+    var proto_2 = Test2.prototype;
+    proto_2.test = function () {
         var x = new Test2();
         x.p;
     };
@@ -73,14 +75,15 @@ var Test2 = (function () {
 var Test3 = (function () {
     function Test3() {
     }
-    Object.defineProperty(Test3.prototype, "x", {
+    var proto_3 = Test3.prototype;
+    Object.defineProperty(proto_3, "x", {
         get: function () {
             return 0;
         },
         enumerable: true,
         configurable: true
     });
-    Test3.prototype.test = function () {
+    proto_3.test = function () {
         var x = new Test3();
         x.x;
     };
@@ -89,14 +92,15 @@ var Test3 = (function () {
 var Test4 = (function () {
     function Test4() {
     }
-    Object.defineProperty(Test4.prototype, "x", {
+    var proto_4 = Test4.prototype;
+    Object.defineProperty(proto_4, "x", {
         set: function (v) {
             v;
         },
         enumerable: true,
         configurable: true
     });
-    Test4.prototype.test = function () {
+    proto_4.test = function () {
         var x = new Test4();
         x.x;
     };
@@ -105,7 +109,8 @@ var Test4 = (function () {
 var Test5 = (function () {
     function Test5() {
     }
-    Test5.prototype.test = function () {
+    var proto_5 = Test5.prototype;
+    proto_5.test = function () {
         var x = new Test5();
         x.p;
     };

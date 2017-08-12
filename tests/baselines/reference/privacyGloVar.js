@@ -86,7 +86,8 @@ var m1;
     var C1_public = (function () {
         function C1_public() {
         }
-        C1_public.prototype.f1 = function () {
+        var proto_1 = C1_public.prototype;
+        proto_1.f1 = function () {
         };
         return C1_public;
     }());
@@ -137,7 +138,8 @@ var m1;
 var glo_C1_public = (function () {
     function glo_C1_public() {
     }
-    glo_C1_public.prototype.f1 = function () {
+    var proto_2 = glo_C1_public.prototype;
+    proto_2.f1 = function () {
     };
     return glo_C1_public;
 }());

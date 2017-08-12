@@ -25,7 +25,8 @@ var NonAbstractClass = (function () {
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.nonAbstractFunction = function () {
+    var proto_1 = C2.prototype;
+    proto_1.nonAbstractFunction = function () {
     };
     return C2;
 }());

@@ -9,7 +9,8 @@ class foo {
 var foo = (function () {
     function foo() {
     }
-    Object.defineProperty(foo.prototype, "bar", {
+    var proto_1 = foo.prototype;
+    Object.defineProperty(proto_1, "bar", {
         set: function (param) { },
         enumerable: true,
         configurable: true

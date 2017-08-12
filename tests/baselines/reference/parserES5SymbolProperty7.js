@@ -7,6 +7,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype[Symbol.toStringTag] = function () { };
+    var proto_1 = C.prototype;
+    proto_1[Symbol.toStringTag] = function () { };
     return C;
 }());

@@ -65,10 +65,11 @@ var __extends = (this && this.__extends) || (function () {
 var Base5 = (function () {
     function Base5() {
     }
-    Base5.prototype.x = function () {
+    var proto_1 = Base5.prototype;
+    proto_1.x = function () {
         return "BaseX";
     };
-    Base5.prototype.y = function () {
+    proto_1.y = function () {
         return "BaseY";
     };
     return Base5;
@@ -78,7 +79,8 @@ var Sub5 = (function (_super) {
     function Sub5() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Sub5.prototype.x = function () {
+    var proto_2 = Sub5.prototype;
+    proto_2.x = function () {
         return "SubX";
     };
     return Sub5;
@@ -88,10 +90,11 @@ var SubSub5 = (function (_super) {
     function SubSub5() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SubSub5.prototype.x = function () {
+    var proto_3 = SubSub5.prototype;
+    proto_3.x = function () {
         return _super.prototype.x.call(this);
     };
-    SubSub5.prototype.y = function () {
+    proto_3.y = function () {
         return _super.prototype.y.call(this);
     };
     return SubSub5;
@@ -100,7 +103,8 @@ var SubSub5 = (function (_super) {
 var Base6 = (function () {
     function Base6() {
     }
-    Base6.prototype.x = function () {
+    var proto_4 = Base6.prototype;
+    proto_4.x = function () {
         return "BaseX";
     };
     return Base6;
@@ -110,7 +114,8 @@ var Sub6 = (function (_super) {
     function Sub6() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Sub6.prototype.y = function () {
+    var proto_5 = Sub6.prototype;
+    proto_5.y = function () {
         return "SubY";
     };
     return Sub6;
@@ -120,7 +125,8 @@ var SubSub6 = (function (_super) {
     function SubSub6() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SubSub6.prototype.y = function () {
+    var proto_6 = SubSub6.prototype;
+    proto_6.y = function () {
         return _super.prototype.y.call(this);
     };
     return SubSub6;

@@ -50,37 +50,38 @@ var B = (function (_super) {
 var LanguageSpec_section_4_5_inference = (function () {
     function LanguageSpec_section_4_5_inference() {
     }
-    Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredGetterFromSetterAnnotation", {
+    var proto_1 = LanguageSpec_section_4_5_inference.prototype;
+    Object.defineProperty(proto_1, "InferredGetterFromSetterAnnotation", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredGetterFromSetterAnnotation_GetterFirst", {
+    Object.defineProperty(proto_1, "InferredGetterFromSetterAnnotation_GetterFirst", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredFromGetter", {
+    Object.defineProperty(proto_1, "InferredFromGetter", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredFromGetter_SetterFirst", {
+    Object.defineProperty(proto_1, "InferredFromGetter_SetterFirst", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredSetterFromGetterAnnotation", {
+    Object.defineProperty(proto_1, "InferredSetterFromGetterAnnotation", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(LanguageSpec_section_4_5_inference.prototype, "InferredSetterFromGetterAnnotation_GetterFirst", {
+    Object.defineProperty(proto_1, "InferredSetterFromGetterAnnotation_GetterFirst", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: true,

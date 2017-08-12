@@ -41,7 +41,8 @@ var Test = (function () {
             _loop_1(outer);
         }
     }
-    Test.prototype.aFunction = function (func) {
+    var proto_1 = Test.prototype;
+    proto_1.aFunction = function (func) {
     };
     return Test;
 }());

@@ -23,12 +23,13 @@ var a;
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, s, {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, s, {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, n, {
+    Object.defineProperty(proto_1, n, {
         set: function (v) { },
         enumerable: true,
         configurable: true
@@ -38,12 +39,12 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, s + n, {
+    Object.defineProperty(proto_1, s + n, {
         set: function (v) { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, +s, {
+    Object.defineProperty(proto_1, +s, {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
@@ -53,12 +54,12 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, 0, {
+    Object.defineProperty(proto_1, 0, {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, a, {
+    Object.defineProperty(proto_1, a, {
         set: function (v) { },
         enumerable: true,
         configurable: true
@@ -68,12 +69,12 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "hello bye", {
+    Object.defineProperty(proto_1, "hello bye", {
         set: function (v) { },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "hello " + a + " bye", {
+    Object.defineProperty(proto_1, "hello " + a + " bye", {
         get: function () { return 0; },
         enumerable: true,
         configurable: true

@@ -102,7 +102,8 @@ var b: { [x: number]: string; } = {
 var C = (function () {
     function C() {
     } // ok
-    Object.defineProperty(C.prototype, "X", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "X", {
         get: function () {
             return '';
         },
@@ -111,7 +112,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    C.prototype.foo = function () {
+    proto_1.foo = function () {
         return '';
     };
     C.foo = function () { }; // ok

@@ -26,7 +26,8 @@ function fun(a) {
 var C = (function () {
     function C() {
     }
-    C.prototype.fun = function (a) {
+    var proto_1 = C.prototype;
+    proto_1.fun = function (a) {
         if (a === void 0) { a = null; }
     };
     C.fun = function (a) {

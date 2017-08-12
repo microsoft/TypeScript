@@ -54,7 +54,8 @@ var A;
     var Point = (function () {
         function Point() {
         }
-        Point.prototype.fromCarthesian = function (p) {
+        var proto_1 = Point.prototype;
+        proto_1.fromCarthesian = function (p) {
             return { x: p.x, y: p.y };
         };
         return Point;

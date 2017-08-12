@@ -28,7 +28,8 @@ var sas;
         var Test = (function () {
             function Test() {
             }
-            Test.prototype.doX = function () {
+            var proto_1 = Test.prototype;
+            proto_1.doX = function () {
                 var f = 2;
                 switch (f) {
                     case 1:

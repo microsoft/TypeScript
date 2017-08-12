@@ -30,8 +30,9 @@ i = c;
 var C = (function () {
     function C() {
     }
-    C.prototype.y = function (a) { return null; };
-    Object.defineProperty(C.prototype, "z", {
+    var proto_1 = C.prototype;
+    proto_1.y = function (a) { return null; };
+    Object.defineProperty(proto_1, "z", {
         get: function () { return 1; },
         set: function (v) { },
         enumerable: true,

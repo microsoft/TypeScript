@@ -42,7 +42,8 @@ var C = (function () {
     function C() {
         this.x = 1;
     }
-    C.prototype.foo = function (x) { return x; };
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) { return x; };
     return C;
 }());
 var D = (function (_super) {
@@ -50,9 +51,10 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.foo = function (x) { return x; };
-    D.prototype.other = function (x) { return x; };
-    D.prototype.bar = function () { };
+    var proto_2 = D.prototype;
+    proto_2.foo = function (x) { return x; };
+    proto_2.other = function (x) { return x; };
+    proto_2.bar = function () { };
     return D;
 }(C));
 var c;

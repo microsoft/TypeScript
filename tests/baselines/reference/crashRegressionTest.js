@@ -37,7 +37,8 @@ var MsPortal;
                 function StringTemplate(templateStorage) {
                     this._templateStorage = templateStorage;
                 }
-                StringTemplate.prototype.text = function (value) {
+                var proto_1 = StringTemplate.prototype;
+                proto_1.text = function (value) {
                     this._templateStorage.templateSources[this._name] = value;
                 };
                 return StringTemplate;

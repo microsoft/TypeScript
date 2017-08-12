@@ -315,7 +315,8 @@ var TypeScriptAllInOne;
             finally {
             }
         };
-        Program.prototype["if"] = function (retValue) {
+        var proto_1 = Program.prototype;
+        proto_1["if"] = function (retValue) {
             if (retValue === void 0) { retValue =  != 0; }
             return 1;
                 ^
@@ -331,7 +332,7 @@ var TypeScriptAllInOne;
                 return 1;
             }
         };
-        Program.prototype["catch"] = function (e) {
+        proto_1["catch"] = function (e) {
             console.log(e);
         };
         return Program;
@@ -347,11 +348,12 @@ var TypeScriptAllInOne;
 var BasicFeatures = (function () {
     function BasicFeatures() {
     }
+    var proto_2 = BasicFeatures.prototype;
     /// <summary>
     /// Test various of variables. Including nullable,key world as variable,special format
     /// </summary>
     /// <returns></returns>
-    BasicFeatures.prototype.VARIABLES = function () {
+    proto_2.VARIABLES = function () {
         var local = Number.MAX_VALUE;
         var min = Number.MIN_VALUE;
         var inf = Number.NEGATIVE_INFINITY -
@@ -400,7 +402,7 @@ var BasicFeatures = (function () {
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    BasicFeatures.prototype.STATEMENTS = function (i) {
+    proto_2.STATEMENTS = function (i) {
         var retVal = 0;
         if (i == 1)
             retVal = 1;
@@ -435,7 +437,7 @@ var BasicFeatures = (function () {
     /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
     /// </summary>
     /// <returns></returns>
-    BasicFeatures.prototype.TYPES = function () {
+    proto_2.TYPES = function () {
         var retVal = 0;
         var c = new CLASS();
         var xx = c;
@@ -454,7 +456,7 @@ var BasicFeatures = (function () {
     ///// Test different operators
     ///// </summary>
     ///// <returns></returns>
-    BasicFeatures.prototype.OPERATOR = function () {
+    proto_2.OPERATOR = function () {
         var a = [1, 2, 3, 4, 5,]; /*[] bug*/ // YES []
         var i = a[1]; /*[]*/
         i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
@@ -493,15 +495,16 @@ var CLASS = (function () {
     function CLASS() {
         this.d = function () { yield 0; };
     }
-    Object.defineProperty(CLASS.prototype, "Property", {
+    var proto_3 = CLASS.prototype;
+    Object.defineProperty(proto_3, "Property", {
         get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
-    CLASS.prototype.Member = function () {
+    proto_3.Member = function () {
         return 0;
     };
-    CLASS.prototype.Foo = function () {
+    proto_3.Foo = function () {
         var myEvent = function () { return 1; };
         if (myEvent() == 1)
             return true ?
@@ -531,7 +534,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.method2 = function () {
+    var proto_4 = B.prototype;
+    proto_4.method2 = function () {
         return this.method1(2);
     };
     return B;

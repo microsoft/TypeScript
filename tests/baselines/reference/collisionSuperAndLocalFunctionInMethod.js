@@ -44,11 +44,12 @@ function _super() {
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.x = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.x = function () {
         function _super() {
         }
     };
-    Foo.prototype._super = function () {
+    proto_1._super = function () {
     };
     return Foo;
 }());
@@ -57,11 +58,12 @@ var b = (function (_super) {
     function b() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    b.prototype.foo = function () {
+    var proto_2 = b.prototype;
+    proto_2.foo = function () {
         function _super() {
         }
     };
-    b.prototype._super = function () {
+    proto_2._super = function () {
     };
     return b;
 }(Foo));
@@ -70,13 +72,14 @@ var c = (function (_super) {
     function c() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    c.prototype.foo = function () {
+    var proto_3 = c.prototype;
+    proto_3.foo = function () {
         var x = function () {
             function _super() {
             }
         };
     };
-    c.prototype._super = function () {
+    proto_3._super = function () {
     };
     return c;
 }(Foo));

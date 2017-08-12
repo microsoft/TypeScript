@@ -19,7 +19,8 @@ var React = { createElement: skate.h };
 var Component = (function () {
     function Component() {
     }
-    Component.prototype.renderCallback = function () {
+    var proto_1 = Component.prototype;
+    proto_1.renderCallback = function () {
         return skate.h("div", null, "test");
     };
     return Component;

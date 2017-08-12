@@ -8,6 +8,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype[1] = function () { };
+    var proto_1 = C.prototype;
+    proto_1[1] = function () { };
     return C;
 }());

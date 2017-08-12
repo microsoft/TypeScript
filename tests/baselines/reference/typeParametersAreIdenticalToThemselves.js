@@ -87,17 +87,19 @@ function foo3(x, y) {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo1 = function (x) { };
-    C.prototype.foo2 = function (a, x) { };
-    C.prototype.foo3 = function (x) { };
-    C.prototype.foo4 = function (x) { };
+    var proto_1 = C.prototype;
+    proto_1.foo1 = function (x) { };
+    proto_1.foo2 = function (a, x) { };
+    proto_1.foo3 = function (x) { };
+    proto_1.foo4 = function (x) { };
     return C;
 }());
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.foo1 = function (x) { };
-    C2.prototype.foo2 = function (a, x) { };
-    C2.prototype.foo3 = function (x) { };
+    var proto_2 = C2.prototype;
+    proto_2.foo1 = function (x) { };
+    proto_2.foo2 = function (a, x) { };
+    proto_2.foo3 = function (x) { };
     return C2;
 }());

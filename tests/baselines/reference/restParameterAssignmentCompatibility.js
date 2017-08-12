@@ -30,7 +30,8 @@ t1 = s; // Similar to above, but optionality does not matter here.
 var T = (function () {
     function T() {
     }
-    T.prototype.m = function () {
+    var proto_1 = T.prototype;
+    proto_1.m = function () {
         var p3 = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             p3[_i] = arguments[_i];
@@ -41,7 +42,8 @@ var T = (function () {
 var S = (function () {
     function S() {
     }
-    S.prototype.m = function (p1, p2) {
+    var proto_2 = S.prototype;
+    proto_2.m = function (p1, p2) {
     };
     return S;
 }());
@@ -53,7 +55,8 @@ t = s; // Should be valid (rest params correspond to an infinite expansion of pa
 var T1 = (function () {
     function T1() {
     }
-    T1.prototype.m = function (p1, p2) {
+    var proto_3 = T1.prototype;
+    proto_3.m = function (p1, p2) {
     };
     return T1;
 }());

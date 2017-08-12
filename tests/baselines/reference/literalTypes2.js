@@ -307,10 +307,11 @@ function f12() {
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.foo = function () {
+    var proto_1 = C2.prototype;
+    proto_1.foo = function () {
         return 0;
     };
-    C2.prototype.bar = function () {
+    proto_1.bar = function () {
         return cond ? 0 : 1;
     };
     return C2;

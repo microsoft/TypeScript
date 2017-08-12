@@ -13,6 +13,7 @@ var accessorName = "accessor";
 var C = (function () {
     function C() {
     }
-    C.prototype[methodName] = function (v) { };
+    var proto_1 = C.prototype;
+    proto_1[methodName] = function (v) { };
     return C;
 }());

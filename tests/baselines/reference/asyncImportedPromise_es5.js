@@ -72,7 +72,8 @@ var task_1 = require("./task");
 var Test = (function () {
     function Test() {
     }
-    Test.prototype.example = function () {
+    var proto_1 = Test.prototype;
+    proto_1.example = function () {
         return __awaiter(this, void 0, task_1.Task, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });

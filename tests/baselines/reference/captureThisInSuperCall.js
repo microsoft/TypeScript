@@ -30,6 +30,7 @@ var B = (function (_super) {
         var _this = _super.call(this, { test: function () { return _this.someMethod(); } }) || this;
         return _this;
     }
-    B.prototype.someMethod = function () { };
+    var proto_1 = B.prototype;
+    proto_1.someMethod = function () { };
     return B;
 }(A));

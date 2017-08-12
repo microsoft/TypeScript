@@ -9,7 +9,8 @@ new abstract;
 var abstract = (function () {
     function abstract() {
     }
-    abstract.prototype.foo = function () { return 1; };
+    var proto_1 = abstract.prototype;
+    proto_1.foo = function () { return 1; };
     return abstract;
 }());
 new abstract;

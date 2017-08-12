@@ -512,10 +512,11 @@ var TypeScript;
             this.stop = stop;
             this.result = null;
         }
-        ScopeSearchFilter.prototype.reset = function () {
+        var proto_1 = ScopeSearchFilter.prototype;
+        proto_1.reset = function () {
             this.result = null;
         };
-        ScopeSearchFilter.prototype.update = function (b) {
+        proto_1.update = function (b) {
             this.result = this.select(this.result, b);
             if (this.result) {
                 return this.stop(this.result);

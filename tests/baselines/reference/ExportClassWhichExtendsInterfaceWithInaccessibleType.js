@@ -27,7 +27,8 @@ var A;
             this.x = x;
             this.y = y;
         }
-        Point2d.prototype.fromOrigin = function (p) {
+        var proto_1 = Point2d.prototype;
+        proto_1.fromOrigin = function (p) {
             return 1;
         };
         return Point2d;

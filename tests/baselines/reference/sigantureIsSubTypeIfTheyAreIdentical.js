@@ -12,7 +12,8 @@ class CacheService implements ICache { // Should not error that property type of
 var CacheService = (function () {
     function CacheService() {
     }
-    CacheService.prototype.get = function (key) {
+    var proto_1 = CacheService.prototype;
+    proto_1.get = function (key) {
         return undefined;
     };
     return CacheService;

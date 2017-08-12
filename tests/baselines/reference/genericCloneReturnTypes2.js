@@ -21,7 +21,8 @@ var MyList = (function () {
         this.size = n;
         this.data = new Array(this.size);
     }
-    MyList.prototype.clone = function () {
+    var proto_1 = MyList.prototype;
+    proto_1.clone = function () {
         return new MyList(this.size);
     };
     return MyList;

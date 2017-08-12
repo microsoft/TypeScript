@@ -28,7 +28,8 @@ var C = (function () {
         this.b = '';
         this.d = function () { return ''; };
     }
-    C.prototype.c = function () { return ''; };
+    var proto_1 = C.prototype;
+    proto_1.c = function () { return ''; };
     C.f = function () { return ''; };
     C.g = function () { return ''; };
     return C;

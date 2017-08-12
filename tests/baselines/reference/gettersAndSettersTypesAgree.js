@@ -14,7 +14,8 @@ var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "Foo", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "Foo", {
         get: function () { return "foo"; } // ok
         ,
         set: function (foo) { } // ok - type inferred from getter return statement
@@ -22,7 +23,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "Bar", {
+    Object.defineProperty(proto_1, "Bar", {
         get: function () { return "foo"; } // ok
         ,
         set: function (bar) { } // ok - type must be declared

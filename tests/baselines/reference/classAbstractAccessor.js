@@ -11,13 +11,14 @@ abstract class A {
 var A = (function () {
     function A() {
     }
-    Object.defineProperty(A.prototype, "aa", {
+    var proto_1 = A.prototype;
+    Object.defineProperty(proto_1, "aa", {
         get: function () { return 1; } // error
         ,
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(A.prototype, "bb", {
+    Object.defineProperty(proto_1, "bb", {
         set: function (x) { } // error
         ,
         enumerable: true,

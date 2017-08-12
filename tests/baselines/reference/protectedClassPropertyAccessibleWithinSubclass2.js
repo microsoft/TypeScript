@@ -108,7 +108,8 @@ var __extends = (this && this.__extends) || (function () {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.method = function () {
+    var proto_1 = Base.prototype;
+    proto_1.method = function () {
         var b;
         var d1;
         var d2;
@@ -127,7 +128,8 @@ var Derived1 = (function (_super) {
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived1.prototype.method1 = function () {
+    var proto_2 = Derived1.prototype;
+    proto_2.method1 = function () {
         var b;
         var d1;
         var d2;
@@ -146,7 +148,8 @@ var Derived2 = (function (_super) {
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived2.prototype.method2 = function () {
+    var proto_3 = Derived2.prototype;
+    proto_3.method2 = function () {
         var b;
         var d1;
         var d2;
@@ -165,7 +168,8 @@ var Derived3 = (function (_super) {
     function Derived3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived3.prototype.method3 = function () {
+    var proto_4 = Derived3.prototype;
+    proto_4.method3 = function () {
         var b;
         var d1;
         var d2;
@@ -184,7 +188,8 @@ var Derived4 = (function (_super) {
     function Derived4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived4.prototype.method4 = function () {
+    var proto_5 = Derived4.prototype;
+    proto_5.method4 = function () {
         var b;
         var d1;
         var d2;

@@ -43,7 +43,8 @@ var TextComponent = (function (_super) {
     function TextComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    TextComponent.prototype.render = function () {
+    var proto_1 = TextComponent.prototype;
+    proto_1.render = function () {
         return <span>Some Text..</span>;
     };
     return TextComponent;

@@ -48,7 +48,8 @@ var WithLocation = function (Base) { return (function (_super) {
     function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    class_1.prototype.getLocation = function () {
+    var proto_1 = class_1.prototype;
+    proto_1.getLocation = function () {
         var _a = _super.prototype.getLocation.call(this), x = _a[0], y = _a[1];
         return [this.x | x, this.y | y];
     };
@@ -59,7 +60,8 @@ var Point = (function () {
         this.x = x;
         this.y = y;
     }
-    Point.prototype.getLocation = function () {
+    var proto_2 = Point.prototype;
+    proto_2.getLocation = function () {
         return [0, 0];
     };
     return Point;
@@ -69,13 +71,14 @@ var Foo = (function (_super) {
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Foo.prototype.calculate = function () {
+    var proto_3 = Foo.prototype;
+    proto_3.calculate = function () {
         return this.x + this.y;
     };
-    Foo.prototype.getLocation = function () {
+    proto_3.getLocation = function () {
         return _super.prototype.getLocation.call(this);
     };
-    Foo.prototype.whereAmI = function () {
+    proto_3.whereAmI = function () {
         return this.getLocation();
     };
     return Foo;

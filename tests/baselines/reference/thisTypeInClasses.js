@@ -54,7 +54,8 @@ class C5 {
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.f = function (x) { return undefined; };
+    var proto_1 = C1.prototype;
+    proto_1.f = function (x) { return undefined; };
     return C1;
 }());
 var C2 = (function () {
@@ -70,7 +71,8 @@ var C3 = (function () {
 var C5 = (function () {
     function C5() {
     }
-    C5.prototype.foo = function () {
+    var proto_2 = C5.prototype;
+    proto_2.foo = function () {
         var _this = this;
         var f1 = function (x) { return _this; };
         var f2 = function (x) { return _this; };
@@ -82,7 +84,7 @@ var C5 = (function () {
             return g(_this);
         };
     };
-    C5.prototype.bar = function () {
+    proto_2.bar = function () {
         var x1 = undefined;
         var x2 = undefined;
     };
