@@ -56,6 +56,7 @@ var A = (function () {
     }
     A.prototype.x = function () {
     };
+    __names(A.prototype, ["x"]);
     return A;
 }());
 var B = (function (_super) {
@@ -102,5 +103,6 @@ var B = (function (_super) {
             });
         });
     };
+    __names(B.prototype, ["simple", "advanced"]);
     return B;
 }(A));

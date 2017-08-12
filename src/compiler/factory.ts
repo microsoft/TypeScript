@@ -2777,9 +2777,17 @@ namespace ts {
             : createStrictEquality(createTypeOf(value), createLiteral(tag));
     }
 
-    export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
+    export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange, storePropertyName?: Push<Identifier | StringLiteral | NumericLiteral>, context?: TransformationContext): MemberExpression {
         if (isComputedPropertyName(memberName)) {
-             return setTextRange(createElementAccess(target, memberName.expression), location);
+            // Assign the name to an identifier so that later we can set it's `.name` property without reinvoking the expression
+            if (storePropertyName) {
+                const id = createTempVariable(context.hoistVariableDeclaration);
+                storePropertyName.push(id);
+                return setTextRange(createElementAccess(target, createAssignment(id, memberName.expression)), location);
+            }
+            else {
+                return setTextRange(createElementAccess(target, memberName.expression), location);
+            }
         }
         else {
             const expression = setTextRange(
@@ -2789,6 +2797,9 @@ namespace ts {
                 memberName
             );
             getOrCreateEmitNode(expression).flags |= EmitFlags.NoNestedSourceMaps;
+            if (storePropertyName) {
+                storePropertyName.push(isIdentifier(memberName) ? createLiteral(unescapeLeadingUnderscores(memberName.escapedText)) : memberName);
+            }
             return expression;
         }
     }

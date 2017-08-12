@@ -56,6 +56,7 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__names(C.prototype, ["method"]);
     tslib_1.__decorate([
         tslib_1.__param(0, dec),
         tslib_1.__metadata("design:type", Function),
@@ -86,6 +87,7 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__names(C.prototype, ["method"]);
     tslib_1.__decorate([
         tslib_1.__param(0, dec),
         tslib_1.__metadata("design:type", Function),
