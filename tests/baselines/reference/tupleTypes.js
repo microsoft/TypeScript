@@ -1,8 +1,9 @@
 //// [tupleTypes.ts]
-var v1: [];  // Error
+var v1: [] = [];
 var v2: [number];
 var v3: [number, string];
 var v4: [number, [string, string]];
+var v5: number[] = v1;
 
 var t: [number, string];
 var t0 = t[0];   // number
@@ -17,6 +18,12 @@ t = [1];              // Error
 t = [1, "hello"];     // Ok
 t = ["hello", 1];     // Error
 t = [1, "hello", 2];  // Ok
+
+var et: [];
+var et0 = et[0];  // never
+var et0: never;
+et = [];    // Ok
+et = [1];   // Error
 
 var tf: [string, (x: string) => number] = ["hello", x => x.length];
 
@@ -45,20 +52,26 @@ var a: number[];
 var a1: [number, string];
 var a2: [number, number];
 var a3: [number, {}];
+var a4: [];
 a = a1;   // Error
 a = a2;
 a = a3;   // Error
+a = a4;
 a1 = a2;  // Error
 a1 = a3;  // Error
+a1 = a4;  // Error
 a3 = a1;
 a3 = a2;
+a3 = a4;  // Error
+a4 = a1;  // Error
 
 
 //// [tupleTypes.js]
-var v1; // Error
+var v1 = [];
 var v2;
 var v3;
 var v4;
+var v5 = v1;
 var t;
 var t0 = t[0]; // number
 var t0;
@@ -71,6 +84,11 @@ t = [1]; // Error
 t = [1, "hello"]; // Ok
 t = ["hello", 1]; // Error
 t = [1, "hello", 2]; // Ok
+var et;
+var et0 = et[0]; // never
+var et0;
+et = []; // Ok
+et = [1]; // Error
 var tf = ["hello", function (x) { return x.length; }];
 var ff1 = ff("hello", ["foo", function (x) { return x.length; }]);
 var ff1;
@@ -92,10 +110,15 @@ var a;
 var a1;
 var a2;
 var a3;
+var a4;
 a = a1; // Error
 a = a2;
 a = a3; // Error
+a = a4;
 a1 = a2; // Error
 a1 = a3; // Error
+a1 = a4; // Error
 a3 = a1;
 a3 = a2;
+a3 = a4; // Error
+a4 = a1; // Error

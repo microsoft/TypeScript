@@ -2640,13 +2640,8 @@ namespace ts {
                         return createArrayTypeNode(elementType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
-                        if (typeArguments.length > 0) {
-                            const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, getTypeReferenceArity(type)), context);
-                            if (tupleConstituentNodes && tupleConstituentNodes.length > 0) {
-                                return createTupleTypeNode(tupleConstituentNodes);
-                            }
-                        }
-                        return createTupleTypeNode([]);
+                        const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, getTypeReferenceArity(type)), context);
+                        return createTupleTypeNode(tupleConstituentNodes);
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
@@ -9987,7 +9982,7 @@ namespace ts {
         }
 
         function isTupleLikeType(type: Type): boolean {
-            return !!getPropertyOfType(type, "0" as __String);
+            return !!getPropertyOfType(type, "0" as __String) || type === getTupleTypeOfArity(0);
         }
 
         function isUnitType(type: Type): boolean {
@@ -13372,9 +13367,7 @@ namespace ts {
                             }
                         }
                     }
-                    if (elementTypes.length) {
-                        return createTupleType(elementTypes);
-                    }
+                    return createTupleType(elementTypes);
                 }
             }
             return createArrayType(elementTypes.length ?
@@ -18732,7 +18725,7 @@ namespace ts {
 
         function checkTupleType(node: TupleTypeNode) {
             // Grammar checking
-            const hasErrorFromDisallowedTrailingComma = checkGrammarForDisallowedTrailingComma(node.elementTypes);
+            checkGrammarForDisallowedTrailingComma(node.elementTypes);
             forEach(node.elementTypes, checkSourceElement);
         }
 

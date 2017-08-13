@@ -1,0 +1,14 @@
+=== tests/cases/compiler/tupleTypesStrictNullChecks.ts ===
+var et: [] = [];
+>et : Symbol(et, Decl(tupleTypesStrictNullChecks.ts, 0, 3))
+
+var et0 = et[0];  // never
+>et0 : Symbol(et0, Decl(tupleTypesStrictNullChecks.ts, 1, 3), Decl(tupleTypesStrictNullChecks.ts, 2, 3))
+>et : Symbol(et, Decl(tupleTypesStrictNullChecks.ts, 0, 3))
+
+var et0: never;
+>et0 : Symbol(et0, Decl(tupleTypesStrictNullChecks.ts, 1, 3), Decl(tupleTypesStrictNullChecks.ts, 2, 3))
+
+et = [];    // Ok
+>et : Symbol(et, Decl(tupleTypesStrictNullChecks.ts, 0, 3))
+

@@ -18,6 +18,12 @@ t = [1, "hello"];     // Ok
 t = ["hello", 1];     // Error
 t = [1, "hello", 2];  // Ok
 
+var et: [];
+var et0 = et[0];  // never
+var et0: never;
+et = [];    // Ok
+et = [1];   // Error
+
 var tf: [string, (x: string) => number] = ["hello", x => x.length];
 
 declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
@@ -45,10 +51,15 @@ var a: number[];
 var a1: [number, string];
 var a2: [number, number];
 var a3: [number, {}];
+var a4: [];
 a = a1;   // Error
 a = a2;
 a = a3;   // Error
+a = a4;
 a1 = a2;  // Error
 a1 = a3;  // Error
+a1 = a4;  // Error
 a3 = a1;
 a3 = a2;
+a3 = a4;  // Error
+a4 = a1;  // Error
