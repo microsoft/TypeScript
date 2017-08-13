@@ -2646,11 +2646,7 @@ namespace ts {
                                 return createTupleTypeNode(tupleConstituentNodes);
                             }
                         }
-                        if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            return createTupleTypeNode([]);
-                        }
-                        context.encounteredError = true;
-                        return undefined;
+                        return createTupleTypeNode([]);
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
@@ -18737,10 +18733,6 @@ namespace ts {
         function checkTupleType(node: TupleTypeNode) {
             // Grammar checking
             const hasErrorFromDisallowedTrailingComma = checkGrammarForDisallowedTrailingComma(node.elementTypes);
-            if (!hasErrorFromDisallowedTrailingComma && node.elementTypes.length === 0) {
-                grammarErrorOnNode(node, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
-            }
-
             forEach(node.elementTypes, checkSourceElement);
         }
 

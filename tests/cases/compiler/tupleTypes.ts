@@ -1,7 +1,8 @@
-var v1: [];  // Error
+var v1: [] = [];
 var v2: [number];
 var v3: [number, string];
 var v4: [number, [string, string]];
+var v5: number[] = v1;
 
 var t: [number, string];
 var t0 = t[0];   // number
