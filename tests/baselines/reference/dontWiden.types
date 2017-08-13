@@ -1,0 +1,120 @@
+=== tests/cases/compiler/dontWiden.ts ===
+const c = [1, 'a'];
+>c : [1, "a"]
+>[1, 'a'] : [1, "a"]
+>1 : 1
+>'a' : "a"
+
+const d = { a: 1, b: 'c' };
+>d : { a: 1; b: "c"; }
+>{ a: 1, b: 'c' } : { a: 1; b: "c"; }
+>a : number
+>1 : 1
+>b : string
+>'c' : "c"
+
+interface SomeInterface { a: boolean }
+>SomeInterface : SomeInterface
+>a : boolean
+
+declare function foo<T extends any[]>(arg: T): { hi: T };
+>foo : <T extends any[]>(arg: T) => { hi: T; }
+>T : T
+>arg : T
+>T : T
+>hi : T
+>T : T
+
+declare function boo<T extends number[]>(arg: T): { hi: T };
+>boo : <T extends number[]>(arg: T) => { hi: T; }
+>T : T
+>arg : T
+>T : T
+>hi : T
+>T : T
+
+declare function bar(arg: SomeInterface): void
+>bar : (arg: SomeInterface) => void
+>arg : SomeInterface
+>SomeInterface : SomeInterface
+
+declare function baz(arg: [number, 2, 3 | number]): void
+>baz : (arg: [number, 2, number]) => void
+>arg : [number, 2, number]
+
+declare function bag(arg: number[]): void
+>bag : (arg: number[]) => void
+>arg : number[]
+
+// As variable assignees
+const a: number[] = [1, 2, 3];
+>a : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+const b: SomeInterface = {a: true};
+>b : SomeInterface
+>SomeInterface : SomeInterface
+>{a: true} : { a: true; }
+>a : boolean
+>true : true
+
+const e = [1, 2, 3];
+>e : [1, 2, 3]
+>[1, 2, 3] : [1, 2, 3]
+>1 : 1
+>2 : 2
+>3 : 3
+
+// Same, but as arguments
+foo([1, 2, 3]);
+>foo([1, 2, 3]) : { hi: [1, 2, 3]; }
+>foo : <T extends any[]>(arg: T) => { hi: T; }
+>[1, 2, 3] : [1, 2, 3]
+>1 : 1
+>2 : 2
+>3 : 3
+
+bar({a: true});
+>bar({a: true}) : void
+>bar : (arg: SomeInterface) => void
+>{a: true} : { a: true; }
+>a : boolean
+>true : true
+
+baz([1, 2, 3]);
+>baz([1, 2, 3]) : void
+>baz : (arg: [number, 2, number]) => void
+>[1, 2, 3] : [number, 2, number]
+>1 : 1
+>2 : 2
+>3 : 3
+
+bag([1, 2, 3]);
+>bag([1, 2, 3]) : void
+>bag : (arg: number[]) => void
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+bag(e);
+>bag(e) : void
+>bag : (arg: number[]) => void
+>e : [1, 2, 3]
+
+boo([1, 2, 3]);
+>boo([1, 2, 3]) : { hi: [1, 2, 3]; }
+>boo : <T extends number[]>(arg: T) => { hi: T; }
+>[1, 2, 3] : [1, 2, 3]
+>1 : 1
+>2 : 2
+>3 : 3
+
+boo(e);
+>boo(e) : { hi: [1, 2, 3]; }
+>boo : <T extends number[]>(arg: T) => { hi: T; }
+>e : [1, 2, 3]
+

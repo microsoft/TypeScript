@@ -2630,7 +2630,7 @@ Each element expression in a non-empty array literal is processed as follows:
 
 The resulting type an array literal expression is determined as follows:
 
-* If the array literal is empty, the resulting type is an array type with the element type Undefined.
+* If the array literal is empty, the resulting type is an empty tuple type in `granularConst` mode, otherwise an array type with the element type Undefined. 
 * Otherwise, if the array literal contains no spread elements and is contextually typed by a tuple-like type (section [3.3.3](#3.3.3)), the resulting type is a tuple type constructed from the types of the element expressions.
 * Otherwise, if the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section [4.21.1](#4.21.1)), the resulting type is a tuple type constructed from the types of the element expressions.
 * Otherwise, the resulting type is an array type with an element type that is the union of the types of the non-spread element expressions and the numeric index signature types of the spread element expressions.

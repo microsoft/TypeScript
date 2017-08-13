@@ -270,6 +270,13 @@ namespace ts {
             description: Diagnostics.Enable_strict_null_checks
         },
         {
+            name: "widenTypes",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Automatically_widen_types_even_in_params_and_const
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             showInSimplifiedHelpView: true,
