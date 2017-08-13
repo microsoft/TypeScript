@@ -64,6 +64,7 @@ namespace ts {
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
         const strictNullChecks = compilerOptions.strictNullChecks === undefined ? compilerOptions.strict : compilerOptions.strictNullChecks;
+        const strictTuples = compilerOptions.strictTuples === undefined ? compilerOptions.strict : compilerOptions.strictTuples;
         const noImplicitAny = compilerOptions.noImplicitAny === undefined ? compilerOptions.strict : compilerOptions.noImplicitAny;
         const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
 
@@ -7160,6 +7161,12 @@ namespace ts {
                 const property = createSymbol(SymbolFlags.Property, "" + i as __String);
                 property.type = typeParameter;
                 properties.push(property);
+            }
+            if (strictTuples) {
+                const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String);
+                lengthSymbol.type = getLiteralType(arity);
+                lengthSymbol.checkFlags = CheckFlags.Readonly;
+                properties.push(lengthSymbol);
             }
             const type = <GenericType & InterfaceTypeWithDeclaredMembers>createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference);
             type.typeParameters = typeParameters;

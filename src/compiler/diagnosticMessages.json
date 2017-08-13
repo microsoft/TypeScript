@@ -3302,6 +3302,10 @@
         "category": "Message",
         "code": 6185
     },
+    "Enable strict tuple checks.": {
+        "category": "Message",
+        "code": 6187
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

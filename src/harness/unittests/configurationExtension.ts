@@ -16,6 +16,12 @@ namespace ts {
                 strictNullChecks: false
             }
         },
+        "/dev/tsconfig.strictTuples.json": {
+            extends: "./tsconfig",
+            compilerOptions: {
+                strictTuples: false
+            }
+        },
         "/dev/configs/base.json": {
             compilerOptions: {
                 allowJs: true,

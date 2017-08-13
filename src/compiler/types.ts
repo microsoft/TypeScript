@@ -3622,6 +3622,7 @@ namespace ts {
         sourceRoot?: string;
         strict?: boolean;
         strictNullChecks?: boolean;  // Always combine with strict property
+        strictTuples?: boolean;
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
