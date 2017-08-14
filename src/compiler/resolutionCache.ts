@@ -26,23 +26,6 @@ namespace ts {
         isInvalidated?: boolean;
     }
 
-    interface ResolverWithGlobalCache {
-        (primaryResult: ResolvedModuleWithFailedLookupLocations, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations | undefined;
-    }
-
-    export function resolveWithGlobalCache(primaryResult: ResolvedModuleWithFailedLookupLocations, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string | undefined, projectName: string): ResolvedModuleWithFailedLookupLocations | undefined {
-        if (!isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
-            // otherwise try to load typings from @types
-
-            // create different collection of failed lookup locations for second pass
-            // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-            const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, projectName, compilerOptions, host, globalCache);
-            if (resolvedModule) {
-                return { resolvedModule, failedLookupLocations: primaryResult.failedLookupLocations.concat(failedLookupLocations) };
-            }
-        }
-    }
-
     interface FailedLookupLocationsWatcher {
         fileWatcher: FileWatcher;
         refCount: number;
@@ -53,7 +36,8 @@ namespace ts {
         getCompilerOptions: () => CompilerOptions,
         watchForFailedLookupLocation: (failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) => FileWatcher,
         log: (s: string) => void,
-        resolveWithGlobalCache?: ResolverWithGlobalCache): ResolutionCache {
+        projectName?: string,
+        getGlobalCache?: () => string | undefined): ResolutionCache {
 
         let host: ModuleResolutionHost;
         let filesWithChangedSetOfUnresolvedImports: Path[];
@@ -107,9 +91,24 @@ namespace ts {
 
         function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
             const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host);
-            // return result immediately only if it is .ts, .tsx or .d.ts
+            // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
+            if (!getGlobalCache) {
+                return primaryResult;
+            }
+
             // otherwise try to load typings from @types
-            return (resolveWithGlobalCache && resolveWithGlobalCache(primaryResult, moduleName, compilerOptions, host)) || primaryResult;
+            const globalCache = getGlobalCache();
+            if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension))) {
+                // create different collection of failed lookup locations for second pass
+                // if it will fail and we've already found something during the first pass - we don't want to pollute its results
+                const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, projectName, compilerOptions, host, globalCache);
+                if (resolvedModule) {
+                    return { resolvedModule, failedLookupLocations: primaryResult.failedLookupLocations.concat(failedLookupLocations) };
+                }
+            }
+
+            // Default return the result from the first pass
+            return primaryResult;
         }
 
         function resolveNamesWithLocalCache<T extends NameResolutionWithFailedLookupLocations, R>(

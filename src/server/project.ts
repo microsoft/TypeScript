@@ -220,8 +220,8 @@ namespace ts.server {
                 () => this.compilerOptions,
                 (failedLookupLocation, failedLookupLocationPath, containingFile, name) => this.watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name),
                 s => this.projectService.logger.info(s),
-                (primaryResult, moduleName, compilerOptions, host) => resolveWithGlobalCache(primaryResult, moduleName, compilerOptions, host,
-                    this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined, this.getProjectName())
+                this.getProjectName(),
+                () => this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined
             );
             this.lsHost.compilationSettings = this.compilerOptions;
             this.resolutionCache.setModuleResolutionHost(this.lsHost);
