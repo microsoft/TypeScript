@@ -1164,10 +1164,15 @@ namespace ts.formatting {
             const { column, character } = SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(commentLineStart, commentStart, sourceFile, options);
             return column + /*length after whitespace ends*/ range.pos - (commentLineStart + character);
         }
-        return undefined;
+        return -1;
     }
 
-    export function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, onlyMultiLine: boolean): CommentRange | undefined {
+    export function getRangeOfEnclosingComment(
+        sourceFile: SourceFile,
+        position: number,
+        onlyMultiLine: boolean,
+        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+        predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
         // Considering a fixed position,
         // - trailing comments are those following and on the same line as the position.
         // - leading comments are those in the range [position, start of next non-trivia token)
@@ -1178,16 +1183,28 @@ namespace ts.formatting {
         // tokens contain all comments in a sourcefile disjointly.
         const precedingToken = findPrecedingToken(position, sourceFile);
         const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
-        const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false), sourceFile);
+        const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
         const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
             trailingRangesOfPreviousToken.concat(leadingCommentRangesOfNextToken) :
             trailingRangesOfPreviousToken || leadingCommentRangesOfNextToken;
         if (commentRanges) {
             for (const range of commentRanges) {
-                // We need to extend the range when in an unclosed multi-line comment.
-                if (range.pos < position && position < range.end ||
-                    position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth())) {
-                    return onlyMultiLine && range.kind !== SyntaxKind.MultiLineCommentTrivia ? undefined : range;
+                // The end marker of a single-line comment does not include the newline character.
+                // With caret at `^`, in the following case, we are inside a comment (^ denotes the cursor position):
+                //
+                //    // asdf   ^\n
+                //
+                // But for closed multi-line comments, we don't want to be inside the comment in the following case:
+                //
+                //    /* asdf */^
+                //
+                // However, unterminated multi-line comments *do* contain their end.
+                //
+                // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+                //
+                if ((range.pos < position && position < range.end ||
+                    position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()))) {
+                    return (range.kind === SyntaxKind.MultiLineCommentTrivia || !onlyMultiLine) && (!predicate || predicate(range)) ? range : undefined;
                 }
             }
         }
