@@ -3,11 +3,17 @@ namespace ts.OutliningElementsCollector {
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         const collapseText = "...";
+        let depth = 0;
+        const maxDepth = 20;
 
-        function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean, fullStart: boolean) {
+        walk(sourceFile);
+        return elements;
+
+        // If useFullStart is true, then the collapsing span includes leading whitespace, including linebreaks.
+        function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean, useFullStart: boolean) {
             if (hintSpanNode && startElement && endElement) {
                 const span: OutliningSpan = {
-                    textSpan: createTextSpanFromBounds(fullStart ? startElement.pos : startElement.getStart(), endElement.end),
+                    textSpan: createTextSpanFromBounds(useFullStart ? startElement.pos : startElement.getStart(), endElement.end),
                     hintSpan: createTextSpanFromBounds(startElement.getStart(), endElement.end),
                     bannerText: collapseText,
                     autoCollapse,
@@ -82,8 +88,6 @@ namespace ts.OutliningElementsCollector {
             return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
         }
 
-        let depth = 0;
-        const maxDepth = 20;
         function walk(n: Node): void {
             cancellationToken.throwIfCancellationRequested();
             if (depth > maxDepth) {
@@ -163,6 +167,9 @@ namespace ts.OutliningElementsCollector {
                     addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n), /* fullStart */ true);
                     break;
                 }
+                // If the block has no leading keywords and is a member of an array literal,
+                // we again want to only collapse the span of the block.
+                // Otherwise, the collapsed section will include the end of the previous line.
                 case SyntaxKind.ObjectLiteralExpression:
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                     const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
@@ -178,8 +185,5 @@ namespace ts.OutliningElementsCollector {
             forEachChild(n, walk);
             depth--;
         }
-
-        walk(sourceFile);
-        return elements;
     }
 }
