@@ -437,7 +437,7 @@ namespace ts {
             if (hostSourceFile !== undefined) {
                 if (!isString(hostSourceFile)) {
                     hostSourceFile.fileWatcher.close();
-                    resolutionCache.invalidateResolutionOfDeletedFile(path);
+                    resolutionCache.invalidateResolutionOfFile(path);
                 }
                 sourceFilesCache.delete(path);
             }
@@ -461,6 +461,7 @@ namespace ts {
                 }
                 else if (hostSourceFileInfo.sourceFile === oldSourceFile) {
                     sourceFilesCache.delete(oldSourceFile.path);
+                    resolutionCache.invalidateResolutionOfFile(oldSourceFile.path);
                 }
             }
         }
@@ -528,7 +529,7 @@ namespace ts {
             if (hostSourceFile) {
                 // Update the cache
                 if (eventKind === FileWatcherEventKind.Deleted) {
-                    resolutionCache.invalidateResolutionOfDeletedFile(path);
+                    resolutionCache.invalidateResolutionOfFile(path);
                     if (!isString(hostSourceFile)) {
                         hostSourceFile.fileWatcher.close();
                         sourceFilesCache.set(path, (hostSourceFile.version++).toString());

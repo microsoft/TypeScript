@@ -13,7 +13,7 @@ namespace ts {
         resolveModuleNames(moduleNames: string[], containingFile: string, logChanges: boolean): ResolvedModuleFull[];
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
-        invalidateResolutionOfDeletedFile(filePath: Path): void;
+        invalidateResolutionOfFile(filePath: Path): void;
         invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation: string): void;
 
         createHasInvalidatedResolution(): HasInvalidatedResolution;
@@ -22,7 +22,7 @@ namespace ts {
     }
 
     interface NameResolutionWithFailedLookupLocations {
-        readonly failedLookupLocations: string[];
+        readonly failedLookupLocations: ReadonlyArray<string>;
         isInvalidated?: boolean;
     }
 
@@ -40,9 +40,12 @@ namespace ts {
         getGlobalCache?: () => string | undefined): ResolutionCache {
 
         let host: ModuleResolutionHost;
-        let filesWithChangedSetOfUnresolvedImports: Path[];
-        let filesWithInvalidatedResolutions: Map<true>;
+        let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
+        let filesWithInvalidatedResolutions: Map<true> | undefined;
 
+        // The resolvedModuleNames and resolvedTypeReferenceDirectives are the cache of resolutions per file.
+        // The key in the map is source file's path.
+        // The values are Map of resolutions with key being name lookedup.
         const resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
@@ -54,7 +57,7 @@ namespace ts {
             finishRecordingFilesWithChangedResolutions,
             resolveModuleNames,
             resolveTypeReferenceDirectives,
-            invalidateResolutionOfDeletedFile,
+            invalidateResolutionOfFile,
             invalidateResolutionOfChangedFailedLookupLocation,
             createHasInvalidatedResolution,
             clear
@@ -65,6 +68,7 @@ namespace ts {
         }
 
         function clear() {
+            // Close all the watches for failed lookup locations, irrespective of refcounts for them since this is to clear the cache
             clearMap(failedLookupLocationsWatches, (failedLookupLocationPath, failedLookupLocationWatcher) => {
                 log(`Watcher: FailedLookupLocations: Status: ForceClose: LocationPath: ${failedLookupLocationPath}, refCount: ${failedLookupLocationWatcher.refCount}`);
                 failedLookupLocationWatcher.fileWatcher.close();
@@ -103,7 +107,7 @@ namespace ts {
                 // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, projectName, compilerOptions, host, globalCache);
                 if (resolvedModule) {
-                    return { resolvedModule, failedLookupLocations: primaryResult.failedLookupLocations.concat(failedLookupLocations) };
+                    return { resolvedModule, failedLookupLocations: addRange(primaryResult.failedLookupLocations as Array<string>, failedLookupLocations) };
                 }
             }
 
@@ -229,20 +233,20 @@ namespace ts {
         }
 
         type FailedLookupLocationAction = (failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) => void;
-        function withFailedLookupLocations(failedLookupLocations: string[], containingFile: string, name: string, fn: FailedLookupLocationAction) {
+        function withFailedLookupLocations(failedLookupLocations: ReadonlyArray<string>, containingFile: string, name: string, fn: FailedLookupLocationAction) {
             forEach(failedLookupLocations, failedLookupLocation => {
                 fn(failedLookupLocation, toPath(failedLookupLocation), containingFile, name);
             });
         }
 
-        function updateFailedLookupLocationWatches(containingFile: string, name: string, existingFailedLookupLocations: string[], failedLookupLocations: string[]) {
+        function updateFailedLookupLocationWatches(containingFile: string, name: string, existingFailedLookupLocations: ReadonlyArray<string> | undefined, failedLookupLocations: ReadonlyArray<string>) {
             if (failedLookupLocations) {
                 if (existingFailedLookupLocations) {
-                    const existingWatches = arrayToMap(existingFailedLookupLocations, failedLookupLocation => toPath(failedLookupLocation));
+                    const existingWatches = arrayToMap(existingFailedLookupLocations, toPath);
                     for (const failedLookupLocation of failedLookupLocations) {
                         const failedLookupLocationPath = toPath(failedLookupLocation);
                         if (existingWatches && existingWatches.has(failedLookupLocationPath)) {
-                            // still has same failed lookup location, keep the was
+                            // still has same failed lookup location, keep the watch
                             existingWatches.delete(failedLookupLocationPath);
                         }
                         else {
@@ -272,7 +276,7 @@ namespace ts {
             cache: Map<Map<T>>,
             getResult: (s: T) => R,
             getResultFileName: (result: R) => string | undefined) {
-            cache.forEach((value, path: Path) => {
+            cache.forEach((value, path) => {
                 if (path === deletedFilePath) {
                     cache.delete(path);
                     value.forEach((resolution, name) => {
@@ -280,7 +284,7 @@ namespace ts {
                     });
                 }
                 else if (value) {
-                    value.forEach((resolution, __name) => {
+                    value.forEach(resolution => {
                         if (resolution && !resolution.isInvalidated) {
                             const result = getResult(resolution);
                             if (result) {
@@ -298,10 +302,10 @@ namespace ts {
         function invalidateResolutionCacheOfChangedFailedLookupLocation<T extends NameResolutionWithFailedLookupLocations>(
             failedLookupLocation: string,
             cache: Map<Map<T>>) {
-            cache.forEach((value, containingFile: Path) => {
+            cache.forEach((value, containingFile) => {
                 if (value) {
-                    value.forEach((resolution, __name) => {
-                        if (resolution && !resolution.isInvalidated && contains(resolution.failedLookupLocations, failedLookupLocation)) {
+                    value.forEach(resolution => {
+                        if (resolution && !resolution.isInvalidated && some(resolution.failedLookupLocations, location => toPath(location) === failedLookupLocation)) {
                             // Mark the file as needing re-evaluation of module resolution instead of using it blindly.
                             resolution.isInvalidated = true;
                             (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFile, true);
@@ -311,7 +315,7 @@ namespace ts {
             });
         }
 
-        function invalidateResolutionOfDeletedFile(filePath: Path) {
+        function invalidateResolutionOfFile(filePath: Path) {
             invalidateResolutionCacheOfDeletedFile(filePath, resolvedModuleNames, m => m.resolvedModule, r => r.resolvedFileName);
             invalidateResolutionCacheOfDeletedFile(filePath, resolvedTypeReferenceDirectives, m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName);
         }

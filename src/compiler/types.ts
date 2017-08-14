@@ -4011,7 +4011,7 @@ namespace ts {
     export interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
-        readonly failedLookupLocations: string[];
+        readonly failedLookupLocations: ReadonlyArray<string>;
         /*@internal*/
         isInvalidated?: boolean;
     }
@@ -4025,7 +4025,7 @@ namespace ts {
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
-        readonly failedLookupLocations: string[];
+        readonly failedLookupLocations: ReadonlyArray<string>;
         /*@internal*/
         isInvalidated?: boolean;
     }

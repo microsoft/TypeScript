@@ -547,7 +547,7 @@ namespace ts.server {
             if (this.isRoot(info)) {
                 this.removeRoot(info);
             }
-            this.resolutionCache.invalidateResolutionOfDeletedFile(info.path);
+            this.resolutionCache.invalidateResolutionOfFile(info.path);
             this.cachedUnresolvedImportsPerFile.remove(info.path);
 
             if (detachFromProject) {
