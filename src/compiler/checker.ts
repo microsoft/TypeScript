@@ -3230,7 +3230,7 @@ namespace ts {
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
-                        ((flags & TypeFormatFlags.UseAliasEvenIfNotAccessible) || isTypeSymbolAccessible(type.aliasSymbol, enclosingDeclaration))) {
+                        ((flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) || isTypeSymbolAccessible(type.aliasSymbol, enclosingDeclaration))) {
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, length(typeArguments), nextFlags);
                     }
