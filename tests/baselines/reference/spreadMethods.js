@@ -33,7 +33,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
-var K = (function () {
+var K = /** @class */ (function () {
     function K() {
         this.p = 12;
     }

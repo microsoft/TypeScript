@@ -58,9 +58,9 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports.get(unescapeLeadingUnderscores(specifier.name.text))) {
+                            if (!uniqueExports.get(unescapeLeadingUnderscores(specifier.name.escapedText))) {
                                 const name = specifier.propertyName || specifier.name;
-                                exportSpecifiers.add(unescapeLeadingUnderscores(name.text), specifier);
+                                exportSpecifiers.add(unescapeLeadingUnderscores(name.escapedText), specifier);
 
                                 const decl = resolver.getReferencedImportDeclaration(name)
                                     || resolver.getReferencedValueDeclaration(name);
@@ -69,7 +69,7 @@ namespace ts {
                                     multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports.set(unescapeLeadingUnderscores(specifier.name.text), true);
+                                uniqueExports.set(unescapeLeadingUnderscores(specifier.name.escapedText), true);
                                 exportedNames = append(exportedNames, specifier.name);
                             }
                         }
@@ -103,9 +103,9 @@ namespace ts {
                         else {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.text))) {
+                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.escapedText))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(unescapeLeadingUnderscores(name.text), true);
+                                uniqueExports.set(unescapeLeadingUnderscores(name.escapedText), true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -124,9 +124,9 @@ namespace ts {
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.text))) {
+                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.escapedText))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(unescapeLeadingUnderscores(name.text), true);
+                                uniqueExports.set(unescapeLeadingUnderscores(name.escapedText), true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -158,8 +158,8 @@ namespace ts {
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports.get(unescapeLeadingUnderscores(decl.name.text))) {
-                uniqueExports.set(unescapeLeadingUnderscores(decl.name.text), true);
+            if (!uniqueExports.get(unescapeLeadingUnderscores(decl.name.escapedText))) {
+                uniqueExports.set(unescapeLeadingUnderscores(decl.name.escapedText), true);
                 exportedNames = append(exportedNames, decl.name);
             }
         }

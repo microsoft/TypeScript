@@ -7,7 +7,7 @@ class C {
 }
 
 //// [methodSignatureDeclarationEmit1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (a) {

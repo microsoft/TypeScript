@@ -51,13 +51,13 @@ var r6 = new b(1, '');
 
 //// [constructSignaturesWithIdenticalOverloads.js]
 // Duplicate overloads of construct signatures should generate errors
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
     }
     return C;
 }());
 var r1 = new C(1, '');
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2(x) {
     }
     return C2;

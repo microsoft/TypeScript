@@ -18,7 +18,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 >>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 >>>    };
 >>>})();
->>>var AbstractGreeter = (function () {
+>>>var AbstractGreeter = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
@@ -53,7 +53,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -64,7 +64,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 >Emitted(15, 2) Source(1, 1) + SourceIndex(0)
 4 >Emitted(15, 6) Source(2, 2) + SourceIndex(0)
 ---
->>>var Greeter = (function (_super) {
+>>>var Greeter = /** @class */ (function (_super) {
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->

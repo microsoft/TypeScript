@@ -101,6 +101,8 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(node as CatchClause);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -156,7 +158,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ObjectLiteralElement[]): Expression[] {
+        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElement>): Expression[] {
             let chunkObject: (ShorthandPropertyAssignment | PropertyAssignment)[];
             const objects: Expression[] = [];
             for (const e of elements) {
@@ -210,6 +212,17 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        }
+
+        function visitCatchClause(node: CatchClause): CatchClause {
+            if (!node.variableDeclaration) {
+                return updateCatchClause(
+                    node,
+                    createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined)),
+                    visitNode(node.block, visitor, isBlock)
+                );
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -776,7 +789,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(unescapeLeadingUnderscores(node.name.text)),
+                    createLiteral(unescapeLeadingUnderscores(node.name.escapedText)),
                     node
                 );
             }

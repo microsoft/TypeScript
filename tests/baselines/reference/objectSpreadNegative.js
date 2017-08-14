@@ -95,12 +95,12 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 var o = { a: 1, b: 'no' };
 /// private propagates
-var PrivateOptionalX = (function () {
+var PrivateOptionalX = /** @class */ (function () {
     function PrivateOptionalX() {
     }
     return PrivateOptionalX;
 }());
-var PublicX = (function () {
+var PublicX = /** @class */ (function () {
     function PublicX() {
     }
     return PublicX;
@@ -137,7 +137,7 @@ spreadFunc(); // error, no call signature
 var setterOnly = __assign({ set b(bad) { } });
 setterOnly.b = 12; // error, 'b' does not exist
 // methods are skipped because they aren't enumerable
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }

@@ -4,6 +4,18 @@ declare function setTimeout(handler: (...args: any[]) => void, timeout: number):
 declare function clearTimeout(handle: any): void;
 
 namespace ts {
+    /**
+     * Set a high stack trace limit to provide more information in case of an error.
+     * Called for command-line and server use cases.
+     * Not called if TypeScript is used as a library.
+     */
+    /* @internal */
+    export function setStackTraceLimit() {
+        if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
+            (Error as any).stackTraceLimit = 100;
+        }
+    }
+
     export enum FileWatcherEventKind {
         Created,
         Changed,
@@ -23,7 +35,7 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        readFile(path: string, encoding?: string): string;
+        readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
@@ -39,7 +51,7 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -97,10 +109,10 @@ namespace ts {
         directoryExists(path: string): boolean;
         createDirectory(path: string): void;
         resolvePath(path: string): string;
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
         writeFile(path: string, contents: string): void;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], basePaths?: string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, basePaths?: ReadonlyArray<string>, excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
@@ -141,7 +153,7 @@ namespace ts {
                         return;
                     }
                     watcher = _fs.watch(
-                        dirPath,
+                        dirPath || ".",
                         { persistent: true },
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
                     );
@@ -196,15 +208,22 @@ namespace ts {
                 if (platform === "win32" || platform === "win64") {
                     return false;
                 }
-                // convert current file name to upper case / lower case and check if file exists
-                // (guards against cases when name is already all uppercase or lowercase)
-                return !fileExists(__filename.toUpperCase()) || !fileExists(__filename.toLowerCase());
+                // If this file exists under a different case, we must be case-insensitve.
+                return !fileExists(swapCase(__filename));
+            }
+
+            /** Convert all lowercase chars to uppercase, and vice-versa */
+            function swapCase(s: string): string {
+                return s.replace(/\w/g, (ch) => {
+                    const up = ch.toUpperCase();
+                    return ch === up ? ch.toLowerCase() : up;
+                });
             }
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
-            function readFile(fileName: string, _encoding?: string): string {
+            function readFile(fileName: string, _encoding?: string): string | undefined {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -287,7 +306,7 @@ namespace ts {
                 }
             }
 
-            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[], depth?: number): string[] {
+            function readDirectory(path: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
                 return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
             }
 

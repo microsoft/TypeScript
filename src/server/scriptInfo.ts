@@ -16,7 +16,7 @@ namespace ts.server {
 
         public getVersion() {
             return this.svc
-                ? `SVC-${this.svcVersion}-${this.svc.getSnapshot().version}`
+                ? `SVC-${this.svcVersion}-${this.svc.getSnapshotVersion()}`
                 : `Text-${this.textVersion}`;
         }
 
@@ -62,22 +62,19 @@ namespace ts.server {
         }
 
         public getLineInfo(line: number): AbsolutePositionAndLineText {
-            return this.switchToScriptVersionCache().getSnapshot().index.lineNumberToInfo(line);
+            return this.switchToScriptVersionCache().getLineInfo(line);
         }
         /**
          *  @param line 0 based index
          */
-        lineToTextSpan(line: number) {
+        lineToTextSpan(line: number): TextSpan {
             if (!this.svc) {
                 const lineMap = this.getLineMap();
                 const start = lineMap[line]; // -1 since line is 1-based
                 const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text.length;
-                return ts.createTextSpanFromBounds(start, end);
+                return createTextSpanFromBounds(start, end);
             }
-            const index = this.svc.getSnapshot().index;
-            const { lineText, absolutePosition } = index.lineNumberToInfo(line + 1);
-            const len = lineText !== undefined ? lineText.length : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
-            return ts.createTextSpan(absolutePosition, len);
+            return this.svc.lineToTextSpan(line);
         }
 
         /**
@@ -86,11 +83,11 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number {
             if (!this.svc) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1);
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
             }
 
             // TODO: assert this offset is actually on the line
-            return this.svc.getSnapshot().index.absolutePositionOfStartOfLine(line) + (offset - 1);
+            return this.svc.lineOffsetToPosition(line, offset);
         }
 
         positionToLineOffset(position: number): protocol.Location {
@@ -98,7 +95,7 @@ namespace ts.server {
                 const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
                 return { line: line + 1, offset: character + 1 };
             }
-            return this.svc.getSnapshot().index.positionToLineOffset(position);
+            return this.svc.positionToLineOffset(position);
         }
 
         private getFileText(tempFileName?: string) {
@@ -147,7 +144,7 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: ts.FormatCodeSettings;
+        private formatCodeSettings: FormatCodeSettings;
         readonly path: Path;
 
         private fileWatcher: FileWatcher;
@@ -232,7 +229,7 @@ namespace ts.server {
                     }
                     break;
                 default:
-                    removeItemFromSet(this.containingProjects, project);
+                    unorderedRemoveItem(this.containingProjects, project);
                     break;
             }
         }
@@ -242,7 +239,7 @@ namespace ts.server {
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*detachFromProjects*/ false);
             }
-            this.containingProjects.length = 0;
+            clear(this.containingProjects);
         }
 
         getDefaultProject() {

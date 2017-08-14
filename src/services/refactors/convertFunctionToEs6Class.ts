@@ -1,6 +1,6 @@
 /* @internal */
 
-namespace ts.refactor {
+namespace ts.refactor.convertFunctionToES6Class {
     const actionName = "convert";
 
     const convertFunctionToES6Class: Refactor = {
@@ -12,7 +12,11 @@ namespace ts.refactor {
 
     registerRefactor(convertFunctionToES6Class);
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] {
+    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+        if (!isInJavaScriptFile(context.file)) {
+            return undefined;
+        }
+
         const start = context.startPosition;
         const node = getTokenAtPosition(context.file, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
@@ -159,7 +163,7 @@ namespace ts.refactor {
                 deleteNode(nodeToDelete);
 
                 if (!assignmentBinaryExpression.right) {
-                    return createProperty([], modifiers, symbol.getUnescapedName(), /*questionToken*/ undefined,
+                    return createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,
                         /*type*/ undefined, /*initializer*/ undefined);
                 }
 

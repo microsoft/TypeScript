@@ -289,7 +289,7 @@ class ProjectRunner extends RunnerBase {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
             }
 
-            function readFile(fileName: string): string {
+            function readFile(fileName: string): string | undefined {
                 return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
@@ -426,12 +426,12 @@ class ProjectRunner extends RunnerBase {
                 compilerResult.program ?
                     ts.filter(compilerResult.program.getSourceFiles(), sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)) :
                     []),
-                sourceFile => <Harness.Compiler.TestFile>{
+                (sourceFile): Harness.Compiler.TestFile => ({
                     unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
                         RunnerBase.removeFullPaths(sourceFile.fileName) :
                         sourceFile.fileName,
                     content: sourceFile.text
-                });
+                }));
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }

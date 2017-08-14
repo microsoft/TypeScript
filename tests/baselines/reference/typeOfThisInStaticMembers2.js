@@ -8,13 +8,13 @@ class C2<T> {
 }
 
 //// [typeOfThisInStaticMembers2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.foo = this; // error
     return C;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.foo = this; // error

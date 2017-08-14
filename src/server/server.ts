@@ -9,14 +9,15 @@ namespace ts.server {
         canUseEvents: boolean;
         installerEventPort: number;
         useSingleInferredProject: boolean;
+        useInferredProjectPerProjectRoot: boolean;
         disableAutomaticTypingAcquisition: boolean;
         globalTypingsCacheLocation: string;
         logger: Logger;
         typingSafeListLocation: string;
         npmLocation: string | undefined;
         telemetryEnabled: boolean;
-        globalPlugins: string[];
-        pluginProbeLocations: string[];
+        globalPlugins: ReadonlyArray<string>;
+        pluginProbeLocations: ReadonlyArray<string>;
         allowLocalPluginLoads: boolean;
     }
 
@@ -116,8 +117,6 @@ namespace ts.server {
         birthtime: Date;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
-
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
@@ -138,11 +137,9 @@ namespace ts.server {
         terminal: false,
     });
 
-    class Logger implements ts.server.Logger {
+    class Logger implements server.Logger {
         private fd = -1;
         private seq = 0;
-        private inGroup = false;
-        private firstInGroup = true;
 
         constructor(private readonly logFilename: string,
             private readonly traceToConsole: boolean,
@@ -172,22 +169,24 @@ namespace ts.server {
         }
 
         perftrc(s: string) {
-            this.msg(s, Msg.Perf);
+            this.msg(s, "Perf");
         }
 
         info(s: string) {
-            this.msg(s, Msg.Info);
+            this.msg(s, "Info");
         }
 
-        startGroup() {
-            this.inGroup = true;
-            this.firstInGroup = true;
+        err(s: string) {
+            this.msg(s, "Err");
         }
 
-        endGroup() {
-            this.inGroup = false;
+        group(logGroupEntries: (log: (msg: string) => void) => void) {
+            let firstInGroup = false;
+            logGroupEntries(s => {
+                this.msg(s, "Info", /*inGroup*/ true, firstInGroup);
+                firstInGroup = false;
+            });
             this.seq++;
-            this.firstInGroup = true;
         }
 
         loggingEnabled() {
@@ -198,28 +197,40 @@ namespace ts.server {
             return this.loggingEnabled() && this.level >= level;
         }
 
-        msg(s: string, type: Msg.Types = Msg.Err) {
-            if (this.fd >= 0 || this.traceToConsole) {
-                s = s + "\n";
+        private msg(s: string, type: string, inGroup = false, firstInGroup = false) {
+            if (!this.canWrite) return;
+
+            s = `[${nowString()}] ${s}\n`;
+            if (!inGroup || firstInGroup) {
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
-                if (this.firstInGroup) {
-                    s = prefix + s;
-                    this.firstInGroup = false;
-                }
-                if (!this.inGroup) {
-                    this.seq++;
-                    this.firstInGroup = true;
-                }
-                if (this.fd >= 0) {
-                    const buf = new Buffer(s);
-                    // tslint:disable-next-line no-null-keyword
-                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
-                }
-                if (this.traceToConsole) {
-                    console.warn(s);
-                }
+                s = prefix + s;
+            }
+            this.write(s);
+            if (!inGroup) {
+                this.seq++;
             }
         }
+
+        private get canWrite() {
+            return this.fd >= 0 || this.traceToConsole;
+        }
+
+        private write(s: string) {
+            if (this.fd >= 0) {
+                const buf = new Buffer(s);
+                // tslint:disable-next-line no-null-keyword
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
+            }
+            if (this.traceToConsole) {
+                console.warn(s);
+            }
+        }
+    }
+
+    // E.g. "12:34:56.789"
+    function nowString() {
+        const d = new Date();
+        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 
     class NodeTypingsInstaller implements ITypingsInstaller {
@@ -404,6 +415,7 @@ namespace ts.server {
                 host,
                 cancellationToken,
                 useSingleInferredProject,
+                useInferredProjectPerProjectRoot,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
@@ -526,12 +538,18 @@ namespace ts.server {
                 if (err) {
                     watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
                 }
-                else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                    watchedFile.mtime = stats.mtime;
-                    const eventKind = watchedFile.mtime.getTime() === 0
-                        ? FileWatcherEventKind.Deleted
-                        : FileWatcherEventKind.Changed;
-                    watchedFile.callback(watchedFile.fileName, eventKind);
+                else {
+                    const oldTime = watchedFile.mtime.getTime();
+                    const newTime = stats.mtime.getTime();
+                    if (oldTime !== newTime) {
+                        watchedFile.mtime = stats.mtime;
+                        const eventKind = oldTime === 0
+                            ? FileWatcherEventKind.Created
+                            : newTime === 0
+                                ? FileWatcherEventKind.Deleted
+                                : FileWatcherEventKind.Changed;
+                        watchedFile.callback(watchedFile.fileName, eventKind);
+                    }
                 }
             });
         }
@@ -745,14 +763,25 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    setStackTraceLimit();
+
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
     const npmLocation = findArgument(Arguments.NpmLocation);
 
-    const globalPlugins = (findArgument("--globalPlugins") || "").split(",");
-    const pluginProbeLocations = (findArgument("--pluginProbeLocations") || "").split(",");
+    function parseStringArray(argName: string): ReadonlyArray<string> {
+        const arg = findArgument(argName);
+        if (arg === undefined) {
+            return emptyArray;
+        }
+        return arg.split(",").filter(name => name !== "");
+    }
+
+    const globalPlugins = parseStringArray("--globalPlugins");
+    const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
+    const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
@@ -762,6 +791,7 @@ namespace ts.server {
         installerEventPort: eventPort,
         canUseEvents: eventPort === undefined,
         useSingleInferredProject,
+        useInferredProjectPerProjectRoot,
         disableAutomaticTypingAcquisition,
         globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
         typingSafeListLocation,

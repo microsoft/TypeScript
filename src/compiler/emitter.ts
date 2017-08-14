@@ -1195,7 +1195,9 @@ namespace ts {
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
-                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                const dotToken = createToken(SyntaxKind.DotToken);
+                dotToken.pos = dotRangeStart;
+                dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
@@ -1346,7 +1348,9 @@ namespace ts {
 
             emitExpression(node.left);
             increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
+            emitLeadingCommentsOfPosition(node.operatorToken.pos);
             writeTokenNode(node.operatorToken);
+            emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
             increaseIndentIf(indentAfterOperator, " ");
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -1570,8 +1574,20 @@ namespace ts {
             write(";");
         }
 
+        function emitTokenWithComment(token: SyntaxKind, pos: number, contextNode?: Node) {
+            const node = contextNode && getParseTreeNode(contextNode);
+            if (node && node.kind === contextNode.kind) {
+                pos = skipTrivia(currentSourceFile.text, pos);
+            }
+            pos = writeToken(token, pos, /*contextNode*/ contextNode);
+            if (node && node.kind === contextNode.kind) {
+                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
+            }
+            return pos;
+        }
+
         function emitReturnStatement(node: ReturnStatement) {
-            writeToken(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
+            emitTokenWithComment(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
             emitExpressionWithPrefix(" ", node.expression);
             write(";");
         }
@@ -2131,10 +2147,12 @@ namespace ts {
         function emitCatchClause(node: CatchClause) {
             const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
             write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos);
-            emit(node.variableDeclaration);
-            writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : openParenPos);
-            write(" ");
+            if (node.variableDeclaration) {
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                emit(node.variableDeclaration);
+                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration.end);
+                write(" ");
+            }
             emit(node.block);
         }
 
@@ -2228,7 +2246,7 @@ namespace ts {
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
          */
-        function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean, seenPrologueDirectives?: Map<true>): number {
+        function emitPrologueDirectives(statements: ReadonlyArray<Node>, startWithNewLine?: boolean, seenPrologueDirectives?: Map<true>): number {
             for (let i = 0; i < statements.length; i++) {
                 const statement = statements[i];
                 if (isPrologueDirective(statement)) {
@@ -2761,7 +2779,7 @@ namespace ts {
                 return generateName(node);
             }
             else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return unescapeLeadingUnderscores(node.text);
+                return unescapeLeadingUnderscores(node.escapedText);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
@@ -2917,8 +2935,8 @@ namespace ts {
          */
         function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
             const expr = getExternalModuleName(node);
-            const baseName = expr.kind === SyntaxKind.StringLiteral ?
-                makeIdentifierFromModuleName((<LiteralExpression>expr).text) : "module";
+            const baseName = isStringLiteral(expr) ?
+                makeIdentifierFromModuleName(expr.text) : "module";
             return makeUniqueName(baseName);
         }
 
@@ -2981,7 +2999,7 @@ namespace ts {
                 case GeneratedIdentifierKind.Loop:
                     return makeTempVariableName(TempFlags._i);
                 case GeneratedIdentifierKind.Unique:
-                    return makeUniqueName(unescapeLeadingUnderscores(name.text));
+                    return makeUniqueName(unescapeLeadingUnderscores(name.escapedText));
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

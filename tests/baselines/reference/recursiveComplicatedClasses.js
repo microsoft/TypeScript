@@ -35,7 +35,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Signature = (function () {
+var Signature = /** @class */ (function () {
     function Signature() {
         this.parameters = null;
     }
@@ -44,7 +44,7 @@ var Signature = (function () {
 function aEnclosesB(a) {
     return true;
 }
-var Symbol = (function () {
+var Symbol = /** @class */ (function () {
     function Symbol() {
     }
     Symbol.prototype.visible = function () {
@@ -53,21 +53,21 @@ var Symbol = (function () {
     };
     return Symbol;
 }());
-var InferenceSymbol = (function (_super) {
+var InferenceSymbol = /** @class */ (function (_super) {
     __extends(InferenceSymbol, _super);
     function InferenceSymbol() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return InferenceSymbol;
 }(Symbol));
-var ParameterSymbol = (function (_super) {
+var ParameterSymbol = /** @class */ (function (_super) {
     __extends(ParameterSymbol, _super);
     function ParameterSymbol() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ParameterSymbol;
 }(InferenceSymbol));
-var TypeSymbol = (function (_super) {
+var TypeSymbol = /** @class */ (function (_super) {
     __extends(TypeSymbol, _super);
     function TypeSymbol() {
         return _super !== null && _super.apply(this, arguments) || this;
