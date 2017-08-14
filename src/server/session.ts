@@ -601,7 +601,7 @@ namespace ts.server {
 
             const definitions = project.getLanguageService().getDefinitionAtPosition(file, position);
             if (!definitions) {
-                return emptyArray;
+                return undefined;
             }
 
             if (simplifiedResult) {
@@ -669,7 +669,7 @@ namespace ts.server {
             const occurrences = project.getLanguageService().getOccurrencesAtPosition(file, position);
 
             if (!occurrences) {
-                return emptyArray;
+                return undefined;
             }
 
             return occurrences.map(occurrence => {
@@ -913,7 +913,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
                 if (!nameInfo) {
-                    return emptyArray;
+                    return undefined;
                 }
 
                 const displayString = displayPartsToString(nameInfo.displayParts);
@@ -1176,7 +1176,7 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
             if (!completions) {
-                return emptyArray;
+                return undefined;
             }
             if (simplifiedResult) {
                 return mapDefined(completions.entries, entry => {
