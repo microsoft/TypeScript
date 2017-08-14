@@ -605,7 +605,7 @@ namespace ts {
             return undefined;
         }
 
-        const groupIdToGroup: T[][] = []; // Sparse array for combining entried with the same id
+        const groupIdToGroup: T[][] = []; // Sparse array for combining entries with the same id
         let result: T[][]; // Compacted array for return value
         for (let index = 0; index < array.length; index++) {
             const value = array[index];

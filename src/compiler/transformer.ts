@@ -353,13 +353,12 @@ namespace ts {
                 }
 
                 if (lexicalEnvironmentVariableDeclarations) {
-                    const newStatements = map(groupVariableDeclarationsByLeadingCommentPresence(lexicalEnvironmentVariableDeclarations), createSimpleVariableStatement);
-
-                    if (!statements) {
-                        statements = newStatements;
-                    }
-                    else {
-                        statements = concatenate(statements, newStatements);
+                    const groups = groupVariableDeclarationsByLeadingCommentPresence(lexicalEnvironmentVariableDeclarations);
+                    for (const group of groups) {
+                        if (!statements) {
+                            statements = [];
+                        }
+                        statements.push(createSimpleVariableStatement(group));
                     }
                 }
             }
