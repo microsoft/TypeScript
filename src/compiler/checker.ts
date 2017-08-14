@@ -22830,7 +22830,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolAtLocation(node: Node) {
+        function getSymbolAtLocation(node: Node): Symbol | undefined {
             if (node.kind === SyntaxKind.SourceFile) {
                 return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
             }
@@ -22908,12 +22908,21 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     // index access
-                    if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
-                        const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
-                        if (objectType === unknownType) return undefined;
-                        const apparentType = getApparentType(objectType);
-                        if (apparentType === unknownType) return undefined;
-                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text as __String);
+                    switch (node.parent.kind) {
+                        case SyntaxKind.ElementAccessExpression: {
+                            if ((<ElementAccessExpression>node.parent).argumentExpression !== node) return undefined;
+                            const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
+                            if (objectType === unknownType) return undefined;
+                            const apparentType = getApparentType(objectType);
+                            if (apparentType === unknownType) return undefined;
+                            return getPropertyOfType(apparentType, (<NumericLiteral>node).text as __String);
+                        }
+                        case SyntaxKind.LiteralType: {
+                            if (!isIndexedAccessTypeNode(node.parent.parent)) return undefined;
+                            const objectType = getApparentType(getTypeFromTypeNode(node.parent.parent.objectType));
+                            if (objectType === unknownType) return undefined;
+                            return getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
+                        }
                     }
                     break;
             }
