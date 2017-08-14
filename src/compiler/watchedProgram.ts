@@ -520,7 +520,7 @@ namespace ts {
         function onSourceFileChange(fileName: string, path: Path, eventKind: FileWatcherEventKind) {
             writeLog(`Source file path : ${path} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName}`);
 
-            updateCachedSystem(fileName, path);
+            updateCachedSystemWithFile(fileName, path, eventKind);
             const hostSourceFile = sourceFilesCache.get(path);
             if (hostSourceFile) {
                 // Update the cache
@@ -547,21 +547,19 @@ namespace ts {
             scheduleProgramUpdate();
         }
 
-        function updateCachedSystem(fileName: string, path: Path) {
+        function updateCachedSystemWithFile(fileName: string, path: Path, eventKind: FileWatcherEventKind) {
             if (configFileName) {
-                const absoluteNormalizedPath = getNormalizedAbsolutePath(fileName, getDirectoryPath(path));
-                (host as CachedSystem).addOrDeleteFileOrFolder(normalizePath(absoluteNormalizedPath));
+                (host as CachedSystem).addOrDeleteFile(fileName, path, eventKind);
             }
         }
 
-        function watchFailedLookupLocation(failedLookupLocation: string, containingFile: string, name: string) {
-            return host.watchFile(failedLookupLocation, (fileName, eventKind) => onFailedLookupLocationChange(fileName, eventKind, failedLookupLocation, containingFile, name));
+        function watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
+            return host.watchFile(failedLookupLocation, (fileName, eventKind) => onFailedLookupLocationChange(fileName, eventKind, failedLookupLocation, failedLookupLocationPath, containingFile, name));
         }
 
-        function onFailedLookupLocationChange(fileName: string, eventKind: FileWatcherEventKind, failedLookupLocation: string, containingFile: string, name: string) {
+        function onFailedLookupLocationChange(fileName: string, eventKind: FileWatcherEventKind, failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
             writeLog(`Failed lookup location : ${failedLookupLocation} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName} containingFile: ${containingFile}, name: ${name}`);
-            const path = toPath(failedLookupLocation);
-            updateCachedSystem(failedLookupLocation, path);
+            updateCachedSystemWithFile(fileName, failedLookupLocationPath, eventKind);
             resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
             scheduleProgramUpdate();
         }
@@ -574,13 +572,13 @@ namespace ts {
             fileWatcher.close();
         }
 
-        function onMissingFileChange(filename: string, missingFilePath: Path, eventKind: FileWatcherEventKind) {
-            writeLog(`Missing file path : ${missingFilePath} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${filename}`);
+        function onMissingFileChange(fileName: string, missingFilePath: Path, eventKind: FileWatcherEventKind) {
+            writeLog(`Missing file path : ${missingFilePath} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName}`);
+            updateCachedSystemWithFile(fileName, missingFilePath, eventKind);
+
             if (eventKind === FileWatcherEventKind.Created && missingFilesMap.has(missingFilePath)) {
                 closeMissingFilePathWatcher(missingFilePath, missingFilesMap.get(missingFilePath));
                 missingFilesMap.delete(missingFilePath);
-
-                updateCachedSystem(filename, missingFilePath);
 
                 // Delete the entry in the source files cache so that new source file is created
                 removeSourceFile(missingFilePath);
@@ -600,8 +598,8 @@ namespace ts {
         }
 
         function watchWildCardDirectory(directory: string, flags: WatchDirectoryFlags) {
-            return host.watchDirectory(directory, fileName =>
-                onFileAddOrRemoveInWatchedDirectory(getNormalizedAbsolutePath(fileName, directory)),
+            return host.watchDirectory(directory, fileOrFolder =>
+                onFileAddOrRemoveInWatchedDirectory(getNormalizedAbsolutePath(fileOrFolder, directory)),
                 (flags & WatchDirectoryFlags.Recursive) !== 0);
         }
 
@@ -609,24 +607,24 @@ namespace ts {
             watcher.close();
         }
 
-        function onFileAddOrRemoveInWatchedDirectory(fileName: string) {
+        function onFileAddOrRemoveInWatchedDirectory(fileOrFolder: string) {
             Debug.assert(!!configFileName);
 
-            const path = toPath(fileName);
+            const fileOrFolderPath = toPath(fileOrFolder);
 
             // Since the file existance changed, update the sourceFiles cache
-            updateCachedSystem(fileName, path);
-            removeSourceFile(path);
+            (host as CachedSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+            removeSourceFile(fileOrFolderPath);
 
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !isSupportedSourceFileName(fileName, compilerOptions)) {
-                writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileName}`);
+            if (fileOrFolder && !isSupportedSourceFileName(fileOrFolder, compilerOptions)) {
+                writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrFolder}`);
                 return;
             }
 
-            writeLog(`Project: ${configFileName} Detected file add/remove of supported extension: ${fileName}`);
+            writeLog(`Project: ${configFileName} Detected file add/remove of supported extension: ${fileOrFolder}`);
 
             // Reload is pending, do the reload
             if (!needsReload) {
@@ -658,9 +656,7 @@ namespace ts {
         }
     }
 
-    interface CachedSystem extends System {
-        addOrDeleteFileOrFolder(fileOrFolder: string): void;
-        clearCache(): void;
+    interface CachedSystem extends System, CachedHost {
     }
 
     function createCachedSystem(host: System): CachedSystem {
@@ -675,7 +671,7 @@ namespace ts {
         const setTimeout = host.setTimeout ? (callback: (...args: any[]) => void, ms: number, ...args: any[]) => host.setTimeout(callback, ms, ...args) : undefined;
         const clearTimeout = host.clearTimeout ? (timeoutId: any) => host.clearTimeout(timeoutId) : undefined;
 
-        const cachedHost = createCachedHost(host);
+        const cachedPartialSystem = createCachedPartialSystem(host);
         return {
             args: host.args,
             newLine: host.newLine,
@@ -683,17 +679,17 @@ namespace ts {
             write: s => host.write(s),
             readFile: (path, encoding?) => host.readFile(path, encoding),
             getFileSize,
-            writeFile: (fileName, data, writeByteOrderMark?) => cachedHost.writeFile(fileName, data, writeByteOrderMark),
+            writeFile: (fileName, data, writeByteOrderMark?) => cachedPartialSystem.writeFile(fileName, data, writeByteOrderMark),
             watchFile,
             watchDirectory,
             resolvePath: path => host.resolvePath(path),
-            fileExists: fileName => cachedHost.fileExists(fileName),
-            directoryExists: dir => cachedHost.directoryExists(dir),
-            createDirectory: dir => cachedHost.createDirectory(dir),
+            fileExists: fileName => cachedPartialSystem.fileExists(fileName),
+            directoryExists: dir => cachedPartialSystem.directoryExists(dir),
+            createDirectory: dir => cachedPartialSystem.createDirectory(dir),
             getExecutingFilePath: () => host.getExecutingFilePath(),
-            getCurrentDirectory: () => cachedHost.getCurrentDirectory(),
-            getDirectories: dir => cachedHost.getDirectories(dir),
-            readDirectory: (path, extensions, excludes, includes, depth) => cachedHost.readDirectory(path, extensions, excludes, includes, depth),
+            getCurrentDirectory: () => cachedPartialSystem.getCurrentDirectory(),
+            getDirectories: dir => cachedPartialSystem.getDirectories(dir),
+            readDirectory: (path, extensions, excludes, includes, depth) => cachedPartialSystem.readDirectory(path, extensions, excludes, includes, depth),
             getModifiedTime,
             createHash,
             getMemoryUsage,
@@ -704,8 +700,9 @@ namespace ts {
             debugMode: host.debugMode,
             setTimeout,
             clearTimeout,
-            addOrDeleteFileOrFolder: fileOrFolder => cachedHost.addOrDeleteFileOrFolder(fileOrFolder),
-            clearCache: () => cachedHost.clearCache()
+            addOrDeleteFileOrFolder: (fileOrFolder, fileOrFolderPath) => cachedPartialSystem.addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath),
+            addOrDeleteFile: (file, filePath, eventKind) => cachedPartialSystem.addOrDeleteFile(file, filePath, eventKind),
+            clearCache: () => cachedPartialSystem.clearCache()
         };
     }
 }

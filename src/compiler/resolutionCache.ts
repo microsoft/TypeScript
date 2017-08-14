@@ -40,7 +40,7 @@ namespace ts {
     export function createResolutionCache(
         toPath: (fileName: string) => Path,
         getCompilerOptions: () => CompilerOptions,
-        watchForFailedLookupLocation: (failedLookupLocation: string, containingFile: string, name: string) => FileWatcher,
+        watchForFailedLookupLocation: (failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) => FileWatcher,
         log: (s: string) => void,
         resolveWithGlobalCache?: ResolverWithGlobalCache): ResolutionCache {
 
@@ -201,7 +201,7 @@ namespace ts {
             }
             else {
                 log(`Watcher: FailedLookupLocations: Status: new watch: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
-                const fileWatcher = watchForFailedLookupLocation(failedLookupLocation, containingFile, name);
+                const fileWatcher = watchForFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name);
                 failedLookupLocationsWatches.set(failedLookupLocationPath, { fileWatcher, refCount: 1 });
             }
         }

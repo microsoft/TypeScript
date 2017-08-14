@@ -4,12 +4,13 @@
 /// <reference path="..\compiler\resolutionCache.ts" />
 
 namespace ts.server {
+    /*@internal*/
     export class CachedServerHost implements ServerHost {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
 
-        private readonly cachedHost: CachedHost;
+        private readonly cachedPartialSystem: CachedPartialSystem;
 
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
@@ -24,7 +25,7 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpath = path => this.host.realpath(path);
             }
-            this.cachedHost = createCachedHost(host);
+            this.cachedPartialSystem = createCachedPartialSystem(host);
         }
 
         write(s: string) {
@@ -32,7 +33,7 @@ namespace ts.server {
         }
 
         writeFile(fileName: string, data: string, writeByteOrderMark?: boolean) {
-            this.cachedHost.writeFile(fileName, data, writeByteOrderMark);
+            this.cachedPartialSystem.writeFile(fileName, data, writeByteOrderMark);
         }
 
         resolvePath(path: string) {
@@ -48,7 +49,7 @@ namespace ts.server {
         }
 
         getCurrentDirectory() {
-            return this.cachedHost.getCurrentDirectory();
+            return this.cachedPartialSystem.getCurrentDirectory();
         }
 
         exit(exitCode?: number) {
@@ -61,32 +62,35 @@ namespace ts.server {
         }
 
         getDirectories(rootDir: string) {
-            return this.cachedHost.getDirectories(rootDir);
+            return this.cachedPartialSystem.getDirectories(rootDir);
         }
 
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-            return this.cachedHost.readDirectory(rootDir, extensions, excludes, includes, depth);
+            return this.cachedPartialSystem.readDirectory(rootDir, extensions, excludes, includes, depth);
         }
 
         fileExists(fileName: string): boolean {
-            return this.cachedHost.fileExists(fileName);
+            return this.cachedPartialSystem.fileExists(fileName);
         }
 
         directoryExists(dirPath: string) {
-            return this.cachedHost.directoryExists(dirPath);
+            return this.cachedPartialSystem.directoryExists(dirPath);
         }
 
         readFile(path: string, encoding?: string): string {
             return this.host.readFile(path, encoding);
         }
 
+        addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath, fileOrFolderPath: Path) {
+            return this.cachedPartialSystem.addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+        }
 
-        addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath) {
-            return this.cachedHost.addOrDeleteFileOrFolder(fileOrFolder);
+        addOrDeleteFile(file: string, path: Path, eventKind: FileWatcherEventKind) {
+            return this.cachedPartialSystem.addOrDeleteFile(file, path, eventKind);
         }
 
         clearCache() {
-            return this.cachedHost.clearCache();
+            return this.cachedPartialSystem.clearCache();
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]) {

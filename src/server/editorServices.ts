@@ -695,8 +695,8 @@ namespace ts.server {
         }
 
         /* @internal  */
-        onTypeRootFileChanged(project: ConfiguredProject, fileName: NormalizedPath) {
-            project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
+        onTypeRootFileChanged(project: ConfiguredProject, fileOrFolder: NormalizedPath) {
+            project.getCachedServerHost().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
             project.updateTypes();
             this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
         }
@@ -707,15 +707,15 @@ namespace ts.server {
          * @param fileName the absolute file name that changed in watched directory
          */
         /* @internal */
-        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileName: NormalizedPath) {
-            project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
+        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileOrFolder: NormalizedPath) {
+            project.getCachedServerHost().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
             const configFilename = project.getConfigFilePath();
 
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
-                this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileName}`);
+            if (fileOrFolder && !isSupportedSourceFileName(fileOrFolder, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
+                this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrFolder}`);
                 return;
             }
 

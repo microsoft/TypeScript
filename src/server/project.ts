@@ -218,7 +218,7 @@ namespace ts.server {
             this.resolutionCache = createResolutionCache(
                 fileName => this.projectService.toPath(fileName),
                 () => this.compilerOptions,
-                (failedLookupLocation, containingFile, name) => this.watchFailedLookupLocation(failedLookupLocation, containingFile, name),
+                (failedLookupLocation, failedLookupLocationPath, containingFile, name) => this.watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name),
                 s => this.projectService.logger.info(s),
                 (primaryResult, moduleName, compilerOptions, host) => resolveWithGlobalCache(primaryResult, moduleName, compilerOptions, host,
                     this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined, this.getProjectName())
@@ -235,12 +235,12 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        private watchFailedLookupLocation(failedLookupLocation: string, containingFile: string, name: string) {
+        private watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
             // There is some kind of change in the failed lookup location, update the program
-            return this.projectService.addFileWatcher(WatchType.FailedLookupLocation, this, failedLookupLocation, (__fileName, eventKind) => {
+            return this.projectService.addFileWatcher(WatchType.FailedLookupLocation, this, failedLookupLocation, (fileName, eventKind) => {
                 this.projectService.logger.info(`Watcher: FailedLookupLocations: Status: ${FileWatcherEventKind[eventKind]}: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
                 if (this.projectKind === ProjectKind.Configured) {
-                    (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(failedLookupLocation));
+                    (this.lsHost.host as CachedServerHost).addOrDeleteFile(fileName, failedLookupLocationPath, eventKind);
                 }
                 this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
                 this.markAsDirty();
@@ -719,15 +719,14 @@ namespace ts.server {
         private addMissingFileWatcher(missingFilePath: Path) {
             const fileWatcher = this.projectService.addFileWatcher(
                 WatchType.MissingFilePath, this, missingFilePath,
-                (filename, eventKind) => {
+                (fileName, eventKind) => {
+                    if (this.projectKind === ProjectKind.Configured) {
+                        (this.lsHost.host as CachedServerHost).addOrDeleteFile(fileName, missingFilePath, eventKind);
+                    }
+
                     if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
                         this.missingFilesMap.delete(missingFilePath);
                         this.closeMissingFileWatcher(missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
-
-                        if (this.projectKind === ProjectKind.Configured) {
-                            const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
-                            (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(absoluteNormalizedPath));
-                        }
 
                         // When a missing file is created, we should update the graph.
                         this.markAsDirty();
@@ -1076,6 +1075,7 @@ namespace ts.server {
             return super.updateGraph();
         }
 
+        /*@internal*/
         getCachedServerHost() {
             return this.lsHost.host as CachedServerHost;
         }
