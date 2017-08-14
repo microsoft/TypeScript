@@ -809,7 +809,7 @@ namespace ts.server {
                 // The rename info should be the same for every project
                 const renameInfo = defaultProject.getLanguageService().getRenameInfo(file, position);
                 if (!renameInfo) {
-                    return emptyArray;
+                    return undefined;
                 }
 
                 if (!renameInfo.canRename) {
