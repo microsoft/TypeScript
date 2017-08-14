@@ -473,7 +473,7 @@ namespace ts {
                 createNewValue: createMissingFileWatch,
                 // Files that are no longer missing (e.g. because they are no longer required)
                 // should no longer be watched.
-                onDeleteExistingValue: closeExistingMissingFilePathFileWatcher
+                onDeleteValue: closeExistingMissingFilePathFileWatcher
             }
         );
     }
@@ -497,26 +497,32 @@ namespace ts {
             wildcardDirectories,
             {
                 // Create new watch and recursive info
-                createNewValue: (directory, flags) => {
-                    return {
-                        watcher: watchDirectory(directory, flags),
-                        flags
-                    };
-                },
+                createNewValue: createWildcardDirectoryWatcher,
                 // Close existing watch thats not needed any more
-                onDeleteExistingValue: (directory, wildcardDirectoryWatcher) =>
+                onDeleteValue: (directory, wildcardDirectoryWatcher) =>
                     closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ false),
                 // Close existing watch that doesnt match in the flags
-                shouldDeleteExistingValue: (directory, wildcardDirectoryWatcher, flags) => {
-                    // Watcher is same if the recursive flags match
-                    if (wildcardDirectoryWatcher.flags === flags) {
-                        return false;
-                    }
-                    closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ true);
-                    return true;
-                }
+                onExistingValue: updateWildcardDirectoryWatcher
             }
         );
+
+        function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatchers {
+            // Create new watch and recursive info
+            return {
+                watcher: watchDirectory(directory, flags),
+                flags
+            };
+        }
+
+        function updateWildcardDirectoryWatcher(directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatchers, flags: WatchDirectoryFlags) {
+            // Watcher needs to be updated if the recursive flags dont match
+            if (wildcardDirectoryWatcher.flags === flags) {
+                return;
+            }
+
+            closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ true);
+            existingWatchedForWildcards.set(directory, createWildcardDirectoryWatcher(directory, flags));
+        }
     }
 
     /**

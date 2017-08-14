@@ -3491,27 +3491,25 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: Map<T>, onDeleteExistingValue: (key: string, existingValue: T) => void) {
+    export function clearMap<T>(map: Map<T>, onDeleteValue: (key: string, existingValue: T) => void) {
         // Remove all
         map.forEach((existingValue, key) => {
-            onDeleteExistingValue(key, existingValue);
+            onDeleteValue(key, existingValue);
         });
         map.clear();
     }
 
     export interface MutateMapOptions<T, U> {
         createNewValue(key: string, valueInNewMap: U): T;
-        onDeleteExistingValue(key: string, existingValue: T, isNotSame?: boolean): void;
+        onDeleteValue(key: string, existingValue: T): void;
 
         /**
-         * If present this is called if there is value for the key in new map and existing map
+         * If present this is called with the key when there is value for that key both in new map as well as existing map provided
+         * Caller can then decide to update or remove this key.
+         * If the key is removed, caller will get callback of createNewValue for that key.
+         * If this callback is not provided, the value of such keys is not updated.
          */
-        onExistingValue?(existingValue: T, valueInNewMap: U): void;
-        /**
-         * If there onExistingValue is not provided, this callback if present will be called to
-         * detemine if the value in the map needs to be deleted
-         */
-        shouldDeleteExistingValue?(key: string, existingValue: T, valueInNewMap: U): boolean;
+        onExistingValue?(key: string, existingValue: T, valueInNewMap: U): void;
     }
 
     /**
@@ -3520,23 +3518,18 @@ namespace ts {
     export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
         // If there are new values update them
         if (newMap) {
-            const { createNewValue, onDeleteExistingValue, onExistingValue, shouldDeleteExistingValue } = options;
+            const { createNewValue, onDeleteValue, onExistingValue } = options;
             // Needs update
             map.forEach((existingValue, key) => {
                 const valueInNewMap = newMap.get(key);
                 // Not present any more in new map, remove it
                 if (valueInNewMap === undefined) {
                     map.delete(key);
-                    onDeleteExistingValue(key, existingValue);
+                    onDeleteValue(key, existingValue);
                 }
                 // If present notify about existing values
                 else if (onExistingValue) {
-                    onExistingValue(existingValue, valueInNewMap);
-                }
-                // different value, delete it here if this value cant be kept around
-                // Note that if the value is deleted here, new value will be created in newMap.forEach loop for this key
-                else if (shouldDeleteExistingValue && !shouldDeleteExistingValue(key, existingValue, valueInNewMap)) {
-                    map.delete(key);
+                    onExistingValue(key, existingValue, valueInNewMap);
                 }
             });
 
@@ -3549,7 +3542,7 @@ namespace ts {
             });
         }
         else {
-            clearMap(map, options.onDeleteExistingValue);
+            clearMap(map, options.onDeleteValue);
         }
     }
 }

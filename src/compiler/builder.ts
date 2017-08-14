@@ -104,9 +104,9 @@ namespace ts {
                     // Add new file info
                     createNewValue: (_path, sourceFile) => addNewFileInfo(program, sourceFile),
                     // Remove existing file info
-                    onDeleteExistingValue: removeExistingFileInfo,
+                    onDeleteValue: removeExistingFileInfo,
                     // We will update in place instead of deleting existing value and adding new one
-                    onExistingValue: (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
+                    onExistingValue: (_key, existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
                 }
             );
         }
@@ -396,7 +396,7 @@ namespace ts {
                         createNewValue: (key): true => { referencedBy.add(key, path); return true; },
                         // Remove existing reference by entry: source file doesnt reference file 'key' any more
                         // in other words source file (path) is not referenced by 'key'
-                        onDeleteExistingValue: (key, _existingValue) => { referencedBy.remove(key, path); }
+                        onDeleteValue: (key, _existingValue) => { referencedBy.remove(key, path); }
                     }
                 );
             }

@@ -1231,7 +1231,7 @@ namespace ts.server {
                         path => this.projectService.onTypeRootFileChanged(this, path), WatchDirectoryFlags.None
                     ),
                     // Close existing watch thats not needed any more
-                    onDeleteExistingValue: (directory, watcher) => this.projectService.closeDirectoryWatcher(
+                    onDeleteValue: (directory, watcher) => this.projectService.closeDirectoryWatcher(
                         WatchType.TypeRoot, this, directory, watcher, WatchDirectoryFlags.None, WatcherCloseReason.NotNeeded
                     )
                 }
