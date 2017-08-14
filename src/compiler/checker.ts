@@ -18760,9 +18760,7 @@ namespace ts {
             }
             // Check if we're indexing with a numeric type and if either object or index types
             // is a generic type with a constraint that has a numeric index signature.
-            const typeOrConstraint = (tp: Type) => maybeTypeOfKind(tp, TypeFlags.TypeVariable) ? getBaseConstraintOfType(tp) || tp : tp;
-            if (isTypeAssignableToKind(typeOrConstraint(indexType), TypeFlags.NumberLike) &&
-                getIndexInfoOfType(typeOrConstraint(objectType), IndexKind.Number)) {
+            if (getIndexInfoOfType(getApparentType(objectType), IndexKind.Number) && isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
                 return type;
             }
             error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
