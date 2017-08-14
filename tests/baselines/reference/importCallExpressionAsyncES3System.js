@@ -87,7 +87,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            cl1 = (function () {
+            cl1 = /** @class */ (function () {
                 function cl1() {
                 }
                 cl1.prototype.m = function () {
@@ -121,7 +121,7 @@ System.register([], function (exports_1, context_1) {
                     });
                 }); }
             });
-            cl2 = (function () {
+            cl2 = /** @class */ (function () {
                 function cl2() {
                     var _this = this;
                     this.p = {
