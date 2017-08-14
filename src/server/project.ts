@@ -1020,11 +1020,6 @@ namespace ts.server {
         }
     }
 
-    interface WildcardDirectoryWatcher {
-        watcher: FileWatcher;
-        flags: WatchDirectoryFlags;
-    }
-
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
      * and if successfull create a ConfiguredProject for it.

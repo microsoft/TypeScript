@@ -1,7 +1,9 @@
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 
+/*@internal*/
 namespace ts {
+    /** This is the cache of module/typedirectives resolution that can be retained across program */
     export interface ResolutionCache {
         setModuleResolutionHost(host: ModuleResolutionHost): void;
 
@@ -19,10 +21,15 @@ namespace ts {
         clear(): void;
     }
 
-    type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
-    type ResolverWithGlobalCache = (primaryResult: ResolvedModuleWithFailedLookupLocations, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost) => ResolvedModuleWithFailedLookupLocations | undefined;
+    interface NameResolutionWithFailedLookupLocations {
+        readonly failedLookupLocations: string[];
+        isInvalidated?: boolean;
+    }
 
-    /*@internal*/
+    interface ResolverWithGlobalCache {
+        (primaryResult: ResolvedModuleWithFailedLookupLocations, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations | undefined;
+    }
+
     export function resolveWithGlobalCache(primaryResult: ResolvedModuleWithFailedLookupLocations, moduleName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string | undefined, projectName: string): ResolvedModuleWithFailedLookupLocations | undefined {
         if (!isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
             // otherwise try to load typings from @types
@@ -36,7 +43,11 @@ namespace ts {
         }
     }
 
-    /*@internal*/
+    interface FailedLookupLocationsWatcher {
+        fileWatcher: FileWatcher;
+        refCount: number;
+    }
+
     export function createResolutionCache(
         toPath: (fileName: string) => Path,
         getCompilerOptions: () => CompilerOptions,
@@ -51,7 +62,6 @@ namespace ts {
         const resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
-        type FailedLookupLocationsWatcher = { fileWatcher: FileWatcher; refCount: number };
         const failedLookupLocationsWatches = createMap<FailedLookupLocationsWatcher>();
 
         return {
@@ -71,11 +81,10 @@ namespace ts {
         }
 
         function clear() {
-            failedLookupLocationsWatches.forEach((failedLookupLocationWatcher, failedLookupLocationPath: Path) => {
+            clearMap(failedLookupLocationsWatches, (failedLookupLocationPath, failedLookupLocationWatcher) => {
                 log(`Watcher: FailedLookupLocations: Status: ForceClose: LocationPath: ${failedLookupLocationPath}, refCount: ${failedLookupLocationWatcher.refCount}`);
                 failedLookupLocationWatcher.fileWatcher.close();
             });
-            failedLookupLocationsWatches.clear();
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
         }

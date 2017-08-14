@@ -241,12 +241,13 @@ namespace ts {
         let needsReload: boolean;                                           // true if the config file changed and needs to reload it from the disk
         let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
         let configFileWatcher: FileWatcher;                                 // watcher for the config file
-        let watchedWildcardDirectories: Map<WildcardDirectoryWatchers>;     // map of watchers for the wild card directories in the config file
+        let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;     // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[];                    // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasInvalidatedResolution: HasInvalidatedResolution;             // Passed along to see if source file has invalidated resolutions
+        let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
 
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
@@ -291,9 +292,10 @@ namespace ts {
             // Create the compiler host
             const compilerHost = createWatchedCompilerHost(compilerOptions);
             resolutionCache.setModuleResolutionHost(compilerHost);
-            if (changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
+            if (hasChangedCompilerOptions && changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
                 resolutionCache.clear();
             }
+            hasChangedCompilerOptions = false;
             beforeCompile(compilerOptions);
 
             // Compile the program
@@ -504,6 +506,7 @@ namespace ts {
             const configParseResult = parseConfigFile(configFileName, optionsToExtendForConfigFile, cachedHost, reportDiagnostic, reportWatchDiagnostic);
             rootFileNames = configParseResult.fileNames;
             compilerOptions = configParseResult.options;
+            hasChangedCompilerOptions = true;
             configFileSpecs = configParseResult.configFileSpecs;
             configFileWildCardDirectories = configParseResult.wildcardDirectories;
 
@@ -603,7 +606,7 @@ namespace ts {
                 (flags & WatchDirectoryFlags.Recursive) !== 0);
         }
 
-        function stopWatchingWildCardDirectory(_directory: string, { watcher }: WildcardDirectoryWatchers, _recursiveChanged: boolean) {
+        function stopWatchingWildCardDirectory(_directory: string, { watcher }: WildcardDirectoryWatcher, _recursiveChanged: boolean) {
             watcher.close();
         }
 

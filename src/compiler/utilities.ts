@@ -403,7 +403,10 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    /* @internal */
+    export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
+        return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
+    }
+
     export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
         return isModuleDeclaration(node) && isStringLiteral(node.name);
     }
@@ -1401,10 +1404,6 @@ namespace ts {
 
 
         return SpecialPropertyAssignmentKind.None;
-    }
-
-    export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
-        return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
     }
 
     export function getExternalModuleName(node: Node): Expression {

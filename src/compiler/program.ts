@@ -393,7 +393,7 @@ namespace ts {
         allDiagnostics?: Diagnostic[];
     }
 
-    export function isProgramUptoDate(program: Program, rootFileNames: string[], newOptions: CompilerOptions,
+    export function isProgramUptoDate(program: Program | undefined, rootFileNames: string[], newOptions: CompilerOptions,
         getSourceVersion: (path: Path) => string, fileExists: (fileName: string) => boolean, hasInvalidatedResolution: HasInvalidatedResolution): boolean {
         // If we haven't create a program yet, then it is not up-to-date
         if (!program) {
@@ -406,14 +406,12 @@ namespace ts {
         }
 
         // If any file is not up-to-date, then the whole program is not up-to-date
-        for (const file of program.getSourceFiles()) {
-            if (!sourceFileUpToDate(program.getSourceFile(file.fileName))) {
+        if (program.getSourceFiles().some(sourceFileNotUptoDate)) {
                 return false;
-            }
         }
 
         // If any of the missing file paths are now created
-        if (program.getMissingFilePaths().some(missingFilePath => fileExists(missingFilePath))) {
+        if (program.getMissingFilePaths().some(fileExists)) {
             return false;
         }
 
@@ -431,15 +429,18 @@ namespace ts {
 
         return true;
 
-        function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-            return sourceFile &&
-                sourceFile.version === getSourceVersion(sourceFile.path) &&
-                !hasInvalidatedResolution(sourceFile.path);
+        function sourceFileNotUptoDate(sourceFile: SourceFile): boolean {
+            return sourceFile.version !== getSourceVersion(sourceFile.path) ||
+                hasInvalidatedResolution(sourceFile.path);
         }
     }
 
+    /**
+     * Determined if source file needs to be re-created even if its text hasnt changed
+     */
     function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
         // If any of these options change, we cant reuse old source file even if version match
+        // The change in options like these could result in change in syntax tree change
         const oldOptions = program && program.getCompilerOptions();
         return oldOptions &&
             (oldOptions.target !== newOptions.target ||
@@ -478,19 +479,19 @@ namespace ts {
         );
     }
 
-    export interface WildcardDirectoryWatchers {
+    export interface WildcardDirectoryWatcher {
         watcher: FileWatcher;
         flags: WatchDirectoryFlags;
     }
 
     /**
-     * Updates the existing wild card directory watcyhes with the new set of wild card directories from the config file after new program is created
+     * Updates the existing wild card directory watches with the new set of wild card directories from the config file after new program is created
      */
     export function updateWatchingWildcardDirectories(
-        existingWatchedForWildcards: Map<WildcardDirectoryWatchers>,
+        existingWatchedForWildcards: Map<WildcardDirectoryWatcher>,
         wildcardDirectories: Map<WatchDirectoryFlags>,
         watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
-        closeDirectoryWatcher: (directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatchers, flagsChanged: boolean) => void
+        closeDirectoryWatcher: (directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatcher, flagsChanged: boolean) => void
     ) {
         mutateMap(
             existingWatchedForWildcards,
@@ -506,7 +507,7 @@ namespace ts {
             }
         );
 
-        function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatchers {
+        function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
             // Create new watch and recursive info
             return {
                 watcher: watchDirectory(directory, flags),
@@ -514,7 +515,7 @@ namespace ts {
             };
         }
 
-        function updateWildcardDirectoryWatcher(directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatchers, flags: WatchDirectoryFlags) {
+        function updateWildcardDirectoryWatcher(directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags) {
             // Watcher needs to be updated if the recursive flags dont match
             if (wildcardDirectoryWatcher.flags === flags) {
                 return;
@@ -622,7 +623,7 @@ namespace ts {
         let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();
-        let missingFilePaths: Path[];
+        let missingFilePaths: ReadonlyArray<Path>;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
@@ -665,6 +666,8 @@ namespace ts {
 
             missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
         }
+
+        Debug.assert(!!missingFilePaths);
 
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;

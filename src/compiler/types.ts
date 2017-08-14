@@ -2411,7 +2411,7 @@ namespace ts {
          * program source file but could not be located.
          */
         /* @internal */
-        getMissingFilePaths(): Path[];
+        getMissingFilePaths(): ReadonlyArray<Path>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -3561,6 +3561,7 @@ namespace ts {
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
+        /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
