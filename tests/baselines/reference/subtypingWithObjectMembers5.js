@@ -68,17 +68,17 @@ module Optional {
 // foo properties are valid, bar properties cause errors in the derived class declarations
 var NotOptional;
 (function (NotOptional) {
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B() {
         }
         return B;
     }());
-    var B2 = (function () {
+    var B2 = /** @class */ (function () {
         function B2() {
         }
         return B2;
     }());
-    var B3 = (function () {
+    var B3 = /** @class */ (function () {
         function B3() {
         }
         return B3;
@@ -87,17 +87,17 @@ var NotOptional;
 // same cases as above but with optional
 var Optional;
 (function (Optional) {
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B() {
         }
         return B;
     }());
-    var B2 = (function () {
+    var B2 = /** @class */ (function () {
         function B2() {
         }
         return B2;
     }());
-    var B3 = (function () {
+    var B3 = /** @class */ (function () {
         function B3() {
         }
         return B3;

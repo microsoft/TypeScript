@@ -12,7 +12,7 @@ arr.forEach(C => console.log(C.y()));
 //// [classExpressionWithStaticProperties3.js]
 var arr = [];
 var _loop_1 = function (i) {
-    arr.push((_a = (function () {
+    arr.push((_a = /** @class */ (function () {
             function C() {
             }
             return C;

@@ -35,7 +35,7 @@ interface i4 {
 
 //// [augmentedTypesInterface.js]
 // interface then interface
-var i2 = (function () {
+var i2 = /** @class */ (function () {
     function i2() {
     }
     i2.prototype.bar = function () {

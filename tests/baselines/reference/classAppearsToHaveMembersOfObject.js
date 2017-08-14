@@ -9,7 +9,7 @@ var o2: {} = c;
 
 
 //// [classAppearsToHaveMembersOfObject.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

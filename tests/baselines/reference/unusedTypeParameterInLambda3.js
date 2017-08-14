@@ -7,7 +7,7 @@ var y: new <T,U>(a:T)=>void;
 
 
 //// [unusedTypeParameterInLambda3.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;

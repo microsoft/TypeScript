@@ -2138,12 +2138,17 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(node.name));
-        if (name && contextualType) {
+        return getPropertySymbolsFromType(contextualType, node.name);
+    }
+
+    /* @internal */
+    export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
+        if (name && type) {
             const result: Symbol[] = [];
-            const symbol = contextualType.getProperty(name);
-            if (contextualType.flags & TypeFlags.Union) {
-                forEach((<UnionType>contextualType).types, t => {
+            const symbol = type.getProperty(name);
+            if (type.flags & TypeFlags.Union) {
+                forEach((<UnionType>type).types, t => {
                     const symbol = t.getProperty(name);
                     if (symbol) {
                         result.push(symbol);

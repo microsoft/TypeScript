@@ -9,7 +9,7 @@ class List<T> {
 
 
 //// [staticOffOfInstance2.js]
-var List = (function () {
+var List = /** @class */ (function () {
     function List() {
     }
     List.prototype.Blah = function () {

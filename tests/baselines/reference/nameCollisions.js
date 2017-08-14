@@ -53,7 +53,7 @@ var T;
     var x = 2;
     var x;
     (function (x) {
-        var Bar = (function () {
+        var Bar = /** @class */ (function () {
             function Bar() {
             }
             return Bar;
@@ -69,7 +69,7 @@ var T;
     (function (y) {
         var b;
     })(y || (y = {}));
-    var y = (function () {
+    var y = /** @class */ (function () {
         function y() {
         }
         return y;
@@ -80,25 +80,25 @@ var T;
     function f2() { }
     var f2; // error
     var i;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
     }());
     function C() { } // error
     function C2() { }
-    var C2 = (function () {
+    var C2 = /** @class */ (function () {
         function C2() {
         }
         return C2;
     }()); // error
     function fi() { }
-    var cli = (function () {
+    var cli = /** @class */ (function () {
         function cli() {
         }
         return cli;
     }());
-    var cli2 = (function () {
+    var cli2 = /** @class */ (function () {
         function cli2() {
         }
         return cli2;

@@ -43,6 +43,7 @@ namespace ts.server {
                 host: mockHost,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
@@ -81,14 +82,15 @@ namespace ts.server {
 
                 session.executeCommand(req);
 
-                expect(lastSent).to.deep.equal(<protocol.Response>{
+                const expected: protocol.Response = {
                     command: CommandNames.Unknown,
                     type: "response",
                     seq: 0,
                     message: "Unrecognized JSON command: foobar",
                     request_seq: 0,
                     success: false
-                });
+                };
+                expect(lastSent).to.deep.equal(expected);
             });
             it("should return a tuple containing the response and if a response is required on success", () => {
                 const req: protocol.ConfigureRequest = {
@@ -393,6 +395,7 @@ namespace ts.server {
                     host: mockHost,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
@@ -460,6 +463,7 @@ namespace ts.server {
                     host: mockHost,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,

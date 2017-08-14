@@ -44,13 +44,13 @@ function fn5() { return true; }
 function fn6() { return new Date(12); }
 function fn7() { return null; }
 function fn8() { return; } // OK, eq. to 'return undefined'
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.dispose = function () { };
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;

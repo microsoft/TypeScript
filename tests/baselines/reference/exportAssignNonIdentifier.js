@@ -36,7 +36,7 @@ module.exports = typeof x;
 module.exports = "sausages";
 //// [foo3.js]
 "use strict";
-module.exports = (function () {
+module.exports = /** @class */ (function () {
     function Foo3() {
     }
     return Foo3;

@@ -20,7 +20,7 @@ P;
 "use strict";
 exports.__esModule = true;
 function f() { f; }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.m = function () { C; };
@@ -33,14 +33,14 @@ var E;
 })(E || (E = {}));
 // Does not detect mutual recursion.
 function g() { D; }
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.m = function () { g; };
     return D;
 }());
 // Does not work on private methods.
-var P = (function () {
+var P = /** @class */ (function () {
     function P() {
     }
     P.prototype.m = function () { this.m; };

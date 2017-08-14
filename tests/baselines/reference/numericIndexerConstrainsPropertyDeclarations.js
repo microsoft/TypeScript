@@ -99,7 +99,7 @@ var b: { [x: number]: string; } = {
 
 //// [numericIndexerConstrainsPropertyDeclarations.js]
 // String indexer types constrain the types of named properties in their containing type
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     } // ok
     Object.defineProperty(C.prototype, "X", {

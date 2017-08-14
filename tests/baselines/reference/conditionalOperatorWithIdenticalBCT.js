@@ -59,13 +59,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     return X;
 }());
 ;
-var A = (function (_super) {
+var A = /** @class */ (function (_super) {
     __extends(A, _super);
     function A() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -73,7 +73,7 @@ var A = (function (_super) {
     return A;
 }(X));
 ;
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;

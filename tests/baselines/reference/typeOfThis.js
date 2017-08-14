@@ -179,7 +179,7 @@ this.spaaaaace = 4;
 
 //// [typeOfThis.js]
 var _this = this;
-var MyTestClass = (function () {
+var MyTestClass = /** @class */ (function () {
     function MyTestClass() {
         var _this = this;
         this.someFunc = function () {
@@ -249,7 +249,7 @@ var MyTestClass = (function () {
     });
     return MyTestClass;
 }());
-var MyGenericTestClass = (function () {
+var MyGenericTestClass = /** @class */ (function () {
     function MyGenericTestClass() {
         var _this = this;
         this.someFunc = function () {
