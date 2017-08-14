@@ -630,7 +630,7 @@ namespace ts {
 
             // Reload is pending, do the reload
             if (!needsReload) {
-                const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, host, /*extraFileExtension*/ []);
+                const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, host);
                 if (!configFileSpecs.filesSpecs) {
                     reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
                 }

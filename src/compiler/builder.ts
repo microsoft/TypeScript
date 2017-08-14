@@ -60,7 +60,7 @@ namespace ts {
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, _onError: (message: string) => void, sourceFiles: SourceFile[]) {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });
             if (isDetailed) {
-                emittedSourceFiles = concatenate(emittedSourceFiles, sourceFiles);
+                emittedSourceFiles = addRange(emittedSourceFiles, sourceFiles);
             }
         }
     }
@@ -139,7 +139,7 @@ namespace ts {
 
         function ensureProgramGraph(program: Program) {
             if (!emitHandler) {
-                createProgramGraph(program, noop);
+                createProgramGraph(program, returnFalse);
             }
         }
 
@@ -457,7 +457,7 @@ namespace ts {
                 }
 
                 // Return array of values that needs emit
-                return flatMapIter(seenFileNamesMap.values());
+                return arrayFrom(seenFileNamesMap.values());
             }
         }
     }

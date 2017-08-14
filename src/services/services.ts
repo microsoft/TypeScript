@@ -1116,7 +1116,7 @@ namespace ts {
             let hostCache = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
 
-            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || noop;
+            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
 
             // If the program is already up-to-date, we can reuse it
             if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists, hasInvalidatedResolution)) {

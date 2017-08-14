@@ -459,14 +459,12 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T>(iter: Iterator<T>): T[];
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[];
-    export function flatMapIter<T>(iter: Iterator<T>, mapfn?: (x: any) => any): any[] {
-        const result = [];
+    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
+        const result: U[] = [];
         while (true) {
             const { value, done } = iter.next();
             if (done) break;
-            const res = mapfn ? mapfn(value) : value;
+            const res = mapfn(value);
             if (res) {
                 if (isArray(res)) {
                     result.push(...res);
@@ -1221,7 +1219,10 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(): any {}
+    export function noop(): void { }
+
+    /** Do nothing and return false */
+    export function returnFalse(): false { return false; }
 
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
@@ -2626,25 +2627,11 @@ namespace ts {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 
-    export interface HostForCaching {
+    export interface HostForCaching extends PartialSystem {
         useCaseSensitiveFileNames: boolean;
-        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        fileExists(path: string): boolean;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
-        getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
     }
 
-    export interface CachedHost {
-        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        fileExists(path: string): boolean;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
-        getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+    export interface CachedHost extends PartialSystem {
         addOrDeleteFileOrFolder(fileOrFolder: string): void;
         clearCache(): void;
     }
