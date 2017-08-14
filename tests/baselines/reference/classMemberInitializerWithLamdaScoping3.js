@@ -22,7 +22,7 @@ var field1;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
 "use strict";
 exports.__esModule = true;
-var Test1 = (function () {
+var Test1 = /** @class */ (function () {
     function Test1(field1) {
         this.field1 = field1;
         this.messageHandler = function () {

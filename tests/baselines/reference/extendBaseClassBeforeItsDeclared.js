@@ -14,14 +14,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var derived = (function (_super) {
+var derived = /** @class */ (function (_super) {
     __extends(derived, _super);
     function derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return derived;
 }(base));
-var base = (function () {
+var base = /** @class */ (function () {
     function base(n) {
         this.n = n;
     }

@@ -23,13 +23,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 function doThing(x) { }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         this.p = doThing(A); // OK
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

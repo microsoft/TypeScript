@@ -28,13 +28,13 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var Collection = (function () {
+    var Collection = /** @class */ (function () {
         function Collection() {
         }
         return Collection;
     }());
     exports.Collection = Collection;
-    var List = (function (_super) {
+    var List = /** @class */ (function (_super) {
         __extends(List, _super);
         function List() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -43,13 +43,13 @@ define(["require", "exports"], function (require, exports) {
         return List;
     }(Collection));
     exports.List = List;
-    var CollectionItem = (function () {
+    var CollectionItem = /** @class */ (function () {
         function CollectionItem() {
         }
         return CollectionItem;
     }());
     exports.CollectionItem = CollectionItem;
-    var ListItem = (function (_super) {
+    var ListItem = /** @class */ (function (_super) {
         __extends(ListItem, _super);
         function ListItem() {
             return _super !== null && _super.apply(this, arguments) || this;

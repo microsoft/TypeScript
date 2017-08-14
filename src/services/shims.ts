@@ -1005,6 +1005,7 @@ namespace ts {
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
         private logPerformance = false;
+        private safeList: JsTyping.SafeList | undefined;
 
         constructor(factory: ShimFactory, public readonly logger: Logger, private readonly host: CoreServicesShimHostAdapter) {
             super(factory);
@@ -1114,12 +1115,15 @@ namespace ts {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
             return this.forwardJSONCall("discoverTypings()", () => {
                 const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
-                return ts.JsTyping.discoverTypings(
+                if (this.safeList === undefined) {
+                    this.safeList = JsTyping.loadSafeList(this.host, toPath(info.safeListPath, info.safeListPath, getCanonicalFileName));
+                }
+                return JsTyping.discoverTypings(
                     this.host,
                     msg => this.logger.log(msg),
                     info.fileNames,
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
-                    toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
+                    this.safeList,
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
                     info.unresolvedImports);

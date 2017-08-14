@@ -420,7 +420,7 @@ namespace ts.Completions {
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                     request = { kind: "JsDocTagName" };
                 }
-                if (isTagWithTypeExpression(tag) && tag.typeExpression) {
+                if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
                     currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ true);
                     if (!currentToken ||
                         (!isDeclarationName(currentToken) &&
@@ -1000,7 +1000,7 @@ namespace ts.Completions {
                     const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                     if (!typeForObject) return false;
                     // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
-                    typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                    typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter((symbol) => !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier));
                     existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
                 }
             }

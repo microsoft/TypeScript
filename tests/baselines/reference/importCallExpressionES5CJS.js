@@ -45,7 +45,7 @@ exports.p2 = Promise.resolve().then(function () { return require("./0"); });
 function foo() {
     var p2 = Promise.resolve().then(function () { return require("./0"); });
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function () {
@@ -53,7 +53,7 @@ var C = (function () {
     };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.method = function () {

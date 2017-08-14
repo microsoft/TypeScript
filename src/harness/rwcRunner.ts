@@ -54,7 +54,8 @@ namespace RWC {
                 useCustomLibraryFile = undefined;
             });
 
-            it("can compile", () => {
+            it("can compile", function(this: Mocha.ITestCallbackContext) {
+                this.timeout(800000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
                 const ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
@@ -207,6 +208,14 @@ namespace RWC {
                 }, baselineOpts);
             });
 
+            it("has the expected types", () => {
+                // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
+                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
+                    .concat(otherFiles)
+                    .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
+                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);
+            });
+
             // Ideally, a generated declaration file will have no errors. But we allow generated
             // declaration file errors as part of the baseline.
             it("has the expected errors in generated declaration files", () => {
@@ -216,22 +225,18 @@ namespace RWC {
                             return null;
                         }
 
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
+                        const declContext = Harness.Compiler.prepareDeclarationCompilationContext(
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory
+                        );
+                        // Reset compilerResult before calling into `compileDeclarationFiles` so the memory from the original compilation can be freed
+                        compilerResult = undefined;
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext);
 
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
                             Harness.IO.newLine() + Harness.IO.newLine() +
                             Harness.Compiler.getErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                     }, baselineOpts);
                 }
-            });
-
-            it("has the expected types", () => {
-                // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
-                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
-                    .concat(otherFiles)
-                    .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
-                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);
             });
         });
     }

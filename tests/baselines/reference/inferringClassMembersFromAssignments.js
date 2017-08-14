@@ -124,7 +124,7 @@ var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
 
 
 //// [output.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         var _this = this;
         this.prop = function () {

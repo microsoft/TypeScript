@@ -120,6 +120,9 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
+        if (!isIdentifier(tag.name)) {
+            return emptyArray;
+        }
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
@@ -129,7 +132,7 @@ namespace ts.JsDoc {
             if (!isIdentifier(param.name)) return undefined;
 
             const name = param.name.text;
-            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.escapedText === name)
+            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name)
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
             }

@@ -28,7 +28,7 @@ import i = I;
 // none of these should work, since non are actually modules
 var V = 12;
 var v = V;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

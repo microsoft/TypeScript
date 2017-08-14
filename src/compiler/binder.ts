@@ -806,11 +806,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return <FlowCondition>{
-                flags,
-                expression,
-                antecedent
-            };
+            return { flags, expression, antecedent };
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -818,31 +814,18 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return <FlowSwitchClause>{
-                flags: FlowFlags.SwitchClause,
-                switchStatement,
-                clauseStart,
-                clauseEnd,
-                antecedent
-            };
+            return { flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent };
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return <FlowAssignment>{
-                flags: FlowFlags.Assignment,
-                antecedent,
-                node
-            };
+            return { flags: FlowFlags.Assignment, antecedent, node };
         }
 
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return <FlowArrayMutation>{
-                flags: FlowFlags.ArrayMutation,
-                antecedent,
-                node
-            };
+            const res: FlowArrayMutation = { flags: FlowFlags.ArrayMutation, antecedent, node };
+            return res;
         }
 
         function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -1504,9 +1487,9 @@ namespace ts {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JsxAttributes:
                     // Interface/Object-types always have their children added to the 'members' of
                     // their container. They are only accessible through an instance of their
@@ -2103,8 +2086,9 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.MappedType:
-                    return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode);
+                    return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral);
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
@@ -2162,13 +2146,17 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
+                case SyntaxKind.JSDocParameterTag:
+                    if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
+                        break;
+                    }
+                    // falls through
                 case SyntaxKind.JSDocPropertyTag:
-                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag,
-                        (node as JSDocPropertyTag).isBracketed || ((node as JSDocPropertyTag).typeExpression && (node as JSDocPropertyTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) ?
-                            SymbolFlags.Property | SymbolFlags.Optional : SymbolFlags.Property,
-                        SymbolFlags.PropertyExcludes);
-                case SyntaxKind.JSDocTypeLiteral:
-                    return bindAnonymousTypeWorker(node as JSDocTypeLiteral);
+                    const propTag = node as JSDocPropertyLikeTag;
+                    const flags = propTag.isBracketed || propTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
+                        SymbolFlags.Property | SymbolFlags.Optional :
+                        SymbolFlags.Property;
+                    return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.JSDocTypedefTag: {
                     const { fullName } = node as JSDocTypedefTag;
                     if (!fullName || fullName.kind === SyntaxKind.Identifier) {
@@ -2779,7 +2767,6 @@ namespace ts {
 
     function computeParameter(node: ParameterDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const modifierFlags = getModifierFlags(node);
         const name = node.name;
         const initializer = node.initializer;
         const dotDotDotToken = node.dotDotDotToken;
@@ -2794,7 +2781,7 @@ namespace ts {
         }
 
         // If a parameter has an accessibility modifier, then it is TypeScript syntax.
-        if (modifierFlags & ModifierFlags.ParameterPropertyModifier) {
+        if (hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
         }
 
@@ -2839,9 +2826,8 @@ namespace ts {
 
     function computeClassDeclaration(node: ClassDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const modifierFlags = getModifierFlags(node);
 
-        if (modifierFlags & ModifierFlags.Ambient) {
+        if (hasModifier(node, ModifierFlags.Ambient)) {
             // An ambient declaration is TypeScript syntax.
             transformFlags = TransformFlags.AssertTypeScript;
         }
@@ -2916,7 +2902,10 @@ namespace ts {
     function computeCatchClause(node: CatchClause, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
 
-        if (node.variableDeclaration && isBindingPattern(node.variableDeclaration.name)) {
+        if (!node.variableDeclaration) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+        else if (isBindingPattern(node.variableDeclaration.name)) {
             transformFlags |= TransformFlags.AssertES2015;
         }
 
@@ -3182,11 +3171,10 @@ namespace ts {
 
     function computeVariableStatement(node: VariableStatement, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const modifierFlags = getModifierFlags(node);
         const declarationListTransformFlags = node.declarationList.transformFlags;
 
         // An ambient declaration is TypeScript syntax.
-        if (modifierFlags & ModifierFlags.Ambient) {
+        if (hasModifier(node, ModifierFlags.Ambient)) {
             transformFlags = TransformFlags.AssertTypeScript;
         }
         else {

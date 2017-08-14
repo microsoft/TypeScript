@@ -27,7 +27,7 @@ export = Adder;
 
 //// [Adder.js]
 "use strict";
-var Adder = (function () {
+var Adder = /** @class */ (function () {
     function Adder() {
     }
     Adder.prototype.add = function (a, b) {

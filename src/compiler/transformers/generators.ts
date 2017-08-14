@@ -164,12 +164,11 @@ namespace ts {
     }
 
     // A generated code block
-    interface CodeBlock {
-        kind: CodeBlockKind;
-    }
+    type CodeBlock = | ExceptionBlock | LabeledBlock | SwitchBlock | LoopBlock | WithBlock;
 
     // a generated exception block, used for 'try' statements
-    interface ExceptionBlock extends CodeBlock {
+    interface ExceptionBlock {
+        kind: CodeBlockKind.Exception;
         state: ExceptionBlockState;
         startLabel: Label;
         catchVariable?: Identifier;
@@ -179,27 +178,31 @@ namespace ts {
     }
 
     // A generated code that tracks the target for 'break' statements in a LabeledStatement.
-    interface LabeledBlock extends CodeBlock {
+    interface LabeledBlock {
+        kind: CodeBlockKind.Labeled;
         labelText: string;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the target for 'break' statements in a 'switch' statement
-    interface SwitchBlock extends CodeBlock {
+    interface SwitchBlock {
+        kind: CodeBlockKind.Switch;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the targets for 'break' and 'continue' statements, used for iteration statements
-    interface LoopBlock extends CodeBlock {
+    interface LoopBlock {
+        kind: CodeBlockKind.Loop;
         continueLabel: Label;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block associated with a 'with' statement
-    interface WithBlock extends CodeBlock {
+    interface WithBlock {
+        kind: CodeBlockKind.With;
         expression: Identifier;
         startLabel: Label;
         endLabel: Label;
@@ -2070,7 +2073,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock(<WithBlock>{
+            beginBlock({
                 kind: CodeBlockKind.With,
                 expression,
                 startLabel,
@@ -2087,10 +2090,6 @@ namespace ts {
             markLabel(block.endLabel);
         }
 
-        function isWithBlock(block: CodeBlock): block is WithBlock {
-            return block.kind === CodeBlockKind.With;
-        }
-
         /**
          * Begins a code block for a generated `try` statement.
          */
@@ -2098,7 +2097,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock(<ExceptionBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Exception,
                 state: ExceptionBlockState.Try,
                 startLabel,
@@ -2188,10 +2187,6 @@ namespace ts {
             exception.state = ExceptionBlockState.Done;
         }
 
-        function isExceptionBlock(block: CodeBlock): block is ExceptionBlock {
-            return block.kind === CodeBlockKind.Exception;
-        }
-
         /**
          * Begins a code block that supports `break` or `continue` statements that are defined in
          * the source tree and not from generated code.
@@ -2199,7 +2194,7 @@ namespace ts {
          * @param labelText Names from containing labeled statements.
          */
         function beginScriptLoopBlock(): void {
-            beginBlock(<LoopBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Loop,
                 isScript: true,
                 breakLabel: -1,
@@ -2217,7 +2212,7 @@ namespace ts {
          */
         function beginLoopBlock(continueLabel: Label): Label {
             const breakLabel = defineLabel();
-            beginBlock(<LoopBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Loop,
                 isScript: false,
                 breakLabel,
@@ -2245,7 +2240,7 @@ namespace ts {
          *
          */
         function beginScriptSwitchBlock(): void {
-            beginBlock(<SwitchBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Switch,
                 isScript: true,
                 breakLabel: -1
@@ -2259,7 +2254,7 @@ namespace ts {
          */
         function beginSwitchBlock(): Label {
             const breakLabel = defineLabel();
-            beginBlock(<SwitchBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Switch,
                 isScript: false,
                 breakLabel,
@@ -2280,7 +2275,7 @@ namespace ts {
         }
 
         function beginScriptLabeledBlock(labelText: string) {
-            beginBlock(<LabeledBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Labeled,
                 isScript: true,
                 labelText,
@@ -2290,7 +2285,7 @@ namespace ts {
 
         function beginLabeledBlock(labelText: string) {
             const breakLabel = defineLabel();
-            beginBlock(<LabeledBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Labeled,
                 isScript: false,
                 labelText,
@@ -2448,7 +2443,7 @@ namespace ts {
          * @param location An optional source map location for the statement.
          */
         function createInlineBreak(label: Label, location?: TextRange): ReturnStatement {
-            Debug.assert(label > 0, `Invalid label: ${label}`);
+            Debug.assertLessThan(0, label, "Invalid label");
             return setTextRange(
                 createReturn(
                     createArrayLiteral([
@@ -2878,34 +2873,37 @@ namespace ts {
                 for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
                     const block = blocks[blockIndex];
                     const blockAction = blockActions[blockIndex];
-                    if (isExceptionBlock(block)) {
-                        if (blockAction === BlockAction.Open) {
-                            if (!exceptionBlockStack) {
-                                exceptionBlockStack = [];
-                            }
+                    switch (block.kind) {
+                        case CodeBlockKind.Exception:
+                            if (blockAction === BlockAction.Open) {
+                                if (!exceptionBlockStack) {
+                                    exceptionBlockStack = [];
+                                }
 
-                            if (!statements) {
-                                statements = [];
-                            }
+                                if (!statements) {
+                                    statements = [];
+                                }
 
-                            exceptionBlockStack.push(currentExceptionBlock);
-                            currentExceptionBlock = block;
-                        }
-                        else if (blockAction === BlockAction.Close) {
-                            currentExceptionBlock = exceptionBlockStack.pop();
-                        }
-                    }
-                    else if (isWithBlock(block)) {
-                        if (blockAction === BlockAction.Open) {
-                            if (!withBlockStack) {
-                                withBlockStack = [];
+                                exceptionBlockStack.push(currentExceptionBlock);
+                                currentExceptionBlock = block;
                             }
+                            else if (blockAction === BlockAction.Close) {
+                                currentExceptionBlock = exceptionBlockStack.pop();
+                            }
+                            break;
+                        case CodeBlockKind.With:
+                            if (blockAction === BlockAction.Open) {
+                                if (!withBlockStack) {
+                                    withBlockStack = [];
+                                }
 
-                            withBlockStack.push(block);
-                        }
-                        else if (blockAction === BlockAction.Close) {
-                            withBlockStack.pop();
-                        }
+                                withBlockStack.push(block);
+                            }
+                            else if (blockAction === BlockAction.Close) {
+                                withBlockStack.pop();
+                            }
+                            break;
+                        // default: do nothing
                     }
                 }
             }

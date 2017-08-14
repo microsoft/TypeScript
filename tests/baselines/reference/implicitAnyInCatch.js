@@ -21,7 +21,7 @@ catch (error) {
     if (error.number === -2147024809) { }
 }
 for (var key in this) { }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.temp = function () {

@@ -24,7 +24,7 @@ exports["default"] = x;
 var x = 'x';
 exports.x = x;
 exports.xx = x;
-var Y = (function () {
+var Y = /** @class */ (function () {
     function Y() {
     }
     return Y;
