@@ -84,7 +84,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes(target: MapLike<any>, source: MapLike <any>): void {
+    export function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -115,9 +115,9 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-/* tslint:disable:no-null-keyword */
+        /* tslint:disable:no-null-keyword */
         const map = createMap<T>();
-/* tslint:enable:no-null-keyword */
+        /* tslint:enable:no-null-keyword */
         return {
             get(path) {
                 return map.get(path);
