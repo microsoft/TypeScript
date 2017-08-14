@@ -1175,10 +1175,10 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position);
-            if (!completions) {
-                return emptyArray;
-            }
             if (simplifiedResult) {
+                if (!completions) {
+                    return emptyArray;
+                }
                 return mapDefined(completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
                         const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
@@ -1188,7 +1188,12 @@ namespace ts.server {
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }
             else {
-                return completions;
+                return completions || {
+                    isGlobalCompletion: false,
+                    isMemberCompletion: false,
+                    isNewIdentifierLocation: false,
+                    entries: [],
+                };
             }
         }
 
