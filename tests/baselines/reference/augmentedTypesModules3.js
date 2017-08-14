@@ -7,7 +7,7 @@ module m3a { var y = 2; }
 class m3a { foo() { } } // error, class isn't ambient or declared before the module
 
 //// [augmentedTypesModules3.js]
-var m3 = (function () {
+var m3 = /** @class */ (function () {
     function m3() {
     }
     return m3;
@@ -16,7 +16,7 @@ var m3a;
 (function (m3a) {
     var y = 2;
 })(m3a || (m3a = {}));
-var m3a = (function () {
+var m3a = /** @class */ (function () {
     function m3a() {
     }
     m3a.prototype.foo = function () { };

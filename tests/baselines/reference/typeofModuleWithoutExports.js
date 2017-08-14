@@ -12,7 +12,7 @@ var r: typeof M;
 var M;
 (function (M) {
     var x = 1;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

@@ -4,7 +4,7 @@ class Foo {
 }
 
 //// [parserErrorRecovery_ParameterList6.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

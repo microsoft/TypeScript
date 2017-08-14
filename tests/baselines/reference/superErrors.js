@@ -69,7 +69,7 @@ function foo() {
     var y = function () { return _super.; };
     var z = function () { return function () { return function () { return _super.; }; }; };
 }
-var User = (function () {
+var User = /** @class */ (function () {
     function User() {
         this.name = "Bob";
     }
@@ -78,7 +78,7 @@ var User = (function () {
     };
     return User;
 }());
-var RegisteredUser = (function (_super) {
+var RegisteredUser = /** @class */ (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
         var _this = _super.call(this) || this;

@@ -21,7 +21,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = (function () {
+            A = /** @class */ (function () {
                 function A() {
                 }
                 A.prototype.B = function () {

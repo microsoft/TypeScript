@@ -36,13 +36,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var FooBase = (function () {
+var FooBase = /** @class */ (function () {
     function FooBase(x) {
     }
     FooBase.prototype.bar1 = function () { };
     return FooBase;
 }());
-var Foo = (function (_super) {
+var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y) {
         return _super.call(this, x) || this;

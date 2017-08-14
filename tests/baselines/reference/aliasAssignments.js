@@ -16,7 +16,7 @@ y = moduleA; // should be error
 //// [aliasAssignments_moduleA.js]
 "use strict";
 exports.__esModule = true;
-var someClass = (function () {
+var someClass = /** @class */ (function () {
     function someClass() {
     }
     return someClass;

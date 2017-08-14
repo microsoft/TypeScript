@@ -39,7 +39,7 @@ let b = a.foo().n;
 //// [f1.js]
 "use strict";
 exports.__esModule = true;
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -48,7 +48,7 @@ exports.A = A;
 //// [f2.js]
 "use strict";
 exports.__esModule = true;
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;

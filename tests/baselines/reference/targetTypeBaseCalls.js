@@ -30,14 +30,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 function foo(x) { }
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(x) {
     }
     return Foo;
 }());
 foo(function (s) { s = 5; }); // Error, can’t assign number to string
 new Foo(function (s) { s = 5; }); // error, if types are applied correctly
-var Bar = (function (_super) {
+var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
         return _super.call(this, function (s) { s = 5; }) || this;

@@ -74,7 +74,7 @@ class C1 {
 // variables in global
 var num;
 var var1;
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1(param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string

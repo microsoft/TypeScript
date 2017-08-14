@@ -8,7 +8,7 @@ var t = new M.ClassA[];
 //// [cannotInvokeNewOnErrorExpression.js]
 var M;
 (function (M) {
-    var ClassA = (function () {
+    var ClassA = /** @class */ (function () {
         function ClassA() {
         }
         return ClassA;

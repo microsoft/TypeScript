@@ -22,7 +22,7 @@ module A {
 //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.js]
 var A;
 (function (A) {
-    var Point2d = (function () {
+    var Point2d = /** @class */ (function () {
         function Point2d(x, y) {
             this.x = x;
             this.y = y;
