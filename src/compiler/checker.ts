@@ -13101,7 +13101,12 @@ namespace ts {
 
             if (isJsxAttribute(node.parent)) {
                 // JSX expression is in JSX attribute
-                return getTypeOfPropertyOfType(attributesType, node.parent.name.escapedText);
+                const attributeName = node.parent.name.escapedText;
+                if (attributesType.flags & TypeFlags.Union) {
+                    // The attribute may fulfill any of the members of the union
+                    return getUnionType(compact(map((attributesType as UnionType).types, t => getTypeOfPropertyOfType(t, attributeName))));
+                }
+                return getTypeOfPropertyOfType(attributesType, attributeName);
             }
             else if (node.parent.kind === SyntaxKind.JsxElement) {
                 // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)

@@ -1,0 +1,90 @@
+=== tests/cases/compiler/index.tsx ===
+namespace JSX {
+>JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
+
+    export interface Element {}
+>Element : Symbol(Element, Decl(index.tsx, 0, 15))
+}
+
+type Props<T> = PropsBase<string> | PropsWithConvert<T>;
+>Props : Symbol(Props, Decl(index.tsx, 2, 1))
+>T : Symbol(T, Decl(index.tsx, 4, 11))
+>PropsBase : Symbol(PropsBase, Decl(index.tsx, 4, 56))
+>PropsWithConvert : Symbol(PropsWithConvert, Decl(index.tsx, 8, 1))
+>T : Symbol(T, Decl(index.tsx, 4, 11))
+
+interface PropsBase<T> {
+>PropsBase : Symbol(PropsBase, Decl(index.tsx, 4, 56))
+>T : Symbol(T, Decl(index.tsx, 6, 20))
+
+    data: T;
+>data : Symbol(PropsBase.data, Decl(index.tsx, 6, 24))
+>T : Symbol(T, Decl(index.tsx, 6, 20))
+}
+
+interface PropsWithConvert<T> extends PropsBase<T> {
+>PropsWithConvert : Symbol(PropsWithConvert, Decl(index.tsx, 8, 1))
+>T : Symbol(T, Decl(index.tsx, 10, 27))
+>PropsBase : Symbol(PropsBase, Decl(index.tsx, 4, 56))
+>T : Symbol(T, Decl(index.tsx, 10, 27))
+
+    convert: (t: T) => string;
+>convert : Symbol(PropsWithConvert.convert, Decl(index.tsx, 10, 52))
+>t : Symbol(t, Decl(index.tsx, 11, 14))
+>T : Symbol(T, Decl(index.tsx, 10, 27))
+}
+
+function InferenceShouldNotProduceAny<T>(props: Props<T>): JSX.Element {
+>InferenceShouldNotProduceAny : Symbol(InferenceShouldNotProduceAny, Decl(index.tsx, 12, 1))
+>T : Symbol(T, Decl(index.tsx, 14, 38))
+>props : Symbol(props, Decl(index.tsx, 14, 41))
+>Props : Symbol(Props, Decl(index.tsx, 2, 1))
+>T : Symbol(T, Decl(index.tsx, 14, 38))
+>JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(index.tsx, 0, 15))
+
+    return <div />;
+>div : Symbol(unknown)
+}
+
+// Sanity check: function call equivalent versions work fine
+InferenceShouldNotProduceAny({ data: "1" });
+>InferenceShouldNotProduceAny : Symbol(InferenceShouldNotProduceAny, Decl(index.tsx, 12, 1))
+>data : Symbol(data, Decl(index.tsx, 19, 30))
+
+InferenceShouldNotProduceAny({ data: "1", convert: n => "" + n });
+>InferenceShouldNotProduceAny : Symbol(InferenceShouldNotProduceAny, Decl(index.tsx, 12, 1))
+>data : Symbol(data, Decl(index.tsx, 20, 30))
+>convert : Symbol(convert, Decl(index.tsx, 20, 41))
+>n : Symbol(n, Decl(index.tsx, 20, 50))
+>n : Symbol(n, Decl(index.tsx, 20, 50))
+
+InferenceShouldNotProduceAny({ data: 2, convert: n => "" + n });
+>InferenceShouldNotProduceAny : Symbol(InferenceShouldNotProduceAny, Decl(index.tsx, 12, 1))
+>data : Symbol(data, Decl(index.tsx, 21, 30))
+>convert : Symbol(convert, Decl(index.tsx, 21, 39))
+>n : Symbol(n, Decl(index.tsx, 21, 48))
+>n : Symbol(n, Decl(index.tsx, 21, 48))
+
+
+const f1 = <InferenceShouldNotProduceAny data={"1"} />;
+>f1 : Symbol(f1, Decl(index.tsx, 24, 5))
+>InferenceShouldNotProduceAny : Symbol(InferenceShouldNotProduceAny, Decl(index.tsx, 12, 1))
+>data : Symbol(data, Decl(index.tsx, 24, 40))
+
+const f2 = <InferenceShouldNotProduceAny data={"1"} convert={n => "" + n} />;
+>f2 : Symbol(f2, Decl(index.tsx, 25, 5))
+>InferenceShouldNotProduceAny : Symbol(InferenceShouldNotProduceAny, Decl(index.tsx, 12, 1))
+>data : Symbol(data, Decl(index.tsx, 25, 40))
+>convert : Symbol(convert, Decl(index.tsx, 25, 51))
+>n : Symbol(n, Decl(index.tsx, 25, 61))
+>n : Symbol(n, Decl(index.tsx, 25, 61))
+
+const f3 = <InferenceShouldNotProduceAny data={2} convert={n => "" + n} />;
+>f3 : Symbol(f3, Decl(index.tsx, 26, 5))
+>InferenceShouldNotProduceAny : Symbol(InferenceShouldNotProduceAny, Decl(index.tsx, 12, 1))
+>data : Symbol(data, Decl(index.tsx, 26, 40))
+>convert : Symbol(convert, Decl(index.tsx, 26, 49))
+>n : Symbol(n, Decl(index.tsx, 26, 59))
+>n : Symbol(n, Decl(index.tsx, 26, 59))
+
