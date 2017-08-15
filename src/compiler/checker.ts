@@ -13104,7 +13104,7 @@ namespace ts {
                 const attributeName = node.parent.name.escapedText;
                 if (attributesType.flags & TypeFlags.Union) {
                     // The attribute may fulfill any of the members of the union
-                    return getUnionType(compact(map((attributesType as UnionType).types, t => getTypeOfPropertyOfType(t, attributeName))));
+                    return getTypeOfSymbol(getUnionOrIntersectionProperty(attributesType as UnionType, attributeName));
                 }
                 return getTypeOfPropertyOfType(attributesType, attributeName);
             }
