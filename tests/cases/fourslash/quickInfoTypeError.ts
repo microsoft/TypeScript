@@ -7,4 +7,4 @@
 
 // The symbol indicates that this is a funciton, but the type is `any`.
 // Regression test that we don't crash (by trying to get signatures from `any`).
-verify.quickInfoAt("", "");
+verify.quickInfoAt("", "(method) f");
