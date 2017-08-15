@@ -116,11 +116,11 @@ namespace ts {
                 return (sourceFile: ts.SourceFile) => {
                     const result = getMutableClone(sourceFile);
                     result.statements = ts.createNodeArray([
-                        ts.createClassDeclaration(undefined, undefined, "Foo", undefined, undefined, undefined),
-                        ts.createModuleDeclaration(undefined, undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
+                        ts.createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined),
+                        ts.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
                     ]);
                     return result;
-                }
+                };
             }
         });
 
