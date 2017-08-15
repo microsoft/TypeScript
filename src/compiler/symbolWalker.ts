@@ -13,23 +13,23 @@ namespace ts {
         return getSymbolWalker;
 
         function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
-            let visitedTypes: Type[] = [];
-            let visitedSymbols: Symbol[] = [];
+            let visitedTypes = createMap<Type>(); // Key is id as string
+            let visitedSymbols = createMap<Symbol>(); // Key is id as string
 
             return {
                 walkType: type =>
                 {
-                    visitedTypes = [];
-                    visitedSymbols = [];
+                    visitedTypes.clear();
+                    visitedSymbols.clear();
                     visitType(type);
-                    return { visitedTypes, visitedSymbols };
+                    return { visitedTypes: arrayFrom(visitedTypes.values()), visitedSymbols: arrayFrom(visitedSymbols.values()) };
                 },
                 walkSymbol: symbol =>
                 {
-                    visitedTypes = [];
-                    visitedSymbols = [];
+                    visitedTypes.clear();
+                    visitedSymbols.clear();
                     visitSymbol(symbol);
-                    return { visitedTypes, visitedSymbols };
+                    return { visitedTypes: arrayFrom(visitedTypes.values()), visitedSymbols: arrayFrom(visitedSymbols.values()) };
                 },
             };
 
@@ -37,10 +37,12 @@ namespace ts {
                 if (!type) {
                     return;
                 }
-                if (contains(visitedTypes, type)) {
+
+                const typeIdString = type.id.toString();
+                if (visitedTypes.has(typeIdString)) {
                     return;
                 }
-                visitedTypes.push(type);
+                visitedTypes.set(typeIdString, type);
 
                 // Reuse visitSymbol to visit the type's symbol,
                 //  but be sure to bail on recuring into the type if accept declines the symbol.
@@ -134,10 +136,11 @@ namespace ts {
                 if (!symbol) {
                     return;
                 }
-                if (contains(visitedSymbols, symbol)) {
+                const symbolIdString = getSymbolId(symbol).toString();
+                if (visitedSymbols.has(symbolIdString)) {
                     return;
                 }
-                visitedSymbols.push(symbol);
+                visitedSymbols.set(symbolIdString, symbol);
                 if (!accept(symbol)) {
                     return true;
                 }
