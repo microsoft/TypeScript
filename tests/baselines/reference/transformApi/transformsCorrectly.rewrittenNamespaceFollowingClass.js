@@ -4,7 +4,6 @@ class C {
     }
 }
 C.bar = 20;
-var C;
 (function (C) {
     C.x = 10;
 })(C || (C = {}));
