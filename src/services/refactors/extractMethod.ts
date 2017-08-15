@@ -866,7 +866,7 @@ namespace ts.refactor.extractMethod {
         readonly node: Node;
     }
 
-    interface ScopeUsages {
+    export interface ScopeUsages {
         usages: Map<UsageEntry>;
         substitutions: Map<Node>;
     }

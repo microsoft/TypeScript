@@ -64,7 +64,7 @@ namespace ts.textChanges {
      */
     export type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd;
 
-    interface InsertNodeOptions {
+    export interface InsertNodeOptions {
         /**
          * Text to be inserted before the new node
          */
@@ -96,7 +96,7 @@ namespace ts.textChanges {
         readonly range: TextRange;
     }
 
-    interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {
+    export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {
         readonly useIndentationFromFile?: boolean;
     }
     interface ReplaceWithSingleNode extends BaseChange {
@@ -111,7 +111,7 @@ namespace ts.textChanges {
         readonly options?: never;
     }
 
-    interface ChangeMultipleNodesOptions extends ChangeNodeOptions {
+    export interface ChangeMultipleNodesOptions extends ChangeNodeOptions {
         nodeSeparator: string;
     }
     interface ReplaceWithMultipleNodes extends BaseChange {
