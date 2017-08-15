@@ -10,14 +10,14 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
-    export const ContextEvent = "context";
+    export const ProjectChangedEvent = "projectChanged";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
 
-    export interface ContextEvent {
-        eventName: typeof ContextEvent;
-        data: { project: Project; fileName: NormalizedPath };
+    export interface ProjectChangedEvent {
+        eventName: typeof ProjectChangedEvent;
+        data: { project: Project; filesToEmit: string[]; changedFiles: string[] };
     }
 
     export interface ConfigFileDiagEvent {
@@ -77,7 +77,7 @@ namespace ts.server {
         readonly dts: number;
     }
 
-    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
+    export type ProjectServiceEvent = ProjectChangedEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -492,7 +492,30 @@ namespace ts.server {
                 if (this.pendingProjectUpdates.delete(projectName)) {
                     project.updateGraph();
                 }
+                // Send the update event to notify about the project changes
+                this.sendProjectChangedEvent(project);
             });
+        }
+
+        private sendProjectChangedEvent(project: Project) {
+            if (project.isClosed() || !this.eventHandler || !project.languageServiceEnabled) {
+                return;
+            }
+
+            const { filesToEmit, changedFiles } = project.getChangedFiles();
+            if (changedFiles.length === 0) {
+                return;
+            }
+
+            const event: ProjectChangedEvent = {
+                eventName: ProjectChangedEvent,
+                data: {
+                    project,
+                    filesToEmit: filesToEmit as string[],
+                    changedFiles: changedFiles as string[]
+                }
+            };
+            this.eventHandler(event);
         }
 
         /* @internal */
@@ -678,19 +701,6 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.delayUpdateProjectGraphs(containingProjects);
-
-                // TODO: (sheetalkamat) Someway to send this event so that error checks are updated?
-                // if (!this.eventHandler) {
-                //     return;
-                // }
-
-                // for (const openFile of this.openFiles) {
-                //     const event: ContextEvent = {
-                //         eventName: ContextEvent,
-                //         data: { project: openFile.getDefaultProject(), fileName: openFile.fileName }
-                //     };
-                //     this.eventHandler(event);
-                // }
             }
         }
 

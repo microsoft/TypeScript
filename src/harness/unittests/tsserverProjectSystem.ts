@@ -125,7 +125,7 @@ namespace ts.projectSystem {
             this.events.push(event);
         }
 
-        checkEventCountOfType(eventType: "context" | "configFileDiag", expectedCount: number) {
+        checkEventCountOfType(eventType: "configFileDiag", expectedCount: number) {
             const eventsOfType = filter(this.events, e => e.eventName === eventType);
             assert.equal(eventsOfType.length, expectedCount, `The actual event counts of type ${eventType} is ${eventsOfType.length}, while expected ${expectedCount}`);
         }
@@ -2001,7 +2001,7 @@ namespace ts.projectSystem {
             const session = createSession(host, {
                 canUseEvents: true,
                 eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
+                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectChangedEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
                         return;
                     }
                     assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
