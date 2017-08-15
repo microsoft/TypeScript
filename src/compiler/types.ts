@@ -2673,9 +2673,8 @@ namespace ts {
 
     /* @internal */
     export interface SymbolWalker {
-        visitType(type: Type): void;
-        visitSymbol(symbol: Symbol): void;
-        reset(accept?: (symbol: Symbol) => boolean): void;
+        walkType(root: Type) : { visitedTypes: Type[], visitedSymbols: Symbol[] };
+        walkSymbol(root: Symbol) : { visitedTypes: Type[], visitedSymbols: Symbol[] };
     }
 
     export interface SymbolDisplayBuilder {

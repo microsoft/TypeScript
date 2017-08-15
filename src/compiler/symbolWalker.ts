@@ -13,27 +13,34 @@ namespace ts {
         return getSymbolWalker;
 
         function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
-            let visited: Type[] = [];
+            let visitedTypes: Type[] = [];
             let visitedSymbols: Symbol[] = [];
 
             return {
-                visitType,
-                visitSymbol,
-                reset: (newCallback: (symbol: Symbol) => boolean = () => true) => {
-                    accept = newCallback;
-                    visited = [];
+                walkType: type =>
+                {
+                    visitedTypes = [];
                     visitedSymbols = [];
-                }
+                    visitType(type);
+                    return { visitedTypes, visitedSymbols };
+                },
+                walkSymbol: symbol =>
+                {
+                    visitedTypes = [];
+                    visitedSymbols = [];
+                    visitSymbol(symbol);
+                    return { visitedTypes, visitedSymbols };
+                },
             };
 
             function visitType(type: Type): void {
                 if (!type) {
                     return;
                 }
-                if (contains(visited, type)) {
+                if (contains(visitedTypes, type)) {
                     return;
                 }
-                visited.push(type);
+                visitedTypes.push(type);
 
                 // Reuse visitSymbol to visit the type's symbol,
                 //  but be sure to bail on recuring into the type if accept declines the symbol.
