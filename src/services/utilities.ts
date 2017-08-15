@@ -867,9 +867,9 @@ namespace ts {
     export function isInComment(
         sourceFile: SourceFile,
         position: number,
-        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+        tokenAtPosition?: Node,
         predicate?: (c: CommentRange) => boolean): boolean {
-        return !!formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false, tokenAtPosition, predicate);
+        return !!formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false, /*precedingToken*/ undefined, tokenAtPosition, predicate);
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
