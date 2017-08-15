@@ -1706,16 +1706,6 @@ namespace ts {
         return false;
     }
 
-    export function isInAmbientContext(node: Node): boolean {
-        while (node) {
-            if (hasModifier(node, ModifierFlags.Ambient) || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
-                return true;
-            }
-            node = node.parent;
-        }
-        return false;
-    }
-
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
         switch (name.kind) {

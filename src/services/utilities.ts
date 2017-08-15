@@ -930,7 +930,7 @@ namespace ts {
         if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+        if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }

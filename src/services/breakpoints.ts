@@ -31,7 +31,8 @@ namespace ts.BreakpointResolver {
         }
 
         // Cannot set breakpoint in ambient declarations
-        if (isInAmbientContext(tokenAtLocation)) {
+        // (Tokens do not have flags set, but their parents do.)
+        if (tokenAtLocation.parent.flags & NodeFlags.Ambient) {
             return undefined;
         }
 

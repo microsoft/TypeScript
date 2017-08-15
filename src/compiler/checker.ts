@@ -652,7 +652,7 @@ namespace ts {
             else {
                 // find a module that about to be augmented
                 // do not validate names of augmentations that are defined in ambient context
-                const moduleNotFoundError = !isInAmbientContext(moduleName.parent.parent)
+                const moduleNotFoundError = !(moduleName.parent.parent.flags & NodeFlags.Ambient)
                     ? Diagnostics.Invalid_module_name_in_augmentation_module_0_cannot_be_found
                     : undefined;
                 let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, moduleNotFoundError, /*isForAugmentation*/ true);
@@ -756,7 +756,7 @@ namespace ts {
                 if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
                     (!compilerOptions.outFile && !compilerOptions.out) ||
                     isInTypeQuery(usage) ||
-                    isInAmbientContext(declaration)) {
+                    declaration.flags & NodeFlags.Ambient) {
                     // nodes are in different files and order cannot be determined
                     return true;
                 }
@@ -1309,7 +1309,7 @@ namespace ts {
 
             Debug.assert(declaration !== undefined, "Declaration to checkResolvedBlockScopedVariable is undefined");
 
-            if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
+            if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
                     error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
                 }
@@ -3886,7 +3886,7 @@ namespace ts {
                         const parent = getDeclarationContainer(node);
                         // If the node is not exported or it is not ambient module element (except import declaration)
                         if (!(getCombinedModifierFlags(node) & ModifierFlags.Export) &&
-                            !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && isInAmbientContext(parent))) {
+                            !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && parent.flags & NodeFlags.Ambient)) {
                             return isGlobalSourceFile(parent);
                         }
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
@@ -4269,7 +4269,7 @@ namespace ts {
 
             if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
-                !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !isInAmbientContext(declaration)) {
+                !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
                 // If --noImplicitAny is on or the declaration is in a Javascript file,
                 // use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
                 // initializer or a 'null' or 'undefined' initializer.
@@ -5128,7 +5128,7 @@ namespace ts {
         function isLiteralEnumMember(member: EnumMember) {
             const expr = member.initializer;
             if (!expr) {
-                return !isInAmbientContext(member);
+                return !(member.flags & NodeFlags.Ambient);
             }
             switch (expr.kind) {
                 case SyntaxKind.StringLiteral:
@@ -12269,7 +12269,7 @@ namespace ts {
             const assumeInitialized = isParameter || isAlias || isOuterVariable ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
-                isInAmbientContext(declaration);
+                declaration.flags & NodeFlags.Ambient;
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
                     getNullableType(type, TypeFlags.Undefined);
@@ -14631,7 +14631,7 @@ namespace ts {
                 }
                 if (prop.valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
                     node.parent && node.parent.kind !== SyntaxKind.TypeReference &&
-                    !isInAmbientContext(prop.valueDeclaration) &&
+                    !(prop.valueDeclaration.flags & NodeFlags.Ambient) &&
                     !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
                     error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
                 }
@@ -16484,7 +16484,7 @@ namespace ts {
             if (targetDeclarationKind !== SyntaxKind.Unknown) {
                 const decl = getDeclarationOfKind(resolvedRequire, targetDeclarationKind);
                 // function/variable declaration should be ambient
-                return isInAmbientContext(decl);
+                return decl.flags & NodeFlags.Ambient;
             }
             return false;
         }
@@ -18617,7 +18617,7 @@ namespace ts {
                 checkDecorators(node);
                 checkSignatureDeclaration(node);
                 if (node.kind === SyntaxKind.GetAccessor) {
-                    if (!isInAmbientContext(node) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
+                    if (!(node.flags & NodeFlags.Ambient) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
                         if (!(node.flags & NodeFlags.HasExplicitReturn)) {
                             error(node.name, Diagnostics.A_get_accessor_must_return_a_value);
                         }
@@ -18793,7 +18793,7 @@ namespace ts {
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
-            return hasModifier(node, ModifierFlags.Private) && isInAmbientContext(node);
+            return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
         }
 
         function getEffectiveDeclarationFlags(n: Node, flagsToCheck: ModifierFlags): ModifierFlags {
@@ -18804,7 +18804,7 @@ namespace ts {
             if (n.parent.kind !== SyntaxKind.InterfaceDeclaration &&
                 n.parent.kind !== SyntaxKind.ClassDeclaration &&
                 n.parent.kind !== SyntaxKind.ClassExpression &&
-                isInAmbientContext(n)) {
+                n.flags & NodeFlags.Ambient) {
                 if (!(flags & ModifierFlags.Ambient)) {
                     // It is nested in an ambient context, which means it is automatically exported
                     flags |= ModifierFlags.Export;
@@ -18943,7 +18943,7 @@ namespace ts {
             let multipleConstructorImplementation = false;
             for (const current of declarations) {
                 const node = <FunctionLike>current;
-                const inAmbientContext = isInAmbientContext(node);
+                const inAmbientContext = node.flags & NodeFlags.Ambient;
                 const inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
                 if (inAmbientContextOrInterface) {
                     // check if declarations are consecutive only if they are non-ambient
@@ -19754,7 +19754,7 @@ namespace ts {
         }
 
         function checkUnusedLocalsAndParameters(node: Node): void {
-            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && noUnusedIdentifiers && !isInAmbientContext(node)) {
+            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && noUnusedIdentifiers && !(node.flags & NodeFlags.Ambient)) {
                 node.locals.forEach(local => {
                     if (!local.isReferenced) {
                         if (local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter) {
@@ -19805,7 +19805,7 @@ namespace ts {
         }
 
         function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression): void {
-            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+            if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
                 if (node.members) {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
@@ -19826,7 +19826,7 @@ namespace ts {
         }
 
         function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration) {
-            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+            if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
                 if (node.typeParameters) {
                     // Only report errors on the last declaration for the type parameter container;
                     // this ensures that all uses have been accounted for.
@@ -19845,7 +19845,7 @@ namespace ts {
         }
 
         function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
-            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+            if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
                 node.locals.forEach(local => {
                     if (!local.isReferenced && !local.exportSymbol) {
                         for (const declaration of local.declarations) {
@@ -19871,7 +19871,7 @@ namespace ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasDeclaredRestParameter(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
+            if (!hasDeclaredRestParameter(node) || node.flags & NodeFlags.Ambient || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
                 return;
             }
 
@@ -19897,7 +19897,7 @@ namespace ts {
                 return false;
             }
 
-            if (isInAmbientContext(node)) {
+            if (node.flags & NodeFlags.Ambient) {
                 // ambient context - no codegen impact
                 return false;
             }
@@ -19962,7 +19962,7 @@ namespace ts {
             // bubble up and find containing type
             const enclosingClass = getContainingClass(node);
             // if containing type was not found or it is ambient - exit (no codegen)
-            if (!enclosingClass || isInAmbientContext(enclosingClass)) {
+            if (!enclosingClass || enclosingClass.flags & NodeFlags.Ambient) {
                 return;
             }
 
@@ -21262,7 +21262,7 @@ namespace ts {
             checkClassForDuplicateDeclarations(node);
 
             // Only check for reserved static identifiers on non-ambient context.
-            if (!isInAmbientContext(node)) {
+            if (!(node.flags & NodeFlags.Ambient)) {
                 checkClassForStaticPropertyNameConflicts(node);
             }
 
@@ -21568,7 +21568,7 @@ namespace ts {
             }
             // In ambient enum declarations that specify no const modifier, enum member declarations that omit
             // a value are considered computed members (as opposed to having auto-incremented values).
-            if (isInAmbientContext(member.parent) && !isConst(member.parent)) {
+            if (member.parent.flags & NodeFlags.Ambient && !isConst(member.parent)) {
                 return undefined;
             }
             // If the member declaration specifies no value, the member is considered a constant enum member.
@@ -21601,7 +21601,7 @@ namespace ts {
             else if (isConstEnum) {
                 error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
             }
-            else if (isInAmbientContext(member.parent)) {
+            else if (member.parent.flags & NodeFlags.Ambient) {
                 error(initializer, Diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression);
             }
             else {
@@ -21714,7 +21714,7 @@ namespace ts {
             computeEnumMemberValues(node);
 
             const enumIsConst = isConst(node);
-            if (compilerOptions.isolatedModules && enumIsConst && isInAmbientContext(node)) {
+            if (compilerOptions.isolatedModules && enumIsConst && node.flags & NodeFlags.Ambient) {
                 error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_isolatedModules_flag_is_provided);
             }
 
@@ -21766,7 +21766,7 @@ namespace ts {
             for (const declaration of declarations) {
                 if ((declaration.kind === SyntaxKind.ClassDeclaration ||
                     (declaration.kind === SyntaxKind.FunctionDeclaration && nodeIsPresent((<FunctionLikeDeclaration>declaration).body))) &&
-                    !isInAmbientContext(declaration)) {
+                    !(declaration.flags & NodeFlags.Ambient)) {
                     return declaration;
                 }
             }
@@ -21791,7 +21791,7 @@ namespace ts {
             if (produceDiagnostics) {
                 // Grammar checking
                 const isGlobalAugmentation = isGlobalScopeAugmentation(node);
-                const inAmbientContext = isInAmbientContext(node);
+                const inAmbientContext = node.flags & NodeFlags.Ambient;
                 if (isGlobalAugmentation && !inAmbientContext) {
                     error(node.name, Diagnostics.Augmentations_for_the_global_scope_should_have_declare_modifier_unless_they_appear_in_already_ambient_context);
                 }
@@ -22010,7 +22010,7 @@ namespace ts {
                 if (compilerOptions.isolatedModules
                     && node.kind === SyntaxKind.ExportSpecifier
                     && !(target.flags & SymbolFlags.Value)
-                    && !isInAmbientContext(node)) {
+                    && !(node.flags & NodeFlags.Ambient)) {
                     error(node, Diagnostics.Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided);
                 }
             }
@@ -22077,7 +22077,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (modulekind === ModuleKind.ES2015 && !isInAmbientContext(node)) {
+                    if (modulekind === ModuleKind.ES2015 && !((node as ImportEqualsDeclaration).flags & NodeFlags.Ambient)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
@@ -22103,7 +22103,7 @@ namespace ts {
 
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
                     const inAmbientNamespaceDeclaration = !inAmbientExternalModule && node.parent.kind === SyntaxKind.ModuleBlock &&
-                        !node.moduleSpecifier && isInAmbientContext(node);
+                        !node.moduleSpecifier && node.flags & NodeFlags.Ambient;
                     if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule && !inAmbientNamespaceDeclaration) {
                         error(node, Diagnostics.Export_declarations_are_not_permitted_in_a_namespace);
                     }
@@ -22176,7 +22176,7 @@ namespace ts {
 
             checkExternalModuleExports(container);
 
-            if (node.isExportEquals && !isInAmbientContext(node)) {
+            if (node.isExportEquals && !(node.flags & NodeFlags.Ambient)) {
                 if (modulekind === ModuleKind.ES2015) {
                     // export assignment is not supported in es6 modules
                     grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_export_default_or_another_module_format_instead);
@@ -23780,7 +23780,7 @@ namespace ts {
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
             if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
                 const sourceFile = getSourceFileOfNode(location);
-                if (isEffectiveExternalModule(sourceFile, compilerOptions) && !isInAmbientContext(location)) {
+                if (isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
                     const helpersModule = resolveHelpersModule(sourceFile, location);
                     if (helpersModule !== unknownSymbol) {
                         const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
@@ -23988,7 +23988,7 @@ namespace ts {
                         else if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
                         }
-                        else if (isInAmbientContext(node.parent) && node.parent.kind === SyntaxKind.ModuleBlock) {
+                        else if ((node.parent.flags & NodeFlags.Ambient) && node.parent.kind === SyntaxKind.ModuleBlock) {
                             return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
                         }
                         flags |= ModifierFlags.Ambient;
@@ -24024,7 +24024,7 @@ namespace ts {
                         if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
                         }
-                        else if (flags & ModifierFlags.Ambient || isInAmbientContext(node.parent)) {
+                        else if (flags & ModifierFlags.Ambient || node.parent.flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
@@ -24375,7 +24375,7 @@ namespace ts {
                     node.kind === SyntaxKind.FunctionDeclaration ||
                     node.kind === SyntaxKind.FunctionExpression ||
                     node.kind === SyntaxKind.MethodDeclaration);
-                if (isInAmbientContext(node)) {
+                if (node.flags & NodeFlags.Ambient) {
                     return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_not_allowed_in_an_ambient_context);
                 }
                 if (!node.body) {
@@ -24562,7 +24562,7 @@ namespace ts {
             if (languageVersion < ScriptTarget.ES5) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
-            else if (isInAmbientContext(accessor)) {
+            else if (accessor.flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
             }
             else if (accessor.body === undefined && !hasModifier(accessor, ModifierFlags.Abstract)) {
@@ -24641,7 +24641,7 @@ namespace ts {
                 // However, property declarations disallow computed names in general,
                 // and accessors are not allowed in ambient contexts in general,
                 // so this error only really matters for methods.
-                if (isInAmbientContext(node)) {
+                if (node.flags & NodeFlags.Ambient) {
                     return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_ambient_context_must_directly_refer_to_a_built_in_symbol);
                 }
                 else if (!node.body) {
@@ -24736,7 +24736,7 @@ namespace ts {
 
         function checkGrammarVariableDeclaration(node: VariableDeclaration) {
             if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
-                if (isInAmbientContext(node)) {
+                if (node.flags & NodeFlags.Ambient) {
                     if (node.initializer) {
                         if (isConst(node) && !node.type) {
                             if (!isStringOrNumberLiteralExpression(node.initializer)) {
@@ -24768,7 +24768,7 @@ namespace ts {
             }
 
             if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
-                !isInAmbientContext(node.parent.parent) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
+                !(node.parent.parent.flags & NodeFlags.Ambient) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
             }
 
@@ -24926,7 +24926,7 @@ namespace ts {
                 }
             }
 
-            if (isInAmbientContext(node) && node.initializer) {
+            if (node.flags & NodeFlags.Ambient && node.initializer) {
                 return grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
         }
@@ -24969,11 +24969,11 @@ namespace ts {
         }
 
         function checkGrammarSourceFile(node: SourceFile): boolean {
-            return isInAmbientContext(node) && checkGrammarTopLevelElementsForRequiredDeclareModifier(node);
+            return !!(node.flags & NodeFlags.Ambient) && checkGrammarTopLevelElementsForRequiredDeclareModifier(node);
         }
 
         function checkGrammarStatementInAmbientContext(node: Node): boolean {
-            if (isInAmbientContext(node)) {
+            if (node.flags & NodeFlags.Ambient) {
                 // An accessors is already reported about the ambient context
                 if (isAccessor(node.parent)) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = true;
