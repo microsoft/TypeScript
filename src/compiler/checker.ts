@@ -16377,6 +16377,9 @@ namespace ts {
                     // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
                     // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
                     let funcSymbol = checkExpression(node.expression).symbol;
+                    if (!funcSymbol && node.expression.kind === SyntaxKind.Identifier) {
+                        funcSymbol = getResolvedSymbol(node.expression as Identifier);
+                    }
                     if (funcSymbol && isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
                         funcSymbol = getSymbolOfNode((<VariableDeclaration>funcSymbol.valueDeclaration).initializer);
                     }
