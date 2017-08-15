@@ -31,12 +31,12 @@ namespace ts.formatting {
                 return 0;
             }
 
-            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position, options);
+            const precedingToken = findPrecedingToken(position, sourceFile);
+            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position, precedingToken, options);
             if (indentationOfEnclosingMultiLineComment >= 0) {
                 return indentationOfEnclosingMultiLineComment;
             }
 
-            const precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
                 return getBaseIndentation(options);
             }

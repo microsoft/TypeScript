@@ -1155,9 +1155,11 @@ namespace ts.formatting {
     /**
      * Gets the indentation level of the multi-line comment enclosing position,
      * and a negative value if the position is not in a multi-line comment.
+     *
+     * @param precedingToken Must be the result of `findPrecedingToken(position, sourceFile)`.
      */
-    export function getIndentationOfEnclosingMultiLineComment(sourceFile: SourceFile, position: number, options: EditorSettings): number {
-        const range = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true);
+    export function getIndentationOfEnclosingMultiLineComment(sourceFile: SourceFile, position: number, precedingToken: Node | undefined, options: EditorSettings): number {
+        const range = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true, precedingToken || null); // tslint:disable-line:no-null-keyword
         if (range) {
             const commentStart = range.pos;
             const commentLineStart = getLineStartPositionForPosition(commentStart, sourceFile);
@@ -1167,10 +1169,14 @@ namespace ts.formatting {
         return -1;
     }
 
+    /**
+     * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
+     */
     export function getRangeOfEnclosingComment(
         sourceFile: SourceFile,
         position: number,
         onlyMultiLine: boolean,
+        precedingToken: Node | null | undefined = findPrecedingToken(position, sourceFile), // tslint:disable-line:no-null-keyword
         tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
         predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
         // Considering a fixed position,
@@ -1181,7 +1187,6 @@ namespace ts.formatting {
         // Note, `node.start` is the start-position of the first comment following the previous
         // token that is not a trailing comment, so the leading and trailing comments of all
         // tokens contain all comments in a sourcefile disjointly.
-        const precedingToken = findPrecedingToken(position, sourceFile);
         const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
         const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
         const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
