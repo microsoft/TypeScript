@@ -13372,6 +13372,97 @@ namespace ts {
                 getApparentTypeOfContextualType(node);
         }
 
+        function combineSignatures(signatureList: Signature[]): Signature {
+            // Produce a synthetic signature whose arguments are a union of the parameters of the inferred signatures and whose return type is an intersection
+            let parameters: Symbol[];
+            let minimumParameterCount = Number.POSITIVE_INFINITY;
+            let maximumRealParameterCount = 0;
+            let restTypes: Type[];
+            let thisTypes: Type[];
+            let hasLiteralTypes = false;
+
+            // First, collect aggrgate statistics about all signatures to determine the characteristics of the resulting signature
+            for (const signature of signatureList) {
+                if (signature.minArgumentCount < minimumParameterCount) {
+                    minimumParameterCount = signature.minArgumentCount;
+                }
+                if (signature.hasRestParameter) {
+                    (restTypes || (restTypes = [])).push(getRestTypeOfSignature(signature));
+                }
+                if (signature.hasLiteralTypes) {
+                    hasLiteralTypes = true;
+                }
+                const realParameterCount = length(signature.parameters) - (signature.hasRestParameter ? 1 : 0);
+                if (maximumRealParameterCount < realParameterCount) {
+                    maximumRealParameterCount = realParameterCount;
+                }
+                if (signature.thisParameter) {
+                    (thisTypes || (thisTypes = [])).push(getTypeOfSymbol(signature.thisParameter));
+                }
+            }
+
+            // Then, for every real parameter up to the maximum, combine those parameter types and names into a new symbol
+            for (let i = 0; i < maximumRealParameterCount; i++) {
+                const parameterNames: __String[] = [];
+                const parameterTypes: Type[] = [];
+                for (const signature of signatureList) {
+                    let type: Type;
+                    const index = signature.thisParameter ? i + 1 : i;
+                    if (index < (signature.hasRestParameter ? signature.parameters.length - 1 : signature.parameters.length)) {
+                        // If the argument is present, add it to the mixed argument
+                        const param = signature.parameters[index];
+                        if (!contains(parameterNames, param.escapedName)) {
+                            parameterNames.push(param.escapedName);
+                        }
+                        type = getTypeOfSymbol(param);
+                    }
+                    else if (signature.hasRestParameter) {
+                        // Otherwise, if there is a rest type for this signature, add that type
+                        type = getRestTypeOfSignature(signature);
+                    }
+                    else {
+                        // Otherwise, this argument may be `undefined` on some uses
+                        type = undefinedType;
+                    }
+                    if (!contains(parameterTypes, type)) {
+                        parameterTypes.push(type);
+                    }
+                }
+                // We do this so the name is reasonable for users
+                const paramName = escapeLeadingUnderscores(map(parameterNames, unescapeLeadingUnderscores).join("or"));
+                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
+                paramSymbol.type = getUnionType(parameterTypes);
+                (parameters || (parameters = [])).push(paramSymbol);
+            }
+
+            const hasRestParameter = !!(restTypes && restTypes.length);
+            if (hasRestParameter) {
+                const restSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "rest" as __String);
+                restSymbol.type = getUnionType(restTypes);
+                restSymbol.isRestParameter = true;
+                (parameters || (parameters = [])).push(restSymbol);
+            }
+
+            let thisParameterSymbol: TransientSymbol;
+            if (thisTypes && thisTypes.length) {
+                thisParameterSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "this" as __String);
+                thisParameterSymbol.type = getUnionType(thisTypes);
+            }
+
+            // TODO (weswigham): Merge type predicates?
+            return createSignature(
+                /*declaration*/ undefined,
+                map(flatMap(signatureList, s => s.typeParameters), cloneTypeParameter),
+                thisParameterSymbol,
+                parameters,
+                getIntersectionType(map(signatureList, getReturnTypeOfSignature)),
+                /*typePredicate*/ undefined,
+                minimumParameterCount,
+                hasRestParameter,
+                hasLiteralTypes
+            );
+        }
+
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
         // If the contextual type is a union type, get the signature from each type possible and if they are
@@ -13388,6 +13479,7 @@ namespace ts {
             }
             let signatureList: Signature[];
             const types = (<UnionType>type).types;
+            let mismatchedSignatures = false;
             for (const current of types) {
                 const signature = getContextualCallSignature(current, node);
                 if (signature) {
@@ -13396,14 +13488,19 @@ namespace ts {
                         signatureList = [signature];
                     }
                     else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
-                        // Signatures aren't identical, do not use
-                        return undefined;
+                        // Signatures aren't identical, set flag to union parameter types, intersect return types
+                        signatureList.push(signature);
+                        mismatchedSignatures = true;
                     }
                     else {
                         // Use this signature for contextual union signature
                         signatureList.push(signature);
                     }
                 }
+            }
+
+            if (mismatchedSignatures) {
+                return combineSignatures(signatureList);
             }
 
             // Result is union of signatures collected (return type is union of return types of this signature set)

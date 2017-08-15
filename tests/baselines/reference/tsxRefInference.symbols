@@ -1,0 +1,796 @@
+=== tests/cases/compiler/index.tsx ===
+import React = require("react");
+>React : Symbol(React, Decl(index.tsx, 0, 0))
+
+interface MyInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>,  HTMLInputElement> {
+>MyInputProps : Symbol(MyInputProps, Decl(index.tsx, 0, 32))
+>React.DetailedHTMLProps : Symbol(React.DetailedHTMLProps, Decl(index.d.ts, 51, 74))
+>React : Symbol(React, Decl(index.tsx, 0, 0))
+>DetailedHTMLProps : Symbol(React.DetailedHTMLProps, Decl(index.d.ts, 51, 74))
+>React : Symbol(React, Decl(index.tsx, 0, 0))
+>InputHTMLAttributes : Symbol(React.InputHTMLAttributes, Decl(index.d.ts, 43, 59))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onValid?(): boolean;
+>onValid : Symbol(MyInputProps.onValid, Decl(index.tsx, 2, 120))
+
+    onInvalid?(): boolean;
+>onInvalid : Symbol(MyInputProps.onInvalid, Decl(index.tsx, 3, 24))
+}
+
+class MyInput implements React.Component<MyInputProps, any>  {
+>MyInput : Symbol(MyInput, Decl(index.tsx, 5, 1))
+>React.Component : Symbol(React.Component, Decl(index.d.ts, 62, 57))
+>React : Symbol(React, Decl(index.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(index.d.ts, 62, 57))
+>MyInputProps : Symbol(MyInputProps, Decl(index.tsx, 0, 32))
+
+    props: MyInputProps;
+>props : Symbol(MyInput.props, Decl(index.tsx, 7, 62))
+>MyInputProps : Symbol(MyInputProps, Decl(index.tsx, 0, 32))
+
+    render() {
+>render : Symbol(MyInput.render, Decl(index.tsx, 8, 24))
+
+        const { onValid, onInvalid, onChange, ...inputProps } = this.props;
+>onValid : Symbol(onValid, Decl(index.tsx, 10, 15))
+>onInvalid : Symbol(onInvalid, Decl(index.tsx, 10, 24))
+>onChange : Symbol(onChange, Decl(index.tsx, 10, 35))
+>inputProps : Symbol(inputProps, Decl(index.tsx, 10, 45))
+>this.props : Symbol(MyInput.props, Decl(index.tsx, 7, 62))
+>this : Symbol(MyInput, Decl(index.tsx, 5, 1))
+>props : Symbol(MyInput.props, Decl(index.tsx, 7, 62))
+
+        return (
+            <input
+>input : Symbol(JSX.IntrinsicElements.input, Decl(index.d.ts, 171, 37))
+
+                { ...inputProps }
+>inputProps : Symbol(inputProps, Decl(index.tsx, 10, 45))
+
+                onChange={ this._onChange }
+>onChange : Symbol(onChange, Decl(index.tsx, 13, 33))
+>this._onChange : Symbol(MyInput._onChange, Decl(index.tsx, 19, 26))
+>this : Symbol(MyInput, Decl(index.tsx, 5, 1))
+>_onChange : Symbol(MyInput._onChange, Decl(index.tsx, 19, 26))
+
+            />
+        );
+    }
+
+    componentDidMount() {}
+>componentDidMount : Symbol(MyInput.componentDidMount, Decl(index.tsx, 17, 5))
+
+    private _onChange(event: React.ChangeEvent<HTMLInputElement>) {
+>_onChange : Symbol(MyInput._onChange, Decl(index.tsx, 19, 26))
+>event : Symbol(event, Decl(index.tsx, 21, 22))
+>React : Symbol(React, Decl(index.tsx, 0, 0))
+>ChangeEvent : Symbol(React.ChangeEvent, Decl(index.d.ts, 21, 5))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+        // do some validation first...
+
+        // ... then trigger onChange callback, if present:
+        if (this.props.onChange) {
+>this.props.onChange : Symbol(React.InputHTMLAttributes.onChange, Decl(index.d.ts, 45, 64))
+>this.props : Symbol(MyInput.props, Decl(index.tsx, 7, 62))
+>this : Symbol(MyInput, Decl(index.tsx, 5, 1))
+>props : Symbol(MyInput.props, Decl(index.tsx, 7, 62))
+>onChange : Symbol(React.InputHTMLAttributes.onChange, Decl(index.d.ts, 45, 64))
+
+            this.props.onChange(event);
+>this.props.onChange : Symbol(React.InputHTMLAttributes.onChange, Decl(index.d.ts, 45, 64))
+>this.props : Symbol(MyInput.props, Decl(index.tsx, 7, 62))
+>this : Symbol(MyInput, Decl(index.tsx, 5, 1))
+>props : Symbol(MyInput.props, Decl(index.tsx, 7, 62))
+>onChange : Symbol(React.InputHTMLAttributes.onChange, Decl(index.d.ts, 45, 64))
+>event : Symbol(event, Decl(index.tsx, 21, 22))
+        }
+    }
+}
+
+function someFunction() {}
+>someFunction : Symbol(someFunction, Decl(index.tsx, 29, 1))
+
+const x = <MyInput ref={r => 0} onChange={someFunction} />;
+>x : Symbol(x, Decl(index.tsx, 32, 5))
+>MyInput : Symbol(MyInput, Decl(index.tsx, 5, 1))
+>ref : Symbol(ref, Decl(index.tsx, 32, 18))
+>r : Symbol(r, Decl(index.tsx, 32, 24))
+>onChange : Symbol(onChange, Decl(index.tsx, 32, 31))
+>someFunction : Symbol(someFunction, Decl(index.tsx, 29, 1))
+
+=== tests/cases/compiler/node_modules/react/index.d.ts ===
+export as namespace React;
+>React : Symbol(React, Decl(index.d.ts, 0, 0))
+
+export = React;
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+
+declare namespace React {
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+
+    interface SyntheticEvent<T> {
+>SyntheticEvent : Symbol(SyntheticEvent, Decl(index.d.ts, 3, 25))
+>T : Symbol(T, Decl(index.d.ts, 4, 29))
+
+        bubbles: boolean;
+>bubbles : Symbol(SyntheticEvent.bubbles, Decl(index.d.ts, 4, 33))
+
+        currentTarget: EventTarget & T;
+>currentTarget : Symbol(SyntheticEvent.currentTarget, Decl(index.d.ts, 5, 25))
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(index.d.ts, 4, 29))
+
+        cancelable: boolean;
+>cancelable : Symbol(SyntheticEvent.cancelable, Decl(index.d.ts, 6, 39))
+
+        defaultPrevented: boolean;
+>defaultPrevented : Symbol(SyntheticEvent.defaultPrevented, Decl(index.d.ts, 7, 28))
+
+        eventPhase: number;
+>eventPhase : Symbol(SyntheticEvent.eventPhase, Decl(index.d.ts, 8, 34))
+
+        isTrusted: boolean;
+>isTrusted : Symbol(SyntheticEvent.isTrusted, Decl(index.d.ts, 9, 27))
+
+        nativeEvent: Event;
+>nativeEvent : Symbol(SyntheticEvent.nativeEvent, Decl(index.d.ts, 10, 27))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+        preventDefault(): void;
+>preventDefault : Symbol(SyntheticEvent.preventDefault, Decl(index.d.ts, 11, 27))
+
+        isDefaultPrevented(): boolean;
+>isDefaultPrevented : Symbol(SyntheticEvent.isDefaultPrevented, Decl(index.d.ts, 12, 31))
+
+        stopPropagation(): void;
+>stopPropagation : Symbol(SyntheticEvent.stopPropagation, Decl(index.d.ts, 13, 38))
+
+        isPropagationStopped(): boolean;
+>isPropagationStopped : Symbol(SyntheticEvent.isPropagationStopped, Decl(index.d.ts, 14, 32))
+
+        persist(): void;
+>persist : Symbol(SyntheticEvent.persist, Decl(index.d.ts, 15, 40))
+
+        // If you thought this should be `EventTarget & T`, see https://github.com/DefinitelyTyped/DefinitelyTyped/pull/12239
+        target: EventTarget;
+>target : Symbol(SyntheticEvent.target, Decl(index.d.ts, 16, 24))
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+        timeStamp: number;
+>timeStamp : Symbol(SyntheticEvent.timeStamp, Decl(index.d.ts, 18, 28))
+
+        type: string;
+>type : Symbol(SyntheticEvent.type, Decl(index.d.ts, 19, 26))
+    }
+
+    interface ChangeEvent<T> extends SyntheticEvent<T> {
+>ChangeEvent : Symbol(ChangeEvent, Decl(index.d.ts, 21, 5))
+>T : Symbol(T, Decl(index.d.ts, 23, 26))
+>SyntheticEvent : Symbol(SyntheticEvent, Decl(index.d.ts, 3, 25))
+>T : Symbol(T, Decl(index.d.ts, 23, 26))
+
+        target: EventTarget & T;
+>target : Symbol(ChangeEvent.target, Decl(index.d.ts, 23, 56))
+>EventTarget : Symbol(EventTarget, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(index.d.ts, 23, 26))
+    }
+
+    interface FormEvent<T> extends SyntheticEvent<T> {
+>FormEvent : Symbol(FormEvent, Decl(index.d.ts, 25, 5))
+>T : Symbol(T, Decl(index.d.ts, 27, 24))
+>SyntheticEvent : Symbol(SyntheticEvent, Decl(index.d.ts, 3, 25))
+>T : Symbol(T, Decl(index.d.ts, 27, 24))
+    }
+
+    interface DOMAttributes<T> {
+>DOMAttributes : Symbol(DOMAttributes, Decl(index.d.ts, 28, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onChange?: FormEventHandler<T>;
+>onChange : Symbol(DOMAttributes.onChange, Decl(index.d.ts, 30, 32))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onChangeCapture?: FormEventHandler<T>;
+>onChangeCapture : Symbol(DOMAttributes.onChangeCapture, Decl(index.d.ts, 31, 39))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onInput?: FormEventHandler<T>;
+>onInput : Symbol(DOMAttributes.onInput, Decl(index.d.ts, 32, 46))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onInputCapture?: FormEventHandler<T>;
+>onInputCapture : Symbol(DOMAttributes.onInputCapture, Decl(index.d.ts, 33, 38))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onReset?: FormEventHandler<T>;
+>onReset : Symbol(DOMAttributes.onReset, Decl(index.d.ts, 34, 45))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onResetCapture?: FormEventHandler<T>;
+>onResetCapture : Symbol(DOMAttributes.onResetCapture, Decl(index.d.ts, 35, 38))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onSubmit?: FormEventHandler<T>;
+>onSubmit : Symbol(DOMAttributes.onSubmit, Decl(index.d.ts, 36, 45))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onSubmitCapture?: FormEventHandler<T>;
+>onSubmitCapture : Symbol(DOMAttributes.onSubmitCapture, Decl(index.d.ts, 37, 39))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onInvalid?: FormEventHandler<T>;
+>onInvalid : Symbol(DOMAttributes.onInvalid, Decl(index.d.ts, 38, 46))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+
+        onInvalidCapture?: FormEventHandler<T>;
+>onInvalidCapture : Symbol(DOMAttributes.onInvalidCapture, Decl(index.d.ts, 39, 40))
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 30, 28))
+    }
+
+    interface HTMLAttributes<T> extends DOMAttributes<T> {}
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 41, 5))
+>T : Symbol(T, Decl(index.d.ts, 43, 29))
+>DOMAttributes : Symbol(DOMAttributes, Decl(index.d.ts, 28, 5))
+>T : Symbol(T, Decl(index.d.ts, 43, 29))
+
+    interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
+>InputHTMLAttributes : Symbol(InputHTMLAttributes, Decl(index.d.ts, 43, 59))
+>T : Symbol(T, Decl(index.d.ts, 45, 34))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 41, 5))
+>T : Symbol(T, Decl(index.d.ts, 45, 34))
+
+        onChange?: ChangeEventHandler<T>;
+>onChange : Symbol(InputHTMLAttributes.onChange, Decl(index.d.ts, 45, 64))
+>ChangeEventHandler : Symbol(ChangeEventHandler, Decl(index.d.ts, 49, 58))
+>T : Symbol(T, Decl(index.d.ts, 45, 34))
+    }
+
+    type FormEventHandler<T> = EventHandler<FormEvent<T>>;
+>FormEventHandler : Symbol(FormEventHandler, Decl(index.d.ts, 47, 5))
+>T : Symbol(T, Decl(index.d.ts, 49, 26))
+>EventHandler : Symbol(EventHandler, Decl(index.d.ts, 50, 62))
+>FormEvent : Symbol(FormEvent, Decl(index.d.ts, 25, 5))
+>T : Symbol(T, Decl(index.d.ts, 49, 26))
+
+    type ChangeEventHandler<T> = EventHandler<ChangeEvent<T>>;
+>ChangeEventHandler : Symbol(ChangeEventHandler, Decl(index.d.ts, 49, 58))
+>T : Symbol(T, Decl(index.d.ts, 50, 28))
+>EventHandler : Symbol(EventHandler, Decl(index.d.ts, 50, 62))
+>ChangeEvent : Symbol(ChangeEvent, Decl(index.d.ts, 21, 5))
+>T : Symbol(T, Decl(index.d.ts, 50, 28))
+
+    type EventHandler<E extends SyntheticEvent<any>> = (event: E) => void;
+>EventHandler : Symbol(EventHandler, Decl(index.d.ts, 50, 62))
+>E : Symbol(E, Decl(index.d.ts, 51, 22))
+>SyntheticEvent : Symbol(SyntheticEvent, Decl(index.d.ts, 3, 25))
+>event : Symbol(event, Decl(index.d.ts, 51, 56))
+>E : Symbol(E, Decl(index.d.ts, 51, 22))
+
+    type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = ClassAttributes<T> & E;
+>DetailedHTMLProps : Symbol(DetailedHTMLProps, Decl(index.d.ts, 51, 74))
+>E : Symbol(E, Decl(index.d.ts, 52, 27))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 41, 5))
+>T : Symbol(T, Decl(index.d.ts, 52, 55))
+>T : Symbol(T, Decl(index.d.ts, 52, 55))
+>ClassAttributes : Symbol(ClassAttributes, Decl(index.d.ts, 56, 5))
+>T : Symbol(T, Decl(index.d.ts, 52, 55))
+>E : Symbol(E, Decl(index.d.ts, 52, 27))
+
+    interface Attributes {
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 52, 84))
+
+        key?: Key;
+>key : Symbol(Attributes.key, Decl(index.d.ts, 54, 26))
+>Key : Symbol(Key, Decl(index.d.ts, 59, 5))
+    }
+    interface ClassAttributes<T> extends Attributes {
+>ClassAttributes : Symbol(ClassAttributes, Decl(index.d.ts, 56, 5))
+>T : Symbol(T, Decl(index.d.ts, 57, 30))
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 52, 84))
+
+        ref?: Ref<T>;
+>ref : Symbol(ClassAttributes.ref, Decl(index.d.ts, 57, 53))
+>Ref : Symbol(Ref, Decl(index.d.ts, 61, 31))
+>T : Symbol(T, Decl(index.d.ts, 57, 30))
+    }
+
+    type Key = string | number;
+>Key : Symbol(Key, Decl(index.d.ts, 59, 5))
+
+    type Ref<T> = string | ((instance: T | null) => any);
+>Ref : Symbol(Ref, Decl(index.d.ts, 61, 31))
+>T : Symbol(T, Decl(index.d.ts, 62, 13))
+>instance : Symbol(instance, Decl(index.d.ts, 62, 29))
+>T : Symbol(T, Decl(index.d.ts, 62, 13))
+
+    interface Component<P = {}, S = {}> extends ComponentLifecycle<P, S> {}
+>Component : Symbol(Component, Decl(index.d.ts, 62, 57))
+>P : Symbol(P, Decl(index.d.ts, 64, 24))
+>S : Symbol(S, Decl(index.d.ts, 64, 31))
+>ComponentLifecycle : Symbol(ComponentLifecycle, Decl(index.d.ts, 64, 75))
+>P : Symbol(P, Decl(index.d.ts, 64, 24))
+>S : Symbol(S, Decl(index.d.ts, 64, 31))
+
+    interface ComponentLifecycle<P, S> {
+>ComponentLifecycle : Symbol(ComponentLifecycle, Decl(index.d.ts, 64, 75))
+>P : Symbol(P, Decl(index.d.ts, 66, 33))
+>S : Symbol(S, Decl(index.d.ts, 66, 35))
+
+        componentWillMount?(): void;
+>componentWillMount : Symbol(ComponentLifecycle.componentWillMount, Decl(index.d.ts, 66, 40))
+
+        componentDidMount?(): void;
+>componentDidMount : Symbol(ComponentLifecycle.componentDidMount, Decl(index.d.ts, 67, 36))
+
+        componentWillReceiveProps?(nextProps: Readonly<P>, nextContext: any): void;
+>componentWillReceiveProps : Symbol(ComponentLifecycle.componentWillReceiveProps, Decl(index.d.ts, 68, 35))
+>nextProps : Symbol(nextProps, Decl(index.d.ts, 69, 35))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(index.d.ts, 66, 33))
+>nextContext : Symbol(nextContext, Decl(index.d.ts, 69, 58))
+
+        shouldComponentUpdate?(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean;
+>shouldComponentUpdate : Symbol(ComponentLifecycle.shouldComponentUpdate, Decl(index.d.ts, 69, 83))
+>nextProps : Symbol(nextProps, Decl(index.d.ts, 70, 31))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(index.d.ts, 66, 33))
+>nextState : Symbol(nextState, Decl(index.d.ts, 70, 54))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(index.d.ts, 66, 35))
+>nextContext : Symbol(nextContext, Decl(index.d.ts, 70, 78))
+
+        componentWillUpdate?(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void;
+>componentWillUpdate : Symbol(ComponentLifecycle.componentWillUpdate, Decl(index.d.ts, 70, 106))
+>nextProps : Symbol(nextProps, Decl(index.d.ts, 71, 29))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(index.d.ts, 66, 33))
+>nextState : Symbol(nextState, Decl(index.d.ts, 71, 52))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(index.d.ts, 66, 35))
+>nextContext : Symbol(nextContext, Decl(index.d.ts, 71, 76))
+
+        componentDidUpdate?(prevProps: Readonly<P>, prevState: Readonly<S>, prevContext: any): void;
+>componentDidUpdate : Symbol(ComponentLifecycle.componentDidUpdate, Decl(index.d.ts, 71, 101))
+>prevProps : Symbol(prevProps, Decl(index.d.ts, 72, 28))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(index.d.ts, 66, 33))
+>prevState : Symbol(prevState, Decl(index.d.ts, 72, 51))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(index.d.ts, 66, 35))
+>prevContext : Symbol(prevContext, Decl(index.d.ts, 72, 75))
+
+        componentWillUnmount?(): void;
+>componentWillUnmount : Symbol(ComponentLifecycle.componentWillUnmount, Decl(index.d.ts, 72, 100))
+
+        componentDidCatch?(error: Error, errorInfo: ErrorInfo): void;
+>componentDidCatch : Symbol(ComponentLifecycle.componentDidCatch, Decl(index.d.ts, 73, 38))
+>error : Symbol(error, Decl(index.d.ts, 74, 27))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>errorInfo : Symbol(errorInfo, Decl(index.d.ts, 74, 40))
+>ErrorInfo : Symbol(ErrorInfo, Decl(index.d.ts, 75, 5))
+    }
+
+    interface ErrorInfo {
+>ErrorInfo : Symbol(ErrorInfo, Decl(index.d.ts, 75, 5))
+
+        componentStack: string;
+>componentStack : Symbol(ErrorInfo.componentStack, Decl(index.d.ts, 77, 25))
+    }
+
+    interface ReactElement<P> {
+>ReactElement : Symbol(ReactElement, Decl(index.d.ts, 79, 5))
+>P : Symbol(P, Decl(index.d.ts, 81, 27))
+
+        type: string | ComponentClass<P> | SFC<P>;
+>type : Symbol(ReactElement.type, Decl(index.d.ts, 81, 31))
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 127, 66))
+>P : Symbol(P, Decl(index.d.ts, 81, 27))
+>SFC : Symbol(SFC, Decl(index.d.ts, 112, 5))
+>P : Symbol(P, Decl(index.d.ts, 81, 27))
+
+        props: P;
+>props : Symbol(ReactElement.props, Decl(index.d.ts, 82, 50))
+>P : Symbol(P, Decl(index.d.ts, 81, 27))
+
+        key: Key | null;
+>key : Symbol(ReactElement.key, Decl(index.d.ts, 83, 17))
+>Key : Symbol(Key, Decl(index.d.ts, 59, 5))
+    }
+
+    interface SFCElement<P> extends ReactElement<P> {
+>SFCElement : Symbol(SFCElement, Decl(index.d.ts, 85, 5))
+>P : Symbol(P, Decl(index.d.ts, 87, 25))
+>ReactElement : Symbol(ReactElement, Decl(index.d.ts, 79, 5))
+>P : Symbol(P, Decl(index.d.ts, 87, 25))
+
+        type: SFC<P>;
+>type : Symbol(SFCElement.type, Decl(index.d.ts, 87, 53))
+>SFC : Symbol(SFC, Decl(index.d.ts, 112, 5))
+>P : Symbol(P, Decl(index.d.ts, 87, 25))
+    }
+
+    type ComponentState = {};
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+
+    type ClassType<P, T extends Component<P, ComponentState>, C extends ComponentClass<P>> =
+>ClassType : Symbol(ClassType, Decl(index.d.ts, 91, 29))
+>P : Symbol(P, Decl(index.d.ts, 92, 19))
+>T : Symbol(T, Decl(index.d.ts, 92, 21))
+>Component : Symbol(Component, Decl(index.d.ts, 62, 57))
+>P : Symbol(P, Decl(index.d.ts, 92, 19))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+>C : Symbol(C, Decl(index.d.ts, 92, 61))
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 127, 66))
+>P : Symbol(P, Decl(index.d.ts, 92, 19))
+
+        & C
+>C : Symbol(C, Decl(index.d.ts, 92, 61))
+
+        & (new (props?: P, context?: any) => T)
+>props : Symbol(props, Decl(index.d.ts, 94, 16))
+>P : Symbol(P, Decl(index.d.ts, 92, 19))
+>context : Symbol(context, Decl(index.d.ts, 94, 26))
+>T : Symbol(T, Decl(index.d.ts, 92, 21))
+
+        & (new (props?: P, context?: any) => { props: P });
+>props : Symbol(props, Decl(index.d.ts, 95, 16))
+>P : Symbol(P, Decl(index.d.ts, 92, 19))
+>context : Symbol(context, Decl(index.d.ts, 95, 26))
+>props : Symbol(props, Decl(index.d.ts, 95, 46))
+>P : Symbol(P, Decl(index.d.ts, 92, 19))
+
+    type CElement<P, T extends Component<P, ComponentState>> = ComponentElement<P, T>;
+>CElement : Symbol(CElement, Decl(index.d.ts, 95, 59))
+>P : Symbol(P, Decl(index.d.ts, 97, 18))
+>T : Symbol(T, Decl(index.d.ts, 97, 20))
+>Component : Symbol(Component, Decl(index.d.ts, 62, 57))
+>P : Symbol(P, Decl(index.d.ts, 97, 18))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+>ComponentElement : Symbol(ComponentElement, Decl(index.d.ts, 97, 86))
+>P : Symbol(P, Decl(index.d.ts, 97, 18))
+>T : Symbol(T, Decl(index.d.ts, 97, 20))
+
+    interface ComponentElement<P, T extends Component<P, ComponentState>> extends ReactElement<P> {
+>ComponentElement : Symbol(ComponentElement, Decl(index.d.ts, 97, 86))
+>P : Symbol(P, Decl(index.d.ts, 98, 31))
+>T : Symbol(T, Decl(index.d.ts, 98, 33))
+>Component : Symbol(Component, Decl(index.d.ts, 62, 57))
+>P : Symbol(P, Decl(index.d.ts, 98, 31))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+>ReactElement : Symbol(ReactElement, Decl(index.d.ts, 79, 5))
+>P : Symbol(P, Decl(index.d.ts, 98, 31))
+
+        type: ComponentClass<P>;
+>type : Symbol(ComponentElement.type, Decl(index.d.ts, 98, 99))
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 127, 66))
+>P : Symbol(P, Decl(index.d.ts, 98, 31))
+
+        ref?: Ref<T>;
+>ref : Symbol(ComponentElement.ref, Decl(index.d.ts, 99, 32))
+>Ref : Symbol(Ref, Decl(index.d.ts, 61, 31))
+>T : Symbol(T, Decl(index.d.ts, 98, 33))
+    }
+
+    interface ClassicComponent<P = {}, S = {}> extends Component<P, S> {
+>ClassicComponent : Symbol(ClassicComponent, Decl(index.d.ts, 101, 5))
+>P : Symbol(P, Decl(index.d.ts, 103, 31))
+>S : Symbol(S, Decl(index.d.ts, 103, 38))
+>Component : Symbol(Component, Decl(index.d.ts, 62, 57))
+>P : Symbol(P, Decl(index.d.ts, 103, 31))
+>S : Symbol(S, Decl(index.d.ts, 103, 38))
+
+        replaceState(nextState: S, callback?: () => any): void;
+>replaceState : Symbol(ClassicComponent.replaceState, Decl(index.d.ts, 103, 72))
+>nextState : Symbol(nextState, Decl(index.d.ts, 104, 21))
+>S : Symbol(S, Decl(index.d.ts, 103, 38))
+>callback : Symbol(callback, Decl(index.d.ts, 104, 34))
+
+        isMounted(): boolean;
+>isMounted : Symbol(ClassicComponent.isMounted, Decl(index.d.ts, 104, 63))
+
+        getInitialState?(): S;
+>getInitialState : Symbol(ClassicComponent.getInitialState, Decl(index.d.ts, 105, 29))
+>S : Symbol(S, Decl(index.d.ts, 103, 38))
+    }
+
+    interface ClassicComponentClass<P = {}> extends ComponentClass<P> {
+>ClassicComponentClass : Symbol(ClassicComponentClass, Decl(index.d.ts, 107, 5))
+>P : Symbol(P, Decl(index.d.ts, 109, 36))
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 127, 66))
+>P : Symbol(P, Decl(index.d.ts, 109, 36))
+
+        new (props?: P, context?: any): ClassicComponent<P, ComponentState>;
+>props : Symbol(props, Decl(index.d.ts, 110, 13))
+>P : Symbol(P, Decl(index.d.ts, 109, 36))
+>context : Symbol(context, Decl(index.d.ts, 110, 23))
+>ClassicComponent : Symbol(ClassicComponent, Decl(index.d.ts, 101, 5))
+>P : Symbol(P, Decl(index.d.ts, 109, 36))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+
+        getDefaultProps?(): P;
+>getDefaultProps : Symbol(ClassicComponentClass.getDefaultProps, Decl(index.d.ts, 110, 76))
+>P : Symbol(P, Decl(index.d.ts, 109, 36))
+    }
+
+    type SFC<P = {}> = StatelessComponent<P>;
+>SFC : Symbol(SFC, Decl(index.d.ts, 112, 5))
+>P : Symbol(P, Decl(index.d.ts, 114, 13))
+>StatelessComponent : Symbol(StatelessComponent, Decl(index.d.ts, 114, 45))
+>P : Symbol(P, Decl(index.d.ts, 114, 13))
+
+    interface StatelessComponent<P = {}> {
+>StatelessComponent : Symbol(StatelessComponent, Decl(index.d.ts, 114, 45))
+>P : Symbol(P, Decl(index.d.ts, 115, 33))
+
+        (props: P & { children?: ReactNode }, context?: any): ReactElement<any> | null;
+>props : Symbol(props, Decl(index.d.ts, 116, 9))
+>P : Symbol(P, Decl(index.d.ts, 115, 33))
+>children : Symbol(children, Decl(index.d.ts, 116, 21))
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 121, 5))
+>context : Symbol(context, Decl(index.d.ts, 116, 45))
+>ReactElement : Symbol(ReactElement, Decl(index.d.ts, 79, 5))
+
+        propTypes?: ValidationMap<P>;
+>propTypes : Symbol(StatelessComponent.propTypes, Decl(index.d.ts, 116, 87))
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 136, 5))
+>P : Symbol(P, Decl(index.d.ts, 115, 33))
+
+        contextTypes?: ValidationMap<any>;
+>contextTypes : Symbol(StatelessComponent.contextTypes, Decl(index.d.ts, 117, 37))
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 136, 5))
+
+        defaultProps?: Partial<P>;
+>defaultProps : Symbol(StatelessComponent.defaultProps, Decl(index.d.ts, 118, 42))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(index.d.ts, 115, 33))
+
+        displayName?: string;
+>displayName : Symbol(StatelessComponent.displayName, Decl(index.d.ts, 119, 34))
+    }
+
+    type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 121, 5))
+>ReactChild : Symbol(ReactChild, Decl(index.d.ts, 123, 77))
+>ReactFragment : Symbol(ReactFragment, Decl(index.d.ts, 125, 37))
+
+    type ReactChild = ReactElement<any> | ReactText;
+>ReactChild : Symbol(ReactChild, Decl(index.d.ts, 123, 77))
+>ReactElement : Symbol(ReactElement, Decl(index.d.ts, 79, 5))
+>ReactText : Symbol(ReactText, Decl(index.d.ts, 124, 52))
+
+    type ReactText = string | number;
+>ReactText : Symbol(ReactText, Decl(index.d.ts, 124, 52))
+
+    // Should be Array<ReactNode> but type aliases cannot be recursive
+    type ReactFragment = {} | Array<ReactChild | any[] | boolean>;
+>ReactFragment : Symbol(ReactFragment, Decl(index.d.ts, 125, 37))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>ReactChild : Symbol(ReactChild, Decl(index.d.ts, 123, 77))
+
+    interface ComponentClass<P = {}> {
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 127, 66))
+>P : Symbol(P, Decl(index.d.ts, 129, 29))
+
+        new (props?: P, context?: any): Component<P, {}>;
+>props : Symbol(props, Decl(index.d.ts, 130, 13))
+>P : Symbol(P, Decl(index.d.ts, 129, 29))
+>context : Symbol(context, Decl(index.d.ts, 130, 23))
+>Component : Symbol(Component, Decl(index.d.ts, 62, 57))
+>P : Symbol(P, Decl(index.d.ts, 129, 29))
+
+        propTypes?: ValidationMap<P>;
+>propTypes : Symbol(ComponentClass.propTypes, Decl(index.d.ts, 130, 57))
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 136, 5))
+>P : Symbol(P, Decl(index.d.ts, 129, 29))
+
+        contextTypes?: ValidationMap<any>;
+>contextTypes : Symbol(ComponentClass.contextTypes, Decl(index.d.ts, 131, 37))
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 136, 5))
+
+        childContextTypes?: ValidationMap<any>;
+>childContextTypes : Symbol(ComponentClass.childContextTypes, Decl(index.d.ts, 132, 42))
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 136, 5))
+
+        defaultProps?: Partial<P>;
+>defaultProps : Symbol(ComponentClass.defaultProps, Decl(index.d.ts, 133, 47))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(index.d.ts, 129, 29))
+
+        displayName?: string;
+>displayName : Symbol(ComponentClass.displayName, Decl(index.d.ts, 134, 34))
+    }
+
+    type ValidationMap<T> = {[K in keyof T]?: Validator<T> };
+>ValidationMap : Symbol(ValidationMap, Decl(index.d.ts, 136, 5))
+>T : Symbol(T, Decl(index.d.ts, 138, 23))
+>K : Symbol(K, Decl(index.d.ts, 138, 30))
+>T : Symbol(T, Decl(index.d.ts, 138, 23))
+>Validator : Symbol(Validator, Decl(index.d.ts, 138, 61))
+>T : Symbol(T, Decl(index.d.ts, 138, 23))
+
+    type Validator<T> = (object: T, key: string, componentName: string, ...rest: any[]) => Error | null;
+>Validator : Symbol(Validator, Decl(index.d.ts, 138, 61))
+>T : Symbol(T, Decl(index.d.ts, 139, 19))
+>object : Symbol(object, Decl(index.d.ts, 139, 25))
+>T : Symbol(T, Decl(index.d.ts, 139, 19))
+>key : Symbol(key, Decl(index.d.ts, 139, 35))
+>componentName : Symbol(componentName, Decl(index.d.ts, 139, 48))
+>rest : Symbol(rest, Decl(index.d.ts, 139, 71))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    function createElement<P>(
+>createElement : Symbol(createElement, Decl(index.d.ts, 139, 104), Decl(index.d.ts, 144, 49), Decl(index.d.ts, 148, 84), Decl(index.d.ts, 152, 50))
+>P : Symbol(P, Decl(index.d.ts, 141, 27))
+
+        type: SFC<P>,
+>type : Symbol(type, Decl(index.d.ts, 141, 30))
+>SFC : Symbol(SFC, Decl(index.d.ts, 112, 5))
+>P : Symbol(P, Decl(index.d.ts, 141, 27))
+
+        props?: Attributes & P,
+>props : Symbol(props, Decl(index.d.ts, 142, 21))
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 52, 84))
+>P : Symbol(P, Decl(index.d.ts, 141, 27))
+
+        ...children: ReactNode[]): SFCElement<P>;
+>children : Symbol(children, Decl(index.d.ts, 143, 31))
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 121, 5))
+>SFCElement : Symbol(SFCElement, Decl(index.d.ts, 85, 5))
+>P : Symbol(P, Decl(index.d.ts, 141, 27))
+
+    function createElement<P>(
+>createElement : Symbol(createElement, Decl(index.d.ts, 139, 104), Decl(index.d.ts, 144, 49), Decl(index.d.ts, 148, 84), Decl(index.d.ts, 152, 50))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+
+        type: ClassType<P, ClassicComponent<P, ComponentState>, ClassicComponentClass<P>>,
+>type : Symbol(type, Decl(index.d.ts, 145, 30))
+>ClassType : Symbol(ClassType, Decl(index.d.ts, 91, 29))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+>ClassicComponent : Symbol(ClassicComponent, Decl(index.d.ts, 101, 5))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+>ClassicComponentClass : Symbol(ClassicComponentClass, Decl(index.d.ts, 107, 5))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+
+        props?: ClassAttributes<ClassicComponent<P, ComponentState>> & P,
+>props : Symbol(props, Decl(index.d.ts, 146, 90))
+>ClassAttributes : Symbol(ClassAttributes, Decl(index.d.ts, 56, 5))
+>ClassicComponent : Symbol(ClassicComponent, Decl(index.d.ts, 101, 5))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+
+        ...children: ReactNode[]): CElement<P, ClassicComponent<P, ComponentState>>;
+>children : Symbol(children, Decl(index.d.ts, 147, 73))
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 121, 5))
+>CElement : Symbol(CElement, Decl(index.d.ts, 95, 59))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+>ClassicComponent : Symbol(ClassicComponent, Decl(index.d.ts, 101, 5))
+>P : Symbol(P, Decl(index.d.ts, 145, 27))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+
+    function createElement<P, T extends Component<P, ComponentState>, C extends ComponentClass<P>>(
+>createElement : Symbol(createElement, Decl(index.d.ts, 139, 104), Decl(index.d.ts, 144, 49), Decl(index.d.ts, 148, 84), Decl(index.d.ts, 152, 50))
+>P : Symbol(P, Decl(index.d.ts, 149, 27))
+>T : Symbol(T, Decl(index.d.ts, 149, 29))
+>Component : Symbol(Component, Decl(index.d.ts, 62, 57))
+>P : Symbol(P, Decl(index.d.ts, 149, 27))
+>ComponentState : Symbol(ComponentState, Decl(index.d.ts, 89, 5))
+>C : Symbol(C, Decl(index.d.ts, 149, 69))
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 127, 66))
+>P : Symbol(P, Decl(index.d.ts, 149, 27))
+
+        type: ClassType<P, T, C>,
+>type : Symbol(type, Decl(index.d.ts, 149, 99))
+>ClassType : Symbol(ClassType, Decl(index.d.ts, 91, 29))
+>P : Symbol(P, Decl(index.d.ts, 149, 27))
+>T : Symbol(T, Decl(index.d.ts, 149, 29))
+>C : Symbol(C, Decl(index.d.ts, 149, 69))
+
+        props?: ClassAttributes<T> & P,
+>props : Symbol(props, Decl(index.d.ts, 150, 33))
+>ClassAttributes : Symbol(ClassAttributes, Decl(index.d.ts, 56, 5))
+>T : Symbol(T, Decl(index.d.ts, 149, 29))
+>P : Symbol(P, Decl(index.d.ts, 149, 27))
+
+        ...children: ReactNode[]): CElement<P, T>;
+>children : Symbol(children, Decl(index.d.ts, 151, 39))
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 121, 5))
+>CElement : Symbol(CElement, Decl(index.d.ts, 95, 59))
+>P : Symbol(P, Decl(index.d.ts, 149, 27))
+>T : Symbol(T, Decl(index.d.ts, 149, 29))
+
+    function createElement<P>(
+>createElement : Symbol(createElement, Decl(index.d.ts, 139, 104), Decl(index.d.ts, 144, 49), Decl(index.d.ts, 148, 84), Decl(index.d.ts, 152, 50))
+>P : Symbol(P, Decl(index.d.ts, 153, 27))
+
+        type: ComponentClass<P>,
+>type : Symbol(type, Decl(index.d.ts, 153, 30))
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 127, 66))
+>P : Symbol(P, Decl(index.d.ts, 153, 27))
+
+        props?: Attributes & P,
+>props : Symbol(props, Decl(index.d.ts, 154, 32))
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 52, 84))
+>P : Symbol(P, Decl(index.d.ts, 153, 27))
+
+        ...children: ReactNode[]): ReactElement<P>;
+>children : Symbol(children, Decl(index.d.ts, 155, 31))
+>ReactNode : Symbol(ReactNode, Decl(index.d.ts, 121, 5))
+>ReactElement : Symbol(ReactElement, Decl(index.d.ts, 79, 5))
+>P : Symbol(P, Decl(index.d.ts, 153, 27))
+}
+
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 157, 1))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 159, 16))
+
+        interface Element extends React.ReactElement<any> {}
+>Element : Symbol(Element, Decl(index.d.ts, 160, 19))
+>React.ReactElement : Symbol(React.ReactElement, Decl(index.d.ts, 79, 5))
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+>ReactElement : Symbol(React.ReactElement, Decl(index.d.ts, 79, 5))
+
+        interface ElementClass extends React.Component<any> {
+>ElementClass : Symbol(ElementClass, Decl(index.d.ts, 161, 60))
+>React.Component : Symbol(React.Component, Decl(index.d.ts, 62, 57))
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+>Component : Symbol(React.Component, Decl(index.d.ts, 62, 57))
+
+            render(): JSX.Element | null | false;
+>render : Symbol(ElementClass.render, Decl(index.d.ts, 162, 61))
+>JSX : Symbol(JSX, Decl(index.d.ts, 159, 16))
+>Element : Symbol(Element, Decl(index.d.ts, 160, 19))
+        }
+        interface ElementAttributesProperty { props: {}; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(index.d.ts, 164, 9))
+>props : Symbol(ElementAttributesProperty.props, Decl(index.d.ts, 165, 45))
+
+        interface ElementChildrenAttribute { children: {}; }
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 165, 58))
+>children : Symbol(ElementChildrenAttribute.children, Decl(index.d.ts, 166, 44))
+
+        interface IntrinsicAttributes extends React.Attributes {}
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(index.d.ts, 166, 60))
+>React.Attributes : Symbol(React.Attributes, Decl(index.d.ts, 52, 84))
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+>Attributes : Symbol(React.Attributes, Decl(index.d.ts, 52, 84))
+
+        interface IntrinsicClassAttributes<T> extends React.ClassAttributes<T> {}
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(index.d.ts, 168, 65))
+>T : Symbol(T, Decl(index.d.ts, 169, 43))
+>React.ClassAttributes : Symbol(React.ClassAttributes, Decl(index.d.ts, 56, 5))
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+>ClassAttributes : Symbol(React.ClassAttributes, Decl(index.d.ts, 56, 5))
+>T : Symbol(T, Decl(index.d.ts, 169, 43))
+
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 169, 81))
+
+            input: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>,  HTMLInputElement>;
+>input : Symbol(IntrinsicElements.input, Decl(index.d.ts, 171, 37))
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+>DetailedHTMLProps : Symbol(React.DetailedHTMLProps, Decl(index.d.ts, 51, 74))
+>React : Symbol(React, Decl(index.d.ts, 1, 15))
+>InputHTMLAttributes : Symbol(React.InputHTMLAttributes, Decl(index.d.ts, 43, 59))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+        }
+    }
+}
+
