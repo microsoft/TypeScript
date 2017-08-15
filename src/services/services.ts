@@ -113,7 +113,7 @@ namespace ts {
                 }
                 pos = textPos;
                 if (token === SyntaxKind.EndOfFileToken) {
-                    return pos;
+                    break;
                 }
             }
             return pos;

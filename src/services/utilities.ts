@@ -753,7 +753,7 @@ namespace ts {
                     const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        nodeHasTokens(child) ||
+                        !nodeHasTokens(child) ||
                         (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
 
                     if (lookInPreviousChild) {
