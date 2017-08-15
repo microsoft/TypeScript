@@ -241,14 +241,14 @@ namespace ts.server {
         getFileName: x => x,
         getScriptKind: _ => undefined,
         hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
-        isDynamicFile: x => x[0] == '^',
+        isDynamicFile: x => x[0] === "^",
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
         getFileName: x => x.fileName,
         getScriptKind: x => tryConvertScriptKindName(x.scriptKind),
         hasMixedContent: x => x.hasMixedContent,
-        isDynamicFile: x => x.fileName[0] == '^',
+        isDynamicFile: x => x.fileName[0] === "^",
     };
 
     function findProjectByName<T extends Project>(projectName: string, projects: T[]): T {
