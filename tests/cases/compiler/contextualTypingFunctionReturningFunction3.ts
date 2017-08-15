@@ -7,3 +7,12 @@ f(() => {
     else
         return n => n + 1;
 });
+
+// Is context sensitive if *any* return expression is.
+function notContextSensitive(n: number): number { return n; }
+f(() => {
+    if (1)
+        return notContextSensitive;
+    else
+        return n => n + 1;
+});
