@@ -111,7 +111,7 @@ namespace ts.SymbolDisplay {
 
             let signature: Signature;
             type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol.exportSymbol || symbol, location);
-            if (type) {
+            if (!(type.flags & TypeFlags.Any)) {
                 if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                     const right = (<PropertyAccessExpression>location.parent).name;
                     // Either the location is on the right of a property access, or on the left and the right is missing
@@ -382,7 +382,7 @@ namespace ts.SymbolDisplay {
         }
         if (!hasAddedSymbolInfo) {
             if (symbolKind !== ScriptElementKind.unknown) {
-                if (type) {
+                if (!(type.flags & TypeFlags.Any)) {
                     if (isThisExpression) {
                         addNewLineIfDisplayPartsExist();
                         displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
