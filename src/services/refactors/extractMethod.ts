@@ -830,10 +830,6 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function isModuleBlock(n: Node): n is ModuleBlock {
-        return n.kind === SyntaxKind.ModuleBlock;
-    }
-
     function isReadonlyArray(v: any): v is ReadonlyArray<any> {
         return isArray(v);
     }
