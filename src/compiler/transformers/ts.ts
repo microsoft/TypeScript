@@ -151,7 +151,17 @@ namespace ts {
                         break;
                     }
 
-                    recordEmittedDeclarationInScope(node);
+                    // Record these declarations provided that they have a name.
+                    if ((node as ClassDeclaration | FunctionDeclaration).name) {
+                        recordEmittedDeclarationInScope(node as ClassDeclaration | FunctionDeclaration);
+                    }
+                    else {
+                        // These nodes should always have names unless they are default-exports;
+                        // however, class declaration parsing allows for undefined names, so syntactically invalid
+                        // programs may also have an undefined name.
+                        Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasModifier(node, ModifierFlags.Default));
+                    }
+
                     break;
             }
         }
@@ -2640,16 +2650,14 @@ namespace ts {
          * Records that a declaration was emitted in the current scope, if it was the first
          * declaration for the provided symbol.
          */
-        function recordEmittedDeclarationInScope(node: Node) {
-            const name = node.symbol && node.symbol.escapedName;
-            if (name) {
-                if (!currentScopeFirstDeclarationsOfName) {
-                    currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
-                }
+        function recordEmittedDeclarationInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration) {
+            if (!currentScopeFirstDeclarationsOfName) {
+                currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
+            }
 
-                if (!currentScopeFirstDeclarationsOfName.has(name)) {
-                    currentScopeFirstDeclarationsOfName.set(name, node);
-                }
+            const name = declaredNameInScope(node);
+            if (!currentScopeFirstDeclarationsOfName.has(name)) {
+                currentScopeFirstDeclarationsOfName.set(name, node);
             }
         }
 
@@ -2658,18 +2666,23 @@ namespace ts {
          * the same name emitted in the current scope. Only returns false if we are absolutely
          * certain a previous declaration has been emitted.
          */
-        function isPotentiallyFirstEmittedDeclarationInScope(node: Node) {
+        function isFirstEmittedDeclarationInScope(node: ModuleDeclaration | EnumDeclaration) {
             // If the node has a named symbol, then we have enough knowledge to determine
             // whether a prior declaration has been emitted.
             if (currentScopeFirstDeclarationsOfName) {
-                const name = node.symbol && node.symbol.escapedName;
-                if (name) {
-                    return currentScopeFirstDeclarationsOfName.get(name) === node;
-                }
+                const name = declaredNameInScope(node);
+                return currentScopeFirstDeclarationsOfName.get(name) === node;
             }
 
             // Otherwise, we can't be sure. For example, this node could be synthetic.
             return true;
+        }
+
+        function declaredNameInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration): __String {
+            if (node.name.kind !== SyntaxKind.Identifier) {
+                Debug.fail(formatSyntaxKind(node.kind) + " should have an identifier name.");
+            }
+            return (node.name as Identifier).escapedText;
         }
 
         /**
@@ -2691,7 +2704,7 @@ namespace ts {
             setOriginalNode(statement, node);
 
             recordEmittedDeclarationInScope(node);
-            if (isPotentiallyFirstEmittedDeclarationInScope(node)) {
+            if (isFirstEmittedDeclarationInScope(node)) {
                 // Adjust the source map emit to match the old emitter.
                 if (node.kind === SyntaxKind.EnumDeclaration) {
                     setSourceMapRange(statement.declarationList, node);
@@ -2747,7 +2760,7 @@ namespace ts {
                 return createNotEmittedStatement(node);
             }
 
-            Debug.assert(isIdentifier(node.name), "TypeScript module should have an Identifier name.");
+            Debug.assert(isIdentifier(node.name), "A TypeScript namespace should have an Identifier name.");
             enableSubstitutionForNamespaceExports();
 
             const statements: Statement[] = [];
