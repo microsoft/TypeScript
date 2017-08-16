@@ -325,12 +325,12 @@ namespace ts {
                 }
 
                 output += sys.newLine;
-                output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+                output += `${relativeFileName}(${firstLine + 1},${firstLineChar + 1}): `;
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+            output += `${formatAndReset(category, categoryColor)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}`;
             output += sys.newLine;
         }
         return output;
@@ -436,7 +436,8 @@ namespace ts {
         host = host || createCompilerHost(options);
 
         let skipDefaultLib = options.noLib;
-        const defaultLibraryPath = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
+        const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
+        const defaultLibraryPath = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(getDefaultLibraryFileName());
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
@@ -512,12 +513,11 @@ namespace ts {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
                 if (!options.lib) {
-                    processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+                    processRootFile(getDefaultLibraryFileName(), /*isDefaultLib*/ true);
                 }
                 else {
-                    const libDirectory = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
                     forEach(options.lib, libFileName => {
-                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true);
+                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true);
                     });
                 }
             }
@@ -982,11 +982,11 @@ namespace ts {
                 return true;
             }
 
-            if (defaultLibraryPath !== undefined && defaultLibraryPath.length !== 0) {
-                return comparePaths(defaultLibraryPath, file.path, currentDirectory, /*ignoreCase*/ true) === Comparison.EqualTo;
+            if (defaultLibraryPath && defaultLibraryPath.length !== 0) {
+                return containsPath(defaultLibraryPath, file.path, currentDirectory, /*ignoreCase*/ !host.useCaseSensitiveFileNames());
             }
 
-            return compareStrings(file.fileName, host.getDefaultLibFileName(options), /*ignoreCase*/ true) === Comparison.EqualTo;
+            return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
 
         function getDiagnosticsProducingTypeChecker() {
