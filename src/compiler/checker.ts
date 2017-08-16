@@ -7566,7 +7566,6 @@ namespace ts {
                 if (indexInfo) {
                     if (accessExpression && indexInfo.isReadonly && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression))) {
                         error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
-                        return unknownType;
                     }
                     return indexInfo.type;
                 }
@@ -7607,7 +7606,6 @@ namespace ts {
                 }
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) && type.declaration.readonlyToken) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(type));
-                    return unknownType;
                 }
             }
             const mapper = createTypeMapper([getTypeParameterFromMappedType(type)], [indexType]);
@@ -14603,7 +14601,6 @@ namespace ts {
                 if (indexInfo && indexInfo.type) {
                     if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
                         error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
-                        return unknownType;
                     }
                     return indexInfo.type;
                 }
@@ -17125,7 +17122,9 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
+            const ok = checkArithmeticOperandType(
+                node.operand,
+                checkNonNullType(operandType, node.operand),
                 Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
