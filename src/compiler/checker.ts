@@ -16362,7 +16362,7 @@ namespace ts {
          */
         function checkCallExpression(node: CallExpression | NewExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
-            checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
+            checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node.arguments);
 
             const signature = getResolvedSignature(node);
 
@@ -16410,7 +16410,7 @@ namespace ts {
 
         function checkImportCallExpression(node: ImportCall): Type {
             // Check grammar of dynamic import
-            checkGrammarArguments(node, node.arguments) || checkGrammarImportCallExpression(node);
+            checkGrammarArguments(node.arguments) || checkGrammarImportCallExpression(node);
 
             if (node.arguments.length === 0) {
                 return createPromiseReturnType(node, anyType);
@@ -18697,7 +18697,7 @@ namespace ts {
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
             if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJavaScriptFile(node) && !isInJSDoc(node)) {
-                grammarErrorAtPos(getSourceFileOfNode(node), node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+                grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
 
             }
             const type = getTypeFromTypeReference(node);
@@ -24136,8 +24136,7 @@ namespace ts {
             if (list && list.hasTrailingComma) {
                 const start = list.end - ",".length;
                 const end = list.end;
-                const sourceFile = getSourceFileOfNode(list[0]);
-                return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Trailing_comma_not_allowed);
+                return grammarErrorAtPos(list[0], start, end - start, Diagnostics.Trailing_comma_not_allowed);
             }
         }
 
@@ -24265,19 +24264,18 @@ namespace ts {
                 checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
-        function checkGrammarForOmittedArgument(node: CallExpression | NewExpression, args: NodeArray<Expression>): boolean {
+        function checkGrammarForOmittedArgument(args: NodeArray<Expression>): boolean {
             if (args) {
-                const sourceFile = getSourceFileOfNode(node);
                 for (const arg of args) {
                     if (arg.kind === SyntaxKind.OmittedExpression) {
-                        return grammarErrorAtPos(sourceFile, arg.pos, 0, Diagnostics.Argument_expression_expected);
+                        return grammarErrorAtPos(arg, arg.pos, 0, Diagnostics.Argument_expression_expected);
                     }
                 }
             }
         }
 
-        function checkGrammarArguments(node: CallExpression | NewExpression, args: NodeArray<Expression>): boolean {
-            return checkGrammarForOmittedArgument(node, args);
+        function checkGrammarArguments(args: NodeArray<Expression>): boolean {
+            return checkGrammarForOmittedArgument(args);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {
@@ -24287,8 +24285,7 @@ namespace ts {
             }
             if (types && types.length === 0) {
                 const listType = tokenToString(node.token);
-                const sourceFile = getSourceFileOfNode(node);
-                return grammarErrorAtPos(sourceFile, types.pos, 0, Diagnostics._0_list_cannot_be_empty, listType);
+                return grammarErrorAtPos(node, types.pos, 0, Diagnostics._0_list_cannot_be_empty, listType);
             }
             return forEach(types, checkGrammarExpressionWithTypeArguments);
         }
@@ -24566,7 +24563,7 @@ namespace ts {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
             }
             else if (accessor.body === undefined && !hasModifier(accessor, ModifierFlags.Abstract)) {
-                return grammarErrorAtPos(getSourceFileOfNode(accessor), accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
+                return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
             }
             else if (accessor.body && hasModifier(accessor, ModifierFlags.Abstract)) {
                 return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
@@ -24631,7 +24628,7 @@ namespace ts {
                     return true;
                 }
                 else if (node.body === undefined) {
-                    return grammarErrorAtPos(getSourceFileOfNode(node), node.end - 1, ";".length, Diagnostics._0_expected, "{");
+                    return grammarErrorAtPos(node, node.end - 1, ";".length, Diagnostics._0_expected, "{");
                 }
             }
 
@@ -24723,7 +24720,7 @@ namespace ts {
 
                 if (node.initializer) {
                     // Error on equals token which immediately precedes the initializer
-                    return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
+                    return grammarErrorAtPos(node, node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
                 }
             }
         }
@@ -24746,15 +24743,13 @@ namespace ts {
                         else {
                             // Error on equals token which immediate precedes the initializer
                             const equalsTokenLength = "=".length;
-                            return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - equalsTokenLength,
-                                equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                            return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                         }
                     }
                     if (node.initializer && !(isConst(node) && isStringOrNumberLiteralExpression(node.initializer))) {
                         // Error on equals token which immediate precedes the initializer
                         const equalsTokenLength = "=".length;
-                        return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - equalsTokenLength,
-                            equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                        return grammarErrorAtPos(node, node.initializer.pos - equalsTokenLength, equalsTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                     }
                 }
                 else if (!node.initializer) {
@@ -24823,7 +24818,7 @@ namespace ts {
             }
 
             if (!declarationList.declarations.length) {
-                return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
+                return grammarErrorAtPos(declarationList, declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
         }
 
@@ -24876,7 +24871,8 @@ namespace ts {
             }
         }
 
-        function grammarErrorAtPos(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+        function grammarErrorAtPos(nodeForSourceFile: Node, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            const sourceFile = getSourceFileOfNode(nodeForSourceFile);
             if (!hasParseDiagnostics(sourceFile)) {
                 diagnostics.add(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
                 return true;
@@ -24893,7 +24889,7 @@ namespace ts {
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
             if (node.typeParameters) {
-                return grammarErrorAtPos(getSourceFileOfNode(node), node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
+                return grammarErrorAtPos(node, node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
 
