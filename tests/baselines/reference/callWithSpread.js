@@ -98,7 +98,7 @@ xa[1].foo(1, 2, "abc");
 (_e = xa[1]).foo.apply(_e, [1, 2].concat(a));
 (_f = xa[1]).foo.apply(_f, [1, 2].concat(a, ["abc"]));
 (_g = xa[1]).foo.apply(_g, [1, 2, "abc"]);
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x, y) {
         var z = [];
         for (var _i = 2; _i < arguments.length; _i++) {
@@ -115,7 +115,7 @@ var C = (function () {
     };
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         var _this = _super.call(this, 1, 2) || this;

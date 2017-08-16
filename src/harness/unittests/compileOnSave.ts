@@ -36,6 +36,7 @@ namespace ts.projectSystem {
                 host,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: typingsInstaller || server.nullTypingsInstaller,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
@@ -518,18 +519,20 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([f], { newLine });
                 const session = createSession(host);
-                session.executeCommand(<server.protocol.OpenRequest>{
+                const openRequest: server.protocol.OpenRequest = {
                     seq: 1,
                     type: "request",
-                    command: "open",
+                    command: server.protocol.CommandTypes.Open,
                     arguments: { file: f.path }
-                });
-                session.executeCommand(<server.protocol.CompileOnSaveEmitFileRequest>{
+                };
+                session.executeCommand(openRequest);
+                const emitFileRequest: server.protocol.CompileOnSaveEmitFileRequest = {
                     seq: 2,
                     type: "request",
-                    command: "compileOnSaveEmitFile",
+                    command: server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: f.path }
-                });
+                };
+                session.executeCommand(emitFileRequest);
                 const emitOutput = host.readFile(path + ts.Extension.Js);
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }
@@ -550,7 +553,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, typingsInstaller);
+            const session = createSession(host, { typingsInstaller });
 
             openFilesForSession([file1, file2], session);
             const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });

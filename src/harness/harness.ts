@@ -67,17 +67,16 @@ namespace Utils {
 
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
-    const Buffer: typeof global.Buffer = currentExecutionEnvironment !== ExecutionEnvironment.Browser
-        ? require("buffer").Buffer
-        : undefined;
+    // Thanks to browserify, Buffer is always available nowadays
+    const Buffer: typeof global.Buffer = require("buffer").Buffer;
 
     export function encodeString(s: string): string {
-        return Buffer ? (new Buffer(s)).toString("utf8") : s;
+        return Buffer.from(s).toString("utf8");
     }
 
     export function byteLength(s: string, encoding?: string): number {
         // stub implementation if Buffer is not available (in-browser case)
-        return Buffer ? Buffer.byteLength(s, encoding) : s.length;
+        return Buffer.byteLength(s, encoding);
     }
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -133,17 +132,18 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T): T {
-        const cache: { [idx: string]: any } = {};
+    export function memoize<T extends Function>(f: T, memoKey: (...anything: any[]) => string): T {
+        const cache = ts.createMap<any>();
 
-        return <any>(function(this: any) {
-            const key = Array.prototype.join.call(arguments);
-            const cachedResult = cache[key];
-            if (cachedResult) {
-                return cachedResult;
+        return <any>(function(this: any, ...args: any[]) {
+            const key = memoKey(...args);
+            if (cache.has(key)) {
+                return cache.get(key);
             }
             else {
-                return cache[key] = f.apply(this, arguments);
+                const value = f.apply(this, args);
+                cache.set(key, value);
+                return value;
             }
         });
     }
@@ -420,7 +420,7 @@ namespace Utils {
 
     const maxHarnessFrames = 1;
 
-    export function filterStack(error: Error, stackTraceLimit: number = Infinity) {
+    export function filterStack(error: Error, stackTraceLimit = Infinity) {
         const stack = <string>(<any>error).stack;
         if (stack) {
             const lines = stack.split(/\r\n?|\n/g);
@@ -564,7 +564,7 @@ namespace Harness {
             }
 
             export let listFiles: typeof IO.listFiles = (path, spec?, options?) => {
-                options = options || <{ recursive?: boolean; }>{};
+                options = options || {};
 
                 function filesInFolder(folder: string): string[] {
                     let paths: string[] = [];
@@ -686,7 +686,7 @@ namespace Harness {
 
                 return dirPath;
             }
-            export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl);
+            export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl, path => path);
 
             export function resolvePath(path: string) {
                 const response = Http.getFileFromServerSync(serverRoot + path + "?resolve=true");
@@ -703,21 +703,22 @@ namespace Harness {
                 return response.status === 200;
             }
 
-            export let listFiles = Utils.memoize((path: string, spec?: RegExp): string[] => {
+            export const listFiles = Utils.memoize((path: string, spec?: RegExp, options?: { recursive?: boolean }): string[] => {
                 const response = Http.getFileFromServerSync(serverRoot + path);
                 if (response.status === 200) {
-                    const results = response.responseText.split(",");
+                    let results = response.responseText.split(",");
                     if (spec) {
-                        return results.filter(file => spec.test(file));
+                        results = results.filter(file => spec.test(file));
                     }
-                    else {
-                        return results;
+                    if (options && !options.recursive) {
+                        results = results.filter(file => (ts.getDirectoryPath(ts.normalizeSlashes(file)) === path));
                     }
+                    return results;
                 }
                 else {
                     return [""];
                 }
-            });
+            }, (path: string, spec?: RegExp, options?: { recursive?: boolean }) => `${path}|${spec}|${options ? options.recursive : undefined}`);
 
             export function readFile(file: string): string | undefined {
                 const response = Http.getFileFromServerSync(serverRoot + file);
@@ -1194,13 +1195,21 @@ namespace Harness {
             return { result, options };
         }
 
-        export function compileDeclarationFiles(inputFiles: TestFile[],
+        export interface DeclarationCompilationContext {
+            declInputFiles: TestFile[];
+            declOtherFiles: TestFile[];
+            harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions;
+            options: ts.CompilerOptions;
+            currentDirectory: string;
+        }
+
+        export function prepareDeclarationCompilationContext(inputFiles: TestFile[],
             otherFiles: TestFile[],
             result: CompilerResult,
             harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-            currentDirectory: string) {
+            currentDirectory: string): DeclarationCompilationContext | undefined {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
                 throw new Error("There were no errors and declFiles generated did not match number of js files generated");
             }
@@ -1212,8 +1221,7 @@ namespace Harness {
             if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory || harnessSettings["currentDirectory"]);
-                return { declInputFiles, declOtherFiles, declResult: output.result };
+                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings["currentDirectory"] };
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -1259,6 +1267,15 @@ namespace Harness {
             }
         }
 
+        export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined) {
+            if (!context) {
+                return;
+            }
+            const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
+            const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory);
+            return { declInputFiles, declOtherFiles, declResult: output.result };
+        }
+
         function normalizeLineEndings(text: string, lineEnding: string): string {
             let normalized = text.replace(/\r\n?/g, "\n");
             if (lineEnding !== "\n") {
@@ -1273,9 +1290,18 @@ namespace Harness {
 
         export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
             diagnostics.sort(ts.compareDiagnostics);
-            const outputLines: string[] = [];
+            let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
             let totalErrorsReportedInNonLibraryFiles = 0;
+
+            let firstLine = true;
+            function newLine() {
+                if (firstLine) {
+                    firstLine = false;
+                    return "";
+                }
+                return "\r\n";
+            }
 
             function outputErrorText(error: ts.Diagnostic) {
                 const message = ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine());
@@ -1285,7 +1311,7 @@ namespace Harness {
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
                     .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
-                errLines.forEach(e => outputLines.push(e));
+                errLines.forEach(e => outputLines += (newLine() + e));
 
                 // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
                 // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers)
@@ -1311,7 +1337,7 @@ namespace Harness {
 
 
                 // Header
-                outputLines.push("==== " + inputFile.unitName + " (" + fileErrors.length + " errors) ====");
+                outputLines += (newLine() + "==== " + inputFile.unitName + " (" + fileErrors.length + " errors) ====");
 
                 // Make sure we emit something for every error
                 let markedErrorCount = 0;
@@ -1340,7 +1366,7 @@ namespace Harness {
                         nextLineStart = lineStarts[lineIndex + 1];
                     }
                     // Emit this line from the original file
-                    outputLines.push("    " + line);
+                    outputLines += (newLine() + "    " + line);
                     fileErrors.forEach(err => {
                         // Does any error start or continue on to this line? Emit squiggles
                         const end = ts.textSpanEnd(err);
@@ -1352,7 +1378,7 @@ namespace Harness {
                             // Calculate the start of the squiggle
                             const squiggleStart = Math.max(0, relativeOffset);
                             // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
-                            outputLines.push("    " + line.substr(0, squiggleStart).replace(/[^\s]/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~"));
+                            outputLines += (newLine() + "    " + line.substr(0, squiggleStart).replace(/[^\s]/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~"));
 
                             // If the error ended here, or we're at the end of the file, emit its message
                             if ((lineIndex === lines.length - 1) || nextLineStart > end) {
@@ -1383,7 +1409,7 @@ namespace Harness {
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
 
             return minimalDiagnosticsToString(diagnostics) +
-                Harness.IO.newLine() + Harness.IO.newLine() + outputLines.join("\r\n");
+                Harness.IO.newLine() + Harness.IO.newLine() + outputLines;
         }
 
         export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[]) {
@@ -1586,9 +1612,10 @@ namespace Harness {
                     }
                 }
 
-                const declFileCompilationResult =
-                    Harness.Compiler.compileDeclarationFiles(
-                        toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined);
+                const declFileContext = Harness.Compiler.prepareDeclarationCompilationContext(
+                    toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined
+                );
+                const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declFileContext);
 
                 if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                     jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
@@ -1963,7 +1990,7 @@ namespace Harness {
                     IO.writeFile(actualFileName + ".delete", "");
                 }
                 else {
-                    IO.writeFile(actualFileName, actual);
+                    IO.writeFile(actualFileName, encoded_actual);
                 }
                 throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }

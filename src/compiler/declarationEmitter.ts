@@ -349,7 +349,6 @@ namespace ts {
                 errorNameNode = declaration.name;
                 const format = TypeFormatFlags.UseTypeOfFunction |
                     TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
-                    TypeFormatFlags.UseTypeAliasValue |
                     (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
                 errorNameNode = undefined;
@@ -368,7 +367,7 @@ namespace ts {
                 resolver.writeReturnTypeOfSignatureDeclaration(
                     signature,
                     enclosingDeclaration,
-                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                     writer);
                 errorNameNode = undefined;
             }
@@ -633,7 +632,7 @@ namespace ts {
             resolver.writeTypeOfExpression(
                 expr,
                 enclosingDeclaration,
-                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                 writer);
             write(";");
             writeLine();
@@ -1367,6 +1366,10 @@ namespace ts {
         }
 
         function writeVariableStatement(node: VariableStatement) {
+            // If binding pattern doesn't have name, then there is nothing to be emitted for declaration file i.e. const [,] = [1,2].
+            if (every(node.declarationList && node.declarationList.declarations, decl => decl.name && isEmptyBindingPattern(decl.name))) {
+                return;
+            }
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isLet(node.declarationList)) {

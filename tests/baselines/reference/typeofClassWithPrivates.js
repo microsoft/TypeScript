@@ -11,7 +11,7 @@ var r: typeof C;
 var r2: typeof c;
 
 //// [typeofClassWithPrivates.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

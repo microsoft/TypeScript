@@ -101,6 +101,8 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(node as CatchClause);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -210,6 +212,17 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        }
+
+        function visitCatchClause(node: CatchClause): CatchClause {
+            if (!node.variableDeclaration) {
+                return updateCatchClause(
+                    node,
+                    createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined)),
+                    visitNode(node.block, visitor, isBlock)
+                );
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         /**

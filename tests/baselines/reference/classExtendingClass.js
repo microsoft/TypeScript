@@ -42,14 +42,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.thing = function () { };
     C.other = function () { };
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -61,14 +61,14 @@ var r = d.foo;
 var r2 = d.bar;
 var r3 = d.thing();
 var r4 = D.other();
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.thing = function (x) { };
     C2.other = function (x) { };
     return C2;
 }());
-var D2 = (function (_super) {
+var D2 = /** @class */ (function (_super) {
     __extends(D2, _super);
     function D2() {
         return _super !== null && _super.apply(this, arguments) || this;

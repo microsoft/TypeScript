@@ -33,13 +33,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     Base.prototype.foo = function () { };
     return Base;
 }());
-var Derived1 = (function (_super) {
+var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -47,7 +47,7 @@ var Derived1 = (function (_super) {
     Derived1.prototype.bar = function () { };
     return Derived1;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -55,7 +55,7 @@ var Derived2 = (function (_super) {
     Derived2.prototype.baz = function () { };
     return Derived2;
 }(Base));
-var Derived3 = (function (_super) {
+var Derived3 = /** @class */ (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -63,7 +63,7 @@ var Derived3 = (function (_super) {
     Derived3.prototype.biz = function () { };
     return Derived3;
 }(Base));
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.createElement = function (tagName) {

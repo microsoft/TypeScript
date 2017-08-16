@@ -9,7 +9,7 @@ declare namespace ts.server {
         data: any;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
     export interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
