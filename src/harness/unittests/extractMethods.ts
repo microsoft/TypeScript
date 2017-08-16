@@ -575,6 +575,13 @@ namespace A {
         t2.toString();|]
     }
 }`);
+        // Confirm that the constraint is preserved.
+        testExtractMethod("extractMethod15",
+            `function F<T>(t1: T) {
+    function F<U extends T[]>(t2: U) {
+        [#|t2.toString();|]
+    }
+}`);
     });
 
 
@@ -590,7 +597,7 @@ namespace A {
                     path: "/a.ts",
                     content: t.source
                 };
-                const host = projectSystem.createServerHost([f]);
+                const host = projectSystem.createServerHost([f, projectSystem.libFile]);
                 const projectService = projectSystem.createProjectService(host);
                 projectService.openClientFile(f.path);
                 const program = projectService.inferredProjects[0].getLanguageService().getProgram();
