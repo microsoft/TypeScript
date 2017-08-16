@@ -1,4 +1,4 @@
-==ORIGINAL==
+// ==ORIGINAL==
 namespace A {
     let x = 1;
     function foo() {
@@ -12,7 +12,7 @@ namespace A {
         }
     }
 }
-==SCOPE::function 'a'==
+// ==SCOPE::function 'a'==
 namespace A {
     let x = 1;
     function foo() {
@@ -30,7 +30,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace 'B'==
+// ==SCOPE::namespace 'B'==
 namespace A {
     let x = 1;
     function foo() {
@@ -48,7 +48,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace 'A'==
+// ==SCOPE::namespace 'A'==
 namespace A {
     let x = 1;
     function foo() {
@@ -66,7 +66,7 @@ namespace A {
         return foo();
     }
 }
-==SCOPE::global scope==
+// ==SCOPE::global scope==
 namespace A {
     let x = 1;
     function foo() {
