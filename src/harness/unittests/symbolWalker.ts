@@ -28,7 +28,7 @@ export default function foo(a: number, b: Bar): void {}`, (file, checker) => {
             let foundCount = 0;
             let stdLibRefSymbols = 0;
             const expectedSymbols = ["default", "a", "b", "Bar", "x", "y", "history"];
-            let walker = checker.getSymbolWalker(symbol => {
+            const walker = checker.getSymbolWalker(symbol => {
                 const isStdLibSymbol = forEach(symbol.declarations, d => {
                     return getSourceFileOfNode(d).hasNoDefaultLib;
                 });

@@ -13,19 +13,17 @@ namespace ts {
         return getSymbolWalker;
 
         function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
-            let visitedTypes = createMap<Type>(); // Key is id as string
-            let visitedSymbols = createMap<Symbol>(); // Key is id as string
+            const visitedTypes = createMap<Type>(); // Key is id as string
+            const visitedSymbols = createMap<Symbol>(); // Key is id as string
 
             return {
-                walkType: type =>
-                {
+                walkType: type => {
                     visitedTypes.clear();
                     visitedSymbols.clear();
                     visitType(type);
                     return { visitedTypes: arrayFrom(visitedTypes.values()), visitedSymbols: arrayFrom(visitedSymbols.values()) };
                 },
-                walkSymbol: symbol =>
-                {
+                walkSymbol: symbol => {
                     visitedTypes.clear();
                     visitedSymbols.clear();
                     visitSymbol(symbol);

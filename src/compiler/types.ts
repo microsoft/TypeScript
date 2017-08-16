@@ -2674,9 +2674,9 @@ namespace ts {
     /* @internal */
     export interface SymbolWalker {
         /** Note: Return values are not ordered. */
-        walkType(root: Type) : { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+        walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
         /** Note: Return values are not ordered. */
-        walkSymbol(root: Symbol) : { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+        walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
     }
 
     export interface SymbolDisplayBuilder {
