@@ -566,6 +566,15 @@ namespace A {
         }
     }
 }`);
+        // This test is descriptive, rather than normative.  The current implementation
+        // doesn't handle type parameter shadowing.
+        testExtractMethod("extractMethod14",
+            `function F<T>(t1: T) {
+    function F<T>(t2: T) {
+        [#|t1.toString();
+        t2.toString();|]
+    }
+}`);
     });
 
 
