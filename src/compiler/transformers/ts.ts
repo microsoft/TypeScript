@@ -2662,26 +2662,19 @@ namespace ts {
         }
 
         /**
-         * Determines whether a declaration is *could* be the first declaration with
-         * the same name emitted in the current scope. Only returns false if we are absolutely
-         * certain a previous declaration has been emitted.
+         * Determines whether a declaration is the first declaration with
+         * the same name emitted in the current scope.
          */
         function isFirstEmittedDeclarationInScope(node: ModuleDeclaration | EnumDeclaration) {
-            // If the node has a named symbol, then we have enough knowledge to determine
-            // whether a prior declaration has been emitted.
             if (currentScopeFirstDeclarationsOfName) {
                 const name = declaredNameInScope(node);
                 return currentScopeFirstDeclarationsOfName.get(name) === node;
             }
-
-            // Otherwise, we can't be sure. For example, this node could be synthetic.
             return true;
         }
 
         function declaredNameInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration): __String {
-            if (node.name.kind !== SyntaxKind.Identifier) {
-                Debug.fail(formatSyntaxKind(node.kind) + " should have an identifier name.");
-            }
+            Debug.assertNode(node.name, isIdentifier);
             return (node.name as Identifier).escapedText;
         }
 
@@ -2760,7 +2753,7 @@ namespace ts {
                 return createNotEmittedStatement(node);
             }
 
-            Debug.assert(isIdentifier(node.name), "A TypeScript namespace should have an Identifier name.");
+            Debug.assertNode(node.name, isIdentifier, "A TypeScript namespace should have an Identifier name.");
             enableSubstitutionForNamespaceExports();
 
             const statements: Statement[] = [];
