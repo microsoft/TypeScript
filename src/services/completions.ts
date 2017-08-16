@@ -860,7 +860,7 @@ namespace ts.Completions {
         }
 
         function getSymbolsFromOtherSourceFileExports(knownSymbols: Symbol[], tokenText: string): Symbol[] {
-            let otherSourceFileExports: Symbol[] = [];
+            const otherSourceFileExports: Symbol[] = [];
             const tokenTextLowerCase = tokenText.toLowerCase();
             const symbolIdMap = arrayToMap(knownSymbols, s => getUniqueSymbolIdAsString(s, typeChecker));
 

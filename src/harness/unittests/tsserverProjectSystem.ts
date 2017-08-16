@@ -4171,7 +4171,7 @@ namespace ts.projectSystem {
             function checkEntryDetail(offset: number, entryName: string, hasAction: boolean, insertString?: string) {
                 const request = makeSessionRequest<protocol.CompletionDetailsRequestArgs>(
                     CommandNames.CompletionDetails,
-                    { entryNames: [entryName], file: file1.path, line: 1, offset: offset, projectFileName: configFile.path });
+                    { entryNames: [entryName], file: file1.path, line: 1, offset, projectFileName: configFile.path });
                 const response = session.executeCommand(request).response as protocol.CompletionEntryDetails[];
                 assert.equal(response.length, 1);
 

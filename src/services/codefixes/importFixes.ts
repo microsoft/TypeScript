@@ -137,7 +137,7 @@ namespace ts.codefix {
             return ModuleSpecifierComparison.Equal;
         }
     }
-    
+
     function createCodeAction(
         description: DiagnosticMessage,
         diagnosticArgs: string[],
@@ -213,7 +213,7 @@ namespace ts.codefix {
                 return undefined;
             }
         }
-            
+
         function createChangeTracker() {
             return textChanges.ChangeTracker.fromCodeFixContext(context);
         }
@@ -388,7 +388,7 @@ namespace ts.codefix {
                 "NewImport",
                 moduleSpecifierWithoutQuotes
             );
-            
+
             function getSourceFileImportLocation(node: SourceFile) {
                 // For a source file, it is possible there are detached comments we should not skip
                 const text = node.text;
