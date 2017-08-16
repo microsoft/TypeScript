@@ -545,6 +545,27 @@ namespace A {
         }
     }
 }`);
+        // The "b" type parameters aren't used and shouldn't be passed to the extracted function.
+        // Type parameters should be in syntactic order (i.e. in order or character offset from BOF).
+        // In all cases, we could use type inference, rather than passing explicit type arguments.
+        // Note the inclusion of arrow functions to ensure that some type parameters are not from
+        //   targetable scopes.
+        testExtractMethod("extractMethod13",
+            `<U1a, U1b>(u1a: U1a, u1b: U1b) => {
+    function F1<T1a, T1b>(t1a: T1a, t1b: T1b) {
+        <U2a, U2b>(u2a: U2a, u2b: U2b) => {
+            function F2<T2a, T2b>(t2a: T2a, t2b: T2b) {
+                <U3a, U3b>(u3a: U3a, u3b: U3b) => {
+                        [#|t1a.toString();
+                        t2a.toString();
+                        u1a.toString();
+                        u2a.toString();
+                        u3a.toString();|]
+                }
+            }
+        }
+    }
+}`);
     });
 
 
