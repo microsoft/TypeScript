@@ -550,7 +550,7 @@ namespace A {
 
     function testExtractMethod(caption: string, text: string) {
         it(caption, () => {
-            Harness.Baseline.runBaseline(`extractMethod/${caption}.js`, () => {
+            Harness.Baseline.runBaseline(`extractMethod/${caption}.ts`, () => {
                 const t = extractTest(text);
                 const selectionRange = t.ranges.get("selection");
                 if (!selectionRange) {
