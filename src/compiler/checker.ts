@@ -2156,6 +2156,11 @@ namespace ts {
             return false;
         }
 
+        function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node): boolean {
+            const access = isSymbolAccessible(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false);
+            return access.accessibility === SymbolAccessibility.Accessible;
+        }
+
         /**
          * Check if the given symbol in given enclosing declaration is accessible and mark all associated alias to be visible if requested
          *
@@ -2486,8 +2491,7 @@ namespace ts {
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (!inTypeAlias && type.aliasSymbol &&
-                    isSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
+                if (!inTypeAlias && type.aliasSymbol && isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration)) {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     return createTypeReferenceNode(name, typeArgumentNodes);
@@ -3254,7 +3258,7 @@ namespace ts {
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
-                        isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
+                        ((flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) || isTypeSymbolAccessible(type.aliasSymbol, enclosingDeclaration))) {
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, length(typeArguments), nextFlags);
                     }
@@ -6576,6 +6580,10 @@ namespace ts {
                 signature.resolvedReturnType = type;
             }
             return signature.resolvedReturnType;
+        }
+
+        function isResolvingReturnTypeOfSignature(signature: Signature) {
+            return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
         }
 
         function getRestTypeOfSignature(signature: Signature): Type {
@@ -12951,7 +12959,7 @@ namespace ts {
             // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
             // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
             const signature = getContextualSignatureForFunctionLikeDeclaration(<FunctionExpression>functionDecl);
-            if (signature) {
+            if (signature && !isResolvingReturnTypeOfSignature(signature)) {
                 return getReturnTypeOfSignature(signature);
             }
 
@@ -22910,17 +22918,17 @@ namespace ts {
                     // index access
                     switch (node.parent.kind) {
                         case SyntaxKind.ElementAccessExpression: {
-                            if ((<ElementAccessExpression>node.parent).argumentExpression !== node) return undefined;
+                            if ((<ElementAccessExpression>node.parent).argumentExpression !== node) {
+                                return undefined;
+                            }
                             const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
-                            if (objectType === unknownType) return undefined;
-                            const apparentType = getApparentType(objectType);
-                            if (apparentType === unknownType) return undefined;
-                            return getPropertyOfType(apparentType, (<NumericLiteral>node).text as __String);
+                            return getPropertyOfType(objectType, (<NumericLiteral>node).text as __String);
                         }
                         case SyntaxKind.LiteralType: {
-                            if (!isIndexedAccessTypeNode(node.parent.parent)) return undefined;
-                            const objectType = getApparentType(getTypeFromTypeNode(node.parent.parent.objectType));
-                            if (objectType === unknownType) return undefined;
+                            if (!isIndexedAccessTypeNode(node.parent.parent)) {
+                                return undefined;
+                            }
+                            const objectType = getTypeFromTypeNode(node.parent.parent.objectType);
                             return getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
                         }
                     }

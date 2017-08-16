@@ -2717,11 +2717,12 @@ namespace ts {
         UseFullyQualifiedType           = 1 << 8,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 1 << 9,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 1 << 10,  // Writing type in type alias declaration
-        UseTypeAliasValue               = 1 << 11,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
         InArrayType                     = 1 << 15,  // Writing an array element type
+        UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
+                                                      // even though `T` can't be accessed in the current scope.
     }
 
     export const enum SymbolFormatFlags {
