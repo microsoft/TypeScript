@@ -776,9 +776,10 @@ namespace ts.Completions {
             }
 
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-            symbols = filterGlobalCompletion(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings));
 
-            getSymbolsFromOtherSourceFileExports(previousToken === undefined ? "" : previousToken.getText());
+            symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+            symbols.push(...getSymbolsFromOtherSourceFileExports(symbols, previousToken === undefined ? "" : previousToken.getText()));
+            symbols = filterGlobalCompletion(symbols);
 
             return true;
         }
@@ -858,9 +859,10 @@ namespace ts.Completions {
             }
         }
 
-        function getSymbolsFromOtherSourceFileExports(tokenText: string) {
+        function getSymbolsFromOtherSourceFileExports(knownSymbols: Symbol[], tokenText: string): Symbol[] {
+            let otherSourceFileExports: Symbol[] = [];
             const tokenTextLowerCase = tokenText.toLowerCase();
-            const symbolIdMap = arrayToMap(symbols, s => getUniqueSymbolIdAsString(s, typeChecker));
+            const symbolIdMap = arrayToMap(knownSymbols, s => getUniqueSymbolIdAsString(s, typeChecker));
 
             const allPotentialModules = getOtherModuleSymbols(allSourceFiles, sourceFile, typeChecker);
             for (const moduleSymbol of allPotentialModules) {
@@ -869,7 +871,7 @@ namespace ts.Completions {
                 if (defaultExport) {
                     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
                     if (localSymbol && !symbolIdMap.has(getUniqueSymbolIdAsString(localSymbol, typeChecker)) && startsWith(localSymbol.name.toLowerCase(), tokenTextLowerCase)) {
-                        symbols.push(localSymbol);
+                        otherSourceFileExports.push(localSymbol);
                         symbolToOriginInfoMap.set(getUniqueSymbolIdAsString(localSymbol, typeChecker), { moduleSymbol, isDefaultExport: true });
                     }
                 }
@@ -879,12 +881,13 @@ namespace ts.Completions {
                 if (allExportedSymbols) {
                     for (const exportedSymbol of allExportedSymbols) {
                         if (exportedSymbol.name && !symbolIdMap.has(getUniqueSymbolIdAsString(exportedSymbol, typeChecker)) && startsWith(exportedSymbol.name.toLowerCase(), tokenTextLowerCase)) {
-                            symbols.push(exportedSymbol);
+                            otherSourceFileExports.push(exportedSymbol);
                             symbolToOriginInfoMap.set(getUniqueSymbolIdAsString(exportedSymbol, typeChecker), { moduleSymbol });
                         }
                     }
                 }
             }
+            return otherSourceFileExports;
         }
 
         /**

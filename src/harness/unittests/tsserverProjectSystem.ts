@@ -3663,7 +3663,7 @@ namespace ts.projectSystem {
             const service = createProjectService(host);
             service.openClientFile(file2.path);
 
-            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, file2.path.length);
+            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, file2.content.length);
             const test1Entry = find(completions1.entries, e => e.name === "Test1");
             const test2Entry = find(completions1.entries, e => e.name === "Test2");
 
@@ -4013,7 +4013,7 @@ namespace ts.projectSystem {
             };
             const file1 = {
                 path: "/a/b/file2.ts",
-                content: ``
+                content: `var x:`
             };
             const globalFile = {
                 path: "/a/b/globalFile.ts",
@@ -4041,17 +4041,17 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             projectService.openClientFile(file1.path);
 
-            checkEntryDetail("guitar", /*hasAction*/ true, `import { guitar } from "./moduleFile";\n\n`);
-            checkEntryDetail("Jazz", /*hasAction*/ false);
-            checkEntryDetail("chetAtkins", /*hasAction*/ true, `import { chetAtkins } from "windyAndWarm";\n\n`);
-            checkEntryDetail("egyptianElla", /*hasAction*/ true, `import egyptianElla from "./defaultModuleFile";\n\n`);
+            checkEntryDetail(1, "guitar", /*hasAction*/ true, `import { guitar } from "./moduleFile";\n\n`);
+            checkEntryDetail(1, "chetAtkins", /*hasAction*/ true, `import { chetAtkins } from "windyAndWarm";\n\n`);
+            checkEntryDetail(1, "egyptianElla", /*hasAction*/ true, `import egyptianElla from "./defaultModuleFile";\n\n`);
+            checkEntryDetail(7, "Jazz", /*hasAction*/ false);
 
-            function checkEntryDetail(entryName: string, hasAction: boolean, insertString?: string) {
+            function checkEntryDetail(offset: number, entryName: string, hasAction: boolean, insertString?: string) {
                 const request = makeSessionRequest<protocol.CompletionDetailsRequestArgs>(
                     CommandNames.CompletionDetails,
-                    { entryNames: [entryName], file: file1.path, line: 1, offset: 0, projectFileName: configFile.path });
+                    { entryNames: [entryName], file: file1.path, line: 1, offset: offset, projectFileName: configFile.path });
                 const response = session.executeCommand(request).response as protocol.CompletionEntryDetails[];
-                assert.isTrue(response.length === 1);
+                assert.equal(response.length, 1);
 
                 const entryDetails = response[0];
                 if (!hasAction) {
@@ -4059,7 +4059,7 @@ namespace ts.projectSystem {
                 }
                 else {
                     const action = entryDetails.codeActions[0];
-                    assert.isTrue(action.changes[0].fileName === file1.path);
+                    assert.equal(action.changes[0].fileName, file1.path);
                     assert.deepEqual(action.changes[0], <protocol.FileCodeEdits>{
                         fileName: file1.path,
                         textChanges: [{ start: { line: 1, offset: 1 }, end: { line: 1, offset: 1 }, newText: insertString }]
