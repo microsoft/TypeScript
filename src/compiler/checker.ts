@@ -22918,10 +22918,7 @@ namespace ts {
                     // index access
                     if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
                         const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
-                        if (objectType === unknownType) return undefined;
-                        const apparentType = getApparentType(objectType);
-                        if (apparentType === unknownType) return undefined;
-                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text as __String);
+                        return getPropertyOfType(objectType, (<NumericLiteral>node).text as __String);
                     }
                     break;
             }
