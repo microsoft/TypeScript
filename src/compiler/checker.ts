@@ -1330,13 +1330,18 @@ namespace ts {
             return parent && !!findAncestor(initial, n => n === stopAt || isFunctionLike(n) ? "quit" : n === parent);
         }
 
-        function getAnyImportSyntax(node: Node): AnyImportSyntax {
-            if (isAliasSymbolDeclaration(node)) {
-                if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    return <ImportEqualsDeclaration>node;
-                }
-
-                return findAncestor(node, isImportDeclaration);
+        function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
+            switch (node.kind) {
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return node as ImportEqualsDeclaration;
+                case SyntaxKind.ImportClause:
+                    return (node as ImportClause).parent;
+                case SyntaxKind.NamespaceImport:
+                    return (node as NamespaceImport).parent.parent;
+                case SyntaxKind.ImportSpecifier:
+                    return (node as ImportSpecifier).parent.parent.parent;
+                default:
+                    return undefined;
             }
         }
 
