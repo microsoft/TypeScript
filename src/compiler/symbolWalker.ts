@@ -1,6 +1,5 @@
 /** @internal */
 namespace ts {
-    /** @internal */
     export function createGetSymbolWalker(
         getRestTypeOfSignature: (sig: Signature) => Type,
         getReturnTypeOfSignature: (sig: Signature) => Type,
@@ -114,7 +113,7 @@ namespace ts {
             function visitObjectType(type: ObjectType): void {
                 const stringIndexType = getIndexTypeOfStructuredType(type, IndexKind.String);
                 visitType(stringIndexType);
-                const numberIndexType = getIndexTypeOfStructuredType(type, IndexKind.String);
+                const numberIndexType = getIndexTypeOfStructuredType(type, IndexKind.Number);
                 visitType(numberIndexType);
 
                 // The two checks above *should* have already resolved the type (if needed), so this should be cached
