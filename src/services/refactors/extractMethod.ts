@@ -1042,6 +1042,9 @@ namespace ts.refactor.extractMethod {
         }
 
         function recordTypeParameterUsages(type: Type) {
+            // PERF: This is potentially very expensive.  `type` could be a library type with
+            // a lot of properties, each of which the walker will visit.  Unfortunately, the
+            // solution isn't as trivial as filtering to user types because of (e.g.) Array.
             const symbolWalker = checker.getSymbolWalker();
             const {visitedTypes} = symbolWalker.walkType(type);
 
