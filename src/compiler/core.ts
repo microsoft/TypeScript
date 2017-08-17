@@ -1543,16 +1543,20 @@ namespace ts {
     }
 
     export function normalizePath(path: string): string {
+        return normalizePathAndParts(path).path;
+    }
+
+    export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
         path = normalizeSlashes(path);
         const rootLength = getRootLength(path);
         const root = path.substr(0, rootLength);
-        const normalized = getNormalizedParts(path, rootLength);
-        if (normalized.length) {
-            const joinedParts = root + normalized.join(directorySeparator);
-            return pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts;
+        const parts = getNormalizedParts(path, rootLength);
+        if (parts.length) {
+            const joinedParts = root + parts.join(directorySeparator);
+            return { path: pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts, parts };
         }
         else {
-            return root;
+            return { path: root, parts };
         }
     }
 
