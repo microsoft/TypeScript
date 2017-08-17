@@ -153,7 +153,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
-        isInCommentAtPosition(onlyMultiLine: boolean): void;
+        isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFixAvailable(): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;

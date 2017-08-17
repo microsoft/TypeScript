@@ -2508,16 +2508,19 @@ namespace FourSlash {
             }
         }
 
-        public verifySpanOfEnclosingComment(negative: boolean, onlyMultiLine: boolean) {
+        public verifySpanOfEnclosingComment(negative: boolean, onlyMultiLineDiverges?: boolean) {
             const expected = !negative;
             const position = this.currentCaretPosition;
             const fileName = this.activeFile.fileName;
-            const actual = !!this.languageService.getSpanOfEnclosingComment(fileName, position, /*onlyMultiLine*/ onlyMultiLine);
-            if (expected !== actual) {
+            const actual = !!this.languageService.getSpanOfEnclosingComment(fileName, position, /*onlyMultiLine*/ false);
+            const actualOnlyMultiLine = !!this.languageService.getSpanOfEnclosingComment(fileName, position, /*onlyMultiLine*/ true);
+            if (expected !== actual || onlyMultiLineDiverges === (actual === actualOnlyMultiLine)) {
                 this.raiseError(`verifySpanOfEnclosingComment failed:
                 position: '${position}'
                 fileName: '${fileName}'
-                onlyMultiLine: '${onlyMultiLine}'
+                onlyMultiLineDiverges: '${onlyMultiLineDiverges}'
+                actual: '${actual}'
+                actualOnlyMultiLine: '${actualOnlyMultiLine}'
                 expected: '${expected}'.`);
             }
         }
@@ -3662,8 +3665,8 @@ namespace FourSlashInterface {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
 
-        public isInCommentAtPosition(onlyMultiLine: boolean) {
-            this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLine);
+        public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
+            this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
         public codeFixAvailable() {

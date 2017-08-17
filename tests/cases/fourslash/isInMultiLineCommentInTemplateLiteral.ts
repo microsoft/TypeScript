@@ -23,5 +23,5 @@
 
 for (let i = 0; i < 9; ++i) {
     goTo.marker(i.toString());
-    verify.not.isInCommentAtPosition(/*onlyMultiLine*/ false);
+    verify.not.isInCommentAtPosition();
 }
