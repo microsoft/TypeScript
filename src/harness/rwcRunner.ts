@@ -90,6 +90,9 @@ namespace RWC {
                         ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
+                    // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
+                    fileNames = ts.filter(fileNames, n => fileNames.indexOf(n) === fileNames.lastIndexOf(n));
+                    
                     // Load the files
                     for (const fileName of fileNames) {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
