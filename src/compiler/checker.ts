@@ -5968,7 +5968,7 @@ namespace ts {
             function computeBaseConstraint(t: Type): Type {
                 if (t.flags & TypeFlags.TypeParameter) {
                     const constraint = getConstraintFromTypeParameter(<TypeParameter>t);
-                    return ((t as TypeParameter).isThisType || !constraint || getObjectFlags(constraint) & ObjectFlags.Mapped) ?
+                    return (t as TypeParameter).isThisType || !constraint ?
                         constraint :
                         getBaseConstraint(constraint);
                 }
@@ -5997,9 +5997,6 @@ namespace ts {
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
-                }
-                if (isGenericMappedType(t)) {
-                    return emptyObjectType;
                 }
                 return t;
             }
