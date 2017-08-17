@@ -1153,23 +1153,6 @@ namespace ts.formatting {
     }
 
     /**
-     * Gets the indentation level of the multi-line comment enclosing position,
-     * and a negative value if the position is not in a multi-line comment.
-     *
-     * @param precedingToken Must be the result of `findPrecedingToken(position, sourceFile)`.
-     */
-    export function getIndentationOfEnclosingMultiLineComment(sourceFile: SourceFile, position: number, precedingToken: Node | undefined, options: EditorSettings): number {
-        const range = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true, precedingToken || null); // tslint:disable-line:no-null-keyword
-        if (range) {
-            const commentStart = range.pos;
-            const commentLineStart = getLineStartPositionForPosition(commentStart, sourceFile);
-            const { column, character } = SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(commentLineStart, commentStart, sourceFile, options);
-            return column + /*length after whitespace ends*/ range.pos - (commentLineStart + character);
-        }
-        return -1;
-    }
-
-    /**
      * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
      */
     export function getRangeOfEnclosingComment(

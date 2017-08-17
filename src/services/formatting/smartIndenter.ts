@@ -32,9 +32,28 @@ namespace ts.formatting {
             }
 
             const precedingToken = findPrecedingToken(position, sourceFile);
-            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position, precedingToken, options);
-            if (indentationOfEnclosingMultiLineComment >= 0) {
-                return indentationOfEnclosingMultiLineComment;
+
+            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true, precedingToken || null); // tslint:disable-line:no-null-keyword
+            if (enclosingCommentRange) {
+                const previousLine = getLineAndCharacterOfPosition(sourceFile, position).line - 1;
+                const commentStartLine = getLineAndCharacterOfPosition(sourceFile, enclosingCommentRange.pos).line;
+
+                Debug.assert(commentStartLine >= 0);
+
+                if (previousLine <= commentStartLine) {
+                    return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
+                }
+
+                // get first character of previous line -- if it is '*', move back one more character (or stay at 0)
+                const startPostionOfLine = getStartPositionOfLine(previousLine, sourceFile);
+                const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPostionOfLine, position, sourceFile, options);
+
+                if (column === 0) {
+                    return column;
+                }
+
+                const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPostionOfLine + character);
+                return firstNonWhitespaceCharacterCode === CharacterCodes.asterisk ? column - 1 : column;
             }
 
             if (!precedingToken) {
