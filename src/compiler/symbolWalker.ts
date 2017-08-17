@@ -53,6 +53,9 @@ namespace ts {
                     if (objectFlags & ObjectFlags.Reference) {
                         visitTypeReference(type as TypeReference);
                     }
+                    if (objectFlags & ObjectFlags.Mapped) {
+                        visitMappedType(type as MappedType);
+                    }
                     if (objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)) {
                         visitInterfaceType(type as InterfaceType);
                     }
@@ -65,6 +68,12 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.UnionOrIntersection) {
                     visitUnionOrIntersectionType(type as UnionOrIntersectionType);
+                }
+                if (type.flags & TypeFlags.Index) {
+                    visitIndexType(type as IndexType);
+                }
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    visitIndexedAccessType(type as IndexedAccessType);
                 }
             }
 
@@ -88,6 +97,23 @@ namespace ts {
 
             function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
                 visitTypeList(type.types);
+            }
+
+            function visitIndexType(type: IndexType): void {
+                visitType(type.type);
+            }
+
+            function visitIndexedAccessType(type: IndexedAccessType): void {
+                visitType(type.objectType);
+                visitType(type.indexType);
+                visitType(type.constraint);
+            }
+
+            function visitMappedType(type: MappedType): void {
+                visitType(type.typeParameter);
+                visitType(type.constraintType);
+                visitType(type.templateType);
+                visitType(type.modifiersType);
             }
 
             function visitSignature(signature: Signature): void {
