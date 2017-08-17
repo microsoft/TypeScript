@@ -16,17 +16,17 @@ class Board {
 }
 
 //// [2dArrays.js]
-var Cell = (function () {
+var Cell = /** @class */ (function () {
     function Cell() {
     }
     return Cell;
 }());
-var Ship = (function () {
+var Ship = /** @class */ (function () {
     function Ship() {
     }
     return Ship;
 }());
-var Board = (function () {
+var Board = /** @class */ (function () {
     function Board() {
     }
     Board.prototype.allShipsSunk = function () {

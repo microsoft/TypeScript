@@ -47,7 +47,7 @@ var TypeScript2;
         PullSymbolVisibility[PullSymbolVisibility["Private"] = 0] = "Private";
         PullSymbolVisibility[PullSymbolVisibility["Public"] = 1] = "Public";
     })(PullSymbolVisibility = TypeScript2.PullSymbolVisibility || (TypeScript2.PullSymbolVisibility = {}));
-    var PullSymbol = (function () {
+    var PullSymbol = /** @class */ (function () {
         function PullSymbol(name, declKind) {
         }
         // link methods
@@ -59,7 +59,7 @@ var TypeScript2;
         return PullSymbol;
     }());
     TypeScript2.PullSymbol = PullSymbol;
-    var PullTypeSymbol = (function (_super) {
+    var PullTypeSymbol = /** @class */ (function (_super) {
         __extends(PullTypeSymbol, _super);
         function PullTypeSymbol() {
             return _super !== null && _super.apply(this, arguments) || this;

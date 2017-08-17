@@ -54,7 +54,7 @@ class C {
 >0 : 0
 
     set [`hello bye`](v) { }
->`hello bye` : string
+>`hello bye` : "hello bye"
 >v : any
 
     get [`hello ${a} bye`]() { return 0; }

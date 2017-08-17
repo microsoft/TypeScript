@@ -1247,6 +1247,7 @@ namespace ts {
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
         return mapToDisplayParts(writer => {
             typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });

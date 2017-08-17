@@ -161,7 +161,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var c1 = (function () {
+var c1 = /** @class */ (function () {
     function c1() {
     }
     // i1_f1
@@ -181,7 +181,7 @@ var i1_i;
 var c1_i = new c1();
 // assign to interface
 i1_i = c1_i;
-var c2 = (function () {
+var c2 = /** @class */ (function () {
     /** c2 constructor*/
     function c2(a) {
         this.c2_p1 = a;
@@ -228,7 +228,7 @@ var c2 = (function () {
     });
     return c2;
 }());
-var c3 = (function (_super) {
+var c3 = /** @class */ (function (_super) {
     __extends(c3, _super);
     function c3() {
         return _super.call(this, 10) || this;
@@ -259,7 +259,7 @@ var c2_i = new c2(10);
 var c3_i = new c3();
 // assign
 c2_i = c3_i;
-var c4 = (function (_super) {
+var c4 = /** @class */ (function (_super) {
     __extends(c4, _super);
     function c4() {
         return _super !== null && _super.apply(this, arguments) || this;

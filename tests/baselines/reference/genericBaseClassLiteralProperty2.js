@@ -26,18 +26,18 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var CollectionItem2 = (function () {
+var CollectionItem2 = /** @class */ (function () {
     function CollectionItem2() {
     }
     return CollectionItem2;
 }());
-var BaseCollection2 = (function () {
+var BaseCollection2 = /** @class */ (function () {
     function BaseCollection2() {
         this._itemsByKey = {};
     }
     return BaseCollection2;
 }());
-var DataView2 = (function (_super) {
+var DataView2 = /** @class */ (function (_super) {
     __extends(DataView2, _super);
     function DataView2() {
         return _super !== null && _super.apply(this, arguments) || this;

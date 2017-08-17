@@ -47,12 +47,12 @@ module m {
 //// [declFileTypeAnnotationVisibilityErrorParameterOfFunction.js]
 var m;
 (function (m) {
-    var private1 = (function () {
+    var private1 = /** @class */ (function () {
         function private1() {
         }
         return private1;
     }());
-    var public1 = (function () {
+    var public1 = /** @class */ (function () {
         function public1() {
         }
         return public1;
@@ -85,7 +85,7 @@ var m;
     m.foo14 = foo14;
     var m2;
     (function (m2) {
-        var public2 = (function () {
+        var public2 = /** @class */ (function () {
             function public2() {
             }
             return public2;

@@ -70,7 +70,7 @@ objA.a++, M.n++;
 var STRING;
 var STRING1 = ["", ""];
 function foo() { return ""; }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.foo = function () { return ""; };

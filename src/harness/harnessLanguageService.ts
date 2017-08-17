@@ -193,7 +193,9 @@ namespace Harness.LanguageService {
         }
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
-        getScriptFileNames(): string[] { return this.getFilenames(); }
+        getScriptFileNames(): string[] {
+            return this.getFilenames().filter(ts.isAnySupportedFileExtension);
+        }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
@@ -826,6 +828,7 @@ namespace Harness.LanguageService {
                 host: serverHost,
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,

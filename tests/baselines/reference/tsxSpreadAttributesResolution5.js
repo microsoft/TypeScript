@@ -47,7 +47,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var Poisoned = (function (_super) {
+var Poisoned = /** @class */ (function (_super) {
     __extends(Poisoned, _super);
     function Poisoned() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -63,7 +63,7 @@ var obj = {
 };
 // Error as "obj" has type { x: string; y: number }
 var p = <Poisoned {...obj}/>;
-var EmptyProp = (function (_super) {
+var EmptyProp = /** @class */ (function (_super) {
     __extends(EmptyProp, _super);
     function EmptyProp() {
         return _super !== null && _super.apply(this, arguments) || this;

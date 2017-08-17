@@ -54,7 +54,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: Diagnostic[];
+        projectErrors: ReadonlyArray<Diagnostic>;
     }
 
     export class UnresolvedImportsMap {
@@ -147,7 +147,7 @@ namespace ts.server {
 
         private typingFiles: SortedReadonlyArray<string>;
 
-        protected projectErrors: Diagnostic[];
+        protected projectErrors: ReadonlyArray<Diagnostic>;
 
         public typesVersion = 0;
 
@@ -837,6 +837,7 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
+        public readonly projectRootPath: string | undefined;
 
         private static readonly newName = (() => {
             let nextId = 1;
@@ -876,7 +877,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -885,6 +886,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+            this.projectRootPath = projectRootPath;
         }
 
         addRoot(info: ScriptInfo) {
@@ -1045,7 +1047,7 @@ namespace ts.server {
             return getDirectoryPath(this.getConfigFilePath());
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 
@@ -1189,7 +1191,7 @@ namespace ts.server {
             return this.typeAcquisition;
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 

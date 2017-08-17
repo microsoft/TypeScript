@@ -19,26 +19,26 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function (_super) {
+var A = /** @class */ (function (_super) {
     __extends(A, _super);
     function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
 }(Comparable));
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var A2 = (function (_super) {
+var A2 = /** @class */ (function (_super) {
     __extends(A2, _super);
     function A2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return A2;
 }(Comparable2));
-var B2 = (function () {
+var B2 = /** @class */ (function () {
     function B2() {
     }
     return B2;

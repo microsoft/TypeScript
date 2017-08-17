@@ -55,7 +55,7 @@ var v = {
 >0 : 0
 
     [`hello bye`]: 0,
->`hello bye` : string
+>`hello bye` : "hello bye"
 >0 : 0
 
     [`hello ${a} bye`]: 0

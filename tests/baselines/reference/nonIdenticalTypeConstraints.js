@@ -39,32 +39,32 @@ interface Quux<U> {
 }
 
 //// [nonIdenticalTypeConstraints.js]
-var Different = (function () {
+var Different = /** @class */ (function () {
     function Different() {
     }
     return Different;
 }());
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-var Qux = (function () {
+var Qux = /** @class */ (function () {
     function Qux() {
     }
     return Qux;
 }());
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;
 }());
-var Baz = (function () {
+var Baz = /** @class */ (function () {
     function Baz() {
     }
     return Baz;
 }());
-var Quux = (function () {
+var Quux = /** @class */ (function () {
     function Quux() {
     }
     return Quux;

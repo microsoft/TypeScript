@@ -394,7 +394,7 @@ namespace ts {
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
-                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isStatement(node))
+                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || (node.kind === SyntaxKind.Block)))
                 || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node))
                 || isTypeScriptClassWrapper(node);
         }
@@ -840,7 +840,7 @@ namespace ts {
             outer.end = skipTrivia(currentText, node.pos);
             setEmitFlags(outer, EmitFlags.NoComments);
 
-            return createParen(
+            const result = createParen(
                 createCall(
                     outer,
                     /*typeArguments*/ undefined,
@@ -849,6 +849,8 @@ namespace ts {
                         : []
                 )
             );
+            addSyntheticLeadingComment(result, SyntaxKind.MultiLineCommentTrivia, "* @class ");
+            return result;
         }
 
         /**
@@ -2105,13 +2107,14 @@ namespace ts {
                 setCommentRange(declarationList, node);
 
                 if (node.transformFlags & TransformFlags.ContainsBindingPattern
-                    && (isBindingPattern(node.declarations[0].name)
-                        || isBindingPattern(lastOrUndefined(node.declarations).name))) {
+                    && (isBindingPattern(node.declarations[0].name) || isBindingPattern(lastOrUndefined(node.declarations).name))) {
                     // If the first or last declaration is a binding pattern, we need to modify
                     // the source map range for the declaration list.
                     const firstDeclaration = firstOrUndefined(declarations);
-                    const lastDeclaration = lastOrUndefined(declarations);
-                    setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+                    if (firstDeclaration) {
+                        const lastDeclaration = lastOrUndefined(declarations);
+                        setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+                    }
                 }
 
                 return declarationList;

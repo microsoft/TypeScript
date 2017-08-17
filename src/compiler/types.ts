@@ -999,6 +999,7 @@ namespace ts {
     export interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
         /* @internal */ textSourceNode?: Identifier | StringLiteral | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        /* @internal */ singleQuote?: boolean;
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -2176,16 +2177,18 @@ namespace ts {
         locked?: boolean;
     }
 
-    export interface AfterFinallyFlow extends FlowNode, FlowLock {
+    export interface AfterFinallyFlow extends FlowNodeBase, FlowLock {
         antecedent: FlowNode;
     }
 
-    export interface PreFinallyFlow extends FlowNode {
+    export interface PreFinallyFlow extends FlowNodeBase {
         antecedent: FlowNode;
         lock: FlowLock;
     }
 
-    export interface FlowNode {
+    export type FlowNode =
+        | AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation;
+    export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
     }
@@ -2193,30 +2196,30 @@ namespace ts {
     // FlowStart represents the start of a control flow. For a function expression or arrow
     // function, the container property references the function (which in turn has a flowNode
     // property for the containing control flow).
-    export interface FlowStart extends FlowNode {
+    export interface FlowStart extends FlowNodeBase {
         container?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
-    export interface FlowLabel extends FlowNode {
+    export interface FlowLabel extends FlowNodeBase {
         antecedents: FlowNode[];
     }
 
     // FlowAssignment represents a node that assigns a value to a narrowable reference,
     // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
-    export interface FlowAssignment extends FlowNode {
+    export interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
     }
 
     // FlowCondition represents a condition that is known to be true or false at the
     // node's location in the control flow.
-    export interface FlowCondition extends FlowNode {
+    export interface FlowCondition extends FlowNodeBase {
         expression: Expression;
         antecedent: FlowNode;
     }
 
-    export interface FlowSwitchClause extends FlowNode {
+    export interface FlowSwitchClause extends FlowNodeBase {
         switchStatement: SwitchStatement;
         clauseStart: number;   // Start index of case/default clause range
         clauseEnd: number;     // End index of case/default clause range
@@ -2225,7 +2228,7 @@ namespace ts {
 
     // FlowArrayMutation represents a node potentially mutates an array, i.e. an
     // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
-    export interface FlowArrayMutation extends FlowNode {
+    export interface FlowArrayMutation extends FlowNodeBase {
         node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
@@ -2255,6 +2258,17 @@ namespace ts {
     }
 
 
+    /* @internal */
+    export interface RedirectInfo {
+        /** Source file this redirects to. */
+        readonly redirectTarget: SourceFile;
+        /**
+         * Source file for the duplicate package. This will not be used by the Program,
+         * but we need to keep this around so we can watch for changes in underlying.
+         */
+        readonly unredirected: SourceFile;
+    }
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -2264,6 +2278,13 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+
+        /**
+         * If two source files are for the same version of the same package, one will redirect to the other.
+         * (See `createRedirectSourceFile` in program.ts.)
+         * The redirect will have this set. The other will not have anything set, but see Program#sourceFileIsRedirectedTo.
+         */
+        /* @internal */ redirectInfo?: RedirectInfo | undefined;
 
         amdDependencies: AmdDependency[];
         moduleName: string;
@@ -2435,6 +2456,11 @@ namespace ts {
         /* @internal */ structureIsReused?: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+
+        /** Given a source file, get the name of the package it was imported from. */
+        /* @internal */ sourceFileToPackageName: Map<string>;
+        /** Set of all source files that some other source file redirects to. */
+        /* @internal */ redirectTargetsSet: Map<true>;
     }
 
     /* @internal */
@@ -2542,6 +2568,15 @@ namespace ts {
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        /**
+         * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
+         * Otherwise returns its input.
+         * For example, at `export type T = number;`:
+         *     - `getSymbolAtLocation` at the location `T` will return the exported symbol for `T`.
+         *     - But the result of `getSymbolsInScope` will contain the *local* symbol for `T`, not the exported symbol.
+         *     - Calling `getExportSymbolOfSymbol` on that local symbol will return the exported symbol.
+         */
+        getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
@@ -2606,9 +2641,8 @@ namespace ts {
          * Does not include properties of primitive types.
          */
         /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
-
+        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
-        /* @internal */ resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
     }
 
     export enum NodeBuilderFlags {
@@ -2683,11 +2717,12 @@ namespace ts {
         UseFullyQualifiedType           = 1 << 8,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 1 << 9,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 1 << 10,  // Writing type in type alias declaration
-        UseTypeAliasValue               = 1 << 11,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
         InArrayType                     = 1 << 15,  // Writing an array element type
+        UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
+                                                      // even though `T` can't be accessed in the current scope.
     }
 
     export const enum SymbolFormatFlags {
@@ -3101,7 +3136,7 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        ContainsAnyFunctionType = 1 << 23,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
@@ -3583,6 +3618,7 @@ namespace ts {
         paths?: MapLike<string[]>;
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
@@ -3898,6 +3934,10 @@ namespace ts {
         readFile(fileName: string): string | undefined;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
+        /**
+         * Resolve a symbolic link.
+         * @see https://nodejs.org/api/fs.html#fs_fs_realpathsync_path_options
+         */
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
@@ -3925,6 +3965,7 @@ namespace ts {
     /**
      * ResolvedModule with an explicitly provided `extension` property.
      * Prefer this over `ResolvedModule`.
+     * If changing this, remember to change `moduleResolutionIsEqualTo`.
      */
     export interface ResolvedModuleFull extends ResolvedModule {
         /**
@@ -3932,6 +3973,22 @@ namespace ts {
          * This is optional for backwards-compatibility, but will be added if not provided.
          */
         extension: Extension;
+        packageId?: PackageId;
+    }
+
+    /**
+     * Unique identifier with a package name and version.
+     * If changing this, remember to change `packageIdIsEqual`.
+     */
+    export interface PackageId {
+        /**
+         * Name of the package.
+         * Should not include `@types`.
+         * If accessing a non-index file, this should include its name e.g. "foo/bar".
+         */
+        name: string;
+        /** Version of the package, e.g. "1.2.3" */
+        version: string;
     }
 
     export const enum Extension {

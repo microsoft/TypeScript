@@ -1195,7 +1195,9 @@ namespace ts {
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
-                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                const dotToken = createToken(SyntaxKind.DotToken);
+                dotToken.pos = dotRangeStart;
+                dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
@@ -1348,7 +1350,7 @@ namespace ts {
             increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
             emitLeadingCommentsOfPosition(node.operatorToken.pos);
             writeTokenNode(node.operatorToken);
-            emitTrailingCommentsOfPosition(node.operatorToken.end);
+            emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
             increaseIndentIf(indentAfterOperator, " ");
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);

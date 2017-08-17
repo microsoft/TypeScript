@@ -4,7 +4,7 @@ var db_1 = require("./db");
 function someDecorator(target) {
     return target;
 }
-var MyClass = (function () {
+var MyClass = /** @class */ (function () {
     function MyClass(db) {
         this.db = db;
         this.db.doSomething();
