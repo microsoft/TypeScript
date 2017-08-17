@@ -398,7 +398,6 @@ namespace ts.formatting {
 
         // formatting context is used by rules provider
         const formattingContext = new FormattingContext(sourceFile, requestKind, options);
-        let previousRangeHasError: boolean;
         let previousRange: TextRangeWithKind;
         let previousParent: Node;
         let previousRangeStartLine: number;
@@ -883,7 +882,7 @@ namespace ts.formatting {
 
             const rangeHasError = rangeContainsError(range);
             let lineAdded: boolean;
-            if (!rangeHasError && !previousRangeHasError) {
+            if (!rangeHasError) {
                 if (!previousRange) {
                     // trim whitespaces starting from the beginning of the span up to the current line
                     const originalStart = sourceFile.getLineAndCharacterOfPosition(originalRange.pos);
@@ -898,7 +897,6 @@ namespace ts.formatting {
             previousRange = range;
             previousParent = parent;
             previousRangeStartLine = rangeStart.line;
-            previousRangeHasError = rangeHasError;
 
             return lineAdded;
         }
