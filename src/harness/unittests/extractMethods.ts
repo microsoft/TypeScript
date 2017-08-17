@@ -587,6 +587,20 @@ namespace A {
             `function F<T>() {
     const array: T[] = [#|[]|];
 }`);
+        // Class type parameter
+        testExtractMethod("extractMethod17",
+            `class C<T1, T2> {
+    M(t1: T1, t2: T2) {
+        [#|t1.toString()|];
+    }
+}`);
+        // Method type parameter
+        testExtractMethod("extractMethod18",
+            `class C {
+    M<T1, T2>(t1: T1, t2: T2) {
+        [#|t1.toString()|];
+    }
+}`);
     });
 
 
