@@ -44,7 +44,7 @@ function f3() {
 //// [localTypes3.js]
 function f1() {
     function f() {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C(x, y) {
                 this.x = x;
                 this.y = y;
@@ -60,7 +60,7 @@ function f1() {
 }
 function f2() {
     function f(x) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C(y) {
                 this.y = y;
                 this.x = x;
@@ -76,7 +76,7 @@ function f2() {
 }
 function f3() {
     function f(x, y) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
                 this.x = x;
                 this.y = y;

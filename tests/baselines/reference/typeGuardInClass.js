@@ -20,7 +20,7 @@ else {
 //// [typeGuardInClass.js]
 var x;
 if (typeof x === "string") {
-    var n = (function () {
+    var n = /** @class */ (function () {
         function class_1() {
             var y = x;
         }
@@ -28,7 +28,7 @@ if (typeof x === "string") {
     }());
 }
 else {
-    var m = (function () {
+    var m = /** @class */ (function () {
         function class_2() {
             var y = x;
         }

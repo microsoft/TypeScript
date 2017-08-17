@@ -57,6 +57,9 @@ var nullable;
 /** @type {Object} */
 var Obj;
 
+/** @type {object} */
+var obj;
+
 /** @type {Function} */
 var Func;
 
@@ -79,4 +82,5 @@ var P: Promise<any>;
 var p: Promise<any>;
 var nullable: number | null;
 var Obj: any;
+var obj: any;
 var Func: Function;

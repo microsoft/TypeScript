@@ -9,7 +9,7 @@ emittedFile:tests/cases/compiler/sourceMapValidationExportAssignmentCommonjs.js
 sourceFile:sourceMapValidationExportAssignmentCommonjs.ts
 -------------------------------------------------------------------
 >>>"use strict";
->>>var a = (function () {
+>>>var a = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >

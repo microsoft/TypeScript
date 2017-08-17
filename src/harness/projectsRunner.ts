@@ -275,8 +275,8 @@ class ProjectRunner extends RunnerBase {
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
             }
 
-            function readDirectory(rootDir: string, extension: string[], exclude: string[], include: string[]): string[] {
-                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude, include);
+            function readDirectory(rootDir: string, extension: string[], exclude: string[], include: string[], depth: number): string[] {
+                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude, include, depth);
                 const result: string[] = [];
                 for (let i = 0; i < harnessReadDirectoryResult.length; i++) {
                     result[i] = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, harnessReadDirectoryResult[i],
@@ -289,7 +289,7 @@ class ProjectRunner extends RunnerBase {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
             }
 
-            function readFile(fileName: string): string {
+            function readFile(fileName: string): string | undefined {
                 return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
@@ -354,7 +354,7 @@ class ProjectRunner extends RunnerBase {
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
                 Harness.IO.writeFile(outputFilePath, data);
 
-                outputFiles.push({ emittedFileName: fileName, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
+                outputFiles.push({ emittedFileName: fileName, code: data, fileName: diskRelativeName, writeByteOrderMark });
             }
         }
 
@@ -426,12 +426,12 @@ class ProjectRunner extends RunnerBase {
                 compilerResult.program ?
                     ts.filter(compilerResult.program.getSourceFiles(), sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)) :
                     []),
-                sourceFile => <Harness.Compiler.TestFile>{
+                (sourceFile): Harness.Compiler.TestFile => ({
                     unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
                         RunnerBase.removeFullPaths(sourceFile.fileName) :
                         sourceFile.fileName,
                     content: sourceFile.text
-                });
+                }));
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }

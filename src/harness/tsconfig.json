@@ -74,11 +74,6 @@
         "../services/formatting/tokenRange.ts",
         "../services/codeFixProvider.ts",
         "../services/codefixes/fixes.ts",
-        "../services/codefixes/fixExtendsInterfaceBecomesImplements.ts",
-        "../services/codefixes/fixClassIncorrectlyImplementsInterface.ts",
-        "../services/codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
-        "../services/codefixes/fixClassSuperMustPrecedeThisAccess.ts",
-        "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
         "../services/codefixes/fixUnusedIdentifier.ts",
@@ -129,6 +124,7 @@
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
         "./unittests/textChanges.ts",
-        "./unittests/telemetry.ts"
+        "./unittests/telemetry.ts",
+        "./unittests/programMissingFiles.ts"
     ]
 }

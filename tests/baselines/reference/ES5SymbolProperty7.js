@@ -9,7 +9,7 @@ class C {
 
 //// [ES5SymbolProperty7.js]
 var Symbol;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype[Symbol.iterator] = function () { };

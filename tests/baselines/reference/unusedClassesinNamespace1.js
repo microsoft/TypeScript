@@ -8,7 +8,7 @@ namespace Validation {
 //// [unusedClassesinNamespace1.js]
 var Validation;
 (function (Validation) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;

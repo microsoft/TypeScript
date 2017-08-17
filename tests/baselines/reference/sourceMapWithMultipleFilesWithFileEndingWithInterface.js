@@ -24,7 +24,7 @@ var M;
 })(M || (M = {}));
 var m1;
 (function (m1) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;

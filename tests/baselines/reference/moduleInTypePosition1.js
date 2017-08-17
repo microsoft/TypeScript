@@ -14,7 +14,7 @@ var x = (w1: WinJS) => { };
 //// [moduleInTypePosition1_0.js]
 "use strict";
 exports.__esModule = true;
-var Promise = (function () {
+var Promise = /** @class */ (function () {
     function Promise() {
     }
     return Promise;

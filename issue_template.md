@@ -8,7 +8,7 @@
 
 ```ts
 // A *self-contained* demonstration of the problem follows...
-
+// Test this by running `tsc` on the command-line, rather than through another build tool such as Gulp, Webpack, etc.
 ```
 
 **Expected behavior:**

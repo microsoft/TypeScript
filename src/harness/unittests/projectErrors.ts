@@ -4,12 +4,12 @@
 
 namespace ts.projectSystem {
     describe("Project errors", () => {
-        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: string[]) {
+        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: ReadonlyArray<string>): void {
             assert.isTrue(projectFiles !== undefined, "missing project files");
             checkProjectErrorsWorker(projectFiles.projectErrors, expectedErrors);
         }
 
-        function checkProjectErrorsWorker(errors: Diagnostic[], expectedErrors: string[]) {
+        function checkProjectErrorsWorker(errors: ReadonlyArray<Diagnostic>, expectedErrors: ReadonlyArray<string>): void {
             assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
             if (expectedErrors.length) {
                 for (let i = 0; i < errors.length; i++) {
@@ -135,7 +135,7 @@ namespace ts.projectSystem {
             }
             // fix config and trigger watcher
             host.reloadFS([file1, file2, correctConfig]);
-            host.triggerFileWatcherCallback(correctConfig.path, /*false*/);
+            host.triggerFileWatcherCallback(correctConfig.path, FileWatcherEventKind.Changed);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
@@ -177,7 +177,7 @@ namespace ts.projectSystem {
             }
             // break config and trigger watcher
             host.reloadFS([file1, file2, corruptedConfig]);
-            host.triggerFileWatcherCallback(corruptedConfig.path, /*false*/);
+            host.triggerFileWatcherCallback(corruptedConfig.path, FileWatcherEventKind.Changed);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);

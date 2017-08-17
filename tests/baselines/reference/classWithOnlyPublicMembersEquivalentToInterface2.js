@@ -29,7 +29,7 @@ i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
 // no errors expected
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.y = function (a) { return null; };

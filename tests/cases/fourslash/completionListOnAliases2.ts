@@ -41,19 +41,16 @@ function getVerify(isTypeLocation?: boolean) {
         verifyValueOrType: verify
     };
 }
-function typeLocationVerify(valueMarker: string, verify: (typeMarker: string) => void) {
-    verify(valueMarker + "Type");
-    return valueMarker;
-}
 
 function verifyModuleM(marker: string) {
-    const isTypeLocation = marker.indexOf("Type") !== -1;
-    const { verifyValue, verifyType, verifyValueOrType } = getVerify(isTypeLocation);
-    if (!isTypeLocation) {
-        marker = typeLocationVerify(marker, verifyModuleM);
-    }
+    verifyModuleMWorker(marker, /*isTypeLocation*/ false);
+    verifyModuleMWorker(`${marker}Type`, /*isTypeLocation*/ true);
+}
+
+function verifyModuleMWorker(marker: string, isTypeLocation: boolean): void {
     goTo.marker(marker);
 
+    const { verifyValue, verifyType, verifyValueOrType } = getVerify(isTypeLocation);
     verifyType.completionListContains("I");
     verifyValueOrType.completionListContains("C");
     verifyValueOrType.completionListContains("E");
@@ -63,8 +60,9 @@ function verifyModuleM(marker: string) {
     verifyValueOrType.completionListContains("A");
 }
 
-
 // Module m
+goTo.marker("1");
+verify.completionListContains("A");
 verifyModuleM("1");
 
 // Class C

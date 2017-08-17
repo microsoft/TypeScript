@@ -19,7 +19,7 @@ class WITDialogs {
 
 
 //// [crashInresolveReturnStatement.js]
-var WorkItemToolbar = (function () {
+var WorkItemToolbar = /** @class */ (function () {
     function WorkItemToolbar() {
     }
     WorkItemToolbar.prototype.onToolbarItemClick = function () {
@@ -27,7 +27,7 @@ var WorkItemToolbar = (function () {
     };
     return WorkItemToolbar;
 }());
-var CreateCopyOfWorkItemDialog = (function () {
+var CreateCopyOfWorkItemDialog = /** @class */ (function () {
     function CreateCopyOfWorkItemDialog() {
     }
     CreateCopyOfWorkItemDialog.prototype.getDialogResult = function () {
@@ -37,7 +37,7 @@ var CreateCopyOfWorkItemDialog = (function () {
 }());
 function createWorkItemDialog(dialogType) {
 }
-var WITDialogs = (function () {
+var WITDialogs = /** @class */ (function () {
     function WITDialogs() {
     }
     WITDialogs.createCopyOfWorkItem = function () {
