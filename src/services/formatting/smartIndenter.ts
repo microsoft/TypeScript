@@ -44,7 +44,6 @@ namespace ts.formatting {
                     return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
                 }
 
-                // get first character of previous line -- if it is '*', move back one more character (or stay at 0)
                 const startPostionOfLine = getStartPositionOfLine(previousLine, sourceFile);
                 const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPostionOfLine, position, sourceFile, options);
 

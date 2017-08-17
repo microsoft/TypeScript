@@ -772,7 +772,7 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n) || n.kind === SyntaxKind.JsxSelfClosingElement);
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
@@ -865,7 +865,6 @@ namespace ts {
     export function isWhiteSpaceOnlyJsxText(node: Node): node is JsxText {
         return isJsxText(node) && node.containsOnlyWhiteSpaces;
     }
-
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
