@@ -7,7 +7,8 @@ namespace ts {
         resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
-        getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type) {
+        getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type,
+        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type) {
 
         return getSymbolWalker;
 
@@ -92,7 +93,7 @@ namespace ts {
             }
 
             function visitTypeParameter(type: TypeParameter): void {
-                visitType(type.constraint);
+                visitType(getConstraintFromTypeParameter(type));
             }
 
             function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
