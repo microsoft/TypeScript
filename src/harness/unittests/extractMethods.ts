@@ -601,6 +601,11 @@ namespace A {
         [#|t1.toString()|];
     }
 }`);
+        // Coupled constraints
+        testExtractMethod("extractMethod19",
+            `function F<T, U extends T[], V extends U[]>(v: V) {
+    [#|v.toString()|];
+}`);
     });
 
 
