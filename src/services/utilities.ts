@@ -720,8 +720,14 @@ namespace ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node {
-        return find(startNode || sourceFile);
+    /**
+     * Finds the rightmost token satisfying `token.end <= position`,
+     * excluding `JsxText` tokens containing only whitespace.
+     */
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node | undefined {
+        const result = find(startNode || sourceFile);
+        Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
+        return result;
 
         function findRightmostToken(n: Node): Node {
             if (isToken(n)) {
@@ -743,18 +749,16 @@ namespace ts {
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // Note that the span of a node's tokens is [node.getStart(...), node.end).
-                // Given that `position < child.end` and child has constiutent tokens*, we distinguish these cases:
+                // Given that `position < child.end` and child has constituent tokens, we distinguish these cases:
                 // 1) `position` precedes `child`'s tokens or `child` has no tokens (ie: in a comment or whitespace preceding `child`):
                 // we need to find the last token in a previous child.
                 // 2) `position` is within the same span: we recurse on `child`.
-                // * JsxText is exceptional in that its tokens are (non-trivia) whitespace, which we do not want to return.
-                // TODO(arozga): shouldn't `findRightmost...` need to handle JsxText?
                 if (position < child.end) {
                     const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         !nodeHasTokens(child) ||
-                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
+                        isWhiteSpaceOnlyJsxText(child);
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
@@ -781,11 +785,16 @@ namespace ts {
         }
 
         /**
-         * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which has constituent tokens.
+         * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
          */
         function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
             for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
-                if (nodeHasTokens(children[i])) {
+                const child = children[i];
+
+                if (isWhiteSpaceOnlyJsxText(child)) {
+                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                }
+                else if (nodeHasTokens(children[i])) {
                     return children[i];
                 }
             }
@@ -853,6 +862,11 @@ namespace ts {
         return false;
     }
 
+    export function isWhiteSpaceOnlyJsxText(node: Node): node is JsxText {
+        return isJsxText(node) && node.containsOnlyWhiteSpaces;
+    }
+
+
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
@@ -888,7 +902,7 @@ namespace ts {
 
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
-        // Note, that getWidth() does not take trivia into account.
+        // Note: getWidth() does not take trivia into account.
         return n.getWidth() !== 0;
     }
 
