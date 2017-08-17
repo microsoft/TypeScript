@@ -582,6 +582,11 @@ namespace A {
         [#|t2.toString();|]
     }
 }`);
+        // Confirm that the contextual type of an extracted expression counts as a use.
+        testExtractMethod("extractMethod16",
+            `function F<T>() {
+    const array: T[] = [#|[]|];
+}`);
     });
 
 

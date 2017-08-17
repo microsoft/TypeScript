@@ -946,6 +946,7 @@ namespace ts.refactor.extractMethod {
             substitutionsPerScope.push(createMap<Expression>());
             errorsPerScope.push([]);
         }
+
         const seenUsages = createMap<Usage>();
         const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
         const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent) ? scopes[0] : getEnclosingBlockScopeContainer(scopes[0]);
@@ -954,6 +955,14 @@ namespace ts.refactor.extractMethod {
         const inGenericContext = isInGenericContext(unmodifiedNode);
 
         collectUsages(target);
+
+        // Unfortunately, this code takes advantage of the knowledge that the generated method
+        // will use the contextual type of an expression as the return type of the extracted
+        // method (and will therefore "use" all the types involved).
+        if (inGenericContext && !isReadonlyArray(targetRange.range)) {
+            const contextualType = checker.getContextualType(targetRange.range);
+            recordTypeParameterUsages(contextualType);
+        }
 
         if (allTypeParameterUsages.size > 0) {
             const seenTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
@@ -1032,18 +1041,21 @@ namespace ts.refactor.extractMethod {
             return false;
         }
 
+        function recordTypeParameterUsages(type: Type) {
+            const symbolWalker = checker.getSymbolWalker();
+            const {visitedTypes} = symbolWalker.walkType(type);
+
+            for (const visitedType of visitedTypes) {
+                if (visitedType.flags & TypeFlags.TypeParameter) {
+                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
+                }
+            }
+        }
+
         function collectUsages(node: Node, valueUsage = Usage.Read) {
             if (inGenericContext) {
                 const type = checker.getTypeAtLocation(node);
-
-                const symbolWalker = checker.getSymbolWalker();
-                const {visitedTypes} = symbolWalker.walkType(type);
-
-                for (const visitedType of visitedTypes) {
-                    if (visitedType.flags & TypeFlags.TypeParameter) {
-                        allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
-                    }
-                }
+                recordTypeParameterUsages(type);
             }
 
             if (isDeclaration(node) && node.symbol) {
