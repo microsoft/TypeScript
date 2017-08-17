@@ -30,7 +30,7 @@ var Hello1;
 (function (Hello1) {
     Hello1[Hello1["World1"] = 0] = "World1";
 })(Hello1 || (Hello1 = {}));
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         // Same names + string => OK
         this.Bar = Bar;

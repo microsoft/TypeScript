@@ -9,6 +9,3 @@ export function foo() { return "foo"; }
 "use strict"
 var p1 = import<Promise<any>>("./0");  // error
 var p2 = import<>("./0");  // error
-// p1.then(value => {
-//     value.anyFunction();
-// })

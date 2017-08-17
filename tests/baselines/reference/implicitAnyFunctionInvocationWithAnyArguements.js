@@ -61,7 +61,7 @@ noError(null, []);
 noError(undefined, []);
 noError(null, [null, undefined]);
 noError(undefined, anyArray);
-var C = (function () {
+var C = /** @class */ (function () {
     function C(emtpyArray, variable) {
     }
     return C;

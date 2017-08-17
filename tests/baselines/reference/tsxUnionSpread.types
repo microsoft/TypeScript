@@ -1,0 +1,74 @@
+=== tests/cases/compiler/index.tsx ===
+namespace JSX {
+>JSX : any
+
+    export interface Element {}
+>Element : Element
+}
+
+export type CatInfo = { type: 'Cat'; subType: string; };
+>CatInfo : CatInfo
+>type : "Cat"
+>subType : string
+
+export type DogInfo = { type: 'Dog'; };
+>DogInfo : DogInfo
+>type : "Dog"
+
+export type AnimalInfo = CatInfo | DogInfo;
+>AnimalInfo : AnimalInfo
+>CatInfo : CatInfo
+>DogInfo : DogInfo
+
+function AnimalComponent(info: AnimalInfo): JSX.Element {
+>AnimalComponent : (info: AnimalInfo) => JSX.Element
+>info : AnimalInfo
+>AnimalInfo : AnimalInfo
+>JSX : any
+>Element : JSX.Element
+
+    return undefined as any;
+>undefined as any : any
+>undefined : undefined
+}
+
+function getProps(): AnimalInfo {
+>getProps : () => AnimalInfo
+>AnimalInfo : AnimalInfo
+
+    // this may be from server or whatever ...
+    return { type: 'Cat', subType: 'Large' };
+>{ type: 'Cat', subType: 'Large' } : { type: "Cat"; subType: string; }
+>type : string
+>'Cat' : "Cat"
+>subType : string
+>'Large' : "Large"
+}
+
+var props:AnimalInfo = getProps();
+>props : AnimalInfo
+>AnimalInfo : AnimalInfo
+>getProps() : AnimalInfo
+>getProps : () => AnimalInfo
+
+var component = <AnimalComponent {...props} />
+>component : any
+><AnimalComponent {...props} /> : any
+>AnimalComponent : (info: AnimalInfo) => JSX.Element
+>props : AnimalInfo
+
+var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
+>props2 : AnimalInfo
+>AnimalInfo : AnimalInfo
+>{ type: 'Cat', subType: 'Large' } : { type: "Cat"; subType: string; }
+>type : string
+>'Cat' : "Cat"
+>subType : string
+>'Large' : "Large"
+
+var component2 = <AnimalComponent {...props2} />
+>component2 : any
+><AnimalComponent {...props2} /> : any
+>AnimalComponent : (info: AnimalInfo) => JSX.Element
+>props2 : CatInfo
+

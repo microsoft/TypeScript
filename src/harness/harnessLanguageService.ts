@@ -108,7 +108,7 @@ namespace Harness.LanguageService {
     }
 
     class DefaultHostCancellationToken implements ts.HostCancellationToken {
-        public static Instance = new DefaultHostCancellationToken();
+        public static readonly Instance = new DefaultHostCancellationToken();
 
         public isCancellationRequested() {
             return false;
@@ -193,7 +193,9 @@ namespace Harness.LanguageService {
         }
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
-        getScriptFileNames(): string[] { return this.getFilenames(); }
+        getScriptFileNames(): string[] {
+            return this.getFilenames().filter(ts.isAnySupportedFileExtension);
+        }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
@@ -208,13 +210,14 @@ namespace Harness.LanguageService {
             const script = this.getScriptSnapshot(fileName);
             return script !== undefined;
         }
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
                 /*useCaseSensitiveFileNames*/ false,
                 this.getCurrentDirectory(),
+                depth,
                 (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
-        readFile(path: string): string {
+        readFile(path: string): string | undefined {
             const snapshot = this.getScriptSnapshot(path);
             return snapshot.getText(0, snapshot.getLength());
         }
@@ -312,9 +315,7 @@ namespace Harness.LanguageService {
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
-        readDirectory(_rootDir: string, _extension: string): string {
-            return ts.notImplemented();
-        }
+        readDirectory = ts.notImplemented;
         readDirectoryNames = ts.notImplemented;
         readFileNames = ts.notImplemented;
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
@@ -620,7 +621,7 @@ namespace Harness.LanguageService {
             this.writeMessage(message);
         }
 
-        readFile(fileName: string): string {
+        readFile(fileName: string): string | undefined {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
                 fileName = Harness.Compiler.defaultLibFileName;
             }
@@ -668,9 +669,7 @@ namespace Harness.LanguageService {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory(_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] {
-            return ts.notImplemented();
-        }
+        readDirectory() { return ts.notImplemented(); }
 
         watchFile(): ts.FileWatcher {
             return { close: ts.noop };
@@ -684,11 +683,11 @@ namespace Harness.LanguageService {
         }
 
         info(message: string): void {
-            return this.host.log(message);
+            this.host.log(message);
         }
 
-        msg(message: string) {
-            return this.host.log(message);
+        err(message: string): void {
+            this.host.log(message);
         }
 
         loggingEnabled() {
@@ -703,15 +702,10 @@ namespace Harness.LanguageService {
             return false;
         }
 
-
-        endGroup(): void {
-        }
+        group() { throw ts.notImplemented(); }
 
         perftrc(message: string): void {
             return this.host.log(message);
-        }
-
-        startGroup(): void {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
@@ -798,7 +792,7 @@ namespace Harness.LanguageService {
                 default:
                     return {
                         module: undefined,
-                        error: "Could not resolve module"
+                        error: new Error("Could not resolve module")
                     };
             }
 
@@ -831,6 +825,7 @@ namespace Harness.LanguageService {
                 host: serverHost,
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,

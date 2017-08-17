@@ -6,4 +6,8 @@
 
 goTo.marker();
 edit.insertLine("");
-verify.currentLineContentIs('class bar {');
+verify.currentFileContentIs(
+`class foo { }
+class bar {
+}
+// new line here`);

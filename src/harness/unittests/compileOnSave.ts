@@ -36,6 +36,7 @@ namespace ts.projectSystem {
                 host,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: typingsInstaller || server.nullTypingsInstaller,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
@@ -208,7 +209,7 @@ namespace ts.projectSystem {
 
                 file1Consumer1.content = `let y = 10;`;
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer1.path, /*removed*/ false);
+                host.triggerFileWatcherCallback(file1Consumer1.path, FileWatcherEventKind.Changed);
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
@@ -225,7 +226,7 @@ namespace ts.projectSystem {
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 // Delete file1Consumer2
                 host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
-                host.triggerFileWatcherCallback(file1Consumer2.path, /*removed*/ true);
+                host.triggerFileWatcherCallback(file1Consumer2.path, FileWatcherEventKind.Deleted);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
             });
 
@@ -475,7 +476,7 @@ namespace ts.projectSystem {
 
                 openFilesForSession([referenceFile1], session);
                 host.reloadFS([referenceFile1, configFile]);
-                host.triggerFileWatcherCallback(moduleFile1.path, /*removed*/ true);
+                host.triggerFileWatcherCallback(moduleFile1.path, FileWatcherEventKind.Deleted);
 
                 const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [
@@ -518,18 +519,20 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([f], { newLine });
                 const session = createSession(host);
-                session.executeCommand(<server.protocol.OpenRequest>{
+                const openRequest: server.protocol.OpenRequest = {
                     seq: 1,
                     type: "request",
-                    command: "open",
+                    command: server.protocol.CommandTypes.Open,
                     arguments: { file: f.path }
-                });
-                session.executeCommand(<server.protocol.CompileOnSaveEmitFileRequest>{
+                };
+                session.executeCommand(openRequest);
+                const emitFileRequest: server.protocol.CompileOnSaveEmitFileRequest = {
                     seq: 2,
                     type: "request",
-                    command: "compileOnSaveEmitFile",
+                    command: server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: f.path }
-                });
+                };
+                session.executeCommand(emitFileRequest);
                 const emitOutput = host.readFile(path + ts.Extension.Js);
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }
@@ -550,7 +553,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, typingsInstaller);
+            const session = createSession(host, { typingsInstaller });
 
             openFilesForSession([file1, file2], session);
             const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });

@@ -1,20 +1,29 @@
 {
-    "kind": "JSDocUnionType",
+    "kind": "ParenthesizedType",
     "pos": 1,
     "end": 16,
-    "types": {
-        "0": {
-            "kind": "NumberKeyword",
-            "pos": 2,
-            "end": 8
-        },
-        "1": {
-            "kind": "StringKeyword",
-            "pos": 9,
-            "end": 15
-        },
-        "length": 2,
+    "flags": "JSDoc",
+    "type": {
+        "kind": "UnionType",
         "pos": 2,
-        "end": 15
+        "end": 15,
+        "flags": "JSDoc",
+        "types": {
+            "0": {
+                "kind": "NumberKeyword",
+                "pos": 2,
+                "end": 8,
+                "flags": "JSDoc"
+            },
+            "1": {
+                "kind": "StringKeyword",
+                "pos": 9,
+                "end": 15,
+                "flags": "JSDoc"
+            },
+            "length": 2,
+            "pos": 2,
+            "end": 15
+        }
     }
 }

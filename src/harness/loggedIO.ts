@@ -64,10 +64,11 @@ interface IOLog {
     }[];
     directoriesRead: {
         path: string,
-        extensions: string[],
-        exclude: string[],
-        include: string[],
-        result: string[]
+        extensions: ReadonlyArray<string>,
+        exclude: ReadonlyArray<string>,
+        include: ReadonlyArray<string>,
+        depth: number,
+        result: ReadonlyArray<string>,
     }[];
 }
 
@@ -220,10 +221,9 @@ namespace Playback {
             memoize(path => findFileByPath(replayLog.filesRead, path, /*throwFileNotFoundError*/ true).contents));
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
-            (path, extensions, exclude, include) => {
-                const result = (<ts.System>underlying).readDirectory(path, extensions, exclude, include);
-                const logEntry = { path, extensions, exclude, include, result };
-                recordLog.directoriesRead.push(logEntry);
+            (path, extensions, exclude, include, depth) => {
+                const result = (<ts.System>underlying).readDirectory(path, extensions, exclude, include, depth);
+                recordLog.directoriesRead.push({ path, extensions, exclude, include, depth, result });
                 return result;
             },
             path => {

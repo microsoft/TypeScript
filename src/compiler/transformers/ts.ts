@@ -65,7 +65,7 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentScopeFirstDeclarationsOfName: Map<Node>;
+        let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node>;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -522,7 +522,7 @@ namespace ts {
             return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
-        function getClassFacts(node: ClassDeclaration, staticProperties: PropertyDeclaration[]) {
+        function getClassFacts(node: ClassDeclaration, staticProperties: ReadonlyArray<PropertyDeclaration>) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             if (getClassExtendsHeritageClauseElement(node)) facts |= ClassFacts.HasExtendsClause;
@@ -1051,7 +1051,7 @@ namespace ts {
          *
          * @param node The constructor node.
          */
-        function getParametersWithPropertyAssignments(node: ConstructorDeclaration): ParameterDeclaration[] {
+        function getParametersWithPropertyAssignments(node: ConstructorDeclaration): ReadonlyArray<ParameterDeclaration> {
             return filter(node.parameters, isParameterWithPropertyAssignment);
         }
 
@@ -1104,7 +1104,7 @@ namespace ts {
          * @param node The class node.
          * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
          */
-        function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): PropertyDeclaration[] {
+        function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<PropertyDeclaration> {
             return filter(node.members, isStatic ? isStaticInitializedProperty : isInstanceInitializedProperty);
         }
 
@@ -1144,7 +1144,7 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addInitializedPropertyStatements(statements: Statement[], properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function addInitializedPropertyStatements(statements: Statement[], properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
             for (const property of properties) {
                 const statement = createStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
@@ -1159,7 +1159,7 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function generateInitializedPropertyExpressions(properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function generateInitializedPropertyExpressions(properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of properties) {
                 const expression = transformInitializedProperty(property, receiver);
@@ -1194,7 +1194,7 @@ namespace ts {
          * @param isStatic A value indicating whether to retrieve static or instance members of
          *                 the class.
          */
-        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ClassElement[] {
+        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<ClassElement> {
             return filter(node.members, isStatic ? isStaticDecoratedClassElement : isInstanceDecoratedClassElement);
         }
 
@@ -1233,8 +1233,8 @@ namespace ts {
          * A structure describing the decorators for a class element.
          */
         interface AllDecorators {
-            decorators: Decorator[];
-            parameters?: Decorator[][];
+            decorators: ReadonlyArray<Decorator>;
+            parameters?: ReadonlyArray<ReadonlyArray<Decorator>>;
         }
 
         /**
@@ -1244,7 +1244,7 @@ namespace ts {
          * @param node The function-like node.
          */
         function getDecoratorsOfParameters(node: FunctionLikeDeclaration) {
-            let decorators: Decorator[][];
+            let decorators: ReadonlyArray<Decorator>[];
             if (node) {
                 const parameters = node.parameters;
                 for (let i = 0; i < parameters.length; i++) {
@@ -1682,7 +1682,7 @@ namespace ts {
             const valueDeclaration =
                 isClassLike(node)
                     ? getFirstConstructorWithBody(node)
-                    : isFunctionLike(node) && nodeIsPresent(node.body)
+                    : isFunctionLike(node) && nodeIsPresent((node as FunctionLikeDeclaration).body)
                         ? node
                         : undefined;
 
@@ -1692,7 +1692,7 @@ namespace ts {
                 const numParameters = parameters.length;
                 for (let i = 0; i < numParameters; i++) {
                     const parameter = parameters[i];
-                    if (i === 0 && isIdentifier(parameter.name) && parameter.name.text === "this") {
+                    if (i === 0 && isIdentifier(parameter.name) && parameter.name.escapedText === "this") {
                         continue;
                     }
                     if (parameter.dotDotDotToken) {
@@ -1707,7 +1707,7 @@ namespace ts {
             return createArrayLiteral(expressions);
         }
 
-        function getParametersOfDecoratedDeclaration(node: FunctionLikeDeclaration, container: ClassLikeDeclaration) {
+        function getParametersOfDecoratedDeclaration(node: FunctionLike, container: ClassLikeDeclaration) {
             if (container && node.kind === SyntaxKind.GetAccessor) {
                 const { setAccessor } = getAllAccessorDeclarations(container.members, <AccessorDeclaration>node);
                 if (setAccessor) {
@@ -1841,7 +1841,7 @@ namespace ts {
             for (const typeNode of node.types) {
                 const serializedIndividual = serializeTypeNode(typeNode);
 
-                if (isIdentifier(serializedIndividual) && serializedIndividual.text === "Object") {
+                if (isIdentifier(serializedIndividual) && serializedIndividual.escapedText === "Object") {
                     // One of the individual is global object, return immediately
                     return serializedIndividual;
                 }
@@ -1851,7 +1851,7 @@ namespace ts {
                     // Different types
                     if (!isIdentifier(serializedUnion) ||
                         !isIdentifier(serializedIndividual) ||
-                        serializedUnion.text !== serializedIndividual.text) {
+                        serializedUnion.escapedText !== serializedIndividual.escapedText) {
                         return createIdentifier("Object");
                     }
                 }
@@ -2007,7 +2007,7 @@ namespace ts {
                     : (<ComputedPropertyName>name).expression;
             }
             else if (isIdentifier(name)) {
-                return createLiteral(unescapeIdentifier(name.text));
+                return createLiteral(unescapeLeadingUnderscores(name.escapedText));
             }
             else {
                 return getSynthesizedClone(name);
@@ -2644,10 +2644,10 @@ namespace ts {
          *       on symbol names.
          */
         function recordEmittedDeclarationInScope(node: Node) {
-            const name = node.symbol && node.symbol.name;
+            const name = node.symbol && node.symbol.escapedName;
             if (name) {
                 if (!currentScopeFirstDeclarationsOfName) {
-                    currentScopeFirstDeclarationsOfName = createMap<Node>();
+                    currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
                 }
 
                 if (!currentScopeFirstDeclarationsOfName.has(name)) {
@@ -2662,7 +2662,7 @@ namespace ts {
          */
         function isFirstEmittedDeclarationInScope(node: Node) {
             if (currentScopeFirstDeclarationsOfName) {
-                const name = node.symbol && node.symbol.name;
+                const name = node.symbol && node.symbol.escapedName;
                 if (name) {
                     return currentScopeFirstDeclarationsOfName.get(name) === node;
                 }
@@ -3158,7 +3158,7 @@ namespace ts {
                 getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true),
                 getLocalName(node)
             );
-            setSourceMapRange(expression, createRange(node.name.pos, node.end));
+            setSourceMapRange(expression, createRange(node.name ? node.name.pos : node.pos, node.end));
 
             const statement = createStatement(expression);
             setSourceMapRange(statement, createRange(-1, node.end));
@@ -3210,7 +3210,7 @@ namespace ts {
         function getClassAliasIfNeeded(node: ClassDeclaration) {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
-                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? unescapeIdentifier(node.name.text) : "default");
+                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? unescapeLeadingUnderscores(node.name.escapedText) : "default");
                 classAliases[getOriginalNodeId(node)] = classAlias;
                 hoistVariableDeclaration(classAlias);
                 return classAlias;

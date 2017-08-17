@@ -24,7 +24,7 @@ C.b = 1;
 C.foo();
 
 //// [classPropertyAsPrivate.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "y", {

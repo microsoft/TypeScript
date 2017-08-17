@@ -22,7 +22,7 @@ f1.bar2();
 
 
 //// [constructorOverloads1.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(x) {
     }
     Foo.prototype.bar1 = function () { };

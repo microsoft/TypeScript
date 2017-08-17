@@ -640,7 +640,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Location in source code expressed as (one-based) line and character offset.
+     * Location in source code expressed as (one-based) line and (one-based) column offset.
      */
     export interface Location {
         line: number;
@@ -914,7 +914,7 @@ namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
 
     /**
@@ -1304,6 +1304,13 @@ namespace ts.server.protocol {
          * Compiler options to be used with inferred projects.
          */
         options: ExternalProjectCompilerOptions;
+
+        /**
+         * Specifies the project root path used to scope compiler options.
+         * It is an error to provide this property if the server has not been started with
+         * `useInferredProjectPerProjectRoot` enabled.
+         */
+        projectRootPath?: string;
     }
 
     /**
@@ -2429,6 +2436,7 @@ namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;

@@ -23,14 +23,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var ab = A.B;
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(ab.C));
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;

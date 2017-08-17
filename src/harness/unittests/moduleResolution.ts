@@ -26,10 +26,19 @@ namespace ts {
     interface File {
         name: string;
         content?: string;
+        symlinks?: string[];
     }
 
     function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ModuleResolutionHost {
-        const map = arrayToMap(files, f => f.name);
+        const map = createMap<File>();
+        for (const file of files) {
+            map.set(file.name, file);
+            if (file.symlinks) {
+                for (const symlink of file.symlinks) {
+                    map.set(symlink, file);
+                }
+            }
+        }
 
         if (hasDirectoryExists) {
             const directories = createMap<string>();
@@ -46,6 +55,7 @@ namespace ts {
             }
             return {
                 readFile,
+                realpath,
                 directoryExists: path => directories.has(path),
                 fileExists: path => {
                     assert.isTrue(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
@@ -54,11 +64,14 @@ namespace ts {
             };
         }
         else {
-            return { readFile, fileExists: path => map.has(path) };
+            return { readFile, realpath, fileExists: path => map.has(path) };
         }
-        function readFile(path: string): string {
+        function readFile(path: string): string | undefined {
             const file = map.get(path);
             return file && file.content;
+        }
+        function realpath(path: string): string {
+            return map.get(path).name;
         }
     }
 
@@ -233,8 +246,8 @@ namespace ts {
             test(/*hasDirectoryExists*/ true);
 
             function test(hasDirectoryExists: boolean) {
-                const containingFile = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
-                const moduleFile = { name: "/a/node_modules/foo/index.d.ts" };
+                const containingFile: File = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
+                const moduleFile: File = { name: "/a/node_modules/foo/index.d.ts" };
                 const resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, moduleFile));
                 checkResolvedModuleWithFailedLookupLocations(resolution, createResolvedModule(moduleFile.name, /*isExternalLibraryImport*/ true), [
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
@@ -289,6 +302,19 @@ namespace ts {
                 ]);
             }
         });
+
+        testPreserveSymlinks(/*preserveSymlinks*/ false);
+        testPreserveSymlinks(/*preserveSymlinks*/ true);
+        function testPreserveSymlinks(preserveSymlinks: boolean) {
+            it(`preserveSymlinks: ${preserveSymlinks}`, () => {
+                const realFileName = "/linked/index.d.ts";
+                const symlinkFileName = "/app/node_modulex/linked/index.d.ts";
+                const host = createModuleResolutionHost(/*hasDirectoryExists*/ true, { name: realFileName, symlinks: [symlinkFileName] });
+                const resolution = nodeModuleNameResolver("linked", "/app/app.ts", { preserveSymlinks }, host);
+                const resolvedFileName = preserveSymlinks ? symlinkFileName : realFileName;
+                checkResolvedModule(resolution.resolvedModule, { resolvedFileName, isExternalLibraryImport: true, extension: Extension.Dts });
+            });
+        }
     });
 
     describe("Module resolution - relative imports", () => {
@@ -950,8 +976,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/types/lib/typings/lib.d.ts" };
-                const package = { name: "/root/src/types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+                const packageFile = { name: "/root/src/types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ true, f1, f2, packageFile);
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
@@ -961,8 +987,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/node_modules/lib/typings/lib.d.ts" };
-                const package = { name: "/root/src/node_modules/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/src/node_modules/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
@@ -972,8 +998,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/node_modules/@types/lib/typings/lib.d.ts" };
-                const package = { name: "/root/src/node_modules/@types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/src/node_modules/@types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
         });
         it("Can be resolved from secondary location", () => {
@@ -990,8 +1016,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/node_modules/lib/typings/lib.d.ts" };
-                const package = { name: "/root/node_modules/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/node_modules/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
@@ -1001,8 +1027,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/node_modules/@types/lib/typings/lib.d.ts" };
-                const package = { name: "/root/node_modules/@types/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/node_modules/@types/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
         });
         it("Primary resolution overrides secondary resolutions", () => {

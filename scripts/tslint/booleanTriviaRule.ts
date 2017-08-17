@@ -27,13 +27,14 @@ function walk(ctx: Lint.WalkContext<void>): void {
     /** Skip certain function/method names whose parameter names are not informative. */
     function shouldIgnoreCalledExpression(expression: ts.Expression): boolean {
         if (expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
-            const methodName = (expression as ts.PropertyAccessExpression).name.text;
+            const methodName = (expression as ts.PropertyAccessExpression).name.text as string;
             if (methodName.indexOf("set") === 0) {
                 return true;
             }
             switch (methodName) {
                 case "apply":
                 case "assert":
+                case "assertEqual":
                 case "call":
                 case "equal":
                 case "fail":
@@ -44,7 +45,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
             }
         }
         else if (expression.kind === ts.SyntaxKind.Identifier) {
-            const functionName = (expression as ts.Identifier).text;
+            const functionName = (expression as ts.Identifier).text as string;
             if (functionName.indexOf("set") === 0) {
                 return true;
             }
@@ -69,7 +70,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
 
         const ranges = ts.getTrailingCommentRanges(sourceFile.text, arg.pos) || ts.getLeadingCommentRanges(sourceFile.text, arg.pos);
         if (ranges === undefined || ranges.length !== 1 || ranges[0].kind !== ts.SyntaxKind.MultiLineCommentTrivia) {
-            ctx.addFailureAtNode(arg, "Tag boolean argument with parameter name");
+            ctx.addFailureAtNode(arg, "Tag argument with parameter name");
             return;
         }
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(32,7): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(33,7): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(39,7): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(40,7): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(32,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(33,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'undefined'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(39,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts(40,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'undefined'.
 
 
 ==== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts (4 errors) ====
@@ -37,22 +37,22 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmen
     x3 += 0;
     x3 += E.a;
     x3 += null;
-          ~~~~
-!!! error TS2531: Object is possibly 'null'.
+    ~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'null'.
     x3 += undefined;
-          ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'undefined'.
     
     var x4: E;
     x4 += a;
     x4 += 0;
     x4 += E.a;
     x4 += null;
-          ~~~~
-!!! error TS2531: Object is possibly 'null'.
+    ~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'null'.
     x4 += undefined;
-          ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'undefined'.
     
     var x5: boolean;
     x5 += a;

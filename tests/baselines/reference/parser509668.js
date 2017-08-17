@@ -5,7 +5,7 @@ class Foo3 {
 }
 
 //// [parser509668.js]
-var Foo3 = (function () {
+var Foo3 = /** @class */ (function () {
     // Doesn't work, but should
     function Foo3() {
         var args = [];

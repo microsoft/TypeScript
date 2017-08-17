@@ -12,7 +12,7 @@ var A;
 (function (A) {
     var B;
     (function (B) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
