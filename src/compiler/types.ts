@@ -343,6 +343,7 @@ namespace ts {
         PropertyAssignment,
         ShorthandPropertyAssignment,
         SpreadAssignment,
+        TypeSpread,
 
         // Enum
         EnumMember,
@@ -950,7 +951,12 @@ namespace ts {
 
     export interface TupleTypeNode extends TypeNode {
         kind: SyntaxKind.TupleType;
-        elementTypes: NodeArray<TypeNode>;
+        elementTypes: NodeArray<TypeNode | TypeSpreadTypeNode>;
+    }
+
+    export interface TypeSpreadTypeNode extends TypeNode {
+        kind: SyntaxKind.TypeSpread;
+        type: TypeNode;
     }
 
     export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;

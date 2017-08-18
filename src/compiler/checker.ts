@@ -7202,9 +7202,37 @@ namespace ts {
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNode));
+                links.resolvedType = createTupleType(flatMap(node.elementTypes, getTypeFromTupleElement));
             }
             return links.resolvedType;
+        }
+
+        function getTupleTypeElementTypes(type: Type): Type[] {
+            Debug.assert(isTupleLikeType(type));
+            const types = [];
+            let idx = 0;
+            let symbol: Symbol;
+            while (symbol = getPropertyOfObjectType(type, idx++ + "" as __String)) {
+                types.push(getTypeOfSymbol(symbol));
+            }
+            return types;
+        }
+
+        function getTypeFromTupleElement(node: TypeNode | TypeSpreadTypeNode): Type | Type[] {
+            if (node.kind === SyntaxKind.TypeSpread) {
+                const typeNode: TypeNode = (node as TypeSpreadTypeNode).type;
+                const type = getApparentType(getTypeFromTypeNode(<TypeNode> typeNode));
+                if (isTupleLikeType(type)) {
+                    return getTupleTypeElementTypes(type);
+                }
+                else {
+                    error(typeNode, Diagnostics.Tuple_type_spreads_may_only_be_created_from_tuple_types);
+                    return [];
+                }
+            }
+            else {
+                return getTypeFromTypeNode(node as TypeNode);
+            }
         }
 
         interface TypeSet extends Array<Type> {

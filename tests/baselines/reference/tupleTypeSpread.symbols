@@ -1,0 +1,4 @@
+=== tests/cases/compiler/tupleTypeSpread.ts ===
+type a = [1, ...[2]];
+>a : Symbol(a, Decl(tupleTypeSpread.ts, 0, 0))
+

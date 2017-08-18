@@ -85,6 +85,8 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.SpreadAssignment:
                 return visitNode(cbNode, (<SpreadAssignment>node).expression);
+            case SyntaxKind.TypeSpread:
+                return visitNode(cbNode, (<TypeSpreadTypeNode>node).type);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -1378,8 +1380,9 @@ namespace ts {
                 case ParsingContext.Parameters:
                     return isStartOfParameter();
                 case ParsingContext.TypeArguments:
-                case ParsingContext.TupleElementTypes:
                     return token() === SyntaxKind.CommaToken || isStartOfType();
+                case ParsingContext.TupleElementTypes:
+                    return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
                 case ParsingContext.ImportOrExportSpecifiers:
@@ -2585,7 +2588,7 @@ namespace ts {
 
         function parseTupleType(): TupleTypeNode {
             const node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
-            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElement, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
 
@@ -5157,6 +5160,19 @@ namespace ts {
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             node.name = parseIdentifierOrPattern();
             node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
+            return finishNode(node);
+        }
+
+        function parseTupleElement(): TypeSpreadTypeNode | TypeNode {
+            return (token() === SyntaxKind.DotDotDotToken) ?
+                parseTypeSpread() :
+                parseType();
+        }
+
+        function parseTypeSpread(): TypeSpreadTypeNode {
+            const node = <TypeSpreadTypeNode>createNode(SyntaxKind.TypeSpread);
+            parseExpected(SyntaxKind.DotDotDotToken);
+            node.type = parseTypeOperatorOrHigher();
             return finishNode(node);
         }
 
