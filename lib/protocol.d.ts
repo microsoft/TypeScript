@@ -1963,6 +1963,7 @@ declare namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ESNext = "ESNext",
     }
     const enum ModuleResolutionKind {
         Classic = "Classic",
@@ -1977,6 +1978,9 @@ declare namespace ts.server.protocol {
         ES5 = "ES5",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2016 = "ES2016",
+        ES2017 = "ES2017",
+        ESNext = "ESNext",
     }
 }
 declare namespace ts.server.protocol {
@@ -1996,6 +2000,81 @@ declare namespace ts.server.protocol {
         descriptor: TodoCommentDescriptor;
         message: string;
         position: number;
+    }
+
+    enum HighlightSpanKind {
+        none = "none",
+        definition = "definition",
+        reference = "reference",
+        writtenReference = "writtenReference",
+    }
+
+    enum ScriptElementKind {
+        unknown = "",
+        warning = "warning",
+        /** predefined type (void) or keyword (class) */
+        keyword = "keyword",
+        /** top level script node */
+        scriptElement = "script",
+        /** module foo {} */
+        moduleElement = "module",
+        /** class X {} */
+        classElement = "class",
+        /** var x = class X {} */
+        localClassElement = "local class",
+        /** interface Y {} */
+        interfaceElement = "interface",
+        /** type T = ... */
+        typeElement = "type",
+        /** enum E */
+        enumElement = "enum",
+        enumMemberElement = "enum member",
+        /**
+         * Inside module and script only
+         * const v = ..
+         */
+        variableElement = "var",
+        /** Inside function */
+        localVariableElement = "local var",
+        /**
+         * Inside module and script only
+         * function f() { }
+         */
+        functionElement = "function",
+        /** Inside function */
+        localFunctionElement = "local function",
+        /** class X { [public|private]* foo() {} } */
+        memberFunctionElement = "method",
+        /** class X { [public|private]* [get|set] foo:number; } */
+        memberGetAccessorElement = "getter",
+        memberSetAccessorElement = "setter",
+        /**
+         * class X { [public|private]* foo:number; }
+         * interface Y { foo:number; }
+         */
+        memberVariableElement = "property",
+        /** class X { constructor() { } } */
+        constructorImplementationElement = "constructor",
+        /** interface Y { ():number; } */
+        callSignatureElement = "call",
+        /** interface Y { []:number; } */
+        indexSignatureElement = "index",
+        /** interface Y { new():Y; } */
+        constructSignatureElement = "construct",
+        /** function foo(*Y*: string) */
+        parameterElement = "parameter",
+        typeParameterElement = "type parameter",
+        primitiveType = "primitive type",
+        label = "label",
+        alias = "alias",
+        constElement = "const",
+        letElement = "let",
+        directory = "directory",
+        externalModuleName = "external module name",
+        /**
+         * <JsxTagName attribute1 attribute2={0} />
+         */
+        jsxAttribute = "JSX attribute",
     }
 
     interface TypeAcquisition {
@@ -2033,8 +2112,6 @@ declare namespace ts.server.protocol {
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly
-    export type HighlightSpanKind = never;
-    export type ScriptElementKind = never;
     export type ScriptKind = never;
     export type IndentStyle = never;
     export type JsxEmit = never;
