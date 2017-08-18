@@ -11,6 +11,7 @@
         "indent": [true,
             "spaces"
         ],
+        "inline-comment-spacing": true,
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
         "next-line": [true,

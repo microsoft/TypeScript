@@ -250,9 +250,9 @@ namespace ts.server {
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
-                    /* tslint:disable no-null-keyword */
+                    /*tslint:disable no-null-keyword*/
                     req.arguments = null;
-                    /* tslint:enable no-null-keyword */
+                    /*tslint:enable no-null-keyword*/
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
