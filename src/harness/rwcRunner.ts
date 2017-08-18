@@ -91,7 +91,11 @@ namespace RWC {
                     }
 
                     // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
-                    fileNames = ts.filter(fileNames, n => fileNames.indexOf(n) === fileNames.lastIndexOf(n));
+                    const uniqueNames = ts.createMap<string>();
+                    for (const fileName of fileNames) {
+                            uniqueNames.set(ts.normalizeSlashes(fileName), fileName);
+                    }
+                    fileNames = ts.arrayFrom(uniqueNames.values());
                     
                     // Load the files
                     for (const fileName of fileNames) {
