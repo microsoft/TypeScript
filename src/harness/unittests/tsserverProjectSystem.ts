@@ -39,8 +39,9 @@ namespace ts.projectSystem {
         loggingEnabled: () => false,
         perftrc: noop,
         info: noop,
-        err: noop,
-        group: noop,
+        msg: noop,
+        startGroup: noop,
+        endGroup: noop,
         getLogFileName: (): string => undefined
     };
 

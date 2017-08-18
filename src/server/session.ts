@@ -368,7 +368,7 @@ namespace ts.server {
                     msg += "\n" + (<StackTraceError>err).stack;
                 }
             }
-            this.logger.err(msg);
+            this.logger.msg(msg, Msg.Err);
         }
 
         public send(msg: protocol.Message) {
@@ -1950,7 +1950,7 @@ namespace ts.server {
                 return this.executeWithRequestId(request.seq, () => handler(request));
             }
             else {
-                this.logger.err(`Unrecognized JSON command: ${JSON.stringify(request)}`);
+                this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
                 this.output(undefined, CommandNames.Unknown, request.seq, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
