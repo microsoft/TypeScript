@@ -4730,6 +4730,7 @@ declare namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ESNext = "ESNext",
     }
     enum ModuleResolutionKind {
         Classic = "Classic",
@@ -4744,6 +4745,9 @@ declare namespace ts.server.protocol {
         ES5 = "ES5",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2016 = "ES2016",
+        ES2017 = "ES2017",
+        ESNext = "ESNext",
     }
 }
 declare namespace ts.server {
