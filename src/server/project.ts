@@ -158,8 +158,6 @@ namespace ts.server {
 
         private typingFiles: SortedReadonlyArray<string>;
 
-        protected projectErrors: Diagnostic[];
-
         public typesVersion = 0;
 
         public isNonTsProject() {
@@ -233,12 +231,12 @@ namespace ts.server {
         /**
          * Get the errors that dont have any file name associated
          */
-        getGlobalProjectErrors() {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file);
+        getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
+            return emptyArray;
         }
 
-        getAllProjectErrors() {
-            return this.projectErrors;
+        getAllProjectErrors(): ReadonlyArray<Diagnostic> {
+            return emptyArray;
         }
 
         getLanguageService(ensureSynchronized = true): LanguageService {
@@ -323,7 +321,6 @@ namespace ts.server {
             this.program = undefined;
             this.builder = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
-            this.projectErrors = undefined;
             this.lsHost.dispose();
             this.lsHost = undefined;
 
@@ -371,6 +368,7 @@ namespace ts.server {
             return result;
         }
 
+        /*@internal*/
         getRootFilesMap() {
             return this.rootFilesMap;
         }
@@ -496,7 +494,7 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        // add a root file to project
+        // add a root file that doesnt exist on host
         addMissingFileRoot(fileName: NormalizedPath) {
             const path = this.projectService.toPath(fileName);
             this.rootFilesMap.set(path, fileName);
@@ -1004,6 +1002,8 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
+        private projectErrors: Diagnostic[];
+
         constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
@@ -1018,7 +1018,7 @@ namespace ts.server {
         }
 
         /**
-         * Checks if the project has reload from disk pending, if thats pending, it reloads (and then updates graph as part of that) instead of just updating the graph
+         * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
@@ -1030,6 +1030,7 @@ namespace ts.server {
             return super.updateGraph();
         }
 
+        /*@internal*/
         getCachedServerHost() {
             return this.lsHost.host as CachedServerHost;
         }
@@ -1119,6 +1120,20 @@ namespace ts.server {
             return getDirectoryPath(this.getConfigFilePath());
         }
 
+        /**
+         * Get the errors that dont have any file name associated
+         */
+        getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
+            return filter(this.projectErrors, diagnostic => !diagnostic.file);
+        }
+
+        /**
+         * Get all the project errors
+         */
+        getAllProjectErrors(): ReadonlyArray<Diagnostic> {
+            return this.projectErrors;
+        }
+
         setProjectErrors(projectErrors: Diagnostic[]) {
             this.projectErrors = projectErrors;
         }
@@ -1143,6 +1158,7 @@ namespace ts.server {
             }));
         }
 
+        /*@internal*/
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
             mutateMap(
                 this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
@@ -1175,6 +1191,7 @@ namespace ts.server {
             this.projectService.closeDirectoryWatcher(WatchType.WildcardDirectories, this, directory, watcher, flags, closeReason);
         }
 
+        /*@internal*/
         stopWatchingWildCards(reason: WatcherCloseReason) {
             if (this.directoriesWatchedForWildcards) {
                 clearMap(
@@ -1185,6 +1202,7 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
         watchTypeRoots() {
             const newTypeRoots = arrayToSet(this.getEffectiveTypeRoots(), dir => this.projectService.toCanonicalFileName(dir));
             mutateMap(
@@ -1203,6 +1221,7 @@ namespace ts.server {
             );
         }
 
+        /*@internal*/
         stopWatchingTypeRoots(reason: WatcherCloseReason) {
             if (this.typeRootsWatchers) {
                 clearMap(

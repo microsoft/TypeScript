@@ -1479,6 +1479,7 @@ namespace ts {
         }
     }
 
+    /*@internal*/
     export function isErrorNoInputFiles(error: Diagnostic) {
         return error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
     }
@@ -1975,15 +1976,13 @@ namespace ts {
     }
 
     /**
-     * Expands an array of file specifications.
-     *
-     * @param fileNames The literal file names to include.
-     * @param include The wildcard file specifications to include.
-     * @param exclude The wildcard file specifications to exclude.
+     * Gets the file names from the provided config file specs that contain, files, include, exclude and
+     * other properties needed to resolve the file names
+     * @param spec The config file specs extracted with file names to include, wildcards to include/exclude and other details
      * @param basePath The base path for any relative file specifications.
      * @param options Compiler options.
      * @param host The host used to resolve files and directories.
-     * @param errors An array for diagnostic reporting.
+     * @param extraFileExtensions optionaly file extra file extension information from host
      */
     export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo>): ExpandResult {
         basePath = normalizePath(basePath);
