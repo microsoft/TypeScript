@@ -14661,7 +14661,7 @@ namespace ts {
                 return;
             }
 
-            if (isInPropertyInitializer(node) &&
+            if (findAncestor(node, node => node.kind === SyntaxKind.PropertyDeclaration ? true : isExpression(node) ? false : "quit") &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && !isPropertyDeclaredInAncestorClass(prop)) {
                 error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
@@ -14822,16 +14822,6 @@ namespace ts {
                     prop.isReferenced = true;
                 }
             }
-        }
-
-        function isInPropertyInitializer(node: Node): boolean {
-            while (node) {
-                if (node.parent && node.parent.kind === SyntaxKind.PropertyDeclaration && (node.parent as PropertyDeclaration).initializer === node) {
-                    return true;
-                }
-                node = node.parent;
-            }
-            return false;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
