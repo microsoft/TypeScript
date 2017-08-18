@@ -3996,4 +3996,130 @@ namespace ts.projectSystem {
             }
         });
     });
+
+    describe("CachingFileSystemInformation", () => {
+        function getFunctionWithCalledMapForSingleArgumentCb<T>(cb: (f: string) => T) {
+            const calledMap = createMultiMap<true>();
+            return {
+                cb: (f: string) => {
+                    calledMap.add(f, /*value*/ true);
+                    return cb(f);
+                },
+                calledMap
+            };
+        }
+
+        function getFunctionWithCalledMapForFiveArgumentCb<T, U, V, W, X>(cb: (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => T) {
+            const calledMap = createMultiMap<[U, V, W, X]>();
+            return {
+                cb: (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
+                    calledMap.add(f, [arg1, arg2, arg3, arg4]);
+                    return cb(f, arg1, arg2, arg3, arg4);
+                },
+                calledMap
+            };
+        }
+
+        function checkMultiMapKeysForSingleEntry<T>(caption: string, multiMap: MultiMap<T>, expectedKeys: string[]) {
+            assert.equal(multiMap.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(multiMap.keys())} Expected: ${expectedKeys}`);
+            for (const name of expectedKeys) {
+                assert.isTrue(multiMap.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(multiMap.keys())}`);
+                assert.equal(multiMap.get(name).length, 1, `${caption} is expected to have just one entry for key ${name}, actual entry: ${multiMap.get(name)}`);
+            }
+        }
+
+        it("when calling goto definition of module", () => {
+            const clientFile: FileOrFolder = {
+                path: "/a/b/controllers/vessels/client.ts",
+                content: `
+                    import { Vessel } from '~/models/vessel';
+                    const v = new Vessel();
+                `
+            };
+            const anotherModuleFile: FileOrFolder = {
+                path: "/a/b/utils/db.ts",
+                content: "export class Bookshelf { }"
+            };
+            const moduleFile: FileOrFolder = {
+                path: "/a/b/models/vessel.ts",
+                content: `
+                    import { Bookshelf } from '~/utils/db';
+                    export class Vessel extends Bookshelf {}
+                `
+            };
+            const tsconfigFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        target: "es6",
+                        module: "es6",
+                        baseUrl: "./",  // all paths are relative to the baseUrl
+                        paths: {
+                            "~/*": ["*"]   // resolve any `~/foo/bar` to `<baseUrl>/foo/bar`
+                        }
+                    },
+                    exclude: [
+                        "api",
+                        "build",
+                        "node_modules",
+                        "public",
+                        "seeds",
+                        "sql_updates",
+                        "tests.build"
+                    ]
+                })
+            };
+
+            const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
+            const host = createServerHost(projectFiles);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+            const { configFileName } = projectService.openClientFile(clientFile.path);
+
+            assert.isDefined(configFileName, `should find config`);
+            checkNumberOfConfiguredProjects(projectService, 1);
+
+            const project = projectService.configuredProjects.get(tsconfigFile.path);
+            checkProjectActualFiles(project, map(projectFiles, f => f.path));
+
+            const fileExistsCalledOn = getFunctionWithCalledMapForSingleArgumentCb<boolean>(host.fileExists.bind(host));
+            host.fileExists = fileExistsCalledOn.cb;
+            const directoryExistsCalledOn = getFunctionWithCalledMapForSingleArgumentCb<boolean>(host.directoryExists.bind(host));
+            host.directoryExists = directoryExistsCalledOn.cb;
+            const getDirectoriesCalledOn = getFunctionWithCalledMapForSingleArgumentCb<string[]>(host.getDirectories.bind(host));
+            host.getDirectories = getDirectoriesCalledOn.cb;
+            const readFileCalledOn = getFunctionWithCalledMapForSingleArgumentCb<string>(host.readFile.bind(host));
+            host.readFile = readFileCalledOn.cb;
+            const readDirectoryCalledOn = getFunctionWithCalledMapForFiveArgumentCb<string[], ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number>(host.readDirectory.bind(host));
+            host.readDirectory = readDirectoryCalledOn.cb;
+
+
+            // Get definitions shouldnt make host requests
+            const getDefinitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(protocol.CommandTypes.Definition, {
+                file: clientFile.path,
+                position: clientFile.content.indexOf("/vessel") + 1,
+                line: undefined,
+                offset: undefined
+            });
+            const { response } = session.executeCommand(getDefinitionRequest);
+            assert.equal(response[0].file, moduleFile.path, "Should go to definition of vessel: response: " + JSON.stringify(response));
+            assert.equal(fileExistsCalledOn.calledMap.size, 0, `fileExists shouldnt be called`);
+            assert.equal(directoryExistsCalledOn.calledMap.size, 0, `directoryExists shouldnt be called`);
+            assert.equal(getDirectoriesCalledOn.calledMap.size, 0, `getDirectories shouldnt be called`);
+            assert.equal(readFileCalledOn.calledMap.size, 0, `readFile shouldnt be called`);
+            assert.equal(readDirectoryCalledOn.calledMap.size, 0, `readDirectory shouldnt be called`);
+
+            // Open the file should call only file exists on module directory and use cached value for parental directory
+            const { configFileName: config2 } = projectService.openClientFile(moduleFile.path);
+            assert.equal(config2, configFileName);
+            checkMultiMapKeysForSingleEntry("fileExists", fileExistsCalledOn.calledMap, ["/a/b/models/tsconfig.json", "/a/b/models/jsconfig.json"]);
+            assert.equal(directoryExistsCalledOn.calledMap.size, 0, `directoryExists shouldnt be called`);
+            assert.equal(getDirectoriesCalledOn.calledMap.size, 0, `getDirectories shouldnt be called`);
+            assert.equal(readFileCalledOn.calledMap.size, 0, `readFile shouldnt be called`);
+            assert.equal(readDirectoryCalledOn.calledMap.size, 0, `readDirectory shouldnt be called`);
+
+            checkNumberOfConfiguredProjects(projectService, 1);
+            assert.strictEqual(projectService.configuredProjects.get(tsconfigFile.path), project);
+        });
+    });
 }
