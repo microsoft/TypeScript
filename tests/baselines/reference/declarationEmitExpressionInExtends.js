@@ -25,12 +25,12 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var x;
-var Q = (function () {
+var Q = /** @class */ (function () {
     function Q() {
     }
     return Q;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;

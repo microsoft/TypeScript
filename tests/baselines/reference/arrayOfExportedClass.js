@@ -26,7 +26,7 @@ export = Road;
 
 //// [arrayOfExportedClass_0.js]
 "use strict";
-var Car = (function () {
+var Car = /** @class */ (function () {
     function Car() {
     }
     return Car;
@@ -34,7 +34,7 @@ var Car = (function () {
 module.exports = Car;
 //// [arrayOfExportedClass_1.js]
 "use strict";
-var Road = (function () {
+var Road = /** @class */ (function () {
     function Road() {
     }
     Road.prototype.AddCars = function (cars) {

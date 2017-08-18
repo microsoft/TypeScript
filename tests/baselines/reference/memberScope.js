@@ -10,7 +10,7 @@ module Salt {
 //// [memberScope.js]
 var Salt;
 (function (Salt) {
-    var Pepper = (function () {
+    var Pepper = /** @class */ (function () {
         function Pepper() {
         }
         return Pepper;

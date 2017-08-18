@@ -95,7 +95,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar(n) {
     }
     Bar.prototype.prop1 = function (x) {
@@ -104,7 +104,7 @@ var Bar = (function () {
     return Bar;
 }());
 // new-style class
-var Foo = (function (_super) {
+var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y, z) {
         if (z === void 0) { z = 0; }

@@ -8,6 +8,7 @@ namespace ts.server.protocol {
         /* @internal */
         BraceFull = "brace-full",
         BraceCompletion = "braceCompletion",
+        GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
         Completions = "completions",
@@ -239,6 +240,21 @@ namespace ts.server.protocol {
      */
     export interface TodoCommentsResponse extends Response {
         body?: TodoComment[];
+    }
+
+    /**
+     * A request to determine if the caret is inside a comment.
+     */
+    export interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+        command: CommandTypes.GetSpanOfEnclosingComment;
+        arguments: SpanOfEnclosingCommentRequestArgs;
+    }
+
+    export interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+         */
+        onlyMultiLine: boolean;
     }
 
     /**

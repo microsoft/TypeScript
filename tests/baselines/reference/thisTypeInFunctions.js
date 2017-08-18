@@ -207,12 +207,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var _this = this;
 // body checking
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.explicitThis = function (m) {
@@ -229,7 +229,7 @@ var C = (function () {
     };
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -330,7 +330,7 @@ c.explicitC = function (m) { return this.n + m; };
 // this:void compatibility
 c.explicitVoid = function (n) { return n; };
 // class-based assignability
-var Base1 = (function () {
+var Base1 = /** @class */ (function () {
     function Base1() {
     }
     Base1.prototype.polymorphic = function () { return this.x; };
@@ -338,21 +338,21 @@ var Base1 = (function () {
     Base1.explicitStatic = function () { return this.y; };
     return Base1;
 }());
-var Derived1 = (function (_super) {
+var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base1));
-var Base2 = (function () {
+var Base2 = /** @class */ (function () {
     function Base2() {
     }
     Base2.prototype.polymorphic = function () { return this.y; };
     Base2.prototype.explicit = function () { return this.x; };
     return Base2;
 }());
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;

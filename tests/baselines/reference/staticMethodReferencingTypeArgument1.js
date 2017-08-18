@@ -19,7 +19,7 @@ module Editor {
 //// [staticMethodReferencingTypeArgument1.js]
 var Editor;
 (function (Editor) {
-    var List = (function () {
+    var List = /** @class */ (function () {
         function List(isHead, data) {
             this.isHead = isHead;
             this.data = data;

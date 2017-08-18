@@ -980,12 +980,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[][]): T[];
+    concat(...items: ReadonlyArray<T>[]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: (T | T[])[]): T[];
+    concat(...items: (T | ReadonlyArray<T>)[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1099,12 +1099,12 @@ interface Array<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[][]): T[];
+    concat(...items: ReadonlyArray<T>[]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: (T | T[])[]): T[];
+    concat(...items: (T | ReadonlyArray<T>)[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.

@@ -43,7 +43,7 @@ define(["require", "exports"], function (require, exports) {
     var multiM;
     (function (multiM) {
         /// class b comment
-        var b = (function () {
+        var b = /** @class */ (function () {
             function b() {
             }
             return b;
@@ -53,14 +53,14 @@ define(["require", "exports"], function (require, exports) {
     /** thi is multi module 2*/
     (function (multiM) {
         /** class c comment*/
-        var c = (function () {
+        var c = /** @class */ (function () {
             function c() {
             }
             return c;
         }());
         multiM.c = c;
         // class e comment
-        var e = (function () {
+        var e = /** @class */ (function () {
             function e() {
             }
             return e;
@@ -78,14 +78,14 @@ define(["require", "exports"], function (require, exports) {
     var multiM;
     (function (multiM) {
         /** class d comment*/
-        var d = (function () {
+        var d = /** @class */ (function () {
             function d() {
             }
             return d;
         }());
         multiM.d = d;
         /// class f comment
-        var f = (function () {
+        var f = /** @class */ (function () {
             function f() {
             }
             return f;

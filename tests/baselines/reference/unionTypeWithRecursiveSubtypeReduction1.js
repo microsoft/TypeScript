@@ -20,22 +20,22 @@ t.parent;
 
 
 //// [unionTypeWithRecursiveSubtypeReduction1.js]
-var Module = (function () {
+var Module = /** @class */ (function () {
     function Module() {
     }
     return Module;
 }());
-var Namespace = (function () {
+var Namespace = /** @class */ (function () {
     function Namespace() {
     }
     return Namespace;
 }());
-var Class = (function () {
+var Class = /** @class */ (function () {
     function Class() {
     }
     return Class;
 }());
-var Property = (function () {
+var Property = /** @class */ (function () {
     function Property() {
     }
     return Property;

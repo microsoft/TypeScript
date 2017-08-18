@@ -44,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
         // variable
         M.M_V = 0;
         //calss
-        var M_C = (function () {
+        var M_C = /** @class */ (function () {
             function M_C() {
             }
             return M_C;

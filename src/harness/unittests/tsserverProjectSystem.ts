@@ -39,8 +39,9 @@ namespace ts.projectSystem {
         loggingEnabled: () => false,
         perftrc: noop,
         info: noop,
-        err: noop,
-        group: noop,
+        msg: noop,
+        startGroup: noop,
+        endGroup: noop,
         getLogFileName: (): string => undefined
     };
 
@@ -2637,10 +2638,10 @@ namespace ts.projectSystem {
 
         it("Getting errors from closed script info does not throw exception (because of getting project from orphan script info)", () => {
             let hasErrorMsg = false;
-            const { close, hasLevel, loggingEnabled, info, group, perftrc, getLogFileName } = nullLogger;
+            const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
             const logger: server.Logger = {
-                close, hasLevel, loggingEnabled, info, group, perftrc, getLogFileName,
-                err: () => {
+                close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
+                msg: () => {
                     hasErrorMsg = true;
                 }
             };

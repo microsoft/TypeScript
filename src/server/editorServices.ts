@@ -638,7 +638,7 @@ namespace ts.server {
         private onSourceFileChanged(fileName: NormalizedPath, eventKind: FileWatcherEventKind) {
             const info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
-                this.logger.err(`Error: got watch notification for unknown file: ${fileName}`);
+                this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
             }
             else if (eventKind === FileWatcherEventKind.Deleted) {
                 // File was deleted
@@ -1197,27 +1197,27 @@ namespace ts.server {
                 return;
             }
 
-            this.logger.group(info => {
-                let counter = 0;
-                counter = printProjects(this.externalProjects, info, counter);
-                counter = printProjects(arrayFrom(this.configuredProjects.values()), info, counter);
-                printProjects(this.inferredProjects, info, counter);
-
-                info("Open files: ");
-                for (const rootFile of this.openFiles) {
-                    info(`\t${rootFile.fileName}`);
-                }
-            });
-
-            function printProjects(projects: Project[], info: (msg: string) => void, counter: number): number {
+            this.logger.startGroup();
+            let counter = 0;
+            const printProjects = (projects: Project[], counter: number): number => {
                 for (const project of projects) {
-                    info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
-                    info(project.filesToString());
-                    info("-----------------------------------------------");
+                    this.logger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
+                    this.logger.info(project.filesToString());
+                    this.logger.info("-----------------------------------------------");
                     counter++;
                 }
                 return counter;
+            };
+            counter = printProjects(this.externalProjects, counter);
+            counter = printProjects(arrayFrom(this.configuredProjects.values()), counter);
+            printProjects(this.inferredProjects, counter);
+
+            this.logger.info("Open files: ");
+            for (const rootFile of this.openFiles) {
+                this.logger.info(`\t${rootFile.fileName}`);
             }
+
+            this.logger.endGroup();
         }
 
         private findConfiguredProjectByProjectName(configFileName: NormalizedPath): ConfiguredProject | undefined {

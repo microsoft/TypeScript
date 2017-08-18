@@ -20,7 +20,7 @@ switch (s) {
 
 
 //// [switchCasesExpressionTypeMismatch.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

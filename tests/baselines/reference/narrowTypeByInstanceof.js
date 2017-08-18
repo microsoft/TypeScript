@@ -26,7 +26,7 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 
 
 //// [narrowTypeByInstanceof.js]
-var Match = (function () {
+var Match = /** @class */ (function () {
     function Match() {
     }
     Match.prototype.range = function () {
@@ -34,7 +34,7 @@ var Match = (function () {
     };
     return Match;
 }());
-var FileMatch = (function () {
+var FileMatch = /** @class */ (function () {
     function FileMatch() {
     }
     FileMatch.prototype.resource = function () {

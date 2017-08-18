@@ -48,7 +48,7 @@ define(["require", "exports"], function (require, exports) {
     function foo() {
         var p2 = new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
     }
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.method = function () {
@@ -56,7 +56,7 @@ define(["require", "exports"], function (require, exports) {
         };
         return C;
     }());
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         D.prototype.method = function () {
