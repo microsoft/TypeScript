@@ -5688,7 +5688,7 @@ namespace ts {
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    (<ResolvedType>type).constructSignatures = constructSignatures || emptyArray;
+                    (<ResolvedType>type).constructSignatures = constructSignatures;
                 }
             }
         }
