@@ -14624,18 +14624,8 @@ namespace ts {
                 }
                 return unknownType;
             }
-            if (prop.valueDeclaration) {
-                if (isInPropertyInitializer(node) &&
-                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                    error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
-                }
-                if (prop.valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
-                    node.parent && node.parent.kind !== SyntaxKind.TypeReference &&
-                    !isInAmbientContext(prop.valueDeclaration) &&
-                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                    error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
-                }
-            }
+
+            checkPropertyNotUsedBeforeDeclaration(prop, node, right);
 
             markPropertyAsReferenced(prop);
 
@@ -14663,6 +14653,55 @@ namespace ts {
             }
             const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function checkPropertyNotUsedBeforeDeclaration(prop: Symbol, node: PropertyAccessExpression | QualifiedName, right: Identifier): void {
+            const { valueDeclaration } = prop;
+            if (!valueDeclaration) {
+                return;
+            }
+
+            if (isInPropertyInitializer(node) &&
+                !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
+                && !isPropertyDeclaredInAncestorClass(prop)) {
+                error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
+            }
+            else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
+                node.parent.kind !== SyntaxKind.TypeReference &&
+                !isInAmbientContext(valueDeclaration) &&
+                !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)) {
+                error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
+            }
+        }
+
+        function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
+            // It's possible that "prop.valueDeclaration" is a local declaration, but the property was also declared in a superclass.
+            // In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
+            let classSymbol = prop.parent;
+            while (true) {
+                classSymbol = getSuperClass(classSymbol);
+                if (!classSymbol) {
+                    return false;
+                }
+                const superProperty = classSymbol.members.get(prop.escapedName);
+                if (superProperty && superProperty.valueDeclaration) {
+                    return true;
+                }
+            }
+        }
+
+        // TODO: there must be a better way of doing this
+        function getSuperClass(classSymbol: Symbol): Symbol | undefined {
+            const classDecl = classSymbol.valueDeclaration;
+            if (!isClassLike(classDecl)) {
+                return undefined;
+            }
+            const superClassExpression = getClassExtendsHeritageClauseElement(classDecl);
+            if (!superClassExpression) {
+                return undefined;
+            }
+            const superClassSymbol = getSymbolAtLocation(superClassExpression.expression);
+            return superClassSymbol.flags & SymbolFlags.Class ? superClassSymbol : undefined;
         }
 
         function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
