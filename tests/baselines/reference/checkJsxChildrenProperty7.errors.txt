@@ -9,12 +9,10 @@ tests/cases/conformance/jsx/file.tsx(25,16): error TS2322: Type '{ a: 10; b: "hi
   Type '{ a: 10; b: "hi"; children: (string | Element)[]; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
       Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-        Type '(string | Element)[]' is not assignable to type 'Element[]'.
 tests/cases/conformance/jsx/file.tsx(27,16): error TS2322: Type '{ a: 10; b: "hi"; children: (string | Element)[]; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ a: 10; b: "hi"; children: (string | Element)[]; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
       Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-        Type '(string | Element)[]' is not assignable to type 'Element[]'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -56,7 +54,6 @@ tests/cases/conformance/jsx/file.tsx(27,16): error TS2322: Type '{ a: 10; b: "hi
 !!! error TS2322:   Type '{ a: 10; b: "hi"; children: (string | Element)[]; }' is not assignable to type 'Prop'.
 !!! error TS2322:     Types of property 'children' are incompatible.
 !!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-!!! error TS2322:         Type '(string | Element)[]' is not assignable to type 'Element[]'.
         <AnotherButton />  </Comp>;
     let k3 = <Comp a={10} b="hi">    <Button />
                    ~~~~~~~~~~~~~
@@ -64,5 +61,4 @@ tests/cases/conformance/jsx/file.tsx(27,16): error TS2322: Type '{ a: 10; b: "hi
 !!! error TS2322:   Type '{ a: 10; b: "hi"; children: (string | Element)[]; }' is not assignable to type 'Prop'.
 !!! error TS2322:     Types of property 'children' are incompatible.
 !!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-!!! error TS2322:         Type '(string | Element)[]' is not assignable to type 'Element[]'.
         <AnotherButton /></Comp>;

@@ -8885,6 +8885,16 @@ namespace ts {
                 return false;
             }
 
+            function reportElaboratedRelationError(headMessage: DiagnosticMessage | undefined, source: Type, target: Type) {
+                if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
+                    tryElaborateErrorsForPrimitivesAndObjects(source, target);
+                }
+                else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
+                    reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
+                }
+                reportRelationError(headMessage, source, target);
+            }
+
             /**
              * Compare two types and return
              * * Ternary.True if they are related with no assumptions,
@@ -8901,8 +8911,24 @@ namespace ts {
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
+                const comparisonId = getRelationKey(source, target, relation);
+                if (relation.has(comparisonId)) {
+                    const result = relation.get(comparisonId);
+                    // If we need to report errors, and the result is RelationComparisonResult.Failed, then we need
+                    // to redo our work to generate an error message. Otherwise, we can just return the cached result.
+                    if (!reportErrors || result !== RelationComparisonResult.Failed) {
+                        if (reportErrors && result !== RelationComparisonResult.Succeeded) {
+                            reportElaboratedRelationError(headMessage, source, target);
+                        }
+                        return result === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
+                    }
+                    if (reportErrors && result === RelationComparisonResult.Failed) {
+                        relation.set(comparisonId, RelationComparisonResult.FailedAndReported);
+                    }
+                }
+
                 if (relation === identityRelation) {
-                    return isIdenticalTo(source, target);
+                    return cacheResult(isIdenticalTo(source, target), comparisonId, /*reportErrors*/ false);
                 }
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
@@ -8912,7 +8938,7 @@ namespace ts {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
-                        return Ternary.False;
+                        return cacheResult(Ternary.False, comparisonId, reportErrors);
                     }
                     // Above we check for excess properties with respect to the entire target type. When union
                     // and intersection types are further deconstructed on the target side, we don't want to
@@ -8944,6 +8970,7 @@ namespace ts {
                             reportError(Diagnostics.Type_0_has_no_properties_in_common_with_type_1, typeToString(source), typeToString(target));
                         }
                     }
+                    // Intentionally not cached, so common property errors are repeated
                     return Ternary.False;
                 }
 
@@ -8994,13 +9021,15 @@ namespace ts {
                 isIntersectionConstituent = saveIsIntersectionConstituent;
 
                 if (!result && reportErrors) {
-                    if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
-                        tryElaborateErrorsForPrimitivesAndObjects(source, target);
-                    }
-                    else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
-                        reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
-                    }
-                    reportRelationError(headMessage, source, target);
+                    reportElaboratedRelationError(headMessage, source, target);
+                }
+
+                return cacheResult(result, comparisonId, reportErrors);
+            }
+
+            function cacheResult(result: Ternary, comparisonId: string, reportErrors?: boolean) {
+                if (!relation.has(comparisonId) && result !== Ternary.Maybe) {
+                    relation.set(comparisonId, result ? RelationComparisonResult.Succeeded : reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed);
                 }
                 return result;
             }
@@ -9189,17 +9218,6 @@ namespace ts {
                     return Ternary.False;
                 }
                 const id = getRelationKey(source, target, relation);
-                const related = relation.get(id);
-                if (related !== undefined) {
-                    if (reportErrors && related === RelationComparisonResult.Failed) {
-                        // We are elaborating errors and the cached result is an unreported failure. Record the result as a reported
-                        // failure and continue computing the relation such that errors get reported.
-                        relation.set(id, RelationComparisonResult.FailedAndReported);
-                    }
-                    else {
-                        return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
-                    }
-                }
                 if (!maybeKeys) {
                     maybeKeys = [];
                     sourceStack = [];
@@ -9239,9 +9257,6 @@ namespace ts {
                     }
                 }
                 else {
-                    // A false result goes straight into global cache (when something is false under
-                    // assumptions it will also be false without assumptions)
-                    relation.set(id, reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed);
                     maybeCount = maybeStart;
                 }
                 return result;
