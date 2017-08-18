@@ -451,6 +451,7 @@ namespace ts {
         /* @internal */
         PossiblyContainsDynamicImport = 1 << 19,
         JSDoc =              1 << 20, // If node was parsed inside jsdoc
+        WithContext =        1 << 21, // If node is within a `with` statement body
 
         BlockScoped = Let | Const,
 
@@ -458,7 +459,7 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | WithContext,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,

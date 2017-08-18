@@ -4723,7 +4723,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
-            node.statement = parseStatement();
+            node.statement = doInsideOfContext(NodeFlags.WithContext, parseStatement);
             return finishNode(node);
         }
 
