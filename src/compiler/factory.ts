@@ -3811,14 +3811,18 @@ namespace ts {
      */
     export function parenthesizeForAccess(expression: Expression): LeftHandSideExpression {
         // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
-        // to parenthesize the expression before a dot. The known exception is:
+        // to parenthesize the expression before a dot. There are two known exceptions:
         //
         //    NewExpression:
         //       new C.x        -> not the same as (new C).x
         //
+        //    EmptyObjectLiteral:
+        //       {}.toString()  -> is incorrect syntax, should be ({}).x
+        //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
-            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)) {
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)
+            && !isEmptyObjectLiteral(emittedExpression)) {
             return <LeftHandSideExpression>expression;
         }
 
