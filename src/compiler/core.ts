@@ -2736,7 +2736,7 @@ namespace ts {
         function fileExists(fileName: string): boolean {
             const path = toPath(fileName);
             const result = getCachedFileSystemEntriesForBaseDir(path);
-            return (result && hasEntry(result.files, getBaseNameOfFileName(fileName))) ||
+            return result && hasEntry(result.files, getBaseNameOfFileName(fileName)) ||
                 host.fileExists(fileName);
         }
 

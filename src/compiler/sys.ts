@@ -30,6 +30,9 @@ namespace ts {
         mtime?: Date;
     }
 
+    /**
+     * Partial interface of the System thats needed to support the caching of directory structure
+     */
     export interface PartialSystem {
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         fileExists(path: string): boolean;

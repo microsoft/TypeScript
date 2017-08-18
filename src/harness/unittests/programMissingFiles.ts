@@ -3,7 +3,7 @@
 namespace ts {
     function verifyMissingFilePaths(missingPaths: ReadonlyArray<Path>, expected: ReadonlyArray<string>) {
         assert.isDefined(missingPaths);
-        const map = arrayToMap(expected, k => k, _v => true);
+        const map = arrayToSet(expected) as Map<boolean>;
         for (const missing of missingPaths) {
             const value = map.get(missing);
             assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
