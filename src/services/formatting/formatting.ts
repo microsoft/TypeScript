@@ -1159,17 +1159,20 @@ namespace ts.formatting {
         sourceFile: SourceFile,
         position: number,
         onlyMultiLine: boolean,
-        precedingToken: Node | null | undefined = findPrecedingToken(position, sourceFile), // tslint:disable-line:no-null-keyword
+        precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
         tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
         predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
-        // Considering a fixed position,
-        // - trailing comments are those following and on the same line as the position.
-        // - leading comments are those in the range [position, start of next non-trivia token)
-        // that are not trailing comments of that position.
-        //
-        // Note, `node.start` is the start-position of the first comment following the previous
-        // token that is not a trailing comment, so the leading and trailing comments of all
-        // tokens contain all comments in a sourcefile disjointly.
+        const tokenStart = tokenAtPosition.getStart(sourceFile);
+        if (tokenStart <= position && position < tokenAtPosition.getEnd()) {
+            return undefined;
+        }
+
+        if (precedingToken === undefined) {
+            precedingToken = findPrecedingToken(position, sourceFile);
+        }
+
+        // Between two consecutive tokens, all comments are either trailing on the former
+        // or leading on the latter (and none are in both lists).
         const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
         const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
         const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
