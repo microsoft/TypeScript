@@ -1,5 +1,8 @@
 /// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
+// /// <reference types="node" />
+
+// declare var console: Console;
 
 /* @internal */
 namespace ts {
@@ -5380,6 +5383,7 @@ namespace ts {
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
+            // if (allowSyntheticDefaultImports) console.log("resolveObjectTypeMembers", typeToString(type));
             let mapper: TypeMapper;
             let members: SymbolTable;
             let callSignatures: Signature[];
@@ -7222,7 +7226,16 @@ namespace ts {
             if (node.kind === SyntaxKind.TypeSpread) {
                 const typeNode: TypeNode = (node as TypeSpreadTypeNode).type;
                 const type = getApparentType(getTypeFromTypeNode(typeNode as TypeNode));
+                // const nodeType = getTypeFromTypeNode(typeNode as TypeNode);
+                // const type = getApparentType(nodeType);
+                if (allowSyntheticDefaultImports) {
+                    // console.log("nodeType", typeToString(nodeType));
+                    // console.log("type", typeToString(type));
+                    // console.log("isTupleLikeType(nodeType)", isTupleLikeType(nodeType));
+                    // console.log("isTupleLikeType(type)", isTupleLikeType(type));
+                }
                 if (isTupleLikeType(type)) {
+                    // return map(getPropertiesOfType(type), getTypeOfSymbol);
                     return getTupleTypeElementTypes(type);
                 }
                 else {
