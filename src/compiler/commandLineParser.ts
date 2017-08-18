@@ -1479,6 +1479,7 @@ namespace ts {
         }
     }
 
+    /*@internal*/
     export function isErrorNoInputFiles(error: Diagnostic) {
         return error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
     }
