@@ -1,0 +1,9 @@
+=== tests/cases/compiler/propertyAccessOnEmptyObjectLiteral.ts ===
+class A { }
+>A : Symbol(A, Decl(propertyAccessOnEmptyObjectLiteral.ts, 0, 0))
+
+(<A>{}).toString();
+>(<A>{}).toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>A : Symbol(A, Decl(propertyAccessOnEmptyObjectLiteral.ts, 0, 0))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+
