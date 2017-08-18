@@ -860,57 +860,6 @@ namespace ts.server {
             }
         }
 
-        getReferencedFiles(path: Path): Map<true> {
-            const referencedFiles = createMap<true>();
-            if (!this.languageServiceEnabled) {
-                return referencedFiles;
-            }
-
-            const sourceFile = this.getSourceFile(path);
-            if (!sourceFile) {
-                return referencedFiles;
-            }
-            // We need to use a set here since the code can contain the same import twice,
-            // but that will only be one dependency.
-            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            if (sourceFile.imports && sourceFile.imports.length > 0) {
-                const checker: TypeChecker = this.program.getTypeChecker();
-                for (const importName of sourceFile.imports) {
-                    const symbol = checker.getSymbolAtLocation(importName);
-                    if (symbol && symbol.declarations && symbol.declarations[0]) {
-                        const declarationSourceFile = symbol.declarations[0].getSourceFile();
-                        if (declarationSourceFile) {
-                            referencedFiles.set(declarationSourceFile.path, true);
-                        }
-                    }
-                }
-            }
-
-            const currentDirectory = getDirectoryPath(path);
-            // Handle triple slash references
-            if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
-                for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = this.projectService.toPath(referencedFile.fileName, currentDirectory);
-                    referencedFiles.set(referencedPath, true);
-                }
-            }
-
-            // Handle type reference directives
-            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
-                    if (!resolvedTypeReferenceDirective) {
-                        return;
-                    }
-
-                    const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = this.projectService.toPath(fileName, currentDirectory);
-                    referencedFiles.set(typeFilePath, true);
-                });
-            }
-
-            return referencedFiles;
-        }
-
         // remove a root file from project
         protected removeRoot(info: ScriptInfo): void {
             orderedRemoveItem(this.rootFiles, info);

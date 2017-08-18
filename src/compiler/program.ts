@@ -485,7 +485,10 @@ namespace ts {
     }
 
     /**
-     * Updates the existing wild card directory watches with the new set of wild card directories from the config file after new program is created
+     * Updates the existing wild card directory watches with the new set of wild card directories from the config file
+     * after new program is created because the config file was reloaded or program was created first time from the config file
+     * Note that there is no need to call this function when the program is updated with additional files without reloading config files,
+     * as wildcard directories wont change unless reloading config file
      */
     export function updateWatchingWildcardDirectories(
         existingWatchedForWildcards: Map<WildcardDirectoryWatcher>,
