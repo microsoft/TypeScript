@@ -7221,7 +7221,7 @@ namespace ts {
         function getTypeFromTupleElement(node: TypeNode | TypeSpreadTypeNode): Type | Type[] {
             if (node.kind === SyntaxKind.TypeSpread) {
                 const typeNode: TypeNode = (node as TypeSpreadTypeNode).type;
-                const type = getApparentType(getTypeFromTypeNode(<TypeNode> typeNode));
+                const type = getApparentType(getTypeFromTypeNode(typeNode as TypeNode));
                 if (isTupleLikeType(type)) {
                     return getTupleTypeElementTypes(type);
                 }
