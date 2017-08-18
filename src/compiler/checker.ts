@@ -9074,9 +9074,9 @@ namespace ts {
 
                                         errorNode = propDeclaration;
 
-                                        const propNameNode = propDeclaration.name as Identifier;
-                                        Debug.assertNode(propNameNode, isIdentifier);
-                                        suggestion = getSuggestionForNonexistentProperty(propNameNode, target);
+                                        if (isIdentifier(propDeclaration.name)) {
+                                            suggestion = getSuggestionForNonexistentProperty(propDeclaration.name, target);
+                                        }
                                     }
 
                                     if (suggestion !== undefined) {
