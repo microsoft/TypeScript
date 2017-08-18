@@ -13102,16 +13102,12 @@ namespace ts {
             if (isJsxAttribute(node.parent)) {
                 // JSX expression is in JSX attribute
                 const attributeName = node.parent.name.escapedText;
-                if (attributesType.flags & TypeFlags.Union) {
-                    // The attribute may fulfill any of the members of the union
-                    return getTypeOfSymbol(getUnionOrIntersectionProperty(attributesType as UnionType, attributeName));
-                }
-                return getTypeOfPropertyOfType(attributesType, attributeName);
+                return getTypeOfPropertyOfContextualType(attributesType, attributeName);
             }
             else if (node.parent.kind === SyntaxKind.JsxElement) {
                 // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
                 const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfType(attributesType, jsxChildrenPropertyName) : anyType;
+                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : anyType;
             }
             else {
                 // JSX expression is in JSX spread attribute
@@ -13129,7 +13125,7 @@ namespace ts {
                 if (!attributesType || isTypeAny(attributesType)) {
                     return undefined;
                 }
-                return getTypeOfPropertyOfType(attributesType, attribute.name.escapedText);
+                return getTypeOfPropertyOfContextualType(attributesType, attribute.name.escapedText);
             }
             else {
                 return attributesType;
