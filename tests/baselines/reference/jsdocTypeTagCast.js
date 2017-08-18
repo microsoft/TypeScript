@@ -98,13 +98,13 @@ var a;
 var s;
 var a = ("" + 4);
 var s = "" + /** @type {*} */ (4);
-var SomeBase = (function () {
+var SomeBase = /** @class */ (function () {
     function SomeBase() {
         this.p = 42;
     }
     return SomeBase;
 }());
-var SomeDerived = (function (_super) {
+var SomeDerived = /** @class */ (function (_super) {
     __extends(SomeDerived, _super);
     function SomeDerived() {
         var _this = _super.call(this) || this;
@@ -113,7 +113,7 @@ var SomeDerived = (function (_super) {
     }
     return SomeDerived;
 }(SomeBase));
-var SomeOther = (function () {
+var SomeOther = /** @class */ (function () {
     function SomeOther() {
         this.q = 42;
     }

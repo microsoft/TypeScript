@@ -14,7 +14,7 @@ class LanguageSpec_section_4_5_error_cases {
 }
 
 //// [accessors_spec_section-4.5_error-cases.js]
-var LanguageSpec_section_4_5_error_cases = (function () {
+var LanguageSpec_section_4_5_error_cases = /** @class */ (function () {
     function LanguageSpec_section_4_5_error_cases() {
     }
     Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedSetter_SetterFirst", {

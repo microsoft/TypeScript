@@ -2508,6 +2508,23 @@ namespace FourSlash {
             }
         }
 
+        public verifySpanOfEnclosingComment(negative: boolean, onlyMultiLineDiverges?: boolean) {
+            const expected = !negative;
+            const position = this.currentCaretPosition;
+            const fileName = this.activeFile.fileName;
+            const actual = !!this.languageService.getSpanOfEnclosingComment(fileName, position, /*onlyMultiLine*/ false);
+            const actualOnlyMultiLine = !!this.languageService.getSpanOfEnclosingComment(fileName, position, /*onlyMultiLine*/ true);
+            if (expected !== actual || onlyMultiLineDiverges === (actual === actualOnlyMultiLine)) {
+                this.raiseError(`verifySpanOfEnclosingComment failed:
+                position: '${position}'
+                fileName: '${fileName}'
+                onlyMultiLineDiverges: '${onlyMultiLineDiverges}'
+                actual: '${actual}'
+                actualOnlyMultiLine: '${actualOnlyMultiLine}'
+                expected: '${expected}'.`);
+            }
+        }
+
         /*
             Check number of navigationItems which match both searchValue and matchKind,
             if a filename is passed in, limit the results to that file.
@@ -3646,6 +3663,10 @@ namespace FourSlashInterface {
 
         public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
+        }
+
+        public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
+            this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
         public codeFixAvailable() {

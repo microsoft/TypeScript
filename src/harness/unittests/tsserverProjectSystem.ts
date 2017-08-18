@@ -37,8 +37,9 @@ namespace ts.projectSystem {
         loggingEnabled: () => false,
         perftrc: noop,
         info: noop,
-        err: noop,
-        group: noop,
+        msg: noop,
+        startGroup: noop,
+        endGroup: noop,
         getLogFileName: (): string => undefined
     };
 
@@ -170,7 +171,7 @@ namespace ts.projectSystem {
             typingsInstaller: undefined,
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: nullLogger,
+            logger: opts.logger || nullLogger,
             canUseEvents: false
         };
 
@@ -2146,6 +2147,47 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 1, inferredProjects: 0 });
             checkProjectActualFiles(projectService.externalProjects[0], [site.path, libFile.path]);
+        });
+
+        it("Getting errors from closed script info does not throw exception (because of getting project from orphan script info)", () => {
+            let hasErrorMsg = false;
+            const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
+            const logger: server.Logger = {
+                close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
+                msg: () => {
+                    hasErrorMsg = true;
+                }
+            };
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {} })
+            };
+            const host = createServerHost([f1, libFile, config]);
+            const session = createSession(host, { logger });
+            session.executeCommandSeq(<protocol.OpenRequest>{
+                command: server.CommandNames.Open,
+                arguments: {
+                    file: f1.path
+                }
+            });
+            session.executeCommandSeq(<protocol.CloseRequest>{
+                command: server.CommandNames.Close,
+                arguments: {
+                    file: f1.path
+                }
+            });
+            session.executeCommandSeq(<protocol.GeterrRequest>{
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [f1.path]
+                }
+            });
+            assert.isFalse(hasErrorMsg);
         });
     });
 

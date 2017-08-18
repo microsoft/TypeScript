@@ -17,9 +17,20 @@ namespace ts.server {
         loggingEnabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;
-        err(s: string): void;
-        group(logGroupEntries: (log: (msg: string) => void) => void): void;
+        startGroup(): void;
+        endGroup(): void;
+        msg(s: string, type?: Msg.Types): void;
         getLogFileName(): string;
+    }
+
+    export namespace Msg {
+        export type Err = "Err";
+        export const Err: Err = "Err";
+        export type Info = "Info";
+        export const Info: Info = "Info";
+        export type Perf = "Perf";
+        export const Perf: Perf = "Perf";
+        export type Types = Err | Info | Perf;
     }
 
     function getProjectRootPath(project: Project): Path {
@@ -115,9 +126,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-/* tslint:disable:no-null-keyword */
         const map = createMap<T>();
-/* tslint:enable:no-null-keyword */
         return {
             get(path) {
                 return map.get(path);

@@ -82,7 +82,7 @@ function fn() {
     });
 }
 exports.fn = fn;
-var cl1 = (function () {
+var cl1 = /** @class */ (function () {
     function cl1() {
     }
     cl1.prototype.m = function () {
@@ -116,7 +116,7 @@ exports.obj = {
         });
     }); }
 };
-var cl2 = (function () {
+var cl2 = /** @class */ (function () {
     function cl2() {
         var _this = this;
         this.p = {

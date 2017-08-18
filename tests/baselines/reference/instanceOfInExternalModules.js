@@ -15,7 +15,7 @@ function IsFoo(value: any): boolean {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var Foo = (function () {
+    var Foo = /** @class */ (function () {
         function Foo() {
         }
         return Foo;

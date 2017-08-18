@@ -12,7 +12,7 @@ export = Bar;
 //// [Foo.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Foo = (function () {
+    var Foo = /** @class */ (function () {
         function Foo() {
         }
         return Foo;
@@ -32,7 +32,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports", "Foo"], function (require, exports, Error) {
     "use strict";
-    var Bar = (function (_super) {
+    var Bar = /** @class */ (function (_super) {
         __extends(Bar, _super);
         function Bar() {
             return _super !== null && _super.apply(this, arguments) || this;

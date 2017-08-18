@@ -720,8 +720,14 @@ namespace ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node {
-        return find(startNode || sourceFile);
+    /**
+     * Finds the rightmost token satisfying `token.end <= position`,
+     * excluding `JsxText` tokens containing only whitespace.
+     */
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node | undefined {
+        const result = find(startNode || sourceFile);
+        Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
+        return result;
 
         function findRightmostToken(n: Node): Node {
             if (isToken(n)) {
@@ -742,19 +748,17 @@ namespace ts {
             const children = n.getChildren();
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
-                // condition 'position < child.end' checks if child node end after the position
-                // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
-                // aaaa___bbbb___$__ccc
-                // after we found child node with end after the position we check if start of the node is after the position.
-                // if yes - then position is in the trivia and we need to look into the previous child to find the token in question.
-                // if no - position is in the node itself so we should recurse in it.
-                // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
-                // if this is the case - then we should assume that token in question is located in previous child.
-                if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
+                // Note that the span of a node's tokens is [node.getStart(...), node.end).
+                // Given that `position < child.end` and child has constituent tokens, we distinguish these cases:
+                // 1) `position` precedes `child`'s tokens or `child` has no tokens (ie: in a comment or whitespace preceding `child`):
+                // we need to find the last token in a previous child.
+                // 2) `position` is within the same span: we recurse on `child`.
+                if (position < child.end) {
                     const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
+                        !nodeHasTokens(child) ||
+                        isWhiteSpaceOnlyJsxText(child);
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
@@ -780,10 +784,17 @@ namespace ts {
             }
         }
 
-        /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
+        /**
+         * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
+         */
         function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
             for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
-                if (nodeHasTokens(children[i])) {
+                const child = children[i];
+
+                if (isWhiteSpaceOnlyJsxText(child)) {
+                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                }
+                else if (nodeHasTokens(children[i])) {
                     return children[i];
                 }
             }
@@ -851,6 +862,10 @@ namespace ts {
         return false;
     }
 
+    export function isWhiteSpaceOnlyJsxText(node: Node): node is JsxText {
+        return isJsxText(node) && node.containsOnlyWhiteSpaces;
+    }
+
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
@@ -863,41 +878,11 @@ namespace ts {
      * @param predicate Additional predicate to test on the comment range.
      */
     export function isInComment(
-            sourceFile: SourceFile,
-            position: number,
-            tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
-            predicate?: (c: CommentRange) => boolean): boolean {
-        return position <= tokenAtPosition.getStart(sourceFile) &&
-            (isInCommentRange(getLeadingCommentRanges(sourceFile.text, tokenAtPosition.pos)) ||
-                isInCommentRange(getTrailingCommentRanges(sourceFile.text, tokenAtPosition.pos)));
-
-        function isInCommentRange(commentRanges: CommentRange[]): boolean {
-            return forEach(commentRanges, c => isPositionInCommentRange(c, position, sourceFile.text) && (!predicate || predicate(c)));
-        }
-    }
-
-    function isPositionInCommentRange({ pos, end, kind }: ts.CommentRange, position: number, text: string): boolean {
-        if (pos < position && position < end) {
-            return true;
-        }
-        else if (position === end) {
-            // The end marker of a single-line comment does not include the newline character.
-            // In the following case, we are inside a comment (^ denotes the cursor position):
-            //
-            //    // asdf   ^\n
-            //
-            // But for multi-line comments, we don't want to be inside the comment in the following case:
-            //
-            //    /* asdf */^
-            //
-            // Internally, we represent the end of the comment at the newline and closing '/', respectively.
-            return kind === SyntaxKind.SingleLineCommentTrivia ||
-                // true for unterminated multi-line comment
-                !(text.charCodeAt(end - 1) === CharacterCodes.slash && text.charCodeAt(end - 2) === CharacterCodes.asterisk);
-        }
-        else {
-            return false;
-        }
+        sourceFile: SourceFile,
+        position: number,
+        tokenAtPosition?: Node,
+        predicate?: (c: CommentRange) => boolean): boolean {
+        return !!formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false, /*precedingToken*/ undefined, tokenAtPosition, predicate);
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
@@ -916,7 +901,7 @@ namespace ts {
 
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
-        // Note, that getWidth() does not take trivia into account.
+        // Note: getWidth() does not take trivia into account.
         return n.getWidth() !== 0;
     }
 
@@ -1241,6 +1226,7 @@ namespace ts {
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
         return mapToDisplayParts(writer => {
             typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });

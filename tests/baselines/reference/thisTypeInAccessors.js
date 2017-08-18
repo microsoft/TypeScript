@@ -57,7 +57,7 @@ var copiedFromGetterUnannotated = {
     get x() { return this.n; },
     set x(n) { this.n = n; }
 };
-var Explicit = (function () {
+var Explicit = /** @class */ (function () {
     function Explicit() {
         this.n = 17;
     }
@@ -69,7 +69,7 @@ var Explicit = (function () {
     });
     return Explicit;
 }());
-var Contextual = (function () {
+var Contextual = /** @class */ (function () {
     function Contextual() {
         this.n = 21;
     }

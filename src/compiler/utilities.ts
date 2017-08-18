@@ -650,7 +650,7 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
+        return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
     }
 
     export function getJSDocCommentRanges(node: Node, text: string) {

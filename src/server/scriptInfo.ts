@@ -328,6 +328,10 @@ namespace ts.server {
             }
         }
 
+        isOrphan() {
+            return this.containingProjects.length === 0;
+        }
+
         /**
          *  @param line 1 based index
          */

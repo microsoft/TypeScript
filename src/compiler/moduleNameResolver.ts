@@ -201,7 +201,7 @@ namespace ts {
         let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         if (resolved) {
             if (!options.preserveSymlinks) {
-                resolved = realpath(resolved, host, traceEnabled);
+                resolved = realPath(resolved, host, traceEnabled);
             }
 
             if (traceEnabled) {
@@ -741,20 +741,21 @@ namespace ts {
 
                 let resolvedValue = resolved.value;
                 if (!compilerOptions.preserveSymlinks) {
-                    resolvedValue = resolvedValue && { ...resolved.value, path: realpath(resolved.value.path, host, traceEnabled), extension: resolved.value.extension };
+                    resolvedValue = resolvedValue && { ...resolved.value, path: realPath(resolved.value.path, host, traceEnabled), extension: resolved.value.extension };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
                 return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
             }
             else {
-                const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+                const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
                 const resolved = nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state, /*considerPackageJson*/ true);
-                return resolved && toSearchResult({ resolved, isExternalLibraryImport: false });
+                // Treat explicit "node_modules" import as an external library import.
+                return resolved && toSearchResult({ resolved, isExternalLibraryImport: contains(parts, "node_modules") });
             }
         }
     }
 
-    function realpath(path: string, host: ModuleResolutionHost, traceEnabled: boolean): string {
+    function realPath(path: string, host: ModuleResolutionHost, traceEnabled: boolean): string {
         if (!host.realpath) {
             return path;
         }

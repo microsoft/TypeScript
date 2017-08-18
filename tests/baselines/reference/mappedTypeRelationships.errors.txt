@@ -58,7 +58,19 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(46,5): error TS2
                 Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(51,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(56,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
+tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(61,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+  Type 'T[string]' is not assignable to type 'U[keyof T]'.
+    Type 'T[string]' is not assignable to type 'U[string]'.
+      Type 'T[keyof T]' is not assignable to type 'U[string]'.
+        Type 'T[string]' is not assignable to type 'U[string]'.
+          Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(61,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
+tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(66,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
+  Type 'T[string]' is not assignable to type 'U[K]'.
+    Type 'T[string]' is not assignable to type 'U[string]'.
+      Type 'T[K]' is not assignable to type 'U[string]'.
+        Type 'T[string]' is not assignable to type 'U[string]'.
+          Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(66,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(72,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(78,5): error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
@@ -88,7 +100,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
             Type 'T' is not assignable to type 'U'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeRelationships.ts (28 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeRelationships.ts (30 errors) ====
     function f1<T>(x: T, k: keyof T) {
         return x[k];
     }
@@ -227,12 +239,26 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         x[k] = y[k];
         y[k] = x[k];  // Error
         ~~~~
+!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[string]'.
+!!! error TS2322:       Type 'T[keyof T]' is not assignable to type 'U[string]'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'U[string]'.
+!!! error TS2322:           Type 'T' is not assignable to type 'U'.
+        ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
     }
     
     function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
         x[k] = y[k];
         y[k] = x[k];  // Error
+        ~~~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[K]'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[string]'.
+!!! error TS2322:       Type 'T[K]' is not assignable to type 'U[string]'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'U[string]'.
+!!! error TS2322:           Type 'T' is not assignable to type 'U'.
         ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
     }

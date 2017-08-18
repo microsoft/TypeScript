@@ -63,7 +63,7 @@ namespace ts {
         const projectService = new server.ProjectService(svcOpts);
         const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */ true, /*containingProject*/ undefined);
 
-        const project = projectService.assignScriptInfoToInferredProject(rootScriptInfo);
+        const project = projectService.assignOrphanScriptInfoToInferredProject(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD, noLib: true } );
         return {
             project,
