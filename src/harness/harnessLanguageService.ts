@@ -686,7 +686,7 @@ namespace Harness.LanguageService {
             this.host.log(message);
         }
 
-        err(message: string): void {
+        msg(message: string): void {
             this.host.log(message);
         }
 
@@ -702,7 +702,8 @@ namespace Harness.LanguageService {
             return false;
         }
 
-        group() { throw ts.notImplemented(); }
+        startGroup() { throw ts.notImplemented(); }
+        endGroup() { throw ts.notImplemented(); }
 
         perftrc(message: string): void {
             return this.host.log(message);
