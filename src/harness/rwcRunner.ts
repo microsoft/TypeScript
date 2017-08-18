@@ -96,7 +96,7 @@ namespace RWC {
                             uniqueNames.set(ts.normalizeSlashes(fileName), fileName);
                     }
                     fileNames = ts.arrayFrom(uniqueNames.values());
-                    
+
                     // Load the files
                     for (const fileName of fileNames) {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
