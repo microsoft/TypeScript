@@ -236,7 +236,7 @@ interface ObjectConstructor {
       * Returns the names of the enumerable properties and methods of an object.
       * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
       */
-    keys(o: any): string[];
+    keys(o: {}): string[];
 }
 
 /**
@@ -5689,7 +5689,7 @@ interface Map<K, V> {
     readonly [Symbol.toStringTag]: "Map";
 }
 
-interface WeakMap<K extends object, V>{
+interface WeakMap<K extends object, V> {
     readonly [Symbol.toStringTag]: "WeakMap";
 }
 

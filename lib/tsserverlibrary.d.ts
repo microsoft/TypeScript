@@ -1175,7 +1175,7 @@ declare namespace ts {
     interface CatchClause extends Node {
         kind: SyntaxKind.CatchClause;
         parent?: TryStatement;
-        variableDeclaration: VariableDeclaration;
+        variableDeclaration?: VariableDeclaration;
         block: Block;
     }
     type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
@@ -1452,38 +1452,39 @@ declare namespace ts {
     interface FlowLock {
         locked?: boolean;
     }
-    interface AfterFinallyFlow extends FlowNode, FlowLock {
+    interface AfterFinallyFlow extends FlowNodeBase, FlowLock {
         antecedent: FlowNode;
     }
-    interface PreFinallyFlow extends FlowNode {
+    interface PreFinallyFlow extends FlowNodeBase {
         antecedent: FlowNode;
         lock: FlowLock;
     }
-    interface FlowNode {
+    type FlowNode = AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation;
+    interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;
     }
-    interface FlowStart extends FlowNode {
+    interface FlowStart extends FlowNodeBase {
         container?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
-    interface FlowLabel extends FlowNode {
+    interface FlowLabel extends FlowNodeBase {
         antecedents: FlowNode[];
     }
-    interface FlowAssignment extends FlowNode {
+    interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
     }
-    interface FlowCondition extends FlowNode {
+    interface FlowCondition extends FlowNodeBase {
         expression: Expression;
         antecedent: FlowNode;
     }
-    interface FlowSwitchClause extends FlowNode {
+    interface FlowSwitchClause extends FlowNodeBase {
         switchStatement: SwitchStatement;
         clauseStart: number;
         clauseEnd: number;
         antecedent: FlowNode;
     }
-    interface FlowArrayMutation extends FlowNode {
+    interface FlowArrayMutation extends FlowNodeBase {
         node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
@@ -1701,6 +1702,7 @@ declare namespace ts {
         AddUndefined = 8192,
         WriteClassExpressionAsTypeLiteral = 16384,
         InArrayType = 32768,
+        UseAliasDefinedOutsideCurrentScope = 65536,
     }
     enum SymbolFormatFlags {
         None = 0,
@@ -1987,6 +1989,12 @@ declare namespace ts {
         NoDefault = 2,
         AnyDefault = 4,
     }
+    enum Ternary {
+        False = 0,
+        Maybe = 1,
+        True = -1,
+    }
+    type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
     interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
@@ -2073,6 +2081,7 @@ declare namespace ts {
         outFile?: string;
         paths?: MapLike<string[]>;
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         jsxFactory?: string;
@@ -2186,6 +2195,11 @@ declare namespace ts {
     }
     interface ResolvedModuleFull extends ResolvedModule {
         extension: Extension;
+        packageId?: PackageId;
+    }
+    interface PackageId {
+        name: string;
+        version: string;
     }
     enum Extension {
         Ts = ".ts",
@@ -2402,6 +2416,8 @@ declare namespace ts {
     function collapseTextChangeRangesAcrossMultipleVersions(changes: ReadonlyArray<TextChangeRange>): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration;
     function isParameterPropertyDeclaration(node: Node): boolean;
+    function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
+    function isEmptyBindingElement(node: BindingElement): boolean;
     function getCombinedModifierFlags(node: Node): ModifierFlags;
     function getCombinedNodeFlags(node: Node): NodeFlags;
     function validateLocaleAndSetLanguage(locale: string, sys: {
@@ -2959,8 +2975,8 @@ declare namespace ts {
     function updateDefaultClause(node: DefaultClause, statements: ReadonlyArray<Statement>): DefaultClause;
     function createHeritageClause(token: HeritageClause["token"], types: ReadonlyArray<ExpressionWithTypeArguments>): HeritageClause;
     function updateHeritageClause(node: HeritageClause, types: ReadonlyArray<ExpressionWithTypeArguments>): HeritageClause;
-    function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block): CatchClause;
-    function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block): CatchClause;
+    function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block): CatchClause;
+    function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
     function createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment;
     function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
     function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression): ShorthandPropertyAssignment;
@@ -3687,7 +3703,10 @@ declare namespace ts.server {
         error: undefined;
     } | {
         module: undefined;
-        error: {};
+        error: {
+            stack?: string;
+            message?: string;
+        };
     };
     interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
@@ -3838,9 +3857,6 @@ declare namespace ts.server {
     function isInferredProjectName(name: string): boolean;
     function makeInferredProjectName(counter: number): string;
     function createSortedArray<T>(): SortedArray<T>;
-    function toSortedArray(arr: string[]): SortedArray<string>;
-    function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
-    function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>): void;
     class ThrottledOperations {
         private readonly host;
         private pendingTimeouts;
@@ -3857,8 +3873,6 @@ declare namespace ts.server {
         scheduleCollect(): void;
         private static run(self);
     }
-    function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void;
-    function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void;
 }
 declare namespace ts.server.protocol {
     enum CommandTypes {
@@ -4168,7 +4182,7 @@ declare namespace ts.server.protocol {
     }
     interface RenameResponseBody {
         info: RenameInfo;
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
     interface RenameResponse extends Response {
         body?: RenameResponseBody;
@@ -4248,6 +4262,7 @@ declare namespace ts.server.protocol {
     }
     interface SetCompilerOptionsForInferredProjectsArgs {
         options: ExternalProjectCompilerOptions;
+        projectRootPath?: string;
     }
     interface SetCompilerOptionsForInferredProjectsResponse extends Response {
     }
@@ -4681,6 +4696,7 @@ declare namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
@@ -4750,6 +4766,7 @@ declare namespace ts.server {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
+        useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -4757,8 +4774,8 @@ declare namespace ts.server {
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
-        globalPlugins?: string[];
-        pluginProbeLocations?: string[];
+        globalPlugins?: ReadonlyArray<string>;
+        pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
     }
     class Session implements EventSender {
@@ -4780,13 +4797,13 @@ declare namespace ts.server {
         private defaultEventHandler(event);
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
-        configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: Diagnostic[]): void;
+        configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ReadonlyArray<Diagnostic>): void;
         event<T>(info: T, eventName: string): void;
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
-        private updateProjectStructure(seq, matchSeq, ms?);
-        private updateErrorCheck(next, checkList, seq, matchSeq, ms?, followMs?, requireOpen?);
+        private updateProjectStructure();
+        private updateErrorCheck(next, checkList, ms, requireOpen?);
         private cleanProjects(caption, projects);
         private cleanup();
         private getEncodedSemanticClassifications(args);
@@ -4878,37 +4895,9 @@ declare namespace ts.server {
     }
 }
 declare namespace ts.server {
-    interface LineCollection {
-        charCount(): number;
-        lineCount(): number;
-        isLeaf(): this is LineLeaf;
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
-    }
     interface AbsolutePositionAndLineText {
         absolutePosition: number;
         lineText: string | undefined;
-    }
-    enum CharRangeSection {
-        PreStart = 0,
-        Start = 1,
-        Entire = 2,
-        Mid = 3,
-        End = 4,
-        PostEnd = 5,
-    }
-    interface ILineIndexWalker {
-        goSubtree: boolean;
-        done: boolean;
-        leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
-        pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineNode, nodeType: CharRangeSection): void;
-        post?(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineNode, nodeType: CharRangeSection): void;
-    }
-    class TextChange {
-        pos: number;
-        deleteLen: number;
-        insertedText: string;
-        constructor(pos: number, deleteLen: number, insertedText?: string);
-        getTextChangeRange(): TextChangeRange;
     }
     class ScriptVersionCache {
         private changes;
@@ -4921,78 +4910,16 @@ declare namespace ts.server {
         private versionToIndex(version);
         private currentVersionToIndex();
         edit(pos: number, deleteLen: number, insertedText?: string): void;
-        latest(): LineIndexSnapshot;
-        latestVersion(): number;
         reload(script: string): void;
-        getSnapshot(): LineIndexSnapshot;
+        getSnapshot(): IScriptSnapshot;
+        private _getSnapshot();
+        getSnapshotVersion(): number;
+        getLineInfo(line: number): AbsolutePositionAndLineText;
+        lineOffsetToPosition(line: number, column: number): number;
+        positionToLineOffset(position: number): protocol.Location;
+        lineToTextSpan(line: number): TextSpan;
         getTextChangesBetweenVersions(oldVersion: number, newVersion: number): TextChangeRange;
         static fromString(script: string): ScriptVersionCache;
-    }
-    class LineIndexSnapshot implements IScriptSnapshot {
-        readonly version: number;
-        readonly cache: ScriptVersionCache;
-        readonly index: LineIndex;
-        readonly changesSincePreviousVersion: ReadonlyArray<TextChange>;
-        constructor(version: number, cache: ScriptVersionCache, index: LineIndex, changesSincePreviousVersion?: ReadonlyArray<TextChange>);
-        getText(rangeStart: number, rangeEnd: number): string;
-        getLength(): number;
-        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
-    }
-    class LineIndex {
-        root: LineNode;
-        checkEdits: boolean;
-        absolutePositionOfStartOfLine(oneBasedLine: number): number;
-        positionToLineOffset(position: number): protocol.Location;
-        private positionToColumnAndLineText(position);
-        lineNumberToInfo(oneBasedLine: number): AbsolutePositionAndLineText;
-        load(lines: string[]): void;
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
-        getText(rangeStart: number, rangeLength: number): string;
-        getLength(): number;
-        every(f: (ll: LineLeaf, s: number, len: number) => boolean, rangeStart: number, rangeEnd?: number): boolean;
-        edit(pos: number, deleteLength: number, newText?: string): LineIndex;
-        private static buildTreeFromBottom(nodes);
-        static linesFromText(text: string): {
-            lines: string[];
-            lineMap: number[];
-        };
-    }
-    class LineNode implements LineCollection {
-        private readonly children;
-        totalChars: number;
-        totalLines: number;
-        constructor(children?: LineCollection[]);
-        isLeaf(): boolean;
-        updateCounts(): void;
-        private execWalk(rangeStart, rangeLength, walkFns, childIndex, nodeType);
-        private skipChild(relativeStart, relativeLength, childIndex, walkFns, nodeType);
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
-        charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): {
-            oneBasedLine: number;
-            zeroBasedColumn: number;
-            lineText: string | undefined;
-        };
-        lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): {
-            position: number;
-            leaf: LineLeaf | undefined;
-        };
-        private childFromLineNumber(relativeOneBasedLine, positionAccumulator);
-        private childFromCharOffset(lineNumberAccumulator, relativePosition);
-        private splitAfter(childIndex);
-        remove(child: LineCollection): void;
-        private findChildIndex(child);
-        insertAt(child: LineCollection, nodes: LineCollection[]): LineNode[];
-        add(collection: LineCollection): void;
-        charCount(): number;
-        lineCount(): number;
-    }
-    class LineLeaf implements LineCollection {
-        text: string;
-        constructor(text: string);
-        isLeaf(): boolean;
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
-        charCount(): number;
-        lineCount(): number;
     }
 }
 declare namespace ts.server {
@@ -5174,7 +5101,7 @@ declare namespace ts.server {
         private projectStructureVersion;
         private projectStateVersion;
         private typingFiles;
-        protected projectErrors: Diagnostic[];
+        protected projectErrors: ReadonlyArray<Diagnostic>;
         typesVersion: number;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
@@ -5182,8 +5109,8 @@ declare namespace ts.server {
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
         constructor(projectName: string, projectKind: ProjectKind, projectService: ProjectService, documentRegistry: DocumentRegistry, hasExplicitListOfFiles: boolean, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
         private setInternalCompilerOptionsForEmittingJsFiles();
-        getGlobalProjectErrors(): Diagnostic[];
-        getAllProjectErrors(): Diagnostic[];
+        getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
+        getAllProjectErrors(): ReadonlyArray<Diagnostic>;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         getProjectVersion(): string;
@@ -5228,12 +5155,13 @@ declare namespace ts.server {
         protected removeRoot(info: ScriptInfo): void;
     }
     class InferredProject extends Project {
+        readonly projectRootPath: string | undefined;
         private static readonly newName;
         private _isJsInferredProject;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
         directoriesWatchedForTsconfig: string[];
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions);
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string);
         addRoot(info: ScriptInfo): void;
         removeRoot(info: ScriptInfo): void;
         getProjectRootPath(): string;
@@ -5257,7 +5185,7 @@ declare namespace ts.server {
         private enablePlugin(pluginConfigEntry, searchPaths);
         private enableProxy(pluginModuleFactory, configEntry);
         getProjectRootPath(): string;
-        setProjectErrors(projectErrors: Diagnostic[]): void;
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>): void;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
         getTypeAcquisition(): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
@@ -5279,7 +5207,7 @@ declare namespace ts.server {
         constructor(externalProjectName: string, projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean, projectFilePath?: string);
         getProjectRootPath(): string;
         getTypeAcquisition(): TypeAcquisition;
-        setProjectErrors(projectErrors: Diagnostic[]): void;
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>): void;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }
 }
@@ -5301,7 +5229,7 @@ declare namespace ts.server {
         data: {
             triggerFile: string;
             configFileName: string;
-            diagnostics: Diagnostic[];
+            diagnostics: ReadonlyArray<Diagnostic>;
         };
     }
     interface ProjectLanguageServiceStateEvent {
@@ -5357,7 +5285,7 @@ declare namespace ts.server {
     function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
     function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
     function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
-    function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean): T[];
+    function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean): T[];
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
@@ -5365,18 +5293,19 @@ declare namespace ts.server {
     }
     interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;
-        configFileErrors?: Diagnostic[];
+        configFileErrors?: ReadonlyArray<Diagnostic>;
     }
     interface ProjectServiceOptions {
         host: ServerHost;
         logger: Logger;
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
+        useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
-        globalPlugins?: string[];
-        pluginProbeLocations?: string[];
+        globalPlugins?: ReadonlyArray<string>;
+        pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
     }
     class ProjectService {
@@ -5389,7 +5318,7 @@ declare namespace ts.server {
         readonly configuredProjects: ConfiguredProject[];
         readonly openFiles: ScriptInfo[];
         private compilerOptionsForInferredProjects;
-        private compileOnSaveForInferredProjects;
+        private compilerOptionsForInferredProjectsPerProjectRoot;
         private readonly projectToSizeMap;
         private readonly directoryWatchers;
         private readonly throttledOperations;
@@ -5402,6 +5331,7 @@ declare namespace ts.server {
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
+        readonly useInferredProjectPerProjectRoot: boolean;
         readonly typingsInstaller: ITypingsInstaller;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;
@@ -5414,7 +5344,7 @@ declare namespace ts.server {
         getCompilerOptionsForInferredProjects(): CompilerOptions;
         onUpdateLanguageServiceStateForProject(project: Project, languageServiceEnabled: boolean): void;
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void;
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions): void;
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         stopWatchingDirectory(directory: string): void;
         findProject(projectName: string): Project;
         getDefaultProjectForFile(fileName: NormalizedPath, refreshInferredProjects: boolean): Project;
@@ -5431,7 +5361,7 @@ declare namespace ts.server {
         private onConfigFileAddedForInferredProject(fileName);
         private getCanonicalFileName(fileName);
         private removeProject(project);
-        private assignScriptInfoToInferredProjectIfNecessary(info, addToListOfOpenFiles);
+        private assignScriptInfoToInferredProjectIfNecessary(info, addToListOfOpenFiles, projectRootPath?);
         private closeOpenFile(info);
         private deleteOrphanScriptInfoNotInAnyProject();
         private openOrUpdateConfiguredProjectForFile(fileName, projectRootPath?);
@@ -5450,7 +5380,10 @@ declare namespace ts.server {
         private openConfigFile(configFileName, clientFileName?);
         private updateNonInferredProject<T>(project, newUncheckedFiles, propertyReader, newOptions, newTypeAcquisition, compileOnSave, configFileErrors);
         private updateConfiguredProject(project);
-        createInferredProjectWithRootFileIfNecessary(root: ScriptInfo): InferredProject;
+        private getOrCreateInferredProjectForProjectRootPathIfEnabled(root, projectRootPath);
+        private getOrCreateSingleInferredProjectIfEnabled();
+        private createInferredProject(isSingleInferredProject?, projectRootPath?);
+        createInferredProjectWithRootFileIfNecessary(root: ScriptInfo, projectRootPath?: string): InferredProject;
         getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind): ScriptInfo;
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         watchClosedScriptInfo(info: ScriptInfo): void;
