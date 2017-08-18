@@ -1,4 +1,4 @@
-tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(6,3): error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '___foo'?
+tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(6,3): error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '__foo'?
 
 
 ==== tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts (1 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(6,3): error TS255
     
     a.___foo
       ~~~~~~
-!!! error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '___foo'?
+!!! error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '__foo'?
     
     // @filename def.ts
     export let b: {
