@@ -5911,13 +5911,7 @@ namespace ts {
                 return transformed;
             }
             const baseObjectType = getBaseConstraintOfType(type.objectType);
-            const keepTypeParameterForMappedType = baseObjectType && getObjectFlags(baseObjectType) & ObjectFlags.Mapped && type.indexType.flags & TypeFlags.TypeParameter;
-            const baseIndexType = !keepTypeParameterForMappedType && getBaseConstraintOfType(type.indexType);
-            if (baseObjectType && baseIndexType === stringType && !getIndexInfoOfType(baseObjectType, IndexKind.String)) {
-                // getIndexedAccessType returns `any` for X[string] where X doesn't have an index signature.
-                // instead, return undefined so that the indexed access check fails
-                return undefined;
-            }
+            const baseIndexType = getBaseConstraintOfType(type.indexType);
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
         }
 
@@ -5967,9 +5961,8 @@ namespace ts {
             function computeBaseConstraint(t: Type): Type {
                 if (t.flags & TypeFlags.TypeParameter) {
                     const constraint = getConstraintFromTypeParameter(<TypeParameter>t);
-                    return (t as TypeParameter).isThisType || !constraint ?
-                        constraint :
-                        getBaseConstraint(constraint);
+                    return (<TypeParameter>t).isThisType ? constraint :
+                        constraint ? getBaseConstraint(constraint) : undefined;
                 }
                 if (t.flags & TypeFlags.UnionOrIntersection) {
                     const types = (<UnionOrIntersectionType>t).types;
@@ -5996,6 +5989,9 @@ namespace ts {
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
+                }
+                if (isGenericMappedType(t)) {
+                    return emptyObjectType;
                 }
                 return t;
             }
@@ -9293,7 +9289,7 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
-                    // A is the apparent type of T.
+                    // A is the apparent type of S.
                     const constraint = getConstraintOfType(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
