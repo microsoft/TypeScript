@@ -564,7 +564,7 @@ namespace ts.server {
                 this.ensureProjectStructuresUptoDate();
             }
             const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            return scriptInfo && scriptInfo.getDefaultProject();
+            return scriptInfo && !scriptInfo.isOrphan() && scriptInfo.getDefaultProject();
         }
 
         /**
@@ -588,7 +588,7 @@ namespace ts.server {
                 else {
                     projectsToUpdate = [];
                     for (const f of this.changedFiles) {
-                        projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
+                        addRange(projectsToUpdate, f.containingProjects);
                     }
                 }
                 this.changedFiles = undefined;
@@ -789,8 +789,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        assignScriptInfoToInferredProject(info: ScriptInfo, projectRootPath?: string) {
-            Debug.assert(info.containingProjects.length === 0);
+        assignOrphanScriptInfoToInferredProject(info: ScriptInfo, projectRootPath?: string) {
+            Debug.assert(info.isOrphan());
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
@@ -823,7 +823,7 @@ namespace ts.server {
         }
 
         private addToListOfOpenFiles(info: ScriptInfo) {
-            Debug.assert(info.containingProjects.length !== 0);
+            Debug.assert(!info.isOrphan());
             for (const p of info.containingProjects) {
                 // file is the part of configured project, addref the project
                 if (p.projectKind === ProjectKind.Configured) {
@@ -885,8 +885,8 @@ namespace ts.server {
 
                 // collect orphaned files and assign them to inferred project just like we treat open of a file
                 for (const f of this.openFiles) {
-                    if (f.containingProjects.length === 0) {
-                        this.assignScriptInfoToInferredProject(f);
+                    if (f.isOrphan()) {
+                        this.assignOrphanScriptInfoToInferredProject(f);
                     }
                 }
 
@@ -907,7 +907,7 @@ namespace ts.server {
 
         private deleteOrphanScriptInfoNotInAnyProject() {
             this.filenameToScriptInfo.forEach(info => {
-                if (!info.isScriptOpen() && info.containingProjects.length === 0) {
+                if (!info.isScriptOpen() && info.isOrphan()) {
                     // if there are not projects that include this script info - delete it
                     this.stopWatchingScriptInfo(info, WatcherCloseReason.OrphanScriptInfo);
                     this.filenameToScriptInfo.delete(info.path);
@@ -1809,8 +1809,8 @@ namespace ts.server {
 
             for (const info of this.openFiles) {
                 // collect all orphaned script infos from open files
-                if (info.containingProjects.length === 0) {
-                    this.assignScriptInfoToInferredProject(info);
+                if (info.isOrphan()) {
+                    this.assignOrphanScriptInfoToInferredProject(info);
                 }
                 else {
                     // Or remove the root of inferred project if is referenced in more than one projects
@@ -1867,8 +1867,8 @@ namespace ts.server {
 
             // At this point if file is part of any any configured or external project, then it would be present in the containing projects
             // So if it still doesnt have any containing projects, it needs to be part of inferred project
-            if (info.containingProjects.length === 0) {
-                this.assignScriptInfoToInferredProject(info, projectRootPath);
+            if (info.isOrphan()) {
+                this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
             }
             this.addToListOfOpenFiles(info);
 
