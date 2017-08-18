@@ -91,14 +91,19 @@ namespace RWC {
                     }
 
                     // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
-                    const uniqueNames = ts.createMap<string>();
+                    const uniqueNames = ts.createMap<true>();
+                    const dedupedNames: string[] = [];
                     for (const fileName of fileNames) {
-                            uniqueNames.set(ts.normalizeSlashes(fileName), fileName);
+                        // Must maintain order, build result list while checking map
+                        const normalized = ts.normalizeSlashes(fileName);
+                        if (!uniqueNames.has(normalized)) {
+                            uniqueNames.set(normalized, true);
+                            dedupedNames.push(fileName);
+                        }
                     }
-                    fileNames = ts.arrayFrom(uniqueNames.values());
 
                     // Load the files
-                    for (const fileName of fileNames) {
+                    for (const fileName of dedupedNames) {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
                     }
 
