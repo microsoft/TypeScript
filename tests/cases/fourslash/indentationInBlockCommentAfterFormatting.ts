@@ -27,13 +27,13 @@ verify.indentationIs(4);
 goTo.marker("2");
 verify.indentationIs(4);
 goTo.marker("3");
-verify.indentationIs(4);
+verify.indentationIs(3);
 goTo.marker("4");
-verify.indentationIs(4);
+verify.indentationIs(3);
 // Putting a marker in line "*" would bring some error when parsing code in automation.
 // So move right by 1 offset from marker 4 to locate the caret in this line.
 edit.moveRight(1);
-verify.indentationIs(4);
+verify.indentationIs(3);
 // Putting a marker in line "  */" would bring some error when parsing code in automation.
 // So move left by 1 offset from marker 5 to locate the caret in this line.
 goTo.marker("5");

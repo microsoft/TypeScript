@@ -527,6 +527,10 @@ namespace ts.server {
             return notImplemented();
         }
 
+        getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
+            return notImplemented();
+        }
+
         getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
