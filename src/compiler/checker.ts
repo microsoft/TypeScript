@@ -22546,12 +22546,7 @@ namespace ts {
 
         function isInsideWithStatementBody(node: Node): boolean {
             if (node) {
-                while (node.parent) {
-                    if (node.parent.kind === SyntaxKind.WithStatement && (<WithStatement>node.parent).statement === node) {
-                        return true;
-                    }
-                    node = node.parent;
-                }
+                return !!(node.flags & NodeFlags.WithContext);
             }
 
             return false;
