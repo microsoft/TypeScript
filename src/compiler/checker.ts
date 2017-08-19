@@ -7229,7 +7229,8 @@ namespace ts {
                     spreadTypes.set(id, type = createTypeSpreadType(tuple));
                 }
                 return [type];
-            } else {
+            }
+            else {
                 // const type = getApparentType(nodeType);
                 if (allowSyntheticDefaultImports) {
                     console.log("type", typeToString(tuple));
@@ -7268,7 +7269,7 @@ namespace ts {
             if (node.kind === SyntaxKind.TypeSpread) {
                 const links = getNodeLinks(node);
                 if (!links.resolvedType) {
-                    links.resolvedType = getTypeFromTypeNode((node as TypeSpreadTypeNode).type)
+                    links.resolvedType = getTypeFromTypeNode((node as TypeSpreadTypeNode).type);
                 }
                 return getTypeSpreadTypes(links.resolvedType);
             }
@@ -7615,6 +7616,7 @@ namespace ts {
         }
 
         function createTypeSpreadType(tuple: Type) {
+            console.log("createTypeSpreadType");
             const type = <TypeSpreadType>createType(TypeFlags.TypeSpread);
             type.type = tuple;
             return type;
@@ -18837,12 +18839,21 @@ namespace ts {
             forEach(node.elementTypes, checkSourceElement);
         }
 
-        function checkTypeSpread(node: TypeSpreadTypeNode) {
-            const type = getApparentType(getTypeFromTypeNode(node.type as TypeNode));
+        function checkTypeSpreadTypeNode(node: TypeSpreadTypeNode) {
+            checkSourceElement(node.type);
+            // checkTypeSpreadType(<TypeSpreadType> getTypeFromTypeNode(node.type), node);
+            const type = getApparentType(getTypeFromTypeNode(node.type));
             if (!isArrayLikeType(type)) { // isTupleLikeType
                 grammarErrorOnNode(node, Diagnostics.Tuple_type_spreads_may_only_be_created_from_tuple_types);
             }
         }
+
+        // function checkTypeSpreadType(spread: TypeSpreadType, node: TypeSpreadTypeNode) {
+        //     const type = getApparentType(spread.type);
+        //     if (!isArrayLikeType(type)) { // isTupleLikeType
+        //         grammarErrorOnNode(node, Diagnostics.Tuple_type_spreads_may_only_be_created_from_tuple_types);
+        //     }
+        // }
 
         function checkUnionOrIntersectionType(node: UnionOrIntersectionTypeNode) {
             forEach(node.types, checkSourceElement);
@@ -22380,7 +22391,7 @@ namespace ts {
                 case SyntaxKind.TupleType:
                     return checkTupleType(<TupleTypeNode>node);
                 case SyntaxKind.TypeSpread:
-                    return checkTypeSpread(<TypeSpreadTypeNode>node);
+                    return checkTypeSpreadTypeNode(<TypeSpreadTypeNode>node);
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);

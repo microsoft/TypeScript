@@ -2186,6 +2186,7 @@ namespace ts {
     }
 
     export function createTypeSpread(type: TypeNode) {
+        console.log("createTypeSpread");
         const node = <TypeSpreadTypeNode>createSynthesizedNode(SyntaxKind.TypeSpread);
         node.type = type !== undefined ? parenthesizeElementTypeMember(type) : undefined;
         return node;
