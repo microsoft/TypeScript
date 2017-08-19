@@ -3821,7 +3821,7 @@ namespace ts {
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
-            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)
+            && (!isNewExpression(emittedExpression) || (<NewExpression>emittedExpression).arguments)
             && !isEmptyObjectLiteral(emittedExpression)) {
             return <LeftHandSideExpression>expression;
         }
