@@ -1017,6 +1017,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ExpressionWithTypeArguments:
+                        // The type parameters of a class are not in scope in the base class expression.
                         if (lastLocation === (<ExpressionWithTypeArguments>location).expression && (<HeritageClause>location.parent).token === SyntaxKind.ExtendsKeyword) {
                             const container = location.parent.parent;
                             if (isClassLike(container) && (result = lookup(getSymbolOfNode(container).members, name, meaning & SymbolFlags.Type))) {
