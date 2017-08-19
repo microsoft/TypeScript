@@ -5657,17 +5657,12 @@ namespace ts {
             else {
                 // Combinations of function, class, enum and module
                 let members = emptySymbols;
-                let constructSignatures: Signature[] = emptyArray;
                 let stringIndexInfo: IndexInfo = undefined;
                 if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                 }
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    constructSignatures = getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor));
-                    if (!constructSignatures.length) {
-                        constructSignatures = getDefaultConstructSignatures(classType);
-                    }
                     const baseConstructorType = getBaseConstructorTypeOfClass(classType);
                     if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
                         members = createSymbolTable(getNamedMembers(members));
@@ -5678,13 +5673,22 @@ namespace ts {
                     }
                 }
                 const numberIndexInfo = symbol.flags & SymbolFlags.Enum ? enumNumberIndexInfo : undefined;
-                setStructuredTypeMembers(type, members, emptyArray, constructSignatures, stringIndexInfo, numberIndexInfo);
+                setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
                 // We resolve the members before computing the signatures because a signature may use
                 // typeof with a qualified name expression that circularly references the type we are
                 // in the process of resolving (see issue #6072). The temporarily empty signature list
                 // will never be observed because a qualified name can't reference signatures.
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
                     (<ResolvedType>type).callSignatures = getSignaturesOfSymbol(symbol);
+                }
+                // And likewise for construct signatures for classes
+                if (symbol.flags & SymbolFlags.Class) {
+                    const classType = getDeclaredTypeOfClassOrInterface(symbol);
+                    let constructSignatures = getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Constructor));
+                    if (!constructSignatures.length) {
+                        constructSignatures = getDefaultConstructSignatures(classType);
+                    }
+                    (<ResolvedType>type).constructSignatures = constructSignatures;
                 }
             }
         }
