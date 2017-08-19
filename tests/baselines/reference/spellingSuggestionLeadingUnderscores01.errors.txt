@@ -1,7 +1,9 @@
 tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(6,3): error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '__foo'?
+tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(14,5): error TS2322: Type '{ ___foo: number; }' is not assignable to type '{ __foo: number; }'.
+  Object literal may only specify known properties, but '___foo' does not exist in type '{ __foo: number; }'. Did you mean to write '__foo'?
 
 
-==== tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts (1 errors) ====
+==== tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts (2 errors) ====
     // @filename abc.ts
     export declare let a: {
         __foo: 10,
@@ -17,7 +19,10 @@ tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(6,3): error TS255
     }
     
     b = {
-        __foo: 100,
+        ___foo: 100,
+        ~~~~~~~~~~~
+!!! error TS2322: Type '{ ___foo: number; }' is not assignable to type '{ __foo: number; }'.
+!!! error TS2322:   Object literal may only specify known properties, but '___foo' does not exist in type '{ __foo: number; }'. Did you mean to write '__foo'?
     }
     
     

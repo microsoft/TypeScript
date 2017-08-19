@@ -12,7 +12,7 @@ export let b: {
 }
 
 b = {
-    __foo: 100,
+    ___foo: 100,
 }
 
 
@@ -22,5 +22,5 @@ b = {
 exports.__esModule = true;
 exports.a.___foo;
 exports.b = {
-    __foo: 100
+    ___foo: 100
 };
