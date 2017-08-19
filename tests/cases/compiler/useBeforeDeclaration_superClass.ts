@@ -16,3 +16,12 @@ class Z extends Y {
     old_x = this.x;
     x = 1;
 }
+
+// Interface doesn't count
+interface I {
+    x: number;
+}
+class J implements I {
+    old_x = this.x;
+    x = 1;
+}

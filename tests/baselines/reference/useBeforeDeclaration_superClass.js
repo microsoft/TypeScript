@@ -18,6 +18,15 @@ class Z extends Y {
     x = 1;
 }
 
+// Interface doesn't count
+interface I {
+    x: number;
+}
+class J implements I {
+    old_x = this.x;
+    x = 1;
+}
+
 
 //// [useBeforeDeclaration_superClass.js]
 var __extends = (this && this.__extends) || (function () {
@@ -71,3 +80,10 @@ var Z = /** @class */ (function (_super) {
     }
     return Z;
 }(Y));
+var J = /** @class */ (function () {
+    function J() {
+        this.old_x = this.x;
+        this.x = 1;
+    }
+    return J;
+}());

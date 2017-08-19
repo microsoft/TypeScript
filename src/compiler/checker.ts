@@ -14674,34 +14674,31 @@ namespace ts {
             }
         }
 
+        /**
+         * It's possible that "prop.valueDeclaration" is a local declaration, but the property was also declared in a superclass.
+         * In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
+         */
         function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
-            // It's possible that "prop.valueDeclaration" is a local declaration, but the property was also declared in a superclass.
-            // In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
-            let classSymbol = prop.parent;
+            let classType = getTypeOfSymbol(prop.parent) as InterfaceType;
             while (true) {
-                classSymbol = getSuperClass(classSymbol);
-                if (!classSymbol) {
+                classType = getSuperClass(classType);
+                if (!classType) {
                     return false;
                 }
-                const superProperty = classSymbol.members.get(prop.escapedName);
+                const superProperty = getPropertyOfType(classType, prop.escapedName);
                 if (superProperty && superProperty.valueDeclaration) {
                     return true;
                 }
             }
         }
 
-        // TODO: there must be a better way of doing this
-        function getSuperClass(classSymbol: Symbol): Symbol | undefined {
-            const classDecl = classSymbol.valueDeclaration;
-            if (!isClassLike(classDecl)) {
+        function getSuperClass(classType: InterfaceType): InterfaceType | undefined {
+            const x = getBaseTypes(classType);
+            if (x.length === 0) {
                 return undefined;
             }
-            const superClassExpression = getClassExtendsHeritageClauseElement(classDecl);
-            if (!superClassExpression) {
-                return undefined;
-            }
-            const superClassSymbol = getSymbolAtLocation(superClassExpression.expression);
-            return superClassSymbol.flags & SymbolFlags.Class ? superClassSymbol : undefined;
+            Debug.assert(x.length === 1);
+            return x[0] as InterfaceType;
         }
 
         function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
