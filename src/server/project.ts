@@ -240,7 +240,7 @@ namespace ts.server {
                 if (this.projectKind === ProjectKind.Configured) {
                     (this.lsHost.host as CachedServerHost).addOrDeleteFile(fileName, failedLookupLocationPath, eventKind);
                 }
-                this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
+                this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath);
                 this.markAsDirty();
                 this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
             });
@@ -701,7 +701,7 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false, this.lsHost.host);
                     scriptInfo.attachToProject(this);
                 },
                 removed => {
@@ -744,7 +744,7 @@ namespace ts.server {
         }
 
         getScriptInfoLSHost(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false, this.lsHost.host);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
                 if (existingValue !== undefined && existingValue !== scriptInfo) {
@@ -758,7 +758,10 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
+            const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(
+                fileName, /*openedByClient*/ false, /*fileContent*/ undefined,
+                /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.lsHost.host
+            );
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
             }

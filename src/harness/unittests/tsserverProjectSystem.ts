@@ -3998,33 +3998,206 @@ namespace ts.projectSystem {
     });
 
     describe("CachingFileSystemInformation", () => {
-        function getFunctionWithCalledMapForSingleArgumentCb<T>(cb: (f: string) => T) {
-            const calledMap = createMultiMap<true>();
+        type CalledMaps = {
+            fileExists: MultiMap<true>;
+            directoryExists: MultiMap<true>;
+            getDirectories: MultiMap<true>;
+            readFile: MultiMap<true>;
+            readDirectory: MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>;
+        };
+
+        function createCallsTrackingHost(host: TestServerHost) {
+            const keys: Array<keyof CalledMaps> = ["fileExists", "directoryExists", "getDirectories", "readFile", "readDirectory"];
+            const calledMaps = getCallsTrackingMap();
             return {
-                cb: (f: string) => {
-                    calledMap.add(f, /*value*/ true);
-                    return cb(f);
-                },
-                calledMap
+                verifyNoCall,
+                verifyCalledOnEachEntryOnce,
+                verifyCalledOnEachEntry,
+                verifyNoHostCalls,
+                verifyNoHostCallsExceptFileExistsOnce,
+                clear
             };
+
+            function getCallsTrackingMap() {
+                const calledMaps: { [s: string]: Map<any> } = {};
+                for (let i = 0; i < keys.length - 1; i++) {
+                    setCallsTrackingWithSingleArgFn(keys[i]);
+                }
+                setCallsTrackingWithFiveArgFn(keys[keys.length - 1]);
+                return calledMaps as CalledMaps;
+
+                function setCallsTrackingWithSingleArgFn(prop: keyof CalledMaps) {
+                    const calledMap = createMultiMap<true>();
+                    const cb = (<any>host)[prop].bind(host);
+                    (<any>host)[prop] = (f: string) => {
+                        calledMap.add(f, /*value*/ true);
+                        return cb(f);
+                    };
+                    calledMaps[prop] = calledMap;
+                }
+
+                function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: keyof CalledMaps) {
+                    const calledMap = createMultiMap<[U, V, W, X]>();
+                    const cb = (<any>host)[prop].bind(host);
+                    (<any>host)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
+                        calledMap.add(f, [arg1, arg2, arg3, arg4]);
+                        return cb(f, arg1, arg2, arg3, arg4);
+                    };
+                    calledMaps[prop] = calledMap;
+                }
+            }
+
+            function verifyNoCall(callback: keyof CalledMaps) {
+                const calledMap = calledMaps[callback];
+                assert.equal(calledMap.size, 0, `${callback} shouldnt be called: ${arrayFrom(calledMap.keys())}`);
+            }
+
+            function verifyCalledOnEachEntry(callback: keyof CalledMaps, expectedKeys: Map<number>) {
+                const calledMap = calledMaps[callback];
+                assert.equal(calledMap.size, expectedKeys.size, `${callback}: incorrect size of map: Actual keys: ${arrayFrom(calledMap.keys())} Expected: ${arrayFrom(expectedKeys.keys())}`);
+                expectedKeys.forEach((called, name) => {
+                    assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
+                    assert.equal(calledMap.get(name).length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
+                });
+            }
+
+            function verifyCalledOnEachEntryOnce(callback: keyof CalledMaps, expectedKeys: string[]) {
+                return verifyCalledOnEachEntry(callback, zipToMap(expectedKeys, expectedKeys.map(() => 1)));
+            }
+
+            function verifyNoHostCalls() {
+                for (const key of keys) {
+                    verifyNoCall(key);
+                }
+            }
+
+            function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: string[]) {
+                verifyCalledOnEachEntryOnce("fileExists", expectedKeys);
+                verifyNoCall("directoryExists");
+                verifyNoCall("getDirectories");
+                verifyNoCall("readFile");
+                verifyNoCall("readDirectory");
+            }
+
+            function clear() {
+                for (const key of keys) {
+                    calledMaps[key].clear();
+                }
+            }
         }
 
-        function getFunctionWithCalledMapForFiveArgumentCb<T, U, V, W, X>(cb: (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => T) {
-            const calledMap = createMultiMap<[U, V, W, X]>();
-            return {
-                cb: (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
-                    calledMap.add(f, [arg1, arg2, arg3, arg4]);
-                    return cb(f, arg1, arg2, arg3, arg4);
-                },
-                calledMap
+        function verifyWatchDirectoriesCaseSensitivity(useCaseSensitiveFileNames: boolean) {
+            const frontendDir = "/Users/someuser/work/applications/frontend";
+            const canonicalFrontendDir = useCaseSensitiveFileNames ? frontendDir : frontendDir.toLowerCase();
+            const file1: FileOrFolder = {
+                path: `${frontendDir}/src/app/utils/Analytic.ts`,
+                content: "export class SomeClass { };"
             };
-        }
+            const file2: FileOrFolder = {
+                path: `${frontendDir}/src/app/redux/configureStore.ts`,
+                content: "export class configureStore { }"
+            };
+            const file3: FileOrFolder = {
+                path: `${frontendDir}/src/app/utils/Cookie.ts`,
+                content: "export class Cookie { }"
+            };
+            const es2016LibFile: FileOrFolder = {
+                path: "/a/lib/lib.es2016.full.d.ts",
+                content: libFile.content
+            };
+            const tsconfigFile: FileOrFolder = {
+                path: `${frontendDir}/tsconfig.json`,
+                content: JSON.stringify({
+                    "compilerOptions": {
+                        "strict": true,
+                        "strictNullChecks": true,
+                        "target": "es2016",
+                        "module": "commonjs",
+                        "moduleResolution": "node",
+                        "sourceMap": true,
+                        "noEmitOnError": true,
+                        "experimentalDecorators": true,
+                        "emitDecoratorMetadata": true,
+                        "types": [
+                            "node",
+                            "jest"
+                        ],
+                        "noUnusedLocals": true,
+                        "outDir": "./compiled",
+                        "typeRoots": [
+                            "types",
+                            "node_modules/@types"
+                        ],
+                        "baseUrl": ".",
+                        "paths": {
+                            "*": [
+                                "types/*"
+                            ]
+                        }
+                    },
+                    "include": [
+                        "src/**/*"
+                    ],
+                    "exclude": [
+                        "node_modules",
+                        "compiled"
+                    ]
+                })
+            };
+            const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
+            const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
+            const projectService = createProjectService(host);
+            const canonicalConfigPath = useCaseSensitiveFileNames ? tsconfigFile.path : tsconfigFile.path.toLowerCase();
+            const { configFileName } = projectService.openClientFile(file1.path);
+            assert.equal(configFileName, tsconfigFile.path, `should find config`);
+            checkNumberOfConfiguredProjects(projectService, 1);
 
-        function checkMultiMapKeysForSingleEntry<T>(caption: string, multiMap: MultiMap<T>, expectedKeys: string[]) {
-            assert.equal(multiMap.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(multiMap.keys())} Expected: ${expectedKeys}`);
-            for (const name of expectedKeys) {
-                assert.isTrue(multiMap.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(multiMap.keys())}`);
-                assert.equal(multiMap.get(name).length, 1, `${caption} is expected to have just one entry for key ${name}, actual entry: ${multiMap.get(name)}`);
+            const project = projectService.configuredProjects.get(canonicalConfigPath);
+            verifyProjectAndWatchedDirectories();
+
+            const callsTrackingHost = createCallsTrackingHost(host);
+
+            // Create file cookie.ts
+            projectFiles.push(file3);
+            host.reloadFS(projectFiles);
+            host.runQueuedTimeoutCallbacks();
+
+            const canonicalFile3Path = useCaseSensitiveFileNames ? file3.path : file3.path.toLocaleLowerCase();
+            callsTrackingHost.verifyCalledOnEachEntryOnce("fileExists", [canonicalFile3Path]);
+
+            // Called for type root resolution
+            const directoryExistsCalled = createMap<number>();
+            for (let dir = frontendDir; dir !== "/"; dir = getDirectoryPath(dir)) {
+                directoryExistsCalled.set(`${dir}/node_modules`, 2);
+            }
+            directoryExistsCalled.set(`/node_modules`, 2);
+            directoryExistsCalled.set(`${frontendDir}/types`, 2);
+            directoryExistsCalled.set(`${frontendDir}/node_modules/@types`, 2);
+            directoryExistsCalled.set(canonicalFile3Path, 1);
+            callsTrackingHost.verifyCalledOnEachEntry("directoryExists", directoryExistsCalled);
+
+            callsTrackingHost.verifyNoCall("getDirectories");
+            callsTrackingHost.verifyCalledOnEachEntryOnce("readFile", [file3.path]);
+            callsTrackingHost.verifyNoCall("readDirectory");
+
+            checkNumberOfConfiguredProjects(projectService, 1);
+            assert.strictEqual(projectService.configuredProjects.get(canonicalConfigPath), project);
+            verifyProjectAndWatchedDirectories();
+
+            callsTrackingHost.clear();
+
+            const { configFileName: configFile2 } = projectService.openClientFile(file3.path);
+            assert.equal(configFile2, configFileName);
+
+            checkNumberOfConfiguredProjects(projectService, 1);
+            assert.strictEqual(projectService.configuredProjects.get(canonicalConfigPath), project);
+            verifyProjectAndWatchedDirectories();
+            callsTrackingHost.verifyNoHostCalls();
+
+            function verifyProjectAndWatchedDirectories() {
+                checkProjectActualFiles(project, map(projectFiles, f => f.path));
+                checkWatchedDirectories(host, [`${canonicalFrontendDir}/src`], /*recursive*/ true);
+                checkWatchedDirectories(host, [`${canonicalFrontendDir}/types`, `${canonicalFrontendDir}/node_modules/@types`], /*recursive*/ false);
             }
         }
 
@@ -4069,7 +4242,6 @@ namespace ts.projectSystem {
                     ]
                 })
             };
-
             const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
             const host = createServerHost(projectFiles);
             const session = createSession(host);
@@ -4082,17 +4254,7 @@ namespace ts.projectSystem {
             const project = projectService.configuredProjects.get(tsconfigFile.path);
             checkProjectActualFiles(project, map(projectFiles, f => f.path));
 
-            const fileExistsCalledOn = getFunctionWithCalledMapForSingleArgumentCb<boolean>(host.fileExists.bind(host));
-            host.fileExists = fileExistsCalledOn.cb;
-            const directoryExistsCalledOn = getFunctionWithCalledMapForSingleArgumentCb<boolean>(host.directoryExists.bind(host));
-            host.directoryExists = directoryExistsCalledOn.cb;
-            const getDirectoriesCalledOn = getFunctionWithCalledMapForSingleArgumentCb<string[]>(host.getDirectories.bind(host));
-            host.getDirectories = getDirectoriesCalledOn.cb;
-            const readFileCalledOn = getFunctionWithCalledMapForSingleArgumentCb<string>(host.readFile.bind(host));
-            host.readFile = readFileCalledOn.cb;
-            const readDirectoryCalledOn = getFunctionWithCalledMapForFiveArgumentCb<string[], ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number>(host.readDirectory.bind(host));
-            host.readDirectory = readDirectoryCalledOn.cb;
-
+            const callsTrackingHost = createCallsTrackingHost(host);
 
             // Get definitions shouldnt make host requests
             const getDefinitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(protocol.CommandTypes.Definition, {
@@ -4103,23 +4265,23 @@ namespace ts.projectSystem {
             });
             const { response } = session.executeCommand(getDefinitionRequest);
             assert.equal(response[0].file, moduleFile.path, "Should go to definition of vessel: response: " + JSON.stringify(response));
-            assert.equal(fileExistsCalledOn.calledMap.size, 0, `fileExists shouldnt be called`);
-            assert.equal(directoryExistsCalledOn.calledMap.size, 0, `directoryExists shouldnt be called`);
-            assert.equal(getDirectoriesCalledOn.calledMap.size, 0, `getDirectories shouldnt be called`);
-            assert.equal(readFileCalledOn.calledMap.size, 0, `readFile shouldnt be called`);
-            assert.equal(readDirectoryCalledOn.calledMap.size, 0, `readDirectory shouldnt be called`);
+            callsTrackingHost.verifyNoHostCalls();
 
             // Open the file should call only file exists on module directory and use cached value for parental directory
             const { configFileName: config2 } = projectService.openClientFile(moduleFile.path);
             assert.equal(config2, configFileName);
-            checkMultiMapKeysForSingleEntry("fileExists", fileExistsCalledOn.calledMap, ["/a/b/models/tsconfig.json", "/a/b/models/jsconfig.json"]);
-            assert.equal(directoryExistsCalledOn.calledMap.size, 0, `directoryExists shouldnt be called`);
-            assert.equal(getDirectoriesCalledOn.calledMap.size, 0, `getDirectories shouldnt be called`);
-            assert.equal(readFileCalledOn.calledMap.size, 0, `readFile shouldnt be called`);
-            assert.equal(readDirectoryCalledOn.calledMap.size, 0, `readDirectory shouldnt be called`);
+            callsTrackingHost.verifyNoHostCallsExceptFileExistsOnce(["/a/b/models/tsconfig.json", "/a/b/models/jsconfig.json"]);
 
             checkNumberOfConfiguredProjects(projectService, 1);
             assert.strictEqual(projectService.configuredProjects.get(tsconfigFile.path), project);
+        });
+
+        it("WatchDirectories for config file With non case sensitive file system", () => {
+            verifyWatchDirectoriesCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
+        });
+
+        it("WatchDirectories for config file With case sensitive file system", () => {
+            verifyWatchDirectoriesCaseSensitivity(/*useCaseSensitiveFileNames*/ true);
         });
     });
 }

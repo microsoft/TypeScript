@@ -14,7 +14,7 @@ namespace ts {
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
         invalidateResolutionOfFile(filePath: Path): void;
-        invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation: string): void;
+        invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath: Path): void;
 
         createHasInvalidatedResolution(): HasInvalidatedResolution;
 
@@ -300,12 +300,12 @@ namespace ts {
         }
 
         function invalidateResolutionCacheOfChangedFailedLookupLocation<T extends NameResolutionWithFailedLookupLocations>(
-            failedLookupLocation: string,
+            failedLookupLocationPath: Path,
             cache: Map<Map<T>>) {
             cache.forEach((value, containingFile) => {
                 if (value) {
                     value.forEach(resolution => {
-                        if (resolution && !resolution.isInvalidated && some(resolution.failedLookupLocations, location => toPath(location) === failedLookupLocation)) {
+                        if (resolution && !resolution.isInvalidated && some(resolution.failedLookupLocations, location => toPath(location) === failedLookupLocationPath)) {
                             // Mark the file as needing re-evaluation of module resolution instead of using it blindly.
                             resolution.isInvalidated = true;
                             (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFile, true);
@@ -320,9 +320,9 @@ namespace ts {
             invalidateResolutionCacheOfDeletedFile(filePath, resolvedTypeReferenceDirectives, m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName);
         }
 
-        function invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation: string) {
-             invalidateResolutionCacheOfChangedFailedLookupLocation(failedLookupLocation, resolvedModuleNames);
-             invalidateResolutionCacheOfChangedFailedLookupLocation(failedLookupLocation, resolvedTypeReferenceDirectives);
+        function invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath: Path) {
+             invalidateResolutionCacheOfChangedFailedLookupLocation(failedLookupLocationPath, resolvedModuleNames);
+             invalidateResolutionCacheOfChangedFailedLookupLocation(failedLookupLocationPath, resolvedTypeReferenceDirectives);
         }
     }
 }

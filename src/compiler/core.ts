@@ -2076,8 +2076,8 @@ namespace ts {
     }
 
     export interface FileSystemEntries {
-        files: ReadonlyArray<string>;
-        directories: ReadonlyArray<string>;
+        readonly files: ReadonlyArray<string>;
+        readonly directories: ReadonlyArray<string>;
     }
 
     export interface FileMatcherPatterns {
@@ -2644,8 +2644,13 @@ namespace ts {
     export interface CachedPartialSystem extends PartialSystem, CachedHost {
     }
 
+    interface MutableFileSystemEntries {
+        readonly files: string[];
+        readonly directories: string[];
+    }
+
     export function createCachedPartialSystem(host: HostForCaching): CachedPartialSystem {
-        const cachedReadDirectoryResult = createMap<FileSystemEntries>();
+        const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
         const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         return {
@@ -2665,11 +2670,11 @@ namespace ts {
             return ts.toPath(fileName, getCurrentDirectory(), getCanonicalFileName);
         }
 
-        function getCachedFileSystemEntries(rootDirPath: Path): FileSystemEntries | undefined {
+        function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
             return cachedReadDirectoryResult.get(rootDirPath);
         }
 
-        function getCachedFileSystemEntriesForBaseDir(path: Path): FileSystemEntries | undefined {
+        function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
             return getCachedFileSystemEntries(getDirectoryPath(path));
         }
 
@@ -2678,8 +2683,8 @@ namespace ts {
         }
 
         function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
-            const resultFromHost: FileSystemEntries = {
-                files: host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]) || [],
+            const resultFromHost: MutableFileSystemEntries = {
+                files: map(host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
                 directories: host.getDirectories(rootDir) || []
             };
 
@@ -2692,7 +2697,7 @@ namespace ts {
          * Otherwise gets result from host and caches it.
          * The host request is done under try catch block to avoid caching incorrect result
          */
-        function tryReadDirectory(rootDir: string, rootDirPath: Path): FileSystemEntries | undefined {
+        function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
             const cachedResult = getCachedFileSystemEntries(rootDirPath);
             if (cachedResult) {
                 return cachedResult;
@@ -2716,16 +2721,15 @@ namespace ts {
             return some(entries, file => fileNameEqual(file, name));
         }
 
-        function updateFileSystemEntry(entries: ReadonlyArray<string>, baseName: string, isValid: boolean) {
+        function updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
             if (hasEntry(entries, baseName)) {
                 if (!isValid) {
-                    return filter(entries, entry => !fileNameEqual(entry, baseName));
+                    return filterMutate(entries, entry => !fileNameEqual(entry, baseName));
                 }
             }
             else if (isValid) {
-                return entries.concat(baseName);
+                return entries.push(baseName);
             }
-            return entries;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
@@ -2754,7 +2758,7 @@ namespace ts {
             const result = getCachedFileSystemEntriesForBaseDir(path);
             const baseFileName = getBaseNameOfFileName(dirPath);
             if (result) {
-                result.directories = updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
+                updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
             }
             host.createDirectory(dirPath);
         }
@@ -2801,7 +2805,7 @@ namespace ts {
                     const baseName = getBaseNameOfFileName(fileOrFolder);
                     if (parentResult) {
                         updateFilesOfFileSystemEntry(parentResult, baseName, host.fileExists(fileOrFolderPath));
-                        parentResult.directories = updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrFolderPath));
+                        updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrFolderPath));
                     }
                 }
             }
@@ -2818,8 +2822,8 @@ namespace ts {
             }
         }
 
-        function updateFilesOfFileSystemEntry(parentResult: FileSystemEntries, baseName: string, fileExists: boolean) {
-            parentResult.files = updateFileSystemEntry(parentResult.files, baseName, fileExists);
+        function updateFilesOfFileSystemEntry(parentResult: MutableFileSystemEntries, baseName: string, fileExists: boolean) {
+            updateFileSystemEntry(parentResult.files, baseName, fileExists);
         }
 
         function clearCache() {

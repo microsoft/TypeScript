@@ -1429,7 +1429,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ clientFileName === newRootFile, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ clientFileName === newRootFile, /*fileContent*/ undefined, scriptKind, hasMixedContent, project.lsHost.host);
                     path = scriptInfo.path;
                     // If this script info is not already a root add it
                     if (!project.isRoot(scriptInfo)) {
@@ -1583,9 +1583,12 @@ namespace ts.server {
          * @param uncheckedFileName is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-
-        getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
-            return this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName), openedByClient, fileContent, scriptKind);
+        /*@internal*/
+        getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, hostToQueryFileExistsOn: ServerHost) {
+            return this.getOrCreateScriptInfoForNormalizedPath(
+                toNormalizedPath(uncheckedFileName), openedByClient, /*fileContent*/ undefined,
+                /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, hostToQueryFileExistsOn
+            );
         }
 
         getScriptInfo(uncheckedFileName: string) {
@@ -1610,11 +1613,11 @@ namespace ts.server {
             }
         }
 
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: ServerHost) {
             const path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
-                if (openedByClient || this.host.fileExists(fileName)) {
+                if (openedByClient || (hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent, path);
 
                     this.filenameToScriptInfo.set(info.path, info);

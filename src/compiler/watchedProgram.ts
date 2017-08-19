@@ -564,7 +564,7 @@ namespace ts {
         function onFailedLookupLocationChange(fileName: string, eventKind: FileWatcherEventKind, failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
             writeLog(`Failed lookup location : ${failedLookupLocation} changed: ${FileWatcherEventKind[eventKind]}, fileName: ${fileName} containingFile: ${containingFile}, name: ${name}`);
             updateCachedSystemWithFile(fileName, failedLookupLocationPath, eventKind);
-            resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocation);
+            resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath);
             scheduleProgramUpdate();
         }
 
@@ -633,7 +633,7 @@ namespace ts {
             // Reload is pending, do the reload
             if (!needsReload) {
                 const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, host);
-                if (!configFileSpecs.filesSpecs) {
+                if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
                     reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
                 }
                 rootFileNames = result.fileNames;

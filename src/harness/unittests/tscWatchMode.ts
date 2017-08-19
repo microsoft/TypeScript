@@ -130,7 +130,7 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([f1, config], { useCaseSensitiveFileNames: false });
             const upperCaseConfigFilePath = combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path));
             const watch = createWatchModeWithConfigFile(upperCaseConfigFilePath, host);
-            checkProgramActualFiles(watch(), [f1.path]);
+            checkProgramActualFiles(watch(), [combinePaths(getDirectoryPath(upperCaseConfigFilePath), getBaseFileName(f1.path))]);
         });
 
         it("create configured project without file list", () => {
@@ -722,12 +722,13 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([moduleFile, file1, configFile, libFile]);
             createWatchModeWithConfigFile(configFile.path, host);
 
-            const error = `error TS6053: File '${moduleFile.path}' not found.${host.newLine}`;
+            const error = "a/b/file1.ts(1,20): error TS2307: Cannot find module \'./moduleFile\'.\n";
             checkOutputDoesNotContain(host, [error]);
 
             const moduleFileOldPath = moduleFile.path;
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             moduleFile.path = moduleFileNewPath;
+            host.clearOutput();
             host.reloadFS([moduleFile, file1, configFile, libFile]);
             host.runQueuedTimeoutCallbacks();
             checkOutputContains(host, [error]);
