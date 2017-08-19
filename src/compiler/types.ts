@@ -3146,6 +3146,7 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        TypeSpread              = 1 << 26,  // spread in tuple types
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3391,6 +3392,11 @@ namespace ts {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
+    }
+
+    // type spread types (TypeFlags.TypeSpread)
+    export interface TypeSpreadType extends TypeVariable {
+        type: Type;
     }
 
     // keyof T types (TypeFlags.Index)

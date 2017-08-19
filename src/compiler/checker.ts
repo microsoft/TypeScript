@@ -1,8 +1,8 @@
 /// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
-// /// <reference types="node" />
+/// <reference types="node" />
 
-// declare var console: Console;
+declare var console: Console;
 
 /* @internal */
 namespace ts {
@@ -240,6 +240,7 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
+        const spreadTypes = createMap<TypeSpreadType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
@@ -2528,6 +2529,10 @@ namespace ts {
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
+                if (type.flags & TypeFlags.TypeSpread) {
+                    const typeNode = typeToTypeNodeHelper((<TypeSpreadType>type).type, context);
+                    return createTypeSpread(typeNode);
+                }
 
                 Debug.fail("Should be unreachable.");
 
@@ -3290,6 +3295,10 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writeType((<IndexedAccessType>type).indexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    }
+                    else if (type.flags & TypeFlags.TypeSpread) {
+                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                        writeType((<TypeSpreadType>type).type, TypeFormatFlags.None);
                     }
                     else {
                         // Should never get here
@@ -5383,7 +5392,7 @@ namespace ts {
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
-            // if (allowSyntheticDefaultImports) console.log("resolveObjectTypeMembers", typeToString(type));
+            if (allowSyntheticDefaultImports) console.log("resolveObjectTypeMembers", typeToString(type));
             let mapper: TypeMapper;
             let members: SymbolTable;
             let callSignatures: Signature[];
@@ -7211,6 +7220,39 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeSpreadTypes(tuple: Type): Type[] {
+            if (isGenericTupleType(tuple)) {
+                // Defer the operation by creating a spread type.
+                const id = "" + tuple.id;
+                let type = spreadTypes.get(id);
+                if (!type) {
+                    spreadTypes.set(id, type = createTypeSpreadType(tuple));
+                }
+                return [type];
+            } else {
+                // const type = getApparentType(nodeType);
+                if (allowSyntheticDefaultImports) {
+                    console.log("type", typeToString(tuple));
+                    console.log("isTupleLikeType(type)", isTupleLikeType(tuple));
+                }
+                if (isTupleLikeType(tuple)) {
+                    // return map(getPropertiesOfType(tuple), getTypeOfSymbol);
+                    return getTupleTypeElementTypes(tuple);
+                }
+                else {
+                    // error(typeNode, Diagnostics.Tuple_type_spreads_may_only_be_created_from_tuple_types);
+                    console.log("not a tuple, don't resolve?");
+                    return [];
+                }
+            }
+        }
+
+        function isGenericTupleType(type: Type): boolean {
+            return type.flags & TypeFlags.TypeVariable ? true :
+                type.flags & TypeFlags.UnionOrIntersection ? forEach((<UnionOrIntersectionType>type).types, isGenericTupleType) :
+                false;
+        }
+
         function getTupleTypeElementTypes(type: Type): Type[] {
             Debug.assert(isTupleLikeType(type));
             const types = [];
@@ -7224,24 +7266,11 @@ namespace ts {
 
         function getTypeFromTupleElement(node: TypeNode | TypeSpreadTypeNode): Type | Type[] {
             if (node.kind === SyntaxKind.TypeSpread) {
-                const typeNode: TypeNode = (node as TypeSpreadTypeNode).type;
-                const type = getApparentType(getTypeFromTypeNode(typeNode as TypeNode));
-                // const nodeType = getTypeFromTypeNode(typeNode as TypeNode);
-                // const type = getApparentType(nodeType);
-                if (allowSyntheticDefaultImports) {
-                    // console.log("nodeType", typeToString(nodeType));
-                    // console.log("type", typeToString(type));
-                    // console.log("isTupleLikeType(nodeType)", isTupleLikeType(nodeType));
-                    // console.log("isTupleLikeType(type)", isTupleLikeType(type));
+                const links = getNodeLinks(node);
+                if (!links.resolvedType) {
+                    links.resolvedType = getTypeFromTypeNode((node as TypeSpreadTypeNode).type)
                 }
-                if (isTupleLikeType(type)) {
-                    // return map(getPropertiesOfType(type), getTypeOfSymbol);
-                    return getTupleTypeElementTypes(type);
-                }
-                else {
-                    error(typeNode, Diagnostics.Tuple_type_spreads_may_only_be_created_from_tuple_types);
-                    return [];
-                }
+                return getTypeSpreadTypes(links.resolvedType);
             }
             else {
                 return getTypeFromTypeNode(node as TypeNode);
@@ -7582,6 +7611,12 @@ namespace ts {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
             type.indexType = indexType;
+            return type;
+        }
+
+        function createTypeSpreadType(tuple: Type) {
+            const type = <TypeSpreadType>createType(TypeFlags.TypeSpread);
+            type.type = tuple;
             return type;
         }
 
@@ -8400,6 +8435,9 @@ namespace ts {
             if (type.flags & TypeFlags.IndexedAccess) {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
+            // if (type.flags & TypeFlags.TypeSpread) {
+            //     return getTypeSpreadTypes(instantiateType((<TypeSpreadType>type).type, mapper));
+            // }
             return type;
         }
 
@@ -18799,6 +18837,13 @@ namespace ts {
             forEach(node.elementTypes, checkSourceElement);
         }
 
+        function checkTypeSpread(node: TypeSpreadTypeNode) {
+            const type = getApparentType(getTypeFromTypeNode(node.type as TypeNode));
+            if (!isArrayLikeType(type)) { // isTupleLikeType
+                grammarErrorOnNode(node, Diagnostics.Tuple_type_spreads_may_only_be_created_from_tuple_types);
+            }
+        }
+
         function checkUnionOrIntersectionType(node: UnionOrIntersectionTypeNode) {
             forEach(node.types, checkSourceElement);
         }
@@ -22334,6 +22379,8 @@ namespace ts {
                     return checkArrayType(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return checkTupleType(<TupleTypeNode>node);
+                case SyntaxKind.TypeSpread:
+                    return checkTypeSpread(<TypeSpreadTypeNode>node);
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
