@@ -98,11 +98,11 @@ function f5() {
     z;
 }
 function f6() {
-    var x = {}.x;
+    var x = ({}).x;
     x;
-    var y = {}.y;
+    var y = ({}).y;
     y;
-    var _a = {}.z, z = _a === void 0 ? "" : _a;
+    var _a = ({}).z, z = _a === void 0 ? "" : _a;
     z;
 }
 function f7() {

@@ -194,12 +194,12 @@ function foo({a = 4, b = { x: 5 }}) {
 });
 (function () {
     var y1;
-    (_a = {}.y1, y1 = _a === void 0 ? 5 : _a);
+    (_a = ({}).y1, y1 = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {
     var y1;
-    (_a = {}.y1, y1 = _a === void 0 ? 5 : _a);
+    (_a = ({}).y1, y1 = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {

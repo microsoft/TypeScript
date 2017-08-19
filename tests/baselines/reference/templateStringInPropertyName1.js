@@ -4,6 +4,6 @@ var x = {
 }
 
 //// [templateStringInPropertyName1.js]
-var x = (_a = ["a"], _a.raw = ["a"], {}(_a));
+var x = (_a = ["a"], _a.raw = ["a"], ({})(_a));
 321;
 var _a;
