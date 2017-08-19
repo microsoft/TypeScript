@@ -12,6 +12,6 @@ export let b: {
 }
 
 b = {
-    __foo: 100,
+    ___foo: 100,
 }
 
