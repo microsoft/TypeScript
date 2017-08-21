@@ -8834,7 +8834,6 @@ namespace ts {
             let sourceStack: Type[];
             let targetStack: Type[];
             let maybeCount = 0;
-            let maybeReferences: Map<true>;
             let depth = 0;
             let expandingFlags = 0;
             let overflow = false;
@@ -9207,19 +9206,23 @@ namespace ts {
                 const onlyTypeParametersAsArguments =
                     arrayIsEqualTo(sourceArguments, targetArguments) &&
                     sourceArguments && sourceArguments.length > 0 &&
-                    every(sourceArguments, t => !!(t.flags & TypeFlags.TypeParameter));
+                    every(sourceArguments, t => t.flags & TypeFlags.TypeParameter && !getConstraintFromTypeParameter(t as TypeParameter));
                 if (!onlyTypeParametersAsArguments) {
                     return false;
                 }
-                const id = getTypePairKey((source as TypeReference).target, (target as TypeReference).target) +
-                    "<" + map(sourceArguments, t => { const c = getConstraintFromTypeParameter(t as TypeParameter); return c ? c.id : ""; }).join(",");
-                if (!maybeReferences) {
-                    maybeReferences = createMap<true>();
+                const id = getTypePairKey((source as TypeReference).target, (target as TypeReference).target);
+                if (!maybeKeys) {
+                    maybeKeys = [];
                 }
-                else if (maybeReferences.has(id)) {
-                    return true;
+                else {
+                    for (let i = 0; i < maybeCount; i++) {
+                        if (id === maybeKeys[i]) {
+                            return true;
+                        }
+                    }
                 }
-                maybeReferences.set(id, true);
+                maybeKeys[maybeCount] = id;
+                maybeCount++;
                 return false;
             }
 
@@ -9263,11 +9266,11 @@ namespace ts {
                         return Ternary.False;
                     }
                 }
+                const maybeStart = maybeCount;
                 if (alreadyComparingTypeReferences(source, target)) {
                     return Ternary.Maybe;
                 }
 
-                const maybeStart = maybeCount;
                 maybeKeys[maybeCount] = id;
                 maybeCount++;
                 sourceStack[depth] = source;
