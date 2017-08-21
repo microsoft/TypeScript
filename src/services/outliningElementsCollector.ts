@@ -13,7 +13,7 @@ namespace ts.OutliningElementsCollector {
 
         walk(sourceFile);
         gatherRegions();
-        return elements;
+        return elements.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
 
         /** If useFullStart is true, then the collapsing span includes leading whitespace, including linebreaks. */
         function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean, useFullStart: boolean) {
