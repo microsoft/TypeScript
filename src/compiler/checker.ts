@@ -4929,7 +4929,7 @@ namespace ts {
         }
 
         function resolveBaseTypesOfClass(type: InterfaceType): void {
-            type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
+            type.resolvedBaseTypes = emptyArray;
             const baseConstructorType = getApparentType(getBaseConstructorTypeOfClass(type));
             if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Any))) {
                 return;
@@ -4976,17 +4976,12 @@ namespace ts {
                 error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
                 return;
             }
-            if (type === baseType || hasBaseType(<BaseType>baseType, type)) {
+            if (type === baseType || hasBaseType(baseType, type)) {
                 error(valueDecl, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                 return;
             }
-            if (type.resolvedBaseTypes === emptyArray) {
-                type.resolvedBaseTypes = [<ObjectType>baseType];
-            }
-            else {
-                type.resolvedBaseTypes.push(<ObjectType>baseType);
-            }
+            type.resolvedBaseTypes = [baseType];
         }
 
         function areAllOuterTypeParametersApplied(type: Type): boolean {
@@ -5003,7 +4998,7 @@ namespace ts {
 
         // A valid base type is `any`, any non-generic object type or intersection of non-generic
         // object types.
-        function isValidBaseType(type: Type): boolean {
+        function isValidBaseType(type: Type): type is BaseType {
             return type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any) && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.Intersection && !forEach((<IntersectionType>type).types, t => !isValidBaseType(t));
         }
@@ -5016,12 +5011,12 @@ namespace ts {
                         const baseType = getTypeFromTypeNode(node);
                         if (baseType !== unknownType) {
                             if (isValidBaseType(baseType)) {
-                                if (type !== baseType && !hasBaseType(<BaseType>baseType, type)) {
+                                if (type !== baseType && !hasBaseType(baseType, type)) {
                                     if (type.resolvedBaseTypes === emptyArray) {
                                         type.resolvedBaseTypes = [<ObjectType>baseType];
                                     }
                                     else {
-                                        type.resolvedBaseTypes.push(<ObjectType>baseType);
+                                        type.resolvedBaseTypes.push(baseType);
                                     }
                                 }
                                 else {
