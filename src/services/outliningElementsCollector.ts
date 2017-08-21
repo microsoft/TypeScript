@@ -107,26 +107,28 @@ namespace ts.OutliningElementsCollector {
         }
 
         function isRegionStart(start: number, end: number) {
-            const comment = sourceFile.text.substring(start, end);
-            const result = comment.match(regionStart);
+            if (!ts.formatting.getRangeOfEnclosingComment(sourceFile, start, /*onlyMultiLine*/ true)) {
+                const comment = sourceFile.text.substring(start, end);
+                const result = comment.match(regionStart);
 
-            if (result && result.length > 0) {
-                const sections = result[0].split(" ").filter(function (s) { return s !== ""; });
+                if (result && result.length > 0) {
+                    const sections = result[0].split(" ").filter(function (s) { return s !== ""; });
 
-                if (sections[0] === "//") {
-                    if (sections.length > 2) {
-                        return result[0].substring(result[0].indexOf(sections[2]));
+                    if (sections[0] === "//") {
+                        if (sections.length > 2) {
+                            return result[0].substring(result[0].indexOf(sections[2]));
+                        }
+                        else {
+                            return regionText;
+                        }
                     }
                     else {
-                        return regionText;
-                    }
-                }
-                else {
-                    if (sections.length > 1) {
-                        return result[0].substring(result[0].indexOf(sections[1]));
-                    }
-                    else {
-                        return regionText;
+                        if (sections.length > 1) {
+                            return result[0].substring(result[0].indexOf(sections[1]));
+                        }
+                        else {
+                            return regionText;
+                        }
                     }
                 }
             }
@@ -134,8 +136,11 @@ namespace ts.OutliningElementsCollector {
         }
 
         function isRegionEnd(start: number, end: number) {
-            const comment = sourceFile.text.substring(start, end);
-            return comment.match(regionEnd);
+            if (!ts.formatting.getRangeOfEnclosingComment(sourceFile, start, /*onlyMultiLine*/ true)) {
+                const comment = sourceFile.text.substring(start, end);
+                return comment.match(regionEnd);
+            }
+            return undefined;
         }
 
         function gatherRegions(): void {
