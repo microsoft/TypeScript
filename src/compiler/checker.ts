@@ -9211,7 +9211,7 @@ namespace ts {
                 if (!onlyTypeParametersAsArguments) {
                     return false;
                 }
-                const id = getTypePairKey(source, target) +
+                const id = getTypePairKey((source as TypeReference).target, (target as TypeReference).target) +
                     "<" + map(sourceArguments, t => { let c = getConstraintFromTypeParameter(t as TypeParameter); return c ? c.id : "" }).join(',');
                 if (!maybeReferences) {
                     maybeReferences = createMap<true>();
