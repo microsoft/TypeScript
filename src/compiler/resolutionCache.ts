@@ -240,35 +240,11 @@ namespace ts {
         }
 
         function updateFailedLookupLocationWatches(containingFile: string, name: string, existingFailedLookupLocations: ReadonlyArray<string> | undefined, failedLookupLocations: ReadonlyArray<string>) {
-            if (failedLookupLocations) {
-                if (existingFailedLookupLocations) {
-                    const existingWatches = arrayToMap(existingFailedLookupLocations, toPath);
-                    for (const failedLookupLocation of failedLookupLocations) {
-                        const failedLookupLocationPath = toPath(failedLookupLocation);
-                        if (existingWatches && existingWatches.has(failedLookupLocationPath)) {
-                            // still has same failed lookup location, keep the watch
-                            existingWatches.delete(failedLookupLocationPath);
-                        }
-                        else {
-                            // Create new watch
-                            watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name);
-                        }
-                    }
+            // Watch all the failed lookup locations
+            withFailedLookupLocations(failedLookupLocations, containingFile, name, watchFailedLookupLocation);
 
-                    // Close all the watches that are still present in the existingWatches since those are not the locations looked up for buy new resolution
-                    existingWatches.forEach((failedLookupLocation, failedLookupLocationPath: Path) =>
-                        closeFailedLookupLocationWatcher(failedLookupLocation, failedLookupLocationPath, containingFile, name)
-                    );
-                }
-                else {
-                    // Watch all the failed lookup locations
-                    withFailedLookupLocations(failedLookupLocations, containingFile, name, watchFailedLookupLocation);
-                }
-            }
-            else {
-                // Close existing watches for the failed locations
-                withFailedLookupLocations(existingFailedLookupLocations, containingFile, name, closeFailedLookupLocationWatcher);
-            }
+            // Close existing watches for the failed locations
+            withFailedLookupLocations(existingFailedLookupLocations, containingFile, name, closeFailedLookupLocationWatcher);
         }
 
         function invalidateResolutionCacheOfDeletedFile<T extends NameResolutionWithFailedLookupLocations, R>(
