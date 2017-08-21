@@ -1718,7 +1718,7 @@ namespace ts.server {
          */
         reloadProjects() {
             this.logger.info("reload projects.");
-            this.reloadConfiguredsProjectForFiles(this.openFiles, /*delayReload*/ false);
+            this.reloadConfiguredProjectForFiles(this.openFiles, /*delayReload*/ false);
             this.refreshInferredProjects();
         }
 
@@ -1734,7 +1734,7 @@ namespace ts.server {
                     }
                 }
             );
-            this.reloadConfiguredsProjectForFiles(openFiles, /*delayReload*/ true);
+            this.reloadConfiguredProjectForFiles(openFiles, /*delayReload*/ true);
             this.delayInferredProjectsRefresh();
         }
 
@@ -1744,7 +1744,7 @@ namespace ts.server {
          * or schedules it for reload depending on delayReload option
          * If the there is no existing project it just opens the configured project for the config file
          */
-        private reloadConfiguredsProjectForFiles(openFiles: ScriptInfo[], delayReload: boolean) {
+        private reloadConfiguredProjectForFiles(openFiles: ReadonlyArray<ScriptInfo>, delayReload: boolean) {
             const updatedProjects = createMap<true>();
             // try to reload config file for all open files
             for (const info of openFiles) {
@@ -1778,11 +1778,19 @@ namespace ts.server {
          */
         private removeRootOfInferredProjectIfNowPartOfOtherProject(info: ScriptInfo) {
             // If the script info is root of inferred project, it could only be first containing project
-            // since info is added to inferred project and made root only when there are no other projects containing it
-            // So even if it is root of the inferred project and after project structure updates its now part
+            // since info is added as root to the inferred project only when there are no other projects containing it
+            // So when it is root of the inferred project and after project structure updates its now part
             // of multiple project it needs to be removed from that inferred project because:
             // - references in inferred project supercede the root part
             // - root / reference in non - inferred project beats root in inferred project
+
+            // eg. say this is structure /a/b/a.ts /a/b/c.ts where c.ts references a.ts
+            // When a.ts is opened, since there is no configured project/external project a.ts can be part of
+            // a.ts is added as root to inferred project.
+            // Now at time of opening c.ts, c.ts is also not aprt of any existing project,
+            // so it will be added to inferred project as a root. (for sake of this example assume single inferred project is false)
+            // So at this poing a.ts is part of first inferred project and second inferred project (of which c.ts is root)
+            // And hence it needs to be removed from the first inferred project.
             if (info.containingProjects.length > 1 &&
                 info.containingProjects[0].projectKind === ProjectKind.Inferred &&
                 info.containingProjects[0].isRoot(info)) {

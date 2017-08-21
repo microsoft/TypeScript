@@ -937,7 +937,7 @@ namespace ts.server {
             this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info, WatcherCloseReason.NotNeeded);
             super.removeRoot(info);
             if (this._isJsInferredProject && info.isJavaScript()) {
-                if (!some(this.getRootScriptInfos(), info => info.isJavaScript())) {
+                if (every(this.getRootScriptInfos(), rootInfo => !rootInfo.isJavaScript())) {
                     this.toggleJsInferredProject(/*isJsInferredProject*/ false);
                 }
             }
