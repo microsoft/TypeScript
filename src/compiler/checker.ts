@@ -9775,7 +9775,7 @@ namespace ts {
         }
 
         function getTypeReferenceId(type: TypeReference, typeParameters: Type[]) {
-            let result = "" + type.id;
+            let result = "" + type.target.id;
             for (const t of type.typeArguments) {
                 if (isUnconstrainedTypeParameter(t)) {
                     let index = indexOf(typeParameters, t);
