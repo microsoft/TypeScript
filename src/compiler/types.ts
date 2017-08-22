@@ -240,6 +240,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        TypeCall,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -398,7 +399,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = LiteralType,
+        LastTypeNode = TypeCall,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1493,6 +1494,13 @@ namespace ts {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
+    }
+
+    export interface TypeCallTypeNode extends TypeNode {
+        kind: SyntaxKind.TypeCall;
+        type: TypeNode;
+        typeArguments?: NodeArray<TypeNode>;
+        arguments: NodeArray<TypeNode>;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-SuperCall

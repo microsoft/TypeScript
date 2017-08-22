@@ -753,6 +753,8 @@ namespace ts {
                     return emitPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return emitElementAccessExpression(<ElementAccessExpression>node);
+                case SyntaxKind.TypeCall:
+                    return emitTypeCall(<TypeCallTypeNode>node);
                 case SyntaxKind.CallExpression:
                     return emitCallExpression(<CallExpression>node);
                 case SyntaxKind.NewExpression:
@@ -1238,6 +1240,12 @@ namespace ts {
             write("[");
             emitExpression(node.argumentExpression);
             write("]");
+        }
+
+        function emitTypeCall(node: TypeCallTypeNode) {
+            emit(node.type);
+            emitTypeArguments(node, node.typeArguments);
+            emitList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
 
         function emitCallExpression(node: CallExpression) {

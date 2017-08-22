@@ -7546,6 +7546,18 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
+            const fn = typeToExpression(node.type);
+            const args = map(node.arguments, typeToExpression);
+            const callExpr = createCall(fn, node.typeArguments, args);
+            return checkExpression(callExpr);
+        }
+
+        // null! as type
+        function typeToExpression(type: TypeNode): Expression {
+            return createAsExpression(createNonNullExpression(createNull()), type);
+        }
+
         function createIndexedAccessType(objectType: Type, indexType: Type) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
@@ -8003,6 +8015,8 @@ namespace ts {
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 case SyntaxKind.TypeOperator:
                     return getTypeFromTypeOperatorNode(<TypeOperatorNode>node);
+                case SyntaxKind.TypeCall:
+                    return getTypeFromTypeCallNode(<TypeCallTypeNode>node);
                 case SyntaxKind.IndexedAccessType:
                     return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
@@ -13179,7 +13193,7 @@ namespace ts {
                 return node.contextualType;
             }
             const parent = node.parent;
-            switch (parent.kind) {
+            switch (parent && parent.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.PropertyDeclaration:

@@ -170,6 +170,10 @@ namespace ts {
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
                     visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
+            case SyntaxKind.TypeCall:
+                return visitNode(cbNode, (<TypeCallTypeNode>node).type) ||
+                    visitNodes(cbNode, cbNodes, (<TypeCallTypeNode>node).typeArguments) ||
+                    visitNodes(cbNode, cbNodes, (<TypeCallTypeNode>node).arguments);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
@@ -2738,8 +2742,8 @@ namespace ts {
             return token() === SyntaxKind.CloseParenToken || isStartOfParameter() || isStartOfType();
         }
 
-        function parseJSDocPostfixTypeOrHigher(): TypeNode {
-            const type = parseNonArrayType();
+        function parseJSDocPostfixTypeOrHigher(typeNode?: TypeNode): TypeNode {
+            const type = typeNode || parseNonArrayType();
             const kind = getKind(token());
             if (!kind) return type;
             nextToken();
@@ -2761,8 +2765,8 @@ namespace ts {
             }
         }
 
-        function parseArrayTypeOrHigher(): TypeNode {
-            let type = parseJSDocPostfixTypeOrHigher();
+        function parseArrayTypeOrHigher(typeNode?: TypeNode): TypeNode {
+            let type = parseJSDocPostfixTypeOrHigher(typeNode);
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 if (isStartOfType()) {
                     const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
@@ -2794,7 +2798,7 @@ namespace ts {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
             }
-            return parseArrayTypeOrHigher();
+            return parseTypeCallRest();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
@@ -4238,6 +4242,46 @@ namespace ts {
 
                 return <MemberExpression>expression;
             }
+        }
+
+        // type equivalent of parseCallExpressionRest
+        function parseTypeCallRest(type?: TypeNode): TypeNode {
+            while (true) {
+                type = parseArrayTypeOrHigher(type);
+                if (token() === SyntaxKind.LessThanToken) {
+                    // See if this is the start of a generic invocation.  If so, consume it and
+                    // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
+                    // part of an arithmetic expression.  Break out so we consume it higher in the
+                    // stack.
+                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                    if (!typeArguments) {
+                        return type;
+                    }
+
+                    const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
+                    callExpr.type = type;
+                    callExpr.typeArguments = typeArguments;
+                    callExpr.arguments = parseTypeArgumentList();
+                    type = finishNode(callExpr);
+                    continue;
+                }
+                else if (token() === SyntaxKind.OpenParenToken) {
+                    const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
+                    callExpr.type = type;
+                    callExpr.arguments = parseTypeArgumentList();
+                    type = finishNode(callExpr);
+                    continue;
+                }
+
+                return type;
+            }
+        }
+
+        function parseTypeArgumentList() {
+            parseExpected(SyntaxKind.OpenParenToken);
+            const result = parseDelimitedList(ParsingContext.TypeArguments, parseType);
+            parseExpected(SyntaxKind.CloseParenToken);
+            return result;
         }
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {

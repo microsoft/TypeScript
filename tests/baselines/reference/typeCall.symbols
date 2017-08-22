@@ -1,0 +1,86 @@
+=== tests/cases/compiler/typeCall.ts ===
+type F1 = () => 1;
+>F1 : Symbol(F1, Decl(typeCall.ts, 0, 0))
+
+type a = F1();
+>a : Symbol(a, Decl(typeCall.ts, 0, 18), Decl(typeCall.ts, 16, 3))
+>F1 : Symbol(F1, Decl(typeCall.ts, 0, 0))
+
+type F2 = (a: string) => 1;
+>F2 : Symbol(F2, Decl(typeCall.ts, 1, 14))
+>a : Symbol(a, Decl(typeCall.ts, 3, 11))
+
+type b = F2('foo');
+>b : Symbol(b, Decl(typeCall.ts, 3, 27))
+>F2 : Symbol(F2, Decl(typeCall.ts, 1, 14))
+
+interface F3 {
+>F3 : Symbol(F3, Decl(typeCall.ts, 4, 19))
+
+    (): 1;
+    (a: number): 2;
+>a : Symbol(a, Decl(typeCall.ts, 8, 5))
+
+    (a: string): 3;
+>a : Symbol(a, Decl(typeCall.ts, 9, 5))
+}
+type c = F3();
+>c : Symbol(c, Decl(typeCall.ts, 10, 1))
+>F3 : Symbol(F3, Decl(typeCall.ts, 4, 19))
+
+type d = F3(123);
+>d : Symbol(d, Decl(typeCall.ts, 11, 14))
+>F3 : Symbol(F3, Decl(typeCall.ts, 4, 19))
+
+type e = F3('foo');
+>e : Symbol(e, Decl(typeCall.ts, 12, 17))
+>F3 : Symbol(F3, Decl(typeCall.ts, 4, 19))
+
+declare function f4(a: string): 1;
+>f4 : Symbol(f4, Decl(typeCall.ts, 13, 19))
+>a : Symbol(a, Decl(typeCall.ts, 15, 20))
+
+let a = 'foo';
+>a : Symbol(a, Decl(typeCall.ts, 0, 18), Decl(typeCall.ts, 16, 3))
+
+type f = typeof f4(typeof a);
+>f : Symbol(f, Decl(typeCall.ts, 16, 14))
+>f4 : Symbol(f4, Decl(typeCall.ts, 13, 19))
+>a : Symbol(a, Decl(typeCall.ts, 0, 18), Decl(typeCall.ts, 16, 3))
+
+type g = (() => 1)();
+>g : Symbol(g, Decl(typeCall.ts, 17, 29))
+
+type Id = <T>(v: T) => T;
+>Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
+>T : Symbol(T, Decl(typeCall.ts, 21, 11))
+>v : Symbol(v, Decl(typeCall.ts, 21, 14))
+>T : Symbol(T, Decl(typeCall.ts, 21, 11))
+>T : Symbol(T, Decl(typeCall.ts, 21, 11))
+
+type h = Id(123);
+>h : Symbol(h, Decl(typeCall.ts, 21, 25))
+>Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
+
+type Wrap<T> = Id(T);
+>Wrap : Symbol(Wrap, Decl(typeCall.ts, 22, 17))
+>T : Symbol(T, Decl(typeCall.ts, 24, 10))
+>Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
+>T : Symbol(T, Decl(typeCall.ts, 24, 10))
+
+type i = Wrap<123>;
+>i : Symbol(i, Decl(typeCall.ts, 24, 21))
+>Wrap : Symbol(Wrap, Decl(typeCall.ts, 22, 17))
+
+type F5 = () => () => { a: () => 1; };
+>F5 : Symbol(F5, Decl(typeCall.ts, 25, 19))
+>a : Symbol(a, Decl(typeCall.ts, 27, 23))
+
+type j = F5()()['a']();
+>j : Symbol(j, Decl(typeCall.ts, 27, 38))
+>F5 : Symbol(F5, Decl(typeCall.ts, 25, 19))
+
+type k = Id<string>('foo');
+>k : Symbol(k, Decl(typeCall.ts, 28, 23))
+>Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
+
