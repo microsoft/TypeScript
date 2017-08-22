@@ -8,7 +8,8 @@ namespace ts {
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
         getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type,
-        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type) {
+        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type,
+        getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier) {
 
         return getSymbolWalker;
 
@@ -180,19 +181,10 @@ namespace ts {
                     // query node on any of the symbol's declarations and get symbols there
                     if ((d as any).type && (d as any).type.kind === SyntaxKind.TypeQuery) {
                         const query = (d as any).type as TypeQueryNode;
-                        const entity = leftmostSymbol(query.exprName);
+                        const entity = getResolvedSymbol(getFirstIdentifier(query.exprName));
                         visitSymbol(entity);
                     }
                 });
-            }
-        }
-
-        function leftmostSymbol(expr: QualifiedName | Identifier): Symbol {
-            if (expr.kind === SyntaxKind.Identifier) {
-                return getResolvedSymbol(expr as Identifier);
-            }
-            else {
-                return leftmostSymbol((expr as QualifiedName).left);
             }
         }
     }
