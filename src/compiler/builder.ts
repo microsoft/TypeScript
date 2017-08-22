@@ -187,11 +187,11 @@ namespace ts {
 
         function enumerateChangedFilesSet(
             program: Program,
-            onChangedFile: (fileName: string) => void,
+            onChangedFile: (fileName: string, path: Path) => void,
             onAffectedFile: (fileName: string, sourceFile: SourceFile) => void
         ) {
             changedFileNames.forEach((fileName, path) => {
-                onChangedFile(fileName);
+                onChangedFile(fileName, path as Path);
                 const affectedFiles = getFilesAffectedBy(program, path as Path);
                 for (const file of affectedFiles) {
                     onAffectedFile(file, program.getSourceFile(file));
@@ -202,7 +202,7 @@ namespace ts {
         function enumerateChangedFilesEmitOutput(
             program: Program,
             emitOnlyDtsFiles: boolean,
-            onChangedFile: (fileName: string) => void,
+            onChangedFile: (fileName: string, path: Path) => void,
             onEmitOutput: (emitOutput: EmitOutputDetailed, sourceFile: SourceFile) => void
         ) {
             const seenFiles = createMap<SourceFile>();
@@ -268,23 +268,23 @@ namespace ts {
             ensureProgramGraph(program);
 
             let filesToEmit: string[];
-            let changedFiles: string[];
+            const changedFiles = createMap<string>();
             enumerateChangedFilesEmitOutput(program, /*emitOnlyDtsFiles*/ true,
                 // All the changed files are required to get diagnostics
-                changedFileName => addFileForDiagnostics(changedFileName),
+                (changedFileName, changedFilePath) => addFileForDiagnostics(changedFileName, changedFilePath),
                 // Emitted file is for emit as well as diagnostic
                 (_emitOutput, sourceFile) => {
                     (filesToEmit || (filesToEmit = [])).push(sourceFile.fileName);
-                    addFileForDiagnostics(sourceFile.fileName);
+                    addFileForDiagnostics(sourceFile.fileName, sourceFile.path);
                 });
             changedFileNames.clear();
             return {
                 filesToEmit: filesToEmit || emptyArray,
-                changedFiles: changedFiles || emptyArray
+                changedFiles: arrayFrom(changedFiles.values())
             };
 
-            function addFileForDiagnostics(fileName: string) {
-                (changedFiles || (changedFiles = [])).push(fileName);
+            function addFileForDiagnostics(fileName: string, path: Path) {
+                changedFiles.set(path, fileName);
             }
         }
 
