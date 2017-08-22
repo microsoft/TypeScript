@@ -131,7 +131,7 @@ function move2(direction) {
 function check(x) {
     return x || error("Undefined value");
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.void1 = function () {

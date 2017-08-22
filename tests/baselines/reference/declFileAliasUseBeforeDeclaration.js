@@ -10,7 +10,7 @@ import foo = require("./declFileAliasUseBeforeDeclaration_foo");
 //// [declFileAliasUseBeforeDeclaration_foo.js]
 "use strict";
 exports.__esModule = true;
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

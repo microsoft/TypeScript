@@ -371,14 +371,15 @@ namespace ts.server.typingsInstaller {
                     this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
                 }
                 finally {
-                    this.sendResponse(<EndInstallTypes>{
+                    const response: EndInstallTypes = {
                         kind: EventEndInstallTypes,
                         eventId: requestId,
                         projectName: req.projectName,
                         packagesToInstall: scopedTypings,
                         installSuccess: ok,
                         typingsInstallerVersion: ts.version // qualified explicitly to prevent occasional shadowing
-                    });
+                    };
+                    this.sendResponse(response);
                 }
             });
         }

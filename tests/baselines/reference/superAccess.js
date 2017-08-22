@@ -24,7 +24,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var MyBase = (function () {
+var MyBase = /** @class */ (function () {
     function MyBase() {
         this.S2 = "test";
         this.f = function () { return 5; };
@@ -32,7 +32,7 @@ var MyBase = (function () {
     MyBase.S1 = 5;
     return MyBase;
 }());
-var MyDerived = (function (_super) {
+var MyDerived = /** @class */ (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
         return _super !== null && _super.apply(this, arguments) || this;

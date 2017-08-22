@@ -67,14 +67,16 @@ function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
     y[k] = x[k];  // Error
 }
 
+type Thing = { a: string, b: string };
+
 function f30<T>(x: T, y: Partial<T>) {
     x = y;  // Error
     y = x;
 }
 
-function f31<T>(x: T, y: Partial<T>) {
-    x = y;  // Error
-    y = x;
+function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>) {
+    x = y;
+    y = x;  // Error
 }
 
 function f40<T>(x: T, y: Readonly<T>) {
@@ -82,9 +84,9 @@ function f40<T>(x: T, y: Readonly<T>) {
     y = x;
 }
 
-function f41<T>(x: T, y: Readonly<T>) {
+function f41<T extends Thing>(x: Readonly<Thing>, y: Readonly<T>) {
     x = y;
-    y = x;
+    y = x;  // Error
 }
 
 type Item = {
@@ -228,8 +230,8 @@ function f30(x, y) {
     y = x;
 }
 function f31(x, y) {
-    x = y; // Error
-    y = x;
+    x = y;
+    y = x; // Error
 }
 function f40(x, y) {
     x = y;
@@ -237,7 +239,7 @@ function f40(x, y) {
 }
 function f41(x, y) {
     x = y;
-    y = x;
+    y = x; // Error
 }
 function f50(obj, key) {
     var item = obj[key];
@@ -304,10 +306,14 @@ declare function f20<T>(x: T, y: Readonly<T>, k: keyof T): void;
 declare function f21<T, K extends keyof T>(x: T, y: Readonly<T>, k: K): void;
 declare function f22<T, U extends T>(x: T, y: Readonly<U>, k: keyof T): void;
 declare function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K): void;
+declare type Thing = {
+    a: string;
+    b: string;
+};
 declare function f30<T>(x: T, y: Partial<T>): void;
-declare function f31<T>(x: T, y: Partial<T>): void;
+declare function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>): void;
 declare function f40<T>(x: T, y: Readonly<T>): void;
-declare function f41<T>(x: T, y: Readonly<T>): void;
+declare function f41<T extends Thing>(x: Readonly<Thing>, y: Readonly<T>): void;
 declare type Item = {
     name: string;
 };

@@ -8,7 +8,7 @@ class A {
 }
 
 //// [noEmitHelpers2.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A(a, b) {
     }
     A = __decorate([

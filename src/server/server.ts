@@ -9,6 +9,7 @@ namespace ts.server {
         canUseEvents: boolean;
         installerEventPort: number;
         useSingleInferredProject: boolean;
+        useInferredProjectPerProjectRoot: boolean;
         disableAutomaticTypingAcquisition: boolean;
         globalTypingsCacheLocation: string;
         logger: Logger;
@@ -16,8 +17,8 @@ namespace ts.server {
         typesMapLocation: string | undefined;
         npmLocation: string | undefined;
         telemetryEnabled: boolean;
-        globalPlugins: string[];
-        pluginProbeLocations: string[];
+        globalPlugins: ReadonlyArray<string>;
+        pluginProbeLocations: ReadonlyArray<string>;
         allowLocalPluginLoads: boolean;
     }
 
@@ -117,8 +118,6 @@ namespace ts.server {
         birthtime: Date;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
-
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
@@ -180,6 +179,10 @@ namespace ts.server {
             this.msg(s, Msg.Info);
         }
 
+        err(s: string) {
+            this.msg(s, Msg.Err);
+        }
+
         startGroup() {
             this.inGroup = true;
             this.firstInGroup = true;
@@ -187,8 +190,6 @@ namespace ts.server {
 
         endGroup() {
             this.inGroup = false;
-            this.seq++;
-            this.firstInGroup = true;
         }
 
         loggingEnabled() {
@@ -200,25 +201,31 @@ namespace ts.server {
         }
 
         msg(s: string, type: Msg.Types = Msg.Err) {
-            if (this.fd >= 0 || this.traceToConsole) {
-                s = `[${nowString()}] ${s}\n`;
+            if (!this.canWrite) return;
+
+            s = `[${nowString()}] ${s}\n`;
+            if (!this.inGroup || this.firstInGroup) {
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
-                if (this.firstInGroup) {
-                    s = prefix + s;
-                    this.firstInGroup = false;
-                }
-                if (!this.inGroup) {
-                    this.seq++;
-                    this.firstInGroup = true;
-                }
-                if (this.fd >= 0) {
-                    const buf = new Buffer(s);
-                    // tslint:disable-next-line no-null-keyword
-                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
-                }
-                if (this.traceToConsole) {
-                    console.warn(s);
-                }
+                s = prefix + s;
+            }
+            this.write(s);
+            if (!this.inGroup) {
+                this.seq++;
+            }
+        }
+
+        private get canWrite() {
+            return this.fd >= 0 || this.traceToConsole;
+        }
+
+        private write(s: string) {
+            if (this.fd >= 0) {
+                const buf = new Buffer(s);
+                // tslint:disable-next-line no-null-keyword
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
+            }
+            if (this.traceToConsole) {
+                console.warn(s);
             }
         }
     }
@@ -415,6 +422,7 @@ namespace ts.server {
                 host,
                 cancellationToken,
                 useSingleInferredProject,
+                useInferredProjectPerProjectRoot,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
@@ -762,15 +770,26 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    setStackTraceLimit();
+
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
     const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
-    const globalPlugins = (findArgument("--globalPlugins") || "").split(",");
-    const pluginProbeLocations = (findArgument("--pluginProbeLocations") || "").split(",");
+    function parseStringArray(argName: string): ReadonlyArray<string> {
+        const arg = findArgument(argName);
+        if (arg === undefined) {
+            return emptyArray;
+        }
+        return arg.split(",").filter(name => name !== "");
+    }
+
+    const globalPlugins = parseStringArray("--globalPlugins");
+    const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
+    const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
@@ -780,6 +799,7 @@ namespace ts.server {
         installerEventPort: eventPort,
         canUseEvents: eventPort === undefined,
         useSingleInferredProject,
+        useInferredProjectPerProjectRoot,
         disableAutomaticTypingAcquisition,
         globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
         typingSafeListLocation,

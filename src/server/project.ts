@@ -54,7 +54,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: Diagnostic[];
+        projectErrors: ReadonlyArray<Diagnostic>;
     }
 
     export class UnresolvedImportsMap {
@@ -147,7 +147,7 @@ namespace ts.server {
 
         private typingFiles: SortedReadonlyArray<string>;
 
-        protected projectErrors: Diagnostic[];
+        protected projectErrors: ReadonlyArray<Diagnostic>;
 
         public typesVersion = 0;
 
@@ -170,7 +170,8 @@ namespace ts.server {
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
             if (result.error) {
-                log(`Failed to load module: ${JSON.stringify(result.error)}`);
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                log(`Failed to load module '${moduleName}': ${err}`);
                 return undefined;
             }
             return result.module;
@@ -362,7 +363,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
-                    Debug.assert(false, `scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' is missing.`);
                 }
                 return scriptInfo;
             });
@@ -498,7 +499,7 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -558,7 +559,7 @@ namespace ts.server {
                 for (const sourceFile of this.program.getSourceFiles()) {
                     this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
                 }
-                this.lastCachedUnresolvedImportsList = toSortedArray(result);
+                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
             }
             unresolvedImports = this.lastCachedUnresolvedImportsList;
 
@@ -840,6 +841,7 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
+        public readonly projectRootPath: string | undefined;
 
         private static readonly newName = (() => {
             let nextId = 1;
@@ -879,7 +881,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -888,6 +890,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+            this.projectRootPath = projectRootPath;
         }
 
         addRoot(info: ScriptInfo) {
@@ -940,9 +943,9 @@ namespace ts.server {
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
         private projectFileWatcher: FileWatcher;
-        private directoryWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<FileWatcher>;
-        private typeRootsWatchers: FileWatcher[];
+        private directoryWatcher: FileWatcher | undefined;
+        private directoriesWatchedForWildcards: Map<FileWatcher> | undefined;
+        private typeRootsWatchers: FileWatcher[] | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         private plugins: PluginModule[] = [];
@@ -1048,7 +1051,7 @@ namespace ts.server {
             return getDirectoryPath(this.getConfigFilePath());
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 
@@ -1138,10 +1141,12 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            this.directoriesWatchedForWildcards.forEach(watcher => {
-                watcher.close();
-            });
-            this.directoriesWatchedForWildcards = undefined;
+            if (this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards.forEach(watcher => {
+                    watcher.close();
+                });
+                this.directoriesWatchedForWildcards = undefined;
+            }
 
             this.stopWatchingDirectory();
         }
@@ -1196,7 +1201,7 @@ namespace ts.server {
             return this.typeAcquisition;
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 

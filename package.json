@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.5.0",
+    "version": "2.6.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -60,7 +60,6 @@
         "gulp-newer": "latest",
         "gulp-sourcemaps": "latest",
         "gulp-typescript": "latest",
-        "into-stream": "latest",
         "istanbul": "latest",
         "jake": "latest",
         "merge2": "latest",
@@ -91,7 +90,6 @@
         "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {
-        "buffer": false,
         "fs": false,
         "os": false,
         "path": false

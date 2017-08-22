@@ -33,7 +33,7 @@ module M {
 //// [fuzzy.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C(x) {
             this.x = x;
         }

@@ -75,7 +75,7 @@ define(["require", "exports"], function (require, exports) {
         var m2;
         (function (m2) {
             /** class comment;*/
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;
@@ -106,7 +106,7 @@ define(["require", "exports"], function (require, exports) {
         var m2;
         (function (m2) {
             /** class comment; */
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;

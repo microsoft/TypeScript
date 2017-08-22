@@ -33,14 +33,14 @@ interface I2<T> {
 
 //// [multipleStringIndexers.js]
 // Multiple indexers of the same type are an error
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var a;
 var b = { y: '' };
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;

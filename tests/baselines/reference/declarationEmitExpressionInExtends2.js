@@ -22,7 +22,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -30,7 +30,7 @@ var C = (function () {
 function getClass(c) {
     return C;
 }
-var MyClass = (function (_super) {
+var MyClass = /** @class */ (function (_super) {
     __extends(MyClass, _super);
     function MyClass() {
         return _super !== null && _super.apply(this, arguments) || this;
