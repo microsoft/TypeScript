@@ -11,7 +11,7 @@
 ////// #endregion|]
 ////
 ////// region with extra whitespace in all valid locations
-////[|             //              #region          label2    label3
+////             [|//              #region          label2    label3
 ////
 ////        //        #endregion|]
 ////

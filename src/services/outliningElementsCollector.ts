@@ -2,14 +2,14 @@
 namespace ts.OutliningElementsCollector {
     const collapseText = "...";
     const maxDepth = 20;
+    const regionText = "#region";
+    const regionStart = new RegExp("^\\s*//\\s*#region(\\s+.*)?$");
+    const regionEnd = new RegExp("^\\s*//\\s*#endregion(\\s|$)");
 
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         let depth = 0;
         const regions: RegionRange[] = [];
-        const regionText = "#region";
-        const regionStart = new RegExp("^\\s*//\\s*#region(\\s+.*)?$", "gm");
-        const regionEnd = new RegExp("^\\s*//\\s*#endregion(\\s|$)", "gm");
 
         walk(sourceFile);
         gatherRegions();
@@ -42,9 +42,10 @@ namespace ts.OutliningElementsCollector {
 
         function addOutliningSpanRegions(regionSpan: RegionRange) {
             if (regionSpan) {
+                const textSpan = createTextSpanFromBounds(regionSpan.pos, regionSpan.end);
                 const span: OutliningSpan = {
-                    textSpan: createTextSpanFromBounds(regionSpan.pos, regionSpan.end),
-                    hintSpan: createTextSpanFromBounds(regionSpan.pos, regionSpan.end),
+                    textSpan,
+                    hintSpan: textSpan,
                     bannerText: regionSpan.name,
                     autoCollapse: false,
                 };
@@ -106,29 +107,18 @@ namespace ts.OutliningElementsCollector {
             return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
         }
 
-        function isRegionStart(start: number, end: number) {
+        function getRegionName(start: number, end: number) {
             if (!ts.formatting.getRangeOfEnclosingComment(sourceFile, start, /*onlyMultiLine*/ true)) {
                 const comment = sourceFile.text.substring(start, end);
                 const result = comment.match(regionStart);
 
                 if (result && result.length > 0) {
-                    const sections = result[0].split(" ").filter(function (s) { return s !== ""; });
-
-                    if (sections[0] === "//") {
-                        if (sections.length > 2) {
-                            return result[0].substring(result[0].indexOf(sections[2]));
-                        }
-                        else {
-                            return regionText;
-                        }
+                    const label = result.pop();
+                    if (label) {
+                        return label.trim();
                     }
                     else {
-                        if (sections.length > 1) {
-                            return result[0].substring(result[0].indexOf(sections[1]));
-                        }
-                        else {
-                            return regionText;
-                        }
+                        return regionText;
                     }
                 }
             }
@@ -146,13 +136,15 @@ namespace ts.OutliningElementsCollector {
         function gatherRegions(): void {
             const lineStarts = sourceFile.getLineStarts();
 
-            for (const currentLineStart of lineStarts) {
-                const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
+            for (let i = 0; i < lineStarts.length; i++) {
+                const currentLineStart = lineStarts[i];
+                const lineEnd = lineStarts[i + 1] - 1 || sourceFile.getEnd();
 
-                const name = isRegionStart(currentLineStart, lineEnd);
+                const name = getRegionName(currentLineStart, lineEnd);
                 if (name) {
+                    const start = sourceFile.getFullText().indexOf("//", currentLineStart);
                     const region: RegionRange = {
-                        pos: currentLineStart,
+                        pos: start,
                         end: lineEnd,
                         name,
                     };
