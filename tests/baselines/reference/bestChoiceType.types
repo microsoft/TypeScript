@@ -1,9 +1,9 @@
 === tests/cases/compiler/bestChoiceType.ts ===
 // Repro from #10041
 
-(''.match(/ /) || []).map(s => s.toLowerCase());
->(''.match(/ /) || []).map(s => s.toLowerCase()) : string[]
->(''.match(/ /) || []).map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+(''.match(/ /) || []).map(s => s!.toLowerCase());
+>(''.match(/ /) || []).map(s => s!.toLowerCase()) : string[]
+>(''.match(/ /) || []).map : <U>(callbackfn: (value: string | undefined, index: number, array: (string | undefined)[]) => U, thisArg?: any) => U[]
 >(''.match(/ /) || []) : RegExpMatchArray
 >''.match(/ /) || [] : RegExpMatchArray
 >''.match(/ /) : RegExpMatchArray | null
@@ -12,12 +12,13 @@
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/ / : RegExp
 >[] : never[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->s => s.toLowerCase() : (s: string) => string
->s : string
->s.toLowerCase() : string
->s.toLowerCase : () => string
->s : string
+>map : <U>(callbackfn: (value: string | undefined, index: number, array: (string | undefined)[]) => U, thisArg?: any) => U[]
+>s => s!.toLowerCase() : (s: string | undefined) => string
+>s : string | undefined
+>s!.toLowerCase() : string
+>s!.toLowerCase : () => string
+>s! : string
+>s : string | undefined
 >toLowerCase : () => string
 
 // Similar cases
@@ -39,17 +40,18 @@ function f1() {
 >x : RegExpMatchArray | null
 >[] : never[]
 
-    let z = y.map(s => s.toLowerCase());
+    let z = y.map(s => s!.toLowerCase());
 >z : string[]
->y.map(s => s.toLowerCase()) : string[]
->y.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>y.map(s => s!.toLowerCase()) : string[]
+>y.map : <U>(callbackfn: (value: string | undefined, index: number, array: (string | undefined)[]) => U, thisArg?: any) => U[]
 >y : RegExpMatchArray
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->s => s.toLowerCase() : (s: string) => string
->s : string
->s.toLowerCase() : string
->s.toLowerCase : () => string
->s : string
+>map : <U>(callbackfn: (value: string | undefined, index: number, array: (string | undefined)[]) => U, thisArg?: any) => U[]
+>s => s!.toLowerCase() : (s: string | undefined) => string
+>s : string | undefined
+>s!.toLowerCase() : string
+>s!.toLowerCase : () => string
+>s! : string
+>s : string | undefined
 >toLowerCase : () => string
 }
 
@@ -71,17 +73,18 @@ function f2() {
 >x : RegExpMatchArray
 >[] : never[]
 
-    let z = y.map(s => s.toLowerCase());
+    let z = y.map(s => s!.toLowerCase());
 >z : string[]
->y.map(s => s.toLowerCase()) : string[]
->y.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>y.map(s => s!.toLowerCase()) : string[]
+>y.map : <U>(callbackfn: (value: string | undefined, index: number, array: (string | undefined)[]) => U, thisArg?: any) => U[]
 >y : RegExpMatchArray
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->s => s.toLowerCase() : (s: string) => string
->s : string
->s.toLowerCase() : string
->s.toLowerCase : () => string
->s : string
+>map : <U>(callbackfn: (value: string | undefined, index: number, array: (string | undefined)[]) => U, thisArg?: any) => U[]
+>s => s!.toLowerCase() : (s: string | undefined) => string
+>s : string | undefined
+>s!.toLowerCase() : string
+>s!.toLowerCase : () => string
+>s! : string
+>s : string | undefined
 >toLowerCase : () => string
 }
 
