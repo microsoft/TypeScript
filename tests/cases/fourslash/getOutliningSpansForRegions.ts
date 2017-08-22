@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////// basic region
+////// region without label
 ////[|// #region
 ////
 ////// #endregion|]
@@ -29,7 +29,7 @@
 ////
 ////// #endregion outer|]
 ////
-////// region delimiters not valid when preceding text on line
+////// region delimiters not valid when there is preceding text on line
 //// test // #region invalid1
 ////
 ////test // #endregion

@@ -2,9 +2,9 @@
 namespace ts.OutliningElementsCollector {
     const collapseText = "...";
     const maxDepth = 20;
-    const regionText = "#region";
-    const regionStart = new RegExp("^\\s*//\\s*#region(\\s+.*)?$");
-    const regionEnd = new RegExp("^\\s*//\\s*#endregion(\\s|$)");
+    const defaultLabel = "#region";
+    const regionStart = new RegExp("^//\\s*#region(\\s+.*)?$");
+    const regionEnd = new RegExp("^//\\s*#endregion(\\s|$)");
 
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
@@ -42,7 +42,7 @@ namespace ts.OutliningElementsCollector {
 
         function addOutliningSpanRegions(regionSpan: RegionRange) {
             if (regionSpan) {
-                const textSpan = createTextSpanFromBounds(regionSpan.pos, regionSpan.end);
+                const textSpan = createTextSpanFromRange(regionSpan);
                 const span: OutliningSpan = {
                     textSpan,
                     hintSpan: textSpan,
@@ -108,8 +108,8 @@ namespace ts.OutliningElementsCollector {
         }
 
         function getRegionName(start: number, end: number) {
-            if (!ts.formatting.getRangeOfEnclosingComment(sourceFile, start, /*onlyMultiLine*/ true)) {
-                const comment = sourceFile.text.substring(start, end);
+            if (!isInComment(sourceFile, start)) {
+                const comment = sourceFile.text.substring(start, end).trim();
                 const result = comment.match(regionStart);
 
                 if (result && result.length > 0) {
@@ -118,7 +118,7 @@ namespace ts.OutliningElementsCollector {
                         return label.trim();
                     }
                     else {
-                        return regionText;
+                        return defaultLabel;
                     }
                 }
             }
@@ -126,11 +126,11 @@ namespace ts.OutliningElementsCollector {
         }
 
         function isRegionEnd(start: number, end: number) {
-            if (!ts.formatting.getRangeOfEnclosingComment(sourceFile, start, /*onlyMultiLine*/ true)) {
-                const comment = sourceFile.text.substring(start, end);
-                return comment.match(regionEnd);
+            if (!isInComment(sourceFile, start)) {
+                const comment = sourceFile.text.substring(start, end).trim();
+                return !!comment.match(regionEnd);
             }
-            return undefined;
+            return false;
         }
 
         function gatherRegions(): void {
