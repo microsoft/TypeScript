@@ -830,10 +830,6 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function isModuleBlock(n: Node): n is ModuleBlock {
-        return n.kind === SyntaxKind.ModuleBlock;
-    }
-
     function isReadonlyArray(v: any): v is ReadonlyArray<any> {
         return isArray(v);
     }
@@ -860,13 +856,13 @@ namespace ts.refactor.extractMethod {
         Write = 2
     }
 
-    interface UsageEntry {
+    export interface UsageEntry {
         readonly usage: Usage;
         readonly symbol: Symbol;
         readonly node: Node;
     }
 
-    interface ScopeUsages {
+    export interface ScopeUsages {
         usages: Map<UsageEntry>;
         substitutions: Map<Node>;
     }

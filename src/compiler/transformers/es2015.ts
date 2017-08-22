@@ -840,7 +840,7 @@ namespace ts {
             outer.end = skipTrivia(currentText, node.pos);
             setEmitFlags(outer, EmitFlags.NoComments);
 
-            return createParen(
+            const result = createParen(
                 createCall(
                     outer,
                     /*typeArguments*/ undefined,
@@ -849,6 +849,8 @@ namespace ts {
                         : []
                 )
             );
+            addSyntheticLeadingComment(result, SyntaxKind.MultiLineCommentTrivia, "* @class ");
+            return result;
         }
 
         /**

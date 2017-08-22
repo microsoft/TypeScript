@@ -30,13 +30,13 @@ let c = x.B.b;
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var foo = (function () {
+    var foo = /** @class */ (function () {
         function foo() {
         }
         return foo;
     }());
     (function (foo) {
-        var A = (function () {
+        var A = /** @class */ (function () {
             function A() {
             }
             return A;

@@ -10,7 +10,7 @@ class Vector {
 
 //// [thisInArrowFunctionInStaticInitializer1.js]
 function log(a) { }
-var Vector = (function () {
+var Vector = /** @class */ (function () {
     function Vector() {
     }
     Vector.foo = function () {

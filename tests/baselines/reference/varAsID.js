@@ -19,14 +19,14 @@ var f2 = new Foo2();
 
 
 //// [varAsID.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.x = 1;
     }
     return Foo;
 }());
 var f = new Foo();
-var Foo2 = (function () {
+var Foo2 = /** @class */ (function () {
     function Foo2() {
         this.x = 1;
     }

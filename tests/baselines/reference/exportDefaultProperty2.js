@@ -21,7 +21,7 @@ const x: B = { c: B };
 "use strict";
 // This test is just like exportEqualsProperty2, but with `export default`.
 exports.__esModule = true;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

@@ -11,7 +11,7 @@ import * as nameSpaceBinding2 from "./server"; // unreferenced
 //// [server.js]
 "use strict";
 exports.__esModule = true;
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

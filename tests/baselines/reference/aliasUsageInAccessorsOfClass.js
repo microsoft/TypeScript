@@ -30,7 +30,7 @@ class C2 {
 //// [aliasUsage1_backbone.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Model = (function () {
+var Model = /** @class */ (function () {
     function Model() {
     }
     return Model;
@@ -50,7 +50,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Backbone = require("./aliasUsage1_backbone");
-var VisualizationModel = (function (_super) {
+var VisualizationModel = /** @class */ (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -62,7 +62,7 @@ exports.VisualizationModel = VisualizationModel;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var moduleA = require("./aliasUsage1_moduleA");
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     Object.defineProperty(C2.prototype, "A", {

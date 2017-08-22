@@ -57,7 +57,7 @@ System.register([], function (exports_1, context_1) {
                 return zero.foo();
             });
             exports_1("p2", p2 = context_1.import("./0"));
-            C = (function () {
+            C = /** @class */ (function () {
                 function C() {
                 }
                 C.prototype.method = function () {
@@ -65,7 +65,7 @@ System.register([], function (exports_1, context_1) {
                 };
                 return C;
             }());
-            D = (function () {
+            D = /** @class */ (function () {
                 function D() {
                 }
                 D.prototype.method = function () {
