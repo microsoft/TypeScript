@@ -254,6 +254,11 @@ namespace ts {
          */
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
+        /**
+         * Returns a JSON-encoded TextSpan | undefined indicating the range of the enclosing comment, if it exists.
+         */
+        getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string;
+
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -812,6 +817,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
                 () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
+            );
+        }
+
+        public getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string {
+            return this.forwardJSONCall(
+                `getSpanOfEnclosingComment('${fileName}', ${position})`,
+                () => this.languageService.getSpanOfEnclosingComment(fileName, position, onlyMultiLine)
             );
         }
 

@@ -1916,6 +1916,10 @@
         "category": "Error",
         "code": 2561
     },
+    "Base class expressions cannot reference class type parameters.": {
+        "category": "Error",
+        "code": 2562
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

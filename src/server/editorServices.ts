@@ -958,28 +958,28 @@ namespace ts.server {
                 return;
             }
 
-            this.logger.group(info => {
-                let counter = 0;
-                counter = printProjects(this.externalProjects, info, counter);
-                counter = printProjects(this.configuredProjects, info, counter);
-                printProjects(this.inferredProjects, info, counter);
-
-                info("Open files: ");
-                for (const rootFile of this.openFiles) {
-                    info(`\t${rootFile.fileName}`);
-                }
-            });
-
-            function printProjects(projects: Project[], info: (msg: string) => void, counter: number): number {
+            this.logger.startGroup();
+            let counter = 0;
+            const printProjects = (projects: Project[], counter: number): number => {
                 for (const project of projects) {
                     project.updateGraph();
-                    info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
-                    info(project.filesToString());
-                    info("-----------------------------------------------");
+                    this.logger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
+                    this.logger.info(project.filesToString());
+                    this.logger.info("-----------------------------------------------");
                     counter++;
                 }
                 return counter;
+            };
+            counter = printProjects(this.externalProjects, counter);
+            counter = printProjects(this.configuredProjects, counter);
+            printProjects(this.inferredProjects, counter);
+
+            this.logger.info("Open files: ");
+            for (const rootFile of this.openFiles) {
+                this.logger.info(`\t${rootFile.fileName}`);
             }
+
+            this.logger.endGroup();
         }
 
         private findConfiguredProjectByProjectName(configFileName: NormalizedPath) {

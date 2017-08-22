@@ -140,6 +140,8 @@ namespace ts.server {
     class Logger implements server.Logger {
         private fd = -1;
         private seq = 0;
+        private inGroup = false;
+        private firstInGroup = true;
 
         constructor(private readonly logFilename: string,
             private readonly traceToConsole: boolean,
@@ -169,24 +171,24 @@ namespace ts.server {
         }
 
         perftrc(s: string) {
-            this.msg(s, "Perf");
+            this.msg(s, Msg.Perf);
         }
 
         info(s: string) {
-            this.msg(s, "Info");
+            this.msg(s, Msg.Info);
         }
 
         err(s: string) {
-            this.msg(s, "Err");
+            this.msg(s, Msg.Err);
         }
 
-        group(logGroupEntries: (log: (msg: string) => void) => void) {
-            let firstInGroup = false;
-            logGroupEntries(s => {
-                this.msg(s, "Info", /*inGroup*/ true, firstInGroup);
-                firstInGroup = false;
-            });
-            this.seq++;
+        startGroup() {
+            this.inGroup = true;
+            this.firstInGroup = true;
+        }
+
+        endGroup() {
+            this.inGroup = false;
         }
 
         loggingEnabled() {
@@ -197,16 +199,16 @@ namespace ts.server {
             return this.loggingEnabled() && this.level >= level;
         }
 
-        private msg(s: string, type: string, inGroup = false, firstInGroup = false) {
+        msg(s: string, type: Msg.Types = Msg.Err) {
             if (!this.canWrite) return;
 
             s = `[${nowString()}] ${s}\n`;
-            if (!inGroup || firstInGroup) {
+            if (!this.inGroup || this.firstInGroup) {
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
                 s = prefix + s;
             }
             this.write(s);
-            if (!inGroup) {
+            if (!this.inGroup) {
                 this.seq++;
             }
         }

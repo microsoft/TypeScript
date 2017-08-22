@@ -1150,6 +1150,56 @@ namespace ts.formatting {
         }
     }
 
+    /**
+     * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
+     */
+    export function getRangeOfEnclosingComment(
+        sourceFile: SourceFile,
+        position: number,
+        onlyMultiLine: boolean,
+        precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
+        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+        predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
+        const tokenStart = tokenAtPosition.getStart(sourceFile);
+        if (tokenStart <= position && position < tokenAtPosition.getEnd()) {
+            return undefined;
+        }
+
+        if (precedingToken === undefined) {
+            precedingToken = findPrecedingToken(position, sourceFile);
+        }
+
+        // Between two consecutive tokens, all comments are either trailing on the former
+        // or leading on the latter (and none are in both lists).
+        const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
+        const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
+        const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
+            trailingRangesOfPreviousToken.concat(leadingCommentRangesOfNextToken) :
+            trailingRangesOfPreviousToken || leadingCommentRangesOfNextToken;
+        if (commentRanges) {
+            for (const range of commentRanges) {
+                // The end marker of a single-line comment does not include the newline character.
+                // With caret at `^`, in the following case, we are inside a comment (^ denotes the cursor position):
+                //
+                //    // asdf   ^\n
+                //
+                // But for closed multi-line comments, we don't want to be inside the comment in the following case:
+                //
+                //    /* asdf */^
+                //
+                // However, unterminated multi-line comments *do* contain their end.
+                //
+                // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+                //
+                if ((range.pos < position && position < range.end ||
+                    position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()))) {
+                    return (range.kind === SyntaxKind.MultiLineCommentTrivia || !onlyMultiLine) && (!predicate || predicate(range)) ? range : undefined;
+                }
+            }
+        }
+        return undefined;
+    }
+
     function getOpenTokenForList(node: Node, list: ReadonlyArray<Node>) {
         switch (node.kind) {
             case SyntaxKind.Constructor:
