@@ -8800,8 +8800,7 @@ namespace ts {
                 return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
-                const related = relation.get(id);
+                const related = relation.get(getRelationKey(source, target, relation));
                 if (related !== undefined) {
                     return related === RelationComparisonResult.Succeeded;
                 }
@@ -9202,7 +9201,7 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
+                const id = getRelationKey(source, target, relation);
                 const related = relation.get(id);
                 if (related !== undefined) {
                     if (reportErrors && related === RelationComparisonResult.Failed) {
@@ -9765,6 +9764,45 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function isUnconstrainedTypeParameter(type: Type) {
+            return type.flags & TypeFlags.TypeParameter && !getConstraintFromTypeParameter(<TypeParameter>type);
+        }
+
+        function isTypeReferenceWithGenericArguments(type: Type) {
+            return getObjectFlags(type) & ObjectFlags.Reference && some((<TypeReference>type).typeArguments, isUnconstrainedTypeParameter);
+        }
+
+        function getTypeReferenceId(type: TypeReference, typeParameters: Type[]) {
+            let result = "" + type.id;
+            for (const t of type.typeArguments) {
+                if (isUnconstrainedTypeParameter(t)) {
+                    let index = indexOf(typeParameters, t);
+                    if (index < 0) {
+                        index = typeParameters.length;
+                        typeParameters.push(t);
+                    }
+                    result += "=" + index;
+                }
+                else {
+                    result += "-" + t.id;
+                }
+            }
+            return result;
+        }
+
+        function getRelationKey(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            if (relation === identityRelation && source.id > target.id) {
+                const temp = source;
+                source = target;
+                target = temp;
+            }
+            if (isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target)) {
+                const typeParameters: Type[] = [];
+                return getTypeReferenceId(<TypeReference>source, typeParameters) + "," + getTypeReferenceId(<TypeReference>target, typeParameters);
+            }
+            return source.id + "," + target.id;
         }
 
         // Invoke the callback for each underlying property symbol of the given symbol and return the first
