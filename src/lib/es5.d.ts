@@ -786,12 +786,12 @@ interface DateConstructor {
 
 declare const Date: DateConstructor;
 
-interface RegExpMatchArray extends Array<string> {
+interface RegExpMatchArray extends Array<string | undefined> {
     index?: number;
     input?: string;
 }
 
-interface RegExpExecArray extends Array<string> {
+interface RegExpExecArray extends Array<string | undefined> {
     index: number;
     input: string;
 }
