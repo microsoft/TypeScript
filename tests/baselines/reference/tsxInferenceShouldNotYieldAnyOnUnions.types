@@ -34,8 +34,8 @@ interface PropsWithConvert<T> extends PropsBase<T> {
 >T : T
 }
 
-function InferenceShouldNotProduceAny<T>(props: Props<T>): JSX.Element {
->InferenceShouldNotProduceAny : <T>(props: Props<T>) => JSX.Element
+function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
+>ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >T : T
 >props : Props<T>
 >Props : Props<T>
@@ -49,16 +49,16 @@ function InferenceShouldNotProduceAny<T>(props: Props<T>): JSX.Element {
 }
 
 // Sanity check: function call equivalent versions work fine
-InferenceShouldNotProduceAny({ data: "1" });
->InferenceShouldNotProduceAny({ data: "1" }) : JSX.Element
->InferenceShouldNotProduceAny : <T>(props: Props<T>) => JSX.Element
+ShouldInferFromData({ data: "1" });
+>ShouldInferFromData({ data: "1" }) : JSX.Element
+>ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >{ data: "1" } : { data: string; }
 >data : string
 >"1" : "1"
 
-InferenceShouldNotProduceAny({ data: "1", convert: n => "" + n });
->InferenceShouldNotProduceAny({ data: "1", convert: n => "" + n }) : JSX.Element
->InferenceShouldNotProduceAny : <T>(props: Props<T>) => JSX.Element
+ShouldInferFromData({ data: "1", convert: n => "" + n });
+>ShouldInferFromData({ data: "1", convert: n => "" + n }) : JSX.Element
+>ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >{ data: "1", convert: n => "" + n } : { data: string; convert: (n: string) => string; }
 >data : string
 >"1" : "1"
@@ -69,9 +69,9 @@ InferenceShouldNotProduceAny({ data: "1", convert: n => "" + n });
 >"" : ""
 >n : string
 
-InferenceShouldNotProduceAny({ data: 2, convert: n => "" + n });
->InferenceShouldNotProduceAny({ data: 2, convert: n => "" + n }) : JSX.Element
->InferenceShouldNotProduceAny : <T>(props: Props<T>) => JSX.Element
+ShouldInferFromData({ data: 2, convert: n => "" + n });
+>ShouldInferFromData({ data: 2, convert: n => "" + n }) : JSX.Element
+>ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >{ data: 2, convert: n => "" + n } : { data: number; convert: (n: number) => string; }
 >data : number
 >2 : 2
@@ -83,17 +83,17 @@ InferenceShouldNotProduceAny({ data: 2, convert: n => "" + n });
 >n : number
 
 
-const f1 = <InferenceShouldNotProduceAny data={"1"} />;
+const f1 = <ShouldInferFromData data={"1"} />;
 >f1 : JSX.Element
-><InferenceShouldNotProduceAny data={"1"} /> : JSX.Element
->InferenceShouldNotProduceAny : <T>(props: Props<T>) => JSX.Element
+><ShouldInferFromData data={"1"} /> : JSX.Element
+>ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >data : string
 >"1" : "1"
 
-const f2 = <InferenceShouldNotProduceAny data={"1"} convert={n => "" + n} />;
+const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
 >f2 : JSX.Element
-><InferenceShouldNotProduceAny data={"1"} convert={n => "" + n} /> : JSX.Element
->InferenceShouldNotProduceAny : <T>(props: Props<T>) => JSX.Element
+><ShouldInferFromData data={"1"} convert={n => "" + n} /> : JSX.Element
+>ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >data : string
 >"1" : "1"
 >convert : (n: "1") => string
@@ -103,10 +103,10 @@ const f2 = <InferenceShouldNotProduceAny data={"1"} convert={n => "" + n} />;
 >"" : ""
 >n : "1"
 
-const f3 = <InferenceShouldNotProduceAny data={2} convert={n => "" + n} />;
+const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
 >f3 : JSX.Element
-><InferenceShouldNotProduceAny data={2} convert={n => "" + n} /> : JSX.Element
->InferenceShouldNotProduceAny : <T>(props: Props<T>) => JSX.Element
+><ShouldInferFromData data={2} convert={n => "" + n} /> : JSX.Element
+>ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >data : number
 >2 : 2
 >convert : (n: 2) => string
