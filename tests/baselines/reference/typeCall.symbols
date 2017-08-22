@@ -80,7 +80,65 @@ type j = F5()()['a']();
 >j : Symbol(j, Decl(typeCall.ts, 27, 38))
 >F5 : Symbol(F5, Decl(typeCall.ts, 25, 19))
 
-type k = Id<string>('foo');
+type k = Id<string>('foo'); // `any`, explicit type argument fails
 >k : Symbol(k, Decl(typeCall.ts, 28, 23))
 >Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
+
+interface IsPrimitive {
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+
+  <T extends object>(o: T): '0';
+>T : Symbol(T, Decl(typeCall.ts, 33, 3))
+>o : Symbol(o, Decl(typeCall.ts, 33, 21))
+>T : Symbol(T, Decl(typeCall.ts, 33, 3))
+
+  <T>(o: T): '1';
+>T : Symbol(T, Decl(typeCall.ts, 34, 3))
+>o : Symbol(o, Decl(typeCall.ts, 34, 6))
+>T : Symbol(T, Decl(typeCall.ts, 34, 3))
+}
+type stringIsPrimitive = IsPrimitive(string); // '1', ok
+>stringIsPrimitive : Symbol(stringIsPrimitive, Decl(typeCall.ts, 35, 1))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+
+type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
+>regexpIsPrimitive : Symbol(regexpIsPrimitive, Decl(typeCall.ts, 36, 45))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+// explicit type arguments still fail
+type genericIsPrimitive = <T>() => IsPrimitive(T);
+>genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 37, 45))
+>T : Symbol(T, Decl(typeCall.ts, 40, 27))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+>T : Symbol(T, Decl(typeCall.ts, 40, 27))
+
+type stringIsPrimitive2 = genericIsPrimitive<string>();
+>stringIsPrimitive2 : Symbol(stringIsPrimitive2, Decl(typeCall.ts, 40, 50))
+>genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 37, 45))
+
+type regexpIsPrimitive2 = genericIsPrimitive<RegExp>();
+>regexpIsPrimitive2 : Symbol(regexpIsPrimitive2, Decl(typeCall.ts, 41, 55))
+>genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 37, 45))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+// workaround, pass as parameters
+type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
+>genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 42, 55))
+>T : Symbol(T, Decl(typeCall.ts, 45, 28))
+>v : Symbol(v, Decl(typeCall.ts, 45, 31))
+>T : Symbol(T, Decl(typeCall.ts, 45, 28))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+>T : Symbol(T, Decl(typeCall.ts, 45, 28))
+
+type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
+>stringIsPrimitive3 : Symbol(stringIsPrimitive3, Decl(typeCall.ts, 45, 55))
+>genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 42, 55))
+
+type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
+>regexpIsPrimitive3 : Symbol(regexpIsPrimitive3, Decl(typeCall.ts, 46, 54))
+>genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 42, 55))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
 

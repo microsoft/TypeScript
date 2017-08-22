@@ -29,8 +29,27 @@ type i = Wrap<123>;
 type F5 = () => () => { a: () => 1; };
 type j = F5()()['a']();
 
-type k = Id<string>('foo');
+type k = Id<string>('foo'); // `any`, explicit type argument fails
+
+interface IsPrimitive {
+  <T extends object>(o: T): '0';
+  <T>(o: T): '1';
+}
+type stringIsPrimitive = IsPrimitive(string); // '1', ok
+type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
+
+// explicit type arguments still fail
+type genericIsPrimitive = <T>() => IsPrimitive(T);
+type stringIsPrimitive2 = genericIsPrimitive<string>();
+type regexpIsPrimitive2 = genericIsPrimitive<RegExp>();
+
+// workaround, pass as parameters
+type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
+type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
+type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
+// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
 
 
 //// [typeCall.js]
 var a = 'foo';
+// FAILS!, '1' instead of '0', should delay overload selection until type argument is known

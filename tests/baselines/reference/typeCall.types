@@ -81,7 +81,65 @@ type j = F5()()['a']();
 >j : 1
 >F5 : F5
 
-type k = Id<string>('foo');
+type k = Id<string>('foo'); // `any`, explicit type argument fails
 >k : any
 >Id : Id
+
+interface IsPrimitive {
+>IsPrimitive : IsPrimitive
+
+  <T extends object>(o: T): '0';
+>T : T
+>o : T
+>T : T
+
+  <T>(o: T): '1';
+>T : T
+>o : T
+>T : T
+}
+type stringIsPrimitive = IsPrimitive(string); // '1', ok
+>stringIsPrimitive : "1"
+>IsPrimitive : IsPrimitive
+
+type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
+>regexpIsPrimitive : "0"
+>IsPrimitive : IsPrimitive
+>RegExp : RegExp
+
+// explicit type arguments still fail
+type genericIsPrimitive = <T>() => IsPrimitive(T);
+>genericIsPrimitive : genericIsPrimitive
+>T : T
+>IsPrimitive : IsPrimitive
+>T : T
+
+type stringIsPrimitive2 = genericIsPrimitive<string>();
+>stringIsPrimitive2 : any
+>genericIsPrimitive : genericIsPrimitive
+
+type regexpIsPrimitive2 = genericIsPrimitive<RegExp>();
+>regexpIsPrimitive2 : any
+>genericIsPrimitive : genericIsPrimitive
+>RegExp : RegExp
+
+// workaround, pass as parameters
+type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
+>genericIsPrimitive3 : genericIsPrimitive3
+>T : T
+>v : T
+>T : T
+>IsPrimitive : IsPrimitive
+>T : T
+
+type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
+>stringIsPrimitive3 : "1"
+>genericIsPrimitive3 : genericIsPrimitive3
+
+type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
+>regexpIsPrimitive3 : "1"
+>genericIsPrimitive3 : genericIsPrimitive3
+>RegExp : RegExp
+
+// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
 
