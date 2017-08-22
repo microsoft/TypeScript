@@ -787,11 +787,15 @@ interface DateConstructor {
 declare const Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string | undefined> {
+    // First element is always defined (not a capture group)
+    0: string;
     index?: number;
     input?: string;
 }
 
 interface RegExpExecArray extends Array<string | undefined> {
+    // First element is always defined (not a capture group)
+    0: string;
     index: number;
     input: string;
 }
