@@ -65,7 +65,7 @@ export class D {
     function foo() {
         var p2 = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
     }
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.method = function () {
@@ -73,7 +73,7 @@ export class D {
         };
         return C;
     }());
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         D.prototype.method = function () {

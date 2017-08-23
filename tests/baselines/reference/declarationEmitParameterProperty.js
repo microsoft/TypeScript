@@ -8,7 +8,7 @@ export class Foo {
 //// [declarationEmitParameterProperty.js]
 "use strict";
 exports.__esModule = true;
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(bar) {
         this.bar = bar;
     }

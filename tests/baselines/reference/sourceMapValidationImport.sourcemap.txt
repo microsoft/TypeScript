@@ -32,7 +32,7 @@ sourceFile:sourceMapValidationImport.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^^^^^^^^^->
+4 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >export module 
 3 >           m
@@ -40,7 +40,7 @@ sourceFile:sourceMapValidationImport.ts
 2 >Emitted(4, 12) Source(1, 15) + SourceIndex(0)
 3 >Emitted(4, 13) Source(1, 16) + SourceIndex(0)
 ---
->>>    var c = (function () {
+>>>    var c = /** @class */ (function () {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^->
 1-> {

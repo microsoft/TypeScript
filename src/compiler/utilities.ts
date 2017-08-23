@@ -344,15 +344,20 @@ namespace ts {
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
-                return '"' + escapeText(node.text) + '"';
+                if ((<StringLiteral>node).singleQuote) {
+                    return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
+                }
+                else {
+                    return '"' + escapeText(node.text, CharacterCodes.doubleQuote) + '"';
+                }
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return "`" + escapeText(node.text) + "`";
+                return "`" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.TemplateHead:
-                return "`" + escapeText(node.text) + "${";
+                return "`" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateMiddle:
-                return "}" + escapeText(node.text) + "${";
+                return "}" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateTail:
-                return "}" + escapeText(node.text) + "`";
+                return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.NumericLiteral:
                 return node.text;
         }
@@ -443,7 +448,8 @@ namespace ts {
         return isExternalModule(node) || compilerOptions.isolatedModules;
     }
 
-    function isBlockScope(node: Node, parentNode: Node) {
+    /* @internal */
+    export function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
             case SyntaxKind.CaseBlock:
@@ -641,7 +647,7 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
+        return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
     }
 
     export function getJSDocCommentRanges(node: Node, text: string) {
@@ -1502,8 +1508,8 @@ namespace ts {
                 parent.parent.kind === SyntaxKind.VariableStatement;
             const variableStatementNode =
                 isInitializerOfVariableDeclarationInStatement ? parent.parent.parent :
-                isVariableOfVariableDeclarationStatement ? parent.parent :
-                undefined;
+                    isVariableOfVariableDeclarationStatement ? parent.parent :
+                        undefined;
             if (variableStatementNode) {
                 getJSDocCommentsAndTagsWorker(variableStatementNode);
             }
@@ -1617,7 +1623,7 @@ namespace ts {
         if (isInJavaScriptFile(node)) {
             if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
                 forEach(getJSDocParameterTags(node),
-                        t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
+                    t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
                 return true;
             }
         }
@@ -2355,7 +2361,9 @@ namespace ts {
     // the language service. These characters should be escaped when printing, and if any characters are added,
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
-    const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const backtickQuoteEscapedCharsRegExp = /[\\\`\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const escapedCharsMap = createMapFromTemplate({
         "\0": "\\0",
         "\t": "\\t",
@@ -2366,18 +2374,23 @@ namespace ts {
         "\n": "\\n",
         "\\": "\\\\",
         "\"": "\\\"",
+        "\'": "\\\'",
+        "\`": "\\\`",
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     });
-
 
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
      * Note that this doesn't actually wrap the input in double quotes.
      */
-    export function escapeString(s: string): string {
+    export function escapeString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
+        const escapedCharsRegExp =
+            quoteChar === CharacterCodes.backtick ? backtickQuoteEscapedCharsRegExp :
+            quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
+            doubleQuoteEscapedCharsRegExp;
         return s.replace(escapedCharsRegExp, getReplacement);
     }
 
@@ -2399,8 +2412,8 @@ namespace ts {
     }
 
     const nonAsciiCharacters = /[^\u0000-\u007F]/g;
-    export function escapeNonAsciiString(s: string): string {
-        s = escapeString(s);
+    export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
+        s = escapeString(s, quoteChar);
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
         // Otherwise just return the original string.
         return nonAsciiCharacters.test(s) ?
@@ -4983,6 +4996,19 @@ namespace ts {
         return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
 
+    /* @internal */
+    export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpression | PostfixUnaryExpression {
+        switch (expr.kind) {
+            case SyntaxKind.PostfixUnaryExpression:
+                return true;
+            case SyntaxKind.PrefixUnaryExpression:
+                return (<PrefixUnaryExpression>expr).operator === SyntaxKind.PlusPlusToken ||
+                    (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusMinusToken;
+            default:
+                return false;
+        }
+    }
+
     function isExpressionKind(kind: SyntaxKind) {
         return kind === SyntaxKind.ConditionalExpression
             || kind === SyntaxKind.YieldExpression
@@ -5197,7 +5223,17 @@ namespace ts {
         const kind = node.kind;
         return isStatementKindButNotDeclarationKind(kind)
             || isDeclarationStatementKind(kind)
-            || kind === SyntaxKind.Block;
+            || isBlockStatement(node);
+    }
+
+    function isBlockStatement(node: Node): node is Block {
+        if (node.kind !== SyntaxKind.Block) return false;
+        if (node.parent !== undefined) {
+            if (node.parent.kind === SyntaxKind.TryStatement || node.parent.kind === SyntaxKind.CatchClause) {
+                return false;
+            }
+        }
+        return !isFunctionBlock(node);
     }
 
     // Module references

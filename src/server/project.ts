@@ -376,6 +376,10 @@ namespace ts.server {
             return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
+        getExcludedFiles(): ReadonlyArray<NormalizedPath> {
+            return emptyArray;
+        }
+
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
             if (!this.program) {
                 return [];
@@ -837,6 +841,7 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
+        public readonly projectRootPath: string | undefined;
 
         private static readonly newName = (() => {
             let nextId = 1;
@@ -876,7 +881,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -885,6 +890,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+            this.projectRootPath = projectRootPath;
         }
 
         addRoot(info: ScriptInfo) {
@@ -1164,6 +1170,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
+        excludedFiles: ReadonlyArray<NormalizedPath> = [];
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -1173,6 +1180,11 @@ namespace ts.server {
             public compileOnSaveEnabled: boolean,
             private readonly projectFilePath?: string) {
             super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+
+        }
+
+        getExcludedFiles() {
+            return this.excludedFiles;
         }
 
         getProjectRootPath() {

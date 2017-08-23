@@ -76,6 +76,28 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
+        // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
+        // declaration the symbol (which is itself), we should try to get to the original type of the ObjectBindingPattern
+        // and return the property declaration for the referenced property.
+        // For example:
+        //      import('./foo').then(({ b/*goto*/ar }) => undefined); => should get use to the declaration in file "./foo"
+        //
+        //      function bar<T>(onfulfilled: (value: T) => void) { //....}
+        //      interface Test {
+        //          pr/*destination*/op1: number
+        //      }
+        //      bar<Test>(({pr/*goto*/op1})=>{});
+        if (isPropertyName(node) && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent) &&
+             (node === (node.parent.propertyName || node.parent.name))) {
+            const type = typeChecker.getTypeAtLocation(node.parent.parent);
+            if (type) {
+                const propSymbols = getPropertySymbolsFromType(type, node);
+                if (propSymbols) {
+                    return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
+                }
+            }
+        }
+
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
         // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
         // For example

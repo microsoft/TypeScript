@@ -83,7 +83,7 @@ var glo_v22_public: glo_C1_public = new glo_C1_public();
 //// [privacyGloVar.js]
 var m1;
 (function (m1) {
-    var C1_public = (function () {
+    var C1_public = /** @class */ (function () {
         function C1_public() {
         }
         C1_public.prototype.f1 = function () {
@@ -91,12 +91,12 @@ var m1;
         return C1_public;
     }());
     m1.C1_public = C1_public;
-    var C2_private = (function () {
+    var C2_private = /** @class */ (function () {
         function C2_private() {
         }
         return C2_private;
     }());
-    var C3_public = (function () {
+    var C3_public = /** @class */ (function () {
         function C3_public() {
             this.C3_v11_private = new C1_public();
             this.C3_v12_public = new C1_public();
@@ -110,7 +110,7 @@ var m1;
         return C3_public;
     }());
     m1.C3_public = C3_public;
-    var C4_public = (function () {
+    var C4_public = /** @class */ (function () {
         function C4_public() {
             this.C4_v11_private = new C1_public();
             this.C4_v12_public = new C1_public();
@@ -134,14 +134,14 @@ var m1;
     var m1_v23_private = new C2_private();
     m1.m1_v24_public = new C2_private(); // error
 })(m1 || (m1 = {}));
-var glo_C1_public = (function () {
+var glo_C1_public = /** @class */ (function () {
     function glo_C1_public() {
     }
     glo_C1_public.prototype.f1 = function () {
     };
     return glo_C1_public;
 }());
-var glo_C3_public = (function () {
+var glo_C3_public = /** @class */ (function () {
     function glo_C3_public() {
         this.glo_C3_v11_private = new glo_C1_public();
         this.glo_C3_v12_public = new glo_C1_public();

@@ -36,6 +36,7 @@ namespace ts.projectSystem {
                 host,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: typingsInstaller || server.nullTypingsInstaller,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
@@ -552,7 +553,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, typingsInstaller);
+            const session = createSession(host, { typingsInstaller });
 
             openFilesForSession([file1, file2], session);
             const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });

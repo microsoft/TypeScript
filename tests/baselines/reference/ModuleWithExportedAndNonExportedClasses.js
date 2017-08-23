@@ -36,24 +36,24 @@ var ag2 = new A.A2<string, number>();
 //// [ModuleWithExportedAndNonExportedClasses.js]
 var A;
 (function (A_1) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
     A_1.A = A;
-    var AG = (function () {
+    var AG = /** @class */ (function () {
         function AG() {
         }
         return AG;
     }());
     A_1.AG = AG;
-    var A2 = (function () {
+    var A2 = /** @class */ (function () {
         function A2() {
         }
         return A2;
     }());
-    var AG2 = (function () {
+    var AG2 = /** @class */ (function () {
         function AG2() {
         }
         return AG2;

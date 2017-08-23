@@ -999,6 +999,7 @@ namespace ts {
     export interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
         /* @internal */ textSourceNode?: Identifier | StringLiteral | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        /* @internal */ singleQuote?: boolean;
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -2567,6 +2568,15 @@ namespace ts {
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        /**
+         * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
+         * Otherwise returns its input.
+         * For example, at `export type T = number;`:
+         *     - `getSymbolAtLocation` at the location `T` will return the exported symbol for `T`.
+         *     - But the result of `getSymbolsInScope` will contain the *local* symbol for `T`, not the exported symbol.
+         *     - Calling `getExportSymbolOfSymbol` on that local symbol will return the exported symbol.
+         */
+        getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
@@ -2615,6 +2625,8 @@ namespace ts {
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
+        /* @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
+
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
@@ -2631,9 +2643,8 @@ namespace ts {
          * Does not include properties of primitive types.
          */
         /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
-
+        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
-        /* @internal */ resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
     }
 
     export enum NodeBuilderFlags {
@@ -2658,6 +2669,14 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 20,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+    }
+
+    /* @internal */
+    export interface SymbolWalker {
+        /** Note: Return values are not ordered. */
+        walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+        /** Note: Return values are not ordered. */
+        walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
     }
 
     export interface SymbolDisplayBuilder {
@@ -2708,11 +2727,12 @@ namespace ts {
         UseFullyQualifiedType           = 1 << 8,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 1 << 9,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 1 << 10,  // Writing type in type alias declaration
-        UseTypeAliasValue               = 1 << 11,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
         InArrayType                     = 1 << 15,  // Writing an array element type
+        UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
+                                                      // even though `T` can't be accessed in the current scope.
     }
 
     export const enum SymbolFormatFlags {
@@ -2921,7 +2941,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        escapedName: __String;                           // Name of symbol
+        escapedName: __String;                  // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members
@@ -3126,7 +3146,7 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        ContainsAnyFunctionType = 1 << 23,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
@@ -3357,6 +3377,7 @@ namespace ts {
 
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
+        /** Retrieve using getConstraintFromTypeParameter */
         constraint: Type;        // Constraint
         default?: Type;
         /* @internal */
@@ -3608,6 +3629,7 @@ namespace ts {
         paths?: MapLike<string[]>;
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
@@ -3923,6 +3945,10 @@ namespace ts {
         readFile(fileName: string): string | undefined;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
+        /**
+         * Resolve a symbolic link.
+         * @see https://nodejs.org/api/fs.html#fs_fs_realpathsync_path_options
+         */
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
@@ -3938,12 +3964,7 @@ namespace ts {
     export interface ResolvedModule {
         /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /**
-         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
-         * - be a .d.ts file
-         * - use top level imports\exports
-         * - don't use tripleslash references
-         */
+        /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
     }
 

@@ -107,12 +107,14 @@ namespace ts {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
-                Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
+                if (token === SyntaxKind.EndOfFileToken) {
+                    break;
+                }
             }
             return pos;
         }
@@ -1756,17 +1758,20 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-            if (key === "{") {
-                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+
+            if (!isInComment(sourceFile, position)) {
+                if (key === "{") {
+                    return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "}") {
+                    return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === ";") {
+                    return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "\n") {
+                    return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                }
             }
 
             return [];
@@ -1823,6 +1828,12 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean) {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const range = ts.formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
+            return range && createTextSpanFromRange(range);
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -2049,6 +2060,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
@@ -2137,12 +2149,17 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(node.name));
-        if (name && contextualType) {
+        return getPropertySymbolsFromType(contextualType, node.name);
+    }
+
+    /* @internal */
+    export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
+        if (name && type) {
             const result: Symbol[] = [];
-            const symbol = contextualType.getProperty(name);
-            if (contextualType.flags & TypeFlags.Union) {
-                forEach((<UnionType>contextualType).types, t => {
+            const symbol = type.getProperty(name);
+            if (type.flags & TypeFlags.Union) {
+                forEach((<UnionType>type).types, t => {
                     const symbol = t.getProperty(name);
                     if (symbol) {
                         result.push(symbol);

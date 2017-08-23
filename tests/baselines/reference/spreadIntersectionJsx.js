@@ -16,12 +16,12 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 var React = null;
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

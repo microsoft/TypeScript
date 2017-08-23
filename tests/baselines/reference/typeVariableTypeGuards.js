@@ -95,7 +95,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.doSomething = function () {
@@ -103,7 +103,7 @@ var A = (function () {
     };
     return A;
 }());
-var Monkey = (function () {
+var Monkey = /** @class */ (function () {
     function Monkey() {
     }
     Monkey.prototype.render = function () {
@@ -113,7 +113,7 @@ var Monkey = (function () {
     };
     return Monkey;
 }());
-var BigMonkey = (function (_super) {
+var BigMonkey = /** @class */ (function (_super) {
     __extends(BigMonkey, _super);
     function BigMonkey() {
         return _super !== null && _super.apply(this, arguments) || this;

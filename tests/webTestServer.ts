@@ -288,7 +288,7 @@ console.log(`Static file server running at\n  => http://localhost:${port}/\nCTRL
 
 http.createServer((req: http.ServerRequest, res: http.ServerResponse) => {
     log(`${req.method} ${req.url}`);
-    const uri = url.parse(req.url).pathname;
+    const uri = decodeURIComponent(url.parse(req.url).pathname);
     const reqPath = path.join(process.cwd(), uri);
     const operation = getRequestOperation(req);
     handleRequestOperation(req, res, operation, reqPath);

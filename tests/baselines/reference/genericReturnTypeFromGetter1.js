@@ -12,7 +12,7 @@ export class DbSet<T> {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var DbSet = (function () {
+    var DbSet = /** @class */ (function () {
         function DbSet() {
         }
         Object.defineProperty(DbSet.prototype, "entityType", {
