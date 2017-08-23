@@ -22986,6 +22986,9 @@ namespace ts {
                         return getPropertyOfType(objectType, (<NumericLiteral>node).text as __String);
                     }
                     break;
+
+                case SyntaxKind.DefaultKeyword:
+                    return getSymbolOfNode(node.parent);
             }
             return undefined;
         }

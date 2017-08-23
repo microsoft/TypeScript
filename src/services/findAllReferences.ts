@@ -176,7 +176,9 @@ namespace ts.FindAllReferences {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
             isWriteAccess: isWriteAccess(node),
-            isDefinition: isAnyDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
+            isDefinition: node.kind === SyntaxKind.DefaultKeyword
+                || isAnyDeclarationName(node)
+                || isLiteralComputedPropertyDeclarationName(node),
             isInString
         };
     }
@@ -243,7 +245,7 @@ namespace ts.FindAllReferences {
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
     function isWriteAccess(node: Node): boolean {
-        if (isAnyDeclarationName(node)) {
+        if (node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node)) {
             return true;
         }
 
@@ -743,7 +745,7 @@ namespace ts.FindAllReferences.Core {
 
     function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
         // Compare the length so we filter out strict superstrings of the symbol we are looking for
-        switch (node && node.kind) {
+        switch (node.kind) {
             case SyntaxKind.Identifier:
                 return (node as Identifier).text.length === searchSymbolName.length;
 
@@ -753,6 +755,9 @@ namespace ts.FindAllReferences.Core {
 
             case SyntaxKind.NumericLiteral:
                 return isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && (node as NumericLiteral).text.length === searchSymbolName.length;
+
+            case SyntaxKind.DefaultKeyword:
+                return "default".length === searchSymbolName.length;
 
             default:
                 return false;

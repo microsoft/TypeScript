@@ -525,7 +525,11 @@ namespace ts.FindAllReferences {
                 importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
             }
 
-            if (symbolName(importedSymbol) === symbol.escapedName) { // If this is a rename import, do not continue searching.
+            // If the import has a different name than the export, do not continue searching.
+            // If `importedName` is undefined, do continue searching as the export is anonymous.
+            // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
+            const importedName = symbolName(importedSymbol);
+            if (importedName === undefined || importedName === symbol.escapedName) {
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
