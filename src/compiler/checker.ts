@@ -5375,7 +5375,7 @@ namespace ts {
             return <InterfaceTypeWithDeclaredMembers>type;
         }
 
-        function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
+        function getTypeWithThisArgument(type: Type, thisArgument: Type): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 const target = (<TypeReference>type).target;
                 const typeArguments = (<TypeReference>type).typeArguments;
@@ -9203,6 +9203,40 @@ namespace ts {
                 return result;
             }
 
+            function getTypePairKey(source: Type, target: Type) {
+                return relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
+            }
+
+            function alreadyComparingTypeReferences(source: Type, target: Type) {
+                if (!(getObjectFlags(source) & ObjectFlags.Reference) || !(getObjectFlags(target) & ObjectFlags.Reference)) {
+                    return false;
+                }
+                const sourceArguments = (source as TypeReference).typeArguments;
+                const targetArguments = (source as TypeReference).typeArguments;
+
+                const onlyTypeParametersAsArguments =
+                    arrayIsEqualTo(sourceArguments, targetArguments) &&
+                    sourceArguments && sourceArguments.length > 0 &&
+                    every(sourceArguments, t => t.flags & TypeFlags.TypeParameter && !getConstraintFromTypeParameter(t as TypeParameter));
+                if (!onlyTypeParametersAsArguments) {
+                    return false;
+                }
+                const id = getTypePairKey((source as TypeReference).target, (target as TypeReference).target);
+                if (!maybeKeys) {
+                    maybeKeys = [];
+                }
+                else {
+                    for (let i = 0; i < maybeCount; i++) {
+                        if (id === maybeKeys[i]) {
+                            return true;
+                        }
+                    }
+                }
+                maybeKeys[maybeCount] = id;
+                maybeCount++;
+                return false;
+            }
+
             // Determine if possibly recursive types are related. First, check if the result is already available in the global cache.
             // Second, check if we have already started a comparison of the given two types in which case we assume the result to be true.
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
@@ -9212,7 +9246,8 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
+
+                const id = getTypePairKey(source, target);
                 const related = relation.get(id);
                 if (related !== undefined) {
                     if (reportErrors && related === RelationComparisonResult.Failed) {
@@ -9224,6 +9259,7 @@ namespace ts {
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
+
                 if (!maybeKeys) {
                     maybeKeys = [];
                     sourceStack = [];
@@ -9242,6 +9278,10 @@ namespace ts {
                     }
                 }
                 const maybeStart = maybeCount;
+                if (alreadyComparingTypeReferences(source, target)) {
+                    return Ternary.Maybe;
+                }
+
                 maybeKeys[maybeCount] = id;
                 maybeCount++;
                 sourceStack[depth] = source;
@@ -21273,7 +21313,7 @@ namespace ts {
             checkExportsOnMergedDeclarations(node);
             const symbol = getSymbolOfNode(node);
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
-            const typeWithThis = getTypeWithThisArgument(type);
+            const typeWithThis = getTypeWithThisArgument(type, type.thisType);
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
             checkTypeParameterListsIdentical(symbol);
             checkClassForDuplicateDeclarations(node);
@@ -21521,7 +21561,7 @@ namespace ts {
                 const firstInterfaceDecl = getDeclarationOfKind<InterfaceDeclaration>(symbol, SyntaxKind.InterfaceDeclaration);
                 if (node === firstInterfaceDecl) {
                     const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
-                    const typeWithThis = getTypeWithThisArgument(type);
+                    const typeWithThis = getTypeWithThisArgument(type, type.thisType);
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         for (const baseType of getBaseTypes(type)) {
