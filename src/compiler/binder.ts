@@ -444,7 +444,10 @@ namespace ts {
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                     const local = declareSymbol(container.locals, /*parent*/ undefined, node, exportKind, symbolExcludes);
-                    local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
+                    if (symbolFlags & (SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace)) {
+                        // Only add export symbol on things which used to have `SymbolFlags.Export` true prior to GH#16766
+                        local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
+                    }
                     node.localSymbol = local;
                     return local;
                 }
