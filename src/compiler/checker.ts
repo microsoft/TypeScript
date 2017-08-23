@@ -1,5 +1,6 @@
 /// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
+/// <reference path="symbolWalker.ts" />
 
 /* @internal */
 namespace ts {
@@ -201,6 +202,7 @@ namespace ts {
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
+            getSymbolWalker: createGetSymbolWalker(getRestTypeOfSignature, getReturnTypeOfSignature, getBaseTypes, resolveStructuredTypeMembers, getTypeOfSymbol, getResolvedSymbol, getIndexTypeOfStructuredType, getConstraintFromTypeParameter, getFirstIdentifier),
             getAmbientModules,
             getAllAttributesTypeFromJsxOpeningLikeElement: node => {
                 node = getParseTreeNode(node, isJsxOpeningLikeElement);

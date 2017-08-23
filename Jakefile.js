@@ -140,6 +140,7 @@ var harnessSources = harnessCoreSources.concat([
     "transform.ts",
     "customTransforms.ts",
     "programMissingFiles.ts",
+    "symbolWalker.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
