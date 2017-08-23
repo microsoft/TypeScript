@@ -57,7 +57,7 @@ namespace ts {
 
         testBaseline("types", () => {
             return transformSourceFile(`let a: () => void`, [
-                 context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
+                context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
                     return visitEachChild(node, visitor, context);
                 })
             ]);
@@ -91,14 +91,14 @@ namespace ts {
             class C { foo = 10; static bar = 20 }
             namespace C { export let x = 10; }
             `, {
-                transformers: {
-                    before: [forceNamespaceRewrite],
-                },
-                compilerOptions: {
-                    target: ts.ScriptTarget.ESNext,
-                    newLine: NewLineKind.CarriageReturnLineFeed,
-                }
-            }).outputText;
+                    transformers: {
+                        before: [forceNamespaceRewrite],
+                    },
+                    compilerOptions: {
+                        target: ts.ScriptTarget.ESNext,
+                        newLine: NewLineKind.CarriageReturnLineFeed,
+                    }
+                }).outputText;
         });
 
         testBaseline("synthesizedClassAndNamespaceCombination", () => {
@@ -138,6 +138,39 @@ namespace ts {
                 }
             };
         }
+
+        testBaseline("transformAwayExportStar", () => {
+            return ts.transpileModule("export * from './helper';", {
+                transformers: {
+                    before: [expandExportStar],
+                },
+                compilerOptions: {
+                    target: ts.ScriptTarget.ESNext,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            // Note: this is a simplified implementation that is missing some corner cases
+            // but is enough to show the bug.
+            function expandExportStar(context: ts.TransformationContext) {
+                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                    return visitNode(sourceFile);
+
+                    function visitNode<T extends ts.Node>(node: T): T {
+                        if (node.kind === ts.SyntaxKind.ExportDeclaration) {
+                            const ed = node as ts.Node as ts.ExportDeclaration;
+                            const exports = [{ name: "x" }];
+                            const exportSpecifiers = exports.map(e => ts.createExportSpecifier(e.name, e.name));
+                            const exportClause = ts.createNamedExports(exportSpecifiers);
+                            const newEd = ts.updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier);
+
+                            return newEd as ts.Node as T;
+                        }
+                        return ts.visitEachChild(node, visitNode, context);
+                    }
+                };
+            }
+        });
     });
 }
 
