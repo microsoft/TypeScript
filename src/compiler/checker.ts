@@ -7547,14 +7547,14 @@ namespace ts {
         }
 
         function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
-            const fn = typeToExpression(node.type);
-            const args = map(node.arguments, typeToExpression);
+            const fn = typeNodeToExpression(node.type);
+            const args = map(node.arguments, typeNodeToExpression);
             const callExpr = createCall(fn, node.typeArguments, args);
             return checkExpression(callExpr);
         }
 
         // null! as type
-        function typeToExpression(type: TypeNode): Expression {
+        function typeNodeToExpression(type: TypeNode): Expression {
             return createAsExpression(createNonNullExpression(createNull()), type);
         }
 
