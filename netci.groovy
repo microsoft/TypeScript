@@ -17,6 +17,6 @@ nodeVersions.each { nodeVer ->
     }
     
     Utilities.standardJobSetup(newJob, project, true, "*/${branch}")
-    Utilities.setMachineAffinity(newJob, 'Ubuntu14.04', '20170821-1')
+    Utilities.setMachineAffinity(newJob, 'Ubuntu', '20161020')
     Utilities.addGithubPRTriggerForBranch(newJob, branch, "TypeScript Test Run ${newJobName}")
 }
