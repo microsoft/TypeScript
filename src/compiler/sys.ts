@@ -34,6 +34,10 @@ namespace ts {
      * Partial interface of the System thats needed to support the caching of directory structure
      */
     export interface PartialSystem {
+        newLine: string;
+        useCaseSensitiveFileNames: boolean;
+        write(s: string): void;
+        readFile(path: string, encoding?: string): string | undefined;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -41,6 +45,7 @@ namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        exit(exitCode?: number): void;
     }
 
     export interface System extends PartialSystem {
@@ -48,7 +53,6 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
@@ -65,7 +69,6 @@ namespace ts {
          */
         createHash?(data: string): string;
         getMemoryUsage?(): number;
-        exit(exitCode?: number): void;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;

@@ -120,7 +120,7 @@ namespace ts {
                     // Remove existing file info
                     onDeleteValue: removeExistingFileInfo,
                     // We will update in place instead of deleting existing value and adding new one
-                    onExistingValue: (_key, existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
+                    onExistingValue: (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
                 }
             );
         }
@@ -137,7 +137,7 @@ namespace ts {
             return { fileName: sourceFile.fileName, version: sourceFile.version, signature: undefined };
         }
 
-        function removeExistingFileInfo(path: Path, existingFileInfo: FileInfo) {
+        function removeExistingFileInfo(existingFileInfo: FileInfo, path: Path) {
             registerChangedFile(path, existingFileInfo.fileName);
             emitHandler.removeScriptInfo(path);
         }

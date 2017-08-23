@@ -4,110 +4,6 @@
 /// <reference path="..\compiler\resolutionCache.ts" />
 
 namespace ts.server {
-    /*@internal*/
-    export class CachedServerHost implements ServerHost {
-        args: string[];
-        newLine: string;
-        useCaseSensitiveFileNames: boolean;
-
-        private readonly cachedPartialSystem: CachedPartialSystem;
-
-        readonly trace: (s: string) => void;
-        readonly realpath?: (path: string) => string;
-
-        constructor(private readonly host: ServerHost) {
-            this.args = host.args;
-            this.newLine = host.newLine;
-            this.useCaseSensitiveFileNames = host.useCaseSensitiveFileNames;
-            if (host.trace) {
-                this.trace = s => host.trace(s);
-            }
-            if (this.host.realpath) {
-                this.realpath = path => this.host.realpath(path);
-            }
-            this.cachedPartialSystem = createCachedPartialSystem(host);
-        }
-
-        write(s: string) {
-            return this.host.write(s);
-        }
-
-        writeFile(fileName: string, data: string, writeByteOrderMark?: boolean) {
-            this.cachedPartialSystem.writeFile(fileName, data, writeByteOrderMark);
-        }
-
-        resolvePath(path: string) {
-            return this.host.resolvePath(path);
-        }
-
-        createDirectory(path: string) {
-            Debug.fail(`Why is createDirectory called on the cached server for ${path}`);
-        }
-
-        getExecutingFilePath() {
-            return this.host.getExecutingFilePath();
-        }
-
-        getCurrentDirectory() {
-            return this.cachedPartialSystem.getCurrentDirectory();
-        }
-
-        exit(exitCode?: number) {
-            Debug.fail(`Why is exit called on the cached server: ${exitCode}`);
-        }
-
-        getEnvironmentVariable(name: string) {
-            Debug.fail(`Why is getEnvironmentVariable called on the cached server: ${name}`);
-            return this.host.getEnvironmentVariable(name);
-        }
-
-        getDirectories(rootDir: string) {
-            return this.cachedPartialSystem.getDirectories(rootDir);
-        }
-
-        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-            return this.cachedPartialSystem.readDirectory(rootDir, extensions, excludes, includes, depth);
-        }
-
-        fileExists(fileName: string): boolean {
-            return this.cachedPartialSystem.fileExists(fileName);
-        }
-
-        directoryExists(dirPath: string) {
-            return this.cachedPartialSystem.directoryExists(dirPath);
-        }
-
-        readFile(path: string, encoding?: string): string {
-            return this.host.readFile(path, encoding);
-        }
-
-        addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath, fileOrFolderPath: Path) {
-            return this.cachedPartialSystem.addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
-        }
-
-        addOrDeleteFile(file: string, path: Path, eventKind: FileWatcherEventKind) {
-            return this.cachedPartialSystem.addOrDeleteFile(file, path, eventKind);
-        }
-
-        clearCache() {
-            return this.cachedPartialSystem.clearCache();
-        }
-
-        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]) {
-            return this.host.setTimeout(callback, ms, ...args);
-        }
-        clearTimeout(timeoutId: any)  {
-            return this.host.clearTimeout(timeoutId);
-        }
-        setImmediate(callback: (...args: any[]) => void, ...args: any[]) {
-            this.host.setImmediate(callback, ...args);
-        }
-        clearImmediate(timeoutId: any) {
-            this.host.clearImmediate(timeoutId);
-        }
-
-    }
-
     export class LSHost implements LanguageServiceHost, ModuleResolutionHost {
         /*@internal*/
         compilationSettings: CompilerOptions;
@@ -124,19 +20,24 @@ namespace ts.server {
          * file system entries as we would anyways be watching files in the project (so safe to cache)
          */
         /*@internal*/
-        host: ServerHost;
+        host: PartialSystem;
 
-        constructor(host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
+        constructor(host: PartialSystem, private project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.host = host;
             this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
 
-            if (host.trace) {
-                this.trace = s => host.trace(s);
+            const serverHost = this.getServerHost();
+            if (serverHost.trace) {
+                this.trace = s => serverHost.trace(s);
             }
 
-            if (this.host.realpath) {
-                this.realpath = path => this.host.realpath(path);
+            if (serverHost.realpath) {
+                this.realpath = path => serverHost.realpath(path);
             }
+        }
+
+        private getServerHost() {
+            return this.project.projectService.host;
         }
 
         dispose() {
@@ -173,7 +74,7 @@ namespace ts.server {
         }
 
         getDefaultLibFileName() {
-            const nodeModuleBinDir = getDirectoryPath(normalizePath(this.host.getExecutingFilePath()));
+            const nodeModuleBinDir = getDirectoryPath(normalizePath(this.getServerHost().getExecutingFilePath()));
             return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilationSettings));
         }
 
@@ -207,7 +108,7 @@ namespace ts.server {
         }
 
         resolvePath(path: string): string {
-            return this.host.resolvePath(path);
+            return this.getServerHost().resolvePath(path);
         }
 
         fileExists(file: string): boolean {

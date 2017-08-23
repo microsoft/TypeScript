@@ -27,14 +27,14 @@ namespace ts {
     }
 
     interface FailedLookupLocationsWatcher {
-        fileWatcher: FileWatcher;
+        watcher: FileWatcher;
         refCount: number;
     }
 
     export function createResolutionCache(
         toPath: (fileName: string) => Path,
         getCompilerOptions: () => CompilerOptions,
-        watchForFailedLookupLocation: (failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) => FileWatcher,
+        watchForFailedLookupLocation: (failedLookupLocation: string, failedLookupLocationPath: Path) => FileWatcher,
         log: (s: string) => void,
         projectName?: string,
         getGlobalCache?: () => string | undefined): ResolutionCache {
@@ -69,10 +69,7 @@ namespace ts {
 
         function clear() {
             // Close all the watches for failed lookup locations, irrespective of refcounts for them since this is to clear the cache
-            clearMap(failedLookupLocationsWatches, (failedLookupLocationPath, failedLookupLocationWatcher) => {
-                log(`Watcher: FailedLookupLocations: Status: ForceClose: LocationPath: ${failedLookupLocationPath}, refCount: ${failedLookupLocationWatcher.refCount}`);
-                failedLookupLocationWatcher.fileWatcher.close();
-            });
+            clearMap(failedLookupLocationsWatches, closeFileWatcherOf);
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
         }
@@ -142,7 +139,7 @@ namespace ts {
                     }
                     else {
                         resolution = loader(name, containingFile, compilerOptions, host);
-                        updateFailedLookupLocationWatches(containingFile, name, existingResolution && existingResolution.failedLookupLocations, resolution.failedLookupLocations);
+                        updateFailedLookupLocationWatches(resolution.failedLookupLocations, existingResolution && existingResolution.failedLookupLocations);
                     }
                     newResolutions.set(name, resolution);
                     if (logChanges && filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
@@ -205,46 +202,44 @@ namespace ts {
                 m => m.resolvedModule, r => r.resolvedFileName, logChanges);
         }
 
-        function watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
+        function watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path) {
             const failedLookupLocationWatcher = failedLookupLocationsWatches.get(failedLookupLocationPath);
             if (failedLookupLocationWatcher) {
                 failedLookupLocationWatcher.refCount++;
-                log(`Watcher: FailedLookupLocations: Status: Using existing watcher: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name} refCount: ${failedLookupLocationWatcher.refCount}`);
+                log(`Watcher: FailedLookupLocations: Status: Using existing watcher: Location: ${failedLookupLocation}`);
             }
             else {
-                log(`Watcher: FailedLookupLocations: Status: new watch: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
-                const fileWatcher = watchForFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name);
-                failedLookupLocationsWatches.set(failedLookupLocationPath, { fileWatcher, refCount: 1 });
+                const watcher = watchForFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                failedLookupLocationsWatches.set(failedLookupLocationPath, { watcher, refCount: 1 });
             }
         }
 
-        function closeFailedLookupLocationWatcher(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
+        function closeFailedLookupLocationWatcher(failedLookupLocation: string, failedLookupLocationPath: Path) {
             const failedLookupLocationWatcher = failedLookupLocationsWatches.get(failedLookupLocationPath);
             Debug.assert(!!failedLookupLocationWatcher);
             failedLookupLocationWatcher.refCount--;
             if (failedLookupLocationWatcher.refCount) {
-                log(`Watcher: FailedLookupLocations: Status: Removing existing watcher: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}: refCount: ${failedLookupLocationWatcher.refCount}`);
+                log(`Watcher: FailedLookupLocations: Status: Removing existing watcher: Location: ${failedLookupLocation}`);
             }
             else {
-                log(`Watcher: FailedLookupLocations: Status: Closing the file watcher: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
-                failedLookupLocationWatcher.fileWatcher.close();
+                failedLookupLocationWatcher.watcher.close();
                 failedLookupLocationsWatches.delete(failedLookupLocationPath);
             }
         }
 
-        type FailedLookupLocationAction = (failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) => void;
-        function withFailedLookupLocations(failedLookupLocations: ReadonlyArray<string>, containingFile: string, name: string, fn: FailedLookupLocationAction) {
+        type FailedLookupLocationAction = (failedLookupLocation: string, failedLookupLocationPath: Path) => void;
+        function withFailedLookupLocations(failedLookupLocations: ReadonlyArray<string> | undefined, fn: FailedLookupLocationAction) {
             forEach(failedLookupLocations, failedLookupLocation => {
-                fn(failedLookupLocation, toPath(failedLookupLocation), containingFile, name);
+                fn(failedLookupLocation, toPath(failedLookupLocation));
             });
         }
 
-        function updateFailedLookupLocationWatches(containingFile: string, name: string, existingFailedLookupLocations: ReadonlyArray<string> | undefined, failedLookupLocations: ReadonlyArray<string>) {
+        function updateFailedLookupLocationWatches(failedLookupLocations: ReadonlyArray<string> | undefined, existingFailedLookupLocations: ReadonlyArray<string> | undefined) {
             // Watch all the failed lookup locations
-            withFailedLookupLocations(failedLookupLocations, containingFile, name, watchFailedLookupLocation);
+            withFailedLookupLocations(failedLookupLocations, watchFailedLookupLocation);
 
             // Close existing watches for the failed locations
-            withFailedLookupLocations(existingFailedLookupLocations, containingFile, name, closeFailedLookupLocationWatcher);
+            withFailedLookupLocations(existingFailedLookupLocations, closeFailedLookupLocationWatcher);
         }
 
         function invalidateResolutionCacheOfDeletedFile<T extends NameResolutionWithFailedLookupLocations, R>(
@@ -255,8 +250,8 @@ namespace ts {
             cache.forEach((value, path) => {
                 if (path === deletedFilePath) {
                     cache.delete(path);
-                    value.forEach((resolution, name) => {
-                        withFailedLookupLocations(resolution.failedLookupLocations, path, name, closeFailedLookupLocationWatcher);
+                    value.forEach(resolution => {
+                        withFailedLookupLocations(resolution.failedLookupLocations, closeFailedLookupLocationWatcher);
                     });
                 }
                 else if (value) {

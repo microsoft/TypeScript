@@ -461,7 +461,6 @@ namespace ts {
         program: Program,
         missingFileWatches: Map<FileWatcher>,
         createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
-        closeExistingMissingFilePathFileWatcher: (missingFilePath: Path, fileWatcher: FileWatcher) => void
     ) {
         const missingFilePaths = program.getMissingFilePaths();
         const newMissingFilePathMap = arrayToSet(missingFilePaths);
@@ -474,7 +473,7 @@ namespace ts {
                 createNewValue: createMissingFileWatch,
                 // Files that are no longer missing (e.g. because they are no longer required)
                 // should no longer be watched.
-                onDeleteValue: closeExistingMissingFilePathFileWatcher
+                onDeleteValue: closeFileWatcher
             }
         );
     }
@@ -493,8 +492,7 @@ namespace ts {
     export function updateWatchingWildcardDirectories(
         existingWatchedForWildcards: Map<WildcardDirectoryWatcher>,
         wildcardDirectories: Map<WatchDirectoryFlags>,
-        watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
-        closeDirectoryWatcher: (directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatcher, flagsChanged: boolean) => void
+        watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher
     ) {
         mutateMap(
             existingWatchedForWildcards,
@@ -503,8 +501,7 @@ namespace ts {
                 // Create new watch and recursive info
                 createNewValue: createWildcardDirectoryWatcher,
                 // Close existing watch thats not needed any more
-                onDeleteValue: (directory, wildcardDirectoryWatcher) =>
-                    closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ false),
+                onDeleteValue: closeFileWatcherOf,
                 // Close existing watch that doesnt match in the flags
                 onExistingValue: updateWildcardDirectoryWatcher
             }
@@ -518,13 +515,13 @@ namespace ts {
             };
         }
 
-        function updateWildcardDirectoryWatcher(directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags) {
+        function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags, directory: string) {
             // Watcher needs to be updated if the recursive flags dont match
-            if (wildcardDirectoryWatcher.flags === flags) {
+            if (existingWatcher.flags === flags) {
                 return;
             }
 
-            closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ true);
+            existingWatcher.watcher.close();
             existingWatchedForWildcards.set(directory, createWildcardDirectoryWatcher(directory, flags));
         }
     }

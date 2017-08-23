@@ -198,7 +198,7 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
-            host: ServerHost) {
+            host: PartialSystem) {
 
             if (!this.compilerOptions) {
                 this.compilerOptions = getDefaultCompilerOptions();
@@ -216,7 +216,7 @@ namespace ts.server {
             this.resolutionCache = createResolutionCache(
                 fileName => this.projectService.toPath(fileName),
                 () => this.compilerOptions,
-                (failedLookupLocation, failedLookupLocationPath, containingFile, name) => this.watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name),
+                (failedLookupLocation, failedLookupLocationPath) => this.watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath),
                 s => this.projectService.logger.info(s),
                 this.getProjectName(),
                 () => this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined
@@ -233,17 +233,24 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        private watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
+        private watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path) {
+            return this.projectService.watchFile(
+                this.projectService.host,
+                failedLookupLocation,
+                (fileName, eventKind) => this.onFailedLookupLocationChanged(fileName, eventKind, failedLookupLocationPath),
+                WatchType.FailedLookupLocation,
+                this
+            );
+        }
+
+        private onFailedLookupLocationChanged(fileName: string, eventKind: FileWatcherEventKind, failedLookupLocationPath: Path) {
             // There is some kind of change in the failed lookup location, update the program
-            return this.projectService.addFileWatcher(WatchType.FailedLookupLocation, this, failedLookupLocation, (fileName, eventKind) => {
-                this.projectService.logger.info(`Watcher: FailedLookupLocations: Status: ${FileWatcherEventKind[eventKind]}: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
-                if (this.projectKind === ProjectKind.Configured) {
-                    (this.lsHost.host as CachedServerHost).addOrDeleteFile(fileName, failedLookupLocationPath, eventKind);
-                }
-                this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath);
-                this.markAsDirty();
-                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
-            });
+            if (this.projectKind === ProjectKind.Configured) {
+                (this.lsHost.host as CachedPartialSystem).addOrDeleteFile(fileName, failedLookupLocationPath, eventKind);
+            }
+            this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath);
+            this.markAsDirty();
+            this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
         }
 
         private setInternalCompilerOptionsForEmittingJsFiles() {
@@ -387,9 +394,7 @@ namespace ts.server {
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
-                clearMap(this.missingFilesMap, (missingFilePath, fileWatcher) => {
-                    this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.ProjectClose);
-                });
+                clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined;
             }
 
@@ -698,10 +703,7 @@ namespace ts.server {
                     this.program,
                     this.missingFilesMap || (this.missingFilesMap = createMap()),
                     // Watch the missing files
-                    missingFilePath => this.addMissingFileWatcher(missingFilePath),
-                    // Files that are no longer missing (e.g. because they are no longer required)
-                    // should no longer be watched.
-                    (missingFilePath, fileWatcher) => this.closeMissingFileWatcher(missingFilePath, fileWatcher, WatcherCloseReason.NotNeeded)
+                    missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
             }
 
@@ -726,28 +728,27 @@ namespace ts.server {
         }
 
         private addMissingFileWatcher(missingFilePath: Path) {
-            const fileWatcher = this.projectService.addFileWatcher(
-                WatchType.MissingFilePath, this, missingFilePath,
+            const fileWatcher = this.projectService.watchFile(
+                this.projectService.host,
+                missingFilePath,
                 (fileName, eventKind) => {
                     if (this.projectKind === ProjectKind.Configured) {
-                        (this.lsHost.host as CachedServerHost).addOrDeleteFile(fileName, missingFilePath, eventKind);
+                        (this.lsHost.host as CachedPartialSystem).addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
                     if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
                         this.missingFilesMap.delete(missingFilePath);
-                        this.closeMissingFileWatcher(missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
+                        fileWatcher.close();
 
                         // When a missing file is created, we should update the graph.
                         this.markAsDirty();
                         this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
                     }
-                }
+                },
+                WatchType.MissingFilePath,
+                this
             );
             return fileWatcher;
-        }
-
-        private closeMissingFileWatcher(missingFilePath: Path, fileWatcher: FileWatcher, reason: WatcherCloseReason) {
-            this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, reason);
         }
 
         isWatchedMissingFile(path: Path) {
@@ -942,7 +943,7 @@ namespace ts.server {
         }
 
         removeRoot(info: ScriptInfo) {
-            this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info, WatcherCloseReason.NotNeeded);
+            this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info);
             super.removeRoot(info);
             if (this._isJsInferredProject && info.isJavaScript()) {
                 if (every(this.getRootScriptInfos(), rootInfo => !rootInfo.isJavaScript())) {
@@ -968,7 +969,7 @@ namespace ts.server {
         }
 
         close() {
-            forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info, WatcherCloseReason.ProjectClose));
+            forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info));
             super.close();
         }
 
@@ -1014,8 +1015,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
-            cachedServerHost: CachedServerHost) {
-            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, cachedServerHost);
+            cachedPartialSystem: PartialSystem) {
+            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, cachedPartialSystem);
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
             this.enablePlugins();
         }
@@ -1034,8 +1035,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getCachedServerHost() {
-            return this.lsHost.host as CachedServerHost;
+        getCachedPartialSystem() {
+            return this.lsHost.host as CachedPartialSystem;
         }
 
         getConfigFilePath() {
@@ -1167,29 +1168,21 @@ namespace ts.server {
                 this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
                 wildcardDirectories,
                 // Create new directory watcher
-                (directory, flags) => this.projectService.addDirectoryWatcher(
-                    WatchType.WildcardDirectories, this, directory,
+                (directory, flags) => this.projectService.watchDirectory(
+                    this.projectService.host,
+                    directory,
                     path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
-                    flags
-                ),
-                // Close directory watcher
-                (directory, wildcardDirectoryWatcher, flagsChanged) => this.closeWildcardDirectoryWatcher(
-                    directory, wildcardDirectoryWatcher, flagsChanged ? WatcherCloseReason.RecursiveChanged : WatcherCloseReason.NotNeeded
+                    flags,
+                    WatchType.WildcardDirectories,
+                    this
                 )
             );
         }
 
-        private closeWildcardDirectoryWatcher(directory: string, { watcher, flags }: WildcardDirectoryWatcher, closeReason: WatcherCloseReason) {
-            this.projectService.closeDirectoryWatcher(WatchType.WildcardDirectories, this, directory, watcher, flags, closeReason);
-        }
-
         /*@internal*/
-        stopWatchingWildCards(reason: WatcherCloseReason) {
+        stopWatchingWildCards() {
             if (this.directoriesWatchedForWildcards) {
-                clearMap(
-                    this.directoriesWatchedForWildcards,
-                    (directory, wildcardDirectoryWatcher) => this.closeWildcardDirectoryWatcher(directory, wildcardDirectoryWatcher, reason)
-                );
+                clearMap(this.directoriesWatchedForWildcards, closeFileWatcherOf);
                 this.directoriesWatchedForWildcards = undefined;
             }
         }
@@ -1202,26 +1195,24 @@ namespace ts.server {
                 newTypeRoots,
                 {
                     // Create new watch
-                    createNewValue: root => this.projectService.addDirectoryWatcher(WatchType.TypeRoot, this, root,
-                        path => this.projectService.onTypeRootFileChanged(this, path), WatchDirectoryFlags.None
+                    createNewValue: root => this.projectService.watchDirectory(
+                        this.projectService.host,
+                        root,
+                        path => this.projectService.onTypeRootFileChanged(this, path),
+                        WatchDirectoryFlags.None,
+                        WatchType.TypeRoot,
+                        this
                     ),
                     // Close existing watch thats not needed any more
-                    onDeleteValue: (directory, watcher) => this.projectService.closeDirectoryWatcher(
-                        WatchType.TypeRoot, this, directory, watcher, WatchDirectoryFlags.None, WatcherCloseReason.NotNeeded
-                    )
+                    onDeleteValue: closeFileWatcher
                 }
             );
         }
 
         /*@internal*/
-        stopWatchingTypeRoots(reason: WatcherCloseReason) {
+        stopWatchingTypeRoots() {
             if (this.typeRootsWatchers) {
-                clearMap(
-                    this.typeRootsWatchers,
-                    (directory, watcher) =>
-                        this.projectService.closeDirectoryWatcher(WatchType.TypeRoot, this,
-                            directory, watcher, WatchDirectoryFlags.None, reason)
-                );
+                clearMap(this.typeRootsWatchers, closeFileWatcher);
                 this.typeRootsWatchers = undefined;
             }
         }
@@ -1230,12 +1221,12 @@ namespace ts.server {
             super.close();
 
             if (this.configFileWatcher) {
-                this.projectService.closeFileWatcher(WatchType.ConfigFilePath, this, this.getConfigFilePath(), this.configFileWatcher, WatcherCloseReason.ProjectClose);
+                this.configFileWatcher.close();
                 this.configFileWatcher = undefined;
             }
 
-            this.stopWatchingTypeRoots(WatcherCloseReason.ProjectClose);
-            this.stopWatchingWildCards(WatcherCloseReason.ProjectClose);
+            this.stopWatchingTypeRoots();
+            this.stopWatchingWildCards();
         }
 
         addOpenRef() {

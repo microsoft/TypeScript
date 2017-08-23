@@ -3490,17 +3490,15 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: Map<T>, onDeleteValue: (key: string, existingValue: T) => void) {
+    export function clearMap<T>(map: Map<T>, onDeleteValue: (existingValue: T, key: string) => void) {
         // Remove all
-        map.forEach((existingValue, key) => {
-            onDeleteValue(key, existingValue);
-        });
+        map.forEach(onDeleteValue);
         map.clear();
     }
 
     export interface MutateMapOptions<T, U> {
         createNewValue(key: string, valueInNewMap: U): T;
-        onDeleteValue(key: string, existingValue: T): void;
+        onDeleteValue(existingValue: T, key: string): void;
 
         /**
          * If present this is called with the key when there is value for that key both in new map as well as existing map provided
@@ -3508,7 +3506,7 @@ namespace ts {
          * If the key is removed, caller will get callback of createNewValue for that key.
          * If this callback is not provided, the value of such keys is not updated.
          */
-        onExistingValue?(key: string, existingValue: T, valueInNewMap: U): void;
+        onExistingValue?(existingValue: T, valueInNewMap: U, key: string): void;
     }
 
     /**
@@ -3524,11 +3522,11 @@ namespace ts {
                 // Not present any more in new map, remove it
                 if (valueInNewMap === undefined) {
                     map.delete(key);
-                    onDeleteValue(key, existingValue);
+                    onDeleteValue(existingValue, key);
                 }
                 // If present notify about existing values
                 else if (onExistingValue) {
-                    onExistingValue(key, existingValue, valueInNewMap);
+                    onExistingValue(existingValue, valueInNewMap, key);
                 }
             });
 
@@ -3543,6 +3541,63 @@ namespace ts {
         else {
             clearMap(map, options.onDeleteValue);
         }
+    }
+
+    export function addFileWatcher(host: System, file: string, cb: FileWatcherCallback): FileWatcher {
+        return host.watchFile(file, cb);
+    }
+
+    export function addFileWatcherWithLogging(host: System, file: string, cb: FileWatcherCallback, log: (s: string) => void): FileWatcher {
+        const watcherCaption = `FileWatcher:: `;
+        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, host, file, cb);
+    }
+
+    export type FilePathWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, filePath: Path) => void;
+    export function addFilePathWatcher(host: System, file: string, cb: FilePathWatcherCallback, path: Path): FileWatcher {
+        return host.watchFile(file, (fileName, eventKind) => cb(fileName, eventKind, path));
+    }
+
+    export function addFilePathWatcherWithLogging(host: System, file: string, cb: FilePathWatcherCallback, path: Path, log: (s: string) => void): FileWatcher {
+        const watcherCaption = `FileWatcher:: `;
+        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, host, file, cb, path);
+    }
+
+    export function addDirectoryWatcher(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
+        const recursive = (flags & WatchDirectoryFlags.Recursive) !== 0;
+        return host.watchDirectory(directory, fileName => {
+            cb(getNormalizedAbsolutePath(fileName, directory));
+        }, recursive);
+    }
+
+    export function addDirectoryWatcherWithLogging(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, log: (s: string) => void): FileWatcher {
+        const watcherCaption = `DirectoryWatcher ${(flags & WatchDirectoryFlags.Recursive) !== 0 ? "recursive" : ""}:: `;
+        return createWatcherWithLogging(addDirectoryWatcher, watcherCaption, log, host, directory, cb, flags);
+    }
+
+    type WatchCallback<T, U> = (fileName: string, cbOptional1?: T, optional?: U) => void;
+    type AddWatch<T, U> = (host: System, file: string, cb: WatchCallback<T, U>, optional?: U) => FileWatcher;
+    function createWatcherWithLogging<T, U>(addWatch: AddWatch<T, U>, watcherCaption: string, log: (s: string) => void, host: System, file: string, cb: WatchCallback<T, U>, optional?: U): FileWatcher {
+        const info = `PathInfo: ${file}`;
+        log(`${watcherCaption}Added: ${info}`);
+        const watcher = addWatch(host, file, (fileName, cbOptional1?) => {
+            const optionalInfo = cbOptional1 !== undefined ? ` ${cbOptional1}` : "";
+            log(`${watcherCaption}Trigger: ${fileName}${optionalInfo} ${info}`);
+            cb(fileName, cbOptional1, optional);
+        }, optional);
+        return {
+            close: () => {
+                log(`${watcherCaption}Close: ${info}`);
+                watcher.close();
+            }
+        };
+    }
+
+    export function closeFileWatcher(watcher: FileWatcher) {
+        watcher.close();
+    }
+
+    export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
+        objWithWatcher.watcher.close();
     }
 }
 

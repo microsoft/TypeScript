@@ -2631,10 +2631,6 @@ namespace ts {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 
-    export interface HostForCaching extends PartialSystem {
-        useCaseSensitiveFileNames: boolean;
-    }
-
     export interface CachedHost {
         addOrDeleteFileOrFolder(fileOrFolder: string, fileOrFolderPath: Path): void;
         addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
@@ -2649,11 +2645,15 @@ namespace ts {
         readonly directories: string[];
     }
 
-    export function createCachedPartialSystem(host: HostForCaching): CachedPartialSystem {
+    export function createCachedPartialSystem(host: PartialSystem): CachedPartialSystem {
         const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
         const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         return {
+            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
+            newLine: host.newLine,
+            readFile: (path, encoding) => host.readFile(path, encoding),
+            write: s => host.write(s),
             writeFile,
             fileExists,
             directoryExists,
@@ -2663,7 +2663,8 @@ namespace ts {
             readDirectory,
             addOrDeleteFileOrFolder,
             addOrDeleteFile,
-            clearCache
+            clearCache,
+            exit: code => host.exit(code)
         };
 
         function toPath(fileName: string) {
