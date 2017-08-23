@@ -791,10 +791,15 @@ namespace ts {
             // 2. inside a function
             // 3. inside an instance property initializer, a reference to a non-instance property
             // 4. inside a static property initializer, a reference to a static method in the same class
+            // 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
             // or if usage is in a type context:
             // 1. inside a type query (typeof in type position)
-            if (usage.parent.kind === SyntaxKind.ExportSpecifier) {
+            if (usage.parent.kind === SyntaxKind.ExportSpecifier || (usage.parent.kind === SyntaxKind.ExportAssignment && (usage.parent as ExportAssignment).isExportEquals)) {
                 // export specifiers do not use the variable, they only make it available for use
+                return true;
+            }
+            // When resolving symbols for exports, the `usage` location passed in can be the export site directly
+            if (usage.kind === SyntaxKind.ExportAssignment && (usage as ExportAssignment).isExportEquals) {
                 return true;
             }
 
