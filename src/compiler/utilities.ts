@@ -3543,6 +3543,18 @@ namespace ts {
         }
     }
 
+    /**
+     * Find the index where arrayA and arrayB differ
+     */
+    export function findDiffIndex<T>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<T>) {
+        for (let i = 0; i < arrayA.length; i++) {
+            if (i === arrayB.length || arrayA[i] !== arrayB[i]) {
+                return i;
+            }
+        }
+        return arrayA.length;
+    }
+
     export function addFileWatcher(host: System, file: string, cb: FileWatcherCallback): FileWatcher {
         return host.watchFile(file, cb);
     }

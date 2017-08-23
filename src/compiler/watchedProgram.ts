@@ -268,7 +268,7 @@ namespace ts {
         const resolutionCache = createResolutionCache(
             fileName => toPath(fileName),
             () => compilerOptions,
-            watchFailedLookupLocation,
+            watchDirectoryOfFailedLookupLocation,
             writeLog
         );
 
@@ -552,14 +552,22 @@ namespace ts {
             }
         }
 
-        function watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path) {
-            return watchFilePath(system, failedLookupLocation, onFailedLookupLocationChange, failedLookupLocationPath, writeLog);
+        function watchDirectoryOfFailedLookupLocation(directory: string) {
+            return watchDirectory(system, directory, onFileAddOrRemoveInDirectoryOfFailedLookup, WatchDirectoryFlags.None, writeLog);
         }
 
-        function onFailedLookupLocationChange(fileName: string, eventKind: FileWatcherEventKind, failedLookupLocationPath: Path) {
-            updateCachedSystemWithFile(fileName, failedLookupLocationPath, eventKind);
-            resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath);
-            scheduleProgramUpdate();
+        function onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolder: string) {
+            const fileOrFolderPath = toPath(fileOrFolder);
+
+            if (configFileName) {
+                // Since the file existance changed, update the sourceFiles cache
+                (host as CachedPartialSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+            }
+
+            // If the location results in update to failed lookup, schedule program update
+            if (resolutionCache.onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolderPath)) {
+                scheduleProgramUpdate();
+            }
         }
 
         function watchMissingFilePath(missingFilePath: Path) {

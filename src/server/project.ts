@@ -216,7 +216,7 @@ namespace ts.server {
             this.resolutionCache = createResolutionCache(
                 fileName => this.projectService.toPath(fileName),
                 () => this.compilerOptions,
-                (failedLookupLocation, failedLookupLocationPath) => this.watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath),
+                directory => this.watchDirectoryOfFailedLookup(directory),
                 s => this.projectService.logger.info(s),
                 this.getProjectName(),
                 () => this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined
@@ -233,24 +233,30 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        private watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path) {
-            return this.projectService.watchFile(
+        private watchDirectoryOfFailedLookup(directory: string) {
+            return this.projectService.watchDirectory(
                 this.projectService.host,
-                failedLookupLocation,
-                (fileName, eventKind) => this.onFailedLookupLocationChanged(fileName, eventKind, failedLookupLocationPath),
+                directory,
+                fileOrFolder => this.onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolder),
+                WatchDirectoryFlags.None,
                 WatchType.FailedLookupLocation,
                 this
             );
         }
 
-        private onFailedLookupLocationChanged(fileName: string, eventKind: FileWatcherEventKind, failedLookupLocationPath: Path) {
+        private onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolder: string) {
+            const fileOrFolderPath = this.projectService.toPath(fileOrFolder);
+
             // There is some kind of change in the failed lookup location, update the program
             if (this.projectKind === ProjectKind.Configured) {
-                (this.lsHost.host as CachedPartialSystem).addOrDeleteFile(fileName, failedLookupLocationPath, eventKind);
+                (this.lsHost.host as CachedPartialSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
             }
-            this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath);
-            this.markAsDirty();
-            this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+
+            // If the location results in update to failed lookup, schedule program update
+            if (this.resolutionCache.onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolderPath)) {
+                this.markAsDirty();
+                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+            }
         }
 
         private setInternalCompilerOptionsForEmittingJsFiles() {

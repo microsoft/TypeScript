@@ -432,8 +432,8 @@ namespace ts.server {
             return s => this.logger.info(s + detailedInfo);
         }
 
-        toPath(fileName: string, basePath = this.currentDirectory) {
-            return toPath(fileName, basePath, this.toCanonicalFileName);
+        toPath(fileName: string) {
+            return toPath(fileName, this.currentDirectory, this.toCanonicalFileName);
         }
 
         /* @internal */
