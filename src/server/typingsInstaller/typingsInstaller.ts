@@ -150,7 +150,7 @@ namespace ts.server.typingsInstaller {
             }
             const discoverTypingsResult = JsTyping.discoverTypings(
                 this.installTypingHost,
-                this.log.isEnabled() ? this.log.writeLine : undefined,
+                this.log.isEnabled() ? this.log.writeLine.bind(this.log) : undefined,
                 req.fileNames,
                 req.projectRootPath,
                 this.safeList,
