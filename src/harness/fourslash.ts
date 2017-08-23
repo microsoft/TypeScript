@@ -490,7 +490,8 @@ namespace FourSlash {
         }
 
         private getDiagnostics(fileName: string): ts.Diagnostic[] {
-            return [...this.languageService.getSyntacticDiagnostics(fileName), ...this.languageService.getSemanticDiagnostics(fileName)];
+            return ts.concatenate(this.languageService.getSyntacticDiagnostics(fileName),
+                this.languageService.getSemanticDiagnostics(fileName));
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {

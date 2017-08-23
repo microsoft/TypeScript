@@ -213,7 +213,7 @@ namespace ts {
         ];
 
         if (program.getCompilerOptions().declaration) {
-            diagnostics = [...diagnostics, ...program.getDeclarationDiagnostics(sourceFile, cancellationToken)];
+            addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
         }
 
         return sortAndDeduplicateDiagnostics(diagnostics);

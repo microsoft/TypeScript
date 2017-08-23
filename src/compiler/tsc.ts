@@ -474,7 +474,7 @@ namespace ts {
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
-                diagnostics = [...program.getOptionsDiagnostics(), ...program.getGlobalDiagnostics()];
+                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
                     diagnostics = program.getSemanticDiagnostics().slice();
