@@ -29,27 +29,35 @@ type i = Wrap<123>;
 type F5 = () => () => { a: () => 1; };
 type j = F5()()['a']();
 
-type k = Id<string>('foo'); // `any`, explicit type argument fails
+type k1 = Id<string>('foo'); // `any`, `<string>` is part of the type reference, not the function call
+type k2 = Id<><string>('foo'); // ok, `string`
+
+declare function id<T>(v: T): T;
+let l = id<string>('foo');
 
 interface IsPrimitive {
-  <T extends object>(o: T): '0';
-  <T>(o: T): '1';
+  (o: object): '0';
+  (o: any): '1';
 }
 type stringIsPrimitive = IsPrimitive(string); // '1', ok
 type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
 
-// explicit type arguments still fail
+// explicit type arguments need to go after the type arguments of the type reference, empty `<>` if n/a
 type genericIsPrimitive = <T>() => IsPrimitive(T);
-type stringIsPrimitive2 = genericIsPrimitive<string>();
-type regexpIsPrimitive2 = genericIsPrimitive<RegExp>();
+type stringIsPrimitive2 = genericIsPrimitive<><string>(); // '1', ok
+type regexpIsPrimitive2 = genericIsPrimitive<><RegExp>();
+// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
 
-// workaround, pass as parameters
+// alternative, pass as parameters
 type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
 type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
 type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
 // FAILS!, '1' instead of '0', should delay overload selection until type argument is known
 
+type map = <Fn extends Function, O extends object>(fn: Fn, obj: O) => { [P in keyof O]: Fn(P) }; // Fn(O[P])
+type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
+
 
 //// [typeCall.js]
 var a = 'foo';
-// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
+var l = id('foo');

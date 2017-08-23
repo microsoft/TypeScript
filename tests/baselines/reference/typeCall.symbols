@@ -80,65 +80,103 @@ type j = F5()()['a']();
 >j : Symbol(j, Decl(typeCall.ts, 27, 38))
 >F5 : Symbol(F5, Decl(typeCall.ts, 25, 19))
 
-type k = Id<string>('foo'); // `any`, explicit type argument fails
->k : Symbol(k, Decl(typeCall.ts, 28, 23))
+type k1 = Id<string>('foo'); // `any`, `<string>` is part of the type reference, not the function call
+>k1 : Symbol(k1, Decl(typeCall.ts, 28, 23))
 >Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
 
+type k2 = Id<><string>('foo'); // ok, `string`
+>k2 : Symbol(k2, Decl(typeCall.ts, 30, 28))
+>Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
+
+declare function id<T>(v: T): T;
+>id : Symbol(id, Decl(typeCall.ts, 31, 30))
+>T : Symbol(T, Decl(typeCall.ts, 33, 20))
+>v : Symbol(v, Decl(typeCall.ts, 33, 23))
+>T : Symbol(T, Decl(typeCall.ts, 33, 20))
+>T : Symbol(T, Decl(typeCall.ts, 33, 20))
+
+let l = id<string>('foo');
+>l : Symbol(l, Decl(typeCall.ts, 34, 3))
+>id : Symbol(id, Decl(typeCall.ts, 31, 30))
+
 interface IsPrimitive {
->IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 34, 26))
 
-  <T extends object>(o: T): '0';
->T : Symbol(T, Decl(typeCall.ts, 33, 3))
->o : Symbol(o, Decl(typeCall.ts, 33, 21))
->T : Symbol(T, Decl(typeCall.ts, 33, 3))
+  (o: object): '0';
+>o : Symbol(o, Decl(typeCall.ts, 37, 3))
 
-  <T>(o: T): '1';
->T : Symbol(T, Decl(typeCall.ts, 34, 3))
->o : Symbol(o, Decl(typeCall.ts, 34, 6))
->T : Symbol(T, Decl(typeCall.ts, 34, 3))
+  (o: any): '1';
+>o : Symbol(o, Decl(typeCall.ts, 38, 3))
 }
 type stringIsPrimitive = IsPrimitive(string); // '1', ok
->stringIsPrimitive : Symbol(stringIsPrimitive, Decl(typeCall.ts, 35, 1))
->IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+>stringIsPrimitive : Symbol(stringIsPrimitive, Decl(typeCall.ts, 39, 1))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 34, 26))
 
 type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
->regexpIsPrimitive : Symbol(regexpIsPrimitive, Decl(typeCall.ts, 36, 45))
->IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
+>regexpIsPrimitive : Symbol(regexpIsPrimitive, Decl(typeCall.ts, 40, 45))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 34, 26))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
-// explicit type arguments still fail
+// explicit type arguments need to go after the type arguments of the type reference, empty `<>` if n/a
 type genericIsPrimitive = <T>() => IsPrimitive(T);
->genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 37, 45))
->T : Symbol(T, Decl(typeCall.ts, 40, 27))
->IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
->T : Symbol(T, Decl(typeCall.ts, 40, 27))
+>genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 41, 45))
+>T : Symbol(T, Decl(typeCall.ts, 44, 27))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 34, 26))
+>T : Symbol(T, Decl(typeCall.ts, 44, 27))
 
-type stringIsPrimitive2 = genericIsPrimitive<string>();
->stringIsPrimitive2 : Symbol(stringIsPrimitive2, Decl(typeCall.ts, 40, 50))
->genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 37, 45))
+type stringIsPrimitive2 = genericIsPrimitive<><string>(); // '1', ok
+>stringIsPrimitive2 : Symbol(stringIsPrimitive2, Decl(typeCall.ts, 44, 50))
+>genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 41, 45))
 
-type regexpIsPrimitive2 = genericIsPrimitive<RegExp>();
->regexpIsPrimitive2 : Symbol(regexpIsPrimitive2, Decl(typeCall.ts, 41, 55))
->genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 37, 45))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
-
-// workaround, pass as parameters
-type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
->genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 42, 55))
->T : Symbol(T, Decl(typeCall.ts, 45, 28))
->v : Symbol(v, Decl(typeCall.ts, 45, 31))
->T : Symbol(T, Decl(typeCall.ts, 45, 28))
->IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 30, 27))
->T : Symbol(T, Decl(typeCall.ts, 45, 28))
-
-type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
->stringIsPrimitive3 : Symbol(stringIsPrimitive3, Decl(typeCall.ts, 45, 55))
->genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 42, 55))
-
-type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
->regexpIsPrimitive3 : Symbol(regexpIsPrimitive3, Decl(typeCall.ts, 46, 54))
->genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 42, 55))
+type regexpIsPrimitive2 = genericIsPrimitive<><RegExp>();
+>regexpIsPrimitive2 : Symbol(regexpIsPrimitive2, Decl(typeCall.ts, 45, 57))
+>genericIsPrimitive : Symbol(genericIsPrimitive, Decl(typeCall.ts, 41, 45))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // FAILS!, '1' instead of '0', should delay overload selection until type argument is known
+
+// alternative, pass as parameters
+type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
+>genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 46, 57))
+>T : Symbol(T, Decl(typeCall.ts, 50, 28))
+>v : Symbol(v, Decl(typeCall.ts, 50, 31))
+>T : Symbol(T, Decl(typeCall.ts, 50, 28))
+>IsPrimitive : Symbol(IsPrimitive, Decl(typeCall.ts, 34, 26))
+>T : Symbol(T, Decl(typeCall.ts, 50, 28))
+
+type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
+>stringIsPrimitive3 : Symbol(stringIsPrimitive3, Decl(typeCall.ts, 50, 55))
+>genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 46, 57))
+
+type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
+>regexpIsPrimitive3 : Symbol(regexpIsPrimitive3, Decl(typeCall.ts, 51, 54))
+>genericIsPrimitive3 : Symbol(genericIsPrimitive3, Decl(typeCall.ts, 46, 57))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
+
+type map = <Fn extends Function, O extends object>(fn: Fn, obj: O) => { [P in keyof O]: Fn(P) }; // Fn(O[P])
+>map : Symbol(map, Decl(typeCall.ts, 52, 53))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 55, 12))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>O : Symbol(O, Decl(typeCall.ts, 55, 32))
+>fn : Symbol(fn, Decl(typeCall.ts, 55, 51))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 55, 12))
+>obj : Symbol(obj, Decl(typeCall.ts, 55, 58))
+>O : Symbol(O, Decl(typeCall.ts, 55, 32))
+>P : Symbol(P, Decl(typeCall.ts, 55, 73))
+>O : Symbol(O, Decl(typeCall.ts, 55, 32))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 55, 12))
+>P : Symbol(P, Decl(typeCall.ts, 55, 73))
+
+type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
+>z : Symbol(z, Decl(typeCall.ts, 55, 96))
+>map : Symbol(map, Decl(typeCall.ts, 52, 53))
+>T : Symbol(T, Decl(typeCall.ts, 56, 14))
+>v : Symbol(v, Decl(typeCall.ts, 56, 17))
+>T : Symbol(T, Decl(typeCall.ts, 56, 14))
+>T : Symbol(T, Decl(typeCall.ts, 56, 14))
+>a : Symbol(a, Decl(typeCall.ts, 56, 32))
+>b : Symbol(b, Decl(typeCall.ts, 56, 38))
+>c : Symbol(c, Decl(typeCall.ts, 56, 44))
 
