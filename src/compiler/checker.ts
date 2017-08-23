@@ -9779,6 +9779,10 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Reference && some((<TypeReference>type).typeArguments, isUnconstrainedTypeParameter);
         }
 
+        /**
+         * getTypeReferenceId(A<T, number, U>) returns "111=0-12=1"
+         *   where A.id=111 and number.id=12
+         */
         function getTypeReferenceId(type: TypeReference, typeParameters: Type[]) {
             let result = "" + type.target.id;
             for (const t of type.typeArguments) {
@@ -9797,6 +9801,10 @@ namespace ts {
             return result;
         }
 
+        /**
+         * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
+         * For other cases, the types ids are used.
+         */
         function getRelationKey(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
             if (relation === identityRelation && source.id > target.id) {
                 const temp = source;
