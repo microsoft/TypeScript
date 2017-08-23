@@ -345,7 +345,7 @@ function modifiers(, C) {
     return this.n;
 }
 function restParam(C) { return this.n; }
-function optional(C) { return this.n; }
+function optional() { return this.n; }
 function decorated(, C) {
     if ( === void 0) {  = this; }
     return this.n;
