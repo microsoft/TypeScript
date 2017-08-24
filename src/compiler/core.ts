@@ -16,11 +16,6 @@ namespace ts {
         // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
-
-    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !isExternalModuleNameRelative(moduleName);
-    }
 }
 
 /* @internal */
@@ -1595,6 +1590,11 @@ namespace ts {
 
     export function pathIsRelative(path: string): boolean {
         return /^\.\.?($|[\\/])/.test(path);
+    }
+
+    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
+    export function moduleHasNonRelativeName(moduleName: string): boolean {
+        return !isExternalModuleNameRelative(moduleName);
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
