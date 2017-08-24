@@ -14,7 +14,7 @@ namespace A {
         }
     }
 }
-==SCOPE::function a==
+==SCOPE::function 'a'==
 namespace A {
     let x = 1;
     export function foo() {
@@ -34,7 +34,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace B==
+==SCOPE::namespace 'B'==
 namespace A {
     let x = 1;
     export function foo() {
@@ -56,7 +56,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace A==
+==SCOPE::namespace 'A'==
 namespace A {
     let x = 1;
     export function foo() {
@@ -78,7 +78,7 @@ namespace A {
         return { __return: foo(), a };
     }
 }
-==SCOPE::file '/a.ts'==
+==SCOPE::this file==
 namespace A {
     let x = 1;
     export function foo() {

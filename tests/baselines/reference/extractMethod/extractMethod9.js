@@ -8,7 +8,7 @@ namespace A {
         }
     }
 }
-==SCOPE::function a==
+==SCOPE::function 'a'==
 namespace A {
     export interface I { x: number };
     namespace B {
@@ -22,7 +22,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace B==
+==SCOPE::namespace 'B'==
 namespace A {
     export interface I { x: number };
     namespace B {
@@ -36,7 +36,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace A==
+==SCOPE::namespace 'A'==
 namespace A {
     export interface I { x: number };
     namespace B {
@@ -50,7 +50,7 @@ namespace A {
         return a1.x + 10;
     }
 }
-==SCOPE::file '/a.ts'==
+==SCOPE::this file==
 namespace A {
     export interface I { x: number };
     namespace B {
