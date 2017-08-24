@@ -6799,7 +6799,7 @@ namespace ts {
                 const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
-            if (node.typeArguments) {
+            if (node.typeArguments　&& node.typeArguments.length) {
                 error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
                 return unknownType;
             }
@@ -6841,7 +6841,7 @@ namespace ts {
                 }
                 return getTypeAliasInstantiation(symbol, typeArguments);
             }
-            if (node.typeArguments) {
+            if (node.typeArguments　&& node.typeArguments.length) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                 return unknownType;
             }
@@ -6852,7 +6852,7 @@ namespace ts {
          * Get type from reference to named type that cannot be generic (enum or type parameter)
          */
         function getTypeFromNonGenericTypeReference(node: TypeReferenceType, symbol: Symbol): Type {
-            if (node.typeArguments) {
+            if (node.typeArguments　&& node.typeArguments.length) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                 return unknownType;
             }
@@ -7553,6 +7553,18 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
+            const fn = typeNodeToExpression(node.type);
+            const args = map(node.arguments, typeNodeToExpression);
+            const callExpr = createCall(fn, node.typeArguments, args);
+            return checkExpression(callExpr);
+        }
+
+        // null! as type
+        function typeNodeToExpression(type: TypeNode): Expression {
+            return createAsExpression(createNonNullExpression(createNull()), type);
+        }
+
         function createIndexedAccessType(objectType: Type, indexType: Type) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
@@ -8010,6 +8022,8 @@ namespace ts {
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 case SyntaxKind.TypeOperator:
                     return getTypeFromTypeOperatorNode(<TypeOperatorNode>node);
+                case SyntaxKind.TypeCall:
+                    return getTypeFromTypeCallNode(<TypeCallTypeNode>node);
                 case SyntaxKind.IndexedAccessType:
                     return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
@@ -13247,7 +13261,7 @@ namespace ts {
                 return node.contextualType;
             }
             const parent = node.parent;
-            switch (parent.kind) {
+            switch (parent && parent.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.PropertyDeclaration:
@@ -18782,7 +18796,7 @@ namespace ts {
             }
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
-                if (node.typeArguments) {
+                if (node.typeArguments　&& node.typeArguments.length) {
                     // Do type argument local checks only if referenced type is successfully resolved
                     forEach(node.typeArguments, checkSourceElement);
                     if (produceDiagnostics) {
@@ -24338,7 +24352,7 @@ namespace ts {
 
         function checkGrammarTypeArguments(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
             return checkGrammarForDisallowedTrailingComma(typeArguments) ||
-                checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
+                false && checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
         function checkGrammarForOmittedArgument(args: NodeArray<Expression>): boolean {
