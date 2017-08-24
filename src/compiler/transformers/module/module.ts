@@ -433,7 +433,7 @@ namespace ts {
                 const expressionResult = importCallExpressionVisitor(currentModuleInfo.exportEquals.expression);
                 if (expressionResult) {
                     if (expressionResult instanceof Array) {
-                        throw new Error("export= expression should never be replaced with multiple expressions!");
+                        return Debug.fail("export= expression should never be replaced with multiple expressions!");
                     }
                     if (emitAsReturn) {
                         const statement = createReturn(expressionResult);
