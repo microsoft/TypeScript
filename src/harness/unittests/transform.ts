@@ -150,8 +150,6 @@ namespace ts {
                 }
             }).outputText;
 
-            // Note: this is a simplified implementation that is missing some corner cases
-            // but is enough to show the bug.
             function expandExportStar(context: ts.TransformationContext) {
                 return (sourceFile: ts.SourceFile): ts.SourceFile => {
                     return visitNode(sourceFile);
