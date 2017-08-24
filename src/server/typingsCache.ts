@@ -110,7 +110,7 @@ namespace ts.server {
             this.perProjectCache.set(projectName, {
                 compilerOptions,
                 typeAcquisition,
-                typings: toSortedReadonlyArray(newTypings),
+                typings: toSortedArray(newTypings),
                 unresolvedImports,
                 poisoned: false
             });

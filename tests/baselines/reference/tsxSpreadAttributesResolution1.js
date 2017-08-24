@@ -7,11 +7,12 @@ class Poisoned extends React.Component<{}, {}> {
     }
 }
 
-const obj: Object = {};
+const obj = {};
 
 // OK
 let p = <Poisoned {...obj} />;
 let y = <Poisoned />;
+
 
 //// [file.jsx]
 "use strict";
@@ -27,7 +28,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var Poisoned = (function (_super) {
+var Poisoned = /** @class */ (function (_super) {
     __extends(Poisoned, _super);
     function Poisoned() {
         return _super !== null && _super.apply(this, arguments) || this;

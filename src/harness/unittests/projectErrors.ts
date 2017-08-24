@@ -4,9 +4,12 @@
 
 namespace ts.projectSystem {
     describe("Project errors", () => {
-        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: string[]) {
+        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: ReadonlyArray<string>): void {
             assert.isTrue(projectFiles !== undefined, "missing project files");
-            const errors = projectFiles.projectErrors;
+            checkProjectErrorsWorker(projectFiles.projectErrors, expectedErrors);
+        }
+
+        function checkProjectErrorsWorker(errors: ReadonlyArray<Diagnostic>, expectedErrors: ReadonlyArray<string>): void {
             assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
             if (expectedErrors.length) {
                 for (let i = 0; i < errors.length; i++) {
@@ -122,21 +125,24 @@ namespace ts.projectSystem {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject,  [
-                    "')' expected.",
-                    "Declaration or statement expected.",
-                    "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json'"
+                checkProjectErrors(configuredProject, []);
+                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                checkProjectErrorsWorker(projectErrors, [
+                    "'{' expected."
                 ]);
+                assert.isNotNull(projectErrors[0].file);
+                assert.equal(projectErrors[0].file.fileName, corruptedConfig.path);
             }
             // fix config and trigger watcher
             host.reloadFS([file1, file2, correctConfig]);
-            host.triggerFileWatcherCallback(correctConfig.path, /*false*/);
+            host.triggerFileWatcherCallback(correctConfig.path, FileWatcherEventKind.Changed);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
+                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                checkProjectErrorsWorker(projectErrors, []);
             }
         });
 
@@ -166,20 +172,23 @@ namespace ts.projectSystem {
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
                 checkProjectErrors(configuredProject, []);
+                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                checkProjectErrorsWorker(projectErrors, []);
             }
             // break config and trigger watcher
             host.reloadFS([file1, file2, corruptedConfig]);
-            host.triggerFileWatcherCallback(corruptedConfig.path, /*false*/);
+            host.triggerFileWatcherCallback(corruptedConfig.path, FileWatcherEventKind.Changed);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = forEach(projectService.synchronizeProjectList([]), f => f.info.projectName === corruptedConfig.path && f);
                 assert.isTrue(configuredProject !== undefined, "should find configured project");
-                checkProjectErrors(configuredProject, [
-                    "')' expected.",
-                    "Declaration or statement expected.",
-                    "Declaration or statement expected.",
-                    "Failed to parse file '/a/b/tsconfig.json'"
+                checkProjectErrors(configuredProject, []);
+                const projectErrors = projectService.configuredProjects[0].getAllProjectErrors();
+                checkProjectErrorsWorker(projectErrors, [
+                    "'{' expected."
                 ]);
+                assert.isNotNull(projectErrors[0].file);
+                assert.equal(projectErrors[0].file.fileName, corruptedConfig.path);
             }
         });
     });

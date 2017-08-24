@@ -8,13 +8,10 @@ namespace ts {
         [index: string]: T;
     }
 
-    /** ES6 Map interface. */
-    export interface Map<T> {
+    /** ES6 Map interface, only read methods included. */
+    export interface ReadonlyMap<T> {
         get(key: string): T | undefined;
         has(key: string): boolean;
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
         forEach(action: (value: T, key: string) => void): void;
         readonly size: number;
         keys(): Iterator<string>;
@@ -22,25 +19,26 @@ namespace ts {
         entries(): Iterator<[string, T]>;
     }
 
+    /** ES6 Map interface. */
+    export interface Map<T> extends ReadonlyMap<T> {
+        set(key: string, value: T): this;
+        delete(key: string): boolean;
+        clear(): void;
+    }
+
     /** ES6 Iterator type. */
     export interface Iterator<T> {
         next(): { value: T, done: false } | { value: never, done: true };
     }
 
+    /** Array that is only intended to be pushed to, never read. */
+    export interface Push<T> {
+        push(...values: T[]): void;
+    }
+
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
-
-    export interface FileMap<T> {
-        get(fileName: Path): T;
-        set(fileName: Path, value: T): void;
-        contains(fileName: Path): boolean;
-        remove(fileName: Path): void;
-
-        forEachValue(f: (key: Path, v: T) => void): void;
-        getKeys(): Path[];
-        clear(): void;
-    }
 
     export interface TextRange {
         pos: number;
@@ -358,19 +356,11 @@ namespace ts {
         JSDocAllType,
         // The ? type
         JSDocUnknownType,
-        JSDocArrayType,
-        JSDocUnionType,
-        JSDocTupleType,
         JSDocNullableType,
         JSDocNonNullableType,
-        JSDocRecordType,
-        JSDocRecordMember,
-        JSDocTypeReference,
         JSDocOptionalType,
         JSDocFunctionType,
         JSDocVariadicType,
-        JSDocConstructorType,
-        JSDocThisType,
         JSDocComment,
         JSDocTag,
         JSDocAugmentsTag,
@@ -382,7 +372,6 @@ namespace ts {
         JSDocTypedefTag,
         JSDocPropertyTag,
         JSDocTypeLiteral,
-        JSDocLiteralType,
 
         // Synthesized list
         SyntaxList,
@@ -424,9 +413,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocLiteralType,
+        LastJSDocNode = JSDocTypeLiteral,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocLiteralType
+        LastJSDocTagNode = JSDocTypeLiteral
     }
 
     export const enum NodeFlags {
@@ -451,13 +440,17 @@ namespace ts {
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
-        // This flag will be set to true when the parse encounter dynamic import so that post-parsing process of module resolution
-        // will not walk the tree if the flag is not set. However, this flag is just a approximation because once it is set, the flag never get reset.
-        // (hence it is named "possiblyContainDynamicImport").
-        // During editing, if dynamic import is remove, incremental parsing will *NOT* update this flag. This will then causes walking of the tree during module resolution.
-        // However, the removal operation should not occur often and in the case of the removal, it is likely that users will add back the import anyway.
-        // The advantage of this approach is its simplicity. For the case of batch compilation, we garuntee that users won't have to pay the price of walking the tree if dynamic import isn't used.
-        PossiblyContainDynamicImport = 1 << 19,
+        // This flag will be set when the parser encounters a dynamic import expression so that module resolution
+        // will not have to walk the tree if the flag is not set. However, this flag is just a approximation because
+        // once it is set, the flag never gets cleared (hence why it's named "PossiblyContainsDynamicImport").
+        // During editing, if dynamic import is removed, incremental parsing will *NOT* update this flag. This means that the tree will always be traversed
+        // during module resolution. However, the removal operation should not occur often and in the case of the
+        // removal, it is likely that users will add the import anyway.
+        // The advantage of this approach is its simplicity. For the case of batch compilation,
+        // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
+        /* @internal */
+        PossiblyContainsDynamicImport = 1 << 19,
+        JSDoc =              1 << 20, // If node was parsed inside jsdoc
 
         BlockScoped = Let | Const,
 
@@ -517,25 +510,28 @@ namespace ts {
         flags: NodeFlags;
         /* @internal */ modifierFlagsCache?: ModifierFlags;
         /* @internal */ transformFlags?: TransformFlags;
-        decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
-        modifiers?: ModifiersArray;                     // Array of modifiers
-        /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
-        parent?: Node;                                  // Parent node (initialized by binding)
-        /* @internal */ original?: Node;                // The original node if this is an updated node.
-        /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
-        /* @internal */ jsDoc?: JSDoc[];                // JSDoc that directly precedes this node
-        /* @internal */ jsDocCache?: (JSDoc | JSDocTag)[]; // All JSDoc that applies to the node, including parent docs and @param tags
-        /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
-        /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type;          // Used to temporarily assign a contextual type during overload resolution
-        /* @internal */ contextualMapper?: TypeMapper;  // Mapper for contextual type
+        decorators?: NodeArray<Decorator>;                    // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                           // Array of modifiers
+        /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
+        parent?: Node;                                        // Parent node (initialized by binding)
+        /* @internal */ original?: Node;                      // The original node if this is an updated node.
+        /* @internal */ startsOnNewLine?: boolean;            // Whether a synthesized node should start on a new line (used by transforms).
+        /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
+        /* @internal */ jsDocCache?: ReadonlyArray<JSDocTag>; // Cache for getJSDocTags
+        /* @internal */ symbol?: Symbol;                      // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
+        /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
+        /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ contextualMapper?: TypeMapper;        // Mapper for contextual type
     }
 
-    export interface NodeArray<T extends Node> extends Array<T>, TextRange {
+    /* @internal */
+    export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
+
+    export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
         hasTrailingComma?: boolean;
         /* @internal */ transformFlags?: TransformFlags;
     }
@@ -583,15 +579,16 @@ namespace ts {
     export interface Identifier extends PrimaryExpression {
         kind: SyntaxKind.Identifier;
         /**
-         * Text of identifier (with escapes converted to characters).
-         * If the identifier begins with two underscores, this will begin with three.
+         * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
+         * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
-        text: string;
+        escapedText: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode>;        // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics.
+        /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
     }
 
     // Transient identifier node (marked by id === -1)
@@ -611,6 +608,7 @@ namespace ts {
         kind: SyntaxKind.QualifiedName;
         left: EntityName;
         right: Identifier;
+        /*@internal*/ jsdocDotPos?: number;                      // QualifiedName occurs in JSDoc-style generic: Id1.Id2.<T>
     }
 
     export type EntityName = Identifier | QualifiedName;
@@ -687,7 +685,7 @@ namespace ts {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
-        name: BindingName;                  // Declared parameter name
+        name: BindingName;                  // Declared parameter name.
         questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
@@ -703,7 +701,7 @@ namespace ts {
     }
 
     export interface PropertySignature extends TypeElement {
-        kind: SyntaxKind.PropertySignature | SyntaxKind.JSDocRecordMember;
+        kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
         questionToken?: QuestionToken;      // Present on optional property
         type?: TypeNode;                    // Optional type annotation
@@ -762,10 +760,11 @@ namespace ts {
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
     // SyntaxKind.JSDocPropertyTag
+    // SyntaxKind.JSDocParameterTag
     export interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
+        name?: DeclarationName; // May be missing for ParameterDeclaration, see comment there
         questionToken?: QuestionToken;
         type?: TypeNode;
         initializer?: Expression;
@@ -793,13 +792,13 @@ namespace ts {
 
     /**
      * Several node kinds share function-like features such as a signature,
-     * a name, and a body. These nodes should extend FunctionLikeDeclaration.
+     * a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
      * Examples:
      * - FunctionDeclaration
      * - MethodDeclaration
      * - AccessorDeclaration
      */
-    export interface FunctionLikeDeclaration extends SignatureDeclaration {
+    export interface FunctionLikeDeclarationBase extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
 
         asteriskToken?: AsteriskToken;
@@ -807,7 +806,24 @@ namespace ts {
         body?: Block | Expression;
     }
 
-    export interface FunctionDeclaration extends FunctionLikeDeclaration, DeclarationStatement {
+    export type FunctionLikeDeclaration =
+        | FunctionDeclaration
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | FunctionExpression
+        | ArrowFunction;
+    export type FunctionLike =
+        | FunctionLikeDeclaration
+        | FunctionTypeNode
+        | ConstructorTypeNode
+        | IndexSignatureDeclaration
+        | MethodSignature
+        | ConstructSignatureDeclaration
+        | CallSignatureDeclaration;
+
+    export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
         name?: Identifier;
         body?: FunctionBody;
@@ -827,13 +843,13 @@ namespace ts {
     // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.MethodDeclaration;
         name: PropertyName;
         body?: FunctionBody;
     }
 
-    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+    export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
@@ -847,7 +863,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface GetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.GetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -856,7 +872,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface SetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.SetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -902,7 +918,7 @@ namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
 
-    export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference;
+    export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
 
     export interface TypeReferenceNode extends TypeNode {
         kind: SyntaxKind.TypeReference;
@@ -983,6 +999,7 @@ namespace ts {
     export interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
         /* @internal */ textSourceNode?: Identifier | StringLiteral | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        /* @internal */ singleQuote?: boolean;
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -1320,13 +1337,13 @@ namespace ts {
     export type FunctionBody = Block;
     export type ConciseBody = FunctionBody | Expression;
 
-    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
+    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase {
         kind: SyntaxKind.FunctionExpression;
         name?: Identifier;
         body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
-    export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
+    export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase {
         kind: SyntaxKind.ArrowFunction;
         equalsGreaterThanToken: EqualsGreaterThanToken;
         body: ConciseBody;
@@ -1705,6 +1722,8 @@ namespace ts {
         incrementor?: Expression;
     }
 
+    export type ForInOrOfStatement = ForInStatement | ForOfStatement;
+
     export interface ForInStatement extends IterationStatement {
         kind: SyntaxKind.ForInStatement;
         initializer: ForInitializer;
@@ -1790,11 +1809,11 @@ namespace ts {
     export interface CatchClause extends Node {
         kind: SyntaxKind.CatchClause;
         parent?: TryStatement;
-        variableDeclaration: VariableDeclaration;
+        variableDeclaration?: VariableDeclaration;
         block: Block;
     }
 
-    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
+    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
     export interface ClassLikeDeclaration extends NamedDeclaration {
         name?: Identifier;
@@ -2019,9 +2038,9 @@ namespace ts {
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
-    export interface JSDocTypeExpression extends Node {
+    export interface JSDocTypeExpression extends TypeNode {
         kind: SyntaxKind.JSDocTypeExpression;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocType extends TypeNode {
@@ -2036,80 +2055,31 @@ namespace ts {
         kind: SyntaxKind.JSDocUnknownType;
     }
 
-    export interface JSDocArrayType extends JSDocType {
-        kind: SyntaxKind.JSDocArrayType;
-        elementType: JSDocType;
-    }
-
-    export interface JSDocUnionType extends JSDocType {
-        kind: SyntaxKind.JSDocUnionType;
-        types: NodeArray<JSDocType>;
-    }
-
-    export interface JSDocTupleType extends JSDocType {
-        kind: SyntaxKind.JSDocTupleType;
-        types: NodeArray<JSDocType>;
-    }
-
     export interface JSDocNonNullableType extends JSDocType {
         kind: SyntaxKind.JSDocNonNullableType;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocNullableType extends JSDocType {
         kind: SyntaxKind.JSDocNullableType;
-        type: JSDocType;
-    }
-
-    export interface JSDocRecordType extends JSDocType {
-        kind: SyntaxKind.JSDocRecordType;
-        literal: TypeLiteralNode;
-    }
-
-    export interface JSDocTypeReference extends JSDocType {
-        kind: SyntaxKind.JSDocTypeReference;
-        name: EntityName;
-        typeArguments: NodeArray<JSDocType>;
+        type: TypeNode;
     }
 
     export interface JSDocOptionalType extends JSDocType {
         kind: SyntaxKind.JSDocOptionalType;
-        type: JSDocType;
+        type: TypeNode;
     }
 
     export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
         kind: SyntaxKind.JSDocFunctionType;
-        parameters: NodeArray<ParameterDeclaration>;
-        type: JSDocType;
     }
 
     export interface JSDocVariadicType extends JSDocType {
         kind: SyntaxKind.JSDocVariadicType;
-        type: JSDocType;
+        type: TypeNode;
     }
 
-    export interface JSDocConstructorType extends JSDocType {
-        kind: SyntaxKind.JSDocConstructorType;
-        type: JSDocType;
-    }
-
-    export interface JSDocThisType extends JSDocType {
-        kind: SyntaxKind.JSDocThisType;
-        type: JSDocType;
-    }
-
-    export interface JSDocLiteralType extends JSDocType {
-        kind: SyntaxKind.JSDocLiteralType;
-        literal: LiteralTypeNode;
-    }
-
-    export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
-
-    export interface JSDocRecordMember extends PropertySignature {
-        kind: SyntaxKind.JSDocRecordMember;
-        name: Identifier | StringLiteral | NumericLiteral;
-        type?: JSDocType;
-    }
+    export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
     export interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;
@@ -2157,38 +2127,32 @@ namespace ts {
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
-        typeExpression?: JSDocTypeExpression;
-        jsDocTypeLiteral?: JSDocTypeLiteral;
+        typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
     }
 
-    export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+    export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
         parent: JSDoc;
-        kind: SyntaxKind.JSDocPropertyTag;
-        name: Identifier;
-        /** the parameter name, if provided *before* the type (TypeScript-style) */
-        preParameterName?: Identifier;
-        /** the parameter name, if provided *after* the type (JSDoc-standard) */
-        postParameterName?: Identifier;
+        name: EntityName;
         typeExpression: JSDocTypeExpression;
+        /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
+        isNameFirst: boolean;
         isBracketed: boolean;
+    }
+
+    export interface JSDocPropertyTag extends JSDocPropertyLikeTag {
+        kind: SyntaxKind.JSDocPropertyTag;
+    }
+
+    export interface JSDocParameterTag extends JSDocPropertyLikeTag {
+        kind: SyntaxKind.JSDocParameterTag;
     }
 
     export interface JSDocTypeLiteral extends JSDocType {
         kind: SyntaxKind.JSDocTypeLiteral;
-        jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
+        jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>;
         jsDocTypeTag?: JSDocTypeTag;
-    }
-
-    export interface JSDocParameterTag extends JSDocTag {
-        kind: SyntaxKind.JSDocParameterTag;
-        /** the parameter name, if provided *before* the type (TypeScript-style) */
-        preParameterName?: Identifier;
-        typeExpression?: JSDocTypeExpression;
-        /** the parameter name, if provided *after* the type (JSDoc-standard) */
-        postParameterName?: Identifier;
-        /** the parameter name, regardless of the location it was provided */
-        name: Identifier;
-        isBracketed: boolean;
+        /** If true, then this type literal represents an *array* of its type. */
+        isArrayType?: boolean;
     }
 
     export const enum FlowFlags {
@@ -2213,16 +2177,18 @@ namespace ts {
         locked?: boolean;
     }
 
-    export interface AfterFinallyFlow extends FlowNode, FlowLock {
+    export interface AfterFinallyFlow extends FlowNodeBase, FlowLock {
         antecedent: FlowNode;
     }
 
-    export interface PreFinallyFlow extends FlowNode {
+    export interface PreFinallyFlow extends FlowNodeBase {
         antecedent: FlowNode;
         lock: FlowLock;
     }
 
-    export interface FlowNode {
+    export type FlowNode =
+        | AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation;
+    export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
     }
@@ -2230,30 +2196,30 @@ namespace ts {
     // FlowStart represents the start of a control flow. For a function expression or arrow
     // function, the container property references the function (which in turn has a flowNode
     // property for the containing control flow).
-    export interface FlowStart extends FlowNode {
+    export interface FlowStart extends FlowNodeBase {
         container?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
-    export interface FlowLabel extends FlowNode {
+    export interface FlowLabel extends FlowNodeBase {
         antecedents: FlowNode[];
     }
 
     // FlowAssignment represents a node that assigns a value to a narrowable reference,
     // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
-    export interface FlowAssignment extends FlowNode {
+    export interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
     }
 
     // FlowCondition represents a condition that is known to be true or false at the
     // node's location in the control flow.
-    export interface FlowCondition extends FlowNode {
+    export interface FlowCondition extends FlowNodeBase {
         expression: Expression;
         antecedent: FlowNode;
     }
 
-    export interface FlowSwitchClause extends FlowNode {
+    export interface FlowSwitchClause extends FlowNodeBase {
         switchStatement: SwitchStatement;
         clauseStart: number;   // Start index of case/default clause range
         clauseEnd: number;     // End index of case/default clause range
@@ -2262,7 +2228,7 @@ namespace ts {
 
     // FlowArrayMutation represents a node potentially mutates an array, i.e. an
     // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
-    export interface FlowArrayMutation extends FlowNode {
+    export interface FlowArrayMutation extends FlowNodeBase {
         node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
@@ -2292,6 +2258,17 @@ namespace ts {
     }
 
 
+    /* @internal */
+    export interface RedirectInfo {
+        /** Source file this redirects to. */
+        readonly redirectTarget: SourceFile;
+        /**
+         * Source file for the duplicate package. This will not be used by the Program,
+         * but we need to keep this around so we can watch for changes in underlying.
+         */
+        readonly unredirected: SourceFile;
+    }
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -2301,6 +2278,13 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+
+        /**
+         * If two source files are for the same version of the same package, one will redirect to the other.
+         * (See `createRedirectSourceFile` in program.ts.)
+         * The redirect will have this set. The other will not have anything set, but see Program#sourceFileIsRedirectedTo.
+         */
+        /* @internal */ redirectInfo?: RedirectInfo | undefined;
 
         amdDependencies: AmdDependency[];
         moduleName: string;
@@ -2331,7 +2315,7 @@ namespace ts {
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ identifiers: Map<string>;
+        /* @internal */ identifiers: Map<string>; // Map from a string to an interned string
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -2352,22 +2336,27 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: Map<string>;
+        /* @internal */ classifiableNames?: UnderscoreEscapedMap<true>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: StringLiteral[];
-        /* @internal */ moduleAugmentations: StringLiteral[];
+        /* @internal */ imports: ReadonlyArray<StringLiteral>;
+        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        /* @internal */ ambientModuleNames: string[];
+        /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
         sourceFiles: SourceFile[];
+    }
+
+    export interface JsonSourceFile extends SourceFile {
+        jsonObject?: ObjectLiteralExpression;
+        extendedSourceFiles?: string[];
     }
 
     export interface ScriptReferenceHost {
@@ -2380,7 +2369,7 @@ namespace ts {
     export interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
 
-        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth: number): string[];
 
         /**
          * Gets a value indicating whether the specified path exists and is a file.
@@ -2388,11 +2377,11 @@ namespace ts {
          */
         fileExists(path: string): boolean;
 
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
     }
 
     export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: SourceFile[]): void;
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: ReadonlyArray<SourceFile>): void;
     }
 
     export class OperationCanceledException { }
@@ -2417,6 +2406,13 @@ namespace ts {
         getSourceFiles(): SourceFile[];
 
         /**
+         * Get a list of file names that were passed to 'createProgram' or referenced in a
+         * program source file but could not be located.
+         */
+        /* @internal */
+        getMissingFilePaths(): Path[];
+
+        /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
          * the JavaScript and declaration files will be produced for all the files in this program.
          * If targetSourceFile is specified, then only the JavaScript and declaration for that
@@ -2435,7 +2431,7 @@ namespace ts {
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
 
         /**
-         * Gets a type checker that can be used to semantically analyze source fils in the program.
+         * Gets a type checker that can be used to semantically analyze source files in the program.
          */
         getTypeChecker(): TypeChecker;
 
@@ -2446,7 +2442,7 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
-        /* @internal */ getClassifiableNames(): Map<string>;
+        /* @internal */ getClassifiableNames(): UnderscoreEscapedMap<true>;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -2455,11 +2451,16 @@ namespace ts {
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+
+        /** Given a source file, get the name of the package it was imported from. */
+        /* @internal */ sourceFileToPackageName: Map<string>;
+        /** Set of all source files that some other source file redirects to. */
+        /* @internal */ redirectTargetsSet: Map<true>;
     }
 
     /* @internal */
@@ -2552,6 +2553,7 @@ namespace ts {
          * Returns `any` if the index is not valid.
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
+        getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
@@ -2566,6 +2568,15 @@ namespace ts {
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        /**
+         * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
+         * Otherwise returns its input.
+         * For example, at `export type T = number;`:
+         *     - `getSymbolAtLocation` at the location `T` will return the exported symbol for `T`.
+         *     - But the result of `getSymbolsInScope` will contain the *local* symbol for `T`, not the exported symbol.
+         *     - Calling `getExportSymbolOfSymbol` on that local symbol will return the exported symbol.
+         */
+        getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
@@ -2577,9 +2588,13 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
-        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature | undefined;
+        /**
+         * returns unknownSignature in the case of an error. Don't know when it returns undefined.
+         * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
+         */
+        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
+        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
@@ -2601,12 +2616,16 @@ namespace ts {
         getAmbientModules(): Symbol[];
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
+        /** Unlike `tryGetMemberInModuleExports`, this includes properties of an `export =` value. */
+        /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
+
+        /* @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2624,9 +2643,8 @@ namespace ts {
          * Does not include properties of primitive types.
          */
         /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
-
+        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
-        /* @internal */ resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
     }
 
     export enum NodeBuilderFlags {
@@ -2651,6 +2669,14 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 20,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+    }
+
+    /* @internal */
+    export interface SymbolWalker {
+        /** Note: Return values are not ordered. */
+        walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+        /** Note: Return values are not ordered. */
+        walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
     }
 
     export interface SymbolDisplayBuilder {
@@ -2701,10 +2727,12 @@ namespace ts {
         UseFullyQualifiedType           = 1 << 8,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 1 << 9,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 1 << 10,  // Writing type in type alias declaration
-        UseTypeAliasValue               = 1 << 11,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
+        InArrayType                     = 1 << 15,  // Writing an array element type
+        UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
+                                                      // even though `T` can't be accessed in the current scope.
     }
 
     export const enum SymbolFormatFlags {
@@ -2809,6 +2837,7 @@ namespace ts {
         collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
+        isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -2852,13 +2881,11 @@ namespace ts {
         TypeParameter           = 1 << 18,  // Type parameter
         TypeAlias               = 1 << 19,  // Type alias
         ExportValue             = 1 << 20,  // Exported value marker (see comment in declareModuleMember in binder)
-        ExportType              = 1 << 21,  // Exported type marker (see comment in declareModuleMember in binder)
-        ExportNamespace         = 1 << 22,  // Exported namespace marker (see comment in declareModuleMember in binder)
-        Alias                   = 1 << 23,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
-        Prototype               = 1 << 24,  // Prototype property (no source representation)
-        ExportStar              = 1 << 25,  // Export * declaration
-        Optional                = 1 << 26,  // Optional property
-        Transient               = 1 << 27,  // Transient symbol (created during type check)
+        Alias                   = 1 << 21,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
+        Prototype               = 1 << 22,  // Prototype property (no source representation)
+        ExportStar              = 1 << 23,  // Export * declaration
+        Optional                = 1 << 24,  // Optional property
+        Transient               = 1 << 25,  // Transient symbol (created during type check)
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -2903,7 +2930,6 @@ namespace ts {
         BlockScoped = BlockScopedVariable | Class | Enum,
 
         PropertyOrAccessor = Property | Accessor,
-        Export = ExportNamespace | ExportType | ExportValue,
 
         ClassMember = Method | Accessor | Property,
 
@@ -2915,7 +2941,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        name: string;                           // Name of symbol
+        escapedName: __String;                  // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members
@@ -2983,7 +3009,55 @@ namespace ts {
         isRestParameter?: boolean;
     }
 
-    export type SymbolTable = Map<Symbol>;
+    export const enum InternalSymbolName {
+        Call = "__call", // Call signatures
+        Constructor = "__constructor", // Constructor implementations
+        New = "__new", // Constructor signatures
+        Index = "__index", // Index signatures
+        ExportStar = "__export", // Module export * declarations
+        Global = "__global", // Global self-reference
+        Missing = "__missing", // Indicates missing symbol
+        Type = "__type", // Anonymous type literal symbol
+        Object = "__object", // Anonymous object literal declaration
+        JSXAttributes = "__jsxAttributes", // Anonymous JSX attributes object literal declaration
+        Class = "__class", // Unnamed class expression
+        Function = "__function", // Unnamed function expression
+        Computed = "__computed", // Computed property name declaration with dynamic name
+        Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
+        ExportEquals = "export=", // Export assignment symbol
+        Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
+    }
+
+    /**
+     * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
+     * The shape of this brand is rather unique compared to others we've used.
+     * Instead of just an intersection of a string and an object, it is that union-ed
+     * with an intersection of void and an object. This makes it wholly incompatible
+     * with a normal string (which is good, it cannot be misused on assignment or on usage),
+     * while still being comparable with a normal string via === (also good) and castable from a string.
+     */
+    export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
+
+    /** ReadonlyMap where keys are `__String`s. */
+    export interface ReadonlyUnderscoreEscapedMap<T> {
+        get(key: __String): T | undefined;
+        has(key: __String): boolean;
+        forEach(action: (value: T, key: __String) => void): void;
+        readonly size: number;
+        keys(): Iterator<__String>;
+        values(): Iterator<T>;
+        entries(): Iterator<[__String, T]>;
+    }
+
+    /** Map where keys are `__String`s. */
+    export interface UnderscoreEscapedMap<T> extends ReadonlyUnderscoreEscapedMap<T> {
+        set(key: __String, value: T): this;
+        delete(key: __String): boolean;
+        clear(): void;
+    }
+
+    /** SymbolTable based on ES6 Map interface. */
+    export type SymbolTable = UnderscoreEscapedMap<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */
@@ -3038,6 +3112,7 @@ namespace ts {
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
+        resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
@@ -3071,7 +3146,7 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        ContainsAnyFunctionType = 1 << 23,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
@@ -3164,7 +3239,7 @@ namespace ts {
         objectFlags: ObjectFlags;
     }
 
-    /** Class and interface types (TypeFlags.Class and TypeFlags.Interface). */
+    /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
@@ -3188,7 +3263,7 @@ namespace ts {
     }
 
     /**
-     * Type references (TypeFlags.Reference). When a class or interface has type parameters or
+     * Type references (ObjectFlags.Reference). When a class or interface has type parameters or
      * a "this" type, references to the class or interface are made using type references. The
      * typeArguments property specifies the types to substitute for the type parameters of the
      * class or interface and optionally includes an extra element that specifies the type to
@@ -3288,6 +3363,11 @@ namespace ts {
         awaitedTypeOfType?: Type;
     }
 
+    /* @internal */
+    export interface SyntheticDefaultModuleType extends Type {
+        syntheticType?: Type;
+    }
+
     export interface TypeVariable extends Type {
         /* @internal */
         resolvedBaseConstraint: Type;
@@ -3297,6 +3377,7 @@ namespace ts {
 
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
+        /** Retrieve using getConstraintFromTypeParameter */
         constraint: Type;        // Constraint
         default?: Type;
         /* @internal */
@@ -3371,8 +3452,8 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        mappedTypes?: Type[];       // Types mapped by this mapper
-        instantiations?: Type[];    // Cache of instantiations created using this type mapper.
+        mappedTypes?: TypeParameter[]; // Types mapped by this mapper
+        instantiations?: Type[];       // Cache of instantiations created using this type mapper.
     }
 
     export const enum InferencePriority {
@@ -3396,13 +3477,29 @@ namespace ts {
         AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
+    /**
+     * Ternary values are defined such that
+     * x & y is False if either x or y is False.
+     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+     * x & y is True if both x and y are True.
+     * x | y is False if both x and y are False.
+     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+     * x | y is True if either x or y is True.
+     */
+    export const enum Ternary {
+        False = 0,
+        Maybe = 1,
+        True = -1
+    }
+
+    export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
+
     /* @internal */
     export interface InferenceContext extends TypeMapper {
         signature: Signature;               // Generic signature for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
-        failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
-        // It is optional because in contextual signature instantiation, nothing fails
+        compareTypes: TypeComparer;         // Type comparer function
     }
 
     /* @internal */
@@ -3484,6 +3581,7 @@ namespace ts {
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
+        /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
@@ -3519,6 +3617,7 @@ namespace ts {
         noImplicitAny?: boolean;  // Always combine with strict property
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;  // Always combine with strict property
+        noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
@@ -3530,6 +3629,7 @@ namespace ts {
         paths?: MapLike<string[]>;
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
@@ -3555,7 +3655,7 @@ namespace ts {
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
-        [option: string]: CompilerOptionsValue | undefined;
+        [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }
 
     export interface TypeAcquisition {
@@ -3615,7 +3715,8 @@ namespace ts {
         JSX = 2,
         TS = 3,
         TSX = 4,
-        External = 5
+        External = 5,
+        JSON = 6
     }
 
     export const enum ScriptTarget {
@@ -3687,6 +3788,8 @@ namespace ts {
     /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
+        elementOptions?: Map<CommandLineOption>;
+        extraKeyDiagnosticMessage?: DiagnosticMessage;
     }
 
     /* @internal */
@@ -3839,9 +3942,13 @@ namespace ts {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module
-        readFile(fileName: string): string;
+        readFile(fileName: string): string | undefined;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
+        /**
+         * Resolve a symbolic link.
+         * @see https://nodejs.org/api/fs.html#fs_fs_realpathsync_path_options
+         */
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
@@ -3857,18 +3964,14 @@ namespace ts {
     export interface ResolvedModule {
         /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /**
-         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
-         * - be a .d.ts file
-         * - use top level imports\exports
-         * - don't use tripleslash references
-         */
+        /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
     }
 
     /**
      * ResolvedModule with an explicitly provided `extension` property.
      * Prefer this over `ResolvedModule`.
+     * If changing this, remember to change `moduleResolutionIsEqualTo`.
      */
     export interface ResolvedModuleFull extends ResolvedModule {
         /**
@@ -3876,15 +3979,30 @@ namespace ts {
          * This is optional for backwards-compatibility, but will be added if not provided.
          */
         extension: Extension;
+        packageId?: PackageId;
     }
 
-    export enum Extension {
-        Ts,
-        Tsx,
-        Dts,
-        Js,
-        Jsx,
-        LastTypeScriptExtension = Dts
+    /**
+     * Unique identifier with a package name and version.
+     * If changing this, remember to change `packageIdIsEqual`.
+     */
+    export interface PackageId {
+        /**
+         * Name of the package.
+         * Should not include `@types`.
+         * If accessing a non-index file, this should include its name e.g. "foo/bar".
+         */
+        name: string;
+        /** Version of the package, e.g. "1.2.3" */
+        version: string;
+    }
+
+    export const enum Extension {
+        Ts = ".ts",
+        Tsx = ".tsx",
+        Dts = ".d.ts",
+        Js = ".js",
+        Jsx = ".jsx"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
@@ -3970,7 +4088,6 @@ namespace ts {
         ContainsBindingPattern = 1 << 23,
         ContainsYield = 1 << 24,
         ContainsHoistedDeclarationOrCompletion = 1 << 25,
-
         ContainsDynamicImport = 1 << 26,
 
         // Please leave this as 1 << 29.
@@ -4255,7 +4372,7 @@ namespace ts {
      */
     export type Visitor = (node: Node) => VisitResult<Node>;
 
-    export type VisitResult<T extends Node> = T | T[];
+    export type VisitResult<T extends Node> = T | T[] | undefined;
 
     export interface Printer {
         /**

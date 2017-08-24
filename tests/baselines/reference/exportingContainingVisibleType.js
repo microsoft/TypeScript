@@ -14,7 +14,7 @@ export var x = 5;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var Foo = (function () {
+    var Foo = /** @class */ (function () {
         function Foo() {
         }
         Object.defineProperty(Foo.prototype, "foo", {

@@ -231,7 +231,7 @@ function f10_public(): C6_public {
 //// [privacyFunc.js]
 var m1;
 (function (m1) {
-    var C1_public = (function () {
+    var C1_public = /** @class */ (function () {
         function C1_public() {
         }
         C1_public.prototype.f1 = function () {
@@ -239,12 +239,12 @@ var m1;
         return C1_public;
     }());
     m1.C1_public = C1_public;
-    var C2_private = (function () {
+    var C2_private = /** @class */ (function () {
         function C2_private() {
         }
         return C2_private;
     }());
-    var C3_public = (function () {
+    var C3_public = /** @class */ (function () {
         function C3_public(m1_c3_c1_2) {
         }
         C3_public.prototype.f1_private = function (m1_c3_f1_arg) {
@@ -282,7 +282,7 @@ var m1;
         return C3_public;
     }());
     m1.C3_public = C3_public;
-    var C4_private = (function () {
+    var C4_private = /** @class */ (function () {
         function C4_private(m1_c4_c1_2) {
         }
         C4_private.prototype.f1_private = function (m1_c4_f1_arg) {
@@ -319,24 +319,24 @@ var m1;
         };
         return C4_private;
     }());
-    var C5_public = (function () {
+    var C5_public = /** @class */ (function () {
         function C5_public(m1_c5_c) {
         }
         return C5_public;
     }());
     m1.C5_public = C5_public;
-    var C6_private = (function () {
+    var C6_private = /** @class */ (function () {
         function C6_private(m1_c6_c) {
         }
         return C6_private;
     }());
-    var C7_public = (function () {
+    var C7_public = /** @class */ (function () {
         function C7_public(m1_c7_c) {
         }
         return C7_public;
     }());
     m1.C7_public = C7_public;
-    var C8_private = (function () {
+    var C8_private = /** @class */ (function () {
         function C8_private(m1_c8_c) {
         }
         return C8_private;
@@ -380,12 +380,12 @@ var m1;
     }
     m1.f12_public = f12_public;
 })(m1 || (m1 = {}));
-var C6_public = (function () {
+var C6_public = /** @class */ (function () {
     function C6_public() {
     }
     return C6_public;
 }());
-var C7_public = (function () {
+var C7_public = /** @class */ (function () {
     function C7_public(c7_c1_2) {
     }
     C7_public.prototype.f1_private = function (c7_f1_arg) {
@@ -406,7 +406,7 @@ var C7_public = (function () {
     };
     return C7_public;
 }());
-var C9_public = (function () {
+var C9_public = /** @class */ (function () {
     function C9_public(c9_c) {
     }
     return C9_public;

@@ -7,7 +7,7 @@ class Dummy {
 }
 
 //// [unusedMultipleParameters2InMethodDeclaration.js]
-var Dummy = (function () {
+var Dummy = /** @class */ (function () {
     function Dummy() {
     }
     Dummy.prototype.greeter = function (person, person2, person3) {

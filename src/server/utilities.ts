@@ -9,7 +9,7 @@ namespace ts.server {
         verbose
     }
 
-    export const emptyArray: ReadonlyArray<any> = [];
+    export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
 
     export interface Logger {
         close(): void;
@@ -49,7 +49,7 @@ namespace ts.server {
     export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
             compilerOptions: project.getCompilerOptions(),
             typeAcquisition,
             unresolvedImports,
@@ -77,7 +77,7 @@ namespace ts.server {
             tabSize: 4,
             newLineCharacter: host.newLine || "\n",
             convertTabsToSpaces: true,
-            indentStyle: ts.IndentStyle.Smart,
+            indentStyle: IndentStyle.Smart,
             insertSpaceAfterConstructor: false,
             insertSpaceAfterCommaDelimiter: true,
             insertSpaceAfterSemicolonInForStatements: true,
@@ -100,24 +100,6 @@ namespace ts.server {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
             }
-        }
-    }
-
-    export function removeItemFromSet<T>(items: T[], itemToRemove: T) {
-        if (items.length === 0) {
-            return;
-        }
-        const index = items.indexOf(itemToRemove);
-        if (index < 0) {
-            return;
-        }
-        if (index ===  items.length - 1) {
-            // last item - pop it
-            items.pop();
-        }
-        else {
-            // non-last item - replace it with the last one
-            items[index] = items.pop();
         }
     }
 
@@ -144,9 +126,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-/* tslint:disable:no-null-keyword */
         const map = createMap<T>();
-/* tslint:enable:no-null-keyword */
         return {
             get(path) {
                 return map.get(path);
@@ -190,40 +170,8 @@ namespace ts.server {
         return `/dev/null/inferredProject${counter}*`;
     }
 
-    export function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string> {
-        arr.sort();
-        return <any>arr;
-    }
-
-    export function enumerateInsertsAndDeletes<T>(a: SortedReadonlyArray<T>, b: SortedReadonlyArray<T>, inserted: (item: T) => void, deleted: (item: T) => void, compare?: (a: T, b: T) => Comparison) {
-        compare = compare || ts.compareValues;
-        let aIndex = 0;
-        let bIndex = 0;
-        const aLen = a.length;
-        const bLen = b.length;
-        while (aIndex < aLen && bIndex < bLen) {
-            const aItem = a[aIndex];
-            const bItem = b[bIndex];
-            const compareResult = compare(aItem, bItem);
-            if (compareResult === Comparison.LessThan) {
-                inserted(aItem);
-                aIndex++;
-            }
-            else if (compareResult === Comparison.GreaterThan) {
-                deleted(bItem);
-                bIndex++;
-            }
-            else {
-                aIndex++;
-                bIndex++;
-            }
-        }
-        while (aIndex < aLen) {
-            inserted(a[aIndex++]);
-        }
-        while (bIndex < bLen) {
-            deleted(b[bIndex++]);
-        }
+    export function createSortedArray<T>(): SortedArray<T> {
+        return [] as SortedArray<T>;
     }
 
     export class ThrottledOperations {
@@ -271,6 +219,84 @@ namespace ts.server {
                 const after = self.host.getMemoryUsage();
                 self.logger.perftrc(`GC::before ${before}, after ${after}`);
             }
+        }
+    }
+}
+
+/* @internal */
+namespace ts.server {
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
+        if (array.length === 0) {
+            array.push(insert);
+            return;
+        }
+
+        const insertIndex = binarySearch(array, insert, compare);
+        if (insertIndex < 0) {
+            array.splice(~insertIndex, 0, insert);
+        }
+    }
+
+    export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
+        if (!array || array.length === 0) {
+            return;
+        }
+
+        if (array[0] === remove) {
+            array.splice(0, 1);
+            return;
+        }
+
+        const removeIndex = binarySearch(array, remove, compare);
+        if (removeIndex >= 0) {
+            array.splice(removeIndex, 1);
+        }
+    }
+
+    export function toSortedArray(arr: string[]): SortedArray<string>;
+    export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
+    export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
+        arr.sort(comparer);
+        return arr as SortedArray<T>;
+    }
+
+    export function toDeduplicatedSortedArray(arr: string[]): SortedArray<string> {
+        arr.sort();
+        filterMutate(arr, isNonDuplicateInSortedArray);
+        return arr as SortedArray<string>;
+    }
+    function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
+        return index === 0 || value !== array[index - 1];
+    }
+
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
+        compare = compare || compareValues;
+        let newIndex = 0;
+        let oldIndex = 0;
+        const newLen = newItems.length;
+        const oldLen = oldItems.length;
+        while (newIndex < newLen && oldIndex < oldLen) {
+            const newItem = newItems[newIndex];
+            const oldItem = oldItems[oldIndex];
+            const compareResult = compare(newItem, oldItem);
+            if (compareResult === Comparison.LessThan) {
+                inserted(newItem);
+                newIndex++;
+            }
+            else if (compareResult === Comparison.GreaterThan) {
+                deleted(oldItem);
+                oldIndex++;
+            }
+            else {
+                newIndex++;
+                oldIndex++;
+            }
+        }
+        while (newIndex < newLen) {
+            inserted(newItems[newIndex++]);
+        }
+        while (oldIndex < oldLen) {
+            deleted(oldItems[oldIndex++]);
         }
     }
 }

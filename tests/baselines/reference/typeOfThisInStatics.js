@@ -11,7 +11,7 @@ class C {
 
 
 //// [typeOfThisInStatics.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.foo = function () {

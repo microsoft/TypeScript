@@ -7,12 +7,18 @@ interface Settings {
 function getDefaultSettings() {
     return { timeout: 1000 };
 }
+interface CtorOnly {
+    new(s: string): { timeout: 1000 }
+}
 
 function doSomething(settings: Settings) { /* ... */ }
-
 // forgot to call `getDefaultSettings`
-// but it is not caught because we don't check for call signatures
 doSomething(getDefaultSettings);
+doSomething(() => ({ timeout: 1000 }));
+doSomething(null as CtorOnly);
+doSomething(12);
+doSomething('completely wrong');
+doSomething(false);
 
 // this is an oddly popular way of defining settings
 // this example is from services/textChanges.ts
@@ -57,14 +63,19 @@ declare let unknown: {
 let weak: Weak & Spoiler = unknown
 
 
+
 //// [weakType.js]
 function getDefaultSettings() {
     return { timeout: 1000 };
 }
 function doSomething(settings) { }
 // forgot to call `getDefaultSettings`
-// but it is not caught because we don't check for call signatures
 doSomething(getDefaultSettings);
+doSomething(function () { return ({ timeout: 1000 }); });
+doSomething(null);
+doSomething(12);
+doSomething('completely wrong');
+doSomething(false);
 function del(options, error) {
     if (options === void 0) { options = {}; }
     if (error === void 0) { error = {}; }
@@ -72,7 +83,7 @@ function del(options, error) {
     changes.push(options);
     changes.push(error);
 }
-var K = (function () {
+var K = /** @class */ (function () {
     function K(s) {
     }
     return K;

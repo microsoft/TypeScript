@@ -18,6 +18,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function Foo() {
 }
 exports.default = Foo;
-var Foo;
 (function (Foo) {
 })(Foo || (Foo = {}));
