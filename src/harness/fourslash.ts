@@ -332,7 +332,7 @@ namespace FourSlash {
                 ts.forEach(referencedFiles, referenceFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
                     const referenceFilePath = this.basePath + "/" + referenceFile.fileName;
-                    this.addMatchedInputFile(referenceFilePath, /* extensions */ undefined);
+                    this.addMatchedInputFile(referenceFilePath, /*extensions*/ undefined);
                 });
 
                 // Add import files into language-service host
@@ -2222,10 +2222,7 @@ namespace FourSlash {
 
         public verifyProjectInfo(expected: string[]) {
             if (this.testType === FourSlashTestType.Server) {
-                const actual = (<ts.server.SessionClient>this.languageService).getProjectInfo(
-                    this.activeFile.fileName,
-                    /* needFileNameList */ true
-                );
+                const actual = (<ts.server.SessionClient>this.languageService).getProjectInfo(this.activeFile.fileName, /*needFileNameList*/ true);
                 assert.equal(
                     expected.join(","),
                     actual.fileNames.map(file => {

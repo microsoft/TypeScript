@@ -1443,7 +1443,7 @@ namespace ts {
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
                             pos += 2;
-                            let value = scanBinaryOrOctalDigits(/* base */ 2);
+                            let value = scanBinaryOrOctalDigits(/*base*/ 2);
                             if (value < 0) {
                                 error(Diagnostics.Binary_digit_expected);
                                 value = 0;
@@ -1454,7 +1454,7 @@ namespace ts {
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
                             pos += 2;
-                            let value = scanBinaryOrOctalDigits(/* base */ 8);
+                            let value = scanBinaryOrOctalDigits(/*base*/ 8);
                             if (value < 0) {
                                 error(Diagnostics.Octal_digit_expected);
                                 value = 0;

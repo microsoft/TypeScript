@@ -1148,8 +1148,8 @@ namespace ts {
                     }
                     else {
                         return convertObjectLiteralExpressionToJson(
-                            objectLiteralExpression, /* knownOptions*/ undefined,
-                            /*extraKeyDiagnosticMessage */ undefined, /*parentOption*/ undefined);
+                            objectLiteralExpression, /*knownOptions*/ undefined,
+                            /*extraKeyDiagnosticMessage*/ undefined, /*parentOption*/ undefined);
                     }
 
                 case SyntaxKind.ArrayLiteralExpression:

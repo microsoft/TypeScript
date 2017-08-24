@@ -1260,7 +1260,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
-        let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
+        let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /*includeArrowFunctions*/ false);
 
         // Whether 'this' occurs in a static context within a class.
         let staticFlag = ModifierFlags.Static;
@@ -1322,7 +1322,7 @@ namespace ts.FindAllReferences.Core {
                     return;
                 }
 
-                const container = getThisContainer(node, /* includeArrowFunctions */ false);
+                const container = getThisContainer(node, /*includeArrowFunctions*/ false);
 
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.FunctionExpression:

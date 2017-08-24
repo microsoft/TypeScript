@@ -55,9 +55,9 @@ class Test262BaselineRunner extends RunnerBase {
                 const output = Harness.Compiler.compileFiles(
                     [Test262BaselineRunner.helperFile].concat(inputFiles),
                     /*otherFiles*/ [],
-                    /* harnessOptions */ undefined,
+                    /*harnessOptions*/ undefined,
                     Test262BaselineRunner.options,
-                    /* currentDirectory */ undefined
+                    /*currentDirectory*/ undefined
                     );
                 testState.compilerResult = output.result;
             });

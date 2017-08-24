@@ -117,7 +117,7 @@ namespace ts {
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* host */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /*host*/ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
@@ -148,11 +148,11 @@ namespace ts {
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /* host */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /*host*/ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /* host */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /*host*/ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
 
@@ -160,14 +160,14 @@ namespace ts {
             if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
                 if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* host */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /*host*/ undefined);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
             }
             else {
                 configFileName = fileOrDirectory;
                 if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project), /* host */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project), /*host*/ undefined);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
             }
@@ -185,7 +185,7 @@ namespace ts {
 
         if (isWatchSet(commandLine.options)) {
             if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /*host*/ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
@@ -218,21 +218,21 @@ namespace ts {
             }
             if (!cachedConfigFileText) {
                 const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
-                reportDiagnostics([error], /* compilerHost */ undefined);
+                reportDiagnostics([error], /*compilerHost*/ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
 
             const result = parseJsonText(configFileName, cachedConfigFileText);
-            reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
+            reportDiagnostics(result.parseDiagnostics, /*compilerHost*/ undefined);
 
             const cwd = sys.getCurrentDirectory();
             const configParseResult = parseJsonSourceFileConfigFileContent(result, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
-            reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
+            reportDiagnostics(configParseResult.errors, /*compilerHost*/ undefined);
 
             if (isWatchSet(configParseResult.options)) {
                 if (!sys.watchFile) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /*host*/ undefined);
                     sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
 
@@ -654,11 +654,11 @@ namespace ts {
         const currentDirectory = sys.getCurrentDirectory();
         const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /*host*/ undefined);
         }
         else {
             sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /*host*/ undefined);
         }
 
         return;

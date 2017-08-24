@@ -12493,7 +12493,7 @@ namespace ts {
         function checkThisExpression(node: Node): Type {
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
-            let container = getThisContainer(node, /* includeArrowFunctions */ true);
+            let container = getThisContainer(node, /*includeArrowFunctions*/ true);
             let needToCaptureLexicalThis = false;
 
             if (container.kind === SyntaxKind.Constructor) {
@@ -12502,7 +12502,7 @@ namespace ts {
 
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
-                container = getThisContainer(container, /* includeArrowFunctions */ false);
+                container = getThisContainer(container, /*includeArrowFunctions*/ false);
 
                 // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
                 needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES2015);

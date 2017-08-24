@@ -1,7 +1,7 @@
 {
     "rulesDirectory": "built/local/tslint",
     "rules": {
-        "boolean-trivia": true,
+        "argument-comment-spacing": true,
         "class-name": true,
         "comment-format": [true,
             "check-space"
@@ -13,6 +13,7 @@
         ],
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
+        "literal-argument-comment": true,
         "next-line": [true,
             "check-catch",
             "check-else"
