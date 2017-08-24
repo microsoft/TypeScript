@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/noCrashOnImportShadowing.ts] ////
+
+//// [b.ts]
+export const zzz = 123;
+
+//// [a.ts]
+import * as B from "./b";
+
+interface B {
+    x: string;
+}
+export { B };
+
+//// [index.ts]
+import { B } from "./a";
+
+const x: B = { x: "" };
+B.zzz;
+
+import * as OriginalB from "./b";
+OriginalB.zzz;
+
+const y: OriginalB = x;
+
+//// [b.js]
+"use strict";
+exports.__esModule = true;
+exports.zzz = 123;
+//// [a.js]
+"use strict";
+exports.__esModule = true;
+//// [index.js]
+"use strict";
+exports.__esModule = true;
+var x = { x: "" };
+B.zzz;
+var OriginalB = require("./b");
+OriginalB.zzz;
+var y = x;
