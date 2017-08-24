@@ -16,14 +16,14 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
     actionDescription: "Extract function into class 'Foo'",
-});
-
-verify.currentFileContentIs(`class Foo {
+    newContent:
+`class Foo {
     static method() {
-        return Foo.newFunction();
+        return Foo./*RENAME*/newFunction();
     }
 
     private static newFunction() {
         return 1;
     }
-}`);
+}`
+});

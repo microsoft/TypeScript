@@ -224,7 +224,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         if (x) {
                             return;
                         } |]
@@ -234,7 +234,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         [$|if (x) {
                         }
                         return;|]
@@ -580,7 +580,8 @@ namespace A {
                 data.push(`==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
-                    const changes = refactor.extractMethod.getPossibleExtractions(result.targetRange, context, results.indexOf(r))[0].changes;
+                    // TODO: GH#18048: Test rename location too
+                    const changes = refactor.extractMethod.getPossibleExtractionAtIndex(result.targetRange, context, results.indexOf(r)).edits;
                     data.push(`==SCOPE::${r.scopeDescription}==`);
                     data.push(textChanges.applyChanges(sourceFile.text, changes[0].textChanges));
                 }

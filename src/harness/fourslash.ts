@@ -2754,11 +2754,11 @@ namespace FourSlash {
             }
         }
 
-        private getSelection() {
-            return ({
+        private getSelection(): ts.TextRange {
+            return {
                 pos: this.currentCaretPosition,
                 end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd
-            });
+            };
         }
 
         public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
@@ -2799,7 +2799,7 @@ namespace FourSlash {
             }
         }
 
-        public applyRefactor({ refactorName, actionName, actionDescription }: FourSlashInterface.ApplyRefactorOptions) {
+        public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
             const refactor = refactors.find(r => r.name === refactorName);
@@ -2819,6 +2819,34 @@ namespace FourSlash {
             for (const edit of editInfo.edits) {
                 this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
             }
+
+            const { renamePosition, newContent } = parseNewContent();
+
+            this.verifyCurrentFileContent(newContent);
+
+            if (renamePosition === undefined) {
+                if (editInfo.renameLocation !== undefined) {
+                    this.raiseError(`Did not expect a rename location, got ${editInfo.renameLocation}`);
+                }
+            }
+            else {
+                // TODO: test editInfo.renameFilename too
+                if (renamePosition !== editInfo.renameLocation) {
+                    this.raiseError(`Expected rename position of ${renamePosition}, but got ${editInfo.renameLocation}`);
+                }
+            }
+
+            function parseNewContent(): { renamePosition: number | undefined, newContent: string } {
+                const renamePosition = newContentWithRenameMarker.indexOf("/*RENAME*/");
+                if (renamePosition === -1) {
+                    return { renamePosition: undefined, newContent: newContentWithRenameMarker };
+                }
+                else {
+                    const newContent = newContentWithRenameMarker.slice(0, renamePosition) + newContentWithRenameMarker.slice(renamePosition + "/*RENAME*/".length);
+                    return { renamePosition, newContent };
+                }
+            }
+
         }
 
         public verifyFileAfterApplyingRefactorAtMarker(
@@ -4313,5 +4341,6 @@ namespace FourSlashInterface {
         refactorName: string;
         actionName: string;
         actionDescription: string;
+        newContent: string;
     }
 }

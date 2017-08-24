@@ -13,9 +13,9 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_1",
     actionDescription: "Extract function into global scope",
-});
-
-verify.currentFileContentIs(`function foo() {
+    newContent:
+// TODO: GH#18048
+`function foo() {
     var i = 10;
     i = newFunction(i);
 }
@@ -23,4 +23,5 @@ function newFunction(i: number) {
     i++;
     return i;
 }
-`);
+`
+});
