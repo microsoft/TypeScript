@@ -9792,9 +9792,9 @@ namespace ts {
 
         // Return true if the given class derives from each of the declaring classes of the protected
         // constituents of the given property.
-        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol) {
-            return forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.Protected ?
-                !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
+        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol): boolean {
+            return !forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.Protected ?
+                !hasBaseType(checkClass, getDeclaringClass(p)) : false);
         }
 
         // Return true if the given type is the constructor type for an abstract class
