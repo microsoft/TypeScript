@@ -102,7 +102,7 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
                 }
-                this.execSync(`${this.npmPath} install ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation, stdio: "ignore" });
+                this.execSync(`${this.npmPath} install --ignore-scripts ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation, stdio: "ignore" });
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updated ${TypesRegistryPackageName} npm package`);
                 }
@@ -152,7 +152,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(args)}'.`);
             }
-            const command = `${this.npmPath} install ${args.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
+            const command = `${this.npmPath} install --ignore-scripts ${args.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
             let stdout: Buffer;
             let stderr: Buffer;
