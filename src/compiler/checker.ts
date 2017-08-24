@@ -9083,11 +9083,26 @@ namespace ts {
                                 else {
                                     // use the property's value declaration if the property is assigned inside the literal itself
                                     const objectLiteralDeclaration = source.symbol && firstOrUndefined(source.symbol.declarations);
+                                    let suggestion;
                                     if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration)) {
-                                        errorNode = prop.valueDeclaration;
+                                        const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
+                                        Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
+
+                                        errorNode = propDeclaration;
+
+                                        if (isIdentifier(propDeclaration.name)) {
+                                            suggestion = getSuggestionForNonexistentProperty(propDeclaration.name, target);
+                                        }
                                     }
-                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                        symbolToString(prop), typeToString(target));
+
+                                    if (suggestion !== undefined) {
+                                        reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
+                                            symbolToString(prop), typeToString(target), unescapeLeadingUnderscores(suggestion));
+                                    }
+                                    else {
+                                        reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                            symbolToString(prop), typeToString(target));
+                                    }
                                 }
                             }
                             return true;
@@ -14739,8 +14754,8 @@ namespace ts {
                 }
             }
             const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
-            if (suggestion) {
-                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+            if (suggestion !== undefined) {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), unescapeLeadingUnderscores(suggestion));
             }
             else {
                 errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
