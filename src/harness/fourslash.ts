@@ -2778,7 +2778,7 @@ namespace FourSlash {
                     this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
                 }
                 if (refactors.length > 1) {
-                    this.raiseError(`2 available refactors both have name ${name} and action ${actionName}`);
+                    this.raiseError(`${refactors.length} available refactors both have name ${name} and action ${actionName}`);
                 }
             }
         }
