@@ -2068,9 +2068,9 @@ namespace ts {
             || kind === SyntaxKind.SourceFile;
     }
 
-    export function nodeIsSynthesized(node: TextRange): boolean {
-        return positionIsSynthesized(node.pos)
-            || positionIsSynthesized(node.end);
+    export function nodeIsSynthesized(range: TextRange): boolean {
+        return positionIsSynthesized(range.pos)
+            || positionIsSynthesized(range.end);
     }
 
     export function getOriginalSourceFile(sourceFile: SourceFile) {
