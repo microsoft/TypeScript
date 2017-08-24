@@ -1,36 +1,9 @@
 === tests/cases/compiler/declarationQuotedMembers.ts ===
-export type Timespans =
->Timespans : Symbol(Timespans, Decl(declarationQuotedMembers.ts, 0, 0))
-
-    '1 hour' | '4 hours' | '12 hours' | '1 day' | '3 days' | '1 week' | '1 month';
-const TIMESPANS: {[k in Timespans]: number} = {
->TIMESPANS : Symbol(TIMESPANS, Decl(declarationQuotedMembers.ts, 2, 5))
->k : Symbol(k, Decl(declarationQuotedMembers.ts, 2, 19))
->Timespans : Symbol(Timespans, Decl(declarationQuotedMembers.ts, 0, 0))
-
-    '1 hour': 1 * 60 * 60 * 1000,
-    '4 hours': 4 * 60 * 60 * 1000,
-    '12 hours': 12 * 60 * 60 * 1000,
-    '1 day': 1 * 24 * 60 * 60 * 1000,
-    '3 days': 3 * 24 * 60 * 60 * 1000,
-    '1 week': 7 * 24 * 60 * 60 * 1000,
-    '1 month': 30 * 24 * 60 * 60 * 1000,
-};
-
-export class Foo {
->Foo : Symbol(Foo, Decl(declarationQuotedMembers.ts, 10, 2))
-
-    timespans = TIMESPANS;
->timespans : Symbol(Foo.timespans, Decl(declarationQuotedMembers.ts, 12, 18))
->TIMESPANS : Symbol(TIMESPANS, Decl(declarationQuotedMembers.ts, 2, 5))
-
-};
-
 export declare const mapped: { [K in 'a-b-c']: number }
->mapped : Symbol(mapped, Decl(declarationQuotedMembers.ts, 16, 20))
->K : Symbol(K, Decl(declarationQuotedMembers.ts, 16, 32))
+>mapped : Symbol(mapped, Decl(declarationQuotedMembers.ts, 0, 20))
+>K : Symbol(K, Decl(declarationQuotedMembers.ts, 0, 32))
 
 export const example = mapped;
->example : Symbol(example, Decl(declarationQuotedMembers.ts, 17, 12))
->mapped : Symbol(mapped, Decl(declarationQuotedMembers.ts, 16, 20))
+>example : Symbol(example, Decl(declarationQuotedMembers.ts, 1, 12))
+>mapped : Symbol(mapped, Decl(declarationQuotedMembers.ts, 0, 20))
 

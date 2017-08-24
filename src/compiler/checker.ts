@@ -3112,7 +3112,7 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
-            if (typeof (symbol as TransientSymbol).syntheticLiteralTypeOrigin) {
+            if ((symbol as TransientSymbol).syntheticLiteralTypeOrigin) {
                 const stringValue = (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
                 if (!isIdentifierText(stringValue, compilerOptions.target)) {
                     return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
