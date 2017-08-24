@@ -3091,7 +3091,7 @@ namespace ts {
         }
 
         function literalTypeToString(type: LiteralType) {
-            return type.flags & TypeFlags.StringLiteral ? `"${escapeString((<StringLiteralType>type).value)}"` : "" + (<NumberLiteralType>type).value;
+            return type.flags & TypeFlags.StringLiteral ? enquote(escapeString((<StringLiteralType>type).value)) : "" + (<NumberLiteralType>type).value;
         }
 
         function getNameOfSymbol(symbol: Symbol): string {
@@ -6254,7 +6254,7 @@ namespace ts {
             if (isExternalModuleNameRelative(moduleName)) {
                 return undefined;
             }
-            const symbol = getSymbol(globals, `"${moduleName}"` as __String, SymbolFlags.ValueModule);
+            const symbol = getSymbol(globals, enquote(moduleName) as __String, SymbolFlags.ValueModule);
             // merged symbol is module declaration symbol combined with all augmentations
             return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
@@ -15862,7 +15862,7 @@ namespace ts {
                     min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
                     max = Math.max(max, length(sig.typeParameters));
                 }
-                const paramCount = min < max ? `${min}-${max}` : min;
+                const paramCount = min < max ? min + "-" + max : min;
                 diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
             }
             else if (args) {
@@ -15875,7 +15875,7 @@ namespace ts {
                 const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
                 const paramCount = hasRestParameter ? min :
-                    min < max ? `${min}-${max}` :
+                    min < max ? min + "-" + max :
                     min;
                 const argCount = args.length - (hasSpreadArgument ? 1 : 0);
                 const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 :
@@ -25056,7 +25056,7 @@ namespace ts {
                 }
                 if (diagnosticMessage) {
                     const withMinus = isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.MinusToken;
-                    const literal = `${withMinus ? "-" : ""}0o${node.text}`;
+                    const literal = (withMinus ? "-" : "") + "0o" + node.text;
                     return grammarErrorOnNode(withMinus ? node.parent : node, diagnosticMessage, literal);
                 }
             }
@@ -25127,5 +25127,9 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    function enquote(s: string): string {
+        return '"' + s + '"';
     }
 }
