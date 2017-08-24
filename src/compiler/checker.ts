@@ -7626,7 +7626,13 @@ namespace ts {
 
         function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
             const fn = typeNodeToExpression(node.type);
-            const args = map(node.arguments, typeNodeToExpression);
+            const args = map(node.arguments, (type: TypeNode) => {
+                if (type.kind === SyntaxKind.TypeSpread) {
+                    return createSpread(typeNodeToExpression((type as TypeSpreadTypeNode).type));
+                } else {
+                    return typeNodeToExpression(type);
+                }
+            });
             const callExpr = createCall(fn, node.typeArguments, args);
             return checkExpression(callExpr);
         }

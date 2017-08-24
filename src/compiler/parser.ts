@@ -4283,7 +4283,7 @@ namespace ts {
 
         function parseTypeArgumentList() {
             parseExpected(SyntaxKind.OpenParenToken);
-            const result = parseDelimitedList(ParsingContext.TypeArguments, parseType);
+            const result = parseDelimitedList(ParsingContext.TypeArguments, parseTupleElement);
             parseExpected(SyntaxKind.CloseParenToken);
             return result;
         }

@@ -1,0 +1,12 @@
+tests/cases/compiler/typeCallSpreads.ts(2,13): error TS1005: ')' expected.
+tests/cases/compiler/typeCallSpreads.ts(2,19): error TS1005: ';' expected.
+
+
+==== tests/cases/compiler/typeCallSpreads.ts (2 errors) ====
+    type Fn = <T>(v: T) => T;
+    type a = Fn(...[1]);
+                ~~~
+!!! error TS1005: ')' expected.
+                      ~
+!!! error TS1005: ';' expected.
+    
