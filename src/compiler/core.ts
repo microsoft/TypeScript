@@ -772,6 +772,32 @@ namespace ts {
     }
 
     /**
+     * @return Whether the value was added.
+     */
+    export function pushIfUnique<T>(array: T[], toAdd: T): boolean {
+        if (contains(array, toAdd)) {
+            return false;
+        }
+        else {
+            array.push(toAdd);
+            return true;
+        }
+    }
+
+    /**
+     * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
+     */
+    export function appendIfUnique<T>(array: T[] | undefined, toAdd: T): T[] {
+        if (array) {
+            pushIfUnique(array, toAdd);
+            return array;
+        }
+        else {
+            return [toAdd];
+        }
+    }
+
+    /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
     export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T> = compareValues) {
