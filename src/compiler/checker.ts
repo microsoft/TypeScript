@@ -5730,7 +5730,7 @@ namespace ts {
 
             function addMemberForKeyType(t: Type, propertySymbolOrIndex?: Symbol | number) {
                 let propertySymbol: Symbol;
-                // forEachType offloads to forEach, which calls with a numeric second argument
+                // forEachType delegates to forEach, which calls with a numeric second argument
                 //  the type system currently doesn't catch this incompatibility, so we annotate
                 //  the function ourselves to indicate the runtime behavior and deal with it here
                 if (typeof propertySymbolOrIndex === "object") {
