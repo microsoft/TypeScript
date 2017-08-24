@@ -14,6 +14,7 @@ namespace ts.server {
         globalTypingsCacheLocation: string;
         logger: Logger;
         typingSafeListLocation: string;
+        typesMapLocation: string | undefined;
         npmLocation: string | undefined;
         telemetryEnabled: boolean;
         globalPlugins: ReadonlyArray<string>;
@@ -250,6 +251,7 @@ namespace ts.server {
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
+            readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
             private newLine: string) {
             this.throttledOperations = new ThrottledOperations(host);
@@ -294,6 +296,9 @@ namespace ts.server {
             }
             if (this.typingSafeListLocation) {
                 args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
+            }
+            if (this.typesMapLocation) {
+                args.push(Arguments.TypesMapLocation, this.typesMapLocation);
             }
             if (this.npmLocation) {
                 args.push(Arguments.NpmLocation, this.npmLocation);
@@ -408,10 +413,10 @@ namespace ts.server {
 
     class IOSession extends Session {
         constructor(options: IOSessionOptions) {
-            const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, npmLocation, canUseEvents } = options;
+            const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, npmLocation, host.newLine);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, host.newLine);
 
             super({
                 host,
@@ -768,6 +773,7 @@ namespace ts.server {
     setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {
@@ -797,6 +803,7 @@ namespace ts.server {
         disableAutomaticTypingAcquisition,
         globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
         typingSafeListLocation,
+        typesMapLocation,
         npmLocation,
         telemetryEnabled,
         logger,

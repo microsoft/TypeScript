@@ -856,7 +856,7 @@ namespace ts.refactor.extractMethod {
         Write = 2
     }
 
-    interface UsageEntry {
+    export interface UsageEntry {
         readonly usage: Usage;
         readonly symbol: Symbol;
         readonly node: Node;

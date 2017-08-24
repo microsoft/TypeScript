@@ -158,8 +158,8 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElement>): Expression[] {
-            let chunkObject: (ShorthandPropertyAssignment | PropertyAssignment)[];
+        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
+            let chunkObject: ObjectLiteralElementLike[];
             const objects: Expression[] = [];
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
@@ -179,7 +179,7 @@ namespace ts {
                         chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
                     }
                     else {
-                        chunkObject.push(e as ShorthandPropertyAssignment);
+                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
                     }
                 }
             }

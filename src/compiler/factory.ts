@@ -2636,9 +2636,7 @@ namespace ts {
         if (some(helpers)) {
             const emitNode = getOrCreateEmitNode(node);
             for (const helper of helpers) {
-                if (!contains(emitNode.helpers, helper)) {
-                    emitNode.helpers = append(emitNode.helpers, helper);
-                }
+                emitNode.helpers = appendIfUnique(emitNode.helpers, helper);
             }
         }
         return node;
@@ -2680,9 +2678,7 @@ namespace ts {
             const helper = sourceEmitHelpers[i];
             if (predicate(helper)) {
                 helpersRemoved++;
-                if (!contains(targetEmitNode.helpers, helper)) {
-                    targetEmitNode.helpers = append(targetEmitNode.helpers, helper);
-                }
+                targetEmitNode.helpers = appendIfUnique(targetEmitNode.helpers, helper);
             }
             else if (helpersRemoved > 0) {
                 sourceEmitHelpers[i - helpersRemoved] = helper;
