@@ -3,7 +3,6 @@
 /// <reference path="utilities.ts" />
 /// <reference path="session.ts" />
 /// <reference path="scriptVersionCache.ts"/>
-/// <reference path="lsHost.ts"/>
 /// <reference path="project.ts"/>
 /// <reference path="typingsCache.ts"/>
 
@@ -476,7 +475,6 @@ namespace ts.server {
                     this.typingsCache.deleteTypingsForProject(response.projectName);
                     break;
             }
-            project.markAsDirty();
             this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
         }
 
@@ -528,6 +526,7 @@ namespace ts.server {
 
         /* @internal */
         delayUpdateProjectGraphAndInferredProjectsRefresh(project: Project) {
+            project.markAsDirty();
             this.delayUpdateProjectGraph(project);
             this.delayInferredProjectsRefresh();
         }
@@ -712,36 +711,56 @@ namespace ts.server {
             }
         }
 
-        /* @internal  */
-        onTypeRootFileChanged(project: ConfiguredProject, fileOrFolder: string) {
-            project.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
-            project.updateTypes();
-            this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
+        /*@internal*/
+        watchTypeRootDirectory(root: Path, project: ConfiguredProject) {
+            // TODO: This is not needed anymore with watches for failed lookup locations?
+            return this.watchDirectory(
+                this.host,
+                root,
+                fileOrFolder => {
+                    project.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
+                    project.updateTypes();
+                    this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
+                },
+                WatchDirectoryFlags.None,
+                WatchType.TypeRoot,
+                project
+            );
         }
 
         /**
-         * This is the callback function when a watched directory has added or removed source code files.
-         * @param project the project that associates with this directory watcher
-         * @param fileName the absolute file name that changed in watched directory
+         * This is to watch whenever files are added or removed to the wildcard directories
          */
-        /* @internal */
-        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileOrFolder: string) {
-            project.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
-            const configFilename = project.getConfigFilePath();
+        /*@internal*/
+        watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
+            return this.watchDirectory(
+                this.host,
+                directory,
+                fileOrFolder => {
+                    const fileOrFolderPath = this.toPath(fileOrFolder);
+                    project.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    const configFilename = project.getConfigFilePath();
 
-            // If a change was made inside "folder/file", node will trigger the callback twice:
-            // one with the fileName being "folder/file", and the other one with "folder".
-            // We don't respond to the second one.
-            if (fileOrFolder && !isSupportedSourceFileName(fileOrFolder, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
-                this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrFolder}`);
-                return;
-            }
+                    // If the the added or created file or folder is not supported file name, ignore the file
+                    // But when watched directory is added/removed, we need to reload the file list
+                    if (fileOrFolderPath !== directory && !isSupportedSourceFileName(fileOrFolder, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
+                        this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrFolder}`);
+                        return;
+                    }
 
-            const configFileSpecs = project.configFileSpecs;
-            const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilerOptions(), project.getCachedPartialSystem(), this.hostConfiguration.extraFileExtensions);
-            project.updateErrorOnNoInputFiles(result.fileNames.length !== 0);
-            this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader, /*clientFileName*/ undefined);
-            this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
+                    // Reload is pending, do the reload
+                    if (!project.pendingReload) {
+                        const configFileSpecs = project.configFileSpecs;
+                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilationSettings(), project.getCachedPartialSystem(), this.hostConfiguration.extraFileExtensions);
+                        project.updateErrorOnNoInputFiles(result.fileNames.length !== 0);
+                        this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader, /*clientFileName*/ undefined);
+                        this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
+                    }
+                },
+                flags,
+                WatchType.WildcardDirectories,
+                project
+            );
         }
 
         private onConfigChangedForConfiguredProject(project: ConfiguredProject, eventKind: FileWatcherEventKind) {
@@ -1253,7 +1272,7 @@ namespace ts.server {
             return findProjectByName(projectFileName, this.externalProjects);
         }
 
-        private convertConfigFileContentToProjectOptions(configFilename: string, cachedServerHost: PartialSystem) {
+        private convertConfigFileContentToProjectOptions(configFilename: string, cachedPartialSystem: CachedPartialSystem) {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
@@ -1265,7 +1284,7 @@ namespace ts.server {
             const errors = result.parseDiagnostics;
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,
-                cachedServerHost,
+                cachedPartialSystem,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
                 configFilename,
@@ -1350,7 +1369,7 @@ namespace ts.server {
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createHash(projectKey),
                 fileStats: countEachFileTypes(project.getScriptInfos()),
-                compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
+                compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilationSettings()),
                 typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
                 extends: projectOptions && projectOptions.configHasExtendsProperty,
                 files: projectOptions && projectOptions.configHasFilesProperty,
@@ -1435,8 +1454,8 @@ namespace ts.server {
                 const normalizedPath = toNormalizedPath(newRootFile);
                 let scriptInfo: ScriptInfo | NormalizedPath;
                 let path: Path;
-                // Use the project's lsHost so that it can use caching instead of reaching to disk for the query
-                if (!project.lsHost.fileExists(newRootFile)) {
+                // Use the project's fileExists so that it can use caching instead of reaching to disk for the query
+                if (!project.fileExists(newRootFile)) {
                     path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path);
                     if (isScriptInfo(existingValue)) {
@@ -1448,7 +1467,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ clientFileName === newRootFile, /*fileContent*/ undefined, scriptKind, hasMixedContent, project.lsHost.host);
+                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ clientFileName === newRootFile, /*fileContent*/ undefined, scriptKind, hasMixedContent, project.partialSystem);
                     path = scriptInfo.path;
                     // If this script info is not already a root add it
                     if (!project.isRoot(scriptInfo)) {

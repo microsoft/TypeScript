@@ -321,6 +321,34 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
+    function getPathsForTypesOrModules(base: string, rootPaths: string[], typesOrModules: string[], map: Map<true>, rootDir?: string) {
+        while (1) {
+            forEach(rootPaths, r => {
+                const rp = combinePaths(base, r);
+                forEach(typesOrModules, tm => {
+                    map.set(tm === "" ? rp : combinePaths(rp, tm), true);
+                });
+            });
+            const parentDir = getDirectoryPath(base);
+            if (base === rootDir || parentDir === base) {
+                break;
+            }
+            base = parentDir;
+        }
+        return map;
+    }
+
+    function getNodeModulesWatchedDirectories(path: string, modules: string[], map = createMap<true>()) {
+        forEach(modules, module => {
+            getPathsForTypesOrModules(path, ["node_modules"], ["", module, "@types", `@types/${module}`], map);
+        });
+        return map;
+    }
+
+    function getTypesWatchedDirectories(path: string, typeRoots: string[], types: string[], map = createMap<true>()) {
+        return getPathsForTypesOrModules(path, typeRoots, types.concat(""), map, path);
+    }
+
     describe("tsserverProjectSystem", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -357,8 +385,9 @@ namespace ts.projectSystem {
             checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
             const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
-            const moduleLookupLocations = ["/a/b/c/module.ts", "/a/b/c/module.tsx"];
-            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path, ...moduleLookupLocations));
+            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
+            checkWatchedDirectories(host, ["/a/b/c"], /*recursive*/ false);
+            checkWatchedDirectories(host, [], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -3403,9 +3432,9 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [file4.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [file1.path, file2.path]);
             checkProjectActualFiles(projectService.inferredProjects[2], [file3.path]);
-            assert.equal(projectService.inferredProjects[0].getCompilerOptions().target, ScriptTarget.ESNext);
-            assert.equal(projectService.inferredProjects[1].getCompilerOptions().target, ScriptTarget.ESNext);
-            assert.equal(projectService.inferredProjects[2].getCompilerOptions().target, ScriptTarget.ES2015);
+            assert.equal(projectService.inferredProjects[0].getCompilationSettings().target, ScriptTarget.ESNext);
+            assert.equal(projectService.inferredProjects[1].getCompilationSettings().target, ScriptTarget.ESNext);
+            assert.equal(projectService.inferredProjects[2].getCompilationSettings().target, ScriptTarget.ES2015);
         });
     });
 
@@ -3895,13 +3924,13 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
 
             let project = projectService.inferredProjects[0];
-            let options = project.getCompilerOptions();
+            let options = project.getCompilationSettings();
             assert.isTrue(options.maxNodeModuleJsDepth === 2);
 
             // Assert the option sticks
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
             project = projectService.inferredProjects[0];
-            options = project.getCompilerOptions();
+            options = project.getCompilationSettings();
             assert.isTrue(options.maxNodeModuleJsDepth === 2);
         });
 
@@ -3921,15 +3950,15 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
             checkNumberOfInferredProjects(projectService, 1);
             let project = projectService.inferredProjects[0];
-            assert.isUndefined(project.getCompilerOptions().maxNodeModuleJsDepth);
+            assert.isUndefined(project.getCompilationSettings().maxNodeModuleJsDepth);
 
             projectService.openClientFile(file2.path);
             project = projectService.inferredProjects[0];
-            assert.isTrue(project.getCompilerOptions().maxNodeModuleJsDepth === 2);
+            assert.isTrue(project.getCompilationSettings().maxNodeModuleJsDepth === 2);
 
             projectService.closeClientFile(file2.path);
             project = projectService.inferredProjects[0];
-            assert.isUndefined(project.getCompilerOptions().maxNodeModuleJsDepth);
+            assert.isUndefined(project.getCompilationSettings().maxNodeModuleJsDepth);
         });
     });
 
@@ -4164,7 +4193,8 @@ namespace ts.projectSystem {
         describe("WatchDirectories for config file with", () => {
             function verifyWatchDirectoriesCaseSensitivity(useCaseSensitiveFileNames: boolean) {
                 const frontendDir = "/Users/someuser/work/applications/frontend";
-                const canonicalFrontendDir = useCaseSensitiveFileNames ? frontendDir : frontendDir.toLowerCase();
+                const toCanonical: (s: string) => Path = useCaseSensitiveFileNames ? s => s as Path : s => s.toLowerCase() as Path;
+                const canonicalFrontendDir = toCanonical(frontendDir);
                 const file1: FileOrFolder = {
                     path: `${frontendDir}/src/app/utils/Analytic.ts`,
                     content: "export class SomeClass { };"
@@ -4181,6 +4211,8 @@ namespace ts.projectSystem {
                     path: "/a/lib/lib.es2016.full.d.ts",
                     content: libFile.content
                 };
+                const typeRoots = ["types", "node_modules/@types"];
+                const types = ["node", "jest"];
                 const tsconfigFile: FileOrFolder = {
                     path: `${frontendDir}/tsconfig.json`,
                     content: JSON.stringify({
@@ -4194,16 +4226,10 @@ namespace ts.projectSystem {
                             "noEmitOnError": true,
                             "experimentalDecorators": true,
                             "emitDecoratorMetadata": true,
-                            "types": [
-                                "node",
-                                "jest"
-                            ],
+                            types,
                             "noUnusedLocals": true,
                             "outDir": "./compiled",
-                            "typeRoots": [
-                                "types",
-                                "node_modules/@types"
-                            ],
+                            typeRoots,
                             "baseUrl": ".",
                             "paths": {
                                 "*": [
@@ -4223,10 +4249,21 @@ namespace ts.projectSystem {
                 const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
                 const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
                 const projectService = createProjectService(host);
-                const canonicalConfigPath = useCaseSensitiveFileNames ? tsconfigFile.path : tsconfigFile.path.toLowerCase();
+                const canonicalConfigPath = toCanonical(tsconfigFile.path);
                 const { configFileName } = projectService.openClientFile(file1.path);
                 assert.equal(configFileName, tsconfigFile.path, `should find config`);
                 checkNumberOfConfiguredProjects(projectService, 1);
+                const watchedModuleDirectories = arrayFrom(
+                    getNodeModulesWatchedDirectories(
+                        canonicalFrontendDir,
+                        types,
+                        getTypesWatchedDirectories(
+                            canonicalFrontendDir,
+                            typeRoots,
+                            types
+                        )
+                    ).keys()
+                );
 
                 const project = projectService.configuredProjects.get(canonicalConfigPath);
                 verifyProjectAndWatchedDirectories();
@@ -4270,10 +4307,17 @@ namespace ts.projectSystem {
                 verifyProjectAndWatchedDirectories();
                 callsTrackingHost.verifyNoHostCalls();
 
+                function getFilePathIfOpen(f: FileOrFolder) {
+                    const path = toCanonical(f.path);
+                    const info = projectService.getScriptInfoForPath(toCanonical(f.path));
+                    return info && info.isScriptOpen() ? undefined : path;
+                }
+
                 function verifyProjectAndWatchedDirectories() {
                     checkProjectActualFiles(project, map(projectFiles, f => f.path));
+                    checkWatchedFiles(host, mapDefined(projectFiles, getFilePathIfOpen));
                     checkWatchedDirectories(host, [`${canonicalFrontendDir}/src`], /*recursive*/ true);
-                    checkWatchedDirectories(host, [`${canonicalFrontendDir}/types`, `${canonicalFrontendDir}/node_modules/@types`], /*recursive*/ false);
+                    checkWatchedDirectories(host, watchedModuleDirectories, /*recursive*/ false);
                 }
             }
 
@@ -4328,7 +4372,7 @@ namespace ts.projectSystem {
                 const projectService = createProjectService(host);
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path, `should find config`);
-                const watchedModuleLocations = getNodeModulesWatchedDirectories(appFolder, "lodash");
+                const watchedModuleLocations = arrayFrom(getNodeModulesWatchedDirectories(appFolder, ["lodash"]).keys());
                 verifyProject();
 
                 let timeoutAfterReloadFs = timeoutDuringPartialInstallation;
@@ -4406,7 +4450,7 @@ namespace ts.projectSystem {
 
                 const lodashIndexPath = "/a/b/node_modules/@types/lodash/index.d.ts";
                 projectFiles.push(find(filesAndFoldersToAdd, f => f.path === lodashIndexPath));
-                watchedModuleLocations.length = watchedModuleLocations.indexOf(lodashIndexPath);
+                watchedModuleLocations.length = indexOf(watchedModuleLocations, getDirectoryPath(lodashIndexPath));
                 // npm installation complete, timeout after reload fs
                 timeoutAfterReloadFs = true;
                 verifyAfterPartialOrCompleteNpmInstall(2);
@@ -4429,32 +4473,10 @@ namespace ts.projectSystem {
                     const projectFilePaths = map(projectFiles, f => f.path);
                     checkProjectActualFiles(project, projectFilePaths);
 
-                    const filesWatched = filter(projectFilePaths, p => p !== app.path).concat(watchedModuleLocations);
+                    const filesWatched = filter(projectFilePaths, p => p !== app.path);
                     checkWatchedFiles(host, filesWatched);
                     checkWatchedDirectories(host, [appFolder], /*recursive*/ true);
-                    checkWatchedDirectories(host, [], /*recursive*/ false);
-                }
-
-                function getNodeModulesWatchedDirectories(path: string, module: string): string[] {
-                    const nodeModulesDir = combinePaths(path, "node_modules/");
-                    const parentDir = getDirectoryPath(path);
-                    const parentNodeModules = parentDir !== path ? getNodeModulesWatchedDirectories(parentDir, module) : [];
-                    return [
-                        `${nodeModulesDir}${module}.ts`,
-                        `${nodeModulesDir}${module}.tsx`,
-                        `${nodeModulesDir}${module}.d.ts`,
-                        `${nodeModulesDir}${module}/index.ts`,
-                        `${nodeModulesDir}${module}/index.tsx`,
-                        `${nodeModulesDir}${module}/index.d.ts`,
-                        `${nodeModulesDir}@types/${module}.d.ts`,
-                        `${nodeModulesDir}@types/${module}/index.d.ts`,
-                        `${nodeModulesDir}@types/${module}/package.json`,
-                        `${nodeModulesDir}${module}.js`,
-                        `${nodeModulesDir}${module}.jsx`,
-                        `${nodeModulesDir}${module}/package.json`,
-                        `${nodeModulesDir}${module}/index.js`,
-                        `${nodeModulesDir}${module}/index.jsx`,
-                    ].concat(parentNodeModules);
+                    checkWatchedDirectories(host, watchedModuleLocations, /*recursive*/ false);
                 }
             }
 

@@ -161,11 +161,10 @@ namespace ts {
                         watcher.referenceCount += 1;
                         return;
                     }
-                    watcher = _fs.watch(
+                    watcher = fsWatchDirectory(
                         dirPath || ".",
-                        { persistent: true },
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
-                    );
+                    ) as DirectoryWatcher;
                     watcher.referenceCount = 1;
                     dirWatchers.set(dirPath, watcher);
                     return;
@@ -231,6 +230,83 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
+
+            function fsWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher {
+                _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
+                return {
+                    close: () => _fs.unwatchFile(fileName, fileChanged)
+                };
+
+                function fileChanged(curr: any, prev: any) {
+                    const isCurrZero = +curr.mtime === 0;
+                    const isPrevZero = +prev.mtime === 0;
+                    const created = !isCurrZero && isPrevZero;
+                    const deleted = isCurrZero && !isPrevZero;
+
+                    const eventKind = created
+                        ? FileWatcherEventKind.Created
+                        : deleted
+                            ? FileWatcherEventKind.Deleted
+                            : FileWatcherEventKind.Changed;
+
+                    if (eventKind === FileWatcherEventKind.Changed && +curr.mtime <= +prev.mtime) {
+                        return;
+                    }
+
+                    callback(fileName, eventKind);
+                }
+            }
+
+            function fsWatchDirectory(directoryName: string, callback: (eventName: string, relativeFileName: string) => void, recursive?: boolean): FileWatcher {
+                // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
+                // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
+                let options: any;
+                let watcher = !directoryExists(directoryName) ?
+                    watchMissingDirectory() :
+                    watchPresentDirectory();
+                return {
+                    close: () => {
+                        watcher.close();
+                    }
+                };
+
+                function watchPresentDirectory(): FileWatcher {
+                    if (options === undefined) {
+                        if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
+                            options = { persistent: true, recursive: !!recursive };
+                        }
+                        else {
+                            options = { persistent: true };
+                        }
+                    }
+
+                    const dirWatcher = _fs.watch(
+                        directoryName,
+                        options,
+                        callback
+                    );
+                    dirWatcher.on("error", () => {
+                        // Deleting file
+                        watcher = watchMissingDirectory();
+                        // Call the callback for current directory
+                        callback("rename", "");
+                    });
+                    return dirWatcher;
+                }
+
+                function watchMissingDirectory(): FileWatcher {
+                    return fsWatchFile(directoryName, (_fileName, eventKind) => {
+                        if (eventKind === FileWatcherEventKind.Created && directoryExists(directoryName)) {
+                            watcher.close();
+                            watcher = watchPresentDirectory();
+                            // Call the callback for current directory
+                            // For now it could be callback for the inner directory creation,
+                            // but just return current directory, better than current no-op
+                            callback("rename", "");
+                        }
+                    });
+                }
+            }
 
             function readFile(fileName: string, _encoding?: string): string | undefined {
                 if (!fileExists(fileName)) {
@@ -349,7 +425,6 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 
-            const noOpFileWatcher: FileWatcher = { close: noop };
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -367,60 +442,21 @@ namespace ts {
                         };
                     }
                     else {
-                        _fs.watchFile(fileName, { persistent: true, interval: pollingInterval || 250 }, fileChanged);
-                        return {
-                            close: () => _fs.unwatchFile(fileName, fileChanged)
-                        };
-                    }
-
-                    function fileChanged(curr: any, prev: any) {
-                        const isCurrZero = +curr.mtime === 0;
-                        const isPrevZero = +prev.mtime === 0;
-                        const created = !isCurrZero && isPrevZero;
-                        const deleted = isCurrZero && !isPrevZero;
-
-                        const eventKind = created
-                            ? FileWatcherEventKind.Created
-                            : deleted
-                                ? FileWatcherEventKind.Deleted
-                                : FileWatcherEventKind.Changed;
-
-                        if (eventKind === FileWatcherEventKind.Changed && +curr.mtime <= +prev.mtime) {
-                            return;
-                        }
-
-                        callback(fileName, eventKind);
+                        return fsWatchFile(fileName, callback, pollingInterval);
                     }
                 },
                 watchDirectory: (directoryName, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    let options: any;
-                    if (!directoryExists(directoryName)) {
-                        // do nothing if target folder does not exist
-                        return noOpFileWatcher;
-                    }
-
-                    if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
-                        options = { persistent: true, recursive: !!recursive };
-                    }
-                    else {
-                        options = { persistent: true };
-                    }
-
-                    return _fs.watch(
-                        directoryName,
-                        options,
-                        (eventName: string, relativeFileName: string) => {
-                            // In watchDirectory we only care about adding and removing files (when event name is
-                            // "rename"); changes made within files are handled by corresponding fileWatchers (when
-                            // event name is "change")
-                            if (eventName === "rename") {
-                                // When deleting a file, the passed baseFileName is null
-                                callback(!relativeFileName ? relativeFileName : normalizePath(combinePaths(directoryName, relativeFileName)));
-                            }
+                    return fsWatchDirectory(directoryName, (eventName, relativeFileName) => {
+                        // In watchDirectory we only care about adding and removing files (when event name is
+                        // "rename"); changes made within files are handled by corresponding fileWatchers (when
+                        // event name is "change")
+                        if (eventName === "rename") {
+                            // When deleting a file, the passed baseFileName is null
+                            callback(!relativeFileName ? relativeFileName : normalizePath(combinePaths(directoryName, relativeFileName)));
                         }
-                    );
+                    }, recursive);
                 },
                 resolvePath: path => _path.resolve(path),
                 fileExists,

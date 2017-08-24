@@ -147,7 +147,7 @@ namespace ts {
                 // setting compiler options discards module resolution cache
                 fileExistsCalled = false;
 
-                const compilerOptions = ts.cloneCompilerOptions(project.getCompilerOptions());
+                const compilerOptions = ts.cloneCompilerOptions(project.getCompilationSettings());
                 compilerOptions.target = ts.ScriptTarget.ES5;
                 project.setCompilerOptions(compilerOptions);
 

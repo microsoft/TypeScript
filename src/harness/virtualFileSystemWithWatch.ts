@@ -95,8 +95,35 @@ namespace ts.TestFSWithWatch {
         }
     }
 
+    function getDiffInKeys(map: Map<any>, expectedKeys: string[]) {
+        if (map.size === expectedKeys.length) {
+            return "";
+        }
+        const notInActual: string[] = [];
+        const duplicates: string[] = [];
+        const seen = createMap<true>();
+        forEach(expectedKeys, expectedKey => {
+            if (seen.has(expectedKey)) {
+                duplicates.push(expectedKey);
+                return;
+            }
+            seen.set(expectedKey, true);
+            if (!map.has(expectedKey)) {
+                notInActual.push(expectedKey);
+            }
+        });
+        const inActualNotExpected: string[] = [];
+        map.forEach((_value, key) => {
+            if (!seen.has(key)) {
+                inActualNotExpected.push(key);
+            }
+            seen.set(key, true);
+        });
+        return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
+    }
+
     function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}`);
+        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
@@ -175,6 +202,8 @@ namespace ts.TestFSWithWatch {
 
     type TimeOutCallback = () => any;
 
+    export type TestFileWatcher = { cb: FileWatcherCallback; fileName: string; };
+    export type TestDirectoryWatcher = { cb: DirectoryWatcherCallback; directoryName: string; };
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
 
@@ -186,9 +215,9 @@ namespace ts.TestFSWithWatch {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories = createMultiMap<DirectoryWatcherCallback>();
-        readonly watchedDirectoriesRecursive = createMultiMap<DirectoryWatcherCallback>();
-        readonly watchedFiles = createMultiMap<FileWatcherCallback>();
+        readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
+        readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
+        readonly watchedFiles = createMultiMap<TestFileWatcher>();
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[], public readonly newLine = "\n") {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -317,8 +346,8 @@ namespace ts.TestFSWithWatch {
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
                 // since that is something we would want to do for both file as well as folder we are deleting
-                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrFolder.path), cb => cb(relativePath));
-                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrFolder.path), cb => cb(relativePath));
+                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrFolder.path), cb => this.directoryCallback(cb, relativePath));
+                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrFolder.path), cb => this.directoryCallback(cb, relativePath));
             }
 
             if (basePath !== fileOrFolder.path) {
@@ -333,8 +362,7 @@ namespace ts.TestFSWithWatch {
 
         private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
-            const fileName = getBaseFileName(fileFullPath);
-            invokeWatcherCallbacks(callbacks, cb => cb(fileName, eventKind));
+            invokeWatcherCallbacks(callbacks, ({ cb, fileName }) => cb(fileName, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -346,8 +374,12 @@ namespace ts.TestFSWithWatch {
          */
         private invokeDirectoryWatcher(folderFullPath: string, fileName: string) {
             const relativePath = this.getRelativePathToDirectory(folderFullPath, fileName);
-            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => cb(relativePath));
+            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
             this.invokeRecursiveDirectoryWatcher(folderFullPath, fileName);
+        }
+
+        private directoryCallback({ cb, directoryName }: TestDirectoryWatcher, relativePath: string) {
+            cb(combinePaths(directoryName, relativePath));
         }
 
         /**
@@ -355,7 +387,7 @@ namespace ts.TestFSWithWatch {
          */
         private invokeRecursiveDirectoryWatcher(fullPath: string, fileName: string) {
             const relativePath = this.getRelativePathToDirectory(fullPath, fileName);
-            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), cb => cb(relativePath));
+            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(fullPath)), cb => this.directoryCallback(cb, relativePath));
             const basePath = getDirectoryPath(fullPath);
             if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
                 this.invokeRecursiveDirectoryWatcher(basePath, fileName);
@@ -437,9 +469,13 @@ namespace ts.TestFSWithWatch {
             });
         }
 
-        watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
+        watchDirectory(directoryName: string, cb: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toFullPath(directoryName);
             const map = recursive ? this.watchedDirectoriesRecursive : this.watchedDirectories;
+            const callback: TestDirectoryWatcher = {
+                cb,
+                directoryName
+            };
             map.add(path, callback);
             return {
                 referenceCount: 0,
@@ -452,8 +488,9 @@ namespace ts.TestFSWithWatch {
             return Harness.mockHash(s);
         }
 
-        watchFile(fileName: string, callback: FileWatcherCallback) {
+        watchFile(fileName: string, cb: FileWatcherCallback) {
             const path = this.toFullPath(fileName);
+            const callback: TestFileWatcher = { fileName, cb };
             this.watchedFiles.add(path, callback);
             return { close: () => this.watchedFiles.remove(path, callback) };
         }

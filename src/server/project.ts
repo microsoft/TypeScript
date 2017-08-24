@@ -1,7 +1,7 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
-/// <reference path="lsHost.ts"/>
+/// <reference path="..\compiler\resolutionCache.ts"/>
 /// <reference path="typingsCache.ts"/>
 /// <reference path="..\compiler\builder.ts"/>
 
@@ -112,7 +112,7 @@ namespace ts.server {
         return value instanceof ScriptInfo;
     }
 
-    export abstract class Project {
+    export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
         private program: Program;
@@ -127,11 +127,14 @@ namespace ts.server {
 
         public languageServiceEnabled = true;
 
-        /*@internal*/
-        resolutionCache: ResolutionCache;
+        readonly trace?: (s: string) => void;
+        readonly realpath?: (path: string) => string;
 
         /*@internal*/
-        lsHost: LSHost;
+        hasInvalidatedResolution: HasInvalidatedResolution;
+
+        /*@internal*/
+        resolutionCache: ResolutionCache;
 
         private builder: Builder;
         /**
@@ -161,7 +164,7 @@ namespace ts.server {
 
         private typingFiles: SortedReadonlyArray<string>;
 
-        public typesVersion = 0;
+        private typesVersion = 0;
 
         public isNonTsProject() {
             this.updateGraph();
@@ -190,7 +193,7 @@ namespace ts.server {
         }
 
         constructor(
-            private readonly projectName: string,
+            /*@internal*/readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,
@@ -198,7 +201,7 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
-            host: PartialSystem) {
+            /*@internal*/public partialSystem: PartialSystem) {
 
             if (!this.compilerOptions) {
                 this.compilerOptions = getDefaultCompilerOptions();
@@ -211,52 +214,162 @@ namespace ts.server {
             }
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
+            const host = this.projectService.host;
+            if (host.trace) {
+                this.trace = s => host.trace(s);
+            }
 
-            this.lsHost = new LSHost(host, this, this.projectService.cancellationToken);
-            this.resolutionCache = createResolutionCache(
-                fileName => this.projectService.toPath(fileName),
-                () => this.compilerOptions,
-                directory => this.watchDirectoryOfFailedLookup(directory),
-                s => this.projectService.logger.info(s),
-                this.getProjectName(),
-                () => this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined
-            );
-            this.lsHost.compilationSettings = this.compilerOptions;
-            this.resolutionCache.setModuleResolutionHost(this.lsHost);
+            if (host.realpath) {
+                this.realpath = path => host.realpath(path);
+            }
 
-            this.languageService = createLanguageService(this.lsHost, this.documentRegistry);
-
+            this.languageService = createLanguageService(this, this.documentRegistry);
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
             }
-
+            this.resolutionCache = createResolutionCache(this);
             this.markAsDirty();
         }
 
-        private watchDirectoryOfFailedLookup(directory: string) {
+        getCompilationSettings() {
+            return this.compilerOptions;
+        }
+
+        getNewLine() {
+            return this.partialSystem.newLine;
+        }
+
+        getProjectVersion() {
+            return this.projectStateVersion.toString();
+        }
+
+        getScriptFileNames() {
+            const result: string[] = [];
+            if (this.rootFiles) {
+                this.rootFilesMap.forEach((value, _path) => {
+                    const f: ScriptInfo = isScriptInfo(value) && value;
+                    if (this.languageServiceEnabled || (f && f.isScriptOpen())) {
+                        // if language service is disabled - process only files that are open
+                        result.push(f ? f.fileName : value as NormalizedPath);
+                    }
+                });
+                if (this.typingFiles) {
+                    for (const f of this.typingFiles) {
+                        result.push(f);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private getScriptInfoLSHost(fileName: string) {
+            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false, this.partialSystem);
+            if (scriptInfo) {
+                const existingValue = this.rootFilesMap.get(scriptInfo.path);
+                if (existingValue !== undefined && existingValue !== scriptInfo) {
+                    // This was missing path earlier but now the file exists. Update the root
+                    this.rootFiles.push(scriptInfo);
+                    this.rootFilesMap.set(scriptInfo.path, scriptInfo);
+                }
+                scriptInfo.attachToProject(this);
+            }
+            return scriptInfo;
+        }
+
+        getScriptKind(fileName: string) {
+            const info = this.getScriptInfoLSHost(fileName);
+            return info && info.scriptKind;
+        }
+
+        getScriptVersion(filename: string) {
+            const info = this.getScriptInfoLSHost(filename);
+            return info && info.getLatestVersion();
+        }
+
+        getScriptSnapshot(filename: string): IScriptSnapshot {
+            const scriptInfo = this.getScriptInfoLSHost(filename);
+            if (scriptInfo) {
+                return scriptInfo.getSnapshot();
+            }
+        }
+
+        getCancellationToken() {
+            return this.projectService.cancellationToken;
+        }
+
+        getCurrentDirectory(): string {
+            return this.partialSystem.getCurrentDirectory();
+        }
+
+        getDefaultLibFileName() {
+            const nodeModuleBinDir = getDirectoryPath(normalizePath(this.projectService.host.getExecutingFilePath()));
+            return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilerOptions));
+        }
+
+        useCaseSensitiveFileNames() {
+            return this.partialSystem.useCaseSensitiveFileNames;
+        }
+
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+            return this.partialSystem.readDirectory(path, extensions, exclude, include, depth);
+        }
+
+        readFile(fileName: string): string | undefined {
+            return this.partialSystem.readFile(fileName);
+        }
+
+        fileExists(file: string): boolean {
+            // As an optimization, don't hit the disks for files we already know don't exist
+            // (because we're watching for their creation).
+            const path = this.toPath(file);
+            return !this.isWatchedMissingFile(path) && this.partialSystem.fileExists(file);
+        }
+
+        getTypeRootsVersion() {
+            return this.typesVersion;
+        }
+
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[] {
+            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ true);
+        }
+
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
+            return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
+        }
+
+        directoryExists(path: string): boolean {
+            return this.partialSystem.directoryExists(path);
+        }
+
+        getDirectories(path: string): string[] {
+            return this.partialSystem.getDirectories(path);
+        }
+
+        /*@internal*/
+        toPath(fileName: string) {
+            return this.projectService.toPath(fileName);
+        }
+
+        /*@internal*/
+        watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback) {
             return this.projectService.watchDirectory(
                 this.projectService.host,
                 directory,
-                fileOrFolder => this.onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolder),
+                cb,
                 WatchDirectoryFlags.None,
                 WatchType.FailedLookupLocation,
                 this
             );
         }
 
-        private onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolder: string) {
-            const fileOrFolderPath = this.projectService.toPath(fileOrFolder);
+        /*@internal*/
+        onInvalidatedResolution() {
+            this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+        }
 
-            // There is some kind of change in the failed lookup location, update the program
-            if (this.projectKind === ProjectKind.Configured) {
-                (this.lsHost.host as CachedPartialSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
-            }
-
-            // If the location results in update to failed lookup, schedule program update
-            if (this.resolutionCache.onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolderPath)) {
-                this.markAsDirty();
-                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
-            }
+        /*@internal*/
+        getGlobalCache() {
+            return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
         }
 
         private setInternalCompilerOptionsForEmittingJsFiles() {
@@ -326,10 +439,6 @@ namespace ts.server {
             return this.builder.getChangedProgramFiles(this.program);
         }
 
-        getProjectVersion() {
-            return this.projectStateVersion.toString();
-        }
-
         enableLanguageService() {
             if (this.languageServiceEnabled) {
                 return;
@@ -366,7 +475,6 @@ namespace ts.server {
 
         updateTypes() {
             this.typesVersion++;
-            this.markAsDirty();
         }
 
         close() {
@@ -395,8 +503,7 @@ namespace ts.server {
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
-            this.lsHost.dispose();
-            this.lsHost = undefined;
+            this.partialSystem = undefined;
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
@@ -410,11 +517,7 @@ namespace ts.server {
         }
 
         isClosed() {
-            return this.lsHost === undefined;
-        }
-
-        getCompilerOptions() {
-            return this.compilerOptions;
+            return this.rootFiles === undefined;
         }
 
         hasRoots() {
@@ -423,25 +526,6 @@ namespace ts.server {
 
         getRootFiles() {
             return this.rootFiles && this.rootFiles.map(info => info.fileName);
-        }
-
-        getRootFilesLSHost() {
-            const result: string[] = [];
-            if (this.rootFiles) {
-                this.rootFilesMap.forEach((value, _path) => {
-                    const f: ScriptInfo = isScriptInfo(value) && value;
-                    if (this.languageServiceEnabled || (f && f.isScriptOpen())) {
-                        // if language service is disabled - process only files that are open
-                        result.push(f ? f.fileName : value as NormalizedPath);
-                    }
-                });
-                if (this.typingFiles) {
-                    for (const f of this.typingFiles) {
-                        result.push(f);
-                    }
-                }
-            }
-            return result;
         }
 
         /*@internal*/
@@ -622,7 +706,7 @@ namespace ts.server {
          */
         updateGraph(): boolean {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
-            this.lsHost.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
+            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
 
             let hasChanges = this.updateGraphWorker();
 
@@ -659,7 +743,7 @@ namespace ts.server {
             // Note we are retaining builder so we can send events for project change
             if (this.builder) {
                 if (this.languageServiceEnabled) {
-                    this.builder.onProgramUpdateGraph(this.program, this.lsHost.hasInvalidatedResolution);
+                    this.builder.onProgramUpdateGraph(this.program, this.hasInvalidatedResolution);
                 }
                 else {
                     this.builder.clear();
@@ -720,7 +804,7 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false, this.lsHost.host);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false, this.partialSystem);
                     scriptInfo.attachToProject(this);
                 },
                 removed => {
@@ -739,7 +823,7 @@ namespace ts.server {
                 missingFilePath,
                 (fileName, eventKind) => {
                     if (this.projectKind === ProjectKind.Configured) {
-                        (this.lsHost.host as CachedPartialSystem).addOrDeleteFile(fileName, missingFilePath, eventKind);
+                        (this.partialSystem as CachedPartialSystem).addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
                     if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
@@ -747,7 +831,6 @@ namespace ts.server {
                         fileWatcher.close();
 
                         // When a missing file is created, we should update the graph.
-                        this.markAsDirty();
                         this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
                     }
                 },
@@ -757,28 +840,14 @@ namespace ts.server {
             return fileWatcher;
         }
 
-        isWatchedMissingFile(path: Path) {
+        private isWatchedMissingFile(path: Path) {
             return this.missingFilesMap && this.missingFilesMap.has(path);
-        }
-
-        getScriptInfoLSHost(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false, this.lsHost.host);
-            if (scriptInfo) {
-                const existingValue = this.rootFilesMap.get(scriptInfo.path);
-                if (existingValue !== undefined && existingValue !== scriptInfo) {
-                    // This was missing path earlier but now the file exists. Update the root
-                    this.rootFiles.push(scriptInfo);
-                    this.rootFilesMap.set(scriptInfo.path, scriptInfo);
-                }
-                scriptInfo.attachToProject(this);
-            }
-            return scriptInfo;
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(
                 fileName, /*openedByClient*/ false, /*fileContent*/ undefined,
-                /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.lsHost.host
+                /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.partialSystem
             );
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
@@ -815,8 +884,6 @@ namespace ts.server {
                 if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
                     this.resolutionCache.clear();
                 }
-                this.lsHost.compilationSettings = this.compilerOptions;
-
                 this.markAsDirty();
             }
         }
@@ -839,7 +906,7 @@ namespace ts.server {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
                 isInferred: this.projectKind === ProjectKind.Inferred,
-                options: this.getCompilerOptions(),
+                options: this.getCompilationSettings(),
                 languageServiceDisabled: !this.languageServiceEnabled
             };
             const updatedFileNames = this.updatedFileNames;
@@ -913,7 +980,7 @@ namespace ts.server {
 
         setCompilerOptions(options?: CompilerOptions) {
             // Avoid manipulating the given options directly
-            const newOptions = options ? cloneCompilerOptions(options) : this.getCompilerOptions();
+            const newOptions = options ? cloneCompilerOptions(options) : this.getCompilationSettings();
             if (!newOptions) {
                 return;
             }
@@ -1042,7 +1109,7 @@ namespace ts.server {
 
         /*@internal*/
         getCachedPartialSystem() {
-            return this.lsHost.host as CachedPartialSystem;
+            return this.partialSystem as CachedPartialSystem;
         }
 
         getConfigFilePath() {
@@ -1051,7 +1118,7 @@ namespace ts.server {
 
         enablePlugins() {
             const host = this.projectService.host;
-            const options = this.getCompilerOptions();
+            const options = this.getCompilationSettings();
 
             if (!host.require) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
@@ -1113,7 +1180,7 @@ namespace ts.server {
                     config: configEntry,
                     project: this,
                     languageService: this.languageService,
-                    languageServiceHost: this.lsHost,
+                    languageServiceHost: this,
                     serverHost: this.projectService.host
                 };
 
@@ -1174,14 +1241,7 @@ namespace ts.server {
                 this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
                 wildcardDirectories,
                 // Create new directory watcher
-                (directory, flags) => this.projectService.watchDirectory(
-                    this.projectService.host,
-                    directory,
-                    path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
-                    flags,
-                    WatchType.WildcardDirectories,
-                    this
-                )
+                (directory, flags) => this.projectService.watchWildcardDirectory(directory as Path, flags, this),
             );
         }
 
@@ -1201,14 +1261,7 @@ namespace ts.server {
                 newTypeRoots,
                 {
                     // Create new watch
-                    createNewValue: root => this.projectService.watchDirectory(
-                        this.projectService.host,
-                        root,
-                        path => this.projectService.onTypeRootFileChanged(this, path),
-                        WatchDirectoryFlags.None,
-                        WatchType.TypeRoot,
-                        this
-                    ),
+                    createNewValue: root => this.projectService.watchTypeRootDirectory(root as Path, this),
                     // Close existing watch thats not needed any more
                     onDeleteValue: closeFileWatcher
                 }
@@ -1245,7 +1298,7 @@ namespace ts.server {
         }
 
         getEffectiveTypeRoots() {
-            return getEffectiveTypeRoots(this.getCompilerOptions(), this.lsHost.host) || [];
+            return getEffectiveTypeRoots(this.getCompilationSettings(), this.partialSystem) || [];
         }
 
         /*@internal*/

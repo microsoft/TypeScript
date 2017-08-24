@@ -149,7 +149,6 @@ var harnessSources = harnessCoreSources.concat([
     "utilities.ts",
     "scriptVersionCache.ts",
     "scriptInfo.ts",
-    "lsHost.ts",
     "project.ts",
     "typingsCache.ts",
     "editorServices.ts",

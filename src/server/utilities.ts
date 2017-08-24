@@ -50,7 +50,7 @@ namespace ts.server {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true),
-            compilerOptions: project.getCompilerOptions(),
+            compilerOptions: project.getCompilationSettings(),
             typeAcquisition,
             unresolvedImports,
             projectRootPath: getProjectRootPath(project),

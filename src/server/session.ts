@@ -1218,7 +1218,7 @@ namespace ts.server {
                     result.push({
                         projectFileName: project.getProjectName(),
                         fileNames: project.getCompileOnSaveAffectedFileList(info),
-                        projectUsesOutFile: !!project.getCompilerOptions().outFile || !!project.getCompilerOptions().out
+                        projectUsesOutFile: !!project.getCompilationSettings().outFile || !!project.getCompilationSettings().out
                     });
                 }
             }

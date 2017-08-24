@@ -245,7 +245,6 @@ namespace ts {
 
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[];                    // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
-        let hasInvalidatedResolution: HasInvalidatedResolution;             // Passed along to see if source file has invalidated resolutions
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
 
         const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
@@ -257,20 +256,47 @@ namespace ts {
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
 
-        const host = configFileName ? createCachedPartialSystem(system) : system;
+        const partialSystem = configFileName ? createCachedPartialSystem(system) : system;
         if (configFileName) {
             configFileWatcher = watchFile(system, configFileName, scheduleProgramReload, writeLog);
         }
-        const currentDirectory = host.getCurrentDirectory();
-        const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
 
-        // Cache for the module resolution
-        const resolutionCache = createResolutionCache(
-            fileName => toPath(fileName),
-            () => compilerOptions,
+        const getCurrentDirectory = memoize(() => partialSystem.getCurrentDirectory());
+        const realpath = system.realpath && ((path: string) => system.realpath(path));
+        const getCachedPartialSystem = configFileName && (() => partialSystem as CachedPartialSystem);
+        const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
+        let newLine = getNewLineCharacter(compilerOptions, system);
+
+        const compilerHost: CompilerHost & ResolutionCacheHost = {
+            // Members for CompilerHost
+            getSourceFile: getVersionedSourceFile,
+            getSourceFileByPath: getVersionedSourceFileByPath,
+            getDefaultLibLocation,
+            getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
+            writeFile: (_fileName, _data, _writeByteOrderMark, _onError?, _sourceFiles?) => { },
+            getCurrentDirectory,
+            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
+            getCanonicalFileName,
+            getNewLine: () => newLine,
+            fileExists,
+            readFile,
+            trace,
+            directoryExists,
+            getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
+            getDirectories,
+            realpath,
+            resolveTypeReferenceDirectives,
+            resolveModuleNames,
+            onReleaseOldSourceFile,
+            // Members for ResolutionCacheHost
+            toPath,
+            getCompilationSettings: () => compilerOptions,
             watchDirectoryOfFailedLookupLocation,
-            writeLog
-        );
+            getCachedPartialSystem,
+            onInvalidatedResolution: scheduleProgramUpdate
+        };
+        // Cache for the module resolution
+        const resolutionCache = createResolutionCache(compilerHost);
 
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder(getCanonicalFileName, getFileEmitOutput, computeHash, _sourceFile => true);
@@ -285,14 +311,15 @@ namespace ts {
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);
 
-            hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
+            if (hasChangedCompilerOptions) {
+                newLine = getNewLineCharacter(compilerOptions, system);
+            }
+
+            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
             if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution)) {
                 return;
             }
 
-            // Create the compiler host
-            const compilerHost = createWatchedCompilerHost(compilerOptions);
-            resolutionCache.setModuleResolutionHost(compilerHost);
             if (hasChangedCompilerOptions && changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
                 resolutionCache.clear();
             }
@@ -300,6 +327,7 @@ namespace ts {
             beforeCompile(compilerOptions);
 
             // Compile the program
+            compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             program = createProgram(rootFileNames, compilerOptions, compilerHost, program);
             builder.onProgramUpdateGraph(program, hasInvalidatedResolution);
 
@@ -309,7 +337,7 @@ namespace ts {
                 // These are the paths that program creater told us as not in use any more but were missing on the disk.
                 // We didnt remove the entry for them from sourceFiles cache so that we dont have to do File IO,
                 // if there is already watcher for it (for missing files)
-                // At that point our watches were updated, hence now we know that these paths are not tracked and need to be removed
+                // At this point our watches were updated, hence now we know that these paths are not tracked and need to be removed
                 // so that at later time we have correct result of their presence
                 for (const missingFilePath of missingFilePathsRequestedForRelease) {
                     if (!missingFilesMap.has(missingFilePath)) {
@@ -319,40 +347,12 @@ namespace ts {
                 missingFilePathsRequestedForRelease = undefined;
             }
 
-            afterCompile(host, program, builder);
+            afterCompile(partialSystem, program, builder);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
-        function createWatchedCompilerHost(options: CompilerOptions): CompilerHost {
-            const newLine = getNewLineCharacter(options, system);
-            const realpath = system.realpath && ((path: string) => system.realpath(path));
-
-            return {
-                getSourceFile: getVersionedSourceFile,
-                getSourceFileByPath: getVersionedSourceFileByPath,
-                getDefaultLibLocation,
-                getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
-                writeFile: (_fileName, _data, _writeByteOrderMark, _onError?, _sourceFiles?) => { },
-                getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
-                useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
-                getCanonicalFileName,
-                getNewLine: () => newLine,
-                fileExists,
-                readFile: fileName => system.readFile(fileName),
-                trace: (s: string) => system.write(s + newLine),
-                directoryExists: directoryName => host.directoryExists(directoryName),
-                getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
-                getDirectories: (path: string) => host.getDirectories(path),
-                realpath,
-                resolveTypeReferenceDirectives: (typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile),
-                resolveModuleNames: (moduleNames, containingFile) => resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ false),
-                onReleaseOldSourceFile,
-                hasInvalidatedResolution
-            };
-        }
-
         function toPath(fileName: string) {
-            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+            return ts.toPath(fileName, getCurrentDirectory(), getCanonicalFileName);
         }
 
         function fileExists(fileName: string) {
@@ -362,7 +362,31 @@ namespace ts {
                 return !isString(hostSourceFileInfo);
             }
 
-            return host.fileExists(fileName);
+            return partialSystem.fileExists(fileName);
+        }
+
+        function directoryExists(directoryName: string) {
+            return partialSystem.directoryExists(directoryName);
+        }
+
+        function readFile(fileName: string) {
+            return system.readFile(fileName);
+        }
+
+        function trace(s: string) {
+            return system.write(s + newLine);
+        }
+
+        function getDirectories(path: string) {
+            return partialSystem.getDirectories(path);
+        }
+
+        function resolveModuleNames(moduleNames: string[], containingFile: string) {
+            return resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ false);
+        }
+
+        function resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string) {
+            return resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
         }
 
         function getDefaultLibLocation(): string {
@@ -503,7 +527,7 @@ namespace ts {
             writeLog(`Reloading config file: ${configFileName}`);
             needsReload = false;
 
-            const cachedHost = host as CachedPartialSystem;
+            const cachedHost = partialSystem as CachedPartialSystem;
             cachedHost.clearCache();
             const configParseResult = parseConfigFile(configFileName, optionsToExtendForConfigFile, cachedHost, reportDiagnostic, reportWatchDiagnostic);
             rootFileNames = configParseResult.fileNames;
@@ -548,26 +572,12 @@ namespace ts {
 
         function updateCachedSystemWithFile(fileName: string, path: Path, eventKind: FileWatcherEventKind) {
             if (configFileName) {
-                (host as CachedPartialSystem).addOrDeleteFile(fileName, path, eventKind);
+                (partialSystem as CachedPartialSystem).addOrDeleteFile(fileName, path, eventKind);
             }
         }
 
-        function watchDirectoryOfFailedLookupLocation(directory: string) {
-            return watchDirectory(system, directory, onFileAddOrRemoveInDirectoryOfFailedLookup, WatchDirectoryFlags.None, writeLog);
-        }
-
-        function onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolder: string) {
-            const fileOrFolderPath = toPath(fileOrFolder);
-
-            if (configFileName) {
-                // Since the file existance changed, update the sourceFiles cache
-                (host as CachedPartialSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
-            }
-
-            // If the location results in update to failed lookup, schedule program update
-            if (resolutionCache.onFileAddOrRemoveInDirectoryOfFailedLookup(fileOrFolderPath)) {
-                scheduleProgramUpdate();
-            }
+        function watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback) {
+            return watchDirectory(system, directory, cb, WatchDirectoryFlags.None, writeLog);
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
@@ -593,42 +603,45 @@ namespace ts {
             updateWatchingWildcardDirectories(
                 watchedWildcardDirectories || (watchedWildcardDirectories = createMap()),
                 createMapFromTemplate(configFileWildCardDirectories),
-                watchWildCardDirectory
+                watchWildcardDirectory
             );
         }
 
-        function watchWildCardDirectory(directory: string, flags: WatchDirectoryFlags) {
-            return watchDirectory(system, directory, onFileAddOrRemoveInWatchedDirectory, flags, writeLog);
-        }
+        function watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags) {
+            return watchDirectory(
+                system,
+                directory,
+                fileOrFolder => {
+                    Debug.assert(!!configFileName);
 
-        function onFileAddOrRemoveInWatchedDirectory(fileOrFolder: string) {
-            Debug.assert(!!configFileName);
+                    const fileOrFolderPath = toPath(fileOrFolder);
 
-            const fileOrFolderPath = toPath(fileOrFolder);
+                    // Since the file existance changed, update the sourceFiles cache
+                    (partialSystem as CachedPartialSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    removeSourceFile(fileOrFolderPath);
 
-            // Since the file existance changed, update the sourceFiles cache
-            (host as CachedPartialSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
-            removeSourceFile(fileOrFolderPath);
+                    // If the the added or created file or folder is not supported file name, ignore the file
+                    // But when watched directory is added/removed, we need to reload the file list
+                    if (fileOrFolderPath !== directory && !isSupportedSourceFileName(fileOrFolder, compilerOptions)) {
+                        writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrFolder}`);
+                        return;
+                    }
 
-            // If a change was made inside "folder/file", node will trigger the callback twice:
-            // one with the fileName being "folder/file", and the other one with "folder".
-            // We don't respond to the second one.
-            if (fileOrFolder && !isSupportedSourceFileName(fileOrFolder, compilerOptions)) {
-                writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrFolder}`);
-                return;
-            }
+                    // Reload is pending, do the reload
+                    if (!needsReload) {
+                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, partialSystem);
+                        if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
+                            reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
+                        }
+                        rootFileNames = result.fileNames;
 
-            // Reload is pending, do the reload
-            if (!needsReload) {
-                const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, host);
-                if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
-                    reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
-                }
-                rootFileNames = result.fileNames;
-
-                // Schedule Update the program
-                scheduleProgramUpdate();
-            }
+                        // Schedule Update the program
+                        scheduleProgramUpdate();
+                    }
+                },
+                flags,
+                writeLog
+            );
         }
 
         function computeHash(data: string) {
