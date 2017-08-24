@@ -2572,7 +2572,7 @@ namespace ts {
      * @param host An EmitHost.
      * @param targetSourceFile An optional target source file to emit.
      */
-    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): SourceFile[] {
+    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): ReadonlyArray<SourceFile> {
         const options = host.getCompilerOptions();
         const isSourceFileFromExternalLibrary = (file: SourceFile) => host.isSourceFileFromExternalLibrary(file);
         if (options.outFile || options.out) {

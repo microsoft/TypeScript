@@ -490,7 +490,8 @@ namespace FourSlash {
         }
 
         private getDiagnostics(fileName: string): ts.Diagnostic[] {
-            return this.languageService.getSyntacticDiagnostics(fileName).concat(this.languageService.getSemanticDiagnostics(fileName));
+            return ts.concatenate(this.languageService.getSyntacticDiagnostics(fileName),
+                this.languageService.getSemanticDiagnostics(fileName));
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
@@ -1148,7 +1149,7 @@ namespace FourSlash {
             this.testDiagnostics(expected, diagnostics);
         }
 
-        private testDiagnostics(expected: string, diagnostics: ts.Diagnostic[]) {
+        private testDiagnostics(expected: string, diagnostics: ReadonlyArray<ts.Diagnostic>) {
             const realized = ts.realizeDiagnostics(diagnostics, "\r\n");
             const actual = stringify(realized);
             assert.equal(actual, expected);
@@ -1585,7 +1586,7 @@ namespace FourSlash {
         public printErrorList() {
             const syntacticErrors = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
             const semanticErrors = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
-            const errorList = syntacticErrors.concat(semanticErrors);
+            const errorList = ts.concatenate(syntacticErrors, semanticErrors);
             Harness.IO.log(`Error list (${errorList.length} errors)`);
 
             if (errorList.length) {

@@ -715,7 +715,7 @@ namespace ts {
         return result;
     }
 
-    export function sum<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
+    export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
             // Note: we need the following type assertion because of GH #17069
