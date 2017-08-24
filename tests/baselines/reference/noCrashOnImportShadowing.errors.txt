@@ -11,6 +11,10 @@ tests/cases/compiler/index.ts(9,10): error TS2304: Cannot find name 'OriginalB'.
     interface B {
         x: string;
     }
+    
+    const x: B = { x: "" };
+    B.zzz;
+    
     export { B };
     
 ==== tests/cases/compiler/index.ts (2 errors) ====
