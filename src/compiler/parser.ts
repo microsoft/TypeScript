@@ -2722,6 +2722,8 @@ namespace ts {
                 case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.QuestionToken:
+                case SyntaxKind.ExclamationToken:
+                case SyntaxKind.DotDotDotToken:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);
