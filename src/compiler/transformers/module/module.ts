@@ -1204,7 +1204,7 @@ namespace ts {
             }
 
             if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : decl.name;
+                const exportName = hasModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : getDeclarationName(decl);
                 statements = appendExportStatement(statements, exportName, getLocalName(decl), /*location*/ decl);
             }
 
