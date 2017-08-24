@@ -116,7 +116,7 @@ type stringIsPrimitive = IsPrimitive(string); // '1', ok
 >IsPrimitive : IsPrimitive
 
 type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
->regexpIsPrimitive : "0"
+>regexpIsPrimitive : "1"
 >IsPrimitive : IsPrimitive
 >RegExp : RegExp
 
@@ -182,4 +182,35 @@ type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 >a : 1
 >b : 2
 >c : 3
+
+// binary function composition, still fails
+type Fn1<T extends number> = (v: T[]) => { [k: string]: T };
+>Fn1 : Fn1<T>
+>T : T
+>v : T[]
+>T : T
+>k : string
+>T : T
+
+type Fn2<T> = (v: { [k: string]: T }) => ReadonlyArray<T>;
+>Fn2 : Fn2<T>
+>T : T
+>v : { [k: string]: T; }
+>k : string
+>T : T
+>ReadonlyArray : ReadonlyArray<T>
+>T : T
+
+type Fn3<T> = (v: T) => Fn2(Fn1(T));
+>Fn3 : Fn3<T>
+>T : T
+>v : T
+>T : T
+>Fn2 : Fn2<T>
+>Fn1 : Fn1<T>
+>T : T
+
+type Fn4 = Fn3(1);
+>Fn4 : any
+>Fn3 : Fn3<T>
 

@@ -180,3 +180,34 @@ type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 >b : Symbol(b, Decl(typeCall.ts, 56, 38))
 >c : Symbol(c, Decl(typeCall.ts, 56, 44))
 
+// binary function composition, still fails
+type Fn1<T extends number> = (v: T[]) => { [k: string]: T };
+>Fn1 : Symbol(Fn1, Decl(typeCall.ts, 56, 53))
+>T : Symbol(T, Decl(typeCall.ts, 59, 9))
+>v : Symbol(v, Decl(typeCall.ts, 59, 30))
+>T : Symbol(T, Decl(typeCall.ts, 59, 9))
+>k : Symbol(k, Decl(typeCall.ts, 59, 44))
+>T : Symbol(T, Decl(typeCall.ts, 59, 9))
+
+type Fn2<T> = (v: { [k: string]: T }) => ReadonlyArray<T>;
+>Fn2 : Symbol(Fn2, Decl(typeCall.ts, 59, 60))
+>T : Symbol(T, Decl(typeCall.ts, 60, 9))
+>v : Symbol(v, Decl(typeCall.ts, 60, 15))
+>k : Symbol(k, Decl(typeCall.ts, 60, 21))
+>T : Symbol(T, Decl(typeCall.ts, 60, 9))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(typeCall.ts, 60, 9))
+
+type Fn3<T> = (v: T) => Fn2(Fn1(T));
+>Fn3 : Symbol(Fn3, Decl(typeCall.ts, 60, 58))
+>T : Symbol(T, Decl(typeCall.ts, 61, 9))
+>v : Symbol(v, Decl(typeCall.ts, 61, 15))
+>T : Symbol(T, Decl(typeCall.ts, 61, 9))
+>Fn2 : Symbol(Fn2, Decl(typeCall.ts, 59, 60))
+>Fn1 : Symbol(Fn1, Decl(typeCall.ts, 56, 53))
+>T : Symbol(T, Decl(typeCall.ts, 61, 9))
+
+type Fn4 = Fn3(1);
+>Fn4 : Symbol(Fn4, Decl(typeCall.ts, 61, 36))
+>Fn3 : Symbol(Fn3, Decl(typeCall.ts, 60, 58))
+

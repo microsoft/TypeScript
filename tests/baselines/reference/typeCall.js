@@ -57,6 +57,12 @@ type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
 type map = <Fn extends Function, O extends object>(fn: Fn, obj: O) => { [P in keyof O]: Fn(P) }; // Fn(O[P])
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 
+// binary function composition, still fails
+type Fn1<T extends number> = (v: T[]) => { [k: string]: T };
+type Fn2<T> = (v: { [k: string]: T }) => ReadonlyArray<T>;
+type Fn3<T> = (v: T) => Fn2(Fn1(T));
+type Fn4 = Fn3(1);
+
 
 //// [typeCall.js]
 var a = 'foo';
