@@ -1641,7 +1641,7 @@ namespace ts {
     export function getAssignmentTargetKind(node: Node): AssignmentKind {
         let parent = node.parent;
         while (true) {
-            switch (parent.kind) {
+            switch (parent && parent.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
                     return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?

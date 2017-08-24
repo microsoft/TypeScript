@@ -1,0 +1,20 @@
+=== tests/cases/compiler/spreadTuples.ts ===
+function foo(x: number, y: number, z: number) {}
+>foo : (x: number, y: number, z: number) => void
+>x : number
+>y : number
+>z : number
+
+var args: [0, 1, 2] = [0, 1, 2];
+>args : [0, 1, 2]
+>[0, 1, 2] : [0, 1, 2]
+>0 : 0
+>1 : 1
+>2 : 2
+
+foo(...args);
+>foo(...args) : void
+>foo : (x: number, y: number, z: number) => void
+>...args : 0 | 1 | 2
+>args : [0, 1, 2]
+
