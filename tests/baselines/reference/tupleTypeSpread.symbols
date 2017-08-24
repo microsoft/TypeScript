@@ -1,0 +1,15 @@
+=== tests/cases/compiler/tupleTypeSpread.ts ===
+type a = [1, ...[2]];
+>a : Symbol(a, Decl(tupleTypeSpread.ts, 0, 0))
+
+type Combine<Head, Tail extends any[]> = [Head, ...Tail];
+>Combine : Symbol(Combine, Decl(tupleTypeSpread.ts, 0, 21))
+>Head : Symbol(Head, Decl(tupleTypeSpread.ts, 1, 13))
+>Tail : Symbol(Tail, Decl(tupleTypeSpread.ts, 1, 18))
+>Head : Symbol(Head, Decl(tupleTypeSpread.ts, 1, 13))
+>Tail : Symbol(Tail, Decl(tupleTypeSpread.ts, 1, 18))
+
+type b = Combine<1, [2, 3]>;
+>b : Symbol(b, Decl(tupleTypeSpread.ts, 1, 57))
+>Combine : Symbol(Combine, Decl(tupleTypeSpread.ts, 0, 21))
+

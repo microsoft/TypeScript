@@ -697,6 +697,8 @@ namespace ts {
                     return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
                 case SyntaxKind.SpreadAssignment:
                     return emitSpreadAssignment(node as SpreadAssignment);
+                case SyntaxKind.TypeSpread:
+                    return emitTypeSpread(node as TypeSpreadTypeNode);
 
                 // Enum
                 case SyntaxKind.EnumMember:
@@ -2198,6 +2200,13 @@ namespace ts {
             if (node.expression) {
                 write("...");
                 emitExpression(node.expression);
+            }
+        }
+
+        function emitTypeSpread(node: TypeSpreadTypeNode) {
+            if (node.type) {
+                write("...");
+                emit(node.type);
             }
         }
 

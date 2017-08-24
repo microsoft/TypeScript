@@ -3358,6 +3358,7 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
             case SyntaxKind.ArrayType:
             case SyntaxKind.TupleType:
+            case SyntaxKind.TypeSpread:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
             case SyntaxKind.ParenthesizedType:

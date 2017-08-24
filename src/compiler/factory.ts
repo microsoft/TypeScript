@@ -2201,6 +2201,19 @@ namespace ts {
             : node;
     }
 
+    export function createTypeSpread(type: TypeNode) {
+        console.log("createTypeSpread");
+        const node = <TypeSpreadTypeNode>createSynthesizedNode(SyntaxKind.TypeSpread);
+        node.type = type !== undefined ? parenthesizeElementTypeMember(type) : undefined;
+        return node;
+    }
+
+    export function updateTypeSpread(node: TypeSpreadTypeNode, type: TypeNode) {
+        return node.type !== type
+            ? updateNode(createTypeSpread(type), node)
+            : node;
+    }
+
     // Enum
 
     export function createEnumMember(name: string | PropertyName, initializer?: Expression) {
