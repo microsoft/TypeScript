@@ -3112,8 +3112,11 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
-            if (hasProperty(symbol, "syntheticName")) {
-                return (symbol as TransientSymbol).syntheticName;
+            if (typeof (symbol as TransientSymbol).syntheticLiteralTypeOrigin) {
+                const stringValue = (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
+                if (!isIdentifierText(stringValue, compilerOptions.target)) {
+                    return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
+                }
             }
             return unescapeLeadingUnderscores(symbol.escapedName);
         }
@@ -5752,9 +5755,7 @@ namespace ts {
                         prop.syntheticOrigin = propertySymbol;
                         prop.declarations = propertySymbol.declarations;
                     }
-                    else if (!isIdentifierText((<StringLiteralType>t).value, compilerOptions.target)) {
-                        prop.syntheticName = `"${escapeString((<StringLiteralType>t).value, CharacterCodes.doubleQuote)}"`;
-                    }
+                    prop.syntheticLiteralTypeOrigin = t as StringLiteralType;
                     members.set(propName, prop);
                 }
                 else if (t.flags & TypeFlags.String) {
