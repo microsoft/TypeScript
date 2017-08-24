@@ -3112,6 +3112,9 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
+            if (hasProperty(symbol, "syntheticName")) {
+                return (symbol as TransientSymbol).syntheticName;
+            }
             return unescapeLeadingUnderscores(symbol.escapedName);
         }
 
@@ -5722,7 +5725,14 @@ namespace ts {
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
 
-            function addMemberForKeyType(t: Type, propertySymbol?: Symbol) {
+            function addMemberForKeyType(t: Type, propertySymbolOrIndex?: Symbol | number) {
+                let propertySymbol: Symbol;
+                // forEachType offloads to forEach, which calls with a numeric second argument
+                //  the type system currently doesn't catch this incompatibility, so we annotate
+                //  the function ourselves to indicate the runtime behavior and deal with it here
+                if (typeof propertySymbolOrIndex === "object") {
+                    propertySymbol = propertySymbolOrIndex;
+                }
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
@@ -5741,6 +5751,9 @@ namespace ts {
                     if (propertySymbol) {
                         prop.syntheticOrigin = propertySymbol;
                         prop.declarations = propertySymbol.declarations;
+                    }
+                    else if (!isIdentifierText((<StringLiteralType>t).value, compilerOptions.target)) {
+                        prop.syntheticName = `"${escapeString((<StringLiteralType>t).value, CharacterCodes.doubleQuote)}"`;
                     }
                     members.set(propName, prop);
                 }

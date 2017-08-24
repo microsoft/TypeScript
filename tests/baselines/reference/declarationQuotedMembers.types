@@ -1,0 +1,101 @@
+=== tests/cases/compiler/declarationQuotedMembers.ts ===
+export type Timespans =
+>Timespans : Timespans
+
+    '1 hour' | '4 hours' | '12 hours' | '1 day' | '3 days' | '1 week' | '1 month';
+const TIMESPANS: {[k in Timespans]: number} = {
+>TIMESPANS : { 1 hour: number; 4 hours: number; 12 hours: number; 1 day: number; 3 days: number; 1 week: number; 1 month: number; }
+>k : k
+>Timespans : Timespans
+>{    '1 hour': 1 * 60 * 60 * 1000,    '4 hours': 4 * 60 * 60 * 1000,    '12 hours': 12 * 60 * 60 * 1000,    '1 day': 1 * 24 * 60 * 60 * 1000,    '3 days': 3 * 24 * 60 * 60 * 1000,    '1 week': 7 * 24 * 60 * 60 * 1000,    '1 month': 30 * 24 * 60 * 60 * 1000,} : { '1 hour': number; '4 hours': number; '12 hours': number; '1 day': number; '3 days': number; '1 week': number; '1 month': number; }
+
+    '1 hour': 1 * 60 * 60 * 1000,
+>1 * 60 * 60 * 1000 : number
+>1 * 60 * 60 : number
+>1 * 60 : number
+>1 : 1
+>60 : 60
+>60 : 60
+>1000 : 1000
+
+    '4 hours': 4 * 60 * 60 * 1000,
+>4 * 60 * 60 * 1000 : number
+>4 * 60 * 60 : number
+>4 * 60 : number
+>4 : 4
+>60 : 60
+>60 : 60
+>1000 : 1000
+
+    '12 hours': 12 * 60 * 60 * 1000,
+>12 * 60 * 60 * 1000 : number
+>12 * 60 * 60 : number
+>12 * 60 : number
+>12 : 12
+>60 : 60
+>60 : 60
+>1000 : 1000
+
+    '1 day': 1 * 24 * 60 * 60 * 1000,
+>1 * 24 * 60 * 60 * 1000 : number
+>1 * 24 * 60 * 60 : number
+>1 * 24 * 60 : number
+>1 * 24 : number
+>1 : 1
+>24 : 24
+>60 : 60
+>60 : 60
+>1000 : 1000
+
+    '3 days': 3 * 24 * 60 * 60 * 1000,
+>3 * 24 * 60 * 60 * 1000 : number
+>3 * 24 * 60 * 60 : number
+>3 * 24 * 60 : number
+>3 * 24 : number
+>3 : 3
+>24 : 24
+>60 : 60
+>60 : 60
+>1000 : 1000
+
+    '1 week': 7 * 24 * 60 * 60 * 1000,
+>7 * 24 * 60 * 60 * 1000 : number
+>7 * 24 * 60 * 60 : number
+>7 * 24 * 60 : number
+>7 * 24 : number
+>7 : 7
+>24 : 24
+>60 : 60
+>60 : 60
+>1000 : 1000
+
+    '1 month': 30 * 24 * 60 * 60 * 1000,
+>30 * 24 * 60 * 60 * 1000 : number
+>30 * 24 * 60 * 60 : number
+>30 * 24 * 60 : number
+>30 * 24 : number
+>30 : 30
+>24 : 24
+>60 : 60
+>60 : 60
+>1000 : 1000
+
+};
+
+export class Foo {
+>Foo : Foo
+
+    timespans = TIMESPANS;
+>timespans : { 1 hour: number; 4 hours: number; 12 hours: number; 1 day: number; 3 days: number; 1 week: number; 1 month: number; }
+>TIMESPANS : { 1 hour: number; 4 hours: number; 12 hours: number; 1 day: number; 3 days: number; 1 week: number; 1 month: number; }
+
+};
+
+export declare const mapped: { [K in 'a-b-c']: number }
+>mapped : { a-b-c: number; }
+>K : K
+
+export const example = mapped;
+>example : { a-b-c: number; }
+>mapped : { a-b-c: number; }
+
