@@ -9,8 +9,11 @@
 //// }
 
 goTo.select('a', 'b')
-verify.refactorAvailable('Extract Method');
-edit.applyRefactor('Extract Method', "scope_1");
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_1",
+    actionDescription: "Extract function into this file",
+});
 verify.currentFileContentIs(`function fn() {
     const x = { m: 1 };
     newFunction(x);
