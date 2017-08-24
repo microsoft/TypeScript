@@ -180,7 +180,7 @@ namespace ts.FindAllReferences {
      * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
      */
     function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-        const exportName = exportSymbol.escapedName;
+        const exportName = exportKind === ExportKind.Default ? "default" : exportSymbol.escapedName;
         const importSearches: Array<[Identifier, Symbol]> = [];
         const singleReferences: Identifier[] = [];
         function addSearch(location: Identifier, symbol: Symbol): void {
@@ -218,11 +218,10 @@ namespace ts.FindAllReferences {
                 return;
             }
 
-            if (!decl.importClause) {
+            const { importClause } = decl;
+            if (!importClause) {
                 return;
             }
-
-            const { importClause } = decl;
 
             const { namedBindings } = importClause;
             if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -245,7 +244,6 @@ namespace ts.FindAllReferences {
 
                 // 'default' might be accessed as a named import `{ default as foo }`.
                 if (!isForRename && exportKind === ExportKind.Default) {
-                    Debug.assert(exportName === "default");
                     searchForNamedImport(namedBindings as NamedImports | undefined);
                 }
             }
@@ -264,27 +262,29 @@ namespace ts.FindAllReferences {
         }
 
         function searchForNamedImport(namedBindings: NamedImportsOrExports | undefined): void {
-            if (namedBindings) {
-                for (const element of namedBindings.elements) {
-                    const { name, propertyName } = element;
-                    if ((propertyName || name).escapedText !== exportName) {
-                        continue;
-                    }
+            if (!namedBindings) {
+                return;
+            }
 
-                    if (propertyName) {
-                        // This is `import { foo as bar } from "./a"` or `export { foo as bar } from "./a"`. `foo` isn't a local in the file, so just add it as a single reference.
-                        singleReferences.push(propertyName);
-                        if (!isForRename) { // If renaming `foo`, don't touch `bar`, just `foo`.
-                            // Search locally for `bar`.
-                            addSearch(name, checker.getSymbolAtLocation(name));
-                        }
+            for (const element of namedBindings.elements) {
+                const { name, propertyName } = element;
+                if ((propertyName || name).escapedText !== exportName) {
+                    continue;
+                }
+
+                if (propertyName) {
+                    // This is `import { foo as bar } from "./a"` or `export { foo as bar } from "./a"`. `foo` isn't a local in the file, so just add it as a single reference.
+                    singleReferences.push(propertyName);
+                    if (!isForRename) { // If renaming `foo`, don't touch `bar`, just `foo`.
+                        // Search locally for `bar`.
+                        addSearch(name, checker.getSymbolAtLocation(name));
                     }
-                    else {
-                        const localSymbol = element.kind === SyntaxKind.ExportSpecifier && element.propertyName
-                            ? checker.getExportSpecifierLocalTargetSymbol(element) // For re-exporting under a different name, we want to get the re-exported symbol.
-                            : checker.getSymbolAtLocation(name);
-                        addSearch(name, localSymbol);
-                    }
+                }
+                else {
+                    const localSymbol = element.kind === SyntaxKind.ExportSpecifier && element.propertyName
+                        ? checker.getExportSpecifierLocalTargetSymbol(element) // For re-exporting under a different name, we want to get the re-exported symbol.
+                        : checker.getSymbolAtLocation(name);
+                    addSearch(name, localSymbol);
                 }
             }
         }
@@ -413,7 +413,7 @@ namespace ts.FindAllReferences {
             case SyntaxKind.ExternalModuleReference:
                 return (decl as ExternalModuleReference).parent;
             default:
-                Debug.fail(`Unexpected module specifier parent: ${decl.kind}`);
+                Debug.fail("Unexpected module specifier parent: " + decl.kind);
         }
     }
 
@@ -468,11 +468,11 @@ namespace ts.FindAllReferences {
                         return exportInfo(symbol, getExportKindForDeclaration(exportNode));
                     }
                 }
-                // If we are in `export = a;`, `parent` is the export assignment.
+                // If we are in `export = a;` or `export default a;`, `parent` is the export assignment.
                 else if (isExportAssignment(parent)) {
                     return getExportAssignmentExport(parent);
                 }
-                // If we are in `export = class A {};` at `A`, `parent.parent` is the export assignment.
+                // If we are in `export = class A {};` (or `export = class A {};`) at `A`, `parent.parent` is the export assignment.
                 else if (isExportAssignment(parent.parent)) {
                     return getExportAssignmentExport(parent.parent);
                 }
@@ -489,7 +489,8 @@ namespace ts.FindAllReferences {
                 // Get the symbol for the `export =` node; its parent is the module it's the export of.
                 const exportingModuleSymbol = ex.symbol.parent;
                 Debug.assert(!!exportingModuleSymbol);
-                return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind: ExportKind.ExportEquals } };
+                const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
+                return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
 
             function getSpecialPropertyExport(node: ts.BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
@@ -529,7 +530,7 @@ namespace ts.FindAllReferences {
             // If `importedName` is undefined, do continue searching as the export is anonymous.
             // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
             const importedName = symbolName(importedSymbol);
-            if (importedName === undefined || importedName === symbol.escapedName) {
+            if (importedName === undefined || importedName === "default" || importedName === symbol.escapedName) {
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
