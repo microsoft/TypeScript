@@ -613,13 +613,16 @@ namespace ts {
 
                 addRange(statements, context.endLexicalEnvironment());
 
+                const iife = createImmediatelyInvokedArrowFunction(statements);
+                setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
+
                 const varStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
                             /*type*/ undefined,
-                            createImmediatelyInvokedFunctionExpression(statements)
+                            iife
                         )
                     ])
                 );
