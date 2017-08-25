@@ -8909,36 +8909,36 @@ namespace ts {
                     target = (<LiteralType>target).regularType;
                 }
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
-                if (source === target) return Ternary.True;
+                if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) {
+                    return Ternary.True;
+                }
 
-                const comparisonId = getRelationKey(source, target, relation);
-                if (relation.has(comparisonId)) {
-                    const result = relation.get(comparisonId);
+                const id = getRelationKey(source, target, relation);
+                const related = relation.get(id);
+                if (related !== undefined) {
                     // If we need to report errors, and the result is RelationComparisonResult.Failed, then we need
                     // to redo our work to generate an error message. Otherwise, we can just return the cached result.
-                    if (!reportErrors || result !== RelationComparisonResult.Failed) {
-                        if (reportErrors && result !== RelationComparisonResult.Succeeded) {
+                    if (!reportErrors || related !== RelationComparisonResult.Failed) {
+                        if (reportErrors && related !== RelationComparisonResult.Succeeded) {
                             reportElaboratedRelationError(headMessage, source, target);
                         }
-                        return result === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
+                        return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
-                    if (reportErrors && result === RelationComparisonResult.Failed) {
-                        relation.set(comparisonId, RelationComparisonResult.FailedAndReported);
+                    if (reportErrors && related === RelationComparisonResult.Failed) {
+                        relation.set(id, RelationComparisonResult.FailedAndReported);
                     }
                 }
 
                 if (relation === identityRelation) {
-                    return cacheResult(isIdenticalTo(source, target), comparisonId, /*reportErrors*/ false);
+                    return cacheResult(isIdenticalTo(source, target, id), id, /*reportErrors*/ false);
                 }
-
-                if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
-                        return cacheResult(Ternary.False, comparisonId, reportErrors);
+                        return cacheResult(Ternary.False, id, reportErrors);
                     }
                     // Above we check for excess properties with respect to the entire target type. When union
                     // and intersection types are further deconstructed on the target side, we don't want to
@@ -9012,7 +9012,7 @@ namespace ts {
                         result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false);
                     }
                     if (!result && (source.flags & TypeFlags.StructuredOrTypeVariable || target.flags & TypeFlags.StructuredOrTypeVariable)) {
-                        if (result = recursiveTypeRelatedTo(source, target, reportErrors)) {
+                        if (result = recursiveTypeRelatedTo(source, target, id, reportErrors)) {
                             errorInfo = saveErrorInfo;
                         }
                     }
@@ -9024,7 +9024,7 @@ namespace ts {
                     reportElaboratedRelationError(headMessage, source, target);
                 }
 
-                return cacheResult(result, comparisonId, reportErrors);
+                return cacheResult(result, id, reportErrors);
             }
 
             function cacheResult(result: Ternary, comparisonId: string, reportErrors?: boolean) {
@@ -9034,10 +9034,10 @@ namespace ts {
                 return result;
             }
 
-            function isIdenticalTo(source: Type, target: Type): Ternary {
+            function isIdenticalTo(source: Type, target: Type, id: string): Ternary {
                 let result: Ternary;
                 if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                    return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false);
+                    return recursiveTypeRelatedTo(source, target, id, /*reportErrors*/ false);
                 }
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
@@ -9213,11 +9213,10 @@ namespace ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function recursiveTypeRelatedTo(source: Type, target: Type, id: string, reportErrors: boolean): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = getRelationKey(source, target, relation);
                 if (!maybeKeys) {
                     maybeKeys = [];
                     sourceStack = [];
