@@ -22,7 +22,7 @@ export { x } from "./server";
 //// [server.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

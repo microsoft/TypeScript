@@ -8,7 +8,7 @@ var logger = Tools.NullLogger();
 //// [forgottenNew.js]
 var Tools;
 (function (Tools) {
-    var NullLogger = (function () {
+    var NullLogger = /** @class */ (function () {
         function NullLogger() {
         }
         return NullLogger;

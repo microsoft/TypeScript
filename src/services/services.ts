@@ -107,12 +107,14 @@ namespace ts {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
-                Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
+                if (token === SyntaxKind.EndOfFileToken) {
+                    break;
+                }
             }
             return pos;
         }
@@ -304,7 +306,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
-        name: __String;
+        escapedName: __String;
         declarations?: Declaration[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -317,19 +319,23 @@ namespace ts {
 
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
-            this.name = name;
+            this.escapedName = name;
         }
 
         getFlags(): SymbolFlags {
             return this.flags;
         }
 
-        getName(): __String {
-            return this.name;
+        get name(): string {
+            return unescapeLeadingUnderscores(this.escapedName);
         }
 
-        getUnescapedName(): string {
-            return unescapeLeadingUnderscores(this.name);
+        getEscapedName(): __String {
+            return this.escapedName;
+        }
+
+        getName(): string {
+            return this.name;
         }
 
         getDeclarations(): Declaration[] | undefined {
@@ -364,7 +370,7 @@ namespace ts {
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
-        public text: __String;
+        public escapedText: __String;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -374,6 +380,10 @@ namespace ts {
         /*@internal*/typeArguments: NodeArray<TypeNode>;
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
+        }
+
+        get text(): string {
+            return unescapeLeadingUnderscores(this.escapedText);
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
@@ -485,7 +495,7 @@ namespace ts {
         public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
-        public lineMap: number[];
+        public lineMap: ReadonlyArray<number>;
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
@@ -535,7 +545,7 @@ namespace ts {
             return ts.getLineAndCharacterOfPosition(this, position);
         }
 
-        public getLineStarts(): number[] {
+        public getLineStarts(): ReadonlyArray<number> {
             return getLineStarts(this);
         }
 
@@ -601,7 +611,7 @@ namespace ts {
                     if (name.kind === SyntaxKind.ComputedPropertyName) {
                         const expr = (<ComputedPropertyName>name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return unescapeLeadingUnderscores((<PropertyAccessExpression>expr).name.text);
+                            return (<PropertyAccessExpression>expr).name.text;
                         }
 
                         return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
@@ -1149,7 +1159,7 @@ namespace ts {
                         !!hostCache.getEntryByPath(path) :
                         (host.fileExists && host.fileExists(fileName));
                 },
-                readFile: (fileName): string => {
+                readFile(fileName) {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     if (hostCache.containsEntryByPath(path)) {
@@ -1250,7 +1260,7 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + path);
+                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.", path);
 
                         return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
@@ -1326,10 +1336,10 @@ namespace ts {
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(fileName: string) {
+        function getSyntacticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
         }
 
         /**
@@ -1346,18 +1356,17 @@ namespace ts {
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
-                return semanticDiagnostics;
+                return semanticDiagnostics.slice();
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-            return concatenate(semanticDiagnostics, declarationDiagnostics);
+            return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getOptionsDiagnostics(cancellationToken).concat(
-                   program.getGlobalDiagnostics(cancellationToken));
+            return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
@@ -1749,17 +1758,20 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-            if (key === "{") {
-                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+
+            if (!isInComment(sourceFile, position)) {
+                if (key === "{") {
+                    return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "}") {
+                    return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === ";") {
+                    return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "\n") {
+                    return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                }
             }
 
             return [];
@@ -1768,21 +1780,14 @@ namespace ts {
         function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            const span = { start, length: end - start };
+            const span = createTextSpanFromBounds(start, end);
             const newLineCharacter = getNewLineOrDefaultFromHost(host);
+            const rulesProvider = getRuleProvider(formatOptions);
 
-            let allFixes: CodeAction[] = [];
-
-            forEach(deduplicate(errorCodes), errorCode => {
+            return flatMap(deduplicate(errorCodes), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                const rulesProvider = getRuleProvider(formatOptions);
-                const fixes = codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
-                if (fixes) {
-                    allFixes = allFixes.concat(fixes);
-                }
+                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, rulesProvider });
             });
-
-            return allFixes;
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
@@ -1825,6 +1830,12 @@ namespace ts {
             return true;
         }
 
+        function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean) {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const range = ts.formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
+            return range && createTextSpanFromRange(range);
+        }
+
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             // Note: while getting todo comments seems like a syntactic operation, we actually
             // treat it as a semantic operation here.  This is because we expect our host to call
@@ -1841,7 +1852,8 @@ namespace ts {
             const fileContents = sourceFile.text;
             const result: TodoComment[] = [];
 
-            if (descriptors.length > 0) {
+            // Exclude node_modules files as we don't want to show the todos of external libraries.
+            if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
                 const regExp = getTodoCommentsRegExp();
 
                 let matchArray: RegExpExecArray;
@@ -1965,6 +1977,12 @@ namespace ts {
                     (char >= CharacterCodes.A && char <= CharacterCodes.Z) ||
                     (char >= CharacterCodes._0 && char <= CharacterCodes._9);
             }
+
+            function isNodeModulesFile(path: string): boolean {
+                const node_modulesFolderName = "/node_modules/";
+
+                return path.indexOf(node_modulesFolderName) !== -1;
+            }
         }
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
@@ -2042,6 +2060,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
@@ -2063,42 +2082,33 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createUnderscoreEscapedMap<number>();
-
-        walk(sourceFile);
-        sourceFile.nameTable = nameTable;
-
-        function walk(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    setNameTable((<Identifier>node).text, node);
-                    break;
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    // We want to store any numbers/strings if they were a name that could be
-                    // related to a declaration.  So, if we have 'import x = require("something")'
-                    // then we want 'something' to be in the name table.  Similarly, if we have
-                    // "a['propname']" then we want to store "propname" in the name table.
-                    if (isDeclarationName(node) ||
-                        node.parent.kind === SyntaxKind.ExternalModuleReference ||
-                        isArgumentOfElementAccessExpression(node) ||
-                        isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable(getEscapedTextOfIdentifierOrLiteral((<LiteralExpression>node)), node);
-                    }
-                    break;
-                default:
-                    forEachChild(node, walk);
-                    if (node.jsDoc) {
-                        for (const jsDoc of node.jsDoc) {
-                            forEachChild(jsDoc, walk);
-                        }
-                    }
+        const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
+        sourceFile.forEachChild(function walk(node) {
+            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteral(node) && literalIsName(node)) {
+                const text = getEscapedTextOfIdentifierOrLiteral(node);
+                nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
-        }
 
-        function setNameTable(text: __String, node: ts.Node): void {
-            nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
-        }
+            forEachChild(node, walk);
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    forEachChild(jsDoc, walk);
+                }
+            }
+        });
+    }
+
+    /**
+     * We want to store any numbers/strings if they were a name that could be
+     * related to a declaration.  So, if we have 'import x = require("something")'
+     * then we want 'something' to be in the name table.  Similarly, if we have
+     * "a['propname']" then we want to store "propname" in the name table.
+     */
+    function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
+        return isDeclarationName(node) ||
+            node.parent.kind === SyntaxKind.ExternalModuleReference ||
+            isArgumentOfElementAccessExpression(node) ||
+            isLiteralComputedPropertyDeclarationName(node);
     }
 
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {
@@ -2139,12 +2149,17 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(node.name));
-        if (name && contextualType) {
+        return getPropertySymbolsFromType(contextualType, node.name);
+    }
+
+    /* @internal */
+    export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
+        if (name && type) {
             const result: Symbol[] = [];
-            const symbol = contextualType.getProperty(name);
-            if (contextualType.flags & TypeFlags.Union) {
-                forEach((<UnionType>contextualType).types, t => {
+            const symbol = type.getProperty(name);
+            if (type.flags & TypeFlags.Union) {
+                forEach((<UnionType>type).types, t => {
                     const symbol = t.getProperty(name);
                     if (symbol) {
                         result.push(symbol);

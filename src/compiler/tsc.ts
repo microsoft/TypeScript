@@ -61,7 +61,7 @@ namespace ts {
     }
 
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine + sys.newLine);
+        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine);
     }
 
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
@@ -469,7 +469,7 @@ namespace ts {
             let diagnostics: Diagnostic[];
 
             // First get and report any syntactic errors.
-            diagnostics = program.getSyntacticDiagnostics();
+            diagnostics = program.getSyntacticDiagnostics().slice();
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
@@ -477,13 +477,13 @@ namespace ts {
                 diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
-                    diagnostics = program.getSemanticDiagnostics();
+                    diagnostics = program.getSemanticDiagnostics().slice();
                 }
             }
 
             // Otherwise, emit and report any errors we ran into.
             const emitOutput = program.emit();
-            diagnostics = diagnostics.concat(emitOutput.diagnostics);
+            addRange(diagnostics, emitOutput.diagnostics);
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
@@ -664,6 +664,8 @@ namespace ts {
         return;
     }
 }
+
+ts.setStackTraceLimit();
 
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();

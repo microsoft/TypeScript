@@ -2,9 +2,11 @@
     "kind": "JSDocOptionalType",
     "pos": 1,
     "end": 8,
+    "flags": "JSDoc",
     "type": {
         "kind": "NumberKeyword",
         "pos": 1,
-        "end": 7
+        "end": 7,
+        "flags": "JSDoc"
     }
 }

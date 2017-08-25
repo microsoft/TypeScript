@@ -58,14 +58,14 @@ var M;
 (function (M) {
     var P;
     (function (P) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             C.f = function () { };
             return C;
         }());
         P.C = C;
-        var E = (function (_super) {
+        var E = /** @class */ (function (_super) {
             __extends(E, _super);
             function E() {
                 return _super !== null && _super.apply(this, arguments) || this;

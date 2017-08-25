@@ -57,7 +57,7 @@ function fn() {
     var n = s;
     var n;
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.n = this.s;
     }

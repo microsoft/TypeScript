@@ -227,7 +227,7 @@ namespace ts.server {
             }));
         }
 
-        getFormattingEditsForRange(file: string, start: number, end: number, _options: ts.FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): ts.TextChange[] {
             const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
 
 
@@ -524,6 +524,10 @@ namespace ts.server {
         }
 
         isValidBraceCompletionAtPosition(_fileName: string, _position: number, _openingBrace: number): boolean {
+            return notImplemented();
+        }
+
+        getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
             return notImplemented();
         }
 

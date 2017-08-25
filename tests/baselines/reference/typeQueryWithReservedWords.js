@@ -16,7 +16,7 @@ interface IScope {
 
 
 //// [typeQueryWithReservedWords.js]
-var Controller = (function () {
+var Controller = /** @class */ (function () {
     function Controller() {
     }
     Controller.prototype.create = function () {

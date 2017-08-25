@@ -69,7 +69,7 @@ namespace ts {
 
         getTypeRootsVersion?(): number;
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
-        readFile(path: string, encoding?: string): string;
+        readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
@@ -95,7 +95,7 @@ namespace ts {
         /**
          * Read arbitary text files on disk, i.e. when resolution procedure needs the content of 'package.json' to determine location of bundled typings for node modules
          */
-        readFile(fileName: string): string;
+        readFile(fileName: string): string | undefined;
         realpath?(path: string): string;
         trace(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
@@ -253,6 +253,11 @@ namespace ts {
          * E.g. we don't want brace completion inside string-literals, comments, etc.
          */
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
+
+        /**
+         * Returns a JSON-encoded TextSpan | undefined indicating the range of the enclosing comment, if it exists.
+         */
+        getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string;
 
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
@@ -444,7 +449,7 @@ namespace ts {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
 
-        public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: string[], include?: string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(path, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
             return JSON.parse(this.shimHost.readDirectory(
@@ -458,7 +463,7 @@ namespace ts {
             ));
         }
 
-        public readFile(path: string, encoding?: string): string {
+        public readFile(path: string, encoding?: string): string | undefined {
             return this.shimHost.readFile(path, encoding);
         }
 
@@ -483,7 +488,7 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[], depth?: number): string[] {
+        public readDirectory(rootDir: string, extensions: ReadonlyArray<string>, exclude: ReadonlyArray<string>, include: ReadonlyArray<string>, depth?: number): string[] {
             const pattern = getFileMatcherPatterns(rootDir, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
             return JSON.parse(this.shimHost.readDirectory(
@@ -501,7 +506,7 @@ namespace ts {
             return this.shimHost.fileExists(fileName);
         }
 
-        public readFile(fileName: string): string {
+        public readFile(fileName: string): string | undefined {
             return this.shimHost.readFile(fileName);
         }
 
@@ -563,7 +568,7 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
@@ -636,7 +641,7 @@ namespace ts {
                 });
         }
 
-        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
+        private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
@@ -812,6 +817,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
                 () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
+            );
+        }
+
+        public getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string {
+            return this.forwardJSONCall(
+                `getSpanOfEnclosingComment('${fileName}', ${position})`,
+                () => this.languageService.getSpanOfEnclosingComment(fileName, position, onlyMultiLine)
             );
         }
 
@@ -1005,8 +1017,9 @@ namespace ts {
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
         private logPerformance = false;
+        private safeList: JsTyping.SafeList | undefined;
 
-        constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
+        constructor(factory: ShimFactory, public readonly logger: Logger, private readonly host: CoreServicesShimHostAdapter) {
             super(factory);
         }
 
@@ -1114,11 +1127,15 @@ namespace ts {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
             return this.forwardJSONCall("discoverTypings()", () => {
                 const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
-                return ts.JsTyping.discoverTypings(
+                if (this.safeList === undefined) {
+                    this.safeList = JsTyping.loadSafeList(this.host, toPath(info.safeListPath, info.safeListPath, getCanonicalFileName));
+                }
+                return JsTyping.discoverTypings(
                     this.host,
+                    msg => this.logger.log(msg),
                     info.fileNames,
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
-                    toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
+                    this.safeList,
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
                     info.unresolvedImports);
@@ -1175,7 +1192,7 @@ namespace ts {
 
         public close(): void {
             // Forget all the registered shims
-            this._shims = [];
+            clear(this._shims);
             this.documentRegistry = undefined;
         }
 
@@ -1217,4 +1234,4 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.5";
+const toolsVersion = "2.6";

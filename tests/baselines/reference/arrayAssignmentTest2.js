@@ -70,14 +70,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     C1.prototype.IM1 = function () { return null; };
     C1.prototype.C1M1 = function () { return null; };
     return C1;
 }());
-var C2 = (function (_super) {
+var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -85,7 +85,7 @@ var C2 = (function (_super) {
     C2.prototype.C2M1 = function () { return null; };
     return C2;
 }(C1));
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     C3.prototype.CM3M1 = function () { return 3; };

@@ -54,13 +54,13 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var C;
 (function (C) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
     C.A = A;
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B() {
         }
         return B;
@@ -78,7 +78,7 @@ var C;
     C.F5 = F5;
     function F6(x) { return null; }
     C.F6 = F6;
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D(val) {
             this.val = val;
         }
@@ -94,7 +94,7 @@ exports.x = (new C.D(new C.A())).val;
 function f() { }
 exports.f = f;
 exports.g = C.F5();
-var h = (function (_super) {
+var h = /** @class */ (function (_super) {
     __extends(h, _super);
     function h() {
         return _super !== null && _super.apply(this, arguments) || this;
