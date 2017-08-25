@@ -2743,20 +2743,25 @@ namespace FourSlash {
             });
         }
 
-        public verifyRefactorAvailable(negative: boolean, name?: string, subName?: string) {
+        public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
             const selection = this.getSelection();
 
             let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection) || [];
-            if (name) {
-                refactors = refactors.filter(r => r.name === name && (subName === undefined || r.actions.some(a => a.name === subName)));
-            }
+            refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
             const isAvailable = refactors.length > 0;
 
-            if (negative && isAvailable) {
-                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some: ${refactors.map(r => r.name).join(", ")}`);
+            if (negative) {
+                if (isAvailable) {
+                    this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found: ${refactors.map(r => r.name).join(", ")}`);
+                }
             }
-            else if (!negative && !isAvailable) {
-                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
+            else {
+                if (!isAvailable) {
+                    this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
+                }
+                if (refactors.length > 1) {
+                    this.raiseError(`${refactors.length} available refactors both have name ${name} and action ${actionName}`);
+                }
             }
         }
 
@@ -2776,12 +2781,20 @@ namespace FourSlash {
             }
         }
 
-        public applyRefactor(refactorName: string, actionName: string) {
+        public applyRefactor({ refactorName, actionName, actionDescription }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
-            const refactor = ts.find(refactors, r => r.name === refactorName);
+            const refactor = refactors.find(r => r.name === refactorName);
             if (!refactor) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.`);
+            }
+
+            const action = refactor.actions.find(a => a.name === actionName);
+            if (!action) {
+                this.raiseError(`The expected action: ${action} is not included in: ${refactor.actions.map(a => a.name)}`);
+            }
+            if (action.description !== actionDescription) {
+                this.raiseError(`Expected action description to be ${JSON.stringify(actionDescription)}, got: ${JSON.stringify(action.description)}`);
             }
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName);
@@ -3660,8 +3673,8 @@ namespace FourSlashInterface {
             this.state.verifyApplicableRefactorAvailableForRange(this.negative);
         }
 
-        public refactorAvailable(name?: string, subName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, name, subName);
+        public refactorAvailable(name: string, actionName?: string) {
+            this.state.verifyRefactorAvailable(this.negative, name, actionName);
         }
     }
 
@@ -4059,8 +4072,8 @@ namespace FourSlashInterface {
             this.state.enableFormatting = false;
         }
 
-        public applyRefactor(refactorName: string, actionName: string) {
-            this.state.applyRefactor(refactorName, actionName);
+        public applyRefactor(options: ApplyRefactorOptions) {
+            this.state.applyRefactor(options);
         }
     }
 
@@ -4272,5 +4285,11 @@ namespace FourSlashInterface {
             const textSpan = position === undefined ? undefined : { start: position, end: position + text.length };
             return { classificationType, text, textSpan };
         }
+    }
+
+    export interface ApplyRefactorOptions {
+        refactorName: string;
+        actionName: string;
+        actionDescription: string;
     }
 }

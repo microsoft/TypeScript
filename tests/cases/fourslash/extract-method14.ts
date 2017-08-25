@@ -11,7 +11,11 @@
 //// }
 
 goTo.select('a', 'b');
-edit.applyRefactor('Extract Method', 'scope_1');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_1",
+    actionDescription: "Extract function into global scope",
+});
 verify.currentFileContentIs(`function foo() {
     var i = 10;
     var __return: any;

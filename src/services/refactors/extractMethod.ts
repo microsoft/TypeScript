@@ -560,32 +560,32 @@ namespace ts.refactor.extractMethod {
                     return "constructor";
                 case SyntaxKind.FunctionExpression:
                     return scope.name
-                        ? `function expression ${scope.name.getText()}`
+                        ? `function expression ${scope.name.text}`
                         : "anonymous function expression";
                 case SyntaxKind.FunctionDeclaration:
-                    return `function ${scope.name.getText()}`;
+                    return `function '${scope.name.text}'`;
                 case SyntaxKind.ArrowFunction:
                     return "arrow function";
                 case SyntaxKind.MethodDeclaration:
-                    return `method ${scope.name.getText()}`;
+                    return `method '${scope.name.getText()}`;
                 case SyntaxKind.GetAccessor:
-                    return `get ${scope.name.getText()}`;
+                    return `'get ${scope.name.getText()}'`;
                 case SyntaxKind.SetAccessor:
-                    return `set ${scope.name.getText()}`;
+                    return `'set ${scope.name.getText()}'`;
             }
         }
         else if (isModuleBlock(scope)) {
-            return `namespace ${scope.parent.name.getText()}`;
+            return `namespace '${scope.parent.name.getText()}'`;
         }
         else if (isClassLike(scope)) {
             return scope.kind === SyntaxKind.ClassDeclaration
-                ? `class ${scope.name.text}`
+                ? `class '${scope.name.text}'`
                 : scope.name.text
-                    ? `class expression ${scope.name.text}`
+                    ? `class expression '${scope.name.text}'`
                     : "anonymous class expression";
         }
         else if (isSourceFile(scope)) {
-            return `file '${scope.fileName}'`;
+            return scope.externalModuleIndicator ? "module scope" : "global scope";
         }
         else {
             return "unknown";
