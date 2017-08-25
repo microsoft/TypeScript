@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.5";
+    export const versionMajorMinor = "2.6";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
 }
@@ -715,7 +715,7 @@ namespace ts {
         return result;
     }
 
-    export function sum<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
+    export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
             // Note: we need the following type assertion because of GH #17069
@@ -769,6 +769,32 @@ namespace ts {
             }
         }
         return to;
+    }
+
+    /**
+     * @return Whether the value was added.
+     */
+    export function pushIfUnique<T>(array: T[], toAdd: T): boolean {
+        if (contains(array, toAdd)) {
+            return false;
+        }
+        else {
+            array.push(toAdd);
+            return true;
+        }
+    }
+
+    /**
+     * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
+     */
+    export function appendIfUnique<T>(array: T[] | undefined, toAdd: T): T[] {
+        if (array) {
+            pushIfUnique(array, toAdd);
+            return array;
+        }
+        else {
+            return [toAdd];
+        }
     }
 
     /**
@@ -1359,7 +1385,7 @@ namespace ts {
         };
     }
 
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: string[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
 
@@ -1543,16 +1569,20 @@ namespace ts {
     }
 
     export function normalizePath(path: string): string {
+        return normalizePathAndParts(path).path;
+    }
+
+    export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
         path = normalizeSlashes(path);
         const rootLength = getRootLength(path);
         const root = path.substr(0, rootLength);
-        const normalized = getNormalizedParts(path, rootLength);
-        if (normalized.length) {
-            const joinedParts = root + normalized.join(directorySeparator);
-            return pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts;
+        const parts = getNormalizedParts(path, rootLength);
+        if (parts.length) {
+            const joinedParts = root + parts.join(directorySeparator);
+            return { path: pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts, parts };
         }
         else {
-            return root;
+            return { path: root, parts };
         }
     }
 
@@ -2595,5 +2625,9 @@ namespace ts {
 
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
+    }
+
+    export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
+        return (arg: T) => f(arg) && g(arg);
     }
 }

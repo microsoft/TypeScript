@@ -153,12 +153,13 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFixAvailable(): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name?: string, subName?: string);
+        refactorAvailable(name: string, actionName?: string);
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -309,7 +310,7 @@ declare namespace FourSlashInterface {
         enableFormatting(): void;
         disableFormatting(): void;
 
-        applyRefactor(refactorName: string, actionName: string): void;
+        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string }): void;
     }
     class debug {
         printCurrentParameterHelp(): void;
@@ -336,7 +337,7 @@ declare namespace FourSlashInterface {
         setFormatOptions(options: FormatCodeOptions): any;
         selection(startMarker: string, endMarker: string): void;
         onType(posMarker: string, key: string): void;
-        setOption(name: string, value: number | string | boolean): void;
+        setOption(name: keyof FormatCodeOptions, value: number | string | boolean): void;
     }
     class cancellation {
         resetCancelled(): void;

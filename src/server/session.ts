@@ -368,7 +368,7 @@ namespace ts.server {
                     msg += "\n" + (<StackTraceError>err).stack;
                 }
             }
-            this.logger.err(msg);
+            this.logger.msg(msg, Msg.Err);
         }
 
         public send(msg: protocol.Message) {
@@ -425,7 +425,7 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
-                let diags: Diagnostic[] = [];
+                let diags: ReadonlyArray<Diagnostic> = emptyArray;
                 if (!isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                     diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
@@ -1023,6 +1023,14 @@ namespace ts.server {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
             return project.getLanguageService(/*ensureSynchronized*/ false).getDocCommentTemplateAtPosition(file, position);
+        }
+
+        private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const onlyMultiLine = args.onlyMultiLine;
+            const position = this.getPosition(args, scriptInfo);
+            return project.getLanguageService(/*ensureSynchronized*/ false).getSpanOfEnclosingComment(file, position, onlyMultiLine);
         }
 
         private getIndentation(args: protocol.IndentationRequestArgs) {
@@ -1765,6 +1773,9 @@ namespace ts.server {
             [CommandNames.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
                 return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
             },
+            [CommandNames.GetSpanOfEnclosingComment]: (request: protocol.SpanOfEnclosingCommentRequest) => {
+                return this.requiredResponse(this.getSpanOfEnclosingComment(request.arguments));
+            },
             [CommandNames.Format]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRange(request.arguments));
             },
@@ -1947,7 +1958,7 @@ namespace ts.server {
                 return this.executeWithRequestId(request.seq, () => handler(request));
             }
             else {
-                this.logger.err(`Unrecognized JSON command: ${JSON.stringify(request)}`);
+                this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
                 this.output(undefined, CommandNames.Unknown, request.seq, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }

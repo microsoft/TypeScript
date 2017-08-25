@@ -231,18 +231,7 @@ namespace ts.refactor.extractMethod {
             if (errors) {
                 return { errors };
             }
-
-            // If our selection is the expression in an ExpressionStatement, expand
-            // the selection to include the enclosing Statement (this stops us
-            // from trying to care about the return value of the extracted function
-            // and eliminates double semicolon insertion in certain scenarios)
-            const range = isStatement(start)
-                ? [start]
-                : start.parent && start.parent.kind === SyntaxKind.ExpressionStatement
-                    ? [start.parent as Statement]
-                    : start as Expression;
-
-            return { targetRange: { range, facts: rangeFacts, declarations } };
+            return { targetRange: { range: getStatementOrExpressionRange(start), facts: rangeFacts, declarations } };
         }
 
         function createErrorResult(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage): RangeToExtract {
@@ -459,6 +448,20 @@ namespace ts.refactor.extractMethod {
         }
     }
 
+    function getStatementOrExpressionRange(node: Node): Statement[] | Expression {
+        if (isStatement(node)) {
+            return [node];
+        }
+        else if (isExpression(node)) {
+            // If our selection is the expression in an ExpressionStatement, expand
+            // the selection to include the enclosing Statement (this stops us
+            // from trying to care about the return value of the extracted function
+            // and eliminates double semicolon insertion in certain scenarios)
+            return isExpressionStatement(node.parent) ? [node.parent] : node;
+        }
+        return undefined;
+    }
+
     function isValidExtractionTarget(node: Node): node is Scope {
         // Note that we don't use isFunctionLike because we don't want to put the extracted closure *inside* a method
         return (node.kind === SyntaxKind.FunctionDeclaration) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
@@ -560,32 +563,32 @@ namespace ts.refactor.extractMethod {
                     return "constructor";
                 case SyntaxKind.FunctionExpression:
                     return scope.name
-                        ? `function expression ${scope.name.getText()}`
+                        ? `function expression ${scope.name.text}`
                         : "anonymous function expression";
                 case SyntaxKind.FunctionDeclaration:
-                    return `function ${scope.name.getText()}`;
+                    return `function '${scope.name.text}'`;
                 case SyntaxKind.ArrowFunction:
                     return "arrow function";
                 case SyntaxKind.MethodDeclaration:
-                    return `method ${scope.name.getText()}`;
+                    return `method '${scope.name.getText()}`;
                 case SyntaxKind.GetAccessor:
-                    return `get ${scope.name.getText()}`;
+                    return `'get ${scope.name.getText()}'`;
                 case SyntaxKind.SetAccessor:
-                    return `set ${scope.name.getText()}`;
+                    return `'set ${scope.name.getText()}'`;
             }
         }
         else if (isModuleBlock(scope)) {
-            return `namespace ${scope.parent.name.getText()}`;
+            return `namespace '${scope.parent.name.getText()}'`;
         }
         else if (isClassLike(scope)) {
             return scope.kind === SyntaxKind.ClassDeclaration
-                ? `class ${scope.name.text}`
+                ? `class '${scope.name.text}'`
                 : scope.name.text
-                    ? `class expression ${scope.name.text}`
+                    ? `class expression '${scope.name.text}'`
                     : "anonymous class expression";
         }
         else if (isSourceFile(scope)) {
-            return `file '${scope.fileName}'`;
+            return scope.externalModuleIndicator ? "module scope" : "global scope";
         }
         else {
             return "unknown";
@@ -830,10 +833,6 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function isModuleBlock(n: Node): n is ModuleBlock {
-        return n.kind === SyntaxKind.ModuleBlock;
-    }
-
     function isReadonlyArray(v: any): v is ReadonlyArray<any> {
         return isArray(v);
     }
@@ -860,13 +859,13 @@ namespace ts.refactor.extractMethod {
         Write = 2
     }
 
-    interface UsageEntry {
+    export interface UsageEntry {
         readonly usage: Usage;
         readonly symbol: Symbol;
         readonly node: Node;
     }
 
-    interface ScopeUsages {
+    export interface ScopeUsages {
         usages: Map<UsageEntry>;
         substitutions: Map<Node>;
     }
