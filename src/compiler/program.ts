@@ -888,7 +888,7 @@ namespace ts {
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
-                    const moduleNames = getModuleImportAndAugmentationNames(newSourceFile);
+                    const moduleNames = getModuleNames(newSourceFile);
                     const oldProgramState = { program: oldProgram, file: oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
@@ -1815,7 +1815,7 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
-                const moduleNames = getModuleImportAndAugmentationNames(file);
+                const moduleNames = getModuleNames(file);
                 const oldProgramState = { program: oldProgram, file, modifiedFilePaths };
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
@@ -2227,7 +2227,7 @@ namespace ts {
         return names;
     }
 
-    function getModuleImportAndAugmentationNames({ imports, moduleAugmentations }: SourceFile): string[] {
+    function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {
         const res = imports.map(i => i.text);
         for (const aug of moduleAugmentations) {
             if (aug.kind === SyntaxKind.StringLiteral) {
