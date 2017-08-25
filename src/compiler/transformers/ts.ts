@@ -1947,7 +1947,7 @@ namespace ts {
                     const name = getMutableClone(<Identifier>node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
-                    name.parent = currentScope;
+                    name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
                     if (useFallback) {
                         return createLogicalAnd(
                             createStrictInequality(
