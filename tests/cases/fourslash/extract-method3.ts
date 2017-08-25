@@ -10,7 +10,7 @@
 ////     }
 //// }
 
-// Don't offer to to 'extract method' a single identifier
+// Don't offer to 'extract method' a single identifier
 
 goTo.marker('a');
 verify.not.refactorAvailable('Extract Method');

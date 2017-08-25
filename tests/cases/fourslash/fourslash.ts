@@ -158,7 +158,7 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name?: string, subName?: string);
+        refactorAvailable(name: string, actionName?: string);
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -309,7 +309,7 @@ declare namespace FourSlashInterface {
         enableFormatting(): void;
         disableFormatting(): void;
 
-        applyRefactor(refactorName: string, actionName: string): void;
+        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string }): void;
     }
     class debug {
         printCurrentParameterHelp(): void;
