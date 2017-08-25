@@ -289,7 +289,7 @@ class A {
 
             options: [] as ReadonlyArray<string>
 >options : Symbol(options, Decl(thisTypeInNativeThisAssignableMethods.ts, 82, 28))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 
         };
 

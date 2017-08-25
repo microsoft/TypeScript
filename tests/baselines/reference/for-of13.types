@@ -5,8 +5,8 @@ var v: string;
 for (v of [""].values()) { }
 >v : string
 >[""].values() : IterableIterator<string>
->[""].values : () => IterableIterator<string>
+>[""].values : (this: readonly) => IterableIterator<string>
 >[""] : string[]
 >"" : ""
->values : () => IterableIterator<string>
+>values : (this: readonly) => IterableIterator<string>
 

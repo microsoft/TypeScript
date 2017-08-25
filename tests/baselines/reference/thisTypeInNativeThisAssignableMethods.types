@@ -174,9 +174,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : string
->options.find : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
+>options.find : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
 >options : string[]
->find : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
+>find : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: string[]; }, val: string, index: number) => boolean
 >val : string
 >index : number
@@ -195,9 +195,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
 >options : string[]
->findIndex : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: string[]; }, val: string, index: number) => boolean
 >val : string
 >index : number
@@ -386,23 +386,23 @@ class A {
 >options : string[]
 
         const thisObject = {
->thisObject : { options: ReadonlyArray<string>; }
->{            options: [] as ReadonlyArray<string>        } : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
+>{            options: [] as ReadonlyArray<string>        } : { options: readonly string[]; }
 
             options: [] as ReadonlyArray<string>
->options : ReadonlyArray<string>
->[] as ReadonlyArray<string> : ReadonlyArray<string>
+>options : readonly string[]
+>[] as ReadonlyArray<string> : readonly string[]
 >[] : undefined[]
->ReadonlyArray : ReadonlyArray<T>
+>ReadonlyArray : readonly T[]
 
         };
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : string
->options.find : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
+>options.find : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
 >options : string[]
->find : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
->function (val, index) {            return val === this.options[index];        } : (this: { options: ReadonlyArray<string>; }, val: string, index: number) => boolean
+>find : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): string; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): string; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): string; }
+>function (val, index) {            return val === this.options[index];        } : (this: { options: readonly string[]; }, val: string, index: number) => boolean
 >val : string
 >index : number
 
@@ -410,20 +410,20 @@ class A {
 >val === this.options[index] : boolean
 >val : string
 >this.options[index] : string
->this.options : ReadonlyArray<string>
->this : { options: ReadonlyArray<string>; }
->options : ReadonlyArray<string>
+>this.options : readonly string[]
+>this : { options: readonly string[]; }
+>options : readonly string[]
 >index : number
 
         }, thisObject);
->thisObject : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
 >options : string[]
->findIndex : { (predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
->function (val, index) {            return val === this.options[index];        } : (this: { options: ReadonlyArray<string>; }, val: string, index: number) => boolean
+>findIndex : { (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean): number; (this: readonly, predicate: (this: void, value: string, index: number, obj: string[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: string, index: number, obj: string[]) => boolean, thisArg: Z): number; }
+>function (val, index) {            return val === this.options[index];        } : (this: { options: readonly string[]; }, val: string, index: number) => boolean
 >val : string
 >index : number
 
@@ -431,13 +431,13 @@ class A {
 >val === this.options[index] : boolean
 >val : string
 >this.options[index] : string
->this.options : ReadonlyArray<string>
->this : { options: ReadonlyArray<string>; }
->options : ReadonlyArray<string>
+>this.options : readonly string[]
+>this : { options: readonly string[]; }
+>options : readonly string[]
 >index : number
 
         }, thisObject);
->thisObject : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
 
         options.forEach(function (val, index) {
 >options.forEach(function (val, index) {            return val === this.options[index];        }, thisObject) : void
@@ -458,7 +458,7 @@ class A {
 >index : number
 
         }, thisObject);
->thisObject : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
 
         options.map(function (val, index) {
 >options.map(function (val, index) {            if (val === this.options[index])                return this.options[index];        }, thisObject) : any[]
@@ -486,7 +486,7 @@ class A {
 >index : number
 
         }, thisObject);
->thisObject : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
 
         options.some(function (val, index) {
 >options.some(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
@@ -507,7 +507,7 @@ class A {
 >index : number
 
         }, thisObject);
->thisObject : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : string[]
@@ -528,7 +528,7 @@ class A {
 >index : number
 
         }, thisObject);
->thisObject : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
 
         options.every(function (val, index) {
 >options.every(function (val, index) {            return val === this.options[index];        }, thisObject) : boolean
@@ -549,7 +549,7 @@ class A {
 >index : number
 
         }, thisObject);
->thisObject : { options: ReadonlyArray<string>; }
+>thisObject : { options: readonly string[]; }
     }
 
     test2(options: Int8Array[]) {
@@ -571,9 +571,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Int8Array
->options.find : { (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): Int8Array; (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): Int8Array; <Z>(predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): Int8Array; }
+>options.find : { (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): Int8Array; (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): Int8Array; <Z>(this: readonly, predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): Int8Array; }
 >options : Int8Array[]
->find : { (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): Int8Array; (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): Int8Array; <Z>(predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): Int8Array; }
+>find : { (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): Int8Array; (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): Int8Array; <Z>(this: readonly, predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): Int8Array; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Int8Array[]; }, val: Int8Array, index: number) => boolean
 >val : Int8Array
 >index : number
@@ -592,9 +592,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): number; (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): number; }
 >options : Int8Array[]
->findIndex : { (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): number; (predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Int8Array, index: number, obj: Int8Array[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Int8Array[]; }, val: Int8Array, index: number) => boolean
 >val : Int8Array
 >index : number
@@ -743,9 +743,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint8Array
->options.find : { (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): Uint8Array; (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): Uint8Array; <Z>(predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): Uint8Array; }
+>options.find : { (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): Uint8Array; (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): Uint8Array; <Z>(this: readonly, predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): Uint8Array; }
 >options : Uint8Array[]
->find : { (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): Uint8Array; (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): Uint8Array; <Z>(predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): Uint8Array; }
+>find : { (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): Uint8Array; (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): Uint8Array; <Z>(this: readonly, predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): Uint8Array; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint8Array[]; }, val: Uint8Array, index: number) => boolean
 >val : Uint8Array
 >index : number
@@ -764,9 +764,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): number; (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): number; }
 >options : Uint8Array[]
->findIndex : { (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): number; (predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint8Array, index: number, obj: Uint8Array[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint8Array[]; }, val: Uint8Array, index: number) => boolean
 >val : Uint8Array
 >index : number
@@ -915,9 +915,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Float32Array
->options.find : { (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): Float32Array; (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): Float32Array; <Z>(predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): Float32Array; }
+>options.find : { (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): Float32Array; (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): Float32Array; <Z>(this: readonly, predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): Float32Array; }
 >options : Float32Array[]
->find : { (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): Float32Array; (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): Float32Array; <Z>(predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): Float32Array; }
+>find : { (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): Float32Array; (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): Float32Array; <Z>(this: readonly, predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): Float32Array; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Float32Array[]; }, val: Float32Array, index: number) => boolean
 >val : Float32Array
 >index : number
@@ -936,9 +936,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): number; (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): number; }
 >options : Float32Array[]
->findIndex : { (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): number; (predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Float32Array, index: number, obj: Float32Array[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Float32Array[]; }, val: Float32Array, index: number) => boolean
 >val : Float32Array
 >index : number
@@ -1087,9 +1087,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint8ClampedArray
->options.find : { (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): Uint8ClampedArray; (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): Uint8ClampedArray; <Z>(predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): Uint8ClampedArray; }
+>options.find : { (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): Uint8ClampedArray; (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): Uint8ClampedArray; <Z>(this: readonly, predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): Uint8ClampedArray; }
 >options : Uint8ClampedArray[]
->find : { (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): Uint8ClampedArray; (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): Uint8ClampedArray; <Z>(predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): Uint8ClampedArray; }
+>find : { (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): Uint8ClampedArray; (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): Uint8ClampedArray; <Z>(this: readonly, predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): Uint8ClampedArray; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint8ClampedArray[]; }, val: Uint8ClampedArray, index: number) => boolean
 >val : Uint8ClampedArray
 >index : number
@@ -1108,9 +1108,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): number; (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): number; }
 >options : Uint8ClampedArray[]
->findIndex : { (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): number; (predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint8ClampedArray, index: number, obj: Uint8ClampedArray[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint8ClampedArray[]; }, val: Uint8ClampedArray, index: number) => boolean
 >val : Uint8ClampedArray
 >index : number
@@ -1259,9 +1259,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Int16Array
->options.find : { (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): Int16Array; (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): Int16Array; <Z>(predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): Int16Array; }
+>options.find : { (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): Int16Array; (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): Int16Array; <Z>(this: readonly, predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): Int16Array; }
 >options : Int16Array[]
->find : { (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): Int16Array; (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): Int16Array; <Z>(predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): Int16Array; }
+>find : { (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): Int16Array; (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): Int16Array; <Z>(this: readonly, predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): Int16Array; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Int16Array[]; }, val: Int16Array, index: number) => boolean
 >val : Int16Array
 >index : number
@@ -1280,9 +1280,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): number; (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): number; }
 >options : Int16Array[]
->findIndex : { (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): number; (predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Int16Array, index: number, obj: Int16Array[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Int16Array[]; }, val: Int16Array, index: number) => boolean
 >val : Int16Array
 >index : number
@@ -1431,9 +1431,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint16Array
->options.find : { (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): Uint16Array; (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): Uint16Array; <Z>(predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): Uint16Array; }
+>options.find : { (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): Uint16Array; (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): Uint16Array; <Z>(this: readonly, predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): Uint16Array; }
 >options : Uint16Array[]
->find : { (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): Uint16Array; (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): Uint16Array; <Z>(predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): Uint16Array; }
+>find : { (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): Uint16Array; (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): Uint16Array; <Z>(this: readonly, predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): Uint16Array; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint16Array[]; }, val: Uint16Array, index: number) => boolean
 >val : Uint16Array
 >index : number
@@ -1452,9 +1452,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): number; (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): number; }
 >options : Uint16Array[]
->findIndex : { (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): number; (predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint16Array, index: number, obj: Uint16Array[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint16Array[]; }, val: Uint16Array, index: number) => boolean
 >val : Uint16Array
 >index : number
@@ -1603,9 +1603,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint32Array
->options.find : { (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): Uint32Array; (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): Uint32Array; <Z>(predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): Uint32Array; }
+>options.find : { (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): Uint32Array; (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): Uint32Array; <Z>(this: readonly, predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): Uint32Array; }
 >options : Uint32Array[]
->find : { (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): Uint32Array; (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): Uint32Array; <Z>(predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): Uint32Array; }
+>find : { (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): Uint32Array; (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): Uint32Array; <Z>(this: readonly, predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): Uint32Array; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint32Array[]; }, val: Uint32Array, index: number) => boolean
 >val : Uint32Array
 >index : number
@@ -1624,9 +1624,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): number; (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): number; }
 >options : Uint32Array[]
->findIndex : { (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): number; (predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Uint32Array, index: number, obj: Uint32Array[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Uint32Array[]; }, val: Uint32Array, index: number) => boolean
 >val : Uint32Array
 >index : number
@@ -1775,9 +1775,9 @@ class A {
 
         options.find(function (val, index) {
 >options.find(function (val, index) {            return val === this.options[index];        }, thisObject) : Float64Array
->options.find : { (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): Float64Array; (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): Float64Array; <Z>(predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): Float64Array; }
+>options.find : { (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): Float64Array; (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): Float64Array; <Z>(this: readonly, predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): Float64Array; }
 >options : Float64Array[]
->find : { (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): Float64Array; (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): Float64Array; <Z>(predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): Float64Array; }
+>find : { (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): Float64Array; (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): Float64Array; <Z>(this: readonly, predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): Float64Array; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Float64Array[]; }, val: Float64Array, index: number) => boolean
 >val : Float64Array
 >index : number
@@ -1796,9 +1796,9 @@ class A {
 
         options.findIndex(function (val, index) {
 >options.findIndex(function (val, index) {            return val === this.options[index];        }, thisObject) : number
->options.findIndex : { (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): number; (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): number; }
+>options.findIndex : { (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): number; }
 >options : Float64Array[]
->findIndex : { (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): number; (predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): number; <Z>(predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): number; }
+>findIndex : { (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean): number; (this: readonly, predicate: (this: void, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: undefined): number; <Z>(this: readonly, predicate: (this: Z, value: Float64Array, index: number, obj: Float64Array[]) => boolean, thisArg: Z): number; }
 >function (val, index) {            return val === this.options[index];        } : (this: { options: Float64Array[]; }, val: Float64Array, index: number) => boolean
 >val : Float64Array
 >index : number
