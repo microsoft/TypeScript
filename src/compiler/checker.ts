@@ -5906,6 +5906,10 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
+            const transformed = getTransformedIndexedAccessType(type);
+            if (transformed) {
+                return transformed;
+            }
             const baseObjectType = getBaseConstraintOfType(type.objectType);
             const baseIndexType = getBaseConstraintOfType(type.indexType);
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
@@ -7617,8 +7621,8 @@ namespace ts {
             return false;
         }
 
-        // Transform an indexed access occurring in a read position to a simpler form. Return the simpler form,
-        // or undefined if no transformation is possible.
+        // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
+        // undefined if no transformation is possible.
         function getTransformedIndexedAccessType(type: IndexedAccessType): Type {
             const objectType = type.objectType;
             // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
@@ -9279,7 +9283,7 @@ namespace ts {
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getConstraintOfType(<IndexedAccessType>target);
+                    const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -9319,7 +9323,7 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getTransformedIndexedAccessType(<IndexedAccessType>source) || getConstraintOfIndexedAccess(<IndexedAccessType>source);
+                    const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>source);
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
