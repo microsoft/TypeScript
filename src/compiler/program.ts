@@ -2233,6 +2233,7 @@ namespace ts {
             if (aug.kind === SyntaxKind.StringLiteral) {
                 res.push(aug.text);
             }
+            // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
         }
         return res;
     }
