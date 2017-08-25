@@ -7678,12 +7678,43 @@ namespace ts {
             return undefined;
         }
 
+        function binarySignature(makeReturnType: (a: Type, b: Type) => Type): Signature {
+            const typeParameters: TypeParameter[] = [];
+            const properties: Symbol[] = [];
+            for (let i = 0; i < 2; i++) {
+                const typeParameter = <TypeParameter>createType(TypeFlags.TypeParameter);
+                typeParameters.push(typeParameter);
+                const property = createSymbol(SymbolFlags.Property, "" + i as __String);
+                property.type = typeParameter;
+                properties.push(property);
+            }
+            const returnType = makeReturnType(typeParameters[0], typeParameters[1]);
+            return createSignature(
+                /*declaration*/ undefined,
+                /*typeParameters*/ typeParameters,
+                /*thisParameter*/ undefined,
+                /*parameters*/ properties,
+                /*resolvedReturnType*/ returnType,
+                /*typePredicate*/ undefined,
+                /*minArgumentCount*/ 2,
+                /*hasRestParameter*/ false,
+                /*hasLiteralTypes*/ true,
+            );
+        }
+
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode): Type {
             // If the object type is a mapped type { [P in K]: E }, where K is generic, we instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
             if (isGenericMappedType(objectType)) {
-                return getIndexedAccessForMappedType(<MappedType>objectType, indexType, accessNode);
+                const innerType = binarySignature((a: Type, b: Type) => getIndexedAccessForMappedType(<MappedType>objectType, getUnionType([a, b])));
+                const outerType = binarySignature((a: Type, b: Type) => getUnionType([
+                    getIndexedAccessForMappedType(<MappedType>objectType, a),
+                    getIndexedAccessForMappedType(<MappedType>objectType, b),
+                ]));
+                if (compareSignaturesIdentical(innerType, outerType, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ false, /*compareTypes*/ compareTypesIdentical)) {
+                    return getIndexedAccessForMappedType(<MappedType>objectType, indexType, accessNode);
+                }
             }
             // Otherwise, if the index type is generic, or if the object type is generic and doesn't originate in an
             // expression, we are performing a higher-order index access where we cannot meaningfully access the properties
