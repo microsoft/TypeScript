@@ -278,7 +278,7 @@ namespace ts.refactor.extractMethod {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) && !(isExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isPartOfExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
@@ -452,12 +452,12 @@ namespace ts.refactor.extractMethod {
         if (isStatement(node)) {
             return [node];
         }
-        else if (isExpression(node)) {
+        else if (isPartOfExpression(node)) {
             // If our selection is the expression in an ExpressionStatement, expand
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
             // and eliminates double semicolon insertion in certain scenarios)
-            return isExpressionStatement(node.parent) ? [node.parent] : node;
+            return isExpressionStatement(node.parent) ? [node.parent] : node as Expression;
         }
         return undefined;
     }

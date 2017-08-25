@@ -4953,7 +4953,11 @@ namespace ts {
 
     /* @internal */
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
-        switch (node.kind) {
+        return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.NewExpression:
@@ -4979,11 +4983,8 @@ namespace ts {
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.MetaProperty:
+            case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
                 return true;
-            case SyntaxKind.PartiallyEmittedExpression:
-                return isLeftHandSideExpression((node as PartiallyEmittedExpression).expression);
-            case SyntaxKind.ImportKeyword:
-                return node.parent.kind === SyntaxKind.CallExpression;
             default:
                 return false;
         }
@@ -4991,7 +4992,11 @@ namespace ts {
 
     /* @internal */
     export function isUnaryExpression(node: Node): node is UnaryExpression {
-        switch (node.kind) {
+        return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.DeleteExpression:
@@ -5000,10 +5005,8 @@ namespace ts {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.TypeAssertionExpression:
                 return true;
-            case SyntaxKind.PartiallyEmittedExpression:
-                return isUnaryExpression((node as PartiallyEmittedExpression).expression);
             default:
-                return isLeftHandSideExpression(node);
+                return isLeftHandSideExpressionKind(kind);
         }
     }
 
@@ -5021,8 +5024,16 @@ namespace ts {
     }
 
     /* @internal */
+    /**
+     * Determines whether a node is an expression based only on its kind.
+     * Use `isPartOfExpression` if not in transforms.
+     */
     export function isExpression(node: Node): node is Expression {
-        switch (node.kind) {
+        return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.ArrowFunction:
@@ -5034,7 +5045,7 @@ namespace ts {
             case SyntaxKind.PartiallyEmittedExpression:
                 return true;
             default:
-                return isUnaryExpression(node);
+                return isUnaryExpressionKind(kind);
         }
     }
 
