@@ -7690,7 +7690,7 @@ namespace ts {
             }
             const returnType = makeReturnType(typeParameters[0], typeParameters[1]);
             return createSignature(
-                /*declaration*/ null,
+                /*declaration*/ undefined,
                 /*typeParameters*/ typeParameters,
                 /*thisParameter*/ undefined,
                 /*parameters*/ properties,
