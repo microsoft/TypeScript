@@ -890,7 +890,7 @@ namespace ts {
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
-                    const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
+                    const moduleNames = getModuleNames(newSourceFile);
                     const oldProgramState = { program: oldProgram, file: oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
@@ -1434,12 +1434,10 @@ namespace ts {
             return a.fileName === b.fileName;
         }
 
-        function moduleNameIsEqualTo(a: LiteralExpression, b: LiteralExpression): boolean {
-            return a.text === b.text;
-        }
-
-        function getTextOfLiteral(literal: LiteralExpression): string {
-            return literal.text;
+        function moduleNameIsEqualTo(a: StringLiteral | Identifier, b: StringLiteral | Identifier): boolean {
+            return a.kind === SyntaxKind.StringLiteral
+                ? b.kind === SyntaxKind.StringLiteral && a.text === b.text
+                : b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText;
         }
 
         function collectExternalModuleReferences(file: SourceFile): void {
@@ -1452,7 +1450,7 @@ namespace ts {
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: StringLiteral[];
-            let moduleAugmentations: StringLiteral[];
+            let moduleAugmentations: Array<StringLiteral | Identifier>;
             let ambientModules: string[];
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
@@ -1481,7 +1479,7 @@ namespace ts {
 
             return;
 
-            function collectModuleReferences(node: Node, inAmbientModule: boolean): void {
+            function collectModuleReferences(node: Statement, inAmbientModule: boolean): void {
                 switch (node.kind) {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
@@ -1503,8 +1501,8 @@ namespace ts {
                         break;
                     case SyntaxKind.ModuleDeclaration:
                         if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
-                            const moduleName = <StringLiteral>(<ModuleDeclaration>node).name; // TODO: GH#17347
-                            const nameText = ts.getTextOfIdentifierOrLiteral(moduleName);
+                            const moduleName = (<ModuleDeclaration>node).name;
+                            const nameText = getTextOfIdentifierOrLiteral(moduleName);
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
                             // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
@@ -1821,8 +1819,7 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
-                const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
-                const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
+                const moduleNames = getModuleNames(file);
                 const oldProgramState = { program: oldProgram, file, modifiedFilePaths };
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
@@ -2232,5 +2229,16 @@ namespace ts {
     function checkAllDefined(names: string[]): string[] {
         Debug.assert(names.every(name => name !== undefined), "A name is undefined.", () => JSON.stringify(names));
         return names;
+    }
+
+    function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {
+        const res = imports.map(i => i.text);
+        for (const aug of moduleAugmentations) {
+            if (aug.kind === SyntaxKind.StringLiteral) {
+                res.push(aug.text);
+            }
+            // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
+        }
+        return res;
     }
 }

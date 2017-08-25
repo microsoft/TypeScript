@@ -640,7 +640,7 @@ namespace ts {
             });
         }
 
-        function mergeModuleAugmentation(moduleName: LiteralExpression): void {
+        function mergeModuleAugmentation(moduleName: StringLiteral | Identifier): void {
             const moduleAugmentation = <ModuleDeclaration>moduleName.parent;
             if (moduleAugmentation.symbol.declarations[0] !== moduleAugmentation) {
                 // this is a combined symbol for multiple augmentations within the same file.
@@ -672,7 +672,8 @@ namespace ts {
                     mergeSymbol(mainModule, moduleAugmentation.symbol);
                 }
                 else {
-                    error(moduleName, Diagnostics.Cannot_augment_module_0_because_it_resolves_to_a_non_module_entity, moduleName.text);
+                    // moduleName will be a StringLiteral since this is not `declare global`.
+                    error(moduleName, Diagnostics.Cannot_augment_module_0_because_it_resolves_to_a_non_module_entity, (moduleName as StringLiteral).text);
                 }
             }
         }
@@ -23800,7 +23801,7 @@ namespace ts {
             }
 
             // Initialize global symbol table
-            let augmentations: ReadonlyArray<StringLiteral>[];
+            let augmentations: ReadonlyArray<StringLiteral | Identifier>[];
             for (const file of host.getSourceFiles()) {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
