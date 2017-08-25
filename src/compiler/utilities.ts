@@ -4955,6 +4955,7 @@ namespace ts {
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
         return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
+
     function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.PropertyAccessExpression:
@@ -4993,6 +4994,7 @@ namespace ts {
     export function isUnaryExpression(node: Node): node is UnaryExpression {
         return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
+
     function isUnaryExpressionKind(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.PrefixUnaryExpression:
@@ -5029,6 +5031,7 @@ namespace ts {
     export function isExpression(node: Node): node is Expression {
         return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
+
     function isExpressionKind(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.ConditionalExpression:
