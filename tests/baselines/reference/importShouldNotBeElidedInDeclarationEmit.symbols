@@ -1,0 +1,257 @@
+=== tests/cases/compiler/node_modules/reselect.d.ts ===
+export as namespace Reselect;
+>Reselect : Symbol(Reselect, Decl(reselect.d.ts, 0, 0))
+
+export type Selector<S, R> = (state: S) => R;
+>Selector : Symbol(Selector, Decl(reselect.d.ts, 0, 29))
+>S : Symbol(S, Decl(reselect.d.ts, 2, 21))
+>R : Symbol(R, Decl(reselect.d.ts, 2, 23))
+>state : Symbol(state, Decl(reselect.d.ts, 2, 30))
+>S : Symbol(S, Decl(reselect.d.ts, 2, 21))
+>R : Symbol(R, Decl(reselect.d.ts, 2, 23))
+
+export type OutputSelector<S, R, C> = Selector<S, R> & {
+>OutputSelector : Symbol(OutputSelector, Decl(reselect.d.ts, 2, 45))
+>S : Symbol(S, Decl(reselect.d.ts, 4, 27))
+>R : Symbol(R, Decl(reselect.d.ts, 4, 29))
+>C : Symbol(C, Decl(reselect.d.ts, 4, 32))
+>Selector : Symbol(Selector, Decl(reselect.d.ts, 0, 29))
+>S : Symbol(S, Decl(reselect.d.ts, 4, 27))
+>R : Symbol(R, Decl(reselect.d.ts, 4, 29))
+
+  resultFunc: C;
+>resultFunc : Symbol(resultFunc, Decl(reselect.d.ts, 4, 56))
+>C : Symbol(C, Decl(reselect.d.ts, 4, 32))
+
+  recomputations: () => number;
+>recomputations : Symbol(recomputations, Decl(reselect.d.ts, 5, 16))
+
+  resetRecomputations: () => number;
+>resetRecomputations : Symbol(resetRecomputations, Decl(reselect.d.ts, 6, 31))
+
+};
+
+export type ParametricSelector<S, P, R> = (state: S, props: P, ...args: any[]) => R;
+>ParametricSelector : Symbol(ParametricSelector, Decl(reselect.d.ts, 8, 2))
+>S : Symbol(S, Decl(reselect.d.ts, 10, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 10, 33))
+>R : Symbol(R, Decl(reselect.d.ts, 10, 36))
+>state : Symbol(state, Decl(reselect.d.ts, 10, 43))
+>S : Symbol(S, Decl(reselect.d.ts, 10, 31))
+>props : Symbol(props, Decl(reselect.d.ts, 10, 52))
+>P : Symbol(P, Decl(reselect.d.ts, 10, 33))
+>args : Symbol(args, Decl(reselect.d.ts, 10, 62))
+>R : Symbol(R, Decl(reselect.d.ts, 10, 36))
+
+export type OutputParametricSelector<S, P, R, C> = ParametricSelector<S, P, R> & {
+>OutputParametricSelector : Symbol(OutputParametricSelector, Decl(reselect.d.ts, 10, 84))
+>S : Symbol(S, Decl(reselect.d.ts, 12, 37))
+>P : Symbol(P, Decl(reselect.d.ts, 12, 39))
+>R : Symbol(R, Decl(reselect.d.ts, 12, 42))
+>C : Symbol(C, Decl(reselect.d.ts, 12, 45))
+>ParametricSelector : Symbol(ParametricSelector, Decl(reselect.d.ts, 8, 2))
+>S : Symbol(S, Decl(reselect.d.ts, 12, 37))
+>P : Symbol(P, Decl(reselect.d.ts, 12, 39))
+>R : Symbol(R, Decl(reselect.d.ts, 12, 42))
+
+  resultFunc: C;
+>resultFunc : Symbol(resultFunc, Decl(reselect.d.ts, 12, 82))
+>C : Symbol(C, Decl(reselect.d.ts, 12, 45))
+
+  recomputations: () => number;
+>recomputations : Symbol(recomputations, Decl(reselect.d.ts, 13, 16))
+
+  resetRecomputations: () => number;
+>resetRecomputations : Symbol(resetRecomputations, Decl(reselect.d.ts, 14, 31))
+
+};
+
+/* one selector */
+export function createSelector<S, R1, T>(
+>createSelector : Symbol(createSelector, Decl(reselect.d.ts, 16, 2), Decl(reselect.d.ts, 22, 40), Decl(reselect.d.ts, 26, 53), Decl(reselect.d.ts, 33, 51))
+>S : Symbol(S, Decl(reselect.d.ts, 19, 31))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 19, 33))
+>T : Symbol(T, Decl(reselect.d.ts, 19, 37))
+
+    selector: Selector<S, R1>,
+>selector : Symbol(selector, Decl(reselect.d.ts, 19, 41))
+>Selector : Symbol(Selector, Decl(reselect.d.ts, 0, 29))
+>S : Symbol(S, Decl(reselect.d.ts, 19, 31))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 19, 33))
+
+    combiner: (res: R1) => T,
+>combiner : Symbol(combiner, Decl(reselect.d.ts, 20, 30))
+>res : Symbol(res, Decl(reselect.d.ts, 21, 15))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 19, 33))
+>T : Symbol(T, Decl(reselect.d.ts, 19, 37))
+
+): OutputSelector<S, T, (res: R1) => T>;
+>OutputSelector : Symbol(OutputSelector, Decl(reselect.d.ts, 2, 45))
+>S : Symbol(S, Decl(reselect.d.ts, 19, 31))
+>T : Symbol(T, Decl(reselect.d.ts, 19, 37))
+>res : Symbol(res, Decl(reselect.d.ts, 22, 25))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 19, 33))
+>T : Symbol(T, Decl(reselect.d.ts, 19, 37))
+
+export function createSelector<S, P, R1, T>(
+>createSelector : Symbol(createSelector, Decl(reselect.d.ts, 16, 2), Decl(reselect.d.ts, 22, 40), Decl(reselect.d.ts, 26, 53), Decl(reselect.d.ts, 33, 51))
+>S : Symbol(S, Decl(reselect.d.ts, 23, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 23, 33))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 23, 36))
+>T : Symbol(T, Decl(reselect.d.ts, 23, 40))
+
+    selector: ParametricSelector<S, P, R1>,
+>selector : Symbol(selector, Decl(reselect.d.ts, 23, 44))
+>ParametricSelector : Symbol(ParametricSelector, Decl(reselect.d.ts, 8, 2))
+>S : Symbol(S, Decl(reselect.d.ts, 23, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 23, 33))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 23, 36))
+
+    combiner: (res: R1) => T,
+>combiner : Symbol(combiner, Decl(reselect.d.ts, 24, 43))
+>res : Symbol(res, Decl(reselect.d.ts, 25, 15))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 23, 36))
+>T : Symbol(T, Decl(reselect.d.ts, 23, 40))
+
+): OutputParametricSelector<S, P, T, (res: R1) => T>;
+>OutputParametricSelector : Symbol(OutputParametricSelector, Decl(reselect.d.ts, 10, 84))
+>S : Symbol(S, Decl(reselect.d.ts, 23, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 23, 33))
+>T : Symbol(T, Decl(reselect.d.ts, 23, 40))
+>res : Symbol(res, Decl(reselect.d.ts, 26, 38))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 23, 36))
+>T : Symbol(T, Decl(reselect.d.ts, 23, 40))
+
+/* two selectors */
+export function createSelector<S, R1, R2, T>(
+>createSelector : Symbol(createSelector, Decl(reselect.d.ts, 16, 2), Decl(reselect.d.ts, 22, 40), Decl(reselect.d.ts, 26, 53), Decl(reselect.d.ts, 33, 51))
+>S : Symbol(S, Decl(reselect.d.ts, 29, 31))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 29, 33))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 29, 37))
+>T : Symbol(T, Decl(reselect.d.ts, 29, 41))
+
+    selector1: Selector<S, R1>,
+>selector1 : Symbol(selector1, Decl(reselect.d.ts, 29, 45))
+>Selector : Symbol(Selector, Decl(reselect.d.ts, 0, 29))
+>S : Symbol(S, Decl(reselect.d.ts, 29, 31))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 29, 33))
+
+    selector2: Selector<S, R2>,
+>selector2 : Symbol(selector2, Decl(reselect.d.ts, 30, 31))
+>Selector : Symbol(Selector, Decl(reselect.d.ts, 0, 29))
+>S : Symbol(S, Decl(reselect.d.ts, 29, 31))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 29, 37))
+
+    combiner: (res1: R1, res2: R2) => T,
+>combiner : Symbol(combiner, Decl(reselect.d.ts, 31, 31))
+>res1 : Symbol(res1, Decl(reselect.d.ts, 32, 15))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 29, 33))
+>res2 : Symbol(res2, Decl(reselect.d.ts, 32, 24))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 29, 37))
+>T : Symbol(T, Decl(reselect.d.ts, 29, 41))
+
+): OutputSelector<S, T, (res1: R1, res2: R2) => T>;
+>OutputSelector : Symbol(OutputSelector, Decl(reselect.d.ts, 2, 45))
+>S : Symbol(S, Decl(reselect.d.ts, 29, 31))
+>T : Symbol(T, Decl(reselect.d.ts, 29, 41))
+>res1 : Symbol(res1, Decl(reselect.d.ts, 33, 25))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 29, 33))
+>res2 : Symbol(res2, Decl(reselect.d.ts, 33, 34))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 29, 37))
+>T : Symbol(T, Decl(reselect.d.ts, 29, 41))
+
+export function createSelector<S, P, R1, R2, T>(
+>createSelector : Symbol(createSelector, Decl(reselect.d.ts, 16, 2), Decl(reselect.d.ts, 22, 40), Decl(reselect.d.ts, 26, 53), Decl(reselect.d.ts, 33, 51))
+>S : Symbol(S, Decl(reselect.d.ts, 34, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 34, 33))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 34, 36))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 34, 40))
+>T : Symbol(T, Decl(reselect.d.ts, 34, 44))
+
+    selector1: ParametricSelector<S, P, R1>,
+>selector1 : Symbol(selector1, Decl(reselect.d.ts, 34, 48))
+>ParametricSelector : Symbol(ParametricSelector, Decl(reselect.d.ts, 8, 2))
+>S : Symbol(S, Decl(reselect.d.ts, 34, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 34, 33))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 34, 36))
+
+    selector2: ParametricSelector<S, P, R2>,
+>selector2 : Symbol(selector2, Decl(reselect.d.ts, 35, 44))
+>ParametricSelector : Symbol(ParametricSelector, Decl(reselect.d.ts, 8, 2))
+>S : Symbol(S, Decl(reselect.d.ts, 34, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 34, 33))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 34, 40))
+
+    combiner: (res1: R1, res2: R2) => T,
+>combiner : Symbol(combiner, Decl(reselect.d.ts, 36, 44))
+>res1 : Symbol(res1, Decl(reselect.d.ts, 37, 15))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 34, 36))
+>res2 : Symbol(res2, Decl(reselect.d.ts, 37, 24))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 34, 40))
+>T : Symbol(T, Decl(reselect.d.ts, 34, 44))
+
+): OutputParametricSelector<S, P, T, (res1: R1, res2: R2) => T>;
+>OutputParametricSelector : Symbol(OutputParametricSelector, Decl(reselect.d.ts, 10, 84))
+>S : Symbol(S, Decl(reselect.d.ts, 34, 31))
+>P : Symbol(P, Decl(reselect.d.ts, 34, 33))
+>T : Symbol(T, Decl(reselect.d.ts, 34, 44))
+>res1 : Symbol(res1, Decl(reselect.d.ts, 38, 38))
+>R1 : Symbol(R1, Decl(reselect.d.ts, 34, 36))
+>res2 : Symbol(res2, Decl(reselect.d.ts, 38, 47))
+>R2 : Symbol(R2, Decl(reselect.d.ts, 34, 40))
+>T : Symbol(T, Decl(reselect.d.ts, 34, 44))
+
+=== tests/cases/compiler/index.ts ===
+import { createSelector } from "reselect";
+>createSelector : Symbol(createSelector, Decl(index.ts, 0, 8))
+
+/*
+ * changing the import to
+ * import * as reselect from 'reselect';
+ * and accessing reselect.createSelector fixes the issue
+*/
+export interface State {
+>State : Symbol(State, Decl(index.ts, 0, 42))
+
+    a: string;
+>a : Symbol(State.a, Decl(index.ts, 6, 24))
+
+    b: number;
+>b : Symbol(State.b, Decl(index.ts, 7, 14))
+}
+export const selector = createSelector<State, string, number, { out: string }>(
+>selector : Symbol(selector, Decl(index.ts, 10, 12))
+>createSelector : Symbol(createSelector, Decl(index.ts, 0, 8))
+>State : Symbol(State, Decl(index.ts, 0, 42))
+>out : Symbol(out, Decl(index.ts, 10, 63))
+
+    state => state.a,
+>state : Symbol(state, Decl(index.ts, 10, 79))
+>state.a : Symbol(State.a, Decl(index.ts, 6, 24))
+>state : Symbol(state, Decl(index.ts, 10, 79))
+>a : Symbol(State.a, Decl(index.ts, 6, 24))
+
+    state => state.b,
+>state : Symbol(state, Decl(index.ts, 11, 21))
+>state.b : Symbol(State.b, Decl(index.ts, 7, 14))
+>state : Symbol(state, Decl(index.ts, 11, 21))
+>b : Symbol(State.b, Decl(index.ts, 7, 14))
+
+    (a, b) => {
+>a : Symbol(a, Decl(index.ts, 13, 5))
+>b : Symbol(b, Decl(index.ts, 13, 7))
+
+        return {
+            out: `${a}+${b}`
+>out : Symbol(out, Decl(index.ts, 14, 16))
+>a : Symbol(a, Decl(index.ts, 13, 5))
+>b : Symbol(b, Decl(index.ts, 13, 7))
+
+        };
+    }
+);
+selector({ a: "string", b: 5 });
+>selector : Symbol(selector, Decl(index.ts, 10, 12))
+>a : Symbol(a, Decl(index.ts, 19, 10))
+>b : Symbol(b, Decl(index.ts, 19, 23))
+

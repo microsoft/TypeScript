@@ -2095,6 +2095,10 @@ namespace ts {
                     canQualifySymbol(symbolFromSymbolTable, meaning);
             }
 
+            function isUMDExportSymbol(symbol: Symbol) {
+                return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
+            }
+
             function trySymbolTable(symbols: SymbolTable) {
                 // If symbol is directly available by its name in the symbol table
                 if (isAccessible(symbols.get(symbol.escapedName))) {
@@ -2106,6 +2110,7 @@ namespace ts {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
                         && symbolFromSymbolTable.escapedName !== "export="
                         && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)
+                        && !(isUMDExportSymbol(symbolFromSymbolTable) && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
 
