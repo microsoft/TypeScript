@@ -572,6 +572,9 @@ namespace ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        if (node.pos < 0) {
+            return getErrorSpanForNode(sourceFile, node.parent);
+        }
         let errorNode = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -1641,7 +1644,7 @@ namespace ts {
     export function getAssignmentTargetKind(node: Node): AssignmentKind {
         let parent = node.parent;
         while (true) {
-            switch (parent && parent.kind) {
+            switch (parent.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
                     return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
