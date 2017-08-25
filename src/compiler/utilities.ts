@@ -539,6 +539,7 @@ namespace ts {
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
+        if (!sourceFile) return createDiagnosticForNodeFromMessageChain(node.parent, messageChain);
         const span = getErrorSpanForNode(sourceFile, node);
         return {
             file: sourceFile,
@@ -572,6 +573,9 @@ namespace ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        if (node && node.parent !== node && (!sourceFile || node.pos < 0)) {
+            return getErrorSpanForNode(sourceFile, node.parent);
+        }
         let errorNode = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:

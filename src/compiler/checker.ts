@@ -6776,7 +6776,7 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (!isInJavaScriptFile(node) && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                if (!isInJavaScriptFile(node) && numTypeArguments && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
                             ? Diagnostics.Generic_type_0_requires_1_type_argument_s
@@ -6822,7 +6822,7 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
+                if (numTypeArguments && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
                             ? Diagnostics.Generic_type_0_requires_1_type_argument_s
@@ -7549,7 +7549,16 @@ namespace ts {
         function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
             const fn = typeNodeToExpression(node.type);
             const args = map(node.arguments, typeNodeToExpression);
-            const callExpr = createCall(fn, node.typeArguments, args);
+            const callExpr = createCall(fn, node.typeArguments || [], args);
+            callExpr.parent = node;
+            callExpr.expression.parent = callExpr;
+            callExpr.expression.parent = callExpr.expression;
+            const setArgParents = (arg: Node) => {
+                arg.parent = callExpr;
+                (arg as ParenthesizedExpression).expression.parent = arg;
+            };
+            forEach(callExpr.arguments, setArgParents);
+            forEach(callExpr.typeArguments, setArgParents);
             return checkExpression(callExpr);
         }
 
