@@ -7986,8 +7986,8 @@ namespace ts {
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
                 case SyntaxKind.JSDocNullableType:
                     return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
-                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
@@ -22374,7 +22374,8 @@ namespace ts {
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TypeOperator:
-                    return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                case SyntaxKind.JSDocNonNullableType:
+                    return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode | JSDocNonNullableType>node).type);
                 case SyntaxKind.JSDocComment:
                     return checkJSDocComment(node as JSDoc);
                 case SyntaxKind.JSDocParameterTag:
@@ -22383,7 +22384,6 @@ namespace ts {
                     checkSignatureDeclaration(node as JSDocFunctionType);
                     // falls through
                 case SyntaxKind.JSDocVariadicType:
-                case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocAllType:
                 case SyntaxKind.JSDocUnknownType:
