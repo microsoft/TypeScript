@@ -693,7 +693,7 @@ namespace ts.refactor.extractMethod {
 
         const newNodes: Node[] = [];
         // replace range with function call
-        let { calledLhsLength, called } = getCalledExpression(scope, range, functionNameText);
+        let { calledLhsLength, called } = getCalledExpression(scope, range, functionNameText); // tslint:disable-line prefer-const
 
         let call: Expression = createCall(called, /*typeArguments*/ undefined, callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
