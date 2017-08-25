@@ -2055,12 +2055,15 @@ namespace ts {
             return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
         }
 
-        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] {
-            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable) {
-                return getAccessibleSymbolChainFromSymbolTableWorker(symbols, []);
+        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined {
+            if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
+                return undefined;
             }
 
-            function getAccessibleSymbolChainFromSymbolTableWorker(symbols: SymbolTable, visitedSymbolTables: SymbolTable[]): Symbol[] {
+            const visitedSymbolTables: SymbolTable[] = [];
+            return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+
+            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable): Symbol[] | undefined {
                 if (!pushIfUnique(visitedSymbolTables, symbols)) {
                     return undefined;
                 }
@@ -2068,62 +2071,51 @@ namespace ts {
                 const result = trySymbolTable(symbols);
                 visitedSymbolTables.pop();
                 return result;
-
-                function canQualifySymbol(symbolFromSymbolTable: Symbol, meaning: SymbolFlags) {
-                    // If the symbol is equivalent and doesn't need further qualification, this symbol is accessible
-                    if (!needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning)) {
-                        return true;
-                    }
-
-                    // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
-                    const accessibleParent = getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning), useOnlyExternalAliasing);
-                    return !!accessibleParent;
-                }
-
-                function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol) {
-                    if (symbol === (resolvedAliasSymbol || symbolFromSymbolTable)) {
-                        // if the symbolFromSymbolTable is not external module (it could be if it was determined as ambient external module and would be in globals table)
-                        // and if symbolFromSymbolTable or alias resolution matches the symbol,
-                        // check the symbol can be qualified, it is only then this symbol is accessible
-                        return !forEach(symbolFromSymbolTable.declarations, hasExternalModuleSymbol) &&
-                            canQualifySymbol(symbolFromSymbolTable, meaning);
-                    }
-                }
-
-                function trySymbolTable(symbols: SymbolTable) {
-                    // If symbol is directly available by its name in the symbol table
-                    if (isAccessible(symbols.get(symbol.escapedName))) {
-                        return [symbol];
-                    }
-
-                    // Check if symbol is any of the alias
-                    return forEachEntry(symbols, symbolFromSymbolTable => {
-                        if (symbolFromSymbolTable.flags & SymbolFlags.Alias
-                            && symbolFromSymbolTable.escapedName !== "export="
-                            && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)) {
-                            if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
-                                // Is this external alias, then use it to name
-                                ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration)) {
-
-                                const resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
-                                if (isAccessible(symbolFromSymbolTable, resolvedImportedSymbol)) {
-                                    return [symbolFromSymbolTable];
-                                }
-
-                                // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
-                                // but only if the symbolFromSymbolTable can be qualified
-                                const accessibleSymbolsFromExports = resolvedImportedSymbol.exports ? getAccessibleSymbolChainFromSymbolTableWorker(resolvedImportedSymbol.exports, visitedSymbolTables) : undefined;
-                                if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, getQualifiedLeftMeaning(meaning))) {
-                                    return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
-                                }
-                            }
-                        }
-                    });
-                }
             }
 
-            if (symbol && !isPropertyOrMethodDeclarationSymbol(symbol)) {
-                return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+            function canQualifySymbol(symbolFromSymbolTable: Symbol, meaning: SymbolFlags) {
+                // If the symbol is equivalent and doesn't need further qualification, this symbol is accessible
+                return !needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning) ||
+                    // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
+                    !!getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning), useOnlyExternalAliasing);
+            }
+
+            function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol) {
+                return symbol === (resolvedAliasSymbol || symbolFromSymbolTable) &&
+                    // if the symbolFromSymbolTable is not external module (it could be if it was determined as ambient external module and would be in globals table)
+                    // and if symbolFromSymbolTable or alias resolution matches the symbol,
+                    // check the symbol can be qualified, it is only then this symbol is accessible
+                    !some(symbolFromSymbolTable.declarations, hasExternalModuleSymbol) &&
+                    canQualifySymbol(symbolFromSymbolTable, meaning);
+            }
+
+            function trySymbolTable(symbols: SymbolTable) {
+                // If symbol is directly available by its name in the symbol table
+                if (isAccessible(symbols.get(symbol.escapedName))) {
+                    return [symbol];
+                }
+
+                // Check if symbol is any of the alias
+                return forEachEntry(symbols, symbolFromSymbolTable => {
+                    if (symbolFromSymbolTable.flags & SymbolFlags.Alias
+                        && symbolFromSymbolTable.escapedName !== "export="
+                        && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)
+                        // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
+                        && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
+
+                        const resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
+                        if (isAccessible(symbolFromSymbolTable, resolvedImportedSymbol)) {
+                            return [symbolFromSymbolTable];
+                        }
+
+                        // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
+                        // but only if the symbolFromSymbolTable can be qualified
+                        const accessibleSymbolsFromExports = resolvedImportedSymbol.exports ? getAccessibleSymbolChainFromSymbolTable(resolvedImportedSymbol.exports) : undefined;
+                        if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, getQualifiedLeftMeaning(meaning))) {
+                            return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
+                        }
+                    }
+                });
             }
         }
 
