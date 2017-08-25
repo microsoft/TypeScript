@@ -8,13 +8,11 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(13,14): error TS802
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,15): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(17,11): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,17): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,17): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (14 errors) ====
+==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (12 errors) ====
     // grammar error from checker
     var ara: Array.<number> = [1,2,3];
                   ~
@@ -52,11 +50,7 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,17): error TS802
                   ~~~~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
     var most: !string = 'definite';
-              ~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
     var postfixdef: number! = 101;
-                    ~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
     var postfixopt: number? = undefined;
         ~~~~~~~~~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'number | null'.
