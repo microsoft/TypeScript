@@ -86,7 +86,7 @@ namespace A {
         return { __return: C.foo(), a };
     }
 }
-==SCOPE::this file==
+==SCOPE::global scope==
 namespace A {
     let x = 1;
     export namespace C {

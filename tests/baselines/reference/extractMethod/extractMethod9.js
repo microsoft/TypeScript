@@ -50,7 +50,7 @@ namespace A {
         return a1.x + 10;
     }
 }
-==SCOPE::this file==
+==SCOPE::global scope==
 namespace A {
     export interface I { x: number };
     namespace B {

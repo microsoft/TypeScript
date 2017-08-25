@@ -585,7 +585,7 @@ namespace ts.refactor.extractMethod {
                     : "anonymous class expression";
         }
         else if (isSourceFile(scope)) {
-            return "this file";
+            return scope.externalModuleIndicator ? "module scope" : "global scope";
         }
         else {
             return "unknown";

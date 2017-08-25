@@ -49,7 +49,7 @@ namespace A {
         return { __return: a1.x + 10, z };
     }
 }
-==SCOPE::this file==
+==SCOPE::global scope==
 namespace A {
     let y = 1;
     class C {

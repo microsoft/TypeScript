@@ -66,7 +66,7 @@ namespace A {
         return foo();
     }
 }
-==SCOPE::this file==
+==SCOPE::global scope==
 namespace A {
     let x = 1;
     function foo() {

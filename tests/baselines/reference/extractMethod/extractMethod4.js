@@ -70,7 +70,7 @@ namespace A {
         return foo();
     }
 }
-==SCOPE::this file==
+==SCOPE::global scope==
 namespace A {
     function foo() {
     }

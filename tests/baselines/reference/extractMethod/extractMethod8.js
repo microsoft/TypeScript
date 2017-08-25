@@ -50,7 +50,7 @@ namespace A {
         return 1 + a1 + x;
     }
 }
-==SCOPE::this file==
+==SCOPE::global scope==
 namespace A {
     let x = 1;
     namespace B {

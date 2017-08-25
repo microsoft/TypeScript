@@ -78,7 +78,7 @@ namespace A {
         return { __return: foo(), a };
     }
 }
-==SCOPE::this file==
+==SCOPE::global scope==
 namespace A {
     let x = 1;
     export function foo() {

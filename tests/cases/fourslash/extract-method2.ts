@@ -13,7 +13,7 @@ goTo.select('start', 'end')
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_2",
-    actionDescription: "Extract function into this file",
+    actionDescription: "Extract function into global scope",
 });
 verify.currentFileContentIs(
 `namespace NS {
