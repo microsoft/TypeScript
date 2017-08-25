@@ -7612,22 +7612,6 @@ namespace ts {
             return anyType;
         }
 
-        function getIndexedAccessForMappedType(type: MappedType, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
-            if (accessNode) {
-                // Check if the index type is assignable to 'keyof T' for the object type.
-                if (!isTypeAssignableTo(indexType, getIndexType(type))) {
-                    error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(type));
-                    return unknownType;
-                }
-                if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) && type.declaration.readonlyToken) {
-                    error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(type));
-                }
-            }
-            const mapper = createTypeMapper([getTypeParameterFromMappedType(type)], [indexType]);
-            const templateMapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
-            return instantiateType(getTemplateTypeFromMappedType(type), templateMapper);
-        }
-
         function isGenericObjectType(type: Type): boolean {
             return type.flags & TypeFlags.TypeVariable ? true :
                 getObjectFlags(type) & ObjectFlags.Mapped ? isGenericIndexType(getConstraintTypeFromMappedType(<MappedType>type)) :
@@ -7653,12 +7637,14 @@ namespace ts {
             return false;
         }
 
-        // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
-        // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
-        // transformed type of the form '(U & V)[K] | D'. This allows us to properly reason about higher order indexed
-        // access types with default property values as expressed by D.
+        // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
+        // undefined if no transformation is possible.
         function getTransformedIndexedAccessType(type: IndexedAccessType): Type {
             const objectType = type.objectType;
+            // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
+            // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
+            // transformed type of the form '(U & V)[K] | D'. This allows us to properly reason about higher order indexed
+            // access types with default property values as expressed by D.
             if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType) && some((<IntersectionType>objectType).types, isStringIndexOnlyType)) {
                 const regularTypes: Type[] = [];
                 const stringIndexTypes: Type[] = [];
@@ -7675,20 +7661,23 @@ namespace ts {
                     getIntersectionType(stringIndexTypes)
                 ]);
             }
+            // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
+            // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
+            // construct the type Box<T[X]>.
+            if (isGenericMappedType(objectType)) {
+                const mapper = createTypeMapper([getTypeParameterFromMappedType(<MappedType>objectType)], [type.indexType]);
+                const objectTypeMapper = (<MappedType>objectType).mapper;
+                const templateMapper = objectTypeMapper ? combineTypeMappers(objectTypeMapper, mapper) : mapper;
+                return instantiateType(getTemplateTypeFromMappedType(<MappedType>objectType), templateMapper);
+            }
             return undefined;
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode): Type {
-            // If the object type is a mapped type { [P in K]: E }, where K is generic, we instantiate E using a mapper
-            // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
-            // construct the type Box<T[X]>.
-            if (isGenericMappedType(objectType)) {
-                return getIndexedAccessForMappedType(<MappedType>objectType, indexType, accessNode);
-            }
-            // Otherwise, if the index type is generic, or if the object type is generic and doesn't originate in an
-            // expression, we are performing a higher-order index access where we cannot meaningfully access the properties
-            // of the object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates
-            // in an expression. This is to preserve backwards compatibility. For example, an element access 'this["foo"]'
+            // If the index type is generic, or if the object type is generic and doesn't originate in an expression,
+            // we are performing a higher-order index access where we cannot meaningfully access the properties of the
+            // object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in
+            // an expression. This is to preserve backwards compatibility. For example, an element access 'this["foo"]'
             // has always been resolved eagerly using the constraint type of 'this' at the given location.
             if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression) && isGenericObjectType(objectType)) {
                 if (objectType.flags & TypeFlags.Any) {
@@ -9310,7 +9299,7 @@ namespace ts {
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getConstraintOfType(<IndexedAccessType>target);
+                    const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -9350,7 +9339,7 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getConstraintOfType(<IndexedAccessType>source);
+                    const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>source);
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -18839,6 +18828,10 @@ namespace ts {
             const objectType = (<IndexedAccessType>type).objectType;
             const indexType = (<IndexedAccessType>type).indexType;
             if (isTypeAssignableTo(indexType, getIndexType(objectType))) {
+                if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
+                    getObjectFlags(objectType) & ObjectFlags.Mapped && (<MappedType>objectType).declaration.readonlyToken) {
+                    error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
+                }
                 return type;
             }
             // Check if we're indexing with a numeric type and if either object or index types
