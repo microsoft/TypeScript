@@ -231,18 +231,7 @@ namespace ts.refactor.extractMethod {
             if (errors) {
                 return { errors };
             }
-
-            // If our selection is the expression in an ExpressionStatement, expand
-            // the selection to include the enclosing Statement (this stops us
-            // from trying to care about the return value of the extracted function
-            // and eliminates double semicolon insertion in certain scenarios)
-            const range = isStatement(start)
-                ? [start]
-                : start.parent && start.parent.kind === SyntaxKind.ExpressionStatement
-                    ? [start.parent as Statement]
-                    : start as Expression;
-
-            return { targetRange: { range, facts: rangeFacts, declarations } };
+            return { targetRange: { range: getStatementOrExpressionRange(start), facts: rangeFacts, declarations } };
         }
 
         function createErrorResult(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage): RangeToExtract {
@@ -457,6 +446,20 @@ namespace ts.refactor.extractMethod {
                 permittedJumps = savedPermittedJumps;
             }
         }
+    }
+
+    function getStatementOrExpressionRange(node: Node): Statement[] | Expression {
+        if (isStatement(node)) {
+            return [node];
+        }
+        else if (isExpression(node)) {
+            // If our selection is the expression in an ExpressionStatement, expand
+            // the selection to include the enclosing Statement (this stops us
+            // from trying to care about the return value of the extracted function
+            // and eliminates double semicolon insertion in certain scenarios)
+            return isExpressionStatement(node.parent) ? [node.parent] : node;
+        }
+        return undefined;
     }
 
     function isValidExtractionTarget(node: Node): node is Scope {
