@@ -22386,6 +22386,8 @@ namespace ts {
                     return checkBindingElement(<BindingElement>node);
                 case SyntaxKind.ClassDeclaration:
                     return checkClassDeclaration(<ClassDeclaration>node);
+                case SyntaxKind.TypeCall:
+                    return checkTypeCallNode(<TypeCallTypeNode>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.TypeAliasDeclaration:
@@ -22411,6 +22413,13 @@ namespace ts {
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
             }
+        }
+
+        function checkTypeCallNode(node: TypeCallTypeNode) {
+            checkGrammarTypeArguments(node, node.typeArguments);
+            checkSourceElement(node.type);
+            forEach(node.arguments, checkSourceElement);
+            forEach(node.typeArguments, checkSourceElement);
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is

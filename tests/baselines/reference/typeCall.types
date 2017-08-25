@@ -1,187 +1,61 @@
 === tests/cases/compiler/typeCall.ts ===
-type F1 = () => 1;
->F1 : F1
+// type F1 = () => 1;
+// type a = F1();
 
-type a = F1();
->a : 1
->F1 : F1
+// type F2 = (a: string) => 1;
+// type b = F2('foo');
 
-type F2 = (a: string) => 1;
->F2 : F2
->a : string
+// interface F3 {
+//     (): 1;
+//     (a: number): 2;
+//     (a: string): 3;
+// }
+// type c = F3();
+// type d = F3(123);
+// type e = F3('foo');
 
-type b = F2('foo');
->b : 1
->F2 : F2
+// declare function f4(a: string): 1;
+// let a = 'foo';
+// type f = typeof f4(typeof a);
 
-interface F3 {
->F3 : F3
+// type g = (() => 1)();
 
-    (): 1;
-    (a: number): 2;
->a : number
+// type Id = <T>(v: T) => T;
+// type h = Id(123);
 
-    (a: string): 3;
->a : string
-}
-type c = F3();
->c : 1
->F3 : F3
+// type Wrap<T> = Id(T);
+// type i = Wrap<123>;
 
-type d = F3(123);
->d : 2
->F3 : F3
+// type F5 = () => () => { a: () => 1; };
+// type j = F5()()['a']();
 
-type e = F3('foo');
->e : 3
->F3 : F3
+// type k1 = Id<string>('foo'); // `any`, `<string>` is part of the type reference, not the function call
+// type k2 = Id<><string>('foo'); // ok, `string`
 
-declare function f4(a: string): 1;
->f4 : (a: string) => 1
->a : string
+// declare function id<T>(v: T): T;
+// let l = id<string>('foo');
 
-let a = 'foo';
->a : string
->'foo' : "foo"
+// interface IsPrimitive {
+//   (o: object): '0';
+//   (o: any): '1';
+// }
+// type stringIsPrimitive = IsPrimitive(string); // '1', ok
+// type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
 
-type f = typeof f4(typeof a);
->f : 1
->f4 : (a: string) => 1
->a : string
+// // explicit type arguments need to go after the type arguments of the type reference, empty `<>` if n/a
+// type genericIsPrimitive = <T>() => IsPrimitive(T);
+// type stringIsPrimitive2 = genericIsPrimitive<><string>(); // '1', ok
+// type regexpIsPrimitive2 = genericIsPrimitive<><RegExp>();
+// // FAILS!, '1' instead of '0', should delay overload selection until type argument is known
 
-type g = (() => 1)();
->g : 1
+// // alternative, pass as parameters
+// type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
+// type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
+// type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
+// // FAILS!, '1' instead of '0', should delay overload selection until type argument is known
 
-type Id = <T>(v: T) => T;
->Id : Id
->T : T
->v : T
->T : T
->T : T
-
-type h = Id(123);
->h : 123
->Id : Id
-
-type Wrap<T> = Id(T);
->Wrap : T
->T : T
->Id : Id
->T : T
-
-type i = Wrap<123>;
->i : 123
->Wrap : T
-
-type F5 = () => () => { a: () => 1; };
->F5 : F5
->a : () => 1
-
-type j = F5()()['a']();
->j : 1
->F5 : F5
-
-type k1 = Id<string>('foo'); // `any`, `<string>` is part of the type reference, not the function call
->k1 : any
->Id : Id
-
-type k2 = Id<><string>('foo'); // ok, `string`
->k2 : string
->Id : Id
-
-declare function id<T>(v: T): T;
->id : <T>(v: T) => T
->T : T
->v : T
->T : T
->T : T
-
-let l = id<string>('foo');
->l : string
->id<string>('foo') : string
->id : <T>(v: T) => T
->'foo' : "foo"
-
-interface IsPrimitive {
->IsPrimitive : IsPrimitive
-
-  (o: object): '0';
->o : object
-
-  (o: any): '1';
->o : any
-}
-type stringIsPrimitive = IsPrimitive(string); // '1', ok
->stringIsPrimitive : "1"
->IsPrimitive : IsPrimitive
-
-type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
->regexpIsPrimitive : "1"
->IsPrimitive : IsPrimitive
->RegExp : RegExp
-
-// explicit type arguments need to go after the type arguments of the type reference, empty `<>` if n/a
-type genericIsPrimitive = <T>() => IsPrimitive(T);
->genericIsPrimitive : genericIsPrimitive
->T : T
->IsPrimitive : IsPrimitive
->T : T
-
-type stringIsPrimitive2 = genericIsPrimitive<><string>(); // '1', ok
->stringIsPrimitive2 : "1"
->genericIsPrimitive : genericIsPrimitive
-
-type regexpIsPrimitive2 = genericIsPrimitive<><RegExp>();
->regexpIsPrimitive2 : "1"
->genericIsPrimitive : genericIsPrimitive
->RegExp : RegExp
-
-// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
-
-// alternative, pass as parameters
-type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
->genericIsPrimitive3 : genericIsPrimitive3
->T : T
->v : T
->T : T
->IsPrimitive : IsPrimitive
->T : T
-
-type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
->stringIsPrimitive3 : "1"
->genericIsPrimitive3 : genericIsPrimitive3
-
-type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
->regexpIsPrimitive3 : "1"
->genericIsPrimitive3 : genericIsPrimitive3
->RegExp : RegExp
-
-// FAILS!, '1' instead of '0', should delay overload selection until type argument is known
-
-type map = <Fn extends Function, O extends object>(fn: Fn, obj: O) => { [P in keyof O]: Fn(P) }; // Fn(O[P])
->map : map
->Fn : Fn
->Function : Function
->O : O
->fn : Fn
->Fn : Fn
->obj : O
->O : O
->P : P
->O : O
->Fn : Fn
->P : P
-
-type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
->z : { a: any; b: any; c: any; }
->map : map
->T : T
->v : T
->T : T
->T : T
->a : 1
->b : 2
->c : 3
+// type map = <Fn extends Function, O extends object>(fn: Fn, obj: O) => { [P in keyof O]: Fn(P) }; // Fn(O[P])
+// type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 
 // binary function composition, still fails
 type Fn1<T extends number> = (v: T[]) => { [k: string]: T };
@@ -213,4 +87,9 @@ type Fn3<T> = (v: T) => Fn2(Fn1(T));
 type Fn4 = Fn3(1);
 >Fn4 : any
 >Fn3 : Fn3<T>
+
+type X = Fn2(Fn1(1));
+>X : any
+>Fn2 : Fn2<T>
+>Fn1 : Fn1<T>
 
