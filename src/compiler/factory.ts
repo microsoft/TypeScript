@@ -2372,6 +2372,24 @@ namespace ts {
         );
     }
 
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[]): CallExpression;
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
+        return createCall(
+            createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ param ? [param] : [],
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                createBlock(statements, /*multiLine*/ true)
+            ),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ paramValue ? [paramValue] : []
+        );
+    }
+
+
     export function createComma(left: Expression, right: Expression) {
         return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
     }
@@ -4036,8 +4054,31 @@ namespace ts {
         }
     }
 
+    /**
+     * Determines whether a node is a parenthesized expression that can be ignored when recreating outer expressions.
+     *
+     * A parenthesized expression can be ignored when all of the following are true:
+     *
+     * - It's `pos` and `end` are not -1
+     * - It does not have a custom source map range
+     * - It does not have a custom comment range
+     * - It does not have synthetic leading or trailing comments
+     *
+     * If an outermost parenthesized expression is ignored, but the containing expression requires a parentheses around
+     * the expression to maintain precedence, a new parenthesized expression should be created automatically when
+     * the containing expression is created/updated.
+     */
+    function isIgnorableParen(node: Expression) {
+        return node.kind === SyntaxKind.ParenthesizedExpression
+            && nodeIsSynthesized(node)
+            && nodeIsSynthesized(getSourceMapRange(node))
+            && nodeIsSynthesized(getCommentRange(node))
+            && !some(getSyntheticLeadingComments(node))
+            && !some(getSyntheticTrailingComments(node));
+    }
+
     export function recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds = OuterExpressionKinds.All): Expression {
-        if (outerExpression && isOuterExpression(outerExpression, kinds)) {
+        if (outerExpression && isOuterExpression(outerExpression, kinds) && !isIgnorableParen(outerExpression)) {
             return updateOuterExpression(
                 outerExpression,
                 recreateOuterExpressions(outerExpression.expression, innerExpression)
