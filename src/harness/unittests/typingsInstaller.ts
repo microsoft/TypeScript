@@ -322,7 +322,7 @@ namespace ts.projectSystem {
                 content: "declare const lodash: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3]);
+            const host = createServerHost([file1, file2, file3, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
@@ -445,7 +445,7 @@ namespace ts.projectSystem {
                 content: "declare const moment: { x: number }"
             };
 
-            const host = createServerHost([file1, file2, file3, packageJson]);
+            const host = createServerHost([file1, file2, file3, packageJson, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
@@ -521,7 +521,7 @@ namespace ts.projectSystem {
             };
 
             const typingFiles = [commander, express, jquery, moment, lodash];
-            const host = createServerHost([lodashJs, commanderJs, file3, packageJson]);
+            const host = createServerHost([lodashJs, commanderJs, file3, packageJson, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") });
@@ -600,7 +600,7 @@ namespace ts.projectSystem {
                 typings: typingsName("gulp")
             };
 
-            const host = createServerHost([lodashJs, commanderJs, file3]);
+            const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
@@ -935,25 +935,26 @@ namespace ts.projectSystem {
                 import * as cmd from "commander
                 `
             };
-            session.executeCommand(<server.protocol.OpenRequest>{
+            const openRequest: server.protocol.OpenRequest = {
                 seq: 1,
                 type: "request",
-                command: "open",
+                command: server.protocol.CommandTypes.Open,
                 arguments: {
                     file: f.path,
                     fileContent: f.content
                 }
-            });
+            };
+            session.executeCommand(openRequest);
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const proj = projectService.inferredProjects[0];
             const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
 
             // make a change that should not affect the structure of the program
-            session.executeCommand(<server.protocol.ChangeRequest>{
+            const changeRequest: server.protocol.ChangeRequest = {
                 seq: 2,
                 type: "request",
-                command: "change",
+                command: server.protocol.CommandTypes.Change,
                 arguments: {
                     file: f.path,
                     insertString: "\nlet x = 1;",
@@ -962,7 +963,8 @@ namespace ts.projectSystem {
                     endLine: 2,
                     endOffset: 0
                 }
-            });
+            };
+            session.executeCommand(changeRequest);
             host.checkTimeoutQueueLength(1);
             host.runQueuedTimeoutCallbacks();
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();

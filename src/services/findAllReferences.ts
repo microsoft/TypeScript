@@ -41,7 +41,7 @@ namespace ts.FindAllReferences {
         readonly implementations?: boolean;
     }
 
-    export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
+    export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const referencedSymbols = findAllReferencedSymbols(program, cancellationToken, sourceFiles, sourceFile, position);
 
         if (!referencedSymbols || !referencedSymbols.length) {
@@ -60,7 +60,7 @@ namespace ts.FindAllReferences {
         return out;
     }
 
-    export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] {
+    export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ImplementationLocation[] {
         // A node in a JSDoc comment can't have an implementation anyway.
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false);
         const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node);
@@ -68,7 +68,7 @@ namespace ts.FindAllReferences {
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
 
-    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], node: Node): Entry[] | undefined {
+    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node): Entry[] | undefined {
         if (node.kind === SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -93,16 +93,16 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, options?: Options): ReferenceEntry[] | undefined {
+    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): ReferenceEntry[] | undefined {
         const x = flattenEntries(findAllReferencedSymbols(program, cancellationToken, sourceFiles, sourceFile, position, options));
         return map(x, toReferenceEntry);
     }
 
-    export function getReferenceEntriesForNode(node: Node, program: Program, sourceFiles: SourceFile[], cancellationToken: CancellationToken, options: Options = {}): Entry[] | undefined {
+    export function getReferenceEntriesForNode(node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): Entry[] | undefined {
         return flattenEntries(Core.getReferencedSymbolsForNode(node, program, sourceFiles, cancellationToken, options));
     }
 
-    function findAllReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, options?: Options): SymbolAndEntries[] | undefined {
+    function findAllReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): SymbolAndEntries[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         return Core.getReferencedSymbolsForNode(node, program, sourceFiles, cancellationToken, options);
     }
@@ -264,7 +264,7 @@ namespace ts.FindAllReferences {
 /* @internal */
 namespace ts.FindAllReferences.Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
-    export function getReferencedSymbolsForNode(node: Node, program: Program, sourceFiles: SourceFile[], cancellationToken: CancellationToken, options: Options = {}): SymbolAndEntries[] | undefined {
+    export function getReferencedSymbolsForNode(node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): SymbolAndEntries[] | undefined {
         if (node.kind === ts.SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -313,7 +313,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, sourceFiles: SourceFile[]): SymbolAndEntries[] {
+    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, sourceFiles: ReadonlyArray<SourceFile>): SymbolAndEntries[] {
         Debug.assert(!!symbol.valueDeclaration);
 
         const references = findModuleReferences(program, sourceFiles, symbol).map<Entry>(reference => {
@@ -349,7 +349,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** getReferencedSymbols for special node kinds. */
-    function getReferencedSymbolsSpecial(node: Node, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
+    function getReferencedSymbolsSpecial(node: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
         if (isTypeKeyword(node.kind)) {
             return getAllReferencesForKeyword(sourceFiles, node.kind, cancellationToken);
         }
@@ -380,7 +380,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Core find-all-references algorithm for a normal symbol. */
-    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
+    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
         symbol = skipPastExportOrImportSpecifier(symbol, node, checker);
 
         // Compute the meaning from the location and the symbol it references
@@ -474,7 +474,7 @@ namespace ts.FindAllReferences.Core {
         readonly markSeenReExportRHS = nodeSeenTracker();
 
         constructor(
-            readonly sourceFiles: SourceFile[],
+            readonly sourceFiles: ReadonlyArray<SourceFile>,
             /** True if we're searching for constructor references. */
             readonly isForConstructor: boolean,
             readonly checker: TypeChecker,
@@ -652,10 +652,15 @@ namespace ts.FindAllReferences.Core {
             return undefined;
         }
 
-        // If the symbol has a parent, it's globally visible.
-        // Unless that parent is an external module, then we should only search in the module (and recurse on the export later).
-        // But if the parent is a module that has `export as namespace`, then the symbol *is* globally visible.
-        if (parent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
+        /*
+        If the symbol has a parent, it's globally visible unless:
+        - It's a private property (handled above).
+        - It's a type parameter.
+        - The parent is an external module: then we should only search in the module (and recurse on the export later).
+          - But if the parent has `export as namespace`, the symbol is globally visible through that namespace.
+        */
+        const exposedByParent = parent && !(symbol.flags & SymbolFlags.TypeParameter);
+        if (exposedByParent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
             return undefined;
         }
 
@@ -682,7 +687,7 @@ namespace ts.FindAllReferences.Core {
         //     declare module "a" { export type T = number; }
         //     declare module "b" { import { T } from "a"; export const x: T; }
         // So we must search the whole source file. (Because we will mark the source file as seen, we we won't return to it when searching for imports.)
-        return parent ? scope.getSourceFile() : scope;
+        return exposedByParent ? scope.getSourceFile() : scope;
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): number[] {
@@ -754,7 +759,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getAllReferencesForKeyword(sourceFiles: SourceFile[], keywordKind: ts.SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: ts.SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references: NodeEntry[] = [];
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
@@ -1254,7 +1259,7 @@ namespace ts.FindAllReferences.Core {
         return [{ definition: { type: "symbol", symbol: searchSpaceNode.symbol, node: superKeyword }, references }];
     }
 
-    function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] {
         let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
         // Whether 'this' occurs in a static context within a class.
@@ -1350,7 +1355,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references: NodeEntry[] = [];
 
         for (const sourceFile of sourceFiles) {

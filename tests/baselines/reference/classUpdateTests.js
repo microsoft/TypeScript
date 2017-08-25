@@ -127,21 +127,21 @@ var __extends = (this && this.__extends) || (function () {
 //
 // test codegen for instance properties
 //
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         this.p1 = 0;
         this.p2 = 0;
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
         this.p1 = 0;
         this.p2 = 0;
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C(p1, p2, p3) {
         if (p1 === void 0) { p1 = 0; }
         if (p2 === void 0) { p2 = 0; }
@@ -154,12 +154,12 @@ var C = (function () {
 //
 // test requirements for super calls
 //
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -168,7 +168,7 @@ var E = (function (_super) {
     }
     return E;
 }(D));
-var F = (function (_super) {
+var F = /** @class */ (function (_super) {
     __extends(F, _super);
     function F() {
         var _this = this;
@@ -176,7 +176,7 @@ var F = (function (_super) {
     } // ERROR - super call required
     return F;
 }(E));
-var G = (function (_super) {
+var G = /** @class */ (function (_super) {
     __extends(G, _super);
     function G() {
         var _this = _super.call(this) || this;
@@ -185,20 +185,20 @@ var G = (function (_super) {
     } // NO ERROR
     return G;
 }(D));
-var H = (function () {
+var H = /** @class */ (function () {
     function H() {
         _this = _super.call(this) || this;
     } // ERROR - no super call allowed
     return H;
 }());
-var I = (function (_super) {
+var I = /** @class */ (function (_super) {
     __extends(I, _super);
     function I() {
         return _super.call(this) || this;
     } // ERROR - no super call allowed
     return I;
 }(Object));
-var J = (function (_super) {
+var J = /** @class */ (function (_super) {
     __extends(J, _super);
     function J(p1) {
         var _this = _super.call(this) || this;
@@ -207,7 +207,7 @@ var J = (function (_super) {
     }
     return J;
 }(G));
-var K = (function (_super) {
+var K = /** @class */ (function (_super) {
     __extends(K, _super);
     function K(p1) {
         var _this = this;
@@ -218,7 +218,7 @@ var K = (function (_super) {
     }
     return K;
 }(G));
-var L = (function (_super) {
+var L = /** @class */ (function (_super) {
     __extends(L, _super);
     function L(p1) {
         var _this = _super.call(this) || this;
@@ -227,7 +227,7 @@ var L = (function (_super) {
     }
     return L;
 }(G));
-var M = (function (_super) {
+var M = /** @class */ (function (_super) {
     __extends(M, _super);
     function M(p1) {
         var _this = this;
@@ -241,7 +241,7 @@ var M = (function (_super) {
 //
 // test this reference in field initializers
 //
-var N = (function () {
+var N = /** @class */ (function () {
     function N() {
         this.p1 = 0;
         this.p2 = this.p1;
@@ -252,25 +252,25 @@ var N = (function () {
 //
 // test error on property declarations within class constructors
 //
-var O = (function () {
+var O = /** @class */ (function () {
     function O() {
         this.p1 = 0; // ERROR
     }
     return O;
 }());
-var P = (function () {
+var P = /** @class */ (function () {
     function P() {
         this.p1 = 0; // ERROR
     }
     return P;
 }());
-var Q = (function () {
+var Q = /** @class */ (function () {
     function Q() {
         this.p1 = 0; // ERROR
     }
     return Q;
 }());
-var R = (function () {
+var R = /** @class */ (function () {
     function R() {
         this.p1 = 0; // ERROR
     }

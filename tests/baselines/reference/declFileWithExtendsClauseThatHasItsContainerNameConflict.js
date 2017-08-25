@@ -32,7 +32,7 @@ var A;
 (function (A) {
     var B;
     (function (B) {
-        var EventManager = (function () {
+        var EventManager = /** @class */ (function () {
             function EventManager() {
             }
             return EventManager;
@@ -45,7 +45,7 @@ var A;
     (function (B) {
         var C;
         (function (C) {
-            var ContextMenu = (function (_super) {
+            var ContextMenu = /** @class */ (function (_super) {
                 __extends(ContextMenu, _super);
                 function ContextMenu() {
                     return _super !== null && _super.apply(this, arguments) || this;

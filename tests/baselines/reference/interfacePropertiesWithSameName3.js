@@ -9,12 +9,12 @@ interface F2 extends E2, D2 { } // error
 
 
 //// [interfacePropertiesWithSameName3.js]
-var D2 = (function () {
+var D2 = /** @class */ (function () {
     function D2() {
     }
     return D2;
 }());
-var E2 = (function () {
+var E2 = /** @class */ (function () {
     function E2() {
     }
     return E2;

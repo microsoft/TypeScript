@@ -1,6 +1,6 @@
 /* @internal */
 
-namespace ts.refactor {
+namespace ts.refactor.convertFunctionToES6Class {
     const actionName = "convert";
 
     const convertFunctionToES6Class: Refactor = {

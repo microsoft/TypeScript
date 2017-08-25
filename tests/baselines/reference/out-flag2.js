@@ -7,12 +7,12 @@ class A { }
 class B { }
 
 //// [c.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;

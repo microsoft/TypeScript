@@ -26,24 +26,24 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var BaseEvent = (function () {
+var BaseEvent = /** @class */ (function () {
     function BaseEvent() {
     }
     return BaseEvent;
 }());
-var MyEvent = (function (_super) {
+var MyEvent = /** @class */ (function (_super) {
     __extends(MyEvent, _super);
     function MyEvent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyEvent;
 }(BaseEvent));
-var BaseEventWrapper = (function () {
+var BaseEventWrapper = /** @class */ (function () {
     function BaseEventWrapper() {
     }
     return BaseEventWrapper;
 }());
-var MyEventWrapper = (function (_super) {
+var MyEventWrapper = /** @class */ (function (_super) {
     __extends(MyEventWrapper, _super);
     function MyEventWrapper() {
         return _super !== null && _super.apply(this, arguments) || this;

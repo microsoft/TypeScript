@@ -107,12 +107,14 @@ namespace ts {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
-                Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
+                if (token === SyntaxKind.EndOfFileToken) {
+                    break;
+                }
             }
             return pos;
         }
@@ -493,7 +495,7 @@ namespace ts {
         public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
-        public lineMap: number[];
+        public lineMap: ReadonlyArray<number>;
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
@@ -543,7 +545,7 @@ namespace ts {
             return ts.getLineAndCharacterOfPosition(this, position);
         }
 
-        public getLineStarts(): number[] {
+        public getLineStarts(): ReadonlyArray<number> {
             return getLineStarts(this);
         }
 
@@ -1258,7 +1260,7 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + path);
+                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.", path);
 
                         return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
@@ -1334,10 +1336,10 @@ namespace ts {
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(fileName: string) {
+        function getSyntacticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
         }
 
         /**
@@ -1354,18 +1356,17 @@ namespace ts {
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
-                return semanticDiagnostics;
+                return semanticDiagnostics.slice();
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-            return concatenate(semanticDiagnostics, declarationDiagnostics);
+            return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getOptionsDiagnostics(cancellationToken).concat(
-                   program.getGlobalDiagnostics(cancellationToken));
+            return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
@@ -1757,17 +1758,20 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-            if (key === "{") {
-                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+
+            if (!isInComment(sourceFile, position)) {
+                if (key === "{") {
+                    return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "}") {
+                    return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === ";") {
+                    return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "\n") {
+                    return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                }
             }
 
             return [];
@@ -1824,6 +1828,12 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean) {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const range = ts.formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
+            return range && createTextSpanFromRange(range);
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -2050,6 +2060,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
@@ -2138,12 +2149,17 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(node.name));
-        if (name && contextualType) {
+        return getPropertySymbolsFromType(contextualType, node.name);
+    }
+
+    /* @internal */
+    export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
+        if (name && type) {
             const result: Symbol[] = [];
-            const symbol = contextualType.getProperty(name);
-            if (contextualType.flags & TypeFlags.Union) {
-                forEach((<UnionType>contextualType).types, t => {
+            const symbol = type.getProperty(name);
+            if (type.flags & TypeFlags.Union) {
+                forEach((<UnionType>type).types, t => {
                     const symbol = t.getProperty(name);
                     if (symbol) {
                         result.push(symbol);

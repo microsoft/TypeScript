@@ -23,7 +23,7 @@ module A {
 }
 
 //// [ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.js]
-var Point = (function () {
+var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;
         this.y = y;
@@ -37,7 +37,7 @@ var Point = (function () {
 })(Point || (Point = {}));
 var A;
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
             this.y = y;

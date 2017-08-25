@@ -79,7 +79,7 @@ var exprString2;
 var exprIsObject2;
 function foo() { }
 ;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

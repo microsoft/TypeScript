@@ -11,7 +11,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Foo = (function () {
+            Foo = /** @class */ (function () {
                 function Foo() {
                 }
                 return Foo;

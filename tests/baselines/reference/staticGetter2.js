@@ -9,7 +9,7 @@ class C {
 
 //// [staticGetter2.js]
 // once caused stack overflow
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.x = function () {

@@ -344,7 +344,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getLineStarts(sourceFile: SourceFileLike): number[] {
+    export function getLineStarts(sourceFile: SourceFileLike): ReadonlyArray<number> {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 
