@@ -703,6 +703,9 @@ namespace ts {
                     return emitEnumMember(<EnumMember>node);
 
                 // JSDoc nodes (ignored)
+                case SyntaxKind.JSDocNonNullableType:
+                    return emitNonNullType(<JSDocNonNullableType>node);
+
                 // Transformation nodes (ignored)
             }
 
@@ -1410,6 +1413,11 @@ namespace ts {
 
         function emitNonNullExpression(node: NonNullExpression) {
             emitExpression(node.expression);
+            write("!");
+        }
+
+        function emitNonNullType(node: JSDocNonNullableType) {
+            emit(node.type);
             write("!");
         }
 

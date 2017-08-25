@@ -7987,10 +7987,11 @@ namespace ts {
                 case SyntaxKind.JSDocNullableType:
                     return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
                 case SyntaxKind.JSDocNonNullableType:
+                    return getTypeFromNonNullableType((<JSDocNullableType>node).type);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -8014,6 +8015,10 @@ namespace ts {
                 default:
                     return unknownType;
             }
+        }
+
+        function getTypeFromNonNullableType(node: TypeNode) {
+            return getNonNullableType(getTypeFromTypeNode(node));
         }
 
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
