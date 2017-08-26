@@ -2725,6 +2725,7 @@ namespace ts {
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.AsteriskToken:
+                case SyntaxKind.QuestionToken:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);

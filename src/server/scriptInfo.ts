@@ -156,11 +156,12 @@ namespace ts.server {
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
-            public hasMixedContent = false) {
+            public hasMixedContent = false,
+            public isDynamic = false) {
 
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.textStorage = new TextStorage(host, fileName);
-            if (hasMixedContent) {
+            if (hasMixedContent || isDynamic) {
                 this.textStorage.reload("");
             }
             this.scriptKind = scriptKind
@@ -180,7 +181,7 @@ namespace ts.server {
 
         public close() {
             this.isOpen = false;
-            this.textStorage.useText(this.hasMixedContent ? "" : undefined);
+            this.textStorage.useText(this.hasMixedContent || this.isDynamic ? "" : undefined);
             this.markContainingProjectsAsDirty();
         }
 
@@ -307,7 +308,7 @@ namespace ts.server {
         }
 
         reloadFromFile(tempFileName?: NormalizedPath) {
-            if (this.hasMixedContent) {
+            if (this.hasMixedContent || this.isDynamic) {
                 this.reload("");
             }
             else {

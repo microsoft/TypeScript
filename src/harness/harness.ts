@@ -207,7 +207,7 @@ namespace Utils {
         return a !== undefined && typeof a.pos === "number";
     }
 
-    export function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
+    export function convertDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>) {
         return diagnostics.map(convertDiagnostic);
     }
 
@@ -337,7 +337,7 @@ namespace Utils {
         }
     }
 
-    export function assertDiagnosticsEquals(array1: ts.Diagnostic[], array2: ts.Diagnostic[]) {
+    export function assertDiagnosticsEquals(array1: ReadonlyArray<ts.Diagnostic>, array2: ReadonlyArray<ts.Diagnostic>) {
         if (array1 === array2) {
             return;
         }
@@ -1284,12 +1284,12 @@ namespace Harness {
             return normalized;
         }
 
-        export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
+        export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>) {
             return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
         }
 
-        export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
-            diagnostics.sort(ts.compareDiagnostics);
+        export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>) {
+            diagnostics = diagnostics.slice().sort(ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
             let totalErrorsReportedInNonLibraryFiles = 0;
