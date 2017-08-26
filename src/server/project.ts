@@ -263,7 +263,7 @@ namespace ts.server {
         }
 
         private getScriptInfoLSHost(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false, this.partialSystem);
+            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.partialSystem);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
                 if (existingValue !== undefined && existingValue !== scriptInfo) {
@@ -804,7 +804,7 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false, this.partialSystem);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.partialSystem);
                     scriptInfo.attachToProject(this);
                 },
                 removed => {
@@ -845,9 +845,8 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(
-                fileName, /*openedByClient*/ false, /*fileContent*/ undefined,
-                /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.partialSystem
+            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
+                fileName, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.partialSystem
             );
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);

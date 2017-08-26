@@ -61,7 +61,7 @@ namespace ts {
             typingsInstaller: undefined
         };
         const projectService = new server.ProjectService(svcOpts);
-        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */ true, serverHost);
+        const rootScriptInfo = projectService.getOrCreateScriptInfoForNormalizedPath(server.toNormalizedPath(rootFile), /*openedByClient*/ true);
 
         const project = projectService.assignOrphanScriptInfoToInferredProject(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD, noLib: true } );
