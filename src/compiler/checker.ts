@@ -7547,15 +7547,8 @@ namespace ts {
             const fn = typeNodeToExpression(node.type);
             const args = map(node.arguments, typeNodeToExpression);
             const callExpr = createCall(fn, node.typeArguments || [], args);
+            fixupParentReferences(callExpr);
             callExpr.parent = node;
-            callExpr.expression.parent = callExpr;
-            callExpr.expression.parent = callExpr.expression;
-            const setArgParents = (arg: Node) => {
-                arg.parent = callExpr;
-                (arg as ParenthesizedExpression).expression.parent = arg;
-            };
-            forEach(callExpr.arguments, setArgParents);
-            forEach(callExpr.typeArguments, setArgParents);
             return checkExpression(callExpr);
         }
 
@@ -7569,6 +7562,29 @@ namespace ts {
             type.objectType = objectType;
             type.indexType = indexType;
             return type;
+        }
+
+        // Parser.fixupParentReferences
+        function fixupParentReferences(rootNode: Node) {
+            let parent: Node = rootNode;
+            forEachChild(rootNode, visitNode);
+            return;
+            function visitNode(n: Node): void {
+                if (n.parent !== parent) {
+                    n.parent = parent;
+                    const saveParent = parent;
+                    parent = n;
+                    forEachChild(n, visitNode);
+                    if (n.jsDoc) {
+                        for (const jsDoc of n.jsDoc) {
+                            jsDoc.parent = n;
+                            parent = jsDoc;
+                            forEachChild(jsDoc, visitNode);
+                        }
+                    }
+                    parent = saveParent;
+                }
+            }
         }
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
