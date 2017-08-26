@@ -70,6 +70,7 @@ interface IOLog {
         depth: number,
         result: ReadonlyArray<string>,
     }[];
+    useCaseSensitiveFileNames?: boolean;
 }
 
 interface PlaybackControl {
@@ -151,7 +152,7 @@ namespace Playback {
         wrapper.startRecord = (fileNameBase) => {
             recordLogFileNameBase = fileNameBase;
             recordLog = createEmptyLog();
-
+            recordLog.useCaseSensitiveFileNames = typeof underlying.useCaseSensitiveFileNames === "function" ? underlying.useCaseSensitiveFileNames() : underlying.useCaseSensitiveFileNames;
             if (typeof underlying.args !== "function") {
                 recordLog.arguments = underlying.args;
             }
@@ -249,6 +250,8 @@ namespace Playback {
             }
             underlying.exit(exitCode);
         };
+
+        wrapper.useCaseSensitiveFileNames = () => !!recordLog.useCaseSensitiveFileNames;
     }
 
     function recordReplay<T extends Function>(original: T, underlying: any) {
