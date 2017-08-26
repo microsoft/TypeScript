@@ -3568,7 +3568,7 @@ namespace ts {
         name: string;
     }
 
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
