@@ -337,7 +337,6 @@ namespace ts {
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
-        const emptyTupleType = createTupleType([]);
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -2660,7 +2659,7 @@ namespace ts {
                         return createArrayTypeNode(elementType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
-                        const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, getTypeReferenceArity(type)), context) || [];
+                        const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, getTypeReferenceArity(type)), context);
                         return createTupleTypeNode(tupleConstituentNodes);
                     }
                     else {
@@ -10048,7 +10047,7 @@ namespace ts {
         }
 
         function isTupleLikeType(type: Type): boolean {
-            return !!getPropertyOfType(type, "0" as __String) || type === emptyTupleType;
+            return !!getPropertyOfType(type, "0" as __String) || type === getTupleTypeOfArity(0);
         }
 
         function isUnitType(type: Type): boolean {

@@ -39,7 +39,7 @@ var tt0 = tt[0];
 var tt0: number;
 var tt1 = tt[1];
 var tt1: string;
-var tt2 = tt[2]; 
+var tt2 = tt[2];
 var tt2: number | string;
 
 tt = tuple2(1, undefined);
