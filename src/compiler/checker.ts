@@ -7834,7 +7834,9 @@ namespace ts {
                     members.set(leftProp.escapedName, getNonReadonlySymbol(leftProp));
                 }
             }
-            return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            const result = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            result.flags |= (left.flags | right.flags) & TypeFlags.PropagatingFlags;
+            return result;
         }
 
         function getNonReadonlySymbol(prop: Symbol) {
@@ -13534,7 +13536,6 @@ namespace ts {
             let propertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
-            let propagatedFlags: TypeFlags = 0;
 
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
@@ -13678,8 +13679,6 @@ namespace ts {
                     spread = getSpreadType(spread, createObjectLiteralType());
                 }
                 if (spread.flags & TypeFlags.Object) {
-                    // only set the symbol and flags if this is a (fresh) object type
-                    spread.flags |= propagatedFlags;
                     spread.flags |= TypeFlags.FreshLiteral;
                     (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
                     spread.symbol = node.symbol;
@@ -13701,9 +13700,6 @@ namespace ts {
                 }
                 if (inDestructuringPattern) {
                     result.pattern = node;
-                }
-                if (!(result.flags & TypeFlags.Nullable)) {
-                    propagatedFlags |= (result.flags & TypeFlags.PropagatingFlags);
                 }
                 return result;
             }
