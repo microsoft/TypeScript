@@ -251,7 +251,12 @@ namespace Playback {
             underlying.exit(exitCode);
         };
 
-        wrapper.useCaseSensitiveFileNames = () => !!recordLog.useCaseSensitiveFileNames;
+        wrapper.useCaseSensitiveFileNames = () => {
+            if (replayLog !== undefined) {
+                return !!replayLog.useCaseSensitiveFileNames;
+            }
+            return typeof underlying.useCaseSensitiveFileNames === "function" ? underlying.useCaseSensitiveFileNames() : underlying.useCaseSensitiveFileNames;
+        };
     }
 
     function recordReplay<T extends Function>(original: T, underlying: any) {
