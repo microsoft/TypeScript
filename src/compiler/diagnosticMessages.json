@@ -3696,7 +3696,7 @@
         "code": 95003
     },
 
-    "Extract function into '{0}'": {
+    "Extract function into {0}": {
         "category": "Message",
         "code": 95004
     }

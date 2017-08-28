@@ -9,7 +9,7 @@ namespace A {
         }
     }
 }
-==SCOPE::class C==
+==SCOPE::class 'C'==
 namespace A {
     export interface I { x: number };
     class C {
@@ -24,7 +24,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace A==
+==SCOPE::namespace 'A'==
 namespace A {
     export interface I { x: number };
     class C {
@@ -39,7 +39,7 @@ namespace A {
         return a1.x + 10;
     }
 }
-==SCOPE::file '/a.ts'==
+==SCOPE::global scope==
 namespace A {
     export interface I { x: number };
     class C {

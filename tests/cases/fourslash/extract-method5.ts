@@ -9,7 +9,11 @@
 //// }
 
 goTo.select('start', 'end');
-edit.applyRefactor('Extract Method', 'scope_0');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract function into function 'f'",
+});
 verify.currentFileContentIs(
 `function f() {
     var x: 1 | 2 | 3 = newFunction();
