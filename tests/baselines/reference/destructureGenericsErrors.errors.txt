@@ -1,0 +1,15 @@
+tests/cases/compiler/destructureGenericsErrors.ts(2,9): error TS2554: Expected 2 arguments, but got 1.
+tests/cases/compiler/destructureGenericsErrors.ts(4,9): error TS2554: Expected 2 arguments, but got 3.
+
+
+==== tests/cases/compiler/destructureGenericsErrors.ts (2 errors) ====
+    declare function g<T extends [number, number]>(...args: T): T;
+    var y = g(1); // error
+            ~~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+    var y: [1];
+    var a = g(1,2,3); // error
+            ~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 3.
+    var a: [1,2,3];
+    

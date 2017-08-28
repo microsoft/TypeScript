@@ -1,0 +1,17 @@
+=== tests/cases/compiler/destructureGenericsErrors.ts ===
+declare function g<T extends [number, number]>(...args: T): T;
+>g : Symbol(g, Decl(destructureGenericsErrors.ts, 0, 0))
+>T : Symbol(T, Decl(destructureGenericsErrors.ts, 0, 19))
+>args : Symbol(args, Decl(destructureGenericsErrors.ts, 0, 47))
+>T : Symbol(T, Decl(destructureGenericsErrors.ts, 0, 19))
+>T : Symbol(T, Decl(destructureGenericsErrors.ts, 0, 19))
+
+// var y = g(1); // error
+// var y: [1];
+var a = g(1,2,3); // error
+>a : Symbol(a, Decl(destructureGenericsErrors.ts, 3, 3), Decl(destructureGenericsErrors.ts, 4, 3))
+>g : Symbol(g, Decl(destructureGenericsErrors.ts, 0, 0))
+
+var a: [1,2,3];
+>a : Symbol(a, Decl(destructureGenericsErrors.ts, 3, 3), Decl(destructureGenericsErrors.ts, 4, 3))
+
