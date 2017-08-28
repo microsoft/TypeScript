@@ -190,7 +190,7 @@ namespace ts {
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
-        PromisedKeyword,
+        AwaitedKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
@@ -973,7 +973,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.PromisedKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.AwaitedKeyword;
         type: TypeNode;
     }
 
@@ -3141,7 +3141,7 @@ namespace ts {
         Intersection            = 1 << 17,  // Intersection (T & U)
         Index                   = 1 << 18,  // keyof T
         IndexedAccess           = 1 << 19,  // T[K]
-        Promised                = 1 << 20,  // promised T
+        Awaited                 = 1 << 20,  // awaited T
         /* @internal */
         FreshLiteral            = 1 << 21,  // Fresh literal type
         /* @internal */
@@ -3171,12 +3171,12 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess | Promised,
-        TypeVariable = TypeParameter | IndexedAccess | Promised,
+        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess | Awaited,
+        TypeVariable = TypeParameter | IndexedAccess | Awaited,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive | Promised,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive | Awaited,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -3299,7 +3299,7 @@ namespace ts {
         /* @internal */
         couldContainTypeVariables: boolean;
         /* @internal */
-        resolvedPromisedType: PromisedType;
+        resolvedAwaitedType: AwaitedType;
     }
 
     export interface UnionType extends UnionOrIntersectionType { }
@@ -3364,7 +3364,7 @@ namespace ts {
     /* @internal */
     export interface PromiseOrAwaitableType extends ObjectType, UnionType {
         fulfillmentType?: Type;     // Type of `value` parameter of `onfulfilled` callback.
-        promisedType?: Type;        // The "fulfillment type" if a Promise-like, otherwise this type.
+        awaitedType?: Type;         // The "fulfillment type" if a Promise-like, otherwise this type.
     }
 
     /* @internal */
@@ -3378,7 +3378,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
-        resolvedPromisedType: PromisedType;
+        resolvedAwaitedType: AwaitedType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3409,8 +3409,8 @@ namespace ts {
         type: TypeVariable | UnionOrIntersectionType;
     }
 
-    // promised T types (TypeFlags.Promised)
-    export interface PromisedType extends Type {
+    // awaited T types (TypeFlags.Awaited)
+    export interface AwaitedType extends Type {
         type: TypeVariable;
     }
 

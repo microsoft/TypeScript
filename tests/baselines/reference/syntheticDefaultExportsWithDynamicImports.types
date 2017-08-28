@@ -9,10 +9,10 @@ export = packageExport;
 === tests/cases/compiler/index.ts ===
 import("package").then(({default: foo}) => foo(42));
 >import("package").then(({default: foo}) => foo(42)) : Promise<string>
->import("package").then : <TResult1 = ((x: number) => string) & { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: ((x: number) => string) & { default: (x: number) => string; }) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<promised TResult1 | promised TResult2>
+>import("package").then : <TResult1 = ((x: number) => string) & { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: ((x: number) => string) & { default: (x: number) => string; }) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
 >import("package") : Promise<((x: number) => string) & { default: (x: number) => string; }>
 >"package" : "package"
->then : <TResult1 = ((x: number) => string) & { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: ((x: number) => string) & { default: (x: number) => string; }) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<promised TResult1 | promised TResult2>
+>then : <TResult1 = ((x: number) => string) & { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: ((x: number) => string) & { default: (x: number) => string; }) => TResult1, onrejected?: (reason: any) => TResult2) => Promise<awaited TResult1 | awaited TResult2>
 >({default: foo}) => foo(42) : ({ default: foo }: ((x: number) => string) & { default: (x: number) => string; }) => string
 >default : any
 >foo : (x: number) => string

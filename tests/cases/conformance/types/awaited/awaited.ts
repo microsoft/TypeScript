@@ -71,8 +71,8 @@ async function f6<U>(u: Promise<Promise<U>>) {
 
 // assignability
 let v0: number;
-let v1: promised number;
-let v2: promised Promise<number>;
+let v1: awaited number;
+let v2: awaited Promise<number>;
 v0 = v1;
 v0 = v2;
 v1 = v0;
@@ -81,16 +81,16 @@ v2 = v0;
 v2 = v1;
 
 function f7<U>() {
-    let v0: promised U;
-    let v1: promised Promise<U>;
+    let v0: awaited U;
+    let v1: awaited Promise<U>;
     v0 = v1;
     v1 = v0;
 }
 
 async function f8<U>() {
     let pu: Promise<U>;
-    let v0: promised U;
-    let v1: promised Promise<U>;
+    let v0: awaited U;
+    let v1: awaited Promise<U>;
     v0 = await pu;
     v1 = await pu;
 }

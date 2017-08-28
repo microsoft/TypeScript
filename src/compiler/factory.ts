@@ -730,7 +730,7 @@ namespace ts {
         return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
     }
 
-    export function createTypeOperatorNode(type: TypeNode, operator: SyntaxKind.KeyOfKeyword | SyntaxKind.PromisedKeyword) {
+    export function createTypeOperatorNode(type: TypeNode, operator: SyntaxKind.KeyOfKeyword | SyntaxKind.AwaitedKeyword) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         node.operator = operator;
         node.type = parenthesizeElementTypeMember(type);

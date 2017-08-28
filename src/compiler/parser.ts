@@ -2782,7 +2782,7 @@ namespace ts {
             return type;
         }
 
-        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.PromisedKeyword) {
+        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.AwaitedKeyword) {
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
             node.operator = operator;
@@ -2794,7 +2794,7 @@ namespace ts {
             const keyword = token();
             switch (keyword) {
                 case SyntaxKind.KeyOfKeyword:
-                case SyntaxKind.PromisedKeyword:
+                case SyntaxKind.AwaitedKeyword:
                     return parseTypeOperator(keyword);
             }
             return parseArrayTypeOrHigher();

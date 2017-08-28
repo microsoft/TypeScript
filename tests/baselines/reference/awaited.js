@@ -1,4 +1,4 @@
-//// [promised.ts]
+//// [awaited.ts]
 // simple
 declare const p0: Promise<number>;
 p0.then(x => x);
@@ -70,8 +70,8 @@ async function f6<U>(u: Promise<Promise<U>>) {
 
 // assignability
 let v0: number;
-let v1: promised number;
-let v2: promised Promise<number>;
+let v1: awaited number;
+let v2: awaited Promise<number>;
 v0 = v1;
 v0 = v2;
 v1 = v0;
@@ -80,21 +80,21 @@ v2 = v0;
 v2 = v1;
 
 function f7<U>() {
-    let v0: promised U;
-    let v1: promised Promise<U>;
+    let v0: awaited U;
+    let v1: awaited Promise<U>;
     v0 = v1;
     v1 = v0;
 }
 
 async function f8<U>() {
     let pu: Promise<U>;
-    let v0: promised U;
-    let v1: promised Promise<U>;
+    let v0: awaited U;
+    let v1: awaited Promise<U>;
     v0 = await pu;
     v1 = await pu;
 }
 
-//// [promised.js]
+//// [awaited.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -188,21 +188,21 @@ function f8() {
 }
 
 
-//// [promised.d.ts]
+//// [awaited.d.ts]
 declare const p0: Promise<number>;
 declare const p1: Promise<Promise<number>>;
 declare const p2: Promise<number | Promise<number>>;
 declare const f: boolean;
 declare function makePromise<T>(x: T): Promise<T>;
-declare function f0<U>(u: U): Promise<promised U>;
-declare function f1<U, V>(u: U, v: V): Promise<(promised U) | (promised V)>;
-declare function f2<U>(u: U): Promise<promised U>;
-declare function f3<U, V>(u: U, v: V): Promise<(promised U) | (promised V)>;
-declare function f4<U, V>(u: U, v: V): Promise<(promised U) | (promised V)>;
-declare function f5<U>(u: Promise<U>): Promise<promised U>;
-declare function f6<U>(u: Promise<Promise<U>>): Promise<promised U>;
+declare function f0<U>(u: U): Promise<awaited U>;
+declare function f1<U, V>(u: U, v: V): Promise<(awaited U) | (awaited V)>;
+declare function f2<U>(u: U): Promise<awaited U>;
+declare function f3<U, V>(u: U, v: V): Promise<(awaited U) | (awaited V)>;
+declare function f4<U, V>(u: U, v: V): Promise<(awaited U) | (awaited V)>;
+declare function f5<U>(u: Promise<U>): Promise<awaited U>;
+declare function f6<U>(u: Promise<Promise<U>>): Promise<awaited U>;
 declare let v0: number;
-declare let v1: promised number;
-declare let v2: promised Promise<number>;
+declare let v1: awaited number;
+declare let v2: awaited Promise<number>;
 declare function f7<U>(): void;
 declare function f8<U>(): Promise<void>;

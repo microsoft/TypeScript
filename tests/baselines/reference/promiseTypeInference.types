@@ -4,7 +4,7 @@ declare class Promise<T> {
 >T : T
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: promised T) => TResult1, onrejected?: (reason: any) => TResult2): Promise<promised TResult1 | promised TResult2>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: awaited T) => TResult1, onrejected?: (reason: any) => TResult2): Promise<awaited TResult1 | awaited TResult2>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
 >U : U
 >success : (value: T) => Promise<U>
 >value : T
@@ -42,11 +42,11 @@ declare function convert(s: string): IPromise<number>;
 var $$x = load("something").then(s => convert(s));
 >$$x : Promise<number>
 >load("something").then(s => convert(s)) : Promise<number>
->load("something").then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1, onrejected?: (reason: any) => TResult2): Promise<promised TResult1 | promised TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
+>load("something").then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1, onrejected?: (reason: any) => TResult2): Promise<awaited TResult1 | awaited TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
 >load("something") : Promise<string>
 >load : (name: string) => Promise<string>
 >"something" : "something"
->then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1, onrejected?: (reason: any) => TResult2): Promise<promised TResult1 | promised TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1, onrejected?: (reason: any) => TResult2): Promise<awaited TResult1 | awaited TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
 >s => convert(s) : (s: string) => IPromise<number>
 >s : string
 >convert(s) : IPromise<number>
