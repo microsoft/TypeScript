@@ -1,4 +1,4 @@
-//// [superNoModifiersError.ts]
+//// [File.js]
 class Parent {
     initialize() {
         super.initialize(...arguments)
@@ -11,7 +11,7 @@ class Child extends Parent {
     }
 }
 
-//// [superNoModifiersError.js]
+//// [File.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||

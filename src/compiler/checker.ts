@@ -8169,6 +8169,9 @@ namespace ts {
             if (symbol.valueDeclaration) {
                 result.valueDeclaration = symbol.valueDeclaration;
             }
+            if ((symbol as TransientSymbol).isRestParameter) {
+                result.isRestParameter = (symbol as TransientSymbol).isRestParameter;
+            }
             return result;
         }
 

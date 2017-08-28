@@ -1,3 +1,6 @@
+// @allowjs: true
+// @outDir: ../
+// @filename: File.js
 class Parent {
     initialize() {
         super.initialize(...arguments)
