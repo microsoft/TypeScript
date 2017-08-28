@@ -8,11 +8,16 @@ namespace ts.codefix {
     function getActionsForJSDocTypes(context: CodeFixContext): CodeAction[] | undefined {
         const sourceFile = context.sourceFile;
         const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
-        const decl = ts.findAncestor(node, n => n.kind === SyntaxKind.VariableDeclaration);
+        const decl = ts.findAncestor(node,
+                                     n => n.kind === SyntaxKind.VariableDeclaration ||
+                                     n.kind === SyntaxKind.Parameter ||
+                                     n.kind === SyntaxKind.PropertyDeclaration ||
+                                     n.kind === SyntaxKind.PropertyAssignment);
         if (!decl) return;
         const checker = context.program.getTypeChecker();
 
         const jsdocType = (decl as VariableDeclaration).type;
+        if (!jsdocType) return;
         const original = getTextOfNode(jsdocType);
         const type = checker.getTypeFromTypeNode(jsdocType);
         const actions = [createAction(jsdocType, sourceFile.fileName, original, checker.typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTruncation))];
