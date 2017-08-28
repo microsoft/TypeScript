@@ -999,16 +999,22 @@ namespace ts.server {
             if (this.projectService.globalPlugins) {
                 // Enable global plugins with synthetic configuration entries
                 for (const globalPluginName of this.projectService.globalPlugins) {
+                    // Skip empty names from odd commandline parses
+                    if (!globalPluginName) continue;
+
                     // Skip already-locally-loaded plugins
                     if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
 
                     // Provide global: true so plugins can detect why they can't find their config
+                    this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
                     this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
                 }
             }
         }
 
         private enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]) {
+            this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
+
             const log = (message: string) => {
                 this.projectService.logger.info(message);
             };
@@ -1020,7 +1026,7 @@ namespace ts.server {
                     return;
                 }
             }
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name} anywhere in paths: ${searchPaths.join(",")}`);
+            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -1039,7 +1045,15 @@ namespace ts.server {
                 };
 
                 const pluginModule = pluginModuleFactory({ typescript: ts });
-                this.languageService = pluginModule.create(info);
+                const newLS = pluginModule.create(info);
+                for (const k of Object.keys(this.languageService)) {
+                    if (!(k in newLS)) {
+                        this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
+                        (newLS as any)[k] = (this.languageService as any)[k];
+                    }
+                }
+                this.projectService.logger.info(`Plugin validation succeded`);
+                this.languageService = newLS;
                 this.plugins.push(pluginModule);
             }
             catch (e) {
