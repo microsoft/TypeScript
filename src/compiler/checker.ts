@@ -5914,7 +5914,7 @@ namespace ts {
             const keepTypeParameterForMappedType = baseObjectType && getObjectFlags(baseObjectType) & ObjectFlags.Mapped &&
                 type.indexType.flags & TypeFlags.TypeParameter;
             const baseIndexType = !keepTypeParameterForMappedType && getBaseConstraintOfType(type.indexType);
-            if (baseObjectType && baseIndexType === stringType && !getIndexInfoOfType(baseObjectType, IndexKind.String)) {
+            if (baseIndexType === stringType && (!baseObjectType || !getIndexInfoOfType(baseObjectType, IndexKind.String))) {
                 // getIndexedAccessType returns `any` for X[string] where X doesn't have an index signature.
                 // to avoid this, return `undefined`.
                 return undefined;
