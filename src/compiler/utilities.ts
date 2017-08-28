@@ -359,6 +359,7 @@ namespace ts {
             case SyntaxKind.TemplateTail:
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.RegularExpressionLiteral:
                 return node.text;
         }
 
