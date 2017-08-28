@@ -321,34 +321,6 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    function getPathsForTypesOrModules(base: string, rootPaths: string[], typesOrModules: string[], map: Map<true>, rootDir?: string) {
-        while (1) {
-            forEach(rootPaths, r => {
-                const rp = combinePaths(base, r);
-                forEach(typesOrModules, tm => {
-                    map.set(tm === "" ? rp : combinePaths(rp, tm), true);
-                });
-            });
-            const parentDir = getDirectoryPath(base);
-            if (base === rootDir || parentDir === base) {
-                break;
-            }
-            base = parentDir;
-        }
-        return map;
-    }
-
-    function getNodeModulesWatchedDirectories(path: string, modules: string[], map = createMap<true>()) {
-        forEach(modules, module => {
-            getPathsForTypesOrModules(path, ["node_modules"], ["", module, "@types", `@types/${module}`], map);
-        });
-        return map;
-    }
-
-    function getTypesWatchedDirectories(path: string, typeRoots: string[], types: string[], map = createMap<true>()) {
-        return getPathsForTypesOrModules(path, typeRoots, types.concat(""), map, path);
-    }
-
     describe("tsserverProjectSystem", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -386,8 +358,8 @@ namespace ts.projectSystem {
             const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
-            checkWatchedDirectories(host, ["/a/b/c"], /*recursive*/ false);
-            checkWatchedDirectories(host, [], /*recursive*/ true);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, ["/"], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -4040,7 +4012,7 @@ namespace ts.projectSystem {
             const calledMaps = getCallsTrackingMap();
             return {
                 verifyNoCall,
-                verifyCalledOnEachEntryOnce,
+                verifyCalledOnEachEntryNTimes,
                 verifyCalledOnEachEntry,
                 verifyNoHostCalls,
                 verifyNoHostCallsExceptFileExistsOnce,
@@ -4090,8 +4062,8 @@ namespace ts.projectSystem {
                 });
             }
 
-            function verifyCalledOnEachEntryOnce(callback: keyof CalledMaps, expectedKeys: string[]) {
-                return verifyCalledOnEachEntry(callback, zipToMap(expectedKeys, expectedKeys.map(() => 1)));
+            function verifyCalledOnEachEntryNTimes(callback: keyof CalledMaps, expectedKeys: string[], nTimes: number) {
+                return verifyCalledOnEachEntry(callback, zipToMap(expectedKeys, expectedKeys.map(() => nTimes)));
             }
 
             function verifyNoHostCalls() {
@@ -4101,7 +4073,7 @@ namespace ts.projectSystem {
             }
 
             function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: string[]) {
-                verifyCalledOnEachEntryOnce("fileExists", expectedKeys);
+                verifyCalledOnEachEntryNTimes("fileExists", expectedKeys, 1);
                 verifyNoCall("directoryExists");
                 verifyNoCall("getDirectories");
                 verifyNoCall("readFile");
@@ -4253,17 +4225,7 @@ namespace ts.projectSystem {
                 const { configFileName } = projectService.openClientFile(file1.path);
                 assert.equal(configFileName, tsconfigFile.path, `should find config`);
                 checkNumberOfConfiguredProjects(projectService, 1);
-                const watchedModuleDirectories = arrayFrom(
-                    getNodeModulesWatchedDirectories(
-                        canonicalFrontendDir,
-                        types,
-                        getTypesWatchedDirectories(
-                            canonicalFrontendDir,
-                            typeRoots,
-                            types
-                        )
-                    ).keys()
-                );
+                const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, canonicalFrontendDir, "/"];
 
                 const project = projectService.configuredProjects.get(canonicalConfigPath);
                 verifyProjectAndWatchedDirectories();
@@ -4276,7 +4238,7 @@ namespace ts.projectSystem {
                 host.runQueuedTimeoutCallbacks();
 
                 const canonicalFile3Path = useCaseSensitiveFileNames ? file3.path : file3.path.toLocaleLowerCase();
-                callsTrackingHost.verifyCalledOnEachEntryOnce("fileExists", [canonicalFile3Path]);
+                callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", [canonicalFile3Path], watchingRecursiveDirectories.length);
 
                 // Called for type root resolution
                 const directoryExistsCalled = createMap<number>();
@@ -4286,11 +4248,11 @@ namespace ts.projectSystem {
                 directoryExistsCalled.set(`/node_modules`, 2);
                 directoryExistsCalled.set(`${frontendDir}/types`, 2);
                 directoryExistsCalled.set(`${frontendDir}/node_modules/@types`, 2);
-                directoryExistsCalled.set(canonicalFile3Path, 1);
+                directoryExistsCalled.set(canonicalFile3Path, watchingRecursiveDirectories.length);
                 callsTrackingHost.verifyCalledOnEachEntry("directoryExists", directoryExistsCalled);
 
                 callsTrackingHost.verifyNoCall("getDirectories");
-                callsTrackingHost.verifyCalledOnEachEntryOnce("readFile", [file3.path]);
+                callsTrackingHost.verifyCalledOnEachEntryNTimes("readFile", [file3.path], 1);
                 callsTrackingHost.verifyNoCall("readDirectory");
 
                 checkNumberOfConfiguredProjects(projectService, 1);
@@ -4316,8 +4278,8 @@ namespace ts.projectSystem {
                 function verifyProjectAndWatchedDirectories() {
                     checkProjectActualFiles(project, map(projectFiles, f => f.path));
                     checkWatchedFiles(host, mapDefined(projectFiles, getFilePathIfOpen));
-                    checkWatchedDirectories(host, [`${canonicalFrontendDir}/src`], /*recursive*/ true);
-                    checkWatchedDirectories(host, watchedModuleDirectories, /*recursive*/ false);
+                    checkWatchedDirectories(host, watchingRecursiveDirectories, /*recursive*/ true);
+                    checkWatchedDirectories(host, [], /*recursive*/ false);
                 }
             }
 
@@ -4372,7 +4334,7 @@ namespace ts.projectSystem {
                 const projectService = createProjectService(host);
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path, `should find config`);
-                const watchedModuleLocations = arrayFrom(getNodeModulesWatchedDirectories(appFolder, ["lodash"]).keys());
+                const recursiveWatchedDirectories: string[] = [appFolder, "/"];
                 verifyProject();
 
                 let timeoutAfterReloadFs = timeoutDuringPartialInstallation;
@@ -4450,7 +4412,8 @@ namespace ts.projectSystem {
 
                 const lodashIndexPath = "/a/b/node_modules/@types/lodash/index.d.ts";
                 projectFiles.push(find(filesAndFoldersToAdd, f => f.path === lodashIndexPath));
-                watchedModuleLocations.length = indexOf(watchedModuleLocations, getDirectoryPath(lodashIndexPath));
+                // we would now not have failed lookup in the parent of appFolder since lodash is available
+                recursiveWatchedDirectories.length = 1;
                 // npm installation complete, timeout after reload fs
                 timeoutAfterReloadFs = true;
                 verifyAfterPartialOrCompleteNpmInstall(2);
@@ -4475,8 +4438,8 @@ namespace ts.projectSystem {
 
                     const filesWatched = filter(projectFilePaths, p => p !== app.path);
                     checkWatchedFiles(host, filesWatched);
-                    checkWatchedDirectories(host, [appFolder], /*recursive*/ true);
-                    checkWatchedDirectories(host, watchedModuleLocations, /*recursive*/ false);
+                    checkWatchedDirectories(host, recursiveWatchedDirectories, /*recursive*/ true);
+                    checkWatchedDirectories(host, [], /*recursive*/ false);
                 }
             }
 

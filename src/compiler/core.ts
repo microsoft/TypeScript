@@ -1809,6 +1809,8 @@ namespace ts {
      * Removes a trailing directory separator from a path.
      * @param path The path.
      */
+    export function removeTrailingDirectorySeparator(path: Path): Path;
+    export function removeTrailingDirectorySeparator(path: string): string;
     export function removeTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) === directorySeparator) {
             return path.substr(0, path.length - 1);

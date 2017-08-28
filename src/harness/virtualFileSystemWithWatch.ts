@@ -141,7 +141,7 @@ namespace ts.TestFSWithWatch {
     }
 
     export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive = false) {
-        checkMapKeys("watchedDirectories", recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
+        checkMapKeys(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
     export function checkOutputContains(host: TestServerHost, expected: ReadonlyArray<string>) {

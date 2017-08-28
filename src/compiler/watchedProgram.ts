@@ -297,7 +297,10 @@ namespace ts {
         };
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost);
-
+        resolutionCache.setRootDirectory(configFileName ?
+            getDirectoryPath(getNormalizedAbsolutePath(configFileName, getCurrentDirectory())) :
+            getCurrentDirectory()
+        );
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder(getCanonicalFileName, getFileEmitOutput, computeHash, _sourceFile => true);
 
@@ -576,8 +579,8 @@ namespace ts {
             }
         }
 
-        function watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback) {
-            return watchDirectory(system, directory, cb, WatchDirectoryFlags.None, writeLog);
+        function watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
+            return watchDirectory(system, directory, cb, flags, writeLog);
         }
 
         function watchMissingFilePath(missingFilePath: Path) {

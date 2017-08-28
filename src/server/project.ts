@@ -351,12 +351,12 @@ namespace ts.server {
         }
 
         /*@internal*/
-        watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback) {
+        watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
             return this.projectService.watchDirectory(
                 this.projectService.host,
                 directory,
                 cb,
-                WatchDirectoryFlags.None,
+                flags,
                 WatchType.FailedLookupLocation,
                 this
             );
@@ -1012,6 +1012,13 @@ namespace ts.server {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }
             super.addRoot(info);
+            // For first root set the resolution cache root dir
+            if (this.getRootFiles.length === 1) {
+                const rootDirPath = this.getProjectRootPath();
+                if (rootDirPath) {
+                    this.resolutionCache.setRootDirectory(rootDirPath);
+                }
+            }
         }
 
         removeRoot(info: ScriptInfo) {
@@ -1064,7 +1071,6 @@ namespace ts.server {
         /* @internal */
         configFileWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
-        private typeRootsWatchers: Map<FileWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
@@ -1091,6 +1097,7 @@ namespace ts.server {
             super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, cachedPartialSystem);
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
             this.enablePlugins();
+            this.resolutionCache.setRootDirectory(getDirectoryPath(configFileName));
         }
 
         /**
@@ -1252,29 +1259,6 @@ namespace ts.server {
             }
         }
 
-        /*@internal*/
-        watchTypeRoots() {
-            const newTypeRoots = arrayToSet(this.getEffectiveTypeRoots(), dir => this.projectService.toCanonicalFileName(dir));
-            mutateMap(
-                this.typeRootsWatchers || (this.typeRootsWatchers = createMap()),
-                newTypeRoots,
-                {
-                    // Create new watch
-                    createNewValue: root => this.projectService.watchTypeRootDirectory(root as Path, this),
-                    // Close existing watch thats not needed any more
-                    onDeleteValue: closeFileWatcher
-                }
-            );
-        }
-
-        /*@internal*/
-        stopWatchingTypeRoots() {
-            if (this.typeRootsWatchers) {
-                clearMap(this.typeRootsWatchers, closeFileWatcher);
-                this.typeRootsWatchers = undefined;
-            }
-        }
-
         close() {
             super.close();
 
@@ -1283,7 +1267,6 @@ namespace ts.server {
                 this.configFileWatcher = undefined;
             }
 
-            this.stopWatchingTypeRoots();
             this.stopWatchingWildCards();
         }
 
@@ -1325,6 +1308,7 @@ namespace ts.server {
             public compileOnSaveEnabled: boolean,
             private readonly projectFilePath?: string) {
             super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, projectService.host);
+            this.resolutionCache.setRootDirectory(this.getProjectRootPath());
         }
 
         getProjectRootPath() {

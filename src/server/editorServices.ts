@@ -244,7 +244,6 @@ namespace ts.server {
         ConfigFilePath = "Config file for the program",
         MissingFilePath = "Missing file from program",
         WildcardDirectories = "Wild card directory",
-        TypeRoot = "Type root of the project",
         ClosedScriptInfo = "Closed Script info",
         ConfigFileForInferredRoot = "Config file for the inferred project root",
         FailedLookupLocation = "Directory of Failed lookup locations in module resolution"
@@ -709,23 +708,6 @@ namespace ts.server {
                 // update projects to make sure that set of referenced files is correct
                 this.delayUpdateProjectGraphs(containingProjects);
             }
-        }
-
-        /*@internal*/
-        watchTypeRootDirectory(root: Path, project: ConfiguredProject) {
-            // TODO: This is not needed anymore with watches for failed lookup locations?
-            return this.watchDirectory(
-                this.host,
-                root,
-                fileOrFolder => {
-                    project.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
-                    project.updateTypes();
-                    this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
-                },
-                WatchDirectoryFlags.None,
-                WatchType.TypeRoot,
-                project
-            );
         }
 
         /**
@@ -1434,7 +1416,6 @@ namespace ts.server {
             );
             if (languageServiceEnabled) {
                 project.watchWildcards(projectOptions.wildcardDirectories);
-                project.watchTypeRoots();
             }
 
             project.setProjectErrors(configFileErrors);
@@ -1534,12 +1515,10 @@ namespace ts.server {
             if (this.exceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader)) {
                 project.disableLanguageService();
                 project.stopWatchingWildCards();
-                project.stopWatchingTypeRoots();
             }
             else {
                 project.enableLanguageService();
                 project.watchWildcards(projectOptions.wildcardDirectories);
-                project.watchTypeRoots();
             }
             this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave);
 
