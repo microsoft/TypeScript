@@ -13708,10 +13708,10 @@ namespace ts {
                 // We used a cached object literal type if the object literal is not the inferred type of a variable
                 // (otherwise Go To Definition on the variable's members wouldn't work properly), has no methods or
                 // accessors (we may cause circularities when obtaining the types of those members), has no index
-                // signatures, is not in a destructuring pattern, doesn't have more than 50 properties, and doesn't
+                // signatures, is not in a destructuring pattern, doesn't have more than 10 properties, and doesn't
                 // have property names containing colons (which we use as a separator in the cache key).
                 if (!isInferredTypeOfVariable(node) && !hasMethodsOrAccessors && !stringIndexInfo && !numberIndexInfo && !inDestructuringPattern &&
-                    propertiesArray.length <= 50 && !forEach(propertiesArray, symbolNameContainsColon)) {
+                    propertiesArray.length <= 10 && !forEach(propertiesArray, symbolNameContainsColon)) {
                     return getObjectLiteralType(typeFlags, node.symbol, propertiesTable, propertiesArray);
                 }
                 const result = makeObjectLiteralType(typeFlags, node.symbol, propertiesTable, stringIndexInfo, numberIndexInfo);
