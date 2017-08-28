@@ -9,7 +9,7 @@ function f() {
 
 //// [emitArrowFunctionWhenUsingArguments17.js]
 function f() {
-    var arguments = { arguments: "hello" }.arguments;
+    var arguments = ({ arguments: "hello" }).arguments;
     if (Math.random()) {
         return function () { return arguments[0]; };
     }

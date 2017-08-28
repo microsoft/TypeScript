@@ -24,9 +24,9 @@ if (true) {
 }
 var x, y, z;
 if (true) {
-    var x_1 = { x: 0 }.x;
-    var y_1 = { y: 0 }.y;
+    var x_1 = ({ x: 0 }).x;
+    var y_1 = ({ y: 0 }).y;
     var z_1;
-    (z_1 = { z: 0 }.z);
-    (z_1 = { z: 0 }.z);
+    (z_1 = ({ z: 0 }).z);
+    (z_1 = ({ z: 0 }).z);
 }

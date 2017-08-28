@@ -82,19 +82,19 @@ function f3() {
     z;
 }
 function f4() {
-    var x = { x: 1 }.x;
+    var x = ({ x: 1 }).x;
     x;
-    var y = { y: "" }.y;
+    var y = ({ y: "" }).y;
     y;
-    var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
+    var _a = ({ z: undefined }).z, z = _a === void 0 ? "" : _a;
     z;
 }
 function f5() {
-    var x = { x: 1 }.x;
+    var x = ({ x: 1 }).x;
     x;
-    var y = { y: "" }.y;
+    var y = ({ y: "" }).y;
     y;
-    var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
+    var _a = ({ z: undefined }).z, z = _a === void 0 ? "" : _a;
     z;
 }
 function f6() {

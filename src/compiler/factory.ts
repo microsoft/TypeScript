@@ -3816,13 +3816,13 @@ namespace ts {
         //    NewExpression:
         //       new C.x        -> not the same as (new C).x
         //
-        //    EmptyObjectLiteral:
-        //       {}.toString()  -> is incorrect syntax, should be ({}).x
+        //    ObjectLiteral:
+        //       {a:1}.toString()  -> is incorrect syntax, should be ({a:3}).toString()
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
             && (!isNewExpression(emittedExpression) || (<NewExpression>emittedExpression).arguments)
-            && !isEmptyObjectLiteral(emittedExpression)) {
+            && !isObjectLiteralExpression(emittedExpression)) {
             return <LeftHandSideExpression>expression;
         }
 

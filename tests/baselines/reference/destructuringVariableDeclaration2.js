@@ -35,4 +35,4 @@ var _g = [1, 2, { c3: 4, c5: 0 }], c1 = _g[0], c2 = _g[1], _h = _g[2], c4 = _h.c
 // When a destructuring variable declaration, binding property, or binding element specifies
 // an initializer expression, the type of the initializer expression is required to be assignable
 // to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
-var _j = { d: { d1: [1, 2] } }.d.d1, d1 = _j === void 0 ? ["string", null] : _j; // Error
+var _j = ({ d: { d1: [1, 2] } }).d.d1, d1 = _j === void 0 ? ["string", null] : _j; // Error

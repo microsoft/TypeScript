@@ -81,7 +81,7 @@ for (var nameA = robot.name, i = 0; i < 1; i++) {
 for (var nameA = getRobot().name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var nameA = { name: "trimmer", skill: "trimming" }.name, i = 0; i < 1; i++) {
+for (var nameA = ({ name: "trimmer", skill: "trimming" }).name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
 for (var _a = multiRobot.skills, primaryA = _a.primary, secondaryA = _a.secondary, i = 0; i < 1; i++) {
@@ -90,7 +90,7 @@ for (var _a = multiRobot.skills, primaryA = _a.primary, secondaryA = _a.secondar
 for (var _b = getMultiRobot().skills, primaryA = _b.primary, secondaryA = _b.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (var _c = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }.skills, primaryA = _c.primary, secondaryA = _c.secondary, i = 0; i < 1; i++) {
+for (var _c = ({ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }).skills, primaryA = _c.primary, secondaryA = _c.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
 for (var nameA = robot.name, skillA = robot.skill, i = 0; i < 1; i++) {

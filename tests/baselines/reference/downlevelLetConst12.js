@@ -16,6 +16,6 @@ const {a: baz4} = { a: 1 };
 var foo;
 var bar = 1;
 var baz = [][0];
-var baz2 = { a: 1 }.a;
+var baz2 = ({ a: 1 }).a;
 var baz3 = [][0];
-var baz4 = { a: 1 }.a;
+var baz4 = ({ a: 1 }).a;

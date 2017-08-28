@@ -112,7 +112,7 @@ for (var _a = robot.name, nameA = _a === void 0 ? "noName" : _a, i = 0; i < 1; i
 for (var _b = getRobot().name, nameA = _b === void 0 ? "noName" : _b, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (var _c = { name: "trimmer", skill: "trimming" }.name, nameA = _c === void 0 ? "noName" : _c, i = 0; i < 1; i++) {
+for (var _c = ({ name: "trimmer", skill: "trimming" }).name, nameA = _c === void 0 ? "noName" : _c, i = 0; i < 1; i++) {
     console.log(nameA);
 }
 for (var _d = multiRobot.skills, _e = _d === void 0 ? { primary: "none", secondary: "none" } : _d, _f = _e.primary, primaryA = _f === void 0 ? "primary" : _f, _g = _e.secondary, secondaryA = _g === void 0 ? "secondary" : _g, i = 0; i < 1; i++) {
@@ -121,7 +121,7 @@ for (var _d = multiRobot.skills, _e = _d === void 0 ? { primary: "none", seconda
 for (var _h = getMultiRobot().skills, _j = _h === void 0 ? { primary: "none", secondary: "none" } : _h, _k = _j.primary, primaryA = _k === void 0 ? "primary" : _k, _l = _j.secondary, secondaryA = _l === void 0 ? "secondary" : _l, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (var _m = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }.skills, _o = _m === void 0 ? { primary: "none", secondary: "none" } : _m, _p = _o.primary, primaryA = _p === void 0 ? "primary" : _p, _q = _o.secondary, secondaryA = _q === void 0 ? "secondary" : _q, i = 0; i < 1; i++) {
+for (var _m = ({ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }).skills, _o = _m === void 0 ? { primary: "none", secondary: "none" } : _m, _p = _o.primary, primaryA = _p === void 0 ? "primary" : _p, _q = _o.secondary, secondaryA = _q === void 0 ? "secondary" : _q, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
 for (var _r = robot.name, nameA = _r === void 0 ? "noName" : _r, _s = robot.skill, skillA = _s === void 0 ? "skill" : _s, i = 0; i < 1; i++) {
