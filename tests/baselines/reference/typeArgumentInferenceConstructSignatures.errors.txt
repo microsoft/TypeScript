@@ -15,7 +15,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,69): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; z: any; }'.
   Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; z: any; }'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,56): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,74): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,66): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
 
 
@@ -169,7 +169,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                            ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
-                                                                             ~~~~~
+                                                                     ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
     var a9f: A92;

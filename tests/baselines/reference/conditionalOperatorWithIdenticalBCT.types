@@ -131,7 +131,7 @@ true ? 1 : {};
 >{} : {}
 
 true ? { a: 2, b: 'string' } : { a: 1 };
->true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; } | { a: number; b: string; }
 >true : true
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
@@ -150,8 +150,8 @@ var result6 = true ? 1 : {};
 >{} : {}
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; b: string; } | { a: number; }
->true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
+>result7 : { a: number; } | { a: number; b: string; }
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; } | { a: number; b: string; }
 >true : true
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
