@@ -3171,6 +3171,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
+        ObjectOrTypeVariable = Object | TypeParameter | Index | IndexedAccess,
         TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
