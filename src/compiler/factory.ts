@@ -3817,7 +3817,7 @@ namespace ts {
         //       new C.x        -> not the same as (new C).x
         //
         //    ObjectLiteral:
-        //       {a:1}.toString()  -> is incorrect syntax, should be ({a:3}).toString()
+        //       {a:1}.toString()  -> is incorrect syntax, should be ({a:1}).toString()
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
