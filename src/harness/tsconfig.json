@@ -125,6 +125,7 @@
         "./unittests/printer.ts",
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
+        "./unittests/extractMethods.ts",
         "./unittests/textChanges.ts",
         "./unittests/telemetry.ts",
         "./unittests/programMissingFiles.ts"

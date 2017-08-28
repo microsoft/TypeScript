@@ -10,10 +10,18 @@
 //// }
 
 goTo.select('a', 'b');
-edit.applyRefactor('Extract Method', 'scope_0');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract function into class 'C'",
+});
 
 goTo.select('c', 'd');
-edit.applyRefactor('Extract Method', 'scope_0');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract function into class 'C'",
+});
 
 verify.currentFileContentIs(`class C {
     static j = C.newFunction_1();
