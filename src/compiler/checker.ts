@@ -3091,7 +3091,7 @@ namespace ts {
         }
 
         function literalTypeToString(type: LiteralType) {
-            return type.flags & TypeFlags.StringLiteral ? enquote(escapeString((<StringLiteralType>type).value)) : "" + (<NumberLiteralType>type).value;
+            return type.flags & TypeFlags.StringLiteral ? '"' + escapeString((<StringLiteralType>type).value) + '"' : "" + (<NumberLiteralType>type).value;
         }
 
         function getNameOfSymbol(symbol: Symbol): string {
@@ -6254,7 +6254,7 @@ namespace ts {
             if (isExternalModuleNameRelative(moduleName)) {
                 return undefined;
             }
-            const symbol = getSymbol(globals, enquote(moduleName) as __String, SymbolFlags.ValueModule);
+            const symbol = getSymbol(globals, '"' + moduleName + '"' as __String, SymbolFlags.ValueModule);
             // merged symbol is module declaration symbol combined with all augmentations
             return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
@@ -25127,9 +25127,5 @@ namespace ts {
             default:
                 return false;
         }
-    }
-
-    function enquote(s: string): string {
-        return '"' + s + '"';
     }
 }
