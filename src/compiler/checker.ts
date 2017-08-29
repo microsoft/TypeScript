@@ -8823,7 +8823,13 @@ namespace ts {
             let targetStack: Type[];
             let maybeCount = 0;
             let depth = 0;
-            let expandingFlags = 0;
+            const enum ExpandingFlags {
+                None = 0,
+                Source = 1,
+                Target = 1 << 1,
+                Both = Source | Target,
+            }
+            let expandingFlags = ExpandingFlags.None;
             let overflow = false;
             let isIntersectionConstituent = false;
 
@@ -9240,9 +9246,9 @@ namespace ts {
                 targetStack[depth] = target;
                 depth++;
                 const saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & 1) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= 1;
-                if (!(expandingFlags & 2) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= 2;
-                const result = expandingFlags !== 3 ? structuredTypeRelatedTo(source, target, reportErrors) : Ternary.Maybe;
+                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= ExpandingFlags.Source;
+                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= ExpandingFlags.Target;
+                const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors) : Ternary.Maybe;
                 expandingFlags = saveExpandingFlags;
                 depth--;
                 if (result) {
