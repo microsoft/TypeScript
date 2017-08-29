@@ -19034,6 +19034,9 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly frameElement: Element;
     readonly frames: Window;
     readonly history: History;
+    readonly IntersectionObserver: {
+      new(callback: IntersectionObserverCallback, options?: IntersectionObserverInit): IntersectionObserver;
+    };
     readonly innerHeight: number;
     readonly innerWidth: number;
     readonly isSecureContext: boolean;
