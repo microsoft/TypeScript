@@ -1760,6 +1760,28 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path, file3.path]);
         });
 
+        it("regression test for crash in acquireOrUpdateDocument", () => {
+            const tsFile = {
+                fileName: "/a/b/file1.ts",
+                path: "/a/b/file1.ts",
+                content: ""
+            };
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "var x = 10;",
+                fileName: "/a/b/file1.js",
+                scriptKind: "JS" as "JS"
+            };
+
+            const host = createServerHost([]);
+            const projectService = createProjectService(host);
+            projectService.applyChangesInOpenFiles([tsFile], [], []);
+            const projs = projectService.synchronizeProjectList([]);
+            projectService.findProject(projs[0].info.projectName).getLanguageService().getNavigationBarItems(tsFile.fileName);
+            projectService.synchronizeProjectList([projs[0].info]);
+            projectService.applyChangesInOpenFiles([jsFile], [], []);
+        });
+
         it("config file is deleted", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1860,7 +1882,7 @@ namespace ts.projectSystem {
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
-                /*openFiles*/ [{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
+                /*openFiles*/[{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
                 /*changedFiles*/ undefined,
                 /*closedFiles*/ undefined);
 
@@ -1877,7 +1899,7 @@ namespace ts.projectSystem {
             projectService.applyChangesInOpenFiles(
                 /*openFiles*/ undefined,
                 /*changedFiles*/ undefined,
-                /*closedFiles*/ [file2.path]);
+                /*closedFiles*/[file2.path]);
 
             // HTML file is still included in project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -3308,7 +3330,7 @@ namespace ts.projectSystem {
             const error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
             assert.isTrue(error1Result.length === 0);
 
-             const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+            const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile2.path }
             );
