@@ -2661,6 +2661,8 @@ namespace ts {
         /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
+
+        /* @internal */ getUnionType(types: ReadonlyArray<Type>): Type;
     }
 
     export enum NodeBuilderFlags {

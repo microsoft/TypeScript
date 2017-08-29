@@ -232,6 +232,7 @@ namespace ts {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
+            getUnionType,
         };
 
         const tupleTypes: GenericType[] = [];
