@@ -730,6 +730,7 @@ namespace ts {
         ;
 
     export interface PropertyAssignment extends ObjectLiteralElement {
+        parent: ObjectLiteralExpression;
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
         questionToken?: QuestionToken;
@@ -737,6 +738,7 @@ namespace ts {
     }
 
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
+        parent: ObjectLiteralExpression;
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
@@ -747,6 +749,7 @@ namespace ts {
     }
 
     export interface SpreadAssignment extends ObjectLiteralElement {
+        parent: ObjectLiteralExpression;
         kind: SyntaxKind.SpreadAssignment;
         expression: Expression;
     }

@@ -5,6 +5,6 @@
 ////    f() {}
 ////});
 
-// The symbol indicates that this is a funciton, but the type is `any`.
+// The symbol indicates that this is a function, but the type is `any`.
 // Regression test that we don't crash (by trying to get signatures from `any`).
-verify.quickInfoAt("", "(method) f");
+verify.quickInfoAt("", "(method) f(): void");
