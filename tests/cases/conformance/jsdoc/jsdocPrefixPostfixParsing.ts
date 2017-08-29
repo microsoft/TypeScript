@@ -15,7 +15,9 @@
  * @param {(number[])?} c - number[] | null
  * @param {?...number} d - number[] | null
  * @param {...?number} e - (number | null)[]
- * @param {...number?} f - (number | null)[]
+ * @param {...number?} f - number[] | null
+ * @param {...number!?} g - number[] | null
+ * @param {...number?!} h - number[] | null
  */
-function f(x, y, z, a, b, c, d, e, f) {
+function f(x, y, z, a, b, c, d, e, f, g, h) {
 }

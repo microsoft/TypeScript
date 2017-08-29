@@ -8,18 +8,22 @@
  * @param {(number[])?} c - number[] | null
  * @param {?...number} d - number[] | null
  * @param {...?number} e - (number | null)[]
- * @param {...number?} f - (number | null)[]
+ * @param {...number?} f - number[] | null
+ * @param {...number!?} g - number[] | null
+ * @param {...number?!} h - number[] | null
  */
-function f(x, y, z, a, b, c, d, e, f) {
+function f(x, y, z, a, b, c, d, e, f, g, h) {
 >f : Symbol(f, Decl(prefixPostfix.js, 0, 0))
->x : Symbol(x, Decl(prefixPostfix.js, 11, 11))
->y : Symbol(y, Decl(prefixPostfix.js, 11, 13))
->z : Symbol(z, Decl(prefixPostfix.js, 11, 16))
->a : Symbol(a, Decl(prefixPostfix.js, 11, 19))
->b : Symbol(b, Decl(prefixPostfix.js, 11, 22))
->c : Symbol(c, Decl(prefixPostfix.js, 11, 25))
->d : Symbol(d, Decl(prefixPostfix.js, 11, 28))
->e : Symbol(e, Decl(prefixPostfix.js, 11, 31))
->f : Symbol(f, Decl(prefixPostfix.js, 11, 34))
+>x : Symbol(x, Decl(prefixPostfix.js, 13, 11))
+>y : Symbol(y, Decl(prefixPostfix.js, 13, 13))
+>z : Symbol(z, Decl(prefixPostfix.js, 13, 16))
+>a : Symbol(a, Decl(prefixPostfix.js, 13, 19))
+>b : Symbol(b, Decl(prefixPostfix.js, 13, 22))
+>c : Symbol(c, Decl(prefixPostfix.js, 13, 25))
+>d : Symbol(d, Decl(prefixPostfix.js, 13, 28))
+>e : Symbol(e, Decl(prefixPostfix.js, 13, 31))
+>f : Symbol(f, Decl(prefixPostfix.js, 13, 34))
+>g : Symbol(g, Decl(prefixPostfix.js, 13, 37))
+>h : Symbol(h, Decl(prefixPostfix.js, 13, 40))
 }
 
