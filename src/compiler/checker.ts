@@ -13711,7 +13711,7 @@ namespace ts {
                 // signatures, is not in a destructuring pattern, doesn't have more than 10 properties, and doesn't
                 // have property names containing colons (which we use as a separator in the cache key).
                 if (!isInferredTypeOfVariable(node) && !hasMethodsOrAccessors && !stringIndexInfo && !numberIndexInfo && !inDestructuringPattern &&
-                    propertiesArray.length <= 10 && !forEach(propertiesArray, symbolNameContainsColon)) {
+                    propertiesArray.length <= 10 && every(propertiesArray, propertyNameIsValidKey)) {
                     return getObjectLiteralType(typeFlags, node.symbol, propertiesTable, propertiesArray);
                 }
                 const result = makeObjectLiteralType(typeFlags, node.symbol, propertiesTable, stringIndexInfo, numberIndexInfo);
@@ -13733,8 +13733,8 @@ namespace ts {
             return isVariableLike(parent) && !parent.type && parent.initializer === node;
         }
 
-        function symbolNameContainsColon(symbol: Symbol) {
-            return (<string>symbol.escapedName).indexOf(":") >= 0;
+        function propertyNameIsValidKey(symbol: Symbol) {
+            return (<string>symbol.escapedName).indexOf(":") < 0;
         }
 
         function getObjectLiteralType(flags: TypeFlags, symbol: Symbol, members: SymbolTable, properties: Symbol[]): ResolvedType {
