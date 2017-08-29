@@ -2178,7 +2178,7 @@ namespace ts {
         function parseJSDocNodeWithType(kind: SyntaxKind.JSDocVariadicType | SyntaxKind.JSDocNonNullableType): TypeNode {
             const result = createNode(kind) as JSDocVariadicType | JSDocNonNullableType;
             nextToken();
-            result.type = parseType();
+            result.type = parseNonArrayType();
             return finishNode(result);
         }
 
@@ -2740,14 +2740,15 @@ namespace ts {
         }
 
         function parseJSDocPostfixTypeOrHigher(): TypeNode {
-            const type = parseNonArrayType();
-            const kind = getKind(token());
-            if (!kind) return type;
-            nextToken();
-
-            const postfix = createNode(kind, type.pos) as JSDocOptionalType | JSDocNonNullableType | JSDocNullableType;
-            postfix.type = type;
-            return finishNode(postfix);
+            let kind: SyntaxKind | undefined;
+            let type = parseNonArrayType();
+            while (kind = getKind(token())) {
+                nextToken();
+                const postfix = createNode(kind, type.pos) as JSDocOptionalType | JSDocNonNullableType | JSDocNullableType;
+                postfix.type = type;
+                type = finishNode(postfix);
+            }
+            return type;
 
             function getKind(tokenKind: SyntaxKind): SyntaxKind | undefined {
                 switch (tokenKind) {
