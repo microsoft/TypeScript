@@ -14732,7 +14732,7 @@ namespace ts {
                 if (!classType) {
                     return false;
                 }
-                const superProperty = getPropertyOfType(classType, prop.escapedName);
+                const superProperty = getPropertyOfObjectType(classType, prop.escapedName);
                 if (superProperty && superProperty.valueDeclaration) {
                     return true;
                 }
