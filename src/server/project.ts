@@ -747,7 +747,8 @@ namespace ts.server {
                 }
                 // compute and return the difference
                 const lastReportedFileNames = this.lastReportedFileNames;
-                const currentFiles = arrayToSet(this.getFileNames());
+                const externalFiles = this.getExternalFiles().map(f => toNormalizedPath(f));
+                const currentFiles = arrayToSet(this.getFileNames().concat(externalFiles));
 
                 const added: string[] = [];
                 const removed: string[] = [];
@@ -770,7 +771,8 @@ namespace ts.server {
             else {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
-                this.lastReportedFileNames = arrayToSet(projectFileNames);
+                const externalFiles = this.getExternalFiles().map(f => toNormalizedPath(f));
+                this.lastReportedFileNames = arrayToSet(projectFileNames.concat(externalFiles));
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, files: projectFileNames, projectErrors: this.getGlobalProjectErrors() };
             }
@@ -1085,6 +1087,9 @@ namespace ts.server {
                 }
                 catch (e) {
                     this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
+                    if (e.stack) {
+                        this.projectService.logger.info(e.stack);
+                    }
                 }
             }));
         }
