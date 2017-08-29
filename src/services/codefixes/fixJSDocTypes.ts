@@ -8,11 +8,27 @@ namespace ts.codefix {
     function getActionsForJSDocTypes(context: CodeFixContext): CodeAction[] | undefined {
         const sourceFile = context.sourceFile;
         const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
+
+        // NOTE: Some locations are not handled yet:
+        // MappedTypeNode.typeParameters and SignatureDeclaration.typeParameters, as well as CallExpression.typeArguments
         const decl = ts.findAncestor(node,
-                                     n => n.kind === SyntaxKind.VariableDeclaration ||
+                                     n =>
+                                     n.kind === SyntaxKind.AsExpression ||
+                                     n.kind === SyntaxKind.CallSignature ||
+                                     n.kind === SyntaxKind.ConstructSignature ||
+                                     n.kind === SyntaxKind.FunctionDeclaration ||
+                                     n.kind === SyntaxKind.GetAccessor ||
+                                     n.kind === SyntaxKind.IndexSignature ||
+                                     n.kind === SyntaxKind.MappedType ||
+                                     n.kind === SyntaxKind.MethodDeclaration ||
+                                     n.kind === SyntaxKind.MethodSignature ||
                                      n.kind === SyntaxKind.Parameter ||
                                      n.kind === SyntaxKind.PropertyDeclaration ||
-                                     n.kind === SyntaxKind.PropertyAssignment);
+                                     n.kind === SyntaxKind.PropertySignature ||
+                                     n.kind === SyntaxKind.SetAccessor ||
+                                     n.kind === SyntaxKind.TypeAliasDeclaration ||
+                                     n.kind === SyntaxKind.TypeAssertionExpression ||
+                                     n.kind === SyntaxKind.VariableDeclaration);
         if (!decl) return;
         const checker = context.program.getTypeChecker();
 
