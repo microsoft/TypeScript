@@ -651,6 +651,20 @@ namespace ts {
     }
 
     export interface SignatureDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.CallSignature
+            | SyntaxKind.ConstructSignature
+            | SyntaxKind.MethodSignature
+            | SyntaxKind.IndexSignature
+            | SyntaxKind.FunctionType
+            | SyntaxKind.ConstructorType
+            | SyntaxKind.JSDocFunctionType
+            | SyntaxKind.FunctionDeclaration
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.Constructor
+            | SyntaxKind.GetAccessor
+            | SyntaxKind.SetAccessor
+            | SyntaxKind.FunctionExpression
+            | SyntaxKind.ArrowFunction;
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
@@ -1816,6 +1830,7 @@ namespace ts {
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
     export interface ClassLikeDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
