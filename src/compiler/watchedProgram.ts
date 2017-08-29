@@ -293,7 +293,8 @@ namespace ts {
             getCompilationSettings: () => compilerOptions,
             watchDirectoryOfFailedLookupLocation,
             getCachedPartialSystem,
-            onInvalidatedResolution: scheduleProgramUpdate
+            onInvalidatedResolution: scheduleProgramUpdate,
+            writeLog
         };
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost);
@@ -330,8 +331,10 @@ namespace ts {
             beforeCompile(compilerOptions);
 
             // Compile the program
+            resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             program = createProgram(rootFileNames, compilerOptions, compilerHost, program);
+            resolutionCache.finishCachingPerDirectoryResolution();
             builder.onProgramUpdateGraph(program, hasInvalidatedResolution);
 
             // Update watches

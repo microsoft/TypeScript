@@ -372,6 +372,11 @@ namespace ts.server {
             return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
         }
 
+        /*@internal*/
+        writeLog(s: string) {
+            this.projectService.logger.info(s);
+        }
+
         private setInternalCompilerOptionsForEmittingJsFiles() {
             if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
                 this.compilerOptions.noEmitForJsFiles = true;
@@ -767,7 +772,10 @@ namespace ts.server {
 
         private updateGraphWorker() {
             const oldProgram = this.program;
+
+            this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram();
+            this.resolutionCache.finishCachingPerDirectoryResolution();
 
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
@@ -795,6 +803,10 @@ namespace ts.server {
                     // Watch the missing files
                     missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
+
+                // Update typeRoots watch
+                // Watch the type locations that would be added to program as part of automatic type resolutions
+                // TODO
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;

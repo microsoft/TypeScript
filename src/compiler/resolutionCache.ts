@@ -14,6 +14,9 @@ namespace ts {
         invalidateResolutionOfFile(filePath: Path): void;
         createHasInvalidatedResolution(): HasInvalidatedResolution;
 
+        startCachingPerDirectoryResolution(): void;
+        finishCachingPerDirectoryResolution(): void;
+
         setRootDirectory(dir: string): void;
 
         clear(): void;
@@ -28,7 +31,7 @@ namespace ts {
         /** watcher for the directory of failed lookup */
         watcher: FileWatcher;
         /** map with key being the failed lookup location path and value being the actual location */
-        mapLocations: MultiMap<string>;
+        mapLocations: Map<number>;
     }
 
     export interface ResolutionCacheHost extends ModuleResolutionHost {
@@ -39,6 +42,7 @@ namespace ts {
         getCachedPartialSystem?(): CachedPartialSystem;
         projectName?: string;
         getGlobalCache?(): string | undefined;
+        writeLog(s: string): void;
     }
 
     const MAX_DIRPATHS_TO_RECURSE = 5;
@@ -51,7 +55,9 @@ namespace ts {
         // The key in the map is source file's path.
         // The values are Map of resolutions with key being name lookedup.
         const resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        const perDirectoryResolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+        const perDirectoryResolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
         const directoryWatchesOfFailedLookups = createMap<DirectoryWatchesOfFailedLookup>();
         const failedLookupLocationToDirPath = createMap<Path>();
@@ -60,6 +66,8 @@ namespace ts {
         return {
             startRecordingFilesWithChangedResolutions,
             finishRecordingFilesWithChangedResolutions,
+            startCachingPerDirectoryResolution,
+            finishCachingPerDirectoryResolution,
             resolveModuleNames,
             resolveTypeReferenceDirectives,
             invalidateResolutionOfFile,
@@ -87,6 +95,7 @@ namespace ts {
             failedLookupLocationToDirPath.clear();
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
+            Debug.assert(perDirectoryResolvedModuleNames.size === 0 && perDirectoryResolvedTypeReferenceDirectives.size === 0);
         }
 
         function startRecordingFilesWithChangedResolutions() {
@@ -103,6 +112,15 @@ namespace ts {
             const collected = filesWithInvalidatedResolutions;
             filesWithInvalidatedResolutions = undefined;
             return path => collected && collected.has(path);
+        }
+
+        function startCachingPerDirectoryResolution() {
+            Debug.assert(perDirectoryResolvedModuleNames.size === 0 && perDirectoryResolvedTypeReferenceDirectives.size === 0);
+        }
+
+        function finishCachingPerDirectoryResolution() {
+            perDirectoryResolvedModuleNames.clear();
+            perDirectoryResolvedTypeReferenceDirectives.clear();
         }
 
         function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -131,6 +149,7 @@ namespace ts {
             names: string[],
             containingFile: string,
             cache: Map<Map<T>>,
+            perDirectoryCache: Map<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R,
             getResultFileName: (result: R) => string | undefined,
@@ -138,6 +157,12 @@ namespace ts {
 
             const path = resolutionHost.toPath(containingFile);
             const currentResolutionsInFile = cache.get(path);
+            const dirPath = getDirectoryPath(path);
+            let perDirectoryResolution = perDirectoryCache.get(dirPath);
+            if (!perDirectoryResolution) {
+                perDirectoryResolution = createMap();
+                perDirectoryCache.set(dirPath, perDirectoryResolution);
+            }
 
             const newResolutions: Map<T> = createMap<T>();
             const resolvedModules: R[] = [];
@@ -148,12 +173,24 @@ namespace ts {
                 let resolution = newResolutions.get(name);
                 if (!resolution) {
                     const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
+                    if (existingResolution) {
+                        // Remove from the cache since we would update the resolution in new file ourselves
+                        currentResolutionsInFile.delete(name);
+                    }
+
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
                     }
                     else {
-                        resolution = loader(name, containingFile, compilerOptions, resolutionHost);
+                        const resolutionInDirectory = perDirectoryResolution && perDirectoryResolution.get(name);
+                        if (resolutionInDirectory) {
+                            resolution = resolutionInDirectory;
+                        }
+                        else {
+                            resolution = loader(name, containingFile, compilerOptions, resolutionHost);
+                            perDirectoryResolution.set(name, resolution);
+                        }
                         updateFailedLookupLocationWatches(resolution.failedLookupLocations, existingResolution && existingResolution.failedLookupLocations);
                     }
                     newResolutions.set(name, resolution);
@@ -167,6 +204,11 @@ namespace ts {
                 Debug.assert(resolution !== undefined);
 
                 resolvedModules.push(getResult(resolution));
+            }
+
+            // Close all the file watchers for the names that arent required any more
+            if (currentResolutionsInFile) {
+                clearMap(currentResolutionsInFile, resolution => withFailedLookupLocations(resolution.failedLookupLocations, closeFailedLookupLocationWatcher));
             }
 
             // replace old results with a new one
@@ -208,25 +250,35 @@ namespace ts {
         }
 
         function resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return resolveNamesWithLocalCache(typeDirectiveNames, containingFile, resolvedTypeReferenceDirectives, resolveTypeReferenceDirective,
-                m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName,  /*logChanges*/ false);
+            resolutionHost.writeLog(`resolveTypeReferenceDirectives: ${typeDirectiveNames} in ${containingFile}`);
+            return resolveNamesWithLocalCache(
+                typeDirectiveNames, containingFile,
+                resolvedTypeReferenceDirectives, perDirectoryResolvedTypeReferenceDirectives,
+                resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName,
+                /*logChanges*/ false
+            );
         }
 
         function resolveModuleNames(moduleNames: string[], containingFile: string, logChanges: boolean): ResolvedModuleFull[] {
-            return resolveNamesWithLocalCache(moduleNames, containingFile, resolvedModuleNames, resolveModuleName,
-                m => m.resolvedModule, r => r.resolvedFileName, logChanges);
+            resolutionHost.writeLog(`resolveModuleNames: ${moduleNames} in ${containingFile}`);
+            return resolveNamesWithLocalCache(
+                moduleNames, containingFile,
+                resolvedModuleNames, perDirectoryResolvedModuleNames,
+                resolveModuleName, m => m.resolvedModule, r => r.resolvedFileName,
+                logChanges
+            );
         }
 
         function watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path) {
             const cachedDir = failedLookupLocationToDirPath.get(failedLookupLocationPath);
             if (cachedDir) {
-                watchFailedLookupLocationInDirectory(cachedDir, failedLookupLocation, failedLookupLocationPath, /*dir*/ undefined);
+                watchFailedLookupLocationInDirectory(cachedDir, failedLookupLocationPath, /*dir*/ undefined);
                 return;
             }
 
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
                 // Watch in directory of rootPath
-                watchFailedLookupLocationInDirectory(rootPath, failedLookupLocation, failedLookupLocationPath, rootDir);
+                watchFailedLookupLocationInDirectory(rootPath, failedLookupLocationPath, rootDir);
                 return;
             }
 
@@ -235,7 +287,7 @@ namespace ts {
             for (let i = 0; i < MAX_DIRPATHS_TO_RECURSE; i++) {
                 const parentPath = getDirectoryPath(dirPath);
                 if (directoryWatchesOfFailedLookups.has(dirPath) || parentPath === dirPath) {
-                    watchFailedLookupLocationInDirectory(dirPath, failedLookupLocation, failedLookupLocationPath, dir);
+                    watchFailedLookupLocationInDirectory(dirPath, failedLookupLocationPath, dir);
                     return;
                 }
                 dirPath = parentPath;
@@ -245,7 +297,7 @@ namespace ts {
             // Verify there are no watches in parent directory
             const ancestorDirPath = getAncestorDirectoryWithWatches(dirPath);
             // We wont need directory if we are using ancestor since its already cached
-            watchFailedLookupLocationInDirectory(ancestorDirPath || dirPath, failedLookupLocation, failedLookupLocationPath, dir);
+            watchFailedLookupLocationInDirectory(ancestorDirPath || dirPath, failedLookupLocationPath, dir);
         }
 
         function getAncestorDirectoryWithWatches(dirPath: Path) {
@@ -258,16 +310,17 @@ namespace ts {
             return undefined;
         }
 
-        function watchFailedLookupLocationInDirectory(dirPath: Path, failedLookupLocation: string, failedLookupLocationPath: Path, dir: string | undefined) {
+        function watchFailedLookupLocationInDirectory(dirPath: Path, failedLookupLocationPath: Path, dir: string | undefined) {
             failedLookupLocationToDirPath.set(failedLookupLocationPath, dirPath);
             const watches = directoryWatchesOfFailedLookups.get(dirPath);
             if (watches) {
-                watches.mapLocations.add(failedLookupLocationPath, failedLookupLocation);
+                const existingCount = watches.mapLocations.get(failedLookupLocationPath) || 0;
+                watches.mapLocations.set(failedLookupLocationPath, existingCount + 1);
             }
             else {
                 Debug.assert(dir !== undefined);
-                const mapLocations = createMultiMap<string>();
-                mapLocations.add(failedLookupLocationPath, failedLookupLocation);
+                const mapLocations = createMap<number>();
+                mapLocations.set(failedLookupLocationPath, 1);
                 directoryWatchesOfFailedLookups.set(dirPath, {
                     watcher: createDirectoryWatcher(dir, dirPath),
                     mapLocations
@@ -294,19 +347,24 @@ namespace ts {
             }, WatchDirectoryFlags.Recursive);
         }
 
-        function closeFailedLookupLocationWatcher(failedLookupLocation: string, failedLookupLocationPath: Path) {
+        function closeFailedLookupLocationWatcher(_failedLookupLocation: string, failedLookupLocationPath: Path) {
             const dirPath = failedLookupLocationToDirPath.get(failedLookupLocationPath);
             const watches = directoryWatchesOfFailedLookups.get(dirPath);
-            watches.mapLocations.remove(failedLookupLocationPath, failedLookupLocation);
-            // If this was last failed lookup location being tracked by the dir watcher,
-            // remove the failed lookup location path to dir Path entry
-            if (!watches.mapLocations.has(failedLookupLocationPath)) {
+            const refCount = watches.mapLocations.get(failedLookupLocationPath);
+            if (refCount === 1) {
+                // If this was last failed lookup location being tracked by the dir watcher,
+                // remove the failed lookup location path to dir Path entry
+                watches.mapLocations.delete(failedLookupLocationPath);
                 failedLookupLocationToDirPath.delete(failedLookupLocationPath);
+
+                // If there are no more files that need this watcher alive, close the watcher
+                if (watches.mapLocations.size === 0) {
+                    watches.watcher.close();
+                    directoryWatchesOfFailedLookups.delete(dirPath);
+                }
             }
-            // If there are no more files that need this watcher alive, close the watcher
-            if (watches.mapLocations.size === 0) {
-                watches.watcher.close();
-                directoryWatchesOfFailedLookups.delete(dirPath);
+            else {
+                watches.mapLocations.set(failedLookupLocationPath, refCount - 1);
             }
         }
 
