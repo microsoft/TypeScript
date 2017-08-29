@@ -786,7 +786,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             const file = new Vinyl({ contents, path: bundlePath });
             console.log(`Fixing sourcemaps for ${file.path}`);
             // assumes contents is a Buffer, since that's what browserify yields
-            const maps = convertMap.fromSource(stringContent, /*largeSource*/ true).toObject();
+            const maps = convertMap.fromSource(stringContent).toObject();
             delete maps.sourceRoot;
             maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
             // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
