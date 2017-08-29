@@ -610,7 +610,7 @@ namespace ts.refactor.extractMethod {
     export function extractFunctionInScope(
         node: Statement | Expression | Block,
         scope: Scope,
-        { usages: usagesInScope, substitutions }: ScopeUsages,
+        { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages,
         range: TargetRange,
         context: RefactorContext): ExtractResultForScope {
 
@@ -652,7 +652,18 @@ namespace ts.refactor.extractMethod {
             callArguments.push(createIdentifier(name));
         });
 
-        // Provide explicit return types for contexutally-typed functions
+        const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
+        const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
+
+        const typeParameters: ReadonlyArray<TypeParameterDeclaration> = sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
+
+        // Strictly speaking, we should check whether each name actually binds to the appropriate type
+        // parameter.  In cases of shadowing, they may not.
+        const callTypeArguments: ReadonlyArray<TypeNode> | undefined = typeParameters.length > 0
+            ? typeParameters.map(decl => createTypeReferenceNode(decl.name, /*typeArguments*/ undefined))
+            : undefined;
+
+        // Provide explicit return types for contextually-typed functions
         // to avoid problems when there are literal types present
         if (isExpression(node) && !isJS) {
             const contextualType = checker.getContextualType(node);
@@ -677,7 +688,7 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
                 /*questionToken*/ undefined,
-                /*typeParameters*/[],
+                typeParameters,
                 parameters,
                 returnType,
                 body
@@ -689,7 +700,7 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsAsyncFunction ? [createToken(SyntaxKind.AsyncKeyword)] : undefined,
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
-                /*typeParameters*/[],
+                typeParameters,
                 parameters,
                 returnType,
                 body
@@ -704,7 +715,7 @@ namespace ts.refactor.extractMethod {
         // replace range with function call
         let call: Expression = createCall(
             isClassLike(scope) ? createPropertyAccess(range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.getText()) : createThis(), functionReference) : functionReference,
-            /*typeArguments*/ undefined,
+            callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
             call = createYield(createToken(SyntaxKind.AsteriskToken), call);
@@ -773,6 +784,51 @@ namespace ts.refactor.extractMethod {
             scopeDescription: getDescriptionForScope(scope),
             changes: changeTracker.getChanges()
         };
+
+        function getFirstDeclaration(type: Type): Declaration | undefined {
+            let firstDeclaration = undefined;
+
+            const symbol = type.symbol;
+            if (symbol && symbol.declarations) {
+                for (const declaration of symbol.declarations) {
+                    if (firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) {
+                        firstDeclaration = declaration;
+                    }
+                }
+            }
+
+            return firstDeclaration;
+        }
+
+        function compareTypesByDeclarationOrder(
+            {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
+            {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
+
+            if (declaration1) {
+                if (declaration2) {
+                    const positionDiff = declaration1.pos - declaration2.pos;
+                    if (positionDiff !== 0) {
+                        return positionDiff;
+                    }
+                }
+                else {
+                    return 1; // Sort undeclared type parameters to the front.
+                }
+            }
+            else if (declaration2) {
+                return -1; // Sort undeclared type parameters to the front.
+            }
+
+            const name1 = type1.symbol ? type1.symbol.getName() : "";
+            const name2 = type2.symbol ? type2.symbol.getName() : "";
+            const nameDiff = compareStrings(name1, name2);
+            if (nameDiff !== 0) {
+                return nameDiff;
+            }
+
+            // IDs are guaranteed to be unique, so this ensures a total ordering.
+            return type1.id - type2.id;
+        }
 
         function getPropertyAssignmentsForWrites(writes: UsageEntry[]) {
             return writes.map(w => createShorthandPropertyAssignment(w.symbol.name));
@@ -867,6 +923,7 @@ namespace ts.refactor.extractMethod {
 
     export interface ScopeUsages {
         usages: Map<UsageEntry>;
+        typeParameterUsages: Map<TypeParameter>; // Key is type ID
         substitutions: Map<Node>;
     }
 
@@ -877,6 +934,7 @@ namespace ts.refactor.extractMethod {
         sourceFile: SourceFile,
         checker: TypeChecker) {
 
+        const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
         const substitutionsPerScope: Map<Node>[] = [];
         const errorsPerScope: Diagnostic[][] = [];
@@ -884,15 +942,58 @@ namespace ts.refactor.extractMethod {
 
         // initialize results
         for (const _ of scopes) {
-            usagesPerScope.push({ usages: createMap<UsageEntry>(), substitutions: createMap<Expression>() });
+            usagesPerScope.push({ usages: createMap<UsageEntry>(), typeParameterUsages: createMap<TypeParameter>(), substitutions: createMap<Expression>() });
             substitutionsPerScope.push(createMap<Expression>());
             errorsPerScope.push([]);
         }
+
         const seenUsages = createMap<Usage>();
         const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
         const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent) ? scopes[0] : getEnclosingBlockScopeContainer(scopes[0]);
 
+        const unmodifiedNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
+        const inGenericContext = isInGenericContext(unmodifiedNode);
+
         collectUsages(target);
+
+        // Unfortunately, this code takes advantage of the knowledge that the generated method
+        // will use the contextual type of an expression as the return type of the extracted
+        // method (and will therefore "use" all the types involved).
+        if (inGenericContext && !isReadonlyArray(targetRange.range)) {
+            const contextualType = checker.getContextualType(targetRange.range);
+            recordTypeParameterUsages(contextualType);
+        }
+
+        if (allTypeParameterUsages.size > 0) {
+            const seenTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
+
+            let i = 0;
+            for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
+                if (curr === scopes[i]) {
+                    // Copy current contents of seenTypeParameterUsages into scope.
+                    seenTypeParameterUsages.forEach((typeParameter, id) => {
+                        usagesPerScope[i].typeParameterUsages.set(id, typeParameter);
+                    });
+
+                    i++;
+                }
+
+                // Note that we add the current node's type parameters *after* updating the corresponding scope.
+                if (isDeclarationWithTypeParameters(curr) && curr.typeParameters) {
+                    for (const typeParameterDecl of curr.typeParameters) {
+                        const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as TypeParameter;
+                        if (allTypeParameterUsages.has(typeParameter.id.toString())) {
+                            seenTypeParameterUsages.set(typeParameter.id.toString(), typeParameter);
+                        }
+                    }
+                }
+            }
+
+            // If we didn't get through all the scopes, then there were some that weren't in our
+            // parent chain (impossible at time of writing).  A conservative solution would be to
+            // copy allTypeParameterUsages into all remaining scopes.
+            Debug.assert(i === scopes.length);
+        }
 
         for (let i = 0; i < scopes.length; i++) {
             let hasWrite = false;
@@ -912,7 +1013,7 @@ namespace ts.refactor.extractMethod {
                 errorsPerScope[i].push(createDiagnosticForNode(targetRange.range, Messages.CannotCombineWritesAndReturns));
             }
             else if (readonlyClassPropertyWrite && i > 0) {
-                errorsPerScope[i].push(createDiagnosticForNode(readonlyClassPropertyWrite, Messages.CannotCombineWritesAndReturns));
+                errorsPerScope[i].push(createDiagnosticForNode(readonlyClassPropertyWrite, Messages.CannotExtractReadonlyPropertyInitializerOutsideConstructor));
             }
         }
 
@@ -924,7 +1025,42 @@ namespace ts.refactor.extractMethod {
 
         return { target, usagesPerScope, errorsPerScope };
 
+        function hasTypeParameters(node: Node) {
+            return isDeclarationWithTypeParameters(node) &&
+                node.typeParameters !== undefined &&
+                node.typeParameters.length > 0;
+        }
+
+        function isInGenericContext(node: Node) {
+            for (; node; node = node.parent) {
+                if (hasTypeParameters(node)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function recordTypeParameterUsages(type: Type) {
+            // PERF: This is potentially very expensive.  `type` could be a library type with
+            // a lot of properties, each of which the walker will visit.  Unfortunately, the
+            // solution isn't as trivial as filtering to user types because of (e.g.) Array.
+            const symbolWalker = checker.getSymbolWalker();
+            const {visitedTypes} = symbolWalker.walkType(type);
+
+            for (const visitedType of visitedTypes) {
+                if (visitedType.flags & TypeFlags.TypeParameter) {
+                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
+                }
+            }
+        }
+
         function collectUsages(node: Node, valueUsage = Usage.Read) {
+            if (inGenericContext) {
+                const type = checker.getTypeAtLocation(node);
+                recordTypeParameterUsages(type);
+            }
+
             if (isDeclaration(node) && node.symbol) {
                 visibleDeclarationsInExtractedRange.push(node.symbol);
             }

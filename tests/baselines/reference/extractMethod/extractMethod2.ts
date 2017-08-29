@@ -1,98 +1,85 @@
-==ORIGINAL==
+// ==ORIGINAL==
 namespace A {
     let x = 1;
     function foo() {
     }
     namespace B {
         function a() {
-            let a = 1;
         
             let y = 5;
             let z = x;
-            a = y;
-            foo();
+            return foo();
         }
     }
 }
-==SCOPE::function 'a'==
+// ==SCOPE::function 'a'==
 namespace A {
     let x = 1;
     function foo() {
     }
     namespace B {
         function a() {
-            let a = 1;
         
-            newFunction();
+            return newFunction();
 
             function newFunction() {
                 let y = 5;
                 let z = x;
-                a = y;
-                foo();
+                return foo();
             }
         }
     }
 }
-==SCOPE::namespace 'B'==
+// ==SCOPE::namespace 'B'==
 namespace A {
     let x = 1;
     function foo() {
     }
     namespace B {
         function a() {
-            let a = 1;
         
-            a = newFunction(a);
+            return newFunction();
         }
 
-        function newFunction(a: number) {
+        function newFunction() {
             let y = 5;
             let z = x;
-            a = y;
-            foo();
-            return a;
+            return foo();
         }
     }
 }
-==SCOPE::namespace 'A'==
+// ==SCOPE::namespace 'A'==
 namespace A {
     let x = 1;
     function foo() {
     }
     namespace B {
         function a() {
-            let a = 1;
         
-            a = newFunction(a);
+            return newFunction();
         }
     }
 
-    function newFunction(a: number) {
+    function newFunction() {
         let y = 5;
         let z = x;
-        a = y;
-        foo();
-        return a;
+        return foo();
     }
 }
-==SCOPE::global scope==
+// ==SCOPE::global scope==
 namespace A {
     let x = 1;
     function foo() {
     }
     namespace B {
         function a() {
-            let a = 1;
         
-            a = newFunction(x, a, foo);
+            return newFunction(x, foo);
         }
     }
 }
-function newFunction(x: number, a: number, foo: () => void) {
+function newFunction(x: number, foo: () => void) {
     let y = 5;
     let z = x;
-    a = y;
-    foo();
-    return a;
+    return foo();
 }

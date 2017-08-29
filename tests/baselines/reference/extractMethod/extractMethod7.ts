@@ -1,7 +1,9 @@
-==ORIGINAL==
+// ==ORIGINAL==
 namespace A {
     let x = 1;
-    export function foo() {
+    export namespace C {
+        export function foo() {
+        }
     }
     namespace B {
         function a() {
@@ -10,14 +12,16 @@ namespace A {
             let y = 5;
             let z = x;
             a = y;
-            return foo();
+            return C.foo();
         }
     }
 }
-==SCOPE::function a==
+// ==SCOPE::function 'a'==
 namespace A {
     let x = 1;
-    export function foo() {
+    export namespace C {
+        export function foo() {
+        }
     }
     namespace B {
         function a() {
@@ -29,73 +33,79 @@ namespace A {
                 let y = 5;
                 let z = x;
                 a = y;
-                return foo();
+                return C.foo();
             }
         }
     }
 }
-==SCOPE::namespace B==
+// ==SCOPE::namespace 'B'==
 namespace A {
     let x = 1;
-    export function foo() {
+    export namespace C {
+        export function foo() {
+        }
     }
     namespace B {
         function a() {
             let a = 1;
         
             var __return: any;
-            ({ a, __return } = newFunction(a));
+            ({ __return, a } = newFunction(a));
             return __return;
         }
 
-        function newFunction(a: any) {
+        function newFunction(a: number) {
             let y = 5;
             let z = x;
             a = y;
-            return { a, __return: foo() };
+            return { __return: C.foo(), a };
         }
     }
 }
-==SCOPE::namespace A==
+// ==SCOPE::namespace 'A'==
 namespace A {
     let x = 1;
-    export function foo() {
+    export namespace C {
+        export function foo() {
+        }
     }
     namespace B {
         function a() {
             let a = 1;
         
             var __return: any;
-            ({ a, __return } = newFunction(a));
+            ({ __return, a } = newFunction(a));
             return __return;
         }
     }
 
-    function newFunction(a: any) {
+    function newFunction(a: number) {
         let y = 5;
         let z = x;
         a = y;
-        return { a, __return: foo() };
+        return { __return: C.foo(), a };
     }
 }
-==SCOPE::file '/a.ts'==
+// ==SCOPE::global scope==
 namespace A {
     let x = 1;
-    export function foo() {
+    export namespace C {
+        export function foo() {
+        }
     }
     namespace B {
         function a() {
             let a = 1;
         
             var __return: any;
-            ({ a, __return } = newFunction(x, a));
+            ({ __return, a } = newFunction(x, a));
             return __return;
         }
     }
 }
-function newFunction(x: any, a: any) {
+function newFunction(x: number, a: number) {
     let y = 5;
     let z = x;
     a = y;
-    return { a, __return: A.foo() };
+    return { __return: A.C.foo(), a };
 }

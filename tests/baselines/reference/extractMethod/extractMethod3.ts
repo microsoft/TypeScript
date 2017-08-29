@@ -1,4 +1,4 @@
-==ORIGINAL==
+// ==ORIGINAL==
 namespace A {
     function foo() {
     }
@@ -11,7 +11,7 @@ namespace A {
         }
     }
 }
-==SCOPE::function a==
+// ==SCOPE::function 'a'==
 namespace A {
     function foo() {
     }
@@ -28,7 +28,7 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace B==
+// ==SCOPE::namespace 'B'==
 namespace A {
     function foo() {
     }
@@ -38,14 +38,14 @@ namespace A {
             return yield* newFunction(z);
         }
 
-        function* newFunction(z: any) {
+        function* newFunction(z: number) {
             let y = 5;
             yield z;
             return foo();
         }
     }
 }
-==SCOPE::namespace A==
+// ==SCOPE::namespace 'A'==
 namespace A {
     function foo() {
     }
@@ -56,13 +56,13 @@ namespace A {
         }
     }
 
-    function* newFunction(z: any) {
+    function* newFunction(z: number) {
         let y = 5;
         yield z;
         return foo();
     }
 }
-==SCOPE::file '/a.ts'==
+// ==SCOPE::global scope==
 namespace A {
     function foo() {
     }
@@ -73,7 +73,7 @@ namespace A {
         }
     }
 }
-function* newFunction(z: any, foo: any) {
+function* newFunction(z: number, foo: () => void) {
     let y = 5;
     yield z;
     return foo();

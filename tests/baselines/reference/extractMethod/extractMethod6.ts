@@ -1,4 +1,4 @@
-==ORIGINAL==
+// ==ORIGINAL==
 namespace A {
     let x = 1;
     export function foo() {
@@ -10,11 +10,11 @@ namespace A {
             let y = 5;
             let z = x;
             a = y;
-            foo();
+            return foo();
         }
     }
 }
-==SCOPE::function a==
+// ==SCOPE::function 'a'==
 namespace A {
     let x = 1;
     export function foo() {
@@ -23,18 +23,18 @@ namespace A {
         function a() {
             let a = 1;
         
-            newFunction();
+            return newFunction();
 
             function newFunction() {
                 let y = 5;
                 let z = x;
                 a = y;
-                foo();
+                return foo();
             }
         }
     }
 }
-==SCOPE::namespace B==
+// ==SCOPE::namespace 'B'==
 namespace A {
     let x = 1;
     export function foo() {
@@ -43,19 +43,20 @@ namespace A {
         function a() {
             let a = 1;
         
-            ({ a } = newFunction(a));
+            var __return: any;
+            ({ __return, a } = newFunction(a));
+            return __return;
         }
 
-        function newFunction(a: any) {
+        function newFunction(a: number) {
             let y = 5;
             let z = x;
             a = y;
-            foo();
-            return { a };
+            return { __return: foo(), a };
         }
     }
 }
-==SCOPE::namespace A==
+// ==SCOPE::namespace 'A'==
 namespace A {
     let x = 1;
     export function foo() {
@@ -64,19 +65,20 @@ namespace A {
         function a() {
             let a = 1;
         
-            ({ a } = newFunction(a));
+            var __return: any;
+            ({ __return, a } = newFunction(a));
+            return __return;
         }
     }
 
-    function newFunction(a: any) {
+    function newFunction(a: number) {
         let y = 5;
         let z = x;
         a = y;
-        foo();
-        return { a };
+        return { __return: foo(), a };
     }
 }
-==SCOPE::file '/a.ts'==
+// ==SCOPE::global scope==
 namespace A {
     let x = 1;
     export function foo() {
@@ -85,14 +87,15 @@ namespace A {
         function a() {
             let a = 1;
         
-            ({ a } = newFunction(x, a));
+            var __return: any;
+            ({ __return, a } = newFunction(x, a));
+            return __return;
         }
     }
 }
-function newFunction(x: any, a: any) {
+function newFunction(x: number, a: number) {
     let y = 5;
     let z = x;
     a = y;
-    A.foo();
-    return { a };
+    return { __return: A.foo(), a };
 }
