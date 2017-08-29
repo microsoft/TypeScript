@@ -18195,7 +18195,7 @@ namespace ts {
             }
         }
 
-        function checkParameter(node: ParameterDeclaration) {
+        function checkParameter(node: ParameterDeclaration, hasOptionals = false) {
             // Grammar checking
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code
@@ -18227,8 +18227,13 @@ namespace ts {
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
             // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
             const type = getTypeOfSymbol(node.symbol);
-            if (node.dotDotDotToken && !isBindingPattern(node.name) && (!isArrayLikeType(type) || type === anyType)) {
-                error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+            if (node.dotDotDotToken && !isBindingPattern(node.name)) {
+                if (!isArrayLikeType(type) || type === anyType) {
+                    error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+                }
+                else if (hasOptionals && !isArrayType(getTypeOfSymbol(node.symbol))) {
+                    error(node, Diagnostics.A_rest_parameter_in_a_function_with_optional_parameters_must_be_of_an_array_type);
+                }
             }
         }
 
@@ -18370,7 +18375,8 @@ namespace ts {
 
             checkTypeParameters(node.typeParameters);
 
-            forEach(node.parameters, checkParameter);
+            const hasOptionals = node.parameters.some((par: ParameterDeclaration) => !!par.questionToken);
+            forEach(node.parameters, (par: ParameterDeclaration) => checkParameter(par, hasOptionals));
 
             // TODO(rbuckton): Should we start checking JSDoc types?
             if (node.type) {

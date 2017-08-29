@@ -1,13 +1,15 @@
 //// [destructureGenericsErrors.ts]
 declare function g<T extends [number, number]>(...args: T): T;
 var y = g(1); // error
-var y: [1];
 var a = g(1,2,3); // error
-var a: [1,2,3];
+declare function k<T extends [number, number]>(...args?: T): T;
+var u = k(1,2); // error
+declare function m<T extends [number, number]>(a?: string, ...args: T): T;
+var v = m('a',1,2); // error
 
 
 //// [destructureGenericsErrors.js]
 var y = g(1); // error
-var y;
 var a = g(1, 2, 3); // error
-var a;
+var u = k(1, 2); // error
+var v = m('a', 1, 2); // error
