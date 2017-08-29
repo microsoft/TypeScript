@@ -7361,7 +7361,8 @@ namespace ts {
                 type.types = types;
                 /*
                 Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
-                If there exist both `type T = number | boolean` and `type U = number | boolean`, it is arbitrary which one gets the aliasSymbol.
+                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
+                (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
                 It's important that we create equivalent union types only once, so that's an unfortunate side effect.
                 */
                 type.aliasSymbol = aliasSymbol;
