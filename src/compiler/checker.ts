@@ -14671,18 +14671,8 @@ namespace ts {
                 }
                 return unknownType;
             }
-            if (prop.valueDeclaration) {
-                if (isInPropertyInitializer(node) &&
-                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                    error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
-                }
-                if (prop.valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
-                    node.parent && node.parent.kind !== SyntaxKind.TypeReference &&
-                    !isInAmbientContext(prop.valueDeclaration) &&
-                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                    error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
-                }
-            }
+
+            checkPropertyNotUsedBeforeDeclaration(prop, node, right);
 
             markPropertyAsReferenced(prop);
 
@@ -14710,6 +14700,52 @@ namespace ts {
             }
             const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function checkPropertyNotUsedBeforeDeclaration(prop: Symbol, node: PropertyAccessExpression | QualifiedName, right: Identifier): void {
+            const { valueDeclaration } = prop;
+            if (!valueDeclaration) {
+                return;
+            }
+
+            if (findAncestor(node, node => node.kind === SyntaxKind.PropertyDeclaration ? true : isExpression(node) ? false : "quit") &&
+                !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
+                && !isPropertyDeclaredInAncestorClass(prop)) {
+                error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
+            }
+            else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
+                node.parent.kind !== SyntaxKind.TypeReference &&
+                !isInAmbientContext(valueDeclaration) &&
+                !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)) {
+                error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
+            }
+        }
+
+        /**
+         * It's possible that "prop.valueDeclaration" is a local declaration, but the property was also declared in a superclass.
+         * In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
+         */
+        function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
+            let classType = getTypeOfSymbol(prop.parent) as InterfaceType;
+            while (true) {
+                classType = getSuperClass(classType);
+                if (!classType) {
+                    return false;
+                }
+                const superProperty = getPropertyOfType(classType, prop.escapedName);
+                if (superProperty && superProperty.valueDeclaration) {
+                    return true;
+                }
+            }
+        }
+
+        function getSuperClass(classType: InterfaceType): InterfaceType | undefined {
+            const x = getBaseTypes(classType);
+            if (x.length === 0) {
+                return undefined;
+            }
+            Debug.assert(x.length === 1);
+            return x[0] as InterfaceType;
         }
 
         function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
@@ -14830,16 +14866,6 @@ namespace ts {
                     prop.isReferenced = true;
                 }
             }
-        }
-
-        function isInPropertyInitializer(node: Node): boolean {
-            while (node) {
-                if (node.parent && node.parent.kind === SyntaxKind.PropertyDeclaration && (node.parent as PropertyDeclaration).initializer === node) {
-                    return true;
-                }
-                node = node.parent;
-            }
-            return false;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
