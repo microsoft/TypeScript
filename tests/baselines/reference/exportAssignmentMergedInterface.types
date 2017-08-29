@@ -69,5 +69,5 @@ interface Foo {
 >y : number
 }
 export = Foo;
->Foo : Foo
+>Foo : any
 

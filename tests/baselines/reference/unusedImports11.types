@@ -42,6 +42,6 @@ export class Member {}
 >Member : Member
 
 export default Member;
->Member : Member
+>Member : typeof Member
 
 

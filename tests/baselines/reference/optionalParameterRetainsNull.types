@@ -3,7 +3,6 @@ interface Bar {  bar: number; foo: object | null;  }
 >Bar : Bar
 >bar : number
 >foo : object | null
->null : null
 
 let a = {
 >a : { test<K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined): void; }
@@ -18,7 +17,6 @@ let a = {
 >b : Bar[K] | null | undefined
 >Bar : Bar
 >K : K
->null : null
 
 };
 a.test("bar", null); // ok, null is assignable to number | null | undefined

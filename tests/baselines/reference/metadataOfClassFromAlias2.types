@@ -26,5 +26,4 @@ export class ClassA {
 >annotation : () => PropertyDecorator
 >array : string | SomeClass
 >SomeClass : SomeClass
->null : null
 }

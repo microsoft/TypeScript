@@ -45,18 +45,12 @@ function f1() {
 
 type B1 = -1 | 0 | 1;
 >B1 : B1
->-1 : -1
->1 : 1
 
 type B2 = 1 | 0 | -1;
 >B2 : B1
->-1 : -1
->1 : 1
 
 type B3 = 0 | -1 | 1;
 >B3 : B1
->-1 : -1
->1 : 1
 
 function f2() {
 >f2 : () => void
@@ -379,7 +373,6 @@ function f14(x: 0 | 1 | 2, y: string) {
 function f15(x: 0 | false, y: 1 | "one") {
 >f15 : (x: false | 0, y: 1 | "one") => void
 >x : false | 0
->false : false
 >y : 1 | "one"
 
     var a = x && y;

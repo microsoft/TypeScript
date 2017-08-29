@@ -20,5 +20,5 @@ class C { public p = 0; }
 >0 : 0
 
 export = C;
->C : C
+>C : typeof C
 

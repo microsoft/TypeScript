@@ -18,14 +18,12 @@ var z1 = void 0;
 
 var x2: null;
 >x2 : null
->null : null
 
 var y2: undefined;
 >y2 : undefined
 
 var x3: null = null;
 >x3 : null
->null : null
 >null : null
 
 var y3: undefined = undefined;

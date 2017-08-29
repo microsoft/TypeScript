@@ -15,7 +15,7 @@ export function w(): e.w { // Should be OK
 }
 === tests/cases/compiler/w1.ts ===
 export = Widget1
->Widget1 : Widget1
+>Widget1 : typeof Widget1
 
 class Widget1 { name = 'one'; }
 >Widget1 : Widget1

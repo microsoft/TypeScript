@@ -8,7 +8,7 @@ import A = a.A;
 >A : a.A
 
 export = A;
->A : a.A
+>A : typeof a.A
 
 === tests/cases/compiler/A.ts ===
 export class A {

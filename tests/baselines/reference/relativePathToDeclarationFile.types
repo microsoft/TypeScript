@@ -54,5 +54,5 @@ declare class Test {
 >x : number
 }
 export = Test;
->Test : Test
+>Test : typeof Test
 

@@ -116,7 +116,6 @@ function union(a: A): A & B | null {
 >A : A
 >A : A
 >B : B
->null : null
 
   if (isB(a)) {
 >isB(a) : boolean

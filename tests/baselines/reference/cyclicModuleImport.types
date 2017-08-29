@@ -19,7 +19,7 @@ declare module "SubModule" {
         constructor();
     }
     export = SubModule;
->SubModule : SubModule
+>SubModule : typeof SubModule
 }
 declare module "MainModule" {
     import SubModule = require('SubModule');
@@ -35,6 +35,6 @@ declare module "MainModule" {
         constructor();
     }
     export = MainModule;
->MainModule : MainModule
+>MainModule : typeof MainModule
 }
 

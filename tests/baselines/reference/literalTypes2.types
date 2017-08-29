@@ -150,7 +150,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 >"abc" : "abc"
 >p3 : true
 >true : true
->true : true
 >p4 : E.A
 >E : any
 >A : E.A
@@ -166,8 +165,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 >v2 : -123
 >-123 : -123
 >123 : 123
->-123 : -123
->123 : 123
 
     var v3: "abc" = "abc";
 >v3 : "abc"
@@ -175,7 +172,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 
     var v4: true = true;
 >v4 : true
->true : true
 >true : true
 
     var v5: E.A = E.A;
@@ -194,8 +190,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 >x2 : -123
 >-123 : -123
 >123 : 123
->-123 : -123
->123 : 123
 
     let x3: "abc" = "abc";
 >x3 : "abc"
@@ -203,7 +197,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 
     let x4: true = true;
 >x4 : true
->true : true
 >true : true
 
     let x5: E.A = E.A;

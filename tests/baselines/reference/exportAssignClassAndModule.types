@@ -34,5 +34,5 @@ module Foo {
     }
 }
 export = Foo;
->Foo : Foo
+>Foo : typeof Foo
 

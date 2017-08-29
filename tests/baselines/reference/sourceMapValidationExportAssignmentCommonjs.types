@@ -6,5 +6,5 @@ class a {
 >c : any
 }
 export = a;
->a : a
+>a : typeof a
 

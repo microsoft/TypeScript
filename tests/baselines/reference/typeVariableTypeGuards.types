@@ -170,7 +170,6 @@ function f3<T extends Item | undefined>(obj: T | null) {
 >Item : Item
 >obj : T | null
 >T : T
->null : null
 
     if (obj) {
 >obj : T | null

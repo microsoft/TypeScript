@@ -18,7 +18,6 @@ const obj1: { x: 2 } = {
 const obj3: {y: true, overwrite: string } = {
 >obj3 : { y: true; overwrite: string; }
 >y : true
->true : true
 >overwrite : string
 >{    y: true,    overwrite: "hi"} : { y: true; overwrite: string; }
 
@@ -39,7 +38,6 @@ interface Prop {
 
     y: true
 >y : true
->true : true
 
     overwrite: string
 >overwrite : string

@@ -39,5 +39,5 @@ class ClassB { }
 >ClassB : ClassB
 
 export = ClassB;
->ClassB : ClassB
+>ClassB : typeof ClassB
 

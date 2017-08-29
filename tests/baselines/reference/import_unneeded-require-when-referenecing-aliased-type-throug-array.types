@@ -24,6 +24,6 @@ declare module "ITest" {
 >name : string
     }
     export = Name;
->Name : Name
+>Name : any
 }
 

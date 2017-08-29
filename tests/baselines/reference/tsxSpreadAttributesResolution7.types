@@ -5,11 +5,9 @@ import React = require('react');
 type TextProps = { editable: false }
 >TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
 >editable : false
->false : false
 
                | { editable: true, onEdit: (newText: string) => void };
 >editable : true
->true : true
 >onEdit : (newText: string) => void
 >newText : string
 

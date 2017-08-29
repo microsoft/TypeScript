@@ -10,7 +10,7 @@ declare module "file1" {
 >v : number
     }
     export = foo;
->foo : foo
+>foo : typeof foo
 }
 
 

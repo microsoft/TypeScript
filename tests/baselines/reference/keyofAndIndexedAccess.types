@@ -78,7 +78,6 @@ type K05 = keyof undefined;  // never
 
 type K06 = keyof null;  // never
 >K06 : never
->null : null
 
 type K07 = keyof never;  // never
 >K07 : never

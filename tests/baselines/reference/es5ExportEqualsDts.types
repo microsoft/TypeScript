@@ -23,5 +23,5 @@ module A {
 }
 
 export = A
->A : A
+>A : typeof A
 

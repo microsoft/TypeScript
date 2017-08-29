@@ -14,7 +14,7 @@ class MainModule {
     constructor() { }
 }
 export = MainModule;
->MainModule : MainModule
+>MainModule : typeof MainModule
 
 
 === tests/cases/compiler/missingImportAfterModuleImport_0.ts ===
@@ -31,6 +31,6 @@ declare module "SubModule" {
         constructor();
     }
     export = SubModule;
->SubModule : SubModule
+>SubModule : typeof SubModule
 }
 

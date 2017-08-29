@@ -18,5 +18,5 @@ var Foo: new () => Foo.A<Foo<string>>;
 >Foo : Foo<T>
 
 export = Foo;
->Foo : Foo<T>
+>Foo : new () => Foo.A<Foo<string>>
 

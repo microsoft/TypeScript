@@ -15,5 +15,5 @@ class x{}
 >x : x
 
 export = x; 
->x : x
+>x : typeof x
 

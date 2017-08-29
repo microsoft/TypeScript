@@ -49,5 +49,5 @@ declare module "bluebird" {
 >Promise : PromiseConstructor
 
     export = Bluebird;
->Bluebird : Promise<T>
+>Bluebird : PromiseConstructor
 }

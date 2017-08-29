@@ -19,7 +19,7 @@ var r: string = m.foo;
 
 === tests/cases/compiler/exportAssignmentOfGenericType1_0.ts ===
 export = T;
->T : T<X>
+>T : typeof T
 
 class T<X> { foo: X; }
 >T : T<X>

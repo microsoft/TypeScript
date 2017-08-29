@@ -3,7 +3,7 @@ class c { }
 >c : c
 
 export default c;
->c : c
+>c : typeof c
 
 === tests/cases/compiler/client.ts ===
 import defaultBinding from "./server";

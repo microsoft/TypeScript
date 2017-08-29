@@ -76,7 +76,7 @@ var x = true;
 >true : true
 
 export = x;
->x : boolean
+>x : true
 
 === tests/cases/conformance/externalModules/expArray.ts ===
 var x = [1,2];

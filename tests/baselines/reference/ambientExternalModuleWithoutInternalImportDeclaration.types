@@ -23,7 +23,7 @@ declare module 'M' {
 >foo : () => void
     }
     export = C;
->C : C
+>C : typeof C
 
 }
 

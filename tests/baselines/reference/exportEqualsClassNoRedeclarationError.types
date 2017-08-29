@@ -14,5 +14,5 @@ class SomeClass {
 >value : number
 }
 export = SomeClass;
->SomeClass : SomeClass
+>SomeClass : typeof SomeClass
 

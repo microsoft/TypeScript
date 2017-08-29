@@ -3,7 +3,7 @@ class a { }
 >a : a
 
 export default a;
->a : a
+>a : typeof a
 
 === tests/cases/compiler/client.ts ===
 import defaultBinding, * as nameSpaceBinding from "server";
