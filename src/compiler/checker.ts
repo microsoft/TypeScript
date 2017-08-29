@@ -22905,7 +22905,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolAtLocation(node: Node) {
+        function getSymbolAtLocation(node: Node): Symbol | undefined {
             if (node.kind === SyntaxKind.SourceFile) {
                 return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
             }
@@ -22983,9 +22983,21 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     // index access
-                    if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
-                        const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
-                        return getPropertyOfType(objectType, (<NumericLiteral>node).text as __String);
+                    switch (node.parent.kind) {
+                        case SyntaxKind.ElementAccessExpression: {
+                            if ((<ElementAccessExpression>node.parent).argumentExpression !== node) {
+                                return undefined;
+                            }
+                            const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
+                            return getPropertyOfType(objectType, (<NumericLiteral>node).text as __String);
+                        }
+                        case SyntaxKind.LiteralType: {
+                            if (!isIndexedAccessTypeNode(node.parent.parent)) {
+                                return undefined;
+                            }
+                            const objectType = getTypeFromTypeNode(node.parent.parent.objectType);
+                            return getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
+                        }
                     }
                     break;
             }
