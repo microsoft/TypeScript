@@ -244,25 +244,27 @@ namespace ts {
             isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
-    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLiteral | NumericLiteral): boolean {
-        switch (node.parent.kind) {
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.EnumMember:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.ModuleDeclaration:
-                return getNameOfDeclaration(<Declaration>node.parent) === node;
-            case SyntaxKind.ElementAccessExpression:
-                return (<ElementAccessExpression>node.parent).argumentExpression === node;
-            case SyntaxKind.ComputedPropertyName:
-                return true;
-            case SyntaxKind.LiteralType:
-                return node.parent.parent.kind === SyntaxKind.IndexedAccessType;
+    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
+        if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
+            switch (node.parent.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.ModuleDeclaration:
+                    return getNameOfDeclaration(<Declaration>node.parent) === node;
+                case SyntaxKind.ElementAccessExpression:
+                    return (<ElementAccessExpression>node.parent).argumentExpression === node;
+                case SyntaxKind.ComputedPropertyName:
+                    return true;
+            }
         }
+
+        return false;
     }
 
     export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
