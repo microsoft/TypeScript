@@ -6997,8 +6997,8 @@ namespace ts {
                 }
 
                 forEachChild(node, visitNode, visitArray);
-                if ((node as HasJSDocNodes).jsDoc) {
-                    for (const jsDocComment of (node as HasJSDocNodes).jsDoc) {
+                if (hasJSDocNodes(node)) {
+                    for (const jsDocComment of node.jsDoc) {
                         forEachChild(jsDocComment, visitNode, visitArray);
                     }
                 }
