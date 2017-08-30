@@ -246,7 +246,8 @@ namespace ts.server {
         WildcardDirectories = "Wild card directory",
         ClosedScriptInfo = "Closed Script info",
         ConfigFileForInferredRoot = "Config file for the inferred project root",
-        FailedLookupLocation = "Directory of Failed lookup locations in module resolution"
+        FailedLookupLocation = "Directory of Failed lookup locations in module resolution",
+        TypeRoots = "Type root directory"
     }
 
     const enum ConfigFileWatcherStatus {

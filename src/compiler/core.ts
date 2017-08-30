@@ -1224,6 +1224,9 @@ namespace ts {
     /** Do nothing and return false */
     export function returnFalse(): false { return false; }
 
+    /** Do nothing and return true */
+    export function returnTrue(): true { return true; }
+
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
         throw new Error("Not implemented");

@@ -19,6 +19,9 @@ namespace ts {
 
         setRootDirectory(dir: string): void;
 
+        updateTypeRootsWatch(): void;
+        closeTypeRootsWatch(): void;
+
         clear(): void;
     }
 
@@ -39,6 +42,8 @@ namespace ts {
         getCompilationSettings(): CompilerOptions;
         watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
         onInvalidatedResolution(): void;
+        watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
+        onChangedAutomaticTypeDirectiveNames(): void;
         getCachedPartialSystem?(): CachedPartialSystem;
         projectName?: string;
         getGlobalCache?(): string | undefined;
@@ -59,10 +64,16 @@ namespace ts {
         const resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         const perDirectoryResolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
+        const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory());
+
         const directoryWatchesOfFailedLookups = createMap<DirectoryWatchesOfFailedLookup>();
         const failedLookupLocationToDirPath = createMap<Path>();
         let rootDir: string;
         let rootPath: Path;
+
+        // TypeRoot watches for the types that get added as part of getAutomaticTypeDirectiveNames
+        const typeRootsWatches = createMap<FileWatcher>();
+
         return {
             startRecordingFilesWithChangedResolutions,
             finishRecordingFilesWithChangedResolutions,
@@ -73,12 +84,14 @@ namespace ts {
             invalidateResolutionOfFile,
             createHasInvalidatedResolution,
             setRootDirectory,
+            updateTypeRootsWatch,
+            closeTypeRootsWatch,
             clear
         };
 
         function setRootDirectory(dir: string) {
             Debug.assert(!resolvedModuleNames.size && !resolvedTypeReferenceDirectives.size && !directoryWatchesOfFailedLookups.size);
-            rootDir = removeTrailingDirectorySeparator(getNormalizedAbsolutePath(dir, resolutionHost.getCurrentDirectory()));
+            rootDir = removeTrailingDirectorySeparator(getNormalizedAbsolutePath(dir, getCurrentDirectory()));
             rootPath = resolutionHost.toPath(rootDir);
         }
 
@@ -93,6 +106,7 @@ namespace ts {
             // Close all the watches for failed lookup locations, irrespective of refcounts for them since this is to clear the cache
             clearMap(directoryWatchesOfFailedLookups, closeFileWatcherOf);
             failedLookupLocationToDirPath.clear();
+            closeTypeRootsWatch();
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
             Debug.assert(perDirectoryResolvedModuleNames.size === 0 && perDirectoryResolvedTypeReferenceDirectives.size === 0);
@@ -283,7 +297,7 @@ namespace ts {
             }
 
             let dirPath = getDirectoryPath(failedLookupLocationPath);
-            let dir = getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, resolutionHost.getCurrentDirectory()));
+            let dir = getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory()));
             for (let i = 0; i < MAX_DIRPATHS_TO_RECURSE; i++) {
                 const parentPath = getDirectoryPath(dirPath);
                 if (directoryWatchesOfFailedLookups.has(dirPath) || parentPath === dirPath) {
@@ -454,6 +468,56 @@ namespace ts {
             const isInDirPath: (location: string) => boolean = location => isInDirectoryPath(dirPath, resolutionHost.toPath(location));
             invalidateResolutionCacheOfChangedFailedLookupLocation(resolvedModuleNames, isInDirPath);
             invalidateResolutionCacheOfChangedFailedLookupLocation(resolvedTypeReferenceDirectives, isInDirPath);
+        }
+
+        function closeTypeRootsWatch() {
+            clearMap(typeRootsWatches, closeFileWatcher);
+        }
+
+        function createTypeRootsWatch(_typeRootPath: string, typeRoot: string): FileWatcher {
+            // Create new watch and recursive info
+            return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrFolder => {
+                const fileOrFolderPath = resolutionHost.toPath(fileOrFolder);
+                if (resolutionHost.getCachedPartialSystem) {
+                    // Since the file existance changed, update the sourceFiles cache
+                    resolutionHost.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                }
+
+                // For now just recompile
+                // We could potentially store more data here about whether it was/would be really be used or not
+                // and with that determine to trigger compilation but for now this is enough
+                resolutionHost.onChangedAutomaticTypeDirectiveNames();
+            }, WatchDirectoryFlags.Recursive);
+        }
+
+        /**
+         * Watches the types that would get added as part of getAutomaticTypeDirectiveNames
+         * To be called when compiler options change
+         */
+        function updateTypeRootsWatch() {
+            const options = resolutionHost.getCompilationSettings();
+            if (options.types) {
+                // No need to do any watch since resolution cache is going to handle the failed lookups
+                // for the types added by this
+                closeTypeRootsWatch();
+                return;
+            }
+
+            // we need to assume the directories exist to ensure that we can get all the type root directories that get included
+            const typeRoots = getEffectiveTypeRoots(options, { directoryExists: returnTrue, getCurrentDirectory });
+            if (typeRoots) {
+                mutateMap(
+                    typeRootsWatches,
+                    arrayToMap(typeRoots, tr => resolutionHost.toPath(tr)),
+                    {
+                        createNewValue: createTypeRootsWatch,
+                        onDeleteValue: closeFileWatcher
+                    }
+                );
+            }
+            else {
+                closeTypeRootsWatch();
+            }
         }
     }
 }

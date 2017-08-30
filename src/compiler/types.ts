@@ -4067,6 +4067,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
         onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
         hasInvalidatedResolution?: HasInvalidatedResolution;
+        hasChangedAutomaticTypeDirectiveNames?(): boolean;
     }
 
     /* @internal */

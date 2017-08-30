@@ -321,6 +321,22 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
+    const typeRootFromTsserverLocation = "/node_modules/@types";
+
+    export function getTypeRootsFromLocation(currentDirectory: string) {
+        currentDirectory = normalizePath(currentDirectory);
+        const result: string[] = [];
+        while (true) {
+            result.push(combinePaths(currentDirectory, "node_modules/@types"));
+            const parentDirectory = getDirectoryPath(currentDirectory);
+            if (parentDirectory === currentDirectory) {
+                break;
+            }
+            currentDirectory = parentDirectory;
+        }
+        return result;
+    }
+
     describe("tsserverProjectSystem", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -359,7 +375,7 @@ namespace ts.projectSystem {
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, ["/"], /*recursive*/ true);
+            checkWatchedDirectories(host, ["/", typeRootFromTsserverLocation], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -430,7 +446,8 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [file1.path, file2.path]);
             // watching all files except one that was open
             checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
-            checkWatchedDirectories(host, [getDirectoryPath(configFile.path)], /*recursive*/ true);
+            const configFileDirectory = getDirectoryPath(configFile.path);
+            checkWatchedDirectories(host, getTypeRootsFromLocation(configFileDirectory).concat(configFileDirectory), /*recursive*/ true);
         });
 
         it("create configured project with the file list", () => {
@@ -518,7 +535,8 @@ namespace ts.projectSystem {
             const host = createServerHost([commonFile1, libFile, configFile]);
             const projectService = createProjectService(host);
             projectService.openClientFile(commonFile1.path);
-            checkWatchedDirectories(host, ["/a/b"], /*recursive*/ true);
+            const configFileDir = getDirectoryPath(configFile.path);
+            checkWatchedDirectories(host, getTypeRootsFromLocation(configFileDir).concat(configFileDir), /*recursive*/ true);
             checkNumberOfConfiguredProjects(projectService, 1);
 
             const project = configuredProjectAt(projectService, 0);
@@ -4329,6 +4347,7 @@ namespace ts.projectSystem {
                 };
                 const appFolder = getDirectoryPath(app.path);
                 const projectFiles = [app, libFile, tsconfigJson];
+                const typeRootDirectories = getTypeRootsFromLocation(getDirectoryPath(tsconfigJson.path));
                 const otherFiles = [packageJson];
                 const host = createServerHost(projectFiles.concat(otherFiles));
                 const projectService = createProjectService(host);
@@ -4402,7 +4421,8 @@ namespace ts.projectSystem {
                     { "path": "/a/b/node_modules/typescript" },
                     { "path": "/a/b/node_modules/.bin" }
                 );
-                verifyAfterPartialOrCompleteNpmInstall(0);
+                // From the type root update
+                verifyAfterPartialOrCompleteNpmInstall(2);
 
                 forEach(filesAndFoldersToAdd, f => {
                     f.path = f.path
@@ -4438,7 +4458,7 @@ namespace ts.projectSystem {
 
                     const filesWatched = filter(projectFilePaths, p => p !== app.path);
                     checkWatchedFiles(host, filesWatched);
-                    checkWatchedDirectories(host, recursiveWatchedDirectories, /*recursive*/ true);
+                    checkWatchedDirectories(host, typeRootDirectories.concat(recursiveWatchedDirectories), /*recursive*/ true);
                     checkWatchedDirectories(host, [], /*recursive*/ false);
                 }
             }

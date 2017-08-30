@@ -162,9 +162,9 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
-        private typingFiles: SortedReadonlyArray<string>;
+        private changedAutomaticTypeDirectiveNames = false;
 
-        private typesVersion = 0;
+        private typingFiles: SortedReadonlyArray<string>;
 
         public isNonTsProject() {
             this.updateGraph();
@@ -224,10 +224,10 @@ namespace ts.server {
             }
 
             this.languageService = createLanguageService(this, this.documentRegistry);
+            this.resolutionCache = createResolutionCache(this);
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
             }
-            this.resolutionCache = createResolutionCache(this);
             this.markAsDirty();
         }
 
@@ -325,10 +325,6 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.partialSystem.fileExists(file);
         }
 
-        getTypeRootsVersion() {
-            return this.typesVersion;
-        }
-
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[] {
             return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ true);
         }
@@ -365,6 +361,29 @@ namespace ts.server {
         /*@internal*/
         onInvalidatedResolution() {
             this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+        }
+
+        /*@internal*/
+        watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
+            return this.projectService.watchDirectory(
+                this.projectService.host,
+                directory,
+                cb,
+                flags,
+                WatchType.TypeRoots,
+                this
+            );
+        }
+
+        /*@internal*/
+        onChangedAutomaticTypeDirectiveNames() {
+            this.changedAutomaticTypeDirectiveNames = true;
+            this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+        }
+
+        /*@internal*/
+        hasChangedAutomaticTypeDirectiveNames() {
+            return this.changedAutomaticTypeDirectiveNames;
         }
 
         /*@internal*/
@@ -458,6 +477,7 @@ namespace ts.server {
             }
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
+            this.resolutionCache.closeTypeRootsWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
 
@@ -476,10 +496,6 @@ namespace ts.server {
                 return undefined;
             }
             return this.program.getSourceFileByPath(path);
-        }
-
-        updateTypes() {
-            this.typesVersion++;
         }
 
         close() {
@@ -781,7 +797,7 @@ namespace ts.server {
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
             const hasChanges = !oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused & StructureIsReused.Completely));
-
+            this.changedAutomaticTypeDirectiveNames = false;
             if (hasChanges) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
@@ -804,9 +820,10 @@ namespace ts.server {
                     missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
 
-                // Update typeRoots watch
                 // Watch the type locations that would be added to program as part of automatic type resolutions
-                // TODO
+                if (this.languageServiceEnabled) {
+                    this.resolutionCache.updateTypeRootsWatch();
+                }
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;

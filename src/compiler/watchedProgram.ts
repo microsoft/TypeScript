@@ -246,12 +246,13 @@ namespace ts {
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[];                    // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
+        let changedAutomaticTypeDirectiveNames = false;                     // True if the automatic type directives have changed
 
         const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
         const writeLog: (s: string) => void = loggingEnabled ? s => system.write(s) : noop;
         const watchFile = loggingEnabled ? ts.addFileWatcherWithLogging : ts.addFileWatcher;
         const watchFilePath = loggingEnabled ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
-        const watchDirectory = loggingEnabled ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
+        const watchDirectoryWorker = loggingEnabled ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
 
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
@@ -288,12 +289,15 @@ namespace ts {
             resolveTypeReferenceDirectives,
             resolveModuleNames,
             onReleaseOldSourceFile,
+            hasChangedAutomaticTypeDirectiveNames,
             // Members for ResolutionCacheHost
             toPath,
             getCompilationSettings: () => compilerOptions,
-            watchDirectoryOfFailedLookupLocation,
+            watchDirectoryOfFailedLookupLocation: watchDirectory,
+            watchTypeRootsDirectory: watchDirectory,
             getCachedPartialSystem,
             onInvalidatedResolution: scheduleProgramUpdate,
+            onChangedAutomaticTypeDirectiveNames,
             writeLog
         };
         // Cache for the module resolution
@@ -320,13 +324,14 @@ namespace ts {
             }
 
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution();
-            if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution)) {
+            if (isProgramUptoDate(program, rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames)) {
                 return;
             }
 
             if (hasChangedCompilerOptions && changesAffectModuleResolution(program && program.getCompilerOptions(), compilerOptions)) {
                 resolutionCache.clear();
             }
+            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
             hasChangedCompilerOptions = false;
             beforeCompile(compilerOptions);
 
@@ -339,6 +344,10 @@ namespace ts {
 
             // Update watches
             updateMissingFilePathsWatch(program, missingFilesMap || (missingFilesMap = createMap()), watchMissingFilePath);
+            if (needsUpdateInTypeRootWatch) {
+                resolutionCache.updateTypeRootsWatch();
+            }
+
             if (missingFilePathsRequestedForRelease) {
                 // These are the paths that program creater told us as not in use any more but were missing on the disk.
                 // We didnt remove the entry for them from sourceFiles cache so that we dont have to do File IO,
@@ -582,8 +591,17 @@ namespace ts {
             }
         }
 
-        function watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return watchDirectory(system, directory, cb, flags, writeLog);
+        function watchDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
+            return watchDirectoryWorker(system, directory, cb, flags, writeLog);
+        }
+
+        function onChangedAutomaticTypeDirectiveNames() {
+            changedAutomaticTypeDirectiveNames = true;
+            scheduleProgramUpdate();
+        }
+
+        function hasChangedAutomaticTypeDirectiveNames() {
+            return changedAutomaticTypeDirectiveNames;
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
@@ -615,7 +633,6 @@ namespace ts {
 
         function watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags) {
             return watchDirectory(
-                system,
                 directory,
                 fileOrFolder => {
                     Debug.assert(!!configFileName);
@@ -645,8 +662,7 @@ namespace ts {
                         scheduleProgramUpdate();
                     }
                 },
-                flags,
-                writeLog
+                flags
             );
         }
 

@@ -1095,11 +1095,13 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
+            const hasChangedAutomaticTypeDirectiveNames = host.hasChangedAutomaticTypeDirectiveNames && host.hasChangedAutomaticTypeDirectiveNames.bind(host) || returnFalse;
+
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
                 if (hostProjectVersion) {
-                    if (lastProjectVersion === hostProjectVersion) {
+                    if (lastProjectVersion === hostProjectVersion && !hasChangedAutomaticTypeDirectiveNames()) {
                         return;
                     }
 
@@ -1121,7 +1123,7 @@ namespace ts {
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists, hasInvalidatedResolution)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames)) {
                 return;
             }
 
@@ -1161,7 +1163,8 @@ namespace ts {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
                 onReleaseOldSourceFile,
-                hasInvalidatedResolution
+                hasInvalidatedResolution,
+                hasChangedAutomaticTypeDirectiveNames
             };
             if (host.trace) {
                 compilerHost.trace = message => host.trace(message);

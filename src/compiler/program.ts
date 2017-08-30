@@ -393,10 +393,17 @@ namespace ts {
         allDiagnostics?: Diagnostic[];
     }
 
-    export function isProgramUptoDate(program: Program | undefined, rootFileNames: string[], newOptions: CompilerOptions,
-        getSourceVersion: (path: Path) => string, fileExists: (fileName: string) => boolean, hasInvalidatedResolution: HasInvalidatedResolution): boolean {
-        // If we haven't create a program yet, then it is not up-to-date
-        if (!program) {
+    export function isProgramUptoDate(
+        program: Program | undefined,
+        rootFileNames: string[],
+        newOptions: CompilerOptions,
+        getSourceVersion: (path: Path) => string,
+        fileExists: (fileName: string) => boolean,
+        hasInvalidatedResolution: HasInvalidatedResolution,
+        hasChangedAutomaticTypeDirectiveNames: () => boolean,
+    ): boolean {
+        // If we haven't create a program yet or has changed automatic type directives, then it is not up-to-date
+        if (!program || hasChangedAutomaticTypeDirectiveNames()) {
             return false;
         }
 
@@ -587,6 +594,7 @@ namespace ts {
         let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+        const hasChangedAutomaticTypeDirectiveNames = host.hasChangedAutomaticTypeDirectiveNames && host.hasChangedAutomaticTypeDirectiveNames.bind(host) || returnFalse;
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
@@ -1088,6 +1096,10 @@ namespace ts {
 
             if (oldProgram.structureIsReused !== StructureIsReused.Completely) {
                 return oldProgram.structureIsReused;
+            }
+
+            if (hasChangedAutomaticTypeDirectiveNames()) {
+                return oldProgram.structureIsReused = StructureIsReused.SafeModules;
             }
 
             missingFilePaths = oldProgram.getMissingFilePaths();
