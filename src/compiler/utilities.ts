@@ -3958,6 +3958,49 @@ namespace ts {
         return id;
     }
 
+    /**
+     * A JSDocTypedef tag has an _optional_ name field - if a name is not directly present, we should
+     * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
+     * will be merged with)
+     */
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+        const hostNode = declaration.parent.parent;
+        if (!hostNode) {
+            return undefined;
+        }
+        // Covers classes, functions - any named declaration host node
+        let name = getNameOfDeclaration(hostNode as Declaration);
+        // Covers variable statements
+        if (!name && hostNode.kind === SyntaxKind.VariableStatement &&
+            (hostNode as VariableStatement).declarationList &&
+            (hostNode as VariableStatement).declarationList.declarations[0]) {
+            name = getNameOfDeclaration((hostNode as VariableStatement).declarationList.declarations[0]);
+        }
+        if (name) {
+            return isIdentifier(name) ? name : undefined;
+        }
+        // Covers property accesses and element accesses
+        if (hostNode.kind === SyntaxKind.ExpressionStatement) {
+            const expr = (hostNode as ExpressionStatement).expression;
+            switch (expr.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                    return (expr as PropertyAccessExpression).name;
+                case SyntaxKind.ElementAccessExpression:
+                    const arg = (expr as ElementAccessExpression).argumentExpression;
+                    if (isIdentifier(arg)) {
+                        return arg;
+                    }
+            }
+            return undefined;
+        }
+        // Do a debug.fail here, this way if this case becomes possible, it errors early; as all cases _should_ be covered with the above
+        Debug.fail("No name location for jsdoc typedef tag!");
+    }
+
+    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+        return declaration.name || nameForNamelessJSDocTypedef(declaration as JSDocTypedefTag);
+    }
+
     export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
         if (!declaration) {
             return undefined;
@@ -3976,6 +4019,9 @@ namespace ts {
                 default:
                     return undefined;
             }
+        }
+        else if (declaration.kind === SyntaxKind.JSDocTypedefTag) {
+            return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
         }
         else {
             return (declaration as NamedDeclaration).name;

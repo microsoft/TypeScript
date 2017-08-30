@@ -282,17 +282,8 @@ namespace ts {
                     const index = indexOf(functionType.parameters, node);
                     return "arg" + index as __String;
                 case SyntaxKind.JSDocTypedefTag:
-                    const parentNode = node.parent && node.parent.parent;
-                    let nameFromParentNode: __String;
-                    if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
-                        if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
-                            const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
-                            if (isIdentifier(nameIdentifier)) {
-                                nameFromParentNode = nameIdentifier.escapedText;
-                            }
-                        }
-                    }
-                    return nameFromParentNode;
+                    const name = getNameOfJSDocTypedef(node as JSDocTypedefTag);
+                    return typeof name !== "undefined" ? name.escapedText : undefined;
             }
         }
 
