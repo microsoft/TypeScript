@@ -11,9 +11,12 @@
  * @param {...number?} f - number[] | null
  * @param {...number!?} g - number[] | null
  * @param {...number?!} h - number[] | null
+ * @param {...number[]} i - number[][]
+ * @param {...number![]?} j - number[][] | null
+ * @param {...number?[]!} k - (number[] | null)[]
  */
-function f(x, y, z, a, b, c, d, e, f, g, h) {
->f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, d: number[] | null, ...e: (number | null)[], f: number[] | null, g: number[] | null, h: number[] | null) => void
+function f(x, y, z, a, b, c, d, e, f, g, h, i, j, k) {
+>f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, d: number[] | null, ...e: (number | null)[], f: number[] | null, g: number[] | null, h: number[] | null, i: number[][], j: number[][] | null, k: (number[] | null)[]) => void
 >x : number[]
 >y : number[]
 >z : number[]
@@ -25,5 +28,8 @@ function f(x, y, z, a, b, c, d, e, f, g, h) {
 >f : number[] | null
 >g : number[] | null
 >h : number[] | null
+>i : number[][]
+>j : number[][] | null
+>k : (number[] | null)[]
 }
 
