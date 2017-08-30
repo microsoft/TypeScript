@@ -23007,15 +23007,11 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     // index access
-                    const objectType = (() => {
-                        switch (node.parent.kind) {
-                            case SyntaxKind.ElementAccessExpression:
-                                const { argumentExpression, expression } = node.parent as ElementAccessExpression;
-                                return argumentExpression === node ? getTypeOfExpression(expression) : undefined;
-                            case SyntaxKind.LiteralType:
-                                return isIndexedAccessTypeNode(node.parent.parent) ? getTypeFromTypeNode(node.parent.parent.objectType) : undefined;
-                        }
-                    })();
+                    const objectType = isElementAccessExpression(node.parent)
+                        ? node.parent.argumentExpression === node ? getTypeOfExpression(node.parent.expression) : undefined
+                        : isLiteralTypeNode(node.parent) && isIndexedAccessTypeNode(node.parent.parent)
+                            ? getTypeFromTypeNode(node.parent.parent.objectType)
+                            : undefined;
                     return objectType && getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
 
                 default:
