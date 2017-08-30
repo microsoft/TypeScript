@@ -10,6 +10,9 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
+    find<S extends T>(predicate: (this: void, value: T, index: number, obj: Array<T>) => value is S): S | undefined;
+    find<S extends T>(predicate: (this: void, value: T, index: number, obj: Array<T>) => value is S, thisArg: undefined): S | undefined;
+    find<S extends T, Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => value is S, thisArg: Z): S | undefined;
     find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): T | undefined;
     find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): T | undefined;
     find<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): T | undefined;
@@ -363,6 +366,9 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
+    find<S extends T>(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => value is S): S | undefined;
+    find<S extends T>(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => value is S, thisArg: undefined): S | undefined;
+    find<S extends T, Z>(predicate: (this: Z, value: T, index: number, obj: ReadonlyArray<T>) => value is S, thisArg: Z): S | undefined;
     find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean): T | undefined;
     find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: undefined): T | undefined;
     find<Z>(predicate: (this: Z, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: Z): T | undefined;
