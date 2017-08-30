@@ -1208,7 +1208,7 @@ namespace ts {
 
     export function isPartOfExpression(node: Node): boolean {
         // For historical reasons, many tokens are not considered part of an expression, even
-        // if, by heirarchy, they aught to be
+        // if, by heirarchy, they ought to be
         if (isToken(node)) {
             switch (node.kind) {
                 case SyntaxKind.SuperKeyword:
@@ -1222,9 +1222,10 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
-                    return (node.flags & NodeFlags.ExpressionContext) !== 0;
+                    break;
+                default:
+                    return false;
             }
-            return false;
         }
         return (node.flags & NodeFlags.ExpressionContext) !== 0;
     }

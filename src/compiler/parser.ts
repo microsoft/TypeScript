@@ -3036,10 +3036,10 @@ namespace ts {
                 setExpressionContext(/*val*/ true);
             }
 
-            let expr = parseAssignmentExpressionOrHigher();
+            let expr = parseAssignmentExpressionOrHigherNoContextSet();
             let operatorToken: BinaryOperatorToken;
             while ((operatorToken = parseOptionalToken(SyntaxKind.CommaToken))) {
-                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigher());
+                expr = makeBinaryExpression(expr, operatorToken, parseAssignmentExpressionOrHigherNoContextSet());
             }
 
             if (!saveExpressionContext) {
@@ -3137,7 +3137,7 @@ namespace ts {
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like > > =  becoming >>=
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                return makeBinaryExpression(expr, <BinaryOperatorToken>parseTokenNode(), parseAssignmentExpressionOrHigher());
+                return makeBinaryExpression(expr, <BinaryOperatorToken>parseTokenNode(), parseAssignmentExpressionOrHigherNoContextSet());
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -3189,7 +3189,7 @@ namespace ts {
             if (!scanner.hasPrecedingLineBreak() &&
                 (token() === SyntaxKind.AsteriskToken || isStartOfExpression())) {
                 node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-                node.expression = parseAssignmentExpressionOrHigher();
+                node.expression = parseAssignmentExpressionOrHigherNoContextSet();
                 return finishNode(node);
             }
             else {
