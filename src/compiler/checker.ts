@@ -13059,7 +13059,7 @@ namespace ts {
                 // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
                 let type = getContextualType(binaryExpression);
                 if (!type && node === binaryExpression.right) {
-                    type = getTypeOfExpression(binaryExpression.left);
+                    type = getTypeOfExpression(binaryExpression.left, /*cache*/ true);
                 }
                 return type;
             }
