@@ -729,7 +729,7 @@ namespace ts {
         }
 
 
-        function addJSDocComment<T extends Node>(node: T): T {
+        function addJSDocComment<T extends HasJSDoc>(node: T): T {
             const comments = getJSDocCommentRanges(node, sourceFile.text);
             if (comments) {
                 for (const comment of comments) {
@@ -768,7 +768,7 @@ namespace ts {
                     const saveParent = parent;
                     parent = n;
                     forEachChild(n, visitNode);
-                    if (n.jsDoc) {
+                    if (hasJSDocNodes(n)) {
                         for (const jsDoc of n.jsDoc) {
                             jsDoc.parent = n;
                             parent = jsDoc;
@@ -2158,7 +2158,7 @@ namespace ts {
                 const result = <JSDocFunctionType>createNode(SyntaxKind.JSDocFunctionType);
                 nextToken();
                 fillSignature(SyntaxKind.ColonToken, SignatureFlags.Type | SignatureFlags.JSDoc, result);
-                return finishNode(result);
+                return addJSDocComment(finishNode(result));
             }
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseIdentifierName();
@@ -2365,7 +2365,7 @@ namespace ts {
             parseSemicolon();
         }
 
-        function parseSignatureMember(kind: SyntaxKind): CallSignatureDeclaration | ConstructSignatureDeclaration {
+        function parseSignatureMember(kind: SyntaxKind.CallSignature | SyntaxKind.ConstructSignature): CallSignatureDeclaration | ConstructSignatureDeclaration {
             const node = <CallSignatureDeclaration | ConstructSignatureDeclaration>createNode(kind);
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
@@ -2445,7 +2445,7 @@ namespace ts {
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         function parsePropertyOrMethodSignature(fullStart: number, modifiers: NodeArray<Modifier>): PropertySignature | MethodSignature {
@@ -2605,7 +2605,7 @@ namespace ts {
                 parseExpected(SyntaxKind.NewKeyword);
             }
             fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type, node);
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         function parseKeywordAndNoDot(): TypeNode | undefined {
@@ -6182,7 +6182,7 @@ namespace ts {
                 return jsDoc ? { jsDoc, diagnostics } : undefined;
             }
 
-            export function parseJSDocComment(parent: Node, start: number, length: number): JSDoc {
+            export function parseJSDocComment(parent: HasJSDoc, start: number, length: number): JSDoc {
                 const saveToken = currentToken;
                 const saveParseDiagnosticsLength = parseDiagnostics.length;
                 const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
@@ -6997,8 +6997,8 @@ namespace ts {
                 }
 
                 forEachChild(node, visitNode, visitArray);
-                if (node.jsDoc) {
-                    for (const jsDocComment of node.jsDoc) {
+                if ((node as HasJSDocNodes).jsDoc) {
+                    for (const jsDocComment of (node as HasJSDocNodes).jsDoc) {
                         forEachChild(jsDocComment, visitNode, visitArray);
                     }
                 }

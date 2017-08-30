@@ -277,7 +277,7 @@ namespace ts {
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
-        if (includeJsDoc && node.jsDoc && node.jsDoc.length > 0) {
+        if (includeJsDoc && hasJSDocNodes(node)) {
             return getTokenPosOfNode(node.jsDoc[0]);
         }
 
@@ -1510,10 +1510,10 @@ namespace ts {
     }
 
     export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
-        let tags = node.jsDocCache;
+        let tags = (node as HasJSDocNodes).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined) {
-            node.jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
+            (node as HasJSDocNodes).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
         }
         return tags;
     }
@@ -1567,11 +1567,13 @@ namespace ts {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
-            if (isVariableLike(node) && node.initializer) {
+            if (isVariableLike(node) && node.initializer && hasJSDocNodes(node.initializer)) {
                 result = addRange(result, node.initializer.jsDoc);
             }
 
-            result = addRange(result, node.jsDoc);
+            if (hasJSDocNodes(node)) {
+                result = addRange(result, node.jsDoc);
+            }
         }
     }
 
@@ -3993,8 +3995,12 @@ namespace ts {
             }
             return undefined;
         }
-        // Do a debug.fail here, this way if this case becomes possible, it errors early; as all cases _should_ be covered with the above
-        Debug.fail("No name location for jsdoc typedef tag!");
+        if (Debug.isDebugging) {
+            // Do a debug.fail here, this way if this case becomes possible, it errors early under test;
+            //   - all cases _should_ be covered by the above, and if not, a missing case should surface
+            //     when not debugging as the typedef node simply not being nameable in an error or bound
+            Debug.fail("No name location for jsdoc typedef tag!");
+        }
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
@@ -5410,5 +5416,11 @@ namespace ts {
     /* @internal */
     export function isJSDocTag(node: Node): boolean {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
+    }
+
+    /** True if has jsdoc nodes attached to it. */
+    /* @internal */
+    export function hasJSDocNodes(node: Node): node is HasJSDoc {
+        return !!(node as HasJSDocNodes).jsDoc && (node as HasJSDocNodes).jsDoc.length > 0;
     }
 }

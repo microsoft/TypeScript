@@ -589,14 +589,14 @@ namespace ts {
             // Binding of JsDocComment should be done before the current block scope container changes.
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
-            if (node.jsDoc) {
+            if ((node as HasJSDocNodes).jsDoc) {
                 if (isInJavaScriptFile(node)) {
-                    for (const j of node.jsDoc) {
+                    for (const j of (node as HasJSDocNodes).jsDoc) {
                         bind(j);
                     }
                 }
                 else {
-                    for (const j of node.jsDoc) {
+                    for (const j of (node as HasJSDocNodes).jsDoc) {
                         setParentPointers(node, j);
                     }
                 }
@@ -1885,7 +1885,7 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            if (isInJavaScriptFile(node)) bindJSDocTypedefTagIfAny(node);
+            if (isInJavaScriptFile(node)) bindJSDocTypedefTagIfAny(node as HasJSDocNodes);
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -1921,7 +1921,7 @@ namespace ts {
             inStrictMode = saveInStrictMode;
         }
 
-        function bindJSDocTypedefTagIfAny(node: Node) {
+        function bindJSDocTypedefTagIfAny(node: HasJSDocNodes) {
             if (!node.jsDoc) {
                 return;
             }
