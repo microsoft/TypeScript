@@ -539,7 +539,8 @@ namespace ts.refactor.extractMethod {
             scopes,
             enclosingTextRange,
             sourceFile,
-            context.program.getTypeChecker());
+            context.program.getTypeChecker(),
+	    context.cancellationToken);
         return { scopes, readsAndWrites };
     }
 
@@ -952,7 +953,8 @@ namespace ts.refactor.extractMethod {
         scopes: Scope[],
         enclosingTextRange: TextRange,
         sourceFile: SourceFile,
-        checker: TypeChecker): ReadsAndWrites {
+        checker: TypeChecker,
+	cancellationToken: CancellationToken): ReadsAndWrites {
 
         const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
@@ -1065,7 +1067,7 @@ namespace ts.refactor.extractMethod {
             // PERF: This is potentially very expensive.  `type` could be a library type with
             // a lot of properties, each of which the walker will visit.  Unfortunately, the
             // solution isn't as trivial as filtering to user types because of (e.g.) Array.
-            const symbolWalker = checker.getSymbolWalker();
+            const symbolWalker = checker.getSymbolWalker(() => (cancellationToken.throwIfCancellationRequested(), true));
             const {visitedTypes} = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
