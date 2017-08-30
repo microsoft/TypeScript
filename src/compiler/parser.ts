@@ -2739,48 +2739,48 @@ namespace ts {
             return token() === SyntaxKind.CloseParenToken || isStartOfParameter() || isStartOfType();
         }
 
-        function parseJSDocPostfixTypeOrHigher(): TypeNode {
+        function parsePostfixTypeOrHigher(): TypeNode {
             let kind: SyntaxKind | undefined;
             let type = parseNonArrayType();
-            while (kind = getKind(token())) {
-                nextToken();
-                const postfix = createNode(kind, type.pos) as JSDocOptionalType | JSDocNonNullableType | JSDocNullableType;
-                postfix.type = type;
-                type = finishNode(postfix);
-            }
-            return type;
-
-            function getKind(tokenKind: SyntaxKind): SyntaxKind | undefined {
-                switch (tokenKind) {
-                    case SyntaxKind.EqualsToken:
-                        // only parse postfix = inside jsdoc, because it's ambiguous elsewhere
-                        return contextFlags & NodeFlags.JSDoc ? SyntaxKind.JSDocOptionalType : undefined;
-                    case SyntaxKind.ExclamationToken:
-                        return SyntaxKind.JSDocNonNullableType;
-                    case SyntaxKind.QuestionToken:
-                        return SyntaxKind.JSDocNullableType;
-                }
-            }
-        }
-
-        function parseArrayTypeOrHigher(): TypeNode {
-            let type = parseJSDocPostfixTypeOrHigher();
-            while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
-                if (isStartOfType()) {
-                    const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
-                    node.objectType = type;
-                    node.indexType = parseType();
-                    parseExpected(SyntaxKind.CloseBracketToken);
-                    type = finishNode(node);
+            while (!scanner.hasPrecedingLineBreak() && (kind = getPostfixTypeKind(token()))) {
+                if (kind === SyntaxKind.ArrayType) {
+                    parseExpected(SyntaxKind.OpenBracketToken);
+                    if (isStartOfType()) {
+                        const node = createNode(SyntaxKind.IndexedAccessType, type.pos) as IndexedAccessTypeNode;
+                        node.objectType = type;
+                        node.indexType = parseType();
+                        parseExpected(SyntaxKind.CloseBracketToken);
+                        type = finishNode(node);
+                    }
+                    else {
+                        const node = createNode(SyntaxKind.ArrayType, type.pos) as ArrayTypeNode;
+                        node.elementType = type;
+                        parseExpected(SyntaxKind.CloseBracketToken);
+                        type = finishNode(node);
+                    }
                 }
                 else {
-                    const node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
-                    node.elementType = type;
-                    parseExpected(SyntaxKind.CloseBracketToken);
-                    type = finishNode(node);
+                    nextToken();
+                    const postfix = createNode(kind, type.pos) as JSDocOptionalType | JSDocNonNullableType | JSDocNullableType;
+                    postfix.type = type;
+                    type = finishNode(postfix);
                 }
             }
             return type;
+        }
+
+        function getPostfixTypeKind(tokenKind: SyntaxKind): SyntaxKind | undefined {
+            switch (tokenKind) {
+                case SyntaxKind.EqualsToken:
+                    // only parse postfix = inside jsdoc, because it's ambiguous elsewhere
+                    return contextFlags & NodeFlags.JSDoc ? SyntaxKind.JSDocOptionalType : undefined;
+                case SyntaxKind.ExclamationToken:
+                    return SyntaxKind.JSDocNonNullableType;
+                case SyntaxKind.QuestionToken:
+                    return SyntaxKind.JSDocNullableType;
+                case SyntaxKind.OpenBracketToken:
+                    return SyntaxKind.ArrayType;
+            }
         }
 
         function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
@@ -2796,7 +2796,7 @@ namespace ts {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
             }
-            return parseArrayTypeOrHigher();
+            return parsePostfixTypeOrHigher();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
