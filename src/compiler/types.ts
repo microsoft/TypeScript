@@ -531,7 +531,6 @@ namespace ts {
         /* @internal */ jsDocCache?: ReadonlyArray<JSDocTag>; // Cache for getJSDocTags
     }
 
-    /* @internal */
     export type HasJSDoc =
         | ParameterDeclaration
         | CallSignatureDeclaration
