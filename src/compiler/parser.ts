@@ -940,10 +940,6 @@ namespace ts {
             return scanner.getStartPos();
         }
 
-        function getNodeEnd(): number {
-            return scanner.getStartPos();
-        }
-
         // Use this function to access the current token instead of reading the currentToken
         // variable. Since function results aren't narrowed in control flow analysis, this ensures
         // that the type checker doesn't make wrong assumptions about the type of the current
@@ -1135,13 +1131,14 @@ namespace ts {
                     new TokenConstructor(kind, pos, pos);
         }
 
-        function createNodeArray<T extends Node>(elements?: T[], pos?: number): MutableNodeArray<T> {
-            const array = <MutableNodeArray<T>>(elements || []);
-            if (!(pos >= 0)) {
-                pos = getNodePos();
-            }
+        function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number): NodeArray<T> {
+            // Since the element list of a node array is typically created by starting with an empty array and
+            // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
+            // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
+            const length = elements.length;
+            const array = <MutableNodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
             array.pos = pos;
-            array.end = pos;
+            array.end = end === undefined ? scanner.getStartPos() : end;
             return array;
         }
 
@@ -1527,12 +1524,13 @@ namespace ts {
         function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            const result = createNodeArray<T>();
+            const list = [];
+            const listPos = getNodePos();
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
                     const element = parseListElement(kind, parseElement);
-                    result.push(element);
+                    list.push(element);
 
                     continue;
                 }
@@ -1542,9 +1540,8 @@ namespace ts {
                 }
             }
 
-            result.end = getNodeEnd();
             parsingContext = saveParsingContext;
-            return result;
+            return createNodeArray(list, listPos);
         }
 
         function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
@@ -1874,13 +1871,14 @@ namespace ts {
         function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T> {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            const result = createNodeArray<T>();
+            const list = [];
+            const listPos = getNodePos();
 
             let commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
                     const startPos = scanner.getStartPos();
-                    result.push(parseListElement(kind, parseElement));
+                    list.push(parseListElement(kind, parseElement));
                     commaStart = scanner.getTokenPos();
 
                     if (parseOptional(SyntaxKind.CommaToken)) {
@@ -1924,6 +1922,8 @@ namespace ts {
                 }
             }
 
+            parsingContext = saveParsingContext;
+            const result = createNodeArray(list, listPos);
             // Recording the trailing comma is deliberately done after the previous
             // loop, and not just if we see a list terminator. This is because the list
             // may have ended incorrectly, but it is still important to know if there
@@ -1933,14 +1933,11 @@ namespace ts {
                 // Always preserve a trailing comma by marking it on the NodeArray
                 result.hasTrailingComma = true;
             }
-
-            result.end = getNodeEnd();
-            parsingContext = saveParsingContext;
             return result;
         }
 
         function createMissingList<T extends Node>(): NodeArray<T> {
-            return createNodeArray<T>();
+            return createNodeArray<T>([], getNodePos());
         }
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): NodeArray<T> {
@@ -2015,15 +2012,15 @@ namespace ts {
             template.head = parseTemplateHead();
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
-            const templateSpans = createNodeArray<TemplateSpan>();
+            const list = [];
+            const listPos = getNodePos();
 
             do {
-                templateSpans.push(parseTemplateSpan());
+                list.push(parseTemplateSpan());
             }
-            while (lastOrUndefined(templateSpans).literal.kind === SyntaxKind.TemplateMiddle);
+            while (lastOrUndefined(list).literal.kind === SyntaxKind.TemplateMiddle);
 
-            templateSpans.end = getNodeEnd();
-            template.templateSpans = templateSpans;
+            template.templateSpans = createNodeArray(list, listPos);
 
             return finishNode(template);
         }
@@ -2802,13 +2799,12 @@ namespace ts {
             parseOptional(operator);
             let type = parseConstituentType();
             if (token() === operator) {
-                const types = createNodeArray<TypeNode>([type], type.pos);
+                const types = [type];
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
-                types.end = getNodeEnd();
                 const node = <UnionOrIntersectionTypeNode>createNode(kind, type.pos);
-                node.types = types;
+                node.types = createNodeArray(types, type.pos);
                 type = finishNode(node);
             }
             return type;
@@ -3174,8 +3170,7 @@ namespace ts {
             parameter.name = identifier;
             finishNode(parameter);
 
-            node.parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos);
-            node.parameters.end = parameter.end;
+            node.parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos, parameter.end);
 
             node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
             node.body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier);
@@ -4025,7 +4020,8 @@ namespace ts {
         }
 
         function parseJsxChildren(openingTagName: LeftHandSideExpression): NodeArray<JsxChild> {
-            const result = createNodeArray<JsxChild>();
+            const list = [];
+            const listPos = getNodePos();
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << ParsingContext.JsxChildren;
 
@@ -4046,15 +4042,13 @@ namespace ts {
                 }
                 const child = parseJsxChild();
                 if (child) {
-                    result.push(child);
+                    list.push(child);
                 }
             }
 
-            result.end = scanner.getTokenPos();
-
             parsingContext = saveParsingContext;
 
-            return result;
+            return createNodeArray(list, listPos);
         }
 
         function parseJsxAttributes(): JsxAttributes {
@@ -5447,27 +5441,19 @@ namespace ts {
         }
 
         function parseDecorators(): NodeArray<Decorator> {
-            let decorators: NodeArray<Decorator> & Decorator[];
+            let list: Decorator[];
+            const listPos = getNodePos();
             while (true) {
                 const decoratorStart = getNodePos();
                 if (!parseOptional(SyntaxKind.AtToken)) {
                     break;
                 }
-
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
                 decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
                 finishNode(decorator);
-                if (!decorators) {
-                    decorators = createNodeArray<Decorator>([decorator], decoratorStart);
-                }
-                else {
-                    decorators.push(decorator);
-                }
+                (list || (list = [])).push(decorator);
             }
-            if (decorators) {
-                decorators.end = getNodeEnd();
-            }
-            return decorators;
+            return list && createNodeArray(list, listPos);
         }
 
         /*
@@ -5478,7 +5464,8 @@ namespace ts {
          * In such situations, 'permitInvalidConstAsModifier' should be set to true.
          */
         function parseModifiers(permitInvalidConstAsModifier?: boolean): NodeArray<Modifier> | undefined {
-            let modifiers: MutableNodeArray<Modifier> | undefined;
+            let list: Modifier[];
+            const listPos = getNodePos();
             while (true) {
                 const modifierStart = scanner.getStartPos();
                 const modifierKind = token();
@@ -5497,17 +5484,9 @@ namespace ts {
                 }
 
                 const modifier = finishNode(<Modifier>createNode(modifierKind, modifierStart));
-                if (!modifiers) {
-                    modifiers = createNodeArray<Modifier>([modifier], modifierStart);
-                }
-                else {
-                    modifiers.push(modifier);
-                }
+                (list || (list = [])).push(modifier);
             }
-            if (modifiers) {
-                modifiers.end = scanner.getStartPos();
-            }
-            return modifiers;
+            return list && createNodeArray(list, listPos);
         }
 
         function parseModifiersForArrowFunction(): NodeArray<Modifier> {
@@ -5518,9 +5497,7 @@ namespace ts {
                 nextToken();
                 const modifier = finishNode(<Modifier>createNode(modifierKind, modifierStart));
                 modifiers = createNodeArray<Modifier>([modifier], modifierStart);
-                modifiers.end = scanner.getStartPos();
             }
-
             return modifiers;
         }
 
@@ -6222,7 +6199,9 @@ namespace ts {
                 Debug.assert(start <= end);
                 Debug.assert(end <= content.length);
 
-                let tags: MutableNodeArray<JSDocTag>;
+                let tags: JSDocTag[];
+                let tagsPos: number;
+                let tagsEnd: number;
                 const comments: string[] = [];
                 let result: JSDoc;
 
@@ -6355,7 +6334,7 @@ namespace ts {
 
                 function createJSDocComment(): JSDoc {
                     const result = <JSDoc>createNode(SyntaxKind.JSDocComment, start);
-                    result.tags = tags;
+                    result.tags = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     result.comment = comments.length ? comments.join("") : undefined;
                     return finishNode(result, end);
                 }
@@ -6495,12 +6474,13 @@ namespace ts {
                     tag.comment = comments.join("");
 
                     if (!tags) {
-                        tags = createNodeArray([tag], tag.pos);
+                        tags = [tag];
+                        tagsPos = tag.pos;
                     }
                     else {
                         tags.push(tag);
                     }
-                    tags.end = tag.end;
+                    tagsEnd = tag.end;
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression | undefined {
@@ -6800,7 +6780,8 @@ namespace ts {
                     }
 
                     // Type parameter list looks like '@template T,U,V'
-                    const typeParameters = createNodeArray<TypeParameterDeclaration>();
+                    const typeParameters = [];
+                    const typeParametersPos = getNodePos();
 
                     while (true) {
                         const name = parseJSDocIdentifierName();
@@ -6828,9 +6809,8 @@ namespace ts {
                     const result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeParameters = typeParameters;
+                    result.typeParameters = createNodeArray(typeParameters, typeParametersPos);
                     finishNode(result);
-                    typeParameters.end = result.end;
                     return result;
                 }
 
