@@ -89,9 +89,15 @@ namespace ts.Rename {
     }
 
     function nodeIsEligibleForRename(node: Node): boolean {
-        return node.kind === ts.SyntaxKind.Identifier ||
-            node.kind === SyntaxKind.StringLiteral ||
-            isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
-            isThis(node);
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.ThisKeyword:
+                return true;
+            case SyntaxKind.NumericLiteral:
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral);
+            default:
+                return false;
+        }
     }
 }
