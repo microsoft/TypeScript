@@ -4037,7 +4037,13 @@ namespace ts {
         }
 
         function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
-            // Disable expression context to simplify context management for the out-of-order node creation we do for JSX parsing
+            // Parse JSX elements outside an expression context, since we do not know if an expression
+            //  context flag should be applied to the first tag we parse until we know that it is either a
+            //  self-closing element, or is combined with a closing tag and children into a jsxelement
+            //  - only the top-level is ever considered an expression (before parsing something else which
+            //   would cause entering an expression context); so it is easiest to just disable the context
+            //   and apply the flag to the top level element (whatever that is) without using the context
+            //   machinery directly.
             return doOutsideOfExpressionContext(parseJsxElementOrSelfClosingElementWorker);
             function parseJsxElementOrSelfClosingElementWorker() {
                 const opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
