@@ -584,7 +584,7 @@ namespace ts.refactor.extractMethod {
         else if (isClassLike(scope)) {
             return scope.kind === SyntaxKind.ClassDeclaration
                 ? `class '${scope.name.text}'`
-                : scope.name.text
+                : scope.name && scope.name.text
                     ? `class expression '${scope.name.text}'`
                     : "anonymous class expression";
         }

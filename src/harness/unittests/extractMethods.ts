@@ -606,6 +606,14 @@ namespace A {
             `function F<T, U extends T[], V extends U[]>(v: V) {
     [#|v.toString()|];
 }`);
+
+        testExtractMethod("extractMethod20",
+        `const _ = class {
+    a() {
+        [#|let a1 = { x: 1 };
+        return a1.x + 10;|]
+    }
+}`);
     });
 
 
