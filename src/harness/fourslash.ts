@@ -762,12 +762,16 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionsAt(markerName: string, expected: string[]) {
+        public verifyCompletionsAt(markerName: string, expected: string[], options?: FourSlashInterface.CompletionsAtOptions) {
             this.goToMarker(markerName);
 
             const actualCompletions = this.getCompletionListAtCaret();
             if (!actualCompletions) {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
+            }
+
+            if (options && options.isNewIdentifierLocation !== undefined && actualCompletions.isNewIdentifierLocation !== options.isNewIdentifierLocation) {
+                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
             const actual = actualCompletions.entries;
@@ -3705,8 +3709,8 @@ namespace FourSlashInterface {
             super(state);
         }
 
-        public completionsAt(markerName: string, completions: string[]) {
-            this.state.verifyCompletionsAt(markerName, completions);
+        public completionsAt(markerName: string, completions: string[], options?: CompletionsAtOptions) {
+            this.state.verifyCompletionsAt(markerName, completions, options);
         }
 
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
@@ -4313,5 +4317,9 @@ namespace FourSlashInterface {
         refactorName: string;
         actionName: string;
         actionDescription: string;
+    }
+
+    export interface CompletionsAtOptions {
+        isNewIdentifierLocation?: boolean;
     }
 }

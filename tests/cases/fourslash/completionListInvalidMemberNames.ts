@@ -13,13 +13,4 @@
 ////
 ////x./**/
 
-goTo.marker();
-
-verify.completionListContains("bar");
-verify.completionListContains("break");
-verify.completionListContains("any");
-verify.completionListContains("$");
-verify.completionListContains("b");
-
-// Nothing else should show up
-verify.completionListCount(5);
+verify.completionsAt("", ['"foo "', "bar", "break", "any", '"#"', "$", "b", '"\u0031\u0062"']);

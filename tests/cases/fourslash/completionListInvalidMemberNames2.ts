@@ -5,7 +5,4 @@
 ////}
 ////var x = Foo./**/
 
-goTo.marker();
-verify.completionListContains("X");
-verify.completionListContains("Y");
-verify.completionListCount(2);
+verify.completionsAt("", ["X", "Y", '"☆"']);

@@ -7,13 +7,7 @@
 ////     a,
 ////     b
 //// }
-//// 
+////
 //// e./**/
 
-goTo.marker();
-verify.not.completionListContains('1');
-verify.not.completionListContains('"1"');
-verify.not.completionListContains('2');
-verify.not.completionListContains('3');
-verify.completionListContains('a');
-verify.completionListContains('b');
+verify.completionsAt("", ["1", "2", "3", "a", "b"]);

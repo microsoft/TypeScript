@@ -164,7 +164,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: string[]): void;
+        completionsAt(markerName: string, completions: string[], options?: { isNewIdentifierLocation?: boolean }): void;
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;

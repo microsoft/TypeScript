@@ -1635,11 +1635,15 @@ namespace ts.Completions {
         // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
         // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
         // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
-        if (performCharacterChecks && !isIdentifierText(name, target)) {
-            return undefined;
+        if (performCharacterChecks && !isIdentifierText(name, target) && !isNumericLiteralText(name)) {
+            return JSON.stringify(name);
         }
 
         return name;
+    }
+
+    function isNumericLiteralText(name: string): boolean {
+        return /^-?\d+(\.\d+)?(e\d+)?$/.test(name);
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
