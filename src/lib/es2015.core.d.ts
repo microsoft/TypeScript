@@ -10,7 +10,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -21,7 +21,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): number;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -52,7 +52,7 @@ interface ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U = T>(arrayLike: ArrayLike<T>, mapfn?: (this: void, v: T, k: number) => U, thisArg?: any): Array<U>;
+    from<T, U = T>(arrayLike: ArrayLike<T>, mapfn?: (v: T, k: number) => U, thisArg?: any): Array<U>;
 
     /**
      * Returns a new array from a set of elements.
