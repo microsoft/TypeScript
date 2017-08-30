@@ -647,7 +647,7 @@ function test(x: number) {
     [#|x++;
     return;|]
 }`);
-        // Write + void return
+        // Return in finally block
         testExtractMethod("extractMethod22",
             `function test() {
     try {
