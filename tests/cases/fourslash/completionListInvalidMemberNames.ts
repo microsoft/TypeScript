@@ -11,6 +11,8 @@
 ////    "\u0031\u0062": "invalid unicode identifer name (1b)"
 ////};
 ////
-////x./**/
+////x./*a*/;
+////x["/*b*/"];
 
-verify.completionsAt("", ['"foo "', "bar", "break", "any", '"#"', "$", "b", '"\u0031\u0062"']);
+verify.completionsAt("a", ["bar", "break", "any", "$", "b"]);
+verify.completionsAt("b", ["foo ", "bar", "break", "any", "#", "$", "b", "\u0031\u0062"]);

@@ -10,4 +10,4 @@
 ////
 //// e./**/
 
-verify.completionsAt("", ["1", "2", "3", "a", "b"]);
+verify.completionsAt("", ["a", "b"]);

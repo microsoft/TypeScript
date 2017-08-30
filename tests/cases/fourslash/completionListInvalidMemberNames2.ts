@@ -3,6 +3,8 @@
 ////enum Foo {
 ////    X, Y, '☆'
 ////}
-////var x = Foo./**/
+////Foo./*a*/;
+////Foo["/*b*/"];
 
-verify.completionsAt("", ["X", "Y", '"☆"']);
+verify.completionsAt("a", ["X", "Y"]);
+verify.completionsAt("b", ["X", "Y", "☆"]);
