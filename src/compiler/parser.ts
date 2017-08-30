@@ -4148,7 +4148,7 @@ namespace ts {
             parseExpected(SyntaxKind.LessThanToken);
 
             const tagName = parseJsxElementName();
-            const attributes =  parseJsxAttributes();
+            const attributes = parseJsxAttributes();
 
             let node: JsxOpeningLikeElement;
 
@@ -4581,16 +4581,13 @@ namespace ts {
                 node.multiLine = true;
             }
 
-            const saveExpressionContext = inExpressionContext();
-            if (saveExpressionContext) {
-                setExpressionContext(/*val*/ false);
-            }
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            if (saveExpressionContext) {
-                setExpressionContext(/*val*/ true);
-            }
+            doOutsideOfExpressionContext(parsePropertyWorker);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
+
+            function parsePropertyWorker() {
+                node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
+            }
         }
 
         function parseFunctionExpression(): FunctionExpression {
