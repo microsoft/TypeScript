@@ -3971,43 +3971,55 @@ namespace ts {
             return undefined;
         }
         // Covers classes, functions - any named declaration host node
-        let name = getNameOfDeclaration(hostNode as Declaration);
-        // Covers variable statements
-        if (!name && hostNode.kind === SyntaxKind.VariableStatement &&
-            (hostNode as VariableStatement).declarationList &&
-            (hostNode as VariableStatement).declarationList.declarations[0]) {
-            name = getNameOfDeclaration((hostNode as VariableStatement).declarationList.declarations[0]);
+        if (isDeclaration(hostNode)) {
+            return getDeclarationIdentifier(hostNode);
         }
-        if (name) {
-            return isIdentifier(name) ? name : undefined;
-        }
-        // Covers property accesses and element accesses
-        if (hostNode.kind === SyntaxKind.ExpressionStatement) {
-            const expr = (hostNode as ExpressionStatement).expression;
-            switch (expr.kind) {
-                case SyntaxKind.PropertyAccessExpression:
-                    return (expr as PropertyAccessExpression).name;
-                case SyntaxKind.ElementAccessExpression:
-                    const arg = (expr as ElementAccessExpression).argumentExpression;
-                    if (isIdentifier(arg)) {
-                        return arg;
-                    }
+        // Covers remaining cases
+        switch (hostNode.kind) {
+            case SyntaxKind.VariableStatement:
+                if ((hostNode as VariableStatement).declarationList &&
+                (hostNode as VariableStatement).declarationList.declarations[0]) {
+                    return getDeclarationIdentifier((hostNode as VariableStatement).declarationList.declarations[0]);
+                }
+                return undefined;
+            case SyntaxKind.ExpressionStatement:
+                const expr = (hostNode as ExpressionStatement).expression;
+                switch (expr.kind) {
+                    case SyntaxKind.PropertyAccessExpression:
+                        return (expr as PropertyAccessExpression).name;
+                    case SyntaxKind.ElementAccessExpression:
+                        const arg = (expr as ElementAccessExpression).argumentExpression;
+                        if (isIdentifier(arg)) {
+                            return arg;
+                        }
+                }
+                return undefined;
+            case SyntaxKind.EndOfFileToken:
+                return undefined;
+            case SyntaxKind.ParenthesizedExpression: {
+                return getDeclarationIdentifier(hostNode.expression);
             }
-            return undefined;
+            case SyntaxKind.LabeledStatement: {
+                if (isDeclaration(hostNode.statement) || isExpression(hostNode.statement)) {
+                    return getDeclarationIdentifier(hostNode.statement);
+                }
+                return undefined;
+            }
+            default:
+                Debug.assertNever(hostNode, "Found typedef tag attached to node which it should not be!");
         }
-        if (Debug.isDebugging) {
-            // Do a debug.fail here, this way if this case becomes possible, it errors early under test;
-            //   - all cases _should_ be covered by the above, and if not, a missing case should surface
-            //     when not debugging as the typedef node simply not being nameable in an error or bound
-            Debug.fail("No name location for jsdoc typedef tag!");
-        }
+    }
+
+    function getDeclarationIdentifier(node: Declaration | Expression) {
+        const name = getNameOfDeclaration(node);
+        return isIdentifier(name) ? name : undefined;
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration as JSDocTypedefTag);
     }
 
-    export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
+    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (!declaration) {
             return undefined;
         }

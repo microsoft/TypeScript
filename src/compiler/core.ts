@@ -2450,6 +2450,11 @@ namespace ts {
             throw e;
         }
 
+        export function assertNever(_member: never, message?: string, stackCrawlMark?: Function): never {
+            fail(message, stackCrawlMark || assertNever);
+            throw "Unreachable";
+        }
+
         export function getFunctionName(func: Function) {
             if (typeof func !== "function") {
                 return "";
