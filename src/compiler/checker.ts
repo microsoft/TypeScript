@@ -22929,7 +22929,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolAtLocation(node: Node) {
+        function getSymbolAtLocation(node: Node): Symbol | undefined {
             if (node.kind === SyntaxKind.SourceFile) {
                 return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
             }
@@ -23007,13 +23007,16 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     // index access
-                    if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
-                        const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
-                        return getPropertyOfType(objectType, (<NumericLiteral>node).text as __String);
-                    }
-                    break;
+                    const objectType = isElementAccessExpression(node.parent)
+                        ? node.parent.argumentExpression === node ? getTypeOfExpression(node.parent.expression) : undefined
+                        : isLiteralTypeNode(node.parent) && isIndexedAccessTypeNode(node.parent.parent)
+                            ? getTypeFromTypeNode(node.parent.parent.objectType)
+                            : undefined;
+                    return objectType && getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
+
+                default:
+                    return undefined;
             }
-            return undefined;
         }
 
         function getShorthandAssignmentValueSymbol(location: Node): Symbol {
