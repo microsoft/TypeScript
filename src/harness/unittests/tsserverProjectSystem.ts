@@ -247,6 +247,23 @@ namespace ts.projectSystem {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
+    function getNodeModuleDirectories(dir: string) {
+        const result: string[] = [];
+        while (true) {
+            result.push(combinePaths(dir, "node_modules"));
+            const parentDir = getDirectoryPath(dir);
+            if (parentDir === dir) {
+                break;
+            }
+            dir = parentDir;
+        }
+        return result;
+    }
+
+    function getNumberOfWatchesInvokedForRecursiveWatches(recursiveWatchedDirs: string[], file: string) {
+        return countWhere(recursiveWatchedDirs, dir => file.length > dir.length && startsWith(file, dir) && file[dir.length] === directorySeparator);
+    }
+
     /**
      * Test server cancellation token used to mock host token cancellation requests.
      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
@@ -375,7 +392,7 @@ namespace ts.projectSystem {
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, ["/", typeRootFromTsserverLocation], /*recursive*/ true);
+            checkWatchedDirectories(host, ["/a/b/c", typeRootFromTsserverLocation], /*recursive*/ true);
         });
 
         it("can handle tsconfig file name with difference casing", () => {
@@ -4243,7 +4260,7 @@ namespace ts.projectSystem {
                 const { configFileName } = projectService.openClientFile(file1.path);
                 assert.equal(configFileName, tsconfigFile.path, `should find config`);
                 checkNumberOfConfiguredProjects(projectService, 1);
-                const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, canonicalFrontendDir, "/"];
+                const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, canonicalFrontendDir].concat(getNodeModuleDirectories(getDirectoryPath(canonicalFrontendDir)));
 
                 const project = projectService.configuredProjects.get(canonicalConfigPath);
                 verifyProjectAndWatchedDirectories();
@@ -4256,7 +4273,8 @@ namespace ts.projectSystem {
                 host.runQueuedTimeoutCallbacks();
 
                 const canonicalFile3Path = useCaseSensitiveFileNames ? file3.path : file3.path.toLocaleLowerCase();
-                callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", [canonicalFile3Path], watchingRecursiveDirectories.length);
+                const numberOfTimesWatchInvoked = getNumberOfWatchesInvokedForRecursiveWatches(watchingRecursiveDirectories, canonicalFile3Path);
+                callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", [canonicalFile3Path], numberOfTimesWatchInvoked);
 
                 // Called for type root resolution
                 const directoryExistsCalled = createMap<number>();
@@ -4266,7 +4284,7 @@ namespace ts.projectSystem {
                 directoryExistsCalled.set(`/node_modules`, 2);
                 directoryExistsCalled.set(`${frontendDir}/types`, 2);
                 directoryExistsCalled.set(`${frontendDir}/node_modules/@types`, 2);
-                directoryExistsCalled.set(canonicalFile3Path, watchingRecursiveDirectories.length);
+                directoryExistsCalled.set(canonicalFile3Path, numberOfTimesWatchInvoked);
                 callsTrackingHost.verifyCalledOnEachEntry("directoryExists", directoryExistsCalled);
 
                 callsTrackingHost.verifyNoCall("getDirectories");
@@ -4353,7 +4371,7 @@ namespace ts.projectSystem {
                 const projectService = createProjectService(host);
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path, `should find config`);
-                const recursiveWatchedDirectories: string[] = [appFolder, "/"];
+                const recursiveWatchedDirectories: string[] = [appFolder].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
                 verifyProject();
 
                 let timeoutAfterReloadFs = timeoutDuringPartialInstallation;
