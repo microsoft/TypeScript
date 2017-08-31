@@ -1208,7 +1208,10 @@ namespace ts {
                 return finishNode(node);
             }
 
-            return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
+            // Only for end of file because the error gets reported incorrectly on embedded script tags.
+            const reportAtCurrentPosition = token() === SyntaxKind.EndOfFileToken;
+
+            return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
