@@ -1,6 +1,7 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
+/// <reference path="builder.ts" />
 
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
@@ -227,17 +228,23 @@ namespace ts {
         let output = "";
 
         for (const diagnostic of diagnostics) {
-            if (diagnostic.file) {
-                const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-                const fileName = diagnostic.file.fileName;
-                const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
-                output += `${relativeFileName}(${line + 1},${character + 1}): `;
-            }
-
-            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+            output += formatDiagnostic(diagnostic, host);
         }
         return output;
+    }
+
+    export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
+        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        const errorMessage = `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+
+        if (diagnostic.file) {
+            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            const fileName = diagnostic.file.fileName;
+            const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
+            return `${relativeFileName}(${line + 1},${character + 1}): ` + errorMessage;
+        }
+
+        return errorMessage;
     }
 
     const redForegroundEscapeSequence = "\u001b[91m";
@@ -337,7 +344,7 @@ namespace ts {
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
-        if (typeof messageText === "string") {
+        if (isString(messageText)) {
             return messageText;
         }
         else {
@@ -384,6 +391,142 @@ namespace ts {
     interface DiagnosticCache {
         perFile?: Map<Diagnostic[]>;
         allDiagnostics?: Diagnostic[];
+    }
+
+    export function isProgramUptoDate(program: Program | undefined, rootFileNames: string[], newOptions: CompilerOptions,
+        getSourceVersion: (path: Path) => string, fileExists: (fileName: string) => boolean, hasInvalidatedResolution: HasInvalidatedResolution): boolean {
+        // If we haven't create a program yet, then it is not up-to-date
+        if (!program) {
+            return false;
+        }
+
+        // If number of files in the program do not match, it is not up-to-date
+        if (program.getRootFileNames().length !== rootFileNames.length) {
+            return false;
+        }
+
+        // If any file is not up-to-date, then the whole program is not up-to-date
+        if (program.getSourceFiles().some(sourceFileNotUptoDate)) {
+                return false;
+        }
+
+        // If any of the missing file paths are now created
+        if (program.getMissingFilePaths().some(fileExists)) {
+            return false;
+        }
+
+        const currentOptions = program.getCompilerOptions();
+        // If the compilation settings do no match, then the program is not up-to-date
+        if (!compareDataObjects(currentOptions, newOptions)) {
+            return false;
+        }
+
+        // If everything matches but the text of config file is changed,
+        // error locations can change for program options, so update the program
+        if (currentOptions.configFile && newOptions.configFile) {
+            return currentOptions.configFile.text === newOptions.configFile.text;
+        }
+
+        return true;
+
+        function sourceFileNotUptoDate(sourceFile: SourceFile): boolean {
+            return sourceFile.version !== getSourceVersion(sourceFile.path) ||
+                hasInvalidatedResolution(sourceFile.path);
+        }
+    }
+
+    /**
+     * Determined if source file needs to be re-created even if its text hasnt changed
+     */
+    function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
+        // If any of these options change, we cant reuse old source file even if version match
+        // The change in options like these could result in change in syntax tree change
+        const oldOptions = program && program.getCompilerOptions();
+        return oldOptions &&
+            (oldOptions.target !== newOptions.target ||
+                oldOptions.module !== newOptions.module ||
+                oldOptions.moduleResolution !== newOptions.moduleResolution ||
+                oldOptions.noResolve !== newOptions.noResolve ||
+                oldOptions.jsx !== newOptions.jsx ||
+                oldOptions.allowJs !== newOptions.allowJs ||
+                oldOptions.disableSizeLimit !== newOptions.disableSizeLimit ||
+                oldOptions.baseUrl !== newOptions.baseUrl ||
+                !equalOwnProperties(oldOptions.paths, newOptions.paths));
+    }
+
+    /**
+     * Updates the existing missing file watches with the new set of missing files after new program is created
+     */
+    export function updateMissingFilePathsWatch(
+        program: Program,
+        missingFileWatches: Map<FileWatcher>,
+        createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
+        closeExistingMissingFilePathFileWatcher: (missingFilePath: Path, fileWatcher: FileWatcher) => void
+    ) {
+        const missingFilePaths = program.getMissingFilePaths();
+        const newMissingFilePathMap = arrayToSet(missingFilePaths);
+        // Update the missing file paths watcher
+        mutateMap(
+            missingFileWatches,
+            newMissingFilePathMap,
+            {
+                // Watch the missing files
+                createNewValue: createMissingFileWatch,
+                // Files that are no longer missing (e.g. because they are no longer required)
+                // should no longer be watched.
+                onDeleteValue: closeExistingMissingFilePathFileWatcher
+            }
+        );
+    }
+
+    export interface WildcardDirectoryWatcher {
+        watcher: FileWatcher;
+        flags: WatchDirectoryFlags;
+    }
+
+    /**
+     * Updates the existing wild card directory watches with the new set of wild card directories from the config file
+     * after new program is created because the config file was reloaded or program was created first time from the config file
+     * Note that there is no need to call this function when the program is updated with additional files without reloading config files,
+     * as wildcard directories wont change unless reloading config file
+     */
+    export function updateWatchingWildcardDirectories(
+        existingWatchedForWildcards: Map<WildcardDirectoryWatcher>,
+        wildcardDirectories: Map<WatchDirectoryFlags>,
+        watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
+        closeDirectoryWatcher: (directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatcher, flagsChanged: boolean) => void
+    ) {
+        mutateMap(
+            existingWatchedForWildcards,
+            wildcardDirectories,
+            {
+                // Create new watch and recursive info
+                createNewValue: createWildcardDirectoryWatcher,
+                // Close existing watch thats not needed any more
+                onDeleteValue: (directory, wildcardDirectoryWatcher) =>
+                    closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ false),
+                // Close existing watch that doesnt match in the flags
+                onExistingValue: updateWildcardDirectoryWatcher
+            }
+        );
+
+        function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
+            // Create new watch and recursive info
+            return {
+                watcher: watchDirectory(directory, flags),
+                flags
+            };
+        }
+
+        function updateWildcardDirectoryWatcher(directory: string, wildcardDirectoryWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags) {
+            // Watcher needs to be updated if the recursive flags dont match
+            if (wildcardDirectoryWatcher.flags === flags) {
+                return;
+            }
+
+            closeDirectoryWatcher(directory, wildcardDirectoryWatcher, /*flagsChanged*/ true);
+            existingWatchedForWildcards.set(directory, createWildcardDirectoryWatcher(directory, flags));
+        }
     }
 
     /**
@@ -446,6 +589,7 @@ namespace ts {
 
         let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
+        const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
@@ -482,10 +626,12 @@ namespace ts {
         let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();
+        let missingFilePaths: ReadonlyArray<Path>;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
+        const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
@@ -520,12 +666,25 @@ namespace ts {
                     });
                 }
             }
+
+            missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
         }
 
-        const missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
+        Debug.assert(!!missingFilePaths);
 
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;
+
+        // Release any files we have acquired in the old program but are
+        // not part of the new program.
+        if (oldProgram && host.onReleaseOldSourceFile) {
+            const oldSourceFiles = oldProgram.getSourceFiles();
+            for (const oldSourceFile of oldSourceFiles) {
+                if (!getSourceFile(oldSourceFile.path) || shouldCreateNewSourceFile) {
+                    host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions());
+                }
+            }
+        }
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
@@ -682,7 +841,7 @@ namespace ts {
                         trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
                     }
                 }
-                else {
+                else if (!hasInvalidatedResolution(oldProgramState.file.path)) {
                     resolvesToAmbientModuleInNonModifiedFile = moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
                 }
 
@@ -784,14 +943,21 @@ namespace ts {
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
             oldProgram.structureIsReused = StructureIsReused.Completely;
 
+            // If the missing file paths are now present, it can change the progam structure,
+            // and hence cant reuse the structure.
+            // This is same as how we dont reuse the structure if one of the file from old program is now missing
+            if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
+                return oldProgram.structureIsReused = StructureIsReused.Not;
+            }
+
             const oldSourceFiles = oldProgram.getSourceFiles();
             const enum SeenPackageName { Exists, Modified }
             const seenPackageNames = createMap<SeenPackageName>();
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
-                    : host.getSourceFile(oldSourceFile.fileName, options.target);
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    : host.getSourceFile(oldSourceFile.fileName, options.target, /*onError*/ undefined, shouldCreateNewSourceFile);
 
                 if (!newSourceFile) {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -874,6 +1040,13 @@ namespace ts {
                     // tentatively approve the file
                     modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
                 }
+                else if (hasInvalidatedResolution(oldSourceFile.path)) {
+                    // 'module/types' references could have changed
+                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+
+                    // add file to the modified list so that we will resolve it later
+                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                }
 
                 // if file has passed all checks it should be safe to reuse it
                 newSourceFiles.push(newSourceFile);
@@ -920,20 +1093,7 @@ namespace ts {
                 return oldProgram.structureIsReused;
             }
 
-            // If a file has ceased to be missing, then we need to discard some of the old
-            // structure in order to pick it up.
-            // Caution: if the file has created and then deleted between since it was discovered to
-            // be missing, then the corresponding file watcher will have been closed and no new one
-            // will be created until we encounter a change that prevents complete structure reuse.
-            // During this interval, creation of the file will go unnoticed.  We expect this to be
-            // both rare and low-impact.
-            if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
-                return oldProgram.structureIsReused = StructureIsReused.SafeModules;
-            }
-
-            for (const p of oldProgram.getMissingFilePaths()) {
-                filesByName.set(p, undefined);
-            }
+            missingFilePaths = oldProgram.getMissingFilePaths();
 
             // update fileName -> file mapping
             for (let i = 0; i < newSourceFiles.length; i++) {
@@ -1670,7 +1830,7 @@ namespace ts {
                 else {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
-            });
+            }, shouldCreateNewSourceFile);
 
             if (packageId) {
                 const packageIdKey = `${packageId.name}@${packageId.version}`;

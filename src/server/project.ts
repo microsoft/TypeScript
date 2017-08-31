@@ -3,7 +3,7 @@
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
 /// <reference path="typingsCache.ts"/>
-/// <reference path="builder.ts"/>
+/// <reference path="..\compiler\builder.ts"/>
 
 namespace ts.server {
 
@@ -128,9 +128,12 @@ namespace ts.server {
         public languageServiceEnabled = true;
 
         /*@internal*/
+        resolutionCache: ResolutionCache;
+
+        /*@internal*/
         lsHost: LSHost;
 
-        builder: Builder;
+        private builder: Builder;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -210,7 +213,16 @@ namespace ts.server {
             this.setInternalCompilerOptionsForEmittingJsFiles();
 
             this.lsHost = new LSHost(host, this, this.projectService.cancellationToken);
-            this.lsHost.setCompilationSettings(this.compilerOptions);
+            this.resolutionCache = createResolutionCache(
+                fileName => this.projectService.toPath(fileName),
+                () => this.compilerOptions,
+                (failedLookupLocation, failedLookupLocationPath, containingFile, name) => this.watchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath, containingFile, name),
+                s => this.projectService.logger.info(s),
+                this.getProjectName(),
+                () => this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined
+            );
+            this.lsHost.compilationSettings = this.compilerOptions;
+            this.resolutionCache.setModuleResolutionHost(this.lsHost);
 
             this.languageService = createLanguageService(this.lsHost, this.documentRegistry);
 
@@ -218,8 +230,20 @@ namespace ts.server {
                 this.disableLanguageService();
             }
 
-            this.builder = createBuilder(this);
             this.markAsDirty();
+        }
+
+        private watchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path, containingFile: string, name: string) {
+            // There is some kind of change in the failed lookup location, update the program
+            return this.projectService.addFileWatcher(WatchType.FailedLookupLocation, this, failedLookupLocation, (fileName, eventKind) => {
+                this.projectService.logger.info(`Watcher: FailedLookupLocations: Status: ${FileWatcherEventKind[eventKind]}: Location: ${failedLookupLocation}, containingFile: ${containingFile}, name: ${name}`);
+                if (this.projectKind === ProjectKind.Configured) {
+                    (this.lsHost.host as CachedServerHost).addOrDeleteFile(fileName, failedLookupLocationPath, eventKind);
+                }
+                this.resolutionCache.invalidateResolutionOfChangedFailedLookupLocation(failedLookupLocationPath);
+                this.markAsDirty();
+                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+            });
         }
 
         private setInternalCompilerOptionsForEmittingJsFiles() {
@@ -246,12 +270,47 @@ namespace ts.server {
             return this.languageService;
         }
 
+        private ensureBuilder() {
+            if (!this.builder) {
+                this.builder = createBuilder(
+                    this.projectService.toCanonicalFileName,
+                    (_program, sourceFile, emitOnlyDts, isDetailed) => this.getFileEmitOutput(sourceFile, emitOnlyDts, isDetailed),
+                    data => this.projectService.host.createHash(data),
+                    sourceFile => !this.projectService.getScriptInfoForPath(sourceFile.path).hasMixedContent
+                );
+            }
+        }
+
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
             if (!this.languageServiceEnabled) {
                 return [];
             }
             this.updateGraph();
-            return this.builder.getFilesAffectedBy(scriptInfo);
+            this.ensureBuilder();
+            return this.builder.getFilesAffectedBy(this.program, scriptInfo.path);
+        }
+
+        /**
+         * Returns true if emit was conducted
+         */
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+            this.ensureBuilder();
+            const { emitSkipped, outputFiles } = this.builder.emitFile(this.program, scriptInfo.path);
+            if (!emitSkipped) {
+                const projectRootPath = this.getProjectRootPath();
+                for (const outputFile of outputFiles) {
+                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, projectRootPath ? projectRootPath : getDirectoryPath(scriptInfo.fileName));
+                    writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
+                }
+            }
+
+            return !emitSkipped;
+        }
+
+        getChangedFiles() {
+            Debug.assert(this.languageServiceEnabled);
+            this.ensureBuilder();
+            return this.builder.getChangedProgramFiles(this.program);
         }
 
         getProjectVersion() {
@@ -320,6 +379,8 @@ namespace ts.server {
             this.rootFilesMap = undefined;
             this.program = undefined;
             this.builder = undefined;
+            this.resolutionCache.clear();
+            this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
             this.lsHost.dispose();
             this.lsHost = undefined;
@@ -335,6 +396,10 @@ namespace ts.server {
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
             this.languageService = undefined;
+        }
+
+        isClosed() {
+            return this.lsHost === undefined;
         }
 
         getCompilerOptions() {
@@ -391,11 +456,11 @@ namespace ts.server {
             });
         }
 
-        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean) {
+        private getFileEmitOutput(sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) {
             if (!this.languageServiceEnabled) {
                 return undefined;
             }
-            return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
+            return this.getLanguageService().getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles, isDetailed);
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
@@ -454,21 +519,6 @@ namespace ts.server {
             return false;
         }
 
-        getAllEmittableFiles() {
-            if (!this.languageServiceEnabled) {
-                return [];
-            }
-            const defaultLibraryFileName = getDefaultLibFileName(this.compilerOptions);
-            const infos = this.getScriptInfos();
-            const result: string[] = [];
-            for (const info of infos) {
-                if (getBaseFileName(info.fileName) !== defaultLibraryFileName && shouldEmitFile(info)) {
-                    result.push(info.fileName);
-                }
-            }
-            return result;
-        }
-
         containsScriptInfo(info: ScriptInfo): boolean {
             return this.isRoot(info) || (this.program && this.program.getSourceFileByPath(info.path) !== undefined);
         }
@@ -505,7 +555,7 @@ namespace ts.server {
             if (this.isRoot(info)) {
                 this.removeRoot(info);
             }
-            this.lsHost.notifyFileRemoved(info);
+            this.resolutionCache.invalidateResolutionOfFile(info.path);
             this.cachedUnresolvedImportsPerFile.remove(info.path);
 
             if (detachFromProject) {
@@ -560,11 +610,12 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            this.lsHost.startRecordingFilesWithChangedResolutions();
+            this.resolutionCache.startRecordingFilesWithChangedResolutions();
+            this.lsHost.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
 
             let hasChanges = this.updateGraphWorker();
 
-            const changedFiles: ReadonlyArray<Path> = this.lsHost.finishRecordingFilesWithChangedResolutions() || emptyArray;
+            const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
@@ -594,11 +645,14 @@ namespace ts.server {
 
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
-            if (this.languageServiceEnabled) {
-                this.builder.onProjectUpdateGraph();
-            }
-            else {
-                this.builder.clear();
+            // Note we are retaining builder so we can send events for project change
+            if (this.builder) {
+                if (this.languageServiceEnabled) {
+                    this.builder.onProgramUpdateGraph(this.program, this.lsHost.hasInvalidatedResolution);
+                }
+                else {
+                    this.builder.clear();
+                }
             }
 
             if (hasChanges) {
@@ -639,41 +693,15 @@ namespace ts.server {
                     }
                 }
 
-                const missingFilePaths = this.program.getMissingFilePaths();
-                const newMissingFilePathMap = arrayToSet(missingFilePaths);
                 // Update the missing file paths watcher
-                mutateMap(
+                updateMissingFilePathsWatch(
+                    this.program,
                     this.missingFilesMap || (this.missingFilesMap = createMap()),
-                    newMissingFilePathMap,
-                    {
-                        // Watch the missing files
-                        createNewValue: missingFilePath => {
-                            const fileWatcher = this.projectService.addFileWatcher(
-                                WatchType.MissingFilePath, this, missingFilePath,
-                                (filename, eventKind) => {
-                                    if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
-                                        this.missingFilesMap.delete(missingFilePath);
-                                        this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
-
-                                        if (this.projectKind === ProjectKind.Configured) {
-                                            const absoluteNormalizedPath = getNormalizedAbsolutePath(filename, getDirectoryPath(missingFilePath));
-                                            (this.lsHost.host as CachedServerHost).addOrDeleteFileOrFolder(toNormalizedPath(absoluteNormalizedPath));
-                                        }
-
-                                        // When a missing file is created, we should update the graph.
-                                        this.markAsDirty();
-                                        this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
-                                    }
-                                }
-                            );
-                            return fileWatcher;
-                        },
-                        // Files that are no longer missing (e.g. because they are no longer required)
-                        // should no longer be watched.
-                        onDeleteExistingValue: (missingFilePath, fileWatcher) => {
-                            this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, WatcherCloseReason.NotNeeded);
-                        }
-                    }
+                    // Watch the missing files
+                    missingFilePath => this.addMissingFileWatcher(missingFilePath),
+                    // Files that are no longer missing (e.g. because they are no longer required)
+                    // should no longer be watched.
+                    (missingFilePath, fileWatcher) => this.closeMissingFileWatcher(missingFilePath, fileWatcher, WatcherCloseReason.NotNeeded)
                 );
             }
 
@@ -684,7 +712,7 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false, this.lsHost.host);
                     scriptInfo.attachToProject(this);
                 },
                 removed => {
@@ -697,12 +725,37 @@ namespace ts.server {
             return hasChanges;
         }
 
+        private addMissingFileWatcher(missingFilePath: Path) {
+            const fileWatcher = this.projectService.addFileWatcher(
+                WatchType.MissingFilePath, this, missingFilePath,
+                (fileName, eventKind) => {
+                    if (this.projectKind === ProjectKind.Configured) {
+                        (this.lsHost.host as CachedServerHost).addOrDeleteFile(fileName, missingFilePath, eventKind);
+                    }
+
+                    if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
+                        this.missingFilesMap.delete(missingFilePath);
+                        this.closeMissingFileWatcher(missingFilePath, fileWatcher, WatcherCloseReason.FileCreated);
+
+                        // When a missing file is created, we should update the graph.
+                        this.markAsDirty();
+                        this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+                    }
+                }
+            );
+            return fileWatcher;
+        }
+
+        private closeMissingFileWatcher(missingFilePath: Path, fileWatcher: FileWatcher, reason: WatcherCloseReason) {
+            this.projectService.closeFileWatcher(WatchType.MissingFilePath, this, missingFilePath, fileWatcher, reason);
+        }
+
         isWatchedMissingFile(path: Path) {
             return this.missingFilesMap && this.missingFilesMap.has(path);
         }
 
         getScriptInfoLSHost(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false, this.lsHost.host);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
                 if (existingValue !== undefined && existingValue !== scriptInfo) {
@@ -716,7 +769,10 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
+            const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(
+                fileName, /*openedByClient*/ false, /*fileContent*/ undefined,
+                /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.lsHost.host
+            );
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
             }
@@ -746,9 +802,13 @@ namespace ts.server {
                     this.cachedUnresolvedImportsPerFile.clear();
                     this.lastCachedUnresolvedImportsList = undefined;
                 }
+                const oldOptions = this.compilerOptions;
                 this.compilerOptions = compilerOptions;
                 this.setInternalCompilerOptionsForEmittingJsFiles();
-                this.lsHost.setCompilationSettings(compilerOptions);
+                if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
+                    this.resolutionCache.clear();
+                }
+                this.lsHost.compilationSettings = this.compilerOptions;
 
                 this.markAsDirty();
             }
@@ -812,58 +872,6 @@ namespace ts.server {
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, files: projectFileNames, projectErrors: this.getGlobalProjectErrors() };
             }
-        }
-
-        getReferencedFiles(path: Path): Path[] {
-            if (!this.languageServiceEnabled) {
-                return [];
-            }
-
-            const sourceFile = this.getSourceFile(path);
-            if (!sourceFile) {
-                return [];
-            }
-            // We need to use a set here since the code can contain the same import twice,
-            // but that will only be one dependency.
-            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            const referencedFiles = createMap<true>();
-            if (sourceFile.imports && sourceFile.imports.length > 0) {
-                const checker: TypeChecker = this.program.getTypeChecker();
-                for (const importName of sourceFile.imports) {
-                    const symbol = checker.getSymbolAtLocation(importName);
-                    if (symbol && symbol.declarations && symbol.declarations[0]) {
-                        const declarationSourceFile = symbol.declarations[0].getSourceFile();
-                        if (declarationSourceFile) {
-                            referencedFiles.set(declarationSourceFile.path, true);
-                        }
-                    }
-                }
-            }
-
-            const currentDirectory = getDirectoryPath(path);
-            // Handle triple slash references
-            if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
-                for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = this.projectService.toPath(referencedFile.fileName, currentDirectory);
-                    referencedFiles.set(referencedPath, true);
-                }
-            }
-
-            // Handle type reference directives
-            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
-                    if (!resolvedTypeReferenceDirective) {
-                        return;
-                    }
-
-                    const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = this.projectService.toPath(fileName, currentDirectory);
-                    referencedFiles.set(typeFilePath, true);
-                });
-            }
-
-            const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
-            return filter(allFileNames, file => this.lsHost.host.fileExists(file));
         }
 
         // remove a root file from project
@@ -971,11 +979,6 @@ namespace ts.server {
                 exclude: []
             };
         }
-    }
-
-    interface WildcardDirectoryWatcher {
-        watcher: FileWatcher;
-        flags: WatchDirectoryFlags;
     }
 
     /**
@@ -1160,30 +1163,19 @@ namespace ts.server {
 
         /*@internal*/
         watchWildcards(wildcardDirectories: Map<WatchDirectoryFlags>) {
-            mutateMap(
+            updateWatchingWildcardDirectories(
                 this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
                 wildcardDirectories,
-                {
-                    // Watcher is same if the recursive flags match
-                    isSameValue: ({ flags: existingFlags }, flags) => existingFlags !== flags,
-                    // Create new watch and recursive info
-                    createNewValue: (directory, flags) => {
-                        return {
-                            watcher: this.projectService.addDirectoryWatcher(
-                                WatchType.WildcardDirectories, this, directory,
-                                path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
-                                flags
-                            ),
-                            flags
-                        };
-                    },
-                    // Close existing watch thats not needed any more
-                    onDeleteExistingValue: (directory, wildcardDirectoryWatcher) =>
-                        this.closeWildcardDirectoryWatcher(directory, wildcardDirectoryWatcher, WatcherCloseReason.NotNeeded),
-                    // Close existing watch that doesnt match in the recursive flags
-                    onDeleteExistingMismatchValue: (directory, wildcardDirectoryWatcher) =>
-                        this.closeWildcardDirectoryWatcher(directory, wildcardDirectoryWatcher, WatcherCloseReason.RecursiveChanged),
-                }
+                // Create new directory watcher
+                (directory, flags) => this.projectService.addDirectoryWatcher(
+                    WatchType.WildcardDirectories, this, directory,
+                    path => this.projectService.onFileAddOrRemoveInWatchedDirectoryOfProject(this, path),
+                    flags
+                ),
+                // Close directory watcher
+                (directory, wildcardDirectoryWatcher, flagsChanged) => this.closeWildcardDirectoryWatcher(
+                    directory, wildcardDirectoryWatcher, flagsChanged ? WatcherCloseReason.RecursiveChanged : WatcherCloseReason.NotNeeded
+                )
             );
         }
 
@@ -1214,7 +1206,7 @@ namespace ts.server {
                         path => this.projectService.onTypeRootFileChanged(this, path), WatchDirectoryFlags.None
                     ),
                     // Close existing watch thats not needed any more
-                    onDeleteExistingValue: (directory, watcher) => this.projectService.closeDirectoryWatcher(
+                    onDeleteValue: (directory, watcher) => this.projectService.closeDirectoryWatcher(
                         WatchType.TypeRoot, this, directory, watcher, WatchDirectoryFlags.None, WatcherCloseReason.NotNeeded
                     )
                 }

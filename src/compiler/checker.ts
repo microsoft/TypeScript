@@ -1166,7 +1166,7 @@ namespace ts {
         }
 
         function diagnosticName(nameArg: __String | Identifier) {
-            return typeof nameArg === "string" ? unescapeLeadingUnderscores(nameArg as __String) : declarationNameToString(nameArg as Identifier);
+            return isString(nameArg) ? unescapeLeadingUnderscores(nameArg as __String) : declarationNameToString(nameArg as Identifier);
         }
 
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {

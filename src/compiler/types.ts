@@ -2347,6 +2347,7 @@ namespace ts {
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
+        /* @internal */ version: string;
     }
 
     export interface Bundle extends Node {
@@ -2410,7 +2411,7 @@ namespace ts {
          * program source file but could not be located.
          */
         /* @internal */
-        getMissingFilePaths(): Path[];
+        getMissingFilePaths(): ReadonlyArray<Path>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -3570,6 +3571,7 @@ namespace ts {
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
+        /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
@@ -4014,7 +4016,7 @@ namespace ts {
     export interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
-        readonly failedLookupLocations: string[];
+        readonly failedLookupLocations: ReadonlyArray<string>;
         /*@internal*/
         isInvalidated?: boolean;
     }
@@ -4028,14 +4030,18 @@ namespace ts {
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
-        readonly failedLookupLocations: string[];
+        readonly failedLookupLocations: ReadonlyArray<string>;
         /*@internal*/
         isInvalidated?: boolean;
     }
 
+    export interface HasInvalidatedResolution {
+        (sourceFile: Path): boolean;
+    }
+
     export interface CompilerHost extends ModuleResolutionHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
@@ -4059,6 +4065,8 @@ namespace ts {
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
+        onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
+        hasInvalidatedResolution?: HasInvalidatedResolution;
     }
 
     /* @internal */

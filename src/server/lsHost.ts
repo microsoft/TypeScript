@@ -1,20 +1,21 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts" />
 /// <reference path="scriptInfo.ts" />
+/// <reference path="..\compiler\resolutionCache.ts" />
 
 namespace ts.server {
+    /*@internal*/
     export class CachedServerHost implements ServerHost {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
 
+        private readonly cachedPartialSystem: CachedPartialSystem;
+
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
 
-        private cachedReadDirectoryResult = createMap<FileSystemEntries>();
-        private readonly currentDirectory: string;
-
-        constructor(private readonly host: ServerHost, private getCanonicalFileName: (fileName: string) => string) {
+        constructor(private readonly host: ServerHost) {
             this.args = host.args;
             this.newLine = host.newLine;
             this.useCaseSensitiveFileNames = host.useCaseSensitiveFileNames;
@@ -24,41 +25,7 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpath = path => this.host.realpath(path);
             }
-            this.currentDirectory = this.host.getCurrentDirectory();
-        }
-
-        private toPath(fileName: string) {
-            return toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
-        }
-
-        private getFileSystemEntries(rootDir: string) {
-            const path = this.toPath(rootDir);
-            const cachedResult = this.cachedReadDirectoryResult.get(path);
-            if (cachedResult) {
-                return cachedResult;
-            }
-
-            const resultFromHost: FileSystemEntries = {
-                files: this.host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]) || [],
-                directories: this.host.getDirectories(rootDir) || []
-            };
-
-            this.cachedReadDirectoryResult.set(path, resultFromHost);
-            return resultFromHost;
-        }
-
-        private canWorkWithCacheForDir(rootDir: string) {
-            // Some of the hosts might not be able to handle read directory or getDirectories
-            const path = this.toPath(rootDir);
-            if (this.cachedReadDirectoryResult.get(path)) {
-                return true;
-            }
-            try {
-                return this.getFileSystemEntries(rootDir);
-            }
-            catch (_e) {
-                return false;
-            }
+            this.cachedPartialSystem = createCachedPartialSystem(host);
         }
 
         write(s: string) {
@@ -66,13 +33,7 @@ namespace ts.server {
         }
 
         writeFile(fileName: string, data: string, writeByteOrderMark?: boolean) {
-            const path = this.toPath(fileName);
-            const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
-            const baseFileName = getBaseFileName(toNormalizedPath(fileName));
-            if (result) {
-                result.files = this.updateFileSystemEntry(result.files, baseFileName, /*isValid*/ true);
-            }
-            return this.host.writeFile(fileName, data, writeByteOrderMark);
+            this.cachedPartialSystem.writeFile(fileName, data, writeByteOrderMark);
         }
 
         resolvePath(path: string) {
@@ -88,7 +49,7 @@ namespace ts.server {
         }
 
         getCurrentDirectory() {
-            return this.currentDirectory;
+            return this.cachedPartialSystem.getCurrentDirectory();
         }
 
         exit(exitCode?: number) {
@@ -101,78 +62,35 @@ namespace ts.server {
         }
 
         getDirectories(rootDir: string) {
-            if (this.canWorkWithCacheForDir(rootDir)) {
-                return this.getFileSystemEntries(rootDir).directories.slice();
-            }
-            return this.host.getDirectories(rootDir);
+            return this.cachedPartialSystem.getDirectories(rootDir);
         }
 
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-            if (this.canWorkWithCacheForDir(rootDir)) {
-                return matchFiles(rootDir, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, path => this.getFileSystemEntries(path));
-            }
-            return this.host.readDirectory(rootDir, extensions, excludes, includes, depth);
+            return this.cachedPartialSystem.readDirectory(rootDir, extensions, excludes, includes, depth);
         }
 
         fileExists(fileName: string): boolean {
-            const path = this.toPath(fileName);
-            const result = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
-            const baseName = getBaseFileName(toNormalizedPath(fileName));
-            return (result && this.hasEntry(result.files, baseName)) || this.host.fileExists(fileName);
+            return this.cachedPartialSystem.fileExists(fileName);
         }
 
         directoryExists(dirPath: string) {
-            const path = this.toPath(dirPath);
-            return this.cachedReadDirectoryResult.has(path) || this.host.directoryExists(dirPath);
+            return this.cachedPartialSystem.directoryExists(dirPath);
         }
 
         readFile(path: string, encoding?: string): string {
             return this.host.readFile(path, encoding);
         }
 
-        private fileNameEqual(name1: string, name2: string) {
-            return this.getCanonicalFileName(name1) === this.getCanonicalFileName(name2);
+        addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath, fileOrFolderPath: Path) {
+            return this.cachedPartialSystem.addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
         }
 
-        private hasEntry(entries: ReadonlyArray<string>, name: string) {
-            return some(entries, file => this.fileNameEqual(file, name));
-        }
-
-        private updateFileSystemEntry(entries: ReadonlyArray<string>, baseName: string, isValid: boolean) {
-            if (this.hasEntry(entries, baseName)) {
-                if (!isValid) {
-                    return filter(entries, entry => !this.fileNameEqual(entry, baseName));
-                }
-            }
-            else if (isValid) {
-                return entries.concat(baseName);
-            }
-            return entries;
-        }
-
-        addOrDeleteFileOrFolder(fileOrFolder: NormalizedPath) {
-            const path = this.toPath(fileOrFolder);
-            const existingResult = this.cachedReadDirectoryResult.get(path);
-            if (existingResult) {
-                // This was a folder already present, remove it if this doesnt exist any more
-                if (!this.host.directoryExists(fileOrFolder)) {
-                    this.cachedReadDirectoryResult.delete(path);
-                }
-            }
-            else {
-                // This was earlier a file (hence not in cached directory contents)
-                // or we never cached the directory containing it
-                const parentResult = this.cachedReadDirectoryResult.get(getDirectoryPath(path));
-                if (parentResult) {
-                    const baseName = getBaseFileName(fileOrFolder);
-                    parentResult.files = this.updateFileSystemEntry(parentResult.files, baseName, this.host.fileExists(path));
-                    parentResult.directories = this.updateFileSystemEntry(parentResult.directories, baseName, this.host.directoryExists(path));
-                }
-            }
+        addOrDeleteFile(file: string, path: Path, eventKind: FileWatcherEventKind) {
+            return this.cachedPartialSystem.addOrDeleteFile(file, path, eventKind);
         }
 
         clearCache() {
-            this.cachedReadDirectoryResult = createMap<FileSystemEntries>();
+            return this.cachedPartialSystem.clearCache();
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]) {
@@ -190,17 +108,16 @@ namespace ts.server {
 
     }
 
-    type NameResolutionWithFailedLookupLocations = { failedLookupLocations: string[], isInvalidated?: boolean };
     export class LSHost implements LanguageServiceHost, ModuleResolutionHost {
-        private compilationSettings: CompilerOptions;
-        private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-        private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+        /*@internal*/
+        compilationSettings: CompilerOptions;
 
-        private filesWithChangedSetOfUnresolvedImports: Path[];
-
-        private resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
+
+        /*@internal*/
+        hasInvalidatedResolution: HasInvalidatedResolution;
+
         /**
          * This is the host that is associated with the project. This is normally same as projectService's host
          * except in Configured projects where it is CachedServerHost so that we can cache the results of the
@@ -217,25 +134,6 @@ namespace ts.server {
                 this.trace = s => host.trace(s);
             }
 
-            this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
-                const globalCache = this.project.getTypeAcquisition().enable
-                    ? this.project.projectService.typingsInstaller.globalTypingsCacheLocation
-                    : undefined;
-                const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
-                // return result immediately only if it is .ts, .tsx or .d.ts
-                if (!isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
-                    // otherwise try to load typings from @types
-
-                    // create different collection of failed lookup locations for second pass
-                    // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-                    const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, this.project.getProjectName(), compilerOptions, host, globalCache);
-                    if (resolvedModule) {
-                        return { resolvedModule, failedLookupLocations: primaryResult.failedLookupLocations.concat(failedLookupLocations) };
-                    }
-                }
-                return primaryResult;
-            };
-
             if (this.host.realpath) {
                 this.realpath = path => this.host.realpath(path);
             }
@@ -243,97 +141,7 @@ namespace ts.server {
 
         dispose() {
             this.project = undefined;
-            this.resolveModuleName = undefined;
             this.host = undefined;
-        }
-
-        public startRecordingFilesWithChangedResolutions() {
-            this.filesWithChangedSetOfUnresolvedImports = [];
-        }
-
-        public finishRecordingFilesWithChangedResolutions() {
-            const collected = this.filesWithChangedSetOfUnresolvedImports;
-            this.filesWithChangedSetOfUnresolvedImports = undefined;
-            return collected;
-        }
-
-        private resolveNamesWithLocalCache<T extends NameResolutionWithFailedLookupLocations, R>(
-            names: string[],
-            containingFile: string,
-            cache: Map<Map<T>>,
-            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
-            getResult: (s: T) => R,
-            getResultFileName: (result: R) => string | undefined,
-            logChanges: boolean): R[] {
-
-            const path = this.project.projectService.toPath(containingFile);
-            const currentResolutionsInFile = cache.get(path);
-
-            const newResolutions: Map<T> = createMap<T>();
-            const resolvedModules: R[] = [];
-            const compilerOptions = this.getCompilationSettings();
-
-            for (const name of names) {
-                // check if this is a duplicate entry in the list
-                let resolution = newResolutions.get(name);
-                if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
-                    if (moduleResolutionIsValid(existingResolution)) {
-                        // ok, it is safe to use existing name resolution results
-                        resolution = existingResolution;
-                    }
-                    else {
-                        resolution = loader(name, containingFile, compilerOptions, this);
-                        newResolutions.set(name, resolution);
-                    }
-                    if (logChanges && this.filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
-                        this.filesWithChangedSetOfUnresolvedImports.push(path);
-                        // reset log changes to avoid recording the same file multiple times
-                        logChanges = false;
-                    }
-                }
-
-                Debug.assert(resolution !== undefined);
-
-                resolvedModules.push(getResult(resolution));
-            }
-
-            // replace old results with a new one
-            cache.set(path, newResolutions);
-            return resolvedModules;
-
-            function resolutionIsEqualTo(oldResolution: T, newResolution: T): boolean {
-                if (oldResolution === newResolution) {
-                    return true;
-                }
-                if (!oldResolution || !newResolution || oldResolution.isInvalidated) {
-                    return false;
-                }
-                const oldResult = getResult(oldResolution);
-                const newResult = getResult(newResolution);
-                if (oldResult === newResult) {
-                    return true;
-                }
-                if (!oldResult || !newResult) {
-                    return false;
-                }
-                return getResultFileName(oldResult) === getResultFileName(newResult);
-            }
-
-            function moduleResolutionIsValid(resolution: T): boolean {
-                if (!resolution || resolution.isInvalidated) {
-                    return false;
-                }
-
-                const result = getResult(resolution);
-                if (result) {
-                    return true;
-                }
-
-                // consider situation if we have no candidate locations as valid resolution.
-                // after all there is no point to invalidate it if we have no idea where to look for the module.
-                return resolution.failedLookupLocations.length === 0;
-            }
         }
 
         getNewLine() {
@@ -357,13 +165,11 @@ namespace ts.server {
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective,
-                m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName,  /*logChanges*/ false);
+            return this.project.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[] {
-            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, this.resolveModuleName,
-                m => m.resolvedModule, r => r.resolvedFileName, /*logChanges*/ true);
+            return this.project.resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ true);
         }
 
         getDefaultLibFileName() {
@@ -425,45 +231,6 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.host.getDirectories(path);
-        }
-
-        notifyFileRemoved(info: ScriptInfo) {
-            this.invalidateResolutionOfDeletedFile(info, this.resolvedModuleNames,
-                m => m.resolvedModule, r => r.resolvedFileName);
-            this.invalidateResolutionOfDeletedFile(info, this.resolvedTypeReferenceDirectives,
-                m => m.resolvedTypeReferenceDirective, r => r.resolvedFileName);
-        }
-
-        private invalidateResolutionOfDeletedFile<T extends NameResolutionWithFailedLookupLocations, R>(
-            deletedInfo: ScriptInfo,
-            cache: Map<Map<T>>,
-            getResult: (s: T) => R,
-            getResultFileName: (result: R) => string | undefined) {
-            cache.forEach((value, path) => {
-                if (path === deletedInfo.path) {
-                    cache.delete(path);
-                }
-                else if (value) {
-                    value.forEach((resolution) => {
-                        if (resolution && !resolution.isInvalidated) {
-                            const result = getResult(resolution);
-                            if (result) {
-                                if (getResultFileName(result) === deletedInfo.path) {
-                                    resolution.isInvalidated = true;
-                                }
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-        setCompilationSettings(opt: CompilerOptions) {
-            if (changesAffectModuleResolution(this.compilationSettings, opt)) {
-                this.resolvedModuleNames.clear();
-                this.resolvedTypeReferenceDirectives.clear();
-            }
-            this.compilationSettings = opt;
         }
     }
 }

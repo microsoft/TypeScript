@@ -366,7 +366,7 @@ namespace ts {
     }
 
     export function getTextOfConstantValue(value: string | number) {
-        return typeof value === "string" ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
+        return isString(value) ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -403,7 +403,10 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    /* @internal */
+    export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
+        return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
+    }
+
     export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral } {
         return isModuleDeclaration(node) && isStringLiteral(node.name);
     }
@@ -1416,8 +1419,8 @@ namespace ts {
         if (node.kind === SyntaxKind.ExportDeclaration) {
             return (<ExportDeclaration>node).moduleSpecifier;
         }
-        if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-            return (<ModuleDeclaration>node).name;
+        if (isModuleWithStringLiteralName(node)) {
+            return node.name;
         }
     }
 
@@ -3202,17 +3205,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: System): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        if (sys) {
-            return sys.newLine;
-        }
-        return carriageReturnLineFeed;
+        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**
@@ -3465,6 +3465,84 @@ namespace ts {
     /** See comment on `declareModuleMember` in `binder.ts`. */
     export function getCombinedLocalAndExportSymbolFlags(symbol: Symbol): SymbolFlags {
         return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
+    }
+
+    export function compareDataObjects(dst: any, src: any): boolean {
+        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
+            return false;
+        }
+
+        for (const e in dst) {
+            if (typeof dst[e] === "object") {
+                if (!compareDataObjects(dst[e], src[e])) {
+                    return false;
+                }
+            }
+            else if (typeof dst[e] !== "function") {
+                if (dst[e] !== src[e]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
+     */
+    export function clearMap<T>(map: Map<T>, onDeleteValue: (key: string, existingValue: T) => void) {
+        // Remove all
+        map.forEach((existingValue, key) => {
+            onDeleteValue(key, existingValue);
+        });
+        map.clear();
+    }
+
+    export interface MutateMapOptions<T, U> {
+        createNewValue(key: string, valueInNewMap: U): T;
+        onDeleteValue(key: string, existingValue: T): void;
+
+        /**
+         * If present this is called with the key when there is value for that key both in new map as well as existing map provided
+         * Caller can then decide to update or remove this key.
+         * If the key is removed, caller will get callback of createNewValue for that key.
+         * If this callback is not provided, the value of such keys is not updated.
+         */
+        onExistingValue?(key: string, existingValue: T, valueInNewMap: U): void;
+    }
+
+    /**
+     * Mutates the map with newMap such that keys in map will be same as newMap.
+     */
+    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
+        // If there are new values update them
+        if (newMap) {
+            const { createNewValue, onDeleteValue, onExistingValue } = options;
+            // Needs update
+            map.forEach((existingValue, key) => {
+                const valueInNewMap = newMap.get(key);
+                // Not present any more in new map, remove it
+                if (valueInNewMap === undefined) {
+                    map.delete(key);
+                    onDeleteValue(key, existingValue);
+                }
+                // If present notify about existing values
+                else if (onExistingValue) {
+                    onExistingValue(key, existingValue, valueInNewMap);
+                }
+            });
+
+            // Add new values that are not already present
+            newMap.forEach((valueInNewMap, key) => {
+                if (!map.has(key)) {
+                    // New values
+                    map.set(key, createNewValue(key, valueInNewMap));
+                }
+            });
+        }
+        else {
+            clearMap(map, options.onDeleteValue);
+        }
     }
 }
 

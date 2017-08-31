@@ -10,14 +10,14 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
-    export const ContextEvent = "context";
+    export const ProjectChangedEvent = "projectChanged";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
 
-    export interface ContextEvent {
-        eventName: typeof ContextEvent;
-        data: { project: Project; fileName: NormalizedPath };
+    export interface ProjectChangedEvent {
+        eventName: typeof ProjectChangedEvent;
+        data: { project: Project; filesToEmit: string[]; changedFiles: string[] };
     }
 
     export interface ConfigFileDiagEvent {
@@ -77,7 +77,7 @@ namespace ts.server {
         readonly dts: number;
     }
 
-    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
+    export type ProjectServiceEvent = ProjectChangedEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -159,7 +159,7 @@ namespace ts.server {
     };
 
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings {
-        if (typeof protocolOptions.indentStyle === "string") {
+        if (isString(protocolOptions.indentStyle)) {
             protocolOptions.indentStyle = indentStyle.get(protocolOptions.indentStyle.toLowerCase());
             Debug.assert(protocolOptions.indentStyle !== undefined);
         }
@@ -169,7 +169,7 @@ namespace ts.server {
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin {
         compilerOptionConverters.forEach((mappedValues, id) => {
             const propertyValue = protocolOptions[id];
-            if (typeof propertyValue === "string") {
+            if (isString(propertyValue)) {
                 protocolOptions[id] = mappedValues.get(propertyValue.toLowerCase());
             }
         });
@@ -177,9 +177,7 @@ namespace ts.server {
     }
 
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {
-        return typeof scriptKindName === "string"
-            ? convertScriptKindName(scriptKindName)
-            : scriptKindName;
+        return isString(scriptKindName) ? convertScriptKindName(scriptKindName) : scriptKindName;
     }
 
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName) {
@@ -249,7 +247,8 @@ namespace ts.server {
         WildcardDirectories = "Wild card directory",
         TypeRoot = "Type root of the project",
         ClosedScriptInfo = "Closed Script info",
-        ConfigFileForInferredRoot = "Config file for the inferred project root"
+        ConfigFileForInferredRoot = "Config file for the inferred project root",
+        FailedLookupLocation = "Failed lookup locations in module resolution"
     }
 
     /* @internal */
@@ -493,7 +492,30 @@ namespace ts.server {
                 if (this.pendingProjectUpdates.delete(projectName)) {
                     project.updateGraph();
                 }
+                // Send the update event to notify about the project changes
+                this.sendProjectChangedEvent(project);
             });
+        }
+
+        private sendProjectChangedEvent(project: Project) {
+            if (project.isClosed() || !this.eventHandler || !project.languageServiceEnabled) {
+                return;
+            }
+
+            const { filesToEmit, changedFiles } = project.getChangedFiles();
+            if (changedFiles.length === 0) {
+                return;
+            }
+
+            const event: ProjectChangedEvent = {
+                eventName: ProjectChangedEvent,
+                data: {
+                    project,
+                    filesToEmit: filesToEmit as string[],
+                    changedFiles: changedFiles as string[]
+                }
+            };
+            this.eventHandler(event);
         }
 
         /* @internal */
@@ -565,6 +587,11 @@ namespace ts.server {
             }
             const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
             return scriptInfo && !scriptInfo.isOrphan() && scriptInfo.getDefaultProject();
+        }
+
+        getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
+            this.ensureProjectStructuresUptoDate();
+            return this.getScriptInfo(uncheckedFileName);
         }
 
         /**
@@ -674,25 +701,12 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.delayUpdateProjectGraphs(containingProjects);
-
-                // TODO: (sheetalkamat) Someway to send this event so that error checks are updated?
-                // if (!this.eventHandler) {
-                //     return;
-                // }
-
-                // for (const openFile of this.openFiles) {
-                //     const event: ContextEvent = {
-                //         eventName: ContextEvent,
-                //         data: { project: openFile.getDefaultProject(), fileName: openFile.fileName }
-                //     };
-                //     this.eventHandler(event);
-                // }
             }
         }
 
         /* @internal  */
-        onTypeRootFileChanged(project: ConfiguredProject, fileName: NormalizedPath) {
-            project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
+        onTypeRootFileChanged(project: ConfiguredProject, fileOrFolder: NormalizedPath) {
+            project.getCachedServerHost().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
             project.updateTypes();
             this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
         }
@@ -703,15 +717,15 @@ namespace ts.server {
          * @param fileName the absolute file name that changed in watched directory
          */
         /* @internal */
-        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileName: NormalizedPath) {
-            project.getCachedServerHost().addOrDeleteFileOrFolder(fileName);
+        onFileAddOrRemoveInWatchedDirectoryOfProject(project: ConfiguredProject, fileOrFolder: NormalizedPath) {
+            project.getCachedServerHost().addOrDeleteFileOrFolder(fileOrFolder, this.toPath(fileOrFolder));
             const configFilename = project.getConfigFilePath();
 
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
-                this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileName}`);
+            if (fileOrFolder && !isSupportedSourceFileName(fileOrFolder, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
+                this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrFolder}`);
                 return;
             }
 
@@ -1019,7 +1033,7 @@ namespace ts.server {
             if (this.configuredProjects.has(canonicalConfigFilePath)) {
                 watches.push(WatchType.ConfigFilePath);
             }
-            this.logger.info(`ConfigFilePresence:: Current Watches: ['${watches.join("','")}']:: File: ${configFileName} Currently impacted open files: RootsOfInferredProjects: ${inferredRoots} OtherOpenFiles: ${otherFiles} Status: ${status}`);
+            this.logger.info(`ConfigFilePresence:: Current Watches: ${watches}:: File: ${configFileName} Currently impacted open files: RootsOfInferredProjects: ${inferredRoots} OtherOpenFiles: ${otherFiles} Status: ${status}`);
         }
 
         /**
@@ -1371,7 +1385,7 @@ namespace ts.server {
         }
 
         private createConfiguredProject(configFileName: NormalizedPath, clientFileName?: string) {
-            const cachedServerHost = new CachedServerHost(this.host, this.toCanonicalFileName);
+            const cachedServerHost = new CachedServerHost(this.host);
             const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedServerHost);
             this.logger.info(`Opened configuration file ${configFileName}`);
             const languageServiceEnabled = !this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
@@ -1425,7 +1439,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ clientFileName === newRootFile, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ clientFileName === newRootFile, /*fileContent*/ undefined, scriptKind, hasMixedContent, project.lsHost.host);
                     path = scriptInfo.path;
                     // If this script info is not already a root add it
                     if (!project.isRoot(scriptInfo)) {
@@ -1579,9 +1593,12 @@ namespace ts.server {
          * @param uncheckedFileName is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-
-        getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
-            return this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName), openedByClient, fileContent, scriptKind);
+        /*@internal*/
+        getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, hostToQueryFileExistsOn: ServerHost) {
+            return this.getOrCreateScriptInfoForNormalizedPath(
+                toNormalizedPath(uncheckedFileName), openedByClient, /*fileContent*/ undefined,
+                /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, hostToQueryFileExistsOn
+            );
         }
 
         getScriptInfo(uncheckedFileName: string) {
@@ -1606,11 +1623,11 @@ namespace ts.server {
             }
         }
 
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: ServerHost) {
             const path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
-                if (openedByClient || this.host.fileExists(fileName)) {
+                if (openedByClient || (hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent, path);
 
                     this.filenameToScriptInfo.set(info.path, info);
@@ -2063,7 +2080,7 @@ namespace ts.server {
                                         // RegExp group numbers are 1-based, but the first element in groups
                                         // is actually the original string, so it all works out in the end.
                                         if (typeof groupNumberOrString === "number") {
-                                            if (typeof groups[groupNumberOrString] !== "string") {
+                                            if (!isString(groups[groupNumberOrString])) {
                                                 // Specification was wrong - exclude nothing!
                                                 this.logger.info(`Incorrect RegExp specification in safelist rule ${name} - not enough groups`);
                                                 // * can't appear in a filename; escape it because it's feeding into a RegExp

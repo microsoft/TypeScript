@@ -2040,6 +2040,29 @@ namespace ts.server.protocol {
         languageServiceEnabled: boolean;
     }
 
+    export type ProjectChangedEventName = "projectChanged";
+    export interface ProjectStructureChangedEvent extends Event {
+        event: ProjectChangedEventName;
+        body: ProjectChangedEventBody;
+    }
+
+    export interface ProjectChangedEventBody {
+        /**
+         * Project name that has changes
+         */
+        projectName: string;
+
+        /**
+         * Minimum set of file names to emit
+         */
+        fileNamesToEmit: string[];
+
+        /**
+         * List of files that have changed/added/removed or could have been affected by the changed files
+         */
+        changedFiles: string[];
+    }
+
     /**
      * Arguments for reload request.
      */

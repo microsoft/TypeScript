@@ -1,4 +1,4 @@
-﻿{
+{
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
@@ -44,6 +44,7 @@
         "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
+        "../compiler/builder.ts",
         "../compiler/commandLineParser.ts",
         "../compiler/diagnosticInformationMap.generated.ts",
         "../services/breakpoints.ts",
@@ -92,6 +93,7 @@
         "rwcRunner.ts",
         "test262Runner.ts",
         "runner.ts",
+        "virtualFileSystemWithWatch.ts",
         "../server/protocol.ts",
         "../server/session.ts",
         "../server/client.ts",
@@ -115,6 +117,7 @@
         "./unittests/convertCompilerOptionsFromJson.ts",
         "./unittests/convertTypeAcquisitionFromJson.ts",
         "./unittests/tsserverProjectSystem.ts",
+        "./unittests/tscWatchMode.ts",
         "./unittests/matchFiles.ts",
         "./unittests/initializeTSConfig.ts",
         "./unittests/compileOnSave.ts",

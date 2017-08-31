@@ -185,6 +185,7 @@ namespace ts {
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        hasInvalidatedResolution?: HasInvalidatedResolution;
         directoryExists?(directoryName: string): boolean;
 
         /*
@@ -276,7 +277,7 @@ namespace ts {
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
 
-        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, isDetailed?: boolean): EmitOutput | EmitOutputDetailed;
 
         getProgram(): Program;
 
@@ -694,21 +695,10 @@ namespace ts {
         autoCollapse: boolean;
     }
 
-    export interface EmitOutput {
-        outputFiles: OutputFile[];
-        emitSkipped: boolean;
-    }
-
     export const enum OutputFileType {
         JavaScript,
         SourceMap,
         Declaration
-    }
-
-    export interface OutputFile {
-        name: string;
-        writeByteOrderMark: boolean;
-        text: string;
     }
 
     export const enum EndOfLineState {

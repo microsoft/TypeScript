@@ -885,7 +885,7 @@ namespace ts {
      */
     export function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): { config?: any; error?: Diagnostic } {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return typeof textOrDiagnostic === "string" ? parseConfigFileTextToJson(fileName, textOrDiagnostic) : { config: {}, error: textOrDiagnostic };
+        return isString(textOrDiagnostic) ? parseConfigFileTextToJson(fileName, textOrDiagnostic) : { config: {}, error: textOrDiagnostic };
     }
 
     /**
@@ -907,7 +907,7 @@ namespace ts {
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): JsonSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return typeof textOrDiagnostic === "string" ? parseJsonText(fileName, textOrDiagnostic) : <JsonSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
+        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <JsonSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
     }
 
     function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {
@@ -1111,9 +1111,9 @@ namespace ts {
                     if (!isDoubleQuotedString(valueExpression)) {
                         errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                     }
-                    reportInvalidOptionValue(option && (typeof option.type === "string" && option.type !== "string"));
+                    reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string"));
                     const text = (<StringLiteral>valueExpression).text;
-                    if (option && typeof option.type !== "string") {
+                    if (option && !isString(option.type)) {
                         const customOption = <CommandLineOptionOfCustomType>option;
                         // Validate custom option type
                         if (!customOption.type.has(text.toLowerCase())) {
@@ -1184,7 +1184,7 @@ namespace ts {
     function getCompilerOptionValueTypeString(option: CommandLineOption) {
         return option.type === "list" ?
             "Array" :
-            typeof option.type === "string" ? option.type : "string";
+            isString(option.type) ? option.type : "string";
     }
 
     function isCompilerOptionsValue(option: CommandLineOption, value: any): value is CompilerOptionsValue {
@@ -1192,7 +1192,7 @@ namespace ts {
             if (option.type === "list") {
                 return isArray(value);
             }
-            const expectedType = typeof option.type === "string" ? option.type : "string";
+            const expectedType = isString(option.type) ? option.type : "string";
             return typeof value === expectedType;
         }
     }
@@ -1578,7 +1578,7 @@ namespace ts {
         let extendedConfigPath: Path;
 
         if (json.extends) {
-            if (typeof json.extends !== "string") {
+            if (!isString(json.extends)) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
             }
             else {
@@ -1803,7 +1803,7 @@ namespace ts {
             if (optType === "list" && isArray(value)) {
                 return convertJsonOptionOfListType(<CommandLineOptionOfListType>opt, value, basePath, errors);
             }
-            else if (typeof optType !== "string") {
+            else if (!isString(optType)) {
                 return convertJsonOptionOfCustomType(<CommandLineOptionOfCustomType>opt, <string>value, errors);
             }
             return normalizeNonListOptionValue(opt, basePath, value);
@@ -1816,13 +1816,13 @@ namespace ts {
     function normalizeOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (option.type === "list") {
             const listOption = <CommandLineOptionOfListType>option;
-            if (listOption.element.isFilePath || typeof listOption.element.type !== "string") {
+            if (listOption.element.isFilePath || !isString(listOption.element.type)) {
                 return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
             }
             return value;
         }
-        else if (typeof option.type !== "string") {
-            return option.type.get(typeof value === "string" ? value.toLowerCase() : value);
+        else if (!isString(option.type)) {
+            return option.type.get(isString(value) ? value.toLowerCase() : value);
         }
         return normalizeNonListOptionValue(option, basePath, value);
     }
@@ -1984,7 +1984,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param extraFileExtensions optionaly file extra file extension information from host
      */
-    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo>): ExpandResult {
+    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo> = []): ExpandResult {
         basePath = normalizePath(basePath);
 
         const keyMapper = host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper;
