@@ -2441,7 +2441,7 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): void {
+        export function fail(message?: string, stackCrawlMark?: Function): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
@@ -2451,8 +2451,7 @@ namespace ts {
         }
 
         export function assertNever(_member: never, message?: string, stackCrawlMark?: Function): never {
-            fail(message, stackCrawlMark || assertNever);
-            throw "Unreachable";
+            return fail(message, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: Function) {
