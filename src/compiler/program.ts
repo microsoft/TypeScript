@@ -1675,7 +1675,7 @@ namespace ts {
             });
 
             if (packageId) {
-                const packageIdKey = `${packageId.name}@${packageId.version}`;
+                const packageIdKey = `${packageId.name}/${packageId.subModuleName}@${packageId.version}`;
                 const fileFromPackageId = packageIdToSourceFile.get(packageIdKey);
                 if (fileFromPackageId) {
                     // Some other SourceFile already exists with this package name and version.
