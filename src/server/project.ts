@@ -889,10 +889,11 @@ namespace ts.server {
 
         filesToString() {
             if (!this.program) {
-                return "";
+                return "\tFiles (0)\n";
             }
-            let strBuilder = "";
-            for (const file of this.program.getSourceFiles()) {
+            const sourceFiles = this.program.getSourceFiles();
+            let strBuilder = `\tFiles (${sourceFiles.length})\n`;
+            for (const file of sourceFiles) {
                 strBuilder += `\t${file.fileName}\n`;
             }
             return strBuilder;
