@@ -125,7 +125,7 @@ namespace ts.projectSystem {
             this.events.push(event);
         }
 
-        checkEventCountOfType(eventType: "context" | "configFileDiag", expectedCount: number) {
+        checkEventCountOfType(eventType: "configFileDiag", expectedCount: number) {
             const eventsOfType = filter(this.events, e => e.eventName === eventType);
             assert.equal(eventsOfType.length, expectedCount, `The actual event counts of type ${eventType} is ${eventsOfType.length}, while expected ${expectedCount}`);
         }
@@ -2001,7 +2001,7 @@ namespace ts.projectSystem {
             const session = createSession(host, {
                 canUseEvents: true,
                 eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
+                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectChangedEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
                         return;
                     }
                     assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
@@ -4465,6 +4465,539 @@ namespace ts.projectSystem {
             it("timeout occurs after installation", () => {
                 verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
             });
+        });
+    });
+
+    describe("ProjectChangedEvent", () => {
+        function verifyFiles(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+            assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
+            const seen = createMap<true>();
+            forEach(actual, f => {
+                assert.isFalse(seen.has(f), `${caption}: Found duplicate ${f}. Actual: ${actual} Expected: ${expected}`);
+                seen.set(f, true);
+                assert.isTrue(contains(expected, f), `${caption}: Expected not to contain ${f}. Actual: ${actual} Expected: ${expected}`);
+            });
+        }
+
+        function createVerifyInitialOpen(session: TestSession, verifyProjectChangedEventHandler: (events: server.ProjectChangedEvent[]) => void) {
+            return (file: FileOrFolder) => {
+                session.executeCommandSeq(<protocol.OpenRequest>{
+                    command: server.CommandNames.Open,
+                    arguments: {
+                        file: file.path
+                    }
+                });
+                verifyProjectChangedEventHandler([]);
+            };
+        }
+
+        interface ProjectChangeEventVerifier {
+            session: TestSession;
+            verifyProjectChangedEventHandler(events: server.ProjectChangedEvent[]): void;
+            verifyInitialOpen(file: FileOrFolder): void;
+        }
+
+        function verifyProjectChangedEvent(createSession: (host: TestServerHost) => ProjectChangeEventVerifier) {
+            it("when adding new file", () => {
+                const commonFile1: FileOrFolder = {
+                    path: "/a/b/file1.ts",
+                    content: "export var x = 10;"
+                };
+                const commonFile2: FileOrFolder = {
+                    path: "/a/b/file2.ts",
+                    content: "export var y = 10;"
+                };
+                const commonFile3: FileOrFolder = {
+                    path: "/a/b/file3.ts",
+                    content: "export var z = 10;"
+                };
+                const configFile: FileOrFolder = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{}`
+                };
+                const host = createServerHost([commonFile1, libFile, configFile]);
+                const { session, verifyProjectChangedEventHandler, verifyInitialOpen } = createSession(host, );
+                const projectService = session.getProjectService();
+                verifyInitialOpen(commonFile1);
+
+                host.reloadFS([commonFile1, libFile, configFile, commonFile2]);
+                host.runQueuedTimeoutCallbacks();
+                // Since this is first event
+                const project = projectService.configuredProjects.get(configFile.path);
+                verifyProjectChangedEventHandler([{
+                    eventName: server.ProjectChangedEvent,
+                    data: {
+                        project,
+                        changedFiles: [libFile.path, commonFile1.path, commonFile2.path],
+                        filesToEmit: [commonFile1.path, commonFile2.path]
+                    }
+                }]);
+
+                host.reloadFS([commonFile1, commonFile2, libFile, configFile, commonFile3]);
+                host.runQueuedTimeoutCallbacks();
+                verifyProjectChangedEventHandler([{
+                    eventName: server.ProjectChangedEvent,
+                    data: {
+                        project,
+                        changedFiles: [commonFile3.path],
+                        filesToEmit: [commonFile3.path]
+                    }
+                }]);
+            });
+
+            describe("with --out or --outFile setting", () => {
+                function verifyEventWithOutSettings(compilerOptions: CompilerOptions = {}) {
+                    const config: FileOrFolder = {
+                        path: "/a/tsconfig.json",
+                        content: JSON.stringify({
+                            compilerOptions
+                        })
+                    };
+
+                    const f1: FileOrFolder = {
+                        path: "/a/a.ts",
+                        content: "export let x = 1"
+                    };
+                    const f2: FileOrFolder = {
+                        path: "/a/b.ts",
+                        content: "export let y = 1"
+                    };
+
+                    const files = [f1, config, libFile];
+                    const host = createServerHost(files);
+                    const { session, verifyInitialOpen, verifyProjectChangedEventHandler } = createSession(host);
+                    const projectService = session.getProjectService();
+                    verifyInitialOpen(f1);
+
+                    files.push(f2);
+                    host.reloadFS(files);
+                    host.runQueuedTimeoutCallbacks();
+
+                    // Since this is first event
+                    const project = projectService.configuredProjects.get(config.path);
+                    verifyProjectChangedEventHandler([{
+                        eventName: server.ProjectChangedEvent,
+                        data: {
+                            project,
+                            changedFiles: [libFile.path, f1.path, f2.path],
+                            filesToEmit: [f1.path, f2.path]
+                        }
+                    }]);
+
+                    f2.content = "export let x = 11";
+                    host.reloadFS(files);
+                    host.runQueuedTimeoutCallbacks();
+                    verifyProjectChangedEventHandler([{
+                        eventName: server.ProjectChangedEvent,
+                        data: {
+                            project,
+                            changedFiles: [f2.path],
+                            filesToEmit: [f2.path]
+                        }
+                    }]);
+                }
+
+                it("when both options are not set", () => {
+                    verifyEventWithOutSettings();
+                });
+
+                it("when --out is set", () => {
+                    const outJs = "/a/out.js";
+                    verifyEventWithOutSettings({ out: outJs });
+                });
+
+                it("when --outFile is set", () => {
+                    const outJs = "/a/out.js";
+                    verifyEventWithOutSettings({ outFile: outJs });
+                });
+            });
+
+            describe("with modules and configured project", () => {
+                const file1Consumer1Path = "/a/b/file1Consumer1.ts";
+                const moduleFile1Path = "/a/b/moduleFile1.ts";
+                const configFilePath = "/a/b/tsconfig.json";
+                type InitialStateParams = {
+                    /** custom config file options */
+                    configObj?: any;
+                    /** list of files emitted/changed on first update graph */
+                    firstCompilationEmitFiles?: string[];
+                    /** Additional files and folders to add */
+                    getAdditionalFileOrFolder?(): FileOrFolder[];
+                    /** initial list of files to reload in fs and first file in this list being the file to open */
+                    firstReloadFileList?: string[];
+                };
+                function getInitialState({ configObj = {}, getAdditionalFileOrFolder, firstReloadFileList, firstCompilationEmitFiles }: InitialStateParams = {}) {
+                    const moduleFile1: FileOrFolder = {
+                        path: moduleFile1Path,
+                        content: "export function Foo() { };",
+                    };
+
+                    const file1Consumer1: FileOrFolder = {
+                        path: file1Consumer1Path,
+                        content: `import {Foo} from "./moduleFile1"; export var y = 10;`,
+                    };
+
+                    const file1Consumer2: FileOrFolder = {
+                        path: "/a/b/file1Consumer2.ts",
+                        content: `import {Foo} from "./moduleFile1"; let z = 10;`,
+                    };
+
+                    const moduleFile2: FileOrFolder = {
+                        path: "/a/b/moduleFile2.ts",
+                        content: `export var Foo4 = 10;`,
+                    };
+
+                    const globalFile3: FileOrFolder = {
+                        path: "/a/b/globalFile3.ts",
+                        content: `interface GlobalFoo { age: number }`
+                    };
+
+                    const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
+                    const configFile = {
+                        path: configFilePath,
+                        content: JSON.stringify(configObj || { compilerOptions: {} })
+                    };
+
+                    const files = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
+
+                    const filesToReload = firstReloadFileList && getFiles(firstReloadFileList) || files;
+                    const host = createServerHost([filesToReload[0], configFile]);
+
+                    // Initial project creation
+                    const { session, verifyProjectChangedEventHandler, verifyInitialOpen } = createSession(host);
+                    const projectService = session.getProjectService();
+                    verifyInitialOpen(filesToReload[0]);
+
+                    // Since this is first event, it will have all the files
+                    const firstFilesExpected = firstCompilationEmitFiles && getFiles(firstCompilationEmitFiles) || filesToReload;
+                    verifyProjectChangedEvent(firstFilesExpected, filesToReload);
+
+                    return {
+                        moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile,
+                        files,
+                        updateContentOfOpenFile,
+                        verifyProjectChangedEvent,
+                        verifyAffectedAllFiles,
+                    };
+
+                    function getFiles(filelist: string[]) {
+                        return map(filelist, getFile);
+                    }
+
+                    function getFile(fileName: string) {
+                        return find(files, file => file.path === fileName);
+                    }
+
+                    function verifyAffectedAllFiles() {
+                        verifyProjectChangedEvent(filter(files, f => f !== libFile));
+                    }
+
+                    function verifyProjectChangedEvent(filesToEmit: FileOrFolder[], filesToReload?: FileOrFolder[], additionalChangedFiles?: FileOrFolder[]) {
+                        const changedFiles = mapDefined(additionalChangedFiles ? filesToEmit.concat(additionalChangedFiles) : filesToEmit, f => f !== configFile ? f.path : undefined);
+                        host.reloadFS(filesToReload || files);
+                        host.runQueuedTimeoutCallbacks();
+                        const project = projectService.configuredProjects.get(configFile.path);
+                        verifyProjectChangedEventHandler([{
+                            eventName: server.ProjectChangedEvent,
+                            data: {
+                                project,
+                                changedFiles,
+                                filesToEmit: mapDefined(filesToEmit, f => f !== libFile && f !== configFile ? f.path : undefined)
+                            }
+                        }]);
+                    }
+
+                    function updateContentOfOpenFile(file: FileOrFolder, newContent: string) {
+                        session.executeCommandSeq<protocol.ChangeRequest>({
+                            command: server.CommandNames.Change,
+                            arguments: {
+                                file: file.path,
+                                insertString: newContent,
+                                endLine: 1,
+                                endOffset: file.content.length,
+                                line: 1,
+                                offset: 1
+                            }
+                        });
+                        file.content = newContent;
+                    }
+                }
+
+                it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
+                    const { moduleFile1, file1Consumer1, file1Consumer2, verifyProjectChangedEvent } = getInitialState();
+
+                    // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1, file1Consumer2]);
+
+                    // Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`
+                    moduleFile1.content = `export var T: number;export function Foo() { console.log('hi'); };`;
+                    verifyProjectChangedEvent([moduleFile1]);
+                });
+
+                it("should be up-to-date with the reference map changes", () => {
+                    const { moduleFile1, file1Consumer1, file1Consumer2, updateContentOfOpenFile, verifyProjectChangedEvent } = getInitialState();
+
+                    // Change file1Consumer1 content to `export let y = Foo();`
+                    updateContentOfOpenFile(file1Consumer1, "export let y = Foo();");
+                    verifyProjectChangedEvent([file1Consumer1]);
+
+                    // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer2]);
+
+                    // Add the import statements back to file1Consumer1
+                    updateContentOfOpenFile(file1Consumer1, `import {Foo} from "./moduleFile1";let y = Foo();`);
+                    verifyProjectChangedEvent([file1Consumer1]);
+
+                    // Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
+                    moduleFile1.content = `export var T: number;export var T2: string;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer2, file1Consumer1]);
+
+                    // Multiple file edits in one go:
+
+                    // Change file1Consumer1 content to `export let y = Foo();`
+                    // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+                    updateContentOfOpenFile(file1Consumer1, `export let y = Foo();`);
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1, file1Consumer2]);
+                });
+
+                it("should be up-to-date with deleted files", () => {
+                    const { moduleFile1, file1Consumer1, file1Consumer2, files, verifyProjectChangedEvent } = getInitialState();
+
+                    // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+
+                    // Delete file1Consumer2
+                    const filesToLoad = filter(files, file => file !== file1Consumer2);
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1], filesToLoad, [file1Consumer2]);
+                });
+
+                it("should be up-to-date with newly created files", () => {
+                    const { moduleFile1, file1Consumer1, file1Consumer2, files, verifyProjectChangedEvent, } = getInitialState();
+
+                    const file1Consumer3: FileOrFolder = {
+                        path: "/a/b/file1Consumer3.ts",
+                        content: `import {Foo} from "./moduleFile1"; let y = Foo();`
+                    };
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1, file1Consumer3, file1Consumer2], files.concat(file1Consumer3));
+                });
+
+                it("should detect changes in non-root files", () => {
+                    const { moduleFile1, file1Consumer1, verifyProjectChangedEvent } = getInitialState({
+                        configObj: { files: [file1Consumer1Path] },
+                        firstCompilationEmitFiles: [file1Consumer1Path, moduleFile1Path, libFile.path]
+                    });
+
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1]);
+
+                    // change file1 internal, and verify only file1 is affected
+                    moduleFile1.content += "var T1: number;";
+                    verifyProjectChangedEvent([moduleFile1]);
+                });
+
+                it("should return all files if a global file changed shape", () => {
+                    const { globalFile3, verifyAffectedAllFiles } = getInitialState();
+
+                    globalFile3.content += "var T2: string;";
+                    verifyAffectedAllFiles();
+                });
+
+                it("should always return the file itself if '--isolatedModules' is specified", () => {
+                    const { moduleFile1, verifyProjectChangedEvent } = getInitialState({
+                        configObj: { compilerOptions: { isolatedModules: true } }
+                    });
+
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1]);
+                });
+
+                it("should always return the file itself if '--out' or '--outFile' is specified", () => {
+                    const outFilePath = "/a/b/out.js";
+                    const { moduleFile1, verifyProjectChangedEvent } = getInitialState({
+                        configObj: { compilerOptions: { module: "system", outFile: outFilePath } }
+                    });
+
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1]);
+                });
+
+                it("should return cascaded affected file list", () => {
+                    const file1Consumer1Consumer1: FileOrFolder = {
+                        path: "/a/b/file1Consumer1Consumer1.ts",
+                        content: `import {y} from "./file1Consumer1";`
+                    };
+                    const { moduleFile1, file1Consumer1, file1Consumer2, updateContentOfOpenFile, verifyProjectChangedEvent } = getInitialState({
+                        getAdditionalFileOrFolder: () => [file1Consumer1Consumer1]
+                    });
+
+                    updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T: number;");
+                    verifyProjectChangedEvent([file1Consumer1, file1Consumer1Consumer1]);
+
+                    // Doesnt change the shape of file1Consumer1
+                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1, file1Consumer2]);
+
+                    // Change both files before the timeout
+                    updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T2: number;");
+                    moduleFile1.content = `export var T2: number;export function Foo() { };`;
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer1Consumer1]);
+                });
+
+                it("should work fine for files with circular references", () => {
+                    const file1: FileOrFolder = {
+                        path: "/a/b/file1.ts",
+                        content: `
+                    /// <reference path="./file2.ts" />
+                    export var t1 = 10;`
+                    };
+                    const file2: FileOrFolder = {
+                        path: "/a/b/file2.ts",
+                        content: `
+                    /// <reference path="./file1.ts" />
+                    export var t2 = 10;`
+                    };
+                    const { configFile, verifyProjectChangedEvent, updateContentOfOpenFile } = getInitialState({
+                        getAdditionalFileOrFolder: () => [file1, file2],
+                        firstReloadFileList: [file1.path, libFile.path, file2.path, configFilePath]
+                    });
+
+                    updateContentOfOpenFile(file1, file1.content + "export var t3 = 10;");
+                    verifyProjectChangedEvent([file1, file2], [file1, file2, libFile, configFile]);
+                });
+
+                it("should detect removed code file", () => {
+                    const referenceFile1: FileOrFolder = {
+                        path: "/a/b/referenceFile1.ts",
+                        content: `
+                    /// <reference path="./moduleFile1.ts" />
+                    export var x = Foo();`
+                    };
+                    const { configFile, verifyProjectChangedEvent, moduleFile1 } = getInitialState({
+                        getAdditionalFileOrFolder: () => [referenceFile1],
+                        firstReloadFileList: [referenceFile1.path, libFile.path, moduleFile1Path, configFilePath]
+                    });
+
+                    verifyProjectChangedEvent([referenceFile1], [libFile, referenceFile1, configFile], [moduleFile1]);
+                });
+
+                it("should detect non-existing code file", () => {
+                    const referenceFile1: FileOrFolder = {
+                        path: "/a/b/referenceFile1.ts",
+                        content: `
+                    /// <reference path="./moduleFile2.ts" />
+                    export var x = Foo();`
+                    };
+                    const { configFile, moduleFile2, updateContentOfOpenFile, verifyProjectChangedEvent } = getInitialState({
+                        getAdditionalFileOrFolder: () => [referenceFile1],
+                        firstReloadFileList: [referenceFile1.path, libFile.path, configFilePath]
+                    });
+
+                    updateContentOfOpenFile(referenceFile1, referenceFile1.content + "export var yy = Foo();");
+                    verifyProjectChangedEvent([referenceFile1], [libFile, referenceFile1, configFile]);
+
+                    // Create module File2 and see both files are saved
+                    verifyProjectChangedEvent([referenceFile1, moduleFile2], [libFile, moduleFile2, referenceFile1, configFile]);
+                });
+            });
+        }
+
+        describe("when event handler is set in the session", () => {
+            verifyProjectChangedEvent(createSessionWithProjectChangedEventHandler);
+
+            function createSessionWithProjectChangedEventHandler(host: TestServerHost): ProjectChangeEventVerifier {
+                const projectChangedEvents: server.ProjectChangedEvent[] = [];
+                const session = createSession(host, {
+                    eventHandler: e => {
+                        if (e.eventName === server.ProjectChangedEvent) {
+                            projectChangedEvents.push(e);
+                        }
+                    }
+                });
+
+                return {
+                    session,
+                    verifyProjectChangedEventHandler,
+                    verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectChangedEventHandler)
+                };
+
+                function eventToString(event: server.ProjectChangedEvent) {
+                    const eventToModify = event && {
+                        eventName: event.eventName,
+                        data: {
+                            project: event.data.project.getProjectName(),
+                            changedFiles: event.data.changedFiles,
+                            filesToEmit: event.data.filesToEmit
+                        }
+                    };
+                    return JSON.stringify(eventToModify);
+                }
+
+                function eventsToString(events: ReadonlyArray<server.ProjectChangedEvent>) {
+                    return "[" + map(events, eventToString).join(",") + "]";
+                }
+
+                function verifyProjectChangedEventHandler(expectedEvents: ReadonlyArray<server.ProjectChangedEvent>) {
+                    assert.equal(projectChangedEvents.length, expectedEvents.length, `Incorrect number of events Actual: ${eventsToString(projectChangedEvents)} Expected: ${eventsToString(expectedEvents)}`);
+                    forEach(projectChangedEvents, (actualEvent, i) => {
+                        const expectedEvent = expectedEvents[i];
+                        assert.strictEqual(actualEvent.eventName, expectedEvent.eventName);
+                        assert.strictEqual(actualEvent.data.project, expectedEvent.data.project);
+                        verifyFiles("changedFiles", actualEvent.data.changedFiles, expectedEvent.data.changedFiles);
+                        verifyFiles("filesToEmit", actualEvent.data.filesToEmit, expectedEvent.data.filesToEmit);
+                    });
+
+                    // Verified the events, reset them
+                    projectChangedEvents.length = 0;
+                }
+            }
+        });
+
+        describe("when event handler is not set but session is created with canUseEvents = true", () => {
+            verifyProjectChangedEvent(createSessionThatUsesEvents);
+
+            function createSessionThatUsesEvents(host: TestServerHost): ProjectChangeEventVerifier {
+                const session = createSession(host, { canUseEvents: true });
+
+                return {
+                    session,
+                    verifyProjectChangedEventHandler,
+                    verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectChangedEventHandler)
+                };
+
+                function verifyProjectChangedEventHandler(expected: ReadonlyArray<server.ProjectChangedEvent>) {
+                    const expectedEvents: protocol.ProjectChangedEventBody[] = map(expected, e => {
+                        return {
+                            projectName: e.data.project.getProjectName(),
+                            changedFiles: e.data.changedFiles,
+                            fileNamesToEmit: e.data.filesToEmit
+                        };
+                    });
+                    const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
+                    const events: protocol.ProjectStructureChangedEvent[] = filter(
+                        map(
+                            host.getOutput(), s => convertToObject(
+                                ts.parseJsonText("json.json", s.replace(outputEventRegex, "")),
+                                []
+                            )
+                        ),
+                        e => e.event === server.ProjectChangedEvent
+                    );
+                    assert.equal(events.length, expectedEvents.length, `Incorrect number of events Actual: ${map(events, e => e.body)} Expected: ${expectedEvents}`);
+                    forEach(events, (actualEvent, i) => {
+                        const expectedEvent = expectedEvents[i];
+                        assert.strictEqual(actualEvent.body.projectName, expectedEvent.projectName);
+                        verifyFiles("changedFiles", actualEvent.body.changedFiles, expectedEvent.changedFiles);
+                        verifyFiles("fileNamesToEmit", actualEvent.body.fileNamesToEmit, expectedEvent.fileNamesToEmit);
+                    });
+
+                    // Verified the events, reset them
+                    host.clearOutput();
+                }
+            }
         });
     });
 }

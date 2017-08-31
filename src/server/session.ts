@@ -332,14 +332,18 @@ namespace ts.server {
 
         private defaultEventHandler(event: ProjectServiceEvent) {
             switch (event.eventName) {
-                case ContextEvent:
-                    const { project, fileName } = event.data;
-                    this.projectService.logger.info(`got context event, updating diagnostics for ${fileName}`);
-                    this.errorCheck.startNew(next => this.updateErrorCheck(next, [{ fileName, project }], 100));
+                case ProjectChangedEvent:
+                    const { project, filesToEmit, changedFiles } = event.data;
+                    this.projectChangedEvent(project, filesToEmit, changedFiles);
                     break;
                 case ConfigFileDiagEvent:
-                    const { triggerFile, configFileName, diagnostics } = event.data;
-                    this.configFileDiagnosticEvent(triggerFile, configFileName, diagnostics);
+                    const { triggerFile, configFileName: configFile, diagnostics } = event.data;
+                    const bakedDiags = map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
+                    this.event<protocol.ConfigFileDiagnosticEventBody>({
+                        triggerFile,
+                        configFile,
+                        diagnostics: bakedDiags
+                    }, "configFileDiag");
                     break;
                 case ProjectLanguageServiceStateEvent: {
                     const eventName: protocol.ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
@@ -357,6 +361,24 @@ namespace ts.server {
                     }, eventName);
                     break;
                 }
+            }
+        }
+
+        private projectChangedEvent(project: Project, fileNamesToEmit: string[], changedFiles: string[]): void {
+            this.projectService.logger.info(`got project changed event, updating diagnostics for ${changedFiles}`);
+            if (changedFiles.length) {
+                const checkList = this.createCheckList(changedFiles, project);
+
+                // For now only queue error checking for open files. We can change this to include non open files as well
+                this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
+
+
+                // Send project changed event
+                this.event<protocol.ProjectChangedEventBody>({
+                    projectName: project.getProjectName(),
+                    changedFiles,
+                    fileNamesToEmit
+                }, "projectChanged");
             }
         }
 
@@ -379,21 +401,6 @@ namespace ts.server {
                 return;
             }
             this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
-        }
-
-        public configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ReadonlyArray<Diagnostic>) {
-            const bakedDiags = map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
-            const ev: protocol.ConfigFileDiagnosticEvent = {
-                seq: 0,
-                type: "event",
-                event: "configFileDiag",
-                body: {
-                    triggerFile,
-                    configFile,
-                    diagnostics: bakedDiags
-                }
-            };
-            this.send(ev);
         }
 
         public event<T>(info: T, eventName: string) {
@@ -1257,13 +1264,16 @@ namespace ts.server {
             }
         }
 
-        private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
-            const checkList = mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
+        private createCheckList(fileNames: string[], defaultProject?: Project): PendingErrorCheck[] {
+            return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
-                const project = this.projectService.getDefaultProjectForFile(fileName, /*refreshInferredProjects*/ true);
+                const project = defaultProject || this.projectService.getDefaultProjectForFile(fileName, /*refreshInferredProjects*/ true);
                 return project && { fileName, project };
             });
+        }
 
+        private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+            const checkList = this.createCheckList(fileNames);
             if (checkList.length > 0) {
                 this.updateErrorCheck(next, checkList, delay);
             }
