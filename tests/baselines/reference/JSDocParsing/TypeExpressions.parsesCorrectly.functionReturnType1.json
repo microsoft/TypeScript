@@ -5,10 +5,11 @@
     "flags": "JSDoc",
     "parameters": {
         "0": {
-            "kind": "Parameter",
+            "kind": "JSDocFunctionTypeParameter",
             "pos": 10,
             "end": 16,
             "flags": "JSDoc",
+            "sort": 0,
             "type": {
                 "kind": "StringKeyword",
                 "pos": 10,
@@ -17,10 +18,11 @@
             }
         },
         "1": {
-            "kind": "Parameter",
+            "kind": "JSDocFunctionTypeParameter",
             "pos": 17,
             "end": 25,
             "flags": "JSDoc",
+            "sort": 0,
             "type": {
                 "kind": "BooleanKeyword",
                 "pos": 17,

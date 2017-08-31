@@ -274,13 +274,16 @@ namespace ts {
                     return (hasModifier(node, ModifierFlags.Default) ? InternalSymbolName.Default : undefined);
                 case SyntaxKind.JSDocFunctionType:
                     return (isJSDocConstructSignature(node) ? InternalSymbolName.New : InternalSymbolName.Call);
-                case SyntaxKind.Parameter:
-                    // Parameters with names are handled at the top of this function.  Parameters
-                    // without names can only come from JSDocFunctionTypes.
-                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
-                    const functionType = <JSDocFunctionType>node.parent;
-                    const index = indexOf(functionType.parameters, node);
-                    return "arg" + index as __String;
+                case SyntaxKind.JSDocFunctionTypeParameter:
+                    const { sort, parent } = node as JSDocFunctionTypeParameterDeclaration;
+                    switch (sort) {
+                        case JSDocFunctionTypeParameterSort.New:
+                            return "new" as __String;
+                        case JSDocFunctionTypeParameterSort.This:
+                            return "this" as __String;
+                        default:
+                            return "arg" + indexOf(parent.parameters, node) as __String;
+                    }
                 case SyntaxKind.JSDocTypedefTag:
                     const parentNode = node.parent && node.parent.parent;
                     let nameFromParentNode: __String;
@@ -2047,6 +2050,8 @@ namespace ts {
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
+                    case SyntaxKind.JSDocFunctionTypeParameter:
+                        return declareSymbolAndAddToSymbolTable(node as JSDocFunctionTypeParameterDeclaration, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 case SyntaxKind.VariableDeclaration:
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration>node);
                 case SyntaxKind.BindingElement:

@@ -5,10 +5,11 @@
     "flags": "JSDoc",
     "parameters": {
         "0": {
-            "kind": "Parameter",
+            "kind": "JSDocFunctionTypeParameter",
             "pos": 10,
             "end": 11,
             "flags": "JSDoc",
+            "sort": 0,
             "type": {
                 "kind": "TypeReference",
                 "pos": 10,

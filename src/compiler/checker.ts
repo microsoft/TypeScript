@@ -2874,7 +2874,7 @@ namespace ts {
             }
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext): ParameterDeclaration {
-                const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+                const parameterDeclaration = parameterSymbol.valueDeclaration as ParameterDeclaration | JSDocFunctionTypeParameterDeclaration;
                 if (isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) {
                     // special-case synthetic rest parameters in JS files
                     return createParameter(
@@ -2888,15 +2888,15 @@ namespace ts {
                 }
                 const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
                 const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
-                const name = parameterDeclaration.name ?
+                const name = parameterDeclaration.kind === SyntaxKind.Parameter ?
                     parameterDeclaration.name.kind === SyntaxKind.Identifier ?
                         setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
                         cloneBindingName(parameterDeclaration.name) :
                     unescapeLeadingUnderscores(parameterSymbol.escapedName);
-                const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
+                const questionToken = parameterDeclaration.kind === SyntaxKind.Parameter && isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
-                if (isRequiredInitializedParameter(parameterDeclaration)) {
+                if (parameterDeclaration.kind === SyntaxKind.Parameter && isRequiredInitializedParameter(parameterDeclaration)) {
                     parameterType = getNullableType(parameterType, TypeFlags.Undefined);
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
@@ -5439,7 +5439,7 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
-        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
+        function createSignature(declaration: SignatureDeclaration | JSDocFunctionType, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
@@ -6363,7 +6363,7 @@ namespace ts {
             return typeArguments;
         }
 
-        function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
+        function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocFunctionType): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
@@ -6373,7 +6373,11 @@ namespace ts {
                 let hasThisParameter: boolean;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
-                const isUntypedSignatureInJSFile = !iife && !isJSConstructSignature && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration);
+                const isUntypedSignatureInJSFile = !iife &&
+                    !isJSConstructSignature &&
+                    isInJavaScriptFile(declaration) &&
+                    declaration.kind !== SyntaxKind.JSDocFunctionType &&
+                    !hasJSDocParameterTags(declaration);
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
@@ -6383,7 +6387,7 @@ namespace ts {
 
                     let paramSymbol = param.symbol;
                     // Include parameter symbol instead of property symbol in the signature
-                    if (paramSymbol && !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
+                    if (param.kind === SyntaxKind.Parameter &&  !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
                         const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, undefined, undefined);
                         paramSymbol = resolvedSymbol;
                     }
@@ -6400,10 +6404,10 @@ namespace ts {
                     }
 
                     // Record a new minimum argument count if this is not an optional parameter
-                    const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
+                    const isOptionalParameter = param.kind === SyntaxKind.Parameter && (param.initializer || param.questionToken || param.dotDotDotToken ||
                         iife && parameters.length > iife.arguments.length && !param.type ||
                         isJSDocOptionalParameter(param) ||
-                        isUntypedSignatureInJSFile;
+                        isUntypedSignatureInJSFile);
                     if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;
                     }
@@ -6423,14 +6427,14 @@ namespace ts {
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
-                const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
+                const typeParameters = classType ? classType.localTypeParameters : declaration.kind === SyntaxKind.JSDocFunctionType ? emptyArray : getTypeParametersFromDeclaration(declaration);
                 const returnType = getSignatureReturnTypeFromDeclaration(declaration, isJSConstructSignature, classType);
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
                 // JS functions get a free rest parameter if they reference `arguments`
                 let hasRestLikeParameter = hasRestParameter(declaration);
-                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && containsArgumentsReference(declaration)) {
+                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && declaration.kind !== SyntaxKind.JSDocFunctionType && containsArgumentsReference(declaration)) {
                     hasRestLikeParameter = true;
                     const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
                     syntheticArgsSymbol.type = anyArrayType;
@@ -6443,7 +6447,7 @@ namespace ts {
             return links.resolvedSignature;
         }
 
-        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration, isJSConstructSignature: boolean, classType: Type) {
+        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration | JSDocFunctionType, isJSConstructSignature: boolean, classType: Type) {
             if (isJSConstructSignature) {
                 return getTypeFromTypeNode(declaration.parameters[0].type);
             }
@@ -8596,7 +8600,7 @@ namespace ts {
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 if (target.typePredicate) {
                     if (source.typePredicate) {
-                        result &= compareTypePredicateRelatedTo(source.typePredicate, target.typePredicate, source.declaration, target.declaration, reportErrors, errorReporter, compareTypes);
+                        result &= compareTypePredicateRelatedTo(source.typePredicate, target.typePredicate, source.declaration as SignatureDeclaration, target.declaration as SignatureDeclaration, reportErrors, errorReporter, compareTypes);
                     }
                     else if (isIdentifierTypePredicate(target.typePredicate)) {
                         if (reportErrors) {
@@ -12599,11 +12603,9 @@ namespace ts {
         function getTypeForThisExpressionFromJSDoc(node: Node) {
             const jsdocType = getJSDocType(node);
             if (jsdocType && jsdocType.kind === SyntaxKind.JSDocFunctionType) {
-                const jsDocFunctionType = <JSDocFunctionType>jsdocType;
-                if (jsDocFunctionType.parameters.length > 0 &&
-                    jsDocFunctionType.parameters[0].name &&
-                    (jsDocFunctionType.parameters[0].name as Identifier).escapedText === "this") {
-                    return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
+                const { parameters } = <JSDocFunctionType>jsdocType;
+                if (parameters.length > 0 && parameters[0].sort === JSDocFunctionTypeParameterSort.This) {
+                    return getTypeFromTypeNode(parameters[0].type);
                 }
             }
         }
@@ -16712,8 +16714,8 @@ namespace ts {
             const links = getSymbolLinks(parameter);
             if (!links.type) {
                 links.type = contextualType;
-                const decl = parameter.valueDeclaration as ParameterDeclaration;
-                if (decl.name.kind !== SyntaxKind.Identifier) {
+                const decl = parameter.valueDeclaration;
+                if (isParameter(decl) && decl.name.kind !== SyntaxKind.Identifier) {
                     // if inference didn't come up with anything but {}, fall back to the binding pattern if present.
                     if (links.type === emptyObjectType) {
                         links.type = getTypeFromBindingPattern(decl.name);
@@ -18316,6 +18318,13 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function checkJSDocSignatureDeclaration(node: JSDocFunctionType) {
+            for (const parameter of node.parameters) {
+                checkSourceElement(parameter.type);
+            }
+            if (node.type) checkSourceElement(node.type);
         }
 
         function checkSignatureDeclaration(node: SignatureDeclaration) {
@@ -22395,7 +22404,7 @@ namespace ts {
                 case SyntaxKind.JSDocParameterTag:
                     return checkSourceElement((node as JSDocParameterTag).typeExpression);
                 case SyntaxKind.JSDocFunctionType:
-                    checkSignatureDeclaration(node as JSDocFunctionType);
+                    checkJSDocSignatureDeclaration(node as JSDocFunctionType);
                     // falls through
                 case SyntaxKind.JSDocVariadicType:
                 case SyntaxKind.JSDocNonNullableType:

@@ -6,5 +6,6 @@
 ////var f = function () { return new/**/; }
 
 goTo.marker();
-verify.completionListCount(115);
-verify.completionListContains('new');
+verify.completionListCount(114);
+// "new" included as a keyword, not as a parameter
+verify.completionListContains("new", "new", "", "keyword");

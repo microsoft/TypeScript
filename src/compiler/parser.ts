@@ -9,7 +9,6 @@ namespace ts {
         Type  = 1 << 2,
         RequireCompleteParameterList = 1 << 3,
         IgnoreMissingOpenBrace = 1 << 4,
-        JSDoc = 1 << 5,
     }
 
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -405,6 +404,9 @@ namespace ts {
             case SyntaxKind.JSDocFunctionType:
                 return visitNodes(cbNode, cbNodes, (<JSDocFunctionType>node).parameters) ||
                     visitNode(cbNode, (<JSDocFunctionType>node).type);
+            case SyntaxKind.JSDocFunctionTypeParameter:
+                return visitNode(cbNode, (node as JSDocFunctionTypeParameterDeclaration).dotDotDotToken) ||
+                    visitNode(cbNode, (node as JSDocFunctionTypeParameterDeclaration).type);
             case SyntaxKind.JSDocVariadicType:
                 return visitNode(cbNode, (<JSDocVariadicType>node).type);
             case SyntaxKind.JSDocComment:
@@ -2157,19 +2159,31 @@ namespace ts {
             if (lookAhead(nextTokenIsOpenParen)) {
                 const result = <JSDocFunctionType>createNode(SyntaxKind.JSDocFunctionType);
                 nextToken();
-                fillSignature(SyntaxKind.ColonToken, SignatureFlags.Type | SignatureFlags.JSDoc, result);
+                result.parameters = parseJsDocParameterList();
+                result.type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ true);
                 return finishNode(result);
             }
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseIdentifierName();
             return finishNode(node);
         }
-
-        function parseJSDocParameter(): ParameterDeclaration {
-            const parameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
+        function parseJsDocParameterList(): NodeArray<JSDocFunctionTypeParameterDeclaration> {
+            if (!parseExpected(SyntaxKind.OpenParenToken)) {
+                return createMissingList<JSDocFunctionTypeParameterDeclaration>();
+            }
+            const result = parseDelimitedList(ParsingContext.Parameters, parseJSDocParameter);
+            parseExpected(SyntaxKind.CloseParenToken);
+            return result;
+        }
+        function parseJSDocParameter(): JSDocFunctionTypeParameterDeclaration {
+            const parameter = createNode(SyntaxKind.JSDocFunctionTypeParameter) as JSDocFunctionTypeParameterDeclaration;
             if (token() === SyntaxKind.ThisKeyword || token() === SyntaxKind.NewKeyword) {
-                parameter.name = parseIdentifierName();
+                parameter.sort = token() === SyntaxKind.ThisKeyword ? JSDocFunctionTypeParameterSort.This : JSDocFunctionTypeParameterSort.New;
+                nextToken();
                 parseExpected(SyntaxKind.ColonToken);
+            }
+            else {
+                parameter.sort = JSDocFunctionTypeParameterSort.Regular;
             }
             parameter.type = parseType();
             return finishNode(parameter);
@@ -2286,9 +2300,7 @@ namespace ts {
             returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken,
             flags: SignatureFlags,
             signature: SignatureDeclaration): void {
-            if (!(flags & SignatureFlags.JSDoc)) {
-                signature.typeParameters = parseTypeParameters();
-            }
+            signature.typeParameters = parseTypeParameters();
             signature.parameters = parseParameterList(flags);
             signature.type = parseReturnType(returnToken, !!(flags & SignatureFlags.Type));
         }
@@ -2334,7 +2346,7 @@ namespace ts {
                 setYieldContext(!!(flags & SignatureFlags.Yield));
                 setAwaitContext(!!(flags & SignatureFlags.Await));
 
-                const result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
+                const result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
 
                 setYieldContext(savedYieldContext);
                 setAwaitContext(savedAwaitContext);

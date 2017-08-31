@@ -316,7 +316,7 @@ namespace ts.GoToDefinition {
         if (signature) {
             const decl = signature.declaration;
             if (decl && isSignatureDeclaration(decl)) {
-                return decl;
+                return decl as SignatureDeclaration;
             }
         }
         // Don't go to a function type, go to the value having that type.
