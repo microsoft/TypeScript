@@ -6418,7 +6418,9 @@ namespace ts {
 
                     // adjust minimum argument count for tuple-bound rest parameters. could use `length` property given #17765.
                     if (param.dotDotDotToken) {
-                        const type = getApparentType(getTypeOfSymbol(paramSymbol));
+                        // clone symbol as getTypeOfSymbol mutates
+                        const symbol = clone(paramSymbol);
+                        const type = getApparentType(getTypeOfSymbol(symbol));
                         if (isTupleLikeType(type)) {
                             minArgumentCount += getTupleLikeLength(type);
                         }
