@@ -349,13 +349,14 @@ declare namespace ts {
         JSDocTemplateTag = 286,
         JSDocTypedefTag = 287,
         JSDocPropertyTag = 288,
-        SyntaxList = 289,
-        NotEmittedStatement = 290,
-        PartiallyEmittedExpression = 291,
-        CommaListExpression = 292,
-        MergeDeclarationMarker = 293,
-        EndOfDeclarationMarker = 294,
-        Count = 295,
+        JSDocInheritDocTag = 289,
+        SyntaxList = 290,
+        NotEmittedStatement = 291,
+        PartiallyEmittedExpression = 292,
+        CommaListExpression = 293,
+        MergeDeclarationMarker = 294,
+        EndOfDeclarationMarker = 295,
+        Count = 296,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -382,9 +383,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 143,
         FirstJSDocNode = 270,
-        LastJSDocNode = 288,
+        LastJSDocNode = 289,
         FirstJSDocTagNode = 280,
-        LastJSDocTagNode = 288,
+        LastJSDocTagNode = 289,
     }
     enum NodeFlags {
         None = 0,
@@ -1471,6 +1472,9 @@ declare namespace ts {
     }
     interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+    interface JSDocInheritDocTag extends JSDocTag {
+        kind: SyntaxKind.JSDocInheritDocTag;
     }
     interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
@@ -3817,7 +3821,7 @@ declare namespace ts {
         getEscapedName(): __String;
         getName(): string;
         getDeclarations(): Declaration[] | undefined;
-        getDocumentationComment(): SymbolDisplayPart[];
+        getDocumentationComment(typeChecker?: TypeChecker): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
     interface Type {
@@ -3838,7 +3842,7 @@ declare namespace ts {
         getTypeParameters(): TypeParameter[] | undefined;
         getParameters(): Symbol[];
         getReturnType(): Type;
-        getDocumentationComment(): SymbolDisplayPart[];
+        getDocumentationComment(typeChecker?: TypeChecker): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
     interface SourceFile {

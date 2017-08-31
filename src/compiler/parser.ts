@@ -6426,6 +6426,9 @@ namespace ts {
                             case "constructor":
                                 tag = parseClassTag(atToken, tagName);
                                 break;
+                            case "inheritDoc":
+                                tag = parseInheritDocTag(atToken, tagName);
+                                break;
                             case "arg":
                             case "argument":
                             case "param":
@@ -6655,6 +6658,13 @@ namespace ts {
                     result.tagName = tagName;
                     result.typeExpression = parseJSDocTypeExpression(/*requireBraces*/ true);
                     return finishNode(result);
+                }
+
+                function parseInheritDocTag(atToken: AtToken, tagName: Identifier): JSDocInheritDocTag {
+                    const tag = <JSDocInheritDocTag>createNode(SyntaxKind.JSDocInheritDocTag, atToken.pos);
+                    tag.atToken = atToken;
+                    tag.tagName = tagName;
+                    return finishNode(tag);
                 }
 
                 function parseAugmentsTag(atToken: AtToken, tagName: Identifier): JSDocAugmentsTag {
