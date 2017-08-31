@@ -100,7 +100,6 @@ type T01 = Readonly<A | B | C | null | undefined>;
 >A : A
 >B : B
 >C : C
->null : null
 
 type T02 = Boxified<A | B[] | C | string>
 >T02 : string | Boxified<A> | Boxified<C> | Boxified<B[]>
@@ -112,12 +111,10 @@ type T02 = Boxified<A | B[] | C | string>
 type T03 = Readonly<string | number | boolean | null | undefined | void>;
 >T03 : string | number | boolean | void | null | undefined
 >Readonly : Readonly<T>
->null : null
 
 type T04 = Boxified<string | number | boolean | null | undefined | void>;
 >T04 : string | number | boolean | void | null | undefined
 >Boxified : Boxified<T>
->null : null
 
 type T05 = Partial<"hello" | "world" | 42>;
 >T05 : "hello" | "world" | 42
@@ -143,7 +140,6 @@ type T10 = BoxifiedWithSentinel<A | B | C, null>;
 >A : A
 >B : B
 >C : C
->null : null
 
 type T11 = BoxifiedWithSentinel<A | B | C, undefined>;
 >T11 : BoxifiedWithSentinel<A, undefined> | BoxifiedWithSentinel<B, undefined> | BoxifiedWithSentinel<C, undefined>

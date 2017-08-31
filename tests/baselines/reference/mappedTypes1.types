@@ -60,7 +60,6 @@ type T20 = { [P in keyof Item]: Item[P] | null };
 >Item : Item
 >Item : Item
 >P : P
->null : null
 
 type T21 = { [P in keyof Item]: Array<Item[P]> };
 >T21 : T21
@@ -93,7 +92,6 @@ type T34 = { [P in keyof undefined]: void };
 type T35 = { [P in keyof null]: void };
 >T35 : T35
 >P : P
->null : null
 
 type T36 = { [P in keyof void]: void };
 >T36 : T36

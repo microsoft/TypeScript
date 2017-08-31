@@ -3,5 +3,5 @@ class E { }
 >E : E
 
 export default E;
->E : E
+>E : typeof E
 

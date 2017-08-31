@@ -1,6 +1,6 @@
 === tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface2.ts ===
 export = Foo;
->Foo : Foo<T>
+>Foo : typeof Foo
 
 interface Foo<T> {
 >Foo : Foo<T>

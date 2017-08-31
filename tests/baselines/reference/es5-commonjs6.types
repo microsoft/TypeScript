@@ -1,5 +1,7 @@
 === tests/cases/compiler/es5-commonjs6.ts ===
 export default "test";
+>"test" : "test"
+
 var __esModule = 1;
 >__esModule : number
 >1 : 1

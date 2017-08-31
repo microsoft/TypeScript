@@ -6,7 +6,7 @@ declare class Foo {
 >member : string
 }
 export = Foo;
->Foo : Foo
+>Foo : typeof Foo
 
 === tests/cases/compiler/a.ts ===
 import Foo from "./b";

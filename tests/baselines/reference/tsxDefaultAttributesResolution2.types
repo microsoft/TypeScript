@@ -7,7 +7,6 @@ interface Prop {
 
     x: true;
 >x : true
->true : true
 }
 class Poisoned extends React.Component<Prop, {}> {
 >Poisoned : Poisoned

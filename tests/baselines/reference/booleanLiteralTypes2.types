@@ -1,13 +1,9 @@
 === tests/cases/conformance/types/literal/booleanLiteralTypes2.ts ===
 type A1 = true | false;
 >A1 : boolean
->true : true
->false : false
 
 type A2 = false | true;
 >A2 : boolean
->false : false
->true : true
 
 function f1() {
 >f1 : () => void
@@ -22,20 +18,14 @@ function f1() {
 
     var a: true | false;
 >a : boolean
->true : true
->false : false
 
     var a: false | true;
 >a : boolean
->false : false
->true : true
 }
 
 function f2(a: true | false, b: boolean) {
 >f2 : (a: boolean, b: boolean) => void
 >a : boolean
->true : true
->false : false
 >b : boolean
 
     a = b;
@@ -52,11 +42,7 @@ function f2(a: true | false, b: boolean) {
 function f3(a: true | false, b: true | false) {
 >f3 : (a: boolean, b: boolean) => void
 >a : boolean
->true : true
->false : false
 >b : boolean
->true : true
->false : false
 
     var x = a || b;
 >x : boolean
@@ -79,9 +65,7 @@ function f3(a: true | false, b: true | false) {
 function f4(t: true, f: false) {
 >f4 : (t: true, f: false) => void
 >t : true
->true : true
 >f : false
->false : false
 
     var x1 = t && f;
 >x1 : boolean
@@ -121,12 +105,10 @@ function f4(t: true, f: false) {
 declare function g(x: true): string;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
 >x : true
->true : true
 
 declare function g(x: false): boolean;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
 >x : false
->false : false
 
 declare function g(x: boolean): number;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
@@ -168,8 +150,6 @@ function assertNever(x: never): never {
 function f10(x: true | false) {
 >f10 : (x: boolean) => "true" | "false"
 >x : boolean
->true : true
->false : false
 
     switch (x) {
 >x : boolean
@@ -187,8 +167,6 @@ function f10(x: true | false) {
 function f11(x: true | false) {
 >f11 : (x: boolean) => "true" | "false"
 >x : boolean
->true : true
->false : false
 
     switch (x) {
 >x : boolean
@@ -210,8 +188,6 @@ function f11(x: true | false) {
 function f12(x: true | false) {
 >f12 : (x: boolean) => void
 >x : boolean
->true : true
->false : false
 
     if (x) {
 >x : boolean
@@ -228,8 +204,6 @@ function f12(x: true | false) {
 function f13(x: true | false) {
 >f13 : (x: boolean) => void
 >x : boolean
->true : true
->false : false
 
     if (x === true) {
 >x === true : boolean
@@ -250,12 +224,10 @@ type Item =
 
     { kind: true, a: string } |
 >kind : true
->true : true
 >a : string
 
     { kind: false, b: string };
 >kind : false
->false : false
 >b : string
 
 function f20(x: Item) {

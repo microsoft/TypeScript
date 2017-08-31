@@ -3,7 +3,7 @@ import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass
 >Foo : typeof Foo
 
 export = Bar;
->Bar : Bar
+>Bar : any
 
 interface Bar {
 >Bar : Bar
@@ -14,7 +14,7 @@ interface Bar {
 }
 === tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
 export = Foo;
->Foo : Foo<A>
+>Foo : typeof Foo
 
 class Foo<A> {
 >Foo : Foo<A>

@@ -18,5 +18,5 @@ const enum E {
 }
 
 export = E
->E : E
+>E : typeof E
 

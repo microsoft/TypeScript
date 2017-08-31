@@ -63,5 +63,5 @@ export { a, b, c, d, e1, e2, f1, f2 };
 
 === tests/cases/conformance/es6/modules/t1.ts ===
 export default "hello";
-No type information for this code.
-No type information for this code.
+>"hello" : "hello"
+

@@ -4,5 +4,5 @@ import b from "./b";
 
 === /b/index.ts ===
 export default 0;
-No type information for this code.
-No type information for this code.
+>0 : 0
+

@@ -29,5 +29,5 @@ var server = new Date();
 >Date : DateConstructor
 
 export = server;
->server : server
+>server : Date
 

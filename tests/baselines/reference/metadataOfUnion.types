@@ -24,7 +24,6 @@ class B {
 
     y: true | boolean;
 >y : boolean
->true : true
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void

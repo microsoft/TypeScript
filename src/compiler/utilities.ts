@@ -1207,107 +1207,27 @@ namespace ts {
     }
 
     export function isPartOfExpression(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.SuperKeyword:
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.TrueKeyword:
-            case SyntaxKind.FalseKeyword:
-            case SyntaxKind.RegularExpressionLiteral:
-            case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.ObjectLiteralExpression:
-            case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression:
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-            case SyntaxKind.TaggedTemplateExpression:
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.NonNullExpression:
-            case SyntaxKind.ParenthesizedExpression:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.VoidExpression:
-            case SyntaxKind.DeleteExpression:
-            case SyntaxKind.TypeOfExpression:
-            case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.PostfixUnaryExpression:
-            case SyntaxKind.BinaryExpression:
-            case SyntaxKind.ConditionalExpression:
-            case SyntaxKind.SpreadElement:
-            case SyntaxKind.TemplateExpression:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.OmittedExpression:
-            case SyntaxKind.JsxElement:
-            case SyntaxKind.JsxSelfClosingElement:
-            case SyntaxKind.YieldExpression:
-            case SyntaxKind.AwaitExpression:
-            case SyntaxKind.MetaProperty:
-                return true;
-            case SyntaxKind.QualifiedName:
-                while (node.parent.kind === SyntaxKind.QualifiedName) {
-                    node = node.parent;
-                }
-                return node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node);
-            case SyntaxKind.Identifier:
-                if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
-                    return true;
-                }
-                // falls through
-            case SyntaxKind.NumericLiteral:
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.ThisKeyword:
-                const parent = node.parent;
-                switch (parent.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.BindingElement:
-                        return (<VariableLikeDeclaration>parent).initializer === node;
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.ThrowStatement:
-                        return (<ExpressionStatement>parent).expression === node;
-                    case SyntaxKind.ForStatement:
-                        const forStatement = <ForStatement>parent;
-                        return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forStatement.condition === node ||
-                            forStatement.incrementor === node;
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                        const forInStatement = <ForInStatement | ForOfStatement>parent;
-                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forInStatement.expression === node;
-                    case SyntaxKind.TypeAssertionExpression:
-                    case SyntaxKind.AsExpression:
-                        return node === (<AssertionExpression>parent).expression;
-                    case SyntaxKind.TemplateSpan:
-                        return node === (<TemplateSpan>parent).expression;
-                    case SyntaxKind.ComputedPropertyName:
-                        return node === (<ComputedPropertyName>parent).expression;
-                    case SyntaxKind.Decorator:
-                    case SyntaxKind.JsxExpression:
-                    case SyntaxKind.JsxSpreadAttribute:
-                    case SyntaxKind.SpreadAssignment:
-                        return true;
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
-                    default:
-                        if (isPartOfExpression(parent)) {
-                            return true;
-                        }
-                }
+        // For historical reasons, many tokens are not considered part of an expression, even
+        // if, by heirarchy, they ought to be
+        if (isToken(node)) {
+            switch (node.kind) {
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                    break;
+                default:
+                    return false;
+            }
         }
-        return false;
+        return (node.flags & NodeFlags.ExpressionContext) !== 0;
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node) {

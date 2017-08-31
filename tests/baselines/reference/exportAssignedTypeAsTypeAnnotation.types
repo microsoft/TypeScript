@@ -18,5 +18,5 @@ interface x {
 >foo : string
 }
 export = x;
->x : x
+>x : any
  

@@ -47,7 +47,7 @@ class D { foo: string; }
 >foo : string
 
 export = D;
->D : D
+>D : typeof D
 
 === tests/cases/compiler/externalModuleAssignToVar_core_require.ts ===
 export class C { bar: string; }
@@ -60,5 +60,5 @@ class C { baz: string; }
 >baz : string
 
 export = C;
->C : C
+>C : typeof C
 

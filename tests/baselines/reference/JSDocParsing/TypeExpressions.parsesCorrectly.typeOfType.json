@@ -7,7 +7,7 @@
         "kind": "Identifier",
         "pos": 7,
         "end": 9,
-        "flags": "JSDoc",
+        "flags": "JSDoc | ExpressionContext | TypeExcludesFlags | ContextFlags",
         "escapedText": "M"
     }
 }

@@ -118,7 +118,6 @@ function foo4(x: string | undefined = undefined, b: number) {
 
 type OptionalNullableString = string | null | undefined;
 >OptionalNullableString : OptionalNullableString
->null : null
 
 function allowsNull(val: OptionalNullableString = "") {
 >allowsNull : (val?: OptionalNullableString) => void

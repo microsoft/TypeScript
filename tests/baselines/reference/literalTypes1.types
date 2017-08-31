@@ -79,8 +79,6 @@ function f2(x: 0 | 1 | 2) {
 
 type Falsy = false | 0 | "" | null | undefined;
 >Falsy : Falsy
->false : false
->null : null
 
 function f3(x: Falsy) {
 >f3 : (x: Falsy) => void
@@ -102,7 +100,6 @@ function f3(x: Falsy) {
 function f4(x: 0 | 1 | true | string) {
 >f4 : (x: string | true | 0 | 1) => void
 >x : string | true | 0 | 1
->true : true
 
     switch (x) {
 >x : string | true | 0 | 1

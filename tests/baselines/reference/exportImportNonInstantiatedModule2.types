@@ -14,7 +14,7 @@ export function w(): e.w { // Should be OK
 }
 === tests/cases/compiler/w1.ts ===
 export = Widget1
->Widget1 : Widget1
+>Widget1 : any
 
 interface Widget1 { name: string; }
 >Widget1 : Widget1

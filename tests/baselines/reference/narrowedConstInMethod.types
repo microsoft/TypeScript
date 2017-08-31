@@ -5,7 +5,6 @@ function f() {
 
     const x: string | null = <any>{};
 >x : string | null
->null : null
 ><any>{} : any
 >{} : {}
 
@@ -32,7 +31,6 @@ function f2() {
 
     const x: string | null = <any>{};
 >x : string | null
->null : null
 ><any>{} : any
 >{} : {}
 

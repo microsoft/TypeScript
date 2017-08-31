@@ -35,5 +35,5 @@ class TesterB {
 >me : string
 }
 export = TesterB;
->TesterB : TesterB
+>TesterB : typeof TesterB
 

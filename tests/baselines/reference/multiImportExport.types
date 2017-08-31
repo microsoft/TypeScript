@@ -45,5 +45,5 @@ class Adder {
 }
 
 export = Adder;
->Adder : Adder
+>Adder : typeof Adder
 

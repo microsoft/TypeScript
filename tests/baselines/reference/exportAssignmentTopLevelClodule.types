@@ -31,5 +31,5 @@ module Foo {
 >42 : 42
 }
 export = Foo;
->Foo : Foo
+>Foo : typeof Foo
 

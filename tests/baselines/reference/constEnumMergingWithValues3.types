@@ -12,5 +12,5 @@ module foo {
 }
 
 export = foo
->foo : foo
+>foo : typeof foo
 

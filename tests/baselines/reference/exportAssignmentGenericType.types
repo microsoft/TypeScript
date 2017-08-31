@@ -23,5 +23,5 @@ class Foo<T>{
 >T : T
 }
 export = Foo;
->Foo : Foo<T>
+>Foo : typeof Foo
 

@@ -14,7 +14,7 @@ class x{}
 >x : x
 
 export = x; 
->x : x
+>x : typeof x
 
 === tests/cases/conformance/externalModules/foo2.ts ===
 import foo1 = require('./foo1');

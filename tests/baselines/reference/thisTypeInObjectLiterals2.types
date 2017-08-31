@@ -143,7 +143,6 @@ let p1: Point = {
 let p2: Point | null = {
 >p2 : Point | null
 >Point : Point
->null : null
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
@@ -244,7 +243,6 @@ let p3: Point | undefined = {
 let p4: Point | null | undefined = {
 >p4 : Point | null | undefined
 >Point : Point
->null : null
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
@@ -351,7 +349,6 @@ declare function f2(p: Point | null | undefined): void;
 >f2 : (p: Point | null | undefined) => void
 >p : Point | null | undefined
 >Point : Point
->null : null
 
 f2({
 >f2({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void

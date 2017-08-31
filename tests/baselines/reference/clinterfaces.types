@@ -48,5 +48,5 @@ interface Bar<T> {
 }
 
 export = Foo;
->Foo : Foo<T>
+>Foo : typeof Foo
 

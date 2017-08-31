@@ -10,7 +10,7 @@ namespace foo {
 >1 : 1
 }
 export = foo;
->foo : foo
+>foo : typeof foo
 
 === tests/cases/compiler/file2.ts ===
 import x = require("./file1"); 

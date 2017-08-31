@@ -7,12 +7,12 @@ class Bar extends Error {}
 >Error : Error
 
 export = Bar;
->Bar : Bar
+>Bar : typeof Bar
 
 === tests/cases/compiler/Foo.ts ===
 class Foo {}
 >Foo : Foo
 
 export = Foo;
->Foo : Foo
+>Foo : typeof Foo
 

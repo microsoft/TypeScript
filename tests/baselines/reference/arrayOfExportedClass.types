@@ -25,7 +25,7 @@ class Road {
 }
 
 export = Road;
->Road : Road
+>Road : typeof Road
 
 === tests/cases/compiler/arrayOfExportedClass_0.ts ===
 class Car {
@@ -36,5 +36,5 @@ class Car {
 }
 
 export = Car;
->Car : Car
+>Car : typeof Car
 

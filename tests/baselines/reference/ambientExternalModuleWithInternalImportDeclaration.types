@@ -27,7 +27,7 @@ declare module 'M' {
 >C : C
 
     export = X;
->X : C
+>X : typeof C
 
 }
 

@@ -25,11 +25,9 @@ type T08 = undefined & never;
 
 type T09 = null | never;
 >T09 : null
->null : null
 
 type T10 = null & never;
 >T10 : never
->null : null
 
 type T11 = { a: string } | never;
 >T11 : { a: string; }

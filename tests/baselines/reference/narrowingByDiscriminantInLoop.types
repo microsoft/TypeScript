@@ -158,7 +158,6 @@ interface A {
 
     kind: true;
 >kind : true
->true : true
 
     prop: { a: string; };
 >prop : { a: string; }
@@ -170,7 +169,6 @@ interface B {
 
     kind: false;
 >kind : false
->false : false
 
     prop: { b: string; }
 >prop : { b: string; }
