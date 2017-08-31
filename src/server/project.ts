@@ -789,6 +789,7 @@ namespace ts.server {
         private updateGraphWorker() {
             const oldProgram = this.program;
 
+            this.writeLog(`Starting Update graph worker: Project: ${this.getProjectName()}`);
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram();
             this.resolutionCache.finishCachingPerDirectoryResolution();
@@ -843,6 +844,7 @@ namespace ts.server {
                     }
                 });
 
+            this.writeLog(`Finishing Update graph worker: Project: ${this.getProjectName()}`);
             return hasChanges;
         }
 
