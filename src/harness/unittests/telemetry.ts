@@ -11,18 +11,24 @@ namespace ts.projectSystem {
         });
 
         it("only sends an event once", () => {
-            const file = makeFile("/a.ts");
-            const tsconfig = makeFile("/tsconfig.json", {});
+            const file = makeFile("/a/a.ts");
+            const file2 = makeFile("/b.ts");
+            const tsconfig = makeFile("/a/tsconfig.json", {});
 
-            const et = new EventTracker([file, tsconfig]);
+            const et = new EventTracker([file, file2, tsconfig]);
             et.service.openClientFile(file.path);
-            et.assertProjectInfoTelemetryEvent({});
+            et.assertProjectInfoTelemetryEvent({}, tsconfig.path);
 
             et.service.closeClientFile(file.path);
-            checkNumberOfProjects(et.service, { configuredProjects: 0 });
+            checkNumberOfProjects(et.service, { configuredProjects: 1 });
+
+            et.service.openClientFile(file2.path);
+            checkNumberOfProjects(et.service, { inferredProjects: 1 });
+
+            assert.equal(et.getEvents().length, 0);
 
             et.service.openClientFile(file.path);
-            checkNumberOfProjects(et.service, { configuredProjects: 1 });
+            checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
 
             assert.equal(et.getEvents().length, 0);
         });
@@ -249,9 +255,9 @@ namespace ts.projectSystem {
             return events;
         }
 
-        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>): void {
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
             assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
-                projectId: Harness.mockHash("/tsconfig.json"),
+                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
                 extends: false,
