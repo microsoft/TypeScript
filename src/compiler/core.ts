@@ -387,6 +387,20 @@ namespace ts {
         return result;
     }
 
+    export function mapDefined<T, U>(array: ReadonlyArray<T> | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
+        const result: U[] = [];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const mapped = mapFn(item, i);
+                if (mapped !== undefined) {
+                    result.push(mapped);
+                }
+            }
+        }
+        return result;
+    }
+
     // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;
@@ -405,6 +419,36 @@ namespace ts {
                         result.push(mapped);
                     }
                 }
+            }
+        }
+        return result || array;
+    }
+
+    // Maps from T to T and avoids allocation if all elements map to themselves. Undefined elements are not added.
+    export function sameMapDefined<T>(array: (T | undefined)[], f: (x: T, i: number) => T | undefined): T[] | undefined;
+    export function sameMapDefined<T>(array: ReadonlyArray<T | undefined>, f: (x: T, i: number) => T | undefined): ReadonlyArray<T> | undefined;
+    export function sameMapDefined<T>(array: (T | undefined)[], f: (x: T, i: number) => T | undefined): T[] | undefined {
+        let result: T[];
+        if (array) {
+            let lastUndefinedOffset = -1;
+            for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const mapped = item !== undefined ? f(item, i) : undefined;
+                if (result) {
+                    if (mapped !== undefined) {
+                        result.push(mapped);
+                    }
+                }
+                else if (mapped === undefined) {
+                    lastUndefinedOffset = i;
+                }
+                else if (item !== mapped) {
+                    result = array.slice(lastUndefinedOffset + 1, i);
+                    result.push(mapped);
+                }
+            }
+            if (!result && lastUndefinedOffset > -1) {
+                return undefined;
             }
         }
         return result || array;
@@ -499,20 +543,6 @@ namespace ts {
             }
         }
         return result || array;
-    }
-
-    export function mapDefined<T, U>(array: ReadonlyArray<T> | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
-        const result: U[] = [];
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                const item = array[i];
-                const mapped = mapFn(item, i);
-                if (mapped !== undefined) {
-                    result.push(mapped);
-                }
-            }
-        }
-        return result;
     }
 
     /**

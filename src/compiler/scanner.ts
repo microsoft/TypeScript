@@ -62,6 +62,7 @@ namespace ts {
         "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
+        "awaited": SyntaxKind.AwaitedKeyword,
         "boolean": SyntaxKind.BooleanKeyword,
         "break": SyntaxKind.BreakKeyword,
         "case": SyntaxKind.CaseKeyword,
