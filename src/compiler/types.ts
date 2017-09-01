@@ -636,6 +636,7 @@ namespace ts {
 
     export interface Decorator extends Node {
         kind: SyntaxKind.Decorator;
+        parent?: NamedDeclaration;
         expression: LeftHandSideExpression;
     }
 
@@ -762,6 +763,7 @@ namespace ts {
 
     export interface SpreadAssignment extends ObjectLiteralElement {
         kind: SyntaxKind.SpreadAssignment;
+        parent?: ObjectLiteralExpression;
         expression: Expression;
     }
 
@@ -778,7 +780,7 @@ namespace ts {
     export interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
-        name?: DeclarationName; // May be missing for ParameterDeclaration, see comment there
+        name: DeclarationName;
         questionToken?: QuestionToken;
         type?: TypeNode;
         initializer?: Expression;
@@ -942,6 +944,7 @@ namespace ts {
 
     export interface TypePredicateNode extends TypeNode {
         kind: SyntaxKind.TypePredicate;
+        parent?: SignatureDeclaration;
         parameterName: Identifier | ThisTypeNode;
         type: TypeNode;
     }
@@ -998,7 +1001,6 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        parent?: TypeAliasDeclaration;
         readonlyToken?: ReadonlyToken;
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken;
@@ -1450,6 +1452,7 @@ namespace ts {
 
     export interface SpreadElement extends Expression {
         kind: SyntaxKind.SpreadElement;
+        parent?: ArrayLiteralExpression | CallExpression | NewExpression;
         expression: Expression;
     }
 
