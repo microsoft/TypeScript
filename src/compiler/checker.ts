@@ -9790,7 +9790,7 @@ namespace ts {
          * getTypeReferenceId(A<T, number, U>) returns "111=0-12=1"
          *   where A.id=111 and number.id=12
          */
-        function getTypeReferenceId(type: TypeReference, typeParameters: Type[]) {
+        function getTypeReferenceId(type: TypeReference, typeParameters: Type[], depth = 0) {
             let result = "" + type.target.id;
             for (const t of type.typeArguments) {
                 if (isUnconstrainedTypeParameter(t)) {
@@ -9801,8 +9801,8 @@ namespace ts {
                     }
                     result += "=" + index;
                 }
-                else if (isTypeReferenceWithGenericArguments(t)) {
-                    result += "<" + getTypeReferenceId(t, typeParameters) + ">";
+                else if (depth < 4 && isTypeReferenceWithGenericArguments(t)) {
+                    result += "<" + getTypeReferenceId(t, typeParameters, depth + 1) + ">";
                 }
                 else {
                     result += "-" + t.id;
