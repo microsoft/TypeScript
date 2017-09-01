@@ -69,20 +69,21 @@ namespace ts {
         }
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
-                return visitNode(cbNode, (<QualifiedName>node).left) ||
-                    visitNode(cbNode, (<QualifiedName>node).right);
-            case SyntaxKind.TypeParameter:
-                return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
-            case SyntaxKind.ShorthandPropertyAssignment:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).name) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
+                const { left, right } = node as QualifiedName;
+                return visitNode(cbNode, left) || visitNode(cbNode, right);
+            case SyntaxKind.TypeParameter: {
+                const { name, constraint, default: d, expression } = node as TypeParameterDeclaration;
+                return visitNode(cbNode, name) || visitNode(cbNode, constraint) || visitNode(cbNode, d) || visitNode(cbNode, expression);
+            }
+            case SyntaxKind.ShorthandPropertyAssignment: {
+                const { decorators, modifiers, name, questionToken, equalsToken, objectAssignmentInitializer } = node as ShorthandPropertyAssignment;
+                return visitNodes(cbNode, cbNodes, decorators) ||
+                    visitNodes(cbNode, cbNodes, modifiers) ||
+                    visitNode(cbNode, name) ||
+                    visitNode(cbNode, questionToken) ||
+                    visitNode(cbNode, equalsToken) ||
+                    visitNode(cbNode, objectAssignmentInitializer);
+            }
             case SyntaxKind.SpreadAssignment:
                 return visitNode(cbNode, (<SpreadAssignment>node).expression);
             case SyntaxKind.Parameter:
@@ -90,25 +91,29 @@ namespace ts {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.BindingElement:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).propertyName) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).name) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<VariableLikeDeclaration>node).initializer);
+            case SyntaxKind.BindingElement: {
+                const { decorators, modifiers, propertyName, dotDotDotToken, name, questionToken, type, initializer } = node as VariableLikeDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) ||
+                    visitNodes(cbNode, cbNodes, modifiers) ||
+                    visitNode(cbNode, propertyName) ||
+                    visitNode(cbNode, dotDotDotToken) ||
+                    visitNode(cbNode, name) ||
+                    visitNode(cbNode, questionToken) ||
+                    visitNode(cbNode, type) ||
+                    visitNode(cbNode, initializer);
+            }
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
-            case SyntaxKind.IndexSignature:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<SignatureDeclaration>node).type);
+            case SyntaxKind.IndexSignature: {
+                const { decorators, modifiers, typeParameters, parameters, type } = node as SignatureDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) ||
+                    visitNodes(cbNode, cbNodes, modifiers) ||
+                    visitNodes(cbNode, cbNodes, typeParameters) ||
+                    visitNodes(cbNode, cbNodes, parameters) ||
+                    visitNode(cbNode, type);
+            }
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -117,22 +122,26 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).asteriskToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).name) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).questionToken) ||
-                    visitNodes(cbNode, cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
-            case SyntaxKind.TypeReference:
-                return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
-                    visitNodes(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments);
-            case SyntaxKind.TypePredicate:
-                return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
-                    visitNode(cbNode, (<TypePredicateNode>node).type);
+                // TODO: invalid cast
+                const { decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, equalsGreaterThanToken, body } = node as ArrowFunction;
+                return visitNodes(cbNode, cbNodes, decorators) ||
+                    visitNodes(cbNode, cbNodes, modifiers) ||
+                    visitNode(cbNode, asteriskToken) ||
+                    visitNode(cbNode, name) ||
+                    visitNode(cbNode, questionToken) ||
+                    visitNodes(cbNode, cbNodes, typeParameters) ||
+                    visitNodes(cbNode, cbNodes, parameters) ||
+                    visitNode(cbNode, type) ||
+                    visitNode(cbNode, equalsGreaterThanToken) ||
+                    visitNode(cbNode, body);
+            case SyntaxKind.TypeReference: {
+                const { typeName, typeArguments } = node as TypeReferenceNode;
+                return visitNode(cbNode, typeName) || visitNodes(cbNode, cbNodes, typeArguments);
+            }
+            case SyntaxKind.TypePredicate: {
+                const { parameterName, type } = node as TypePredicateNode;
+                return visitNode(cbNode, parameterName) || visitNode(cbNode, type);
+            }
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
             case SyntaxKind.TypeLiteral:
@@ -147,14 +156,14 @@ namespace ts {
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
-            case SyntaxKind.IndexedAccessType:
-                return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
-                    visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
-            case SyntaxKind.MappedType:
-                return visitNode(cbNode, (<MappedTypeNode>node).readonlyToken) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).type);
+            case SyntaxKind.IndexedAccessType: {
+                const { objectType, indexType } = node as IndexedAccessTypeNode;
+                return visitNode(cbNode, objectType) || visitNode(cbNode, indexType);
+            }
+            case SyntaxKind.MappedType: {
+                const { readonlyToken, typeParameter, questionToken, type } = node as MappedTypeNode;
+                return visitNode(cbNode, readonlyToken) || visitNode(cbNode, typeParameter) || visitNode(cbNode, questionToken) || visitNode(cbNode, type);
+            }
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -164,23 +173,27 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<ArrayLiteralExpression>node).elements);
             case SyntaxKind.ObjectLiteralExpression:
                 return visitNodes(cbNode, cbNodes, (<ObjectLiteralExpression>node).properties);
-            case SyntaxKind.PropertyAccessExpression:
-                return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
-                    visitNode(cbNode, (<PropertyAccessExpression>node).name);
-            case SyntaxKind.ElementAccessExpression:
-                return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
-                    visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
+            case SyntaxKind.PropertyAccessExpression: {
+                const { expression, name } = node as PropertyAccessExpression;
+                return visitNode(cbNode, expression) || visitNode(cbNode, name);
+            }
+            case SyntaxKind.ElementAccessExpression: {
+                const { expression, argumentExpression } = node as ElementAccessExpression;
+                return visitNode(cbNode, expression) || visitNode(cbNode, argumentExpression);
+            }
             case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-                return visitNode(cbNode, (<CallExpression>node).expression) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).typeArguments) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
-            case SyntaxKind.TaggedTemplateExpression:
-                return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
-                    visitNode(cbNode, (<TaggedTemplateExpression>node).template);
-            case SyntaxKind.TypeAssertionExpression:
-                return visitNode(cbNode, (<TypeAssertion>node).type) ||
-                    visitNode(cbNode, (<TypeAssertion>node).expression);
+            case SyntaxKind.NewExpression: {
+                const { expression, typeArguments, arguments: args } = node as CallExpression | NewExpression;
+                return visitNode(cbNode, expression) || visitNodes(cbNode, cbNodes, typeArguments) || visitNodes(cbNode, cbNodes, args);
+            }
+            case SyntaxKind.TaggedTemplateExpression: {
+                const { tag, template } = node as TaggedTemplateExpression;
+                return visitNode(cbNode, tag) || visitNode(cbNode, template);
+            }
+            case SyntaxKind.TypeAssertionExpression: {
+                const { type, expression } = node as TypeAssertion;
+                return visitNode(cbNode, type) || visitNode(cbNode, expression);
+            }
             case SyntaxKind.ParenthesizedExpression:
                 return visitNode(cbNode, (<ParenthesizedExpression>node).expression);
             case SyntaxKind.DeleteExpression:
@@ -198,23 +211,22 @@ namespace ts {
                 return visitNode(cbNode, (<AwaitExpression>node).expression);
             case SyntaxKind.PostfixUnaryExpression:
                 return visitNode(cbNode, (<PostfixUnaryExpression>node).operand);
-            case SyntaxKind.BinaryExpression:
-                return visitNode(cbNode, (<BinaryExpression>node).left) ||
-                    visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
-                    visitNode(cbNode, (<BinaryExpression>node).right);
-            case SyntaxKind.AsExpression:
-                return visitNode(cbNode, (<AsExpression>node).expression) ||
-                    visitNode(cbNode, (<AsExpression>node).type);
+            case SyntaxKind.BinaryExpression: {
+                const { left, operatorToken, right } = node as BinaryExpression;
+                return visitNode(cbNode, left) || visitNode(cbNode, operatorToken) || visitNode(cbNode, right);
+            }
+            case SyntaxKind.AsExpression: {
+                const { expression, type } = node as AsExpression;
+                return visitNode(cbNode, expression) || visitNode(cbNode, type);
+            }
             case SyntaxKind.NonNullExpression:
                 return visitNode(cbNode, (<NonNullExpression>node).expression);
             case SyntaxKind.MetaProperty:
                 return visitNode(cbNode, (<MetaProperty>node).name);
-            case SyntaxKind.ConditionalExpression:
-                return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
+            case SyntaxKind.ConditionalExpression: {
+                const { condition, questionToken, whenTrue, colonToken, whenFalse } = node as ConditionalExpression;
+                return visitNode(cbNode, condition) || visitNode(cbNode, questionToken) || visitNode(cbNode, whenTrue) || visitNode(cbNode, colonToken) || visitNode(cbNode, whenFalse);
+            }
             case SyntaxKind.SpreadElement:
                 return visitNode(cbNode, (<SpreadElement>node).expression);
             case SyntaxKind.Block:
@@ -231,30 +243,30 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<VariableDeclarationList>node).declarations);
             case SyntaxKind.ExpressionStatement:
                 return visitNode(cbNode, (<ExpressionStatement>node).expression);
-            case SyntaxKind.IfStatement:
-                return visitNode(cbNode, (<IfStatement>node).expression) ||
-                    visitNode(cbNode, (<IfStatement>node).thenStatement) ||
-                    visitNode(cbNode, (<IfStatement>node).elseStatement);
-            case SyntaxKind.DoStatement:
-                return visitNode(cbNode, (<DoStatement>node).statement) ||
-                    visitNode(cbNode, (<DoStatement>node).expression);
-            case SyntaxKind.WhileStatement:
-                return visitNode(cbNode, (<WhileStatement>node).expression) ||
-                    visitNode(cbNode, (<WhileStatement>node).statement);
-            case SyntaxKind.ForStatement:
-                return visitNode(cbNode, (<ForStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForStatement>node).condition) ||
-                    visitNode(cbNode, (<ForStatement>node).incrementor) ||
-                    visitNode(cbNode, (<ForStatement>node).statement);
-            case SyntaxKind.ForInStatement:
-                return visitNode(cbNode, (<ForInStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForInStatement>node).expression) ||
-                    visitNode(cbNode, (<ForInStatement>node).statement);
-            case SyntaxKind.ForOfStatement:
-                return visitNode(cbNode, (<ForOfStatement>node).awaitModifier) ||
-                    visitNode(cbNode, (<ForOfStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForOfStatement>node).expression) ||
-                    visitNode(cbNode, (<ForOfStatement>node).statement);
+            case SyntaxKind.IfStatement: {
+                const { expression, thenStatement, elseStatement } = node as IfStatement;
+                return visitNode(cbNode, expression) || visitNode(cbNode, thenStatement) || visitNode(cbNode, elseStatement);
+            }
+            case SyntaxKind.DoStatement: {
+                const { statement, expression } = node as DoStatement;
+                return visitNode(cbNode, statement) || visitNode(cbNode, expression);
+            }
+            case SyntaxKind.WhileStatement: {
+                const { expression, statement } = node as WhileStatement;
+                return visitNode(cbNode, expression) || visitNode(cbNode, statement);
+            }
+            case SyntaxKind.ForStatement: {
+                const { initializer, condition, incrementor, statement } = node as ForStatement;
+                return visitNode(cbNode, initializer) || visitNode(cbNode, condition) || visitNode(cbNode, incrementor) || visitNode(cbNode, statement);
+            }
+            case SyntaxKind.ForInStatement: {
+                const { initializer, expression, statement } = node as ForInStatement;
+                return visitNode(cbNode, initializer) || visitNode(cbNode, expression) || visitNode(cbNode, statement);
+            }
+            case SyntaxKind.ForOfStatement: {
+                const { awaitModifier, initializer, expression, statement } = node as ForOfStatement;
+                return visitNode(cbNode, awaitModifier) || visitNode(cbNode, initializer) || visitNode(cbNode, expression) || visitNode(cbNode, statement);
+            }
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
@@ -263,77 +275,77 @@ namespace ts {
             case SyntaxKind.WithStatement:
                 return visitNode(cbNode, (<WithStatement>node).expression) ||
                     visitNode(cbNode, (<WithStatement>node).statement);
-            case SyntaxKind.SwitchStatement:
-                return visitNode(cbNode, (<SwitchStatement>node).expression) ||
-                    visitNode(cbNode, (<SwitchStatement>node).caseBlock);
+            case SyntaxKind.SwitchStatement: {
+                const { expression, caseBlock } = node as SwitchStatement;
+                return visitNode(cbNode, expression) || visitNode(cbNode, caseBlock);
+            }
             case SyntaxKind.CaseBlock:
                 return visitNodes(cbNode, cbNodes, (<CaseBlock>node).clauses);
-            case SyntaxKind.CaseClause:
-                return visitNode(cbNode, (<CaseClause>node).expression) ||
-                    visitNodes(cbNode, cbNodes, (<CaseClause>node).statements);
+            case SyntaxKind.CaseClause: {
+                const { expression, statements } = node as CaseClause;
+                return visitNode(cbNode, expression) || visitNodes(cbNode, cbNodes, statements);
+            }
             case SyntaxKind.DefaultClause:
                 return visitNodes(cbNode, cbNodes, (<DefaultClause>node).statements);
-            case SyntaxKind.LabeledStatement:
-                return visitNode(cbNode, (<LabeledStatement>node).label) ||
-                    visitNode(cbNode, (<LabeledStatement>node).statement);
+            case SyntaxKind.LabeledStatement: {
+                const { label, statement } = node as LabeledStatement;
+                return visitNode(cbNode, label) || visitNode(cbNode, statement);
+            }
             case SyntaxKind.ThrowStatement:
                 return visitNode(cbNode, (<ThrowStatement>node).expression);
-            case SyntaxKind.TryStatement:
-                return visitNode(cbNode, (<TryStatement>node).tryBlock) ||
-                    visitNode(cbNode, (<TryStatement>node).catchClause) ||
-                    visitNode(cbNode, (<TryStatement>node).finallyBlock);
-            case SyntaxKind.CatchClause:
-                return visitNode(cbNode, (<CatchClause>node).variableDeclaration) ||
-                    visitNode(cbNode, (<CatchClause>node).block);
+            case SyntaxKind.TryStatement: {
+                const { tryBlock, catchClause, finallyBlock } = node as TryStatement;
+                return visitNode(cbNode, tryBlock) || visitNode(cbNode, catchClause) || visitNode(cbNode, finallyBlock);
+            }
+            case SyntaxKind.CatchClause: {
+                const { variableDeclaration, block } = node as CatchClause;
+                return visitNode(cbNode, variableDeclaration) || visitNode(cbNode, block);
+            }
             case SyntaxKind.Decorator:
                 return visitNode(cbNode, (<Decorator>node).expression);
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ClassLikeDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).members);
-            case SyntaxKind.InterfaceDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<InterfaceDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<ClassDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).members);
-            case SyntaxKind.TypeAliasDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<TypeAliasDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<TypeAliasDeclaration>node).typeParameters) ||
-                    visitNode(cbNode, (<TypeAliasDeclaration>node).type);
-            case SyntaxKind.EnumDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<EnumDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<EnumDeclaration>node).members);
-            case SyntaxKind.EnumMember:
-                return visitNode(cbNode, (<EnumMember>node).name) ||
-                    visitNode(cbNode, (<EnumMember>node).initializer);
-            case SyntaxKind.ModuleDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ModuleDeclaration>node).name) ||
-                    visitNode(cbNode, (<ModuleDeclaration>node).body);
-            case SyntaxKind.ImportEqualsDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportEqualsDeclaration>node).name) ||
-                    visitNode(cbNode, (<ImportEqualsDeclaration>node).moduleReference);
-            case SyntaxKind.ImportDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).importClause) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier);
-            case SyntaxKind.ImportClause:
-                return visitNode(cbNode, (<ImportClause>node).name) ||
-                    visitNode(cbNode, (<ImportClause>node).namedBindings);
+            case SyntaxKind.InterfaceDeclaration: {
+                const { decorators, modifiers, name, typeParameters, heritageClauses, members } = node as ClassDeclaration | ClassExpression | InterfaceDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) ||
+                    visitNodes(cbNode, cbNodes, modifiers) ||
+                    visitNode(cbNode, name) ||
+                    visitNodes(cbNode, cbNodes, typeParameters) ||
+                    visitNodes(cbNode, cbNodes, heritageClauses) ||
+                    visitNodes(cbNode, cbNodes, members);
+            }
+            case SyntaxKind.TypeAliasDeclaration: {
+                const { decorators, modifiers, name, typeParameters, type } = node as TypeAliasDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) ||
+                    visitNodes(cbNode, cbNodes, modifiers) ||
+                    visitNode(cbNode, name) ||
+                    visitNodes(cbNode, cbNodes, typeParameters) ||
+                    visitNode(cbNode, type);
+            }
+            case SyntaxKind.EnumDeclaration: {
+                const { decorators, modifiers, name, members } = node as EnumDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) || visitNodes(cbNode, cbNodes, modifiers) || visitNode(cbNode, name) || visitNodes(cbNode, cbNodes, members);
+            }
+            case SyntaxKind.EnumMember: {
+                const { name, initializer } = node as EnumMember;
+                return visitNode(cbNode, name) || visitNode(cbNode, initializer);
+            }
+            case SyntaxKind.ModuleDeclaration: {
+                const { decorators, modifiers, name, body } = node as ModuleDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) || visitNodes(cbNode, cbNodes, modifiers) || visitNode(cbNode, name) || visitNode(cbNode, body);
+            }
+            case SyntaxKind.ImportEqualsDeclaration: {
+                const { decorators, modifiers, name, moduleReference } = node as ImportEqualsDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) || visitNodes(cbNode, cbNodes, modifiers) || visitNode(cbNode, name) || visitNode(cbNode, moduleReference);
+            }
+            case SyntaxKind.ImportDeclaration: {
+                const { decorators, modifiers, importClause, moduleSpecifier } = node as ImportDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) || visitNodes(cbNode, cbNodes, modifiers) || visitNode(cbNode, importClause) || visitNode(cbNode, moduleSpecifier);
+            }
+            case SyntaxKind.ImportClause: {
+                const { name, namedBindings } = node as ImportClause;
+                return visitNode(cbNode, name) || visitNode(cbNode, namedBindings);
+            }
             case SyntaxKind.NamespaceExportDeclaration:
                 return visitNode(cbNode, (<NamespaceExportDeclaration>node).name);
 
@@ -342,30 +354,35 @@ namespace ts {
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
                 return visitNodes(cbNode, cbNodes, (<NamedImportsOrExports>node).elements);
-            case SyntaxKind.ExportDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).exportClause) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).moduleSpecifier);
+            case SyntaxKind.ExportDeclaration: {
+                const { decorators, modifiers, exportClause, moduleSpecifier } = node as ExportDeclaration;
+                return visitNodes(cbNode, cbNodes, decorators) || visitNodes(cbNode, cbNodes, modifiers) || visitNode(cbNode, exportClause) || visitNode(cbNode, moduleSpecifier);
+            }
             case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.ExportSpecifier:
-                return visitNode(cbNode, (<ImportOrExportSpecifier>node).propertyName) ||
-                    visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
-            case SyntaxKind.ExportAssignment:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).expression);
-            case SyntaxKind.TemplateExpression:
-                return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNode, cbNodes, (<TemplateExpression>node).templateSpans);
-            case SyntaxKind.TemplateSpan:
-                return visitNode(cbNode, (<TemplateSpan>node).expression) || visitNode(cbNode, (<TemplateSpan>node).literal);
+            case SyntaxKind.ExportSpecifier: {
+                const { propertyName, name } = node as ImportSpecifier | ExportSpecifier;
+                return visitNode(cbNode, propertyName) || visitNode(cbNode, name);
+            }
+            case SyntaxKind.ExportAssignment: {
+                const { decorators, modifiers, expression } = node as ExportAssignment;
+                return visitNodes(cbNode, cbNodes, decorators) || visitNodes(cbNode, cbNodes, modifiers) || visitNode(cbNode, expression);
+            }
+            case SyntaxKind.TemplateExpression: {
+                const { head, templateSpans } = node as TemplateExpression;
+                return visitNode(cbNode, head) || visitNodes(cbNode, cbNodes, templateSpans);
+            }
+            case SyntaxKind.TemplateSpan: {
+                const { expression, literal } = node as TemplateSpan;
+                return visitNode(cbNode, expression) || visitNode(cbNode, literal);
+            }
             case SyntaxKind.ComputedPropertyName:
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
                 return visitNodes(cbNode, cbNodes, (<HeritageClause>node).types);
-            case SyntaxKind.ExpressionWithTypeArguments:
-                return visitNode(cbNode, (<ExpressionWithTypeArguments>node).expression) ||
-                    visitNodes(cbNode, cbNodes, (<ExpressionWithTypeArguments>node).typeArguments);
+            case SyntaxKind.ExpressionWithTypeArguments: {
+                const { expression, typeArguments } = node as ExpressionWithTypeArguments;
+                return visitNode(cbNode, expression) || visitNodes(cbNode, cbNodes, typeArguments);
+            }
             case SyntaxKind.ExternalModuleReference:
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
@@ -373,24 +390,27 @@ namespace ts {
             case SyntaxKind.CommaListExpression:
                 return visitNodes(cbNode, cbNodes, (<CommaListExpression>node).elements);
 
-            case SyntaxKind.JsxElement:
-                return visitNode(cbNode, (<JsxElement>node).openingElement) ||
-                    visitNodes(cbNode, cbNodes, (<JsxElement>node).children) ||
-                    visitNode(cbNode, (<JsxElement>node).closingElement);
+            case SyntaxKind.JsxElement: {
+                const { openingElement, children, closingElement } = node as JsxElement;
+                return visitNode(cbNode, openingElement) || visitNodes(cbNode, cbNodes, children) || visitNode(cbNode, closingElement);
+            }
             case SyntaxKind.JsxSelfClosingElement:
-            case SyntaxKind.JsxOpeningElement:
-                return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
-                    visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
+            case SyntaxKind.JsxOpeningElement: {
+                const { tagName, attributes } = node as JsxSelfClosingElement | JsxOpeningElement;
+                return visitNode(cbNode, tagName) || visitNode(cbNode, attributes);
+            }
             case SyntaxKind.JsxAttributes:
                 return visitNodes(cbNode, cbNodes, (<JsxAttributes>node).properties);
-            case SyntaxKind.JsxAttribute:
-                return visitNode(cbNode, (<JsxAttribute>node).name) ||
-                    visitNode(cbNode, (<JsxAttribute>node).initializer);
+            case SyntaxKind.JsxAttribute: {
+                const { name, initializer } = node as JsxAttribute;
+                return visitNode(cbNode, name) || visitNode(cbNode, initializer);
+            }
             case SyntaxKind.JsxSpreadAttribute:
                 return visitNode(cbNode, (<JsxSpreadAttribute>node).expression);
-            case SyntaxKind.JsxExpression:
-                return visitNode(cbNode, (node as JsxExpression).dotDotDotToken) ||
-                    visitNode(cbNode, (node as JsxExpression).expression);
+            case SyntaxKind.JsxExpression: {
+                const { dotDotDotToken, expression } = node as JsxExpression;
+                return visitNode(cbNode, dotDotDotToken) || visitNode(cbNode, expression);
+            }
             case SyntaxKind.JsxClosingElement:
                 return visitNode(cbNode, (<JsxClosingElement>node).tagName);
 
@@ -402,23 +422,21 @@ namespace ts {
                 return visitNode(cbNode, (<JSDocNullableType>node).type);
             case SyntaxKind.JSDocOptionalType:
                 return visitNode(cbNode, (<JSDocOptionalType>node).type);
-            case SyntaxKind.JSDocFunctionType:
-                return visitNodes(cbNode, cbNodes, (<JSDocFunctionType>node).parameters) ||
-                    visitNode(cbNode, (<JSDocFunctionType>node).type);
+            case SyntaxKind.JSDocFunctionType: {
+                const { parameters, type } = node as JSDocFunctionType;
+                return visitNodes(cbNode, cbNodes, parameters) || visitNode(cbNode, type);
+            }
             case SyntaxKind.JSDocVariadicType:
                 return visitNode(cbNode, (<JSDocVariadicType>node).type);
             case SyntaxKind.JSDocComment:
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
             case SyntaxKind.JSDocParameterTag:
-            case SyntaxKind.JSDocPropertyTag:
-                if ((node as JSDocPropertyLikeTag).isNameFirst) {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression);
-                }
-                else {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).name);
-                }
+            case SyntaxKind.JSDocPropertyTag: {
+                const { isNameFirst, name, typeExpression } = node as JSDocParameterTag | JSDocPropertyTag;
+                return isNameFirst
+                    ? visitNode(cbNode, name) || visitNode(cbNode, typeExpression)
+                    : visitNode(cbNode, typeExpression) || visitNode(cbNode, name);
+            }
             case SyntaxKind.JSDocReturnTag:
                 return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
             case SyntaxKind.JSDocTypeTag:
@@ -427,16 +445,12 @@ namespace ts {
                 return visitNode(cbNode, (<JSDocAugmentsTag>node).typeExpression);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
-            case SyntaxKind.JSDocTypedefTag:
-                if ((node as JSDocTypedefTag).typeExpression &&
-                    (node as JSDocTypedefTag).typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
-                    return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).fullName);
-                }
-                else {
-                    return visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
-                }
+            case SyntaxKind.JSDocTypedefTag: {
+                const { typeExpression, fullName } = node as JSDocTypedefTag;
+                return typeExpression && typeExpression.kind === SyntaxKind.JSDocTypeExpression
+                    ? visitNode(cbNode, typeExpression) || visitNode(cbNode, fullName)
+                    : visitNode(cbNode, fullName) || visitNode(cbNode, typeExpression);
+            }
             case SyntaxKind.JSDocTypeLiteral:
                 for (const tag of (node as JSDocTypeLiteral).jsDocPropertyTags) {
                     visitNode(cbNode, tag);
