@@ -2294,20 +2294,23 @@ namespace ts {
         }
 
         function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined {
+            return shouldParseReturnType(returnToken, isType) ? parseTypeOrTypePredicate() : undefined;
+        }
+        function shouldParseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): boolean {
             if (returnToken === SyntaxKind.EqualsGreaterThanToken) {
-                // return token required
-                parseExpected(SyntaxKind.EqualsGreaterThanToken);
+                parseExpected(returnToken);
+                return true;
             }
-            else if (parseOptional(SyntaxKind.ColonToken)) {}
+            else if (parseOptional(SyntaxKind.ColonToken)) {
+                return true;
+            }
             else if (isType && token() === SyntaxKind.EqualsGreaterThanToken) {
                 // This is easy to get backward, especially in type contexts, so parse the type anyway
                 parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
                 nextToken();
+                return true;
             }
-            else {
-                return undefined;
-            }
-            return parseTypeOrTypePredicate();
+            return false;
         }
 
         function parseParameterList(flags: SignatureFlags) {
