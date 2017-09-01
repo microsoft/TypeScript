@@ -2742,8 +2742,8 @@ namespace ts {
         function parsePostfixTypeOrHigher(): TypeNode {
             let kind: SyntaxKind | undefined;
             let type = parseNonArrayType();
-            while (!scanner.hasPrecedingLineBreak() && (kind = getPostfixTypeKind(token()))) {
-                if (kind === SyntaxKind.ArrayType) {
+            while (!scanner.hasPrecedingLineBreak() && (kind = getPostfixSyntaxKind(token()))) {
+                if (kind === SyntaxKind.OpenBracketToken) {
                     parseExpected(SyntaxKind.OpenBracketToken);
                     if (isStartOfType()) {
                         const node = createNode(SyntaxKind.IndexedAccessType, type.pos) as IndexedAccessTypeNode;
@@ -2769,17 +2769,19 @@ namespace ts {
             return type;
         }
 
-        function getPostfixTypeKind(tokenKind: SyntaxKind): SyntaxKind | undefined {
+        function getPostfixSyntaxKind(tokenKind: SyntaxKind): SyntaxKind {
             switch (tokenKind) {
                 case SyntaxKind.EqualsToken:
                     // only parse postfix = inside jsdoc, because it's ambiguous elsewhere
-                    return contextFlags & NodeFlags.JSDoc ? SyntaxKind.JSDocOptionalType : undefined;
+                    return contextFlags & NodeFlags.JSDoc ? SyntaxKind.JSDocOptionalType : 0;
                 case SyntaxKind.ExclamationToken:
                     return SyntaxKind.JSDocNonNullableType;
                 case SyntaxKind.QuestionToken:
                     return SyntaxKind.JSDocNullableType;
                 case SyntaxKind.OpenBracketToken:
-                    return SyntaxKind.ArrayType;
+                    return SyntaxKind.OpenBracketToken;
+                default:
+                    return 0;
             }
         }
 
