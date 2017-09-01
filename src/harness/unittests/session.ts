@@ -148,9 +148,9 @@ namespace ts.server {
                     }
                 };
                 session.onMessage(JSON.stringify(setOptionsRequest));
-                assert.deepEqual(
+                assert.deepEqual<CompilerOptions>(
                     session.getProjectService().getCompilerOptionsForInferredProjects(),
-                    <CompilerOptions>{
+                    {
                         module: ModuleKind.System,
                         target: ScriptTarget.ES5,
                         jsx: JsxEmit.React,
@@ -284,7 +284,7 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(req));
 
-                expect(lastSent).to.deep.equal(<protocol.ConfigureResponse>{
+                assert.deepEqual<protocol.ConfigureResponse>(lastSent as protocol.ConfigureResponse, {
                     command: CommandNames.Configure,
                     type: "response",
                     success: true,

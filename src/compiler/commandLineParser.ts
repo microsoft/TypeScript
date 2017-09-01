@@ -907,7 +907,10 @@ namespace ts {
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): JsonSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return typeof textOrDiagnostic === "string" ? parseJsonText(fileName, textOrDiagnostic) : <JsonSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
+        return typeof textOrDiagnostic === "string"
+            ? parseJsonText(fileName, textOrDiagnostic)
+            // tslint:disable-next-line no-object-literal-type-assertion (TODO:GH#18217)
+            : <JsonSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
     }
 
     function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {

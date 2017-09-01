@@ -328,12 +328,15 @@ namespace ts.server.typingsInstaller {
             this.installRunCount++;
 
             // send progress event
-            this.sendResponse(<BeginInstallTypes>{
+            const response: BeginInstallTypes = {
                 kind: EventBeginInstallTypes,
                 eventId: requestId,
                 typingsInstallerVersion: ts.version, // qualified explicitly to prevent occasional shadowing
-                projectName: req.projectName
-            });
+                projectName: req.projectName,
+                // TODO: GH#18217 (property was not present)
+                packagesToInstall: undefined
+            };
+            this.sendResponse(response);
 
             const scopedTypings = filteredTypings.map(typingsName);
             this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {

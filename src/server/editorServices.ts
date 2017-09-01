@@ -1039,6 +1039,7 @@ namespace ts.server {
 
             const result = parseJsonText(configFilename, configFileContent);
             if (!result.endOfFileToken) {
+                // tslint:disable-next-line no-object-literal-type-assertion (TODO: GH#18217)
                 result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
             }
             const errors = result.parseDiagnostics;

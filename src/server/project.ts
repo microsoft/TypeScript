@@ -1003,6 +1003,8 @@ namespace ts.server {
                     if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
 
                     // Provide global: true so plugins can detect why they can't find their config
+                    // TODO: Pluginimport has no `global` property!
+                    // tslint:disable-next-line no-object-literal-type-assertion (TODO: GH#18217)
                     this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
                 }
             }

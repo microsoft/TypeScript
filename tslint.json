@@ -23,6 +23,7 @@
         "no-inferrable-types": true,
         "no-internal-module": true,
         "no-null-keyword": true,
+        "no-object-literal-type-assertion": true,
         "no-switch-case-fall-through": true,
         "no-trailing-whitespace": [true, "ignore-template-strings"],
         "no-type-assertion-whitespace": true,

@@ -1862,8 +1862,10 @@ namespace ts {
                     target.set(id, sourceSymbol);
                     if (lookupTable && exportNode) {
                         lookupTable.set(id, {
-                            specifierText: getTextOfNode(exportNode.moduleSpecifier)
-                        } as ExportCollisionTracker);
+                            specifierText: getTextOfNode(exportNode.moduleSpecifier),
+                            // TODO: GH#18217: (exportsWithDuplicate was not present)
+                            exportsWithDuplicate: undefined,
+                        });
                     }
                 }
                 else if (lookupTable && exportNode && targetSymbol && resolveSymbol(targetSymbol) !== resolveSymbol(sourceSymbol)) {
@@ -6298,18 +6300,21 @@ namespace ts {
         function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
             const { parameterName } = node;
             if (parameterName.kind === SyntaxKind.Identifier) {
-                return {
+                const result: IdentifierTypePredicate = {
                     kind: TypePredicateKind.Identifier,
-                    parameterName: parameterName ? parameterName.escapedText : undefined,
+                    // TODO: GH#18217 (should unescape parameterName)
+                    parameterName: parameterName ? parameterName.escapedText as string : undefined,
                     parameterIndex: parameterName ? getTypePredicateParameterIndex((node.parent as SignatureDeclaration).parameters, parameterName) : undefined,
-                    type: getTypeFromTypeNode(node.type)
-                } as IdentifierTypePredicate;
+                    type: getTypeFromTypeNode(node.type),
+                };
+                return result;
             }
             else {
-                return {
+                const result: ThisTypePredicate = {
                     kind: TypePredicateKind.This,
                     type: getTypeFromTypeNode(node.type)
                 };
+                return result;
             }
         }
 

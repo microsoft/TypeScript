@@ -710,7 +710,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
             const service = createProjectService(host);
-            service.openExternalProject(<protocol.ExternalProject>{
+            service.openExternalProject({
                 projectFileName: "/a/b/project.csproj",
                 rootFiles: toExternalFiles([f1.path, combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path))]),
                 options: {}
@@ -867,10 +867,10 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, f2, f3]);
             const session = createSession(host);
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand<protocol.OpenExternalProjectsRequest>({
                 seq: 1,
                 type: "request",
-                command: "openExternalProjects",
+                command: protocol.CommandTypes.OpenExternalProjects,
                 arguments: { projects: [p1, p2] }
             });
 
@@ -879,28 +879,28 @@ namespace ts.projectSystem {
             assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
             assert.equal(projectService.externalProjects[1].getProjectName(), p2.projectFileName);
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand<protocol.OpenExternalProjectsRequest>({
                 seq: 2,
                 type: "request",
-                command: "openExternalProjects",
+                command: protocol.CommandTypes.OpenExternalProjects,
                 arguments: { projects: [p1, p3] }
             });
             checkNumberOfProjects(projectService, { externalProjects: 2 });
             assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
             assert.equal(projectService.externalProjects[1].getProjectName(), p3.projectFileName);
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand<protocol.OpenExternalProjectsRequest>({
                 seq: 3,
                 type: "request",
-                command: "openExternalProjects",
+                command: protocol.CommandTypes.OpenExternalProjects,
                 arguments: { projects: [] }
             });
             checkNumberOfProjects(projectService, { externalProjects: 0 });
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand<protocol.OpenExternalProjectsRequest>({
                 seq: 3,
                 type: "request",
-                command: "openExternalProjects",
+                command: protocol.CommandTypes.OpenExternalProjects,
                 arguments: { projects: [p2] }
             });
             assert.equal(projectService.externalProjects[0].getProjectName(), p2.projectFileName);
@@ -2290,10 +2290,10 @@ namespace ts.projectSystem {
                     lastEvent = <server.ProjectLanguageServiceStateEvent>e;
                 }
             });
-            session.executeCommand(<protocol.OpenRequest>{
+            session.executeCommand<protocol.OpenRequest>({
                 seq: 0,
                 type: "request",
-                command: "open",
+                command: protocol.CommandTypes.Open,
                 arguments: { file: f1.path }
             });
             const projectService = session.getProjectService();
@@ -2342,10 +2342,10 @@ namespace ts.projectSystem {
                     lastEvent = <server.ProjectLanguageServiceStateEvent>e;
                 }
             });
-            session.executeCommand(<protocol.OpenRequest>{
+            session.executeCommand<protocol.OpenRequest>({
                 seq: 0,
                 type: "request",
-                command: "open",
+                command: protocol.CommandTypes.Open,
                 arguments: { file: f1.path }
             });
 
@@ -3501,17 +3501,17 @@ namespace ts.projectSystem {
             const session = createSession(host);
 
             // send open request
-            session.executeCommand(<server.protocol.OpenRequest>{
+            session.executeCommand<server.protocol.OpenRequest>({
                 type: "request",
-                command: "open",
+                command: protocol.CommandTypes.Open,
                 seq: 1,
                 arguments: { file: f1.path }
             });
 
             // reload from tmp file
-            session.executeCommand(<server.protocol.ReloadRequest>{
+            session.executeCommand<server.protocol.ReloadRequest>({
                 type: "request",
-                command: "reload",
+                command: protocol.CommandTypes.Reload,
                 seq: 2,
                 arguments: { file: f1.path, tmpfile: tmp.path }
             });
@@ -3521,12 +3521,13 @@ namespace ts.projectSystem {
             const snap1 = projectServiice.getScriptInfo(f1.path).getSnapshot();
             assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
 
-            // reload from original file file
-            session.executeCommand(<server.protocol.ReloadRequest>{
+            // reload from original file
+            session.executeCommand<server.protocol.ReloadRequest>({
                 type: "request",
-                command: "reload",
+                command: protocol.CommandTypes.Reload,
                 seq: 2,
-                arguments: { file: f1.path }
+                // TODO: GH#18217 (tmpfile was not present)
+                arguments: { file: f1.path, tmpfile: undefined }
             });
 
             // verify content
@@ -3544,20 +3545,20 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f]);
             const session = createSession(host);
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            session.executeCommand<server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
                 seq: 1,
                 type: "request",
-                command: "compilerOptionsForInferredProjects",
+                command: protocol.CommandTypes.CompilerOptionsForInferredProjects,
                 arguments: {
                     options: {
                         allowJs: true
                     }
                 }
             });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            session.executeCommand<server.protocol.OpenRequest>({
                 seq: 2,
                 type: "request",
-                command: "open",
+                command: protocol.CommandTypes.Open,
                 arguments: {
                     file: f.path,
                     fileContent: f.content,
@@ -3579,7 +3580,7 @@ namespace ts.projectSystem {
                 useSingleInferredProject: true,
                 useInferredProjectPerProjectRoot: true
             });
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            session.executeCommand<server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
                 seq: 1,
                 type: "request",
                 command: CommandNames.CompilerOptionsForInferredProjects,
@@ -3590,7 +3591,7 @@ namespace ts.projectSystem {
                     }
                 }
             });
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            session.executeCommand<server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
                 seq: 2,
                 type: "request",
                 command: CommandNames.CompilerOptionsForInferredProjects,
@@ -3602,7 +3603,7 @@ namespace ts.projectSystem {
                     projectRootPath: "/b"
                 }
             });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            session.executeCommand<server.protocol.OpenRequest>({
                 seq: 3,
                 type: "request",
                 command: CommandNames.Open,
@@ -3613,7 +3614,7 @@ namespace ts.projectSystem {
                     projectRootPath: file1.projectRootPath
                 }
             });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            session.executeCommand<server.protocol.OpenRequest>({
                 seq: 4,
                 type: "request",
                 command: CommandNames.Open,
@@ -3624,7 +3625,7 @@ namespace ts.projectSystem {
                     projectRootPath: file2.projectRootPath
                 }
             });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            session.executeCommand<server.protocol.OpenRequest>({
                 seq: 5,
                 type: "request",
                 command: CommandNames.Open,
@@ -3635,7 +3636,7 @@ namespace ts.projectSystem {
                     projectRootPath: file3.projectRootPath
                 }
             });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            session.executeCommand<server.protocol.OpenRequest>({
                 seq: 6,
                 type: "request",
                 command: CommandNames.Open,
@@ -3671,7 +3672,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const projectName = projectService.inferredProjects[0].getProjectName();
 
-            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diags = session.executeCommand<server.protocol.CompilerOptionsDiagnosticsRequest>({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
@@ -3679,13 +3680,13 @@ namespace ts.projectSystem {
             }).response;
             assert.isTrue(diags.length === 0);
 
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            session.executeCommand<server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsForInferredProjects,
                 seq: 3,
                 arguments: { options: { module: ModuleKind.CommonJS } }
             });
-            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diagsAfterUpdate = session.executeCommand<server.protocol.CompilerOptionsDiagnosticsRequest>({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
@@ -3704,7 +3705,7 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             const projectFileName = "/a/b/project.csproj";
             const externalFiles = toExternalFiles([f1.path]);
-            projectService.openExternalProject(<protocol.ExternalProject>{
+            projectService.openExternalProject({
                 projectFileName,
                 rootFiles: externalFiles,
                 options: {}
@@ -3712,7 +3713,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
 
-            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diags = session.executeCommand<server.protocol.CompilerOptionsDiagnosticsRequest>({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
@@ -3720,7 +3721,7 @@ namespace ts.projectSystem {
             }).response;
             assert.isTrue(diags.length === 0);
 
-            session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
+            session.executeCommand<server.protocol.OpenExternalProjectRequest>({
                 type: "request",
                 command: server.CommandNames.OpenExternalProject,
                 seq: 3,
@@ -3730,7 +3731,7 @@ namespace ts.projectSystem {
                     options: { module: ModuleKind.CommonJS }
                 }
             });
-            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diagsAfterUpdate = session.executeCommand<server.protocol.CompilerOptionsDiagnosticsRequest>({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
@@ -3759,17 +3760,17 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f1, f2, config]);
             const session = createSession(host);
-            session.executeCommand(<protocol.OpenRequest>{
+            session.executeCommand<protocol.OpenRequest>({
                 seq: 1,
                 type: "request",
-                command: "open",
+                command: protocol.CommandTypes.Open,
                 arguments: { file: f1.path }
             });
             checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
-            const { response } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+            const { response } = session.executeCommand<protocol.CompileOnSaveAffectedFileListRequest>({
                 seq: 2,
                 type: "request",
-                command: "compileOnSaveAffectedFileList",
+                command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: { file: f1.path }
             });
             assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response).length, 1, "expected output for 1 project");
@@ -3851,20 +3852,21 @@ namespace ts.projectSystem {
             const session = createSession(host, { cancellationToken });
 
             expectedRequestId = session.getNextSeq();
-            session.executeCommandSeq(<server.protocol.OpenRequest>{
-                command: "open",
+            session.executeCommandSeq<server.protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
                 arguments: { file: f1.path }
             });
 
             expectedRequestId = session.getNextSeq();
-            session.executeCommandSeq(<server.protocol.GeterrRequest>{
-                command: "geterr",
-                arguments: { files: [f1.path] }
+            session.executeCommandSeq<server.protocol.GeterrRequest>({
+                command: protocol.CommandTypes.Geterr,
+                // TODO: GH#18217 (delay was not present)
+                arguments: { files: [f1.path], delay: undefined }
             });
 
             expectedRequestId = session.getNextSeq();
-            session.executeCommandSeq(<server.protocol.OccurrencesRequest>{
-                command: "occurrences",
+            session.executeCommandSeq<server.protocol.OccurrencesRequest>({
+                command: protocol.CommandTypes.Occurrences,
                 arguments: { file: f1.path, line: 1, offset: 6 }
             });
 
@@ -3894,14 +3896,15 @@ namespace ts.projectSystem {
                 cancellationToken
             });
             {
-                session.executeCommandSeq(<protocol.OpenRequest>{
-                    command: "open",
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
                     arguments: { file: f1.path }
                 });
                 // send geterr for missing file
-                session.executeCommandSeq(<protocol.GeterrRequest>{
-                    command: "geterr",
-                    arguments: { files: ["/a/missing"] }
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: protocol.CommandTypes.Geterr,
+                    // TODO: GH#18217 (delay was not present)
+                    arguments: { files: ["/a/missing"], delay: undefined }
                 });
                 // no files - expect 'completed' event
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
@@ -3910,17 +3913,19 @@ namespace ts.projectSystem {
             {
                 const getErrId = session.getNextSeq();
                 // send geterr for a valid file
-                session.executeCommandSeq(<protocol.GeterrRequest>{
-                    command: "geterr",
-                    arguments: { files: [f1.path] }
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: protocol.CommandTypes.Geterr,
+                    // TODO: GH#18217 (delay was not present)
+                    arguments: { files: [f1.path], delay: undefined }
                 });
 
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
                 // run new request
-                session.executeCommandSeq(<protocol.ProjectInfoRequest>{
-                    command: "projectInfo",
-                    arguments: { file: f1.path }
+                session.executeCommandSeq<protocol.ProjectInfoRequest>({
+                    command: protocol.CommandTypes.ProjectInfo,
+                    // TODO: GH#18217 (needFileNameList was not present)
+                    arguments: { file: f1.path, needFileNameList: undefined }
                 });
                 host.clearOutput();
 
@@ -3935,9 +3940,10 @@ namespace ts.projectSystem {
             }
             {
                 const getErrId = session.getNextSeq();
-                session.executeCommandSeq(<protocol.GeterrRequest>{
-                    command: "geterr",
-                    arguments: { files: [f1.path] }
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: protocol.CommandTypes.Geterr,
+                    // TODO: GH#18217 (delay was not present)
+                    arguments: { files: [f1.path], delay: undefined }
                 });
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
@@ -3957,9 +3963,10 @@ namespace ts.projectSystem {
             }
             {
                 const getErrId = session.getNextSeq();
-                session.executeCommandSeq(<protocol.GeterrRequest>{
-                    command: "geterr",
-                    arguments: { files: [f1.path] }
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: protocol.CommandTypes.Geterr,
+                    // TODO: GH#18217 (delay was not present)
+                    arguments: { files: [f1.path], delay: undefined }
                 });
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
@@ -3981,9 +3988,10 @@ namespace ts.projectSystem {
             }
             {
                 const getErr1 = session.getNextSeq();
-                session.executeCommandSeq(<protocol.GeterrRequest>{
-                    command: "geterr",
-                    arguments: { files: [f1.path] }
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: protocol.CommandTypes.Geterr,
+                    // TODO: GH#18217 (delay was not present)
+                    arguments: { files: [f1.path], delay: undefined }
                 });
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
                 // run first step
@@ -3993,9 +4001,10 @@ namespace ts.projectSystem {
                 assert.equal(e1.event, "syntaxDiag");
                 host.clearOutput();
 
-                session.executeCommandSeq(<protocol.GeterrRequest>{
-                    command: "geterr",
-                    arguments: { files: [f1.path] }
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: protocol.CommandTypes.Geterr,
+                    // TODO: GH#18217 (delay was not present)
+                    arguments: { files: [f1.path], delay: undefined }
                 });
                 // make sure that getErr1 is completed
                 verifyRequestCompleted(getErr1, 0);
@@ -4032,32 +4041,32 @@ namespace ts.projectSystem {
                 throttleWaitMilliseconds: 0
             });
             {
-                session.executeCommandSeq(<protocol.OpenRequest>{
-                    command: "open",
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
                     arguments: { file: f1.path }
                 });
 
                 // send navbar request (normal priority)
-                session.executeCommandSeq(<protocol.NavBarRequest>{
-                    command: "navbar",
+                session.executeCommandSeq<protocol.NavBarRequest>({
+                    command: protocol.CommandTypes.NavBar,
                     arguments: { file: f1.path }
                 });
 
                 // ensure the nav bar request can be canceled
-                verifyExecuteCommandSeqIsCancellable(<protocol.NavBarRequest>{
-                    command: "navbar",
+                verifyExecuteCommandSeqIsCancellable<protocol.NavBarRequest>({
+                    command: protocol.CommandTypes.NavBar,
                     arguments: { file: f1.path }
                 });
 
                 // send outlining spans request (normal priority)
-                session.executeCommandSeq(<protocol.OutliningSpansRequest>{
-                    command: "outliningSpans",
+                session.executeCommandSeq<protocol.OutliningSpansRequest>({
+                    command: protocol.CommandTypes.OutliningSpans,
                     arguments: { file: f1.path }
                 });
 
                 // ensure the outlining spans request can be canceled
-                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequest>{
-                    command: "outliningSpans",
+                verifyExecuteCommandSeqIsCancellable<protocol.OutliningSpansRequest>({
+                    command: protocol.CommandTypes.OutliningSpans,
                     arguments: { file: f1.path }
                 });
             }
@@ -4211,7 +4220,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const projectName = projectService.configuredProjects[0].getProjectName();
 
-            const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+            const diags = session.executeCommand<server.protocol.SemanticDiagnosticsSyncRequest>({
                 type: "request",
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
@@ -4223,7 +4232,7 @@ namespace ts.projectSystem {
             host.reloadFS([file, configFile]);
             host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
 
-            const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+            const diagsAfterEdit = session.executeCommand<server.protocol.SemanticDiagnosticsSyncRequest>({
                 type: "request",
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,

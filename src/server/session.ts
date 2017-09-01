@@ -568,7 +568,7 @@ namespace ts.server {
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: ReadonlyArray<Diagnostic>, scriptInfo: ScriptInfo): protocol.DiagnosticWithLinePosition[] {
-            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
+            return diagnostics.map<protocol.DiagnosticWithLinePosition>(d => ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
@@ -577,7 +577,7 @@ namespace ts.server {
                 source: d.source,
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
                 endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length)
-            });
+            }));
         }
 
         private getDiagnosticsWorker(
@@ -1952,7 +1952,7 @@ namespace ts.server {
             }
         }
 
-        public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
+        public executeCommand<T extends protocol.Request>(request: T): { response?: any, responseRequired?: boolean } {
             const handler = this.handlers.get(request.command);
             if (handler) {
                 return this.executeWithRequestId(request.seq, () => handler(request));
