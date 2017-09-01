@@ -15904,7 +15904,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     ondurationchange: (ev: Event) => any;
     onemptied: (ev: Event) => any;
     onended: (ev: Event) => any;
-    onerror: ErrorEventHandler;
+    onerror: ErrorEventHandler | null;
     onfocus: (ev: FocusEvent) => any;
     onhashchange: (ev: HashChangeEvent) => any;
     oninput: (ev: Event) => any;
