@@ -878,10 +878,10 @@ namespace ts.server {
                     if (info.hasMixedContent) {
                         info.registerFileUpdate();
                     }
-                    // last open file in configured project - close it
-                    if ((<ConfiguredProject>p).deleteOpenRef() === 0) {
-                        (projectsToRemove || (projectsToRemove = [])).push(p);
-                    }
+                    // Delete the reference to the open configured projects but
+                    // do not remove the project so that we can reuse this project
+                    // if it would need to be re-created with next file open
+                    (<ConfiguredProject>p).deleteOpenRef();
                 }
                 else if (p.projectKind === ProjectKind.Inferred && p.isRoot(info)) {
                     // If this was the open root file of inferred project
@@ -1880,6 +1880,15 @@ namespace ts.server {
                 this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
             }
             this.addToListOfOpenFiles(info);
+
+            // Remove the configured projects that have zero references from open files.
+            // This was postponed from closeOpenFile to after opening next file,
+            // so that we can reuse the project if we need to right away
+            this.configuredProjects.forEach(project => {
+                if (!project.hasOpenRef()) {
+                    this.removeProject(project);
+                }
+            });
 
             // Delete the orphan files here because there might be orphan script infos (which are not part of project)
             // when some file/s were closed which resulted in project removal.

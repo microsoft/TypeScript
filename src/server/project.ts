@@ -1311,6 +1311,10 @@ namespace ts.server {
             return this.openRefCount;
         }
 
+        hasOpenRef() {
+            return !!this.openRefCount;
+        }
+
         getEffectiveTypeRoots() {
             return getEffectiveTypeRoots(this.getCompilationSettings(), this.partialSystem) || [];
         }
