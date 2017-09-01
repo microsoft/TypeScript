@@ -2290,25 +2290,27 @@ namespace ts {
                 signature.typeParameters = parseTypeParameters();
             }
             signature.parameters = parseParameterList(flags);
+            signature.type = parseReturnType(returnToken, !!(flags & SignatureFlags.Type));
+        }
 
-            const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
-            if (returnTokenRequired) {
+        function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined {
+            return shouldParseReturnType(returnToken, isType) ? parseTypeOrTypePredicate() : undefined;
+        }
+        function shouldParseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): boolean {
+            if (returnToken === SyntaxKind.EqualsGreaterThanToken) {
                 parseExpected(returnToken);
-                signature.type = parseTypeOrTypePredicate();
+                return true;
             }
-            else if (parseOptional(returnToken)) {
-                signature.type = parseTypeOrTypePredicate();
+            else if (parseOptional(SyntaxKind.ColonToken)) {
+                return true;
             }
-            else if (flags & SignatureFlags.Type) {
-                const start = scanner.getTokenPos();
-                const length = scanner.getTextPos() - start;
-                const backwardToken = parseOptional(returnToken === SyntaxKind.ColonToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken);
-                if (backwardToken) {
-                    // This is easy to get backward, especially in type contexts, so parse the type anyway
-                    signature.type = parseTypeOrTypePredicate();
-                    parseErrorAtPosition(start, length, Diagnostics._0_expected, tokenToString(returnToken));
-                }
+            else if (isType && token() === SyntaxKind.EqualsGreaterThanToken) {
+                // This is easy to get backward, especially in type contexts, so parse the type anyway
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
+                nextToken();
+                return true;
             }
+            return false;
         }
 
         function parseParameterList(flags: SignatureFlags) {
