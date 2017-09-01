@@ -2290,25 +2290,24 @@ namespace ts {
                 signature.typeParameters = parseTypeParameters();
             }
             signature.parameters = parseParameterList(flags);
+            signature.type = parseReturnType(returnToken, !!(flags & SignatureFlags.Type));
+        }
 
-            const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
-            if (returnTokenRequired) {
-                parseExpected(returnToken);
-                signature.type = parseTypeOrTypePredicate();
+        function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined {
+            if (returnToken === SyntaxKind.EqualsGreaterThanToken) {
+                // return token required
+                parseExpected(SyntaxKind.EqualsGreaterThanToken);
             }
-            else if (parseOptional(returnToken)) {
-                signature.type = parseTypeOrTypePredicate();
+            else if (parseOptional(SyntaxKind.ColonToken)) {}
+            else if (isType && token() === SyntaxKind.EqualsGreaterThanToken) {
+                // This is easy to get backward, especially in type contexts, so parse the type anyway
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
+                nextToken();
             }
-            else if (flags & SignatureFlags.Type) {
-                const start = scanner.getTokenPos();
-                const length = scanner.getTextPos() - start;
-                const backwardToken = parseOptional(returnToken === SyntaxKind.ColonToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken);
-                if (backwardToken) {
-                    // This is easy to get backward, especially in type contexts, so parse the type anyway
-                    signature.type = parseTypeOrTypePredicate();
-                    parseErrorAtPosition(start, length, Diagnostics._0_expected, tokenToString(returnToken));
-                }
+            else {
+                return undefined;
             }
+            return parseTypeOrTypePredicate();
         }
 
         function parseParameterList(flags: SignatureFlags) {
