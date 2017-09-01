@@ -4038,6 +4038,7 @@ namespace ts {
         primary: boolean;
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName?: string;
+        packageId?: PackageId;
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {

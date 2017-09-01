@@ -51,13 +51,17 @@ namespace ts {
         DtsOnly /** Only '.d.ts' */
     }
 
+    interface PathAndPackageId {
+        readonly fileName: string;
+        readonly packageId: PackageId;
+    }
     /** Used with `Extensions.DtsOnly` to extract the path from TypeScript results. */
-    function resolvedTypeScriptOnly(resolved: Resolved | undefined): string | undefined {
+    function resolvedTypeScriptOnly(resolved: Resolved | undefined): PathAndPackageId | undefined {
         if (!resolved) {
             return undefined;
         }
         Debug.assert(extensionIsTypeScript(resolved.extension));
-        return resolved.path;
+        return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
     function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
@@ -201,18 +205,18 @@ namespace ts {
         let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         if (resolved) {
             if (!options.preserveSymlinks) {
-                resolved = realPath(resolved, host, traceEnabled);
+                resolved = { ...resolved, fileName: realPath(resolved.fileName, host, traceEnabled) };
             }
 
             if (traceEnabled) {
-                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolved, primary);
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolved.fileName, primary);
             }
-            resolvedTypeReferenceDirective = { primary, resolvedFileName: resolved };
+            resolvedTypeReferenceDirective = { primary, resolvedFileName: resolved.fileName, packageId: resolved.packageId };
         }
 
         return { resolvedTypeReferenceDirective, failedLookupLocations };
 
-        function primaryLookup(): string | undefined {
+        function primaryLookup(): PathAndPackageId | undefined {
             // Check primary library paths
             if (typeRoots && typeRoots.length) {
                 if (traceEnabled) {
@@ -237,8 +241,8 @@ namespace ts {
             }
         }
 
-        function secondaryLookup(): string | undefined {
-            let resolvedFile: string;
+        function secondaryLookup(): PathAndPackageId | undefined {
+            let resolvedFile: PathAndPackageId;
             const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
 
             if (initialLocationForSecondaryLookup !== undefined) {

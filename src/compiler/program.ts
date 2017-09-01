@@ -1427,7 +1427,7 @@ namespace ts {
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib);
+            processSourceFile(normalizePath(fileName), isDefaultLib, /*packageId*/ undefined);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -1591,9 +1591,9 @@ namespace ts {
         }
 
         /** This has side effects through `findSourceFile`. */
-        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, packageId: PackageId | undefined, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
             getSourceFileFromReferenceWorker(fileName,
-                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, refFile, refPos, refEnd, /*packageId*/ undefined),
+                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, refFile, refPos, refEnd, packageId),
                 (diagnostic, ...args) => {
                     fileProcessingDiagnostics.add(refFile !== undefined && refEnd !== undefined && refPos !== undefined
                         ? createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...args)
@@ -1735,7 +1735,7 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, isDefaultLib, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, isDefaultLib, /*packageId*/ undefined, file, ref.pos, ref.end);
             });
         }
 
@@ -1766,7 +1766,7 @@ namespace ts {
             if (resolvedTypeReferenceDirective) {
                 if (resolvedTypeReferenceDirective.primary) {
                     // resolved from the primary path
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
+                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
                 }
                 else {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
@@ -1789,7 +1789,7 @@ namespace ts {
                     }
                     else {
                         // First resolution of this library
-                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
+                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
                     }
                 }
             }
