@@ -3331,13 +3331,12 @@ namespace ts {
     }
 
     /* @internal */
-    export interface MappedType extends ObjectType {
+    export interface MappedType extends AnonymousType {
         declaration: MappedTypeNode;
         typeParameter?: TypeParameter;
         constraintType?: Type;
         templateType?: Type;
         modifiersType?: Type;
-        mapper?: TypeMapper;  // Instantiation mapper
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -3469,8 +3468,6 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        mappedTypes?: TypeParameter[]; // Types mapped by this mapper
-        instantiations?: Type[];       // Cache of instantiations created using this type mapper.
     }
 
     export const enum InferencePriority {
