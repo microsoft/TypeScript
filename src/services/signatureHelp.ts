@@ -373,7 +373,7 @@ namespace ts.SignatureHelp {
                 isVariadic = false; // type parameter lists are not variadic
                 prefixDisplayParts.push(punctuationPart(SyntaxKind.LessThanToken));
                 // Use `.mapper` to ensure we get the generic type arguments even if this is an instantiated version of the signature.
-                const typeParameters = candidateSignature.mapper ? candidateSignature.mapper.mappedTypes : candidateSignature.typeParameters;
+                const typeParameters = candidateSignature.typeParameters; // !!! candidateSignature.mapper ? candidateSignature.mapper.mappedTypes : candidateSignature.typeParameters;
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                 const parameterParts = mapToDisplayParts(writer =>
