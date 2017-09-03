@@ -10422,7 +10422,6 @@ namespace ts {
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
-            //sys.write(typeToString(originalSource) + " ==> " + typeToString(originalTarget) + "\n");
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -10490,7 +10489,6 @@ namespace ts {
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
-                            //sys.write("  " + typeToString(source) + "\n");
                             if (!inference.candidates || priority < inference.priority) {
                                 inference.candidates = [source];
                                 inference.priority = priority;
