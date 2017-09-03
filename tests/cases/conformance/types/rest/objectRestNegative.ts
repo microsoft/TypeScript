@@ -14,5 +14,5 @@ function generic<T extends { x, y }>(t: T) {
     return rest;
 }
 
-let rest: { b: string }
+let rest: { b: string };
 ({a, ...rest.b + rest.b} = o);

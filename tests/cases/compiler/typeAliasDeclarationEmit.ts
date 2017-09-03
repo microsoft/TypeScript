@@ -1,6 +1,7 @@
 // @target: ES5
 // @module: AMD
 // @declaration: true
+// @allowSyntheticDefaultImports: true
 
 export type callback<T> = () => T;
 

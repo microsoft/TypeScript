@@ -39,7 +39,7 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: Th
         return rest;
     }
     
-    let rest: { b: string }
+    let rest: { b: string };
     ({a, ...rest.b + rest.b} = o);
             ~~~~~~~~~~~~~~~
 !!! error TS2701: The target of an object rest assignment must be a variable or a property access.

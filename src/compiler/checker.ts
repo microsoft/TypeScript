@@ -6773,7 +6773,7 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (!isInJavaScriptFile(node) && numTypeArguments && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                if (!isInJavaScriptFile(node) && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
                             ? Diagnostics.Generic_type_0_requires_1_type_argument_s
@@ -6819,7 +6819,7 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (numTypeArguments && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
                             ? Diagnostics.Generic_type_0_requires_1_type_argument_s
@@ -7543,13 +7543,21 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
+         function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
             const fn = typeNodeToExpression(node.type);
             const args = map(node.arguments, typeNodeToExpression);
             const callExpr = createCall(fn, node.typeArguments || [], args);
-            fixupParentReferences(callExpr);
             callExpr.parent = node;
-            return checkExpression(callExpr);
+            callExpr.expression.parent = callExpr;
+            callExpr.expression.parent = callExpr.expression;
+            forEach(callExpr.arguments, (arg: Node) => {
+                arg.parent = callExpr;
+                (arg as ParenthesizedExpression).expression.parent = arg;
+            });
+            forEach(callExpr.typeArguments, (arg: Node) => {
+                arg.parent = callExpr;
+            });
+            return checkCallExpression(callExpr);
         }
 
         // null! as type
@@ -7564,28 +7572,28 @@ namespace ts {
             return type;
         }
 
-        // Parser.fixupParentReferences
-        function fixupParentReferences(rootNode: Node) {
-            let parent: Node = rootNode;
-            forEachChild(rootNode, visitNode);
-            return;
-            function visitNode(n: Node): void {
-                if (n.parent !== parent) {
-                    n.parent = parent;
-                    const saveParent = parent;
-                    parent = n;
-                    forEachChild(n, visitNode);
-                    if (n.jsDoc) {
-                        for (const jsDoc of n.jsDoc) {
-                            jsDoc.parent = n;
-                            parent = jsDoc;
-                            forEachChild(jsDoc, visitNode);
-                        }
-                    }
-                    parent = saveParent;
-                }
-            }
-        }
+        // // Parser.fixupParentReferences
+        // function fixupParentReferences(rootNode: Node) {
+        //     let parent: Node = rootNode;
+        //     forEachChild(rootNode, visitNode);
+        //     return;
+        //     function visitNode(n: Node): void {
+        //         if (n.parent !== parent) {
+        //             n.parent = parent;
+        //             const saveParent = parent;
+        //             parent = n;
+        //             forEachChild(n, visitNode);
+        //             if (n.jsDoc) {
+        //                 for (const jsDoc of n.jsDoc) {
+        //                     jsDoc.parent = n;
+        //                     parent = jsDoc;
+        //                     forEachChild(jsDoc, visitNode);
+        //                 }
+        //             }
+        //             parent = saveParent;
+        //         }
+        //     }
+        // }
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
@@ -15202,7 +15210,7 @@ namespace ts {
             // the declared number of type parameters, the call has an incorrect arity.
             const numTypeParameters = length(signature.typeParameters);
             const minTypeArgumentCount = getMinTypeArgumentCount(signature.typeParameters);
-            const hasRightNumberOfTypeArgs = !typeArguments ||
+            const hasRightNumberOfTypeArgs = !(typeArguments && typeArguments.length) ||
                 (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
             if (!hasRightNumberOfTypeArgs) {
                 return false;
@@ -15997,7 +16005,7 @@ namespace ts {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
-                            if (typeArguments) {
+                            if (typeArguments && typeArguments.length) {
                                 typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
                                 if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
                                     candidateForTypeArgumentError = originalCandidate;
@@ -18780,7 +18788,7 @@ namespace ts {
             for (let i = 0; i < typeParameters.length; i++) {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
-                    if (!typeArguments) {
+                    if (!(typeArguments && typeArguments.length)) {
                         typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
@@ -22506,6 +22514,7 @@ namespace ts {
             checkSourceElement(node.type);
             forEach(node.arguments, checkSourceElement);
             forEach(node.typeArguments, checkSourceElement);
+            getTypeFromTypeCallNode(node); // construct node and check it (checkCallExpression)
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is

@@ -4247,35 +4247,63 @@ namespace ts {
 
         // type equivalent of parseCallExpressionRest
         function parseTypeCallRest(type?: TypeNode): TypeNode {
+            // console.log("parseTypeCallRest");
             while (true) {
                 type = parseArrayTypeOrHigher(type);
-                if (token() === SyntaxKind.LessThanToken) {
-                    // See if this is the start of a generic invocation.  If so, consume it and
-                    // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
-                    // part of an arithmetic expression.  Break out so we consume it higher in the
-                    // stack.
-                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
-                    if (!typeArguments) {
-                        return type;
+                // crap, the type may have parsed a semicolon...
+                if (!~[SyntaxKind.ThisType, SyntaxKind.ArrayType, SyntaxKind.TupleType, SyntaxKind.TypeOperator, SyntaxKind.LiteralType, SyntaxKind.NullKeyword, SyntaxKind.TrueKeyword, SyntaxKind.FalseKeyword, SyntaxKind.AnyKeyword, SyntaxKind.NumberKeyword, SyntaxKind.ObjectKeyword, SyntaxKind.BooleanKeyword, SyntaxKind.StringKeyword, SyntaxKind.SymbolKeyword, SyntaxKind.ThisKeyword, SyntaxKind.VoidKeyword, SyntaxKind.UndefinedKeyword, SyntaxKind.NullKeyword, SyntaxKind.NeverKeyword].indexOf(type.kind)) {
+                    if (token() === SyntaxKind.LessThanToken) {
+                        // See if this is the start of a generic invocation.  If so, consume it and
+                        // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
+                        // part of an arithmetic expression.  Break out so we consume it higher in the
+                        // stack.
+                        const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                        if (!typeArguments) {
+                            return type;
+                        }
+
+                        const call = tryParse(() => parseTypeCall(type));
+                        if (call) {
+                            type = call;
+                            continue;
+                        }
+                    }
+                    else if (token() === SyntaxKind.OpenParenToken) {
+                        const call = tryParse(() => parseTypeCall(type));
+                        if (call) {
+                            type = call;
+                            continue;
+                        }
                     }
 
-                    const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
-                    callExpr.type = type;
-                    callExpr.typeArguments = typeArguments;
-                    callExpr.arguments = parseTypeArgumentList();
-                    type = finishNode(callExpr);
-                    continue;
                 }
-                else if (token() === SyntaxKind.OpenParenToken) {
-                    const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
-                    callExpr.type = type;
-                    callExpr.arguments = parseTypeArgumentList();
-                    type = finishNode(callExpr);
-                    continue;
-                }
-
                 return type;
             }
+        }
+
+        function parseTypeCall(type: TypeNode) {
+            let typeArguments: NodeArray<TypeNode>;
+            if (token() === SyntaxKind.LessThanToken) {
+                typeArguments = tryParse(parseTypeArgumentsInExpression);
+            }
+
+            // if we're in what looks like a function declaration, scram
+            const arg = lookAhead(parseFirstParam);
+            if (arg && arg.type) {
+                return undefined;
+            }
+
+            const args = parseTypeArgumentList();
+            const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
+            callExpr.type = type;
+            callExpr.typeArguments = typeArguments;
+            callExpr.arguments = args;
+            return finishNode(callExpr);
+        }
+
+        function parseFirstParam() {
+            parseExpected(SyntaxKind.OpenParenToken);
+            return parseParameter();
         }
 
         function parseTypeArgumentList() {

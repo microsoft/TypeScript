@@ -4,7 +4,7 @@
 var f2: {
 >f2 : { (x: string, y: number): string; <T, U>(x: T, y: U): T; }
 
-    (x: string, y: number): string;
+    (x: string, y: number): string
 >x : string
 >y : number
 
