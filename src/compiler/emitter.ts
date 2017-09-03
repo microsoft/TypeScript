@@ -557,6 +557,15 @@ namespace ts {
                     return emitIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return emitMappedType(<MappedTypeNode>node);
+                case SyntaxKind.MatchType:
+                    return emitMatchType(<MatchTypeNode>node);
+                case SyntaxKind.MatchTypeBlock:
+                    return emitMatchTypeBlock(<MatchTypeBlock>node);
+                case SyntaxKind.MatchTypeMatchClause:
+                    return emitMatchTypeMatchClause(<MatchTypeMatchClause>node);
+                case SyntaxKind.MatchTypeElseClause:
+                    return emitMatchTypeElseClause(<MatchTypeElseClause>node);
+
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -1112,6 +1121,30 @@ namespace ts {
                 decreaseIndent();
             }
             write("}");
+        }
+
+        function emitMatchType(node: MatchTypeNode) {
+            emit(node.typeArgument);
+            writeToken(SyntaxKind.MatchKeyword, node.typeArgument.end);
+            write(" ");
+            emit(node.matchBlock);
+        }
+
+        function emitMatchTypeBlock(node: MatchTypeBlock) {
+            writeToken(SyntaxKind.OpenBraceToken, node.pos);
+            emitList(node, node.clauses, ListFormat.MatchTypeBlockClauses);
+            writeToken(SyntaxKind.CloseBraceToken, node.clauses.end);
+        }
+
+        function emitMatchTypeMatchClause(node: MatchTypeMatchClause) {
+            emit(node.matchType);
+            write(": ");
+            emit(node.resultType);
+        }
+
+        function emitMatchTypeElseClause(node: MatchTypeElseClause) {
+            write("else: ");
+            emit(node.resultType);
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
@@ -3134,6 +3167,7 @@ namespace ts {
         InterfaceMembers = Indented | MultiLine,
         EnumMembers = CommaDelimited | Indented | MultiLine,
         CaseBlockClauses = Indented | MultiLine,
+        MatchTypeBlockClauses = Indented | MultiLine | CommaDelimited | AllowTrailingComma,
         NamedImportsOrExportsElements = CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
         JsxElementChildren = SingleLine | NoInterveningComments,
         JsxElementAttributes = SingleLine | SpaceBetweenSiblings | NoInterveningComments,

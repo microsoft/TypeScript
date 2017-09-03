@@ -907,6 +907,14 @@
         "category": "Error",
         "code": 1328
     },
+    "Type or 'else' expected.": {
+        "category": "Error",
+        "code": 1329
+    },
+    "An 'else' clause cannot appear more than once in a 'match' type.": {
+        "category": "Error",
+        "code": 1330
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

@@ -2534,6 +2534,17 @@ namespace ts {
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
+                if (type.flags & TypeFlags.Match) {
+                    const typeArgument = typeToTypeNodeHelper((<MatchType>type).typeArgument, context);
+                    const clauses: MatchTypeMatchOrElseClause[] = map((<MatchType>type).clauses, clause => {
+                        const matchType = typeToTypeNodeHelper(clause.matchType, context);
+                        const resultType = typeToTypeNodeHelper(clause.resultType, context);
+                        return createMatchTypeMatchClause(matchType, resultType);
+                    });
+                    const elseType = (<MatchType>type).elseType;
+                    if (elseType) clauses.push(createMatchTypeElseClause(typeToTypeNodeHelper(elseType, context)));
+                    return createMatchTypeNode(typeArgument, createMatchTypeBlock(clauses));
+                }
 
                 Debug.fail("Should be unreachable.");
 
@@ -3303,6 +3314,9 @@ namespace ts {
                         writeType((<IndexedAccessType>type).indexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
+                    else if (type.flags & TypeFlags.Match) {
+                        writeMatchType(<MatchType>type);
+                    }
                     else {
                         // Should never get here
                         // { ... }
@@ -3314,6 +3328,35 @@ namespace ts {
                     }
                 }
 
+                function writeMatchType(type: MatchType) {
+                    writeType((<MatchType>type).typeArgument, TypeFormatFlags.None);
+                    writeSpace(writer);
+                    writer.writeKeyword("match");
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    writer.writeLine();
+                    writer.increaseIndent();
+                    for (const clause of (<MatchType>type).clauses) {
+                        writeType(clause.matchType, TypeFormatFlags.None);
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
+                        writeType(clause.resultType, TypeFormatFlags.None);
+                        writePunctuation(writer, SyntaxKind.CommaToken);
+                        writer.writeLine();
+                    }
+                    const elseType = (<MatchType>type).elseType;
+                    if (elseType) {
+                        writer.writeKeyword("else");
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
+                        writeType(elseType, TypeFormatFlags.None);
+                        writePunctuation(writer, SyntaxKind.CommaToken);
+                        writer.writeLine();
+                    }
+                    writer.decreaseIndent();
+                    writer.writeLine();
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                }
 
                 function writeTypeList(types: Type[], delimiter: SyntaxKind) {
                     for (let i = 0; i < types.length; i++) {
@@ -7730,6 +7773,65 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function isGenericMatchTypeClause(clause: MatchTypeClause): boolean {
+            return isGenericObjectType(clause.matchType);
+        }
+
+        function getMatchTypeConstituents(type: MatchType) {
+            if (type.clauses.length === 0) return type.elseType || neverType;
+            const constituents: Type[] = [];
+            for (const clause of type.clauses) {
+                constituents.push(clause.resultType);
+            }
+            if (type.elseType) {
+                constituents.push(type.elseType);
+            }
+            return getUnionType(constituents);
+        }
+
+        function getMatchType(typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
+            if (clauses.length > 0 && (isGenericObjectType(typeArgument) || forEach(clauses, isGenericMatchTypeClause))) {
+                if (clauses.length > 0) {
+                    const type = <MatchType>createType(TypeFlags.Match);
+                    type.typeArgument = typeArgument;
+                    type.clauses = clauses;
+                    type.elseType = elseType;
+                    type.aliasSymbol = aliasSymbol;
+                    type.aliasTypeArguments = aliasTypeArguments;
+                    return type;
+                }
+            }
+
+            for (const clause of clauses) {
+                if (isTypeAssignableTo(typeArgument, clause.matchType)) {
+                    return clause.resultType;
+                }
+            }
+
+            return elseType || neverType;
+        }
+
+        function getTypeFromMatchTypeNode(node: MatchTypeNode) {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                const typeArgument = getTypeFromTypeNode(node.typeArgument);
+                const clauses: MatchTypeClause[] = [];
+                let elseType: Type | undefined;
+                for (const clause of node.matchBlock.clauses) {
+                    if (clause.kind === SyntaxKind.MatchTypeElseClause) {
+                        if (!elseType) elseType = getTypeFromTypeNode(clause.resultType);
+                    }
+                    else {
+                        const matchType = getTypeFromTypeNode(clause.matchType);
+                        const resultType = getTypeFromTypeNode(clause.resultType);
+                        clauses.push({ matchType, resultType });
+                    }
+                }
+                links.resolvedType = getMatchType(typeArgument, clauses, elseType, getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: TypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -7992,6 +8094,8 @@ namespace ts {
                     return getTypeFromIndexedAccessTypeNode(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return getTypeFromMappedTypeNode(<MappedTypeNode>node);
+                case SyntaxKind.MatchType:
+                    return getTypeFromMatchTypeNode(<MatchTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -8005,6 +8109,8 @@ namespace ts {
             }
         }
 
+        function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[];
+        function instantiateList<T>(items: ReadonlyArray<T>, mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): ReadonlyArray<T>;
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
             if (items && items.length) {
                 const result: T[] = [];
@@ -8356,7 +8462,21 @@ namespace ts {
             if (type.flags & TypeFlags.IndexedAccess) {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
+            if (type.flags & TypeFlags.Match) {
+                return getMatchType(
+                    instantiateType((<MatchType>type).typeArgument, mapper),
+                    instantiateList((<MatchType>type).clauses, mapper, instantiateMatchTypeClause),
+                    instantiateType((<MatchType>type).elseType, mapper),
+                    type.aliasSymbol,
+                    instantiateTypes(type.aliasTypeArguments, mapper));
+            }
             return type;
+        }
+
+        function instantiateMatchTypeClause(clause: MatchTypeClause, mapper: TypeMapper) {
+            const matchType = instantiateType(clause.matchType, mapper);
+            const resultType = instantiateType(clause.resultType, mapper);
+            return { matchType, resultType };
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
@@ -9362,6 +9482,14 @@ namespace ts {
                     }
                 }
                 else {
+                    if (source.flags & TypeFlags.Match) {
+                        if (target.flags & TypeFlags.Union) {
+                            if (result = isRelatedTo(getMatchTypeConstituents(<MatchType>source), target, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
+                    }
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, reportErrors)) {
@@ -18879,6 +19007,34 @@ namespace ts {
             checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
         }
 
+        function checkMatchType(node: MatchTypeNode) {
+            checkSourceElement(node.typeArgument);
+
+            let firstElseClause: MatchTypeElseClause;
+            let hasDuplicateElseClause = false;
+            for (const clause of node.matchBlock.clauses) {
+                if (clause.kind === SyntaxKind.MatchTypeElseClause) {
+                    if (hasDuplicateElseClause) continue;
+                    if (!firstElseClause) {
+                        firstElseClause = clause;
+                    }
+                    else {
+                        const sourceFile = getSourceFileOfNode(node);
+                        const start = skipTrivia(sourceFile.text, clause.pos);
+                        const end = clause.resultType ? clause.resultType.pos : clause.end;
+                        grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.An_else_clause_cannot_appear_more_than_once_in_a_match_type);
+                        hasDuplicateElseClause = true;
+                    }
+                }
+                else {
+                    checkSourceElement(clause.matchType);
+                }
+
+                checkSourceElement(clause.resultType);
+            }
+        }
+
+
         function isPrivateWithinAmbient(node: Node): boolean {
             return hasModifier(node, ModifierFlags.Private) && isInAmbientContext(node);
         }
@@ -22412,6 +22568,8 @@ namespace ts {
                     return checkIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return checkMappedType(<MappedTypeNode>node);
+                case SyntaxKind.MatchType:
+                    return checkMatchType(<MatchTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:

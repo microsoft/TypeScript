@@ -3367,6 +3367,10 @@ namespace ts {
             case SyntaxKind.TypeOperator:
             case SyntaxKind.IndexedAccessType:
             case SyntaxKind.MappedType:
+            case SyntaxKind.MatchType:
+            case SyntaxKind.MatchTypeBlock:
+            case SyntaxKind.MatchTypeMatchClause:
+            case SyntaxKind.MatchTypeElseClause:
             case SyntaxKind.LiteralType:
             case SyntaxKind.NamespaceExportDeclaration:
                 // Types and signatures are TypeScript syntax, and exclude all other facts.

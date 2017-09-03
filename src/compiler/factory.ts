@@ -773,6 +773,58 @@ namespace ts {
             : node;
     }
 
+    export function createMatchTypeNode(typeArgument: TypeNode, matchBlock: MatchTypeBlock) {
+        const node = createSynthesizedNode(SyntaxKind.MatchType) as MatchTypeNode;
+        node.typeArgument = typeArgument;
+        node.matchBlock = matchBlock;
+        return node;
+    }
+
+    export function updateMatchTypeNode(node: MatchTypeNode, typeArgument: TypeNode, matchBlock: MatchTypeBlock) {
+        return node.typeArgument !== typeArgument
+            || node.matchBlock !== matchBlock
+            ? updateNode(createMatchTypeNode(typeArgument, matchBlock), node)
+            : node;
+    }
+
+    export function createMatchTypeBlock(clauses: ReadonlyArray<MatchTypeMatchOrElseClause>) {
+        const node = createSynthesizedNode(SyntaxKind.MatchTypeBlock) as MatchTypeBlock;
+        node.clauses = createNodeArray(clauses);
+        return node;
+    }
+
+    export function updateMatchTypeBlock(node: MatchTypeBlock, clauses: ReadonlyArray<MatchTypeMatchOrElseClause>) {
+        return node.clauses !== clauses
+            ? updateNode(createMatchTypeBlock(clauses), node)
+            : node;
+    }
+
+    export function createMatchTypeMatchClause(matchType: TypeNode, resultType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.MatchTypeMatchClause) as MatchTypeMatchClause;
+        node.matchType = matchType;
+        node.resultType = resultType;
+        return node;
+    }
+
+    export function updateMatchTypeMatchClause(node: MatchTypeMatchClause, matchType: TypeNode, resultType: TypeNode) {
+        return node.matchType !== matchType
+            || node.resultType !== resultType
+            ? updateNode(createMatchTypeMatchClause(matchType, resultType), node)
+            : node;
+    }
+
+    export function createMatchTypeElseClause(resultType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.MatchTypeElseClause) as MatchTypeElseClause;
+        node.resultType = resultType;
+        return node;
+    }
+
+    export function updateMatchTypeElseClause(node: MatchTypeElseClause, resultType: TypeNode) {
+        return node.resultType !== resultType
+            ? updateNode(createMatchTypeElseClause(resultType), node)
+            : node;
+    }
+
     export function createLiteralTypeNode(literal: Expression) {
         const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         node.literal = literal;

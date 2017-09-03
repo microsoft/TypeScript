@@ -94,6 +94,7 @@ namespace ts {
         "is": SyntaxKind.IsKeyword,
         "keyof": SyntaxKind.KeyOfKeyword,
         "let": SyntaxKind.LetKeyword,
+        "match": SyntaxKind.MatchKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,
         "never": SyntaxKind.NeverKeyword,

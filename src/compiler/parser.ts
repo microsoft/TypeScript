@@ -155,6 +155,16 @@ namespace ts {
                     visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
                     visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).type);
+            case SyntaxKind.MatchType:
+                return visitNode(cbNode, (<MatchTypeNode>node).typeArgument) ||
+                    visitNode(cbNode, (<MatchTypeNode>node).matchBlock);
+            case SyntaxKind.MatchTypeBlock:
+                return visitNodes(cbNode, cbNodes, (<MatchTypeBlock>node).clauses);
+            case SyntaxKind.MatchTypeMatchClause:
+                return visitNode(cbNode, (<MatchTypeMatchClause>node).matchType) ||
+                    visitNode(cbNode, (<MatchTypeMatchClause>node).resultType);
+            case SyntaxKind.MatchTypeElseClause:
+                return visitNode(cbNode, (<MatchTypeElseClause>node).resultType);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
@@ -1332,6 +1342,8 @@ namespace ts {
                     return !(token() === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfStatement();
                 case ParsingContext.SwitchClauses:
                     return token() === SyntaxKind.CaseKeyword || token() === SyntaxKind.DefaultKeyword;
+                case ParsingContext.MatchTypeClauses:
+                    return token() === SyntaxKind.ElseKeyword || token() === SyntaxKind.CommaToken || isStartOfType();
                 case ParsingContext.TypeMembers:
                     return lookAhead(isTypeMemberStart);
                 case ParsingContext.ClassMembers:
@@ -1446,6 +1458,7 @@ namespace ts {
             switch (kind) {
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauses:
+                case ParsingContext.MatchTypeClauses:
                 case ParsingContext.TypeMembers:
                 case ParsingContext.ClassMembers:
                 case ParsingContext.EnumMembers:
@@ -1631,6 +1644,9 @@ namespace ts {
                 case ParsingContext.SwitchClauses:
                     return isReusableSwitchClause(node);
 
+                case ParsingContext.MatchTypeClauses:
+                    return isReusableMatchTypeClause(node);
+
                 case ParsingContext.SourceElements:
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
@@ -1737,6 +1753,17 @@ namespace ts {
                 }
             }
 
+            return false;
+        }
+
+        function isReusableMatchTypeClause(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.MatchTypeMatchClause:
+                    case SyntaxKind.MatchTypeElseClause:
+                        return true;
+                }
+            }
             return false;
         }
 
@@ -1848,6 +1875,7 @@ namespace ts {
                 case ParsingContext.BlockStatements: return Diagnostics.Declaration_or_statement_expected;
                 case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
                 case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.MatchTypeClauses: return Diagnostics.Type_or_else_expected;
                 case ParsingContext.RestProperties: // fallthrough
                 case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
                 case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
@@ -2585,6 +2613,45 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseMatchTypeMatchClause() {
+            const node = <MatchTypeMatchClause>createNode(SyntaxKind.MatchTypeMatchClause);
+            node.matchType = parseType();
+            parseExpected(SyntaxKind.ColonToken);
+            node.resultType = parseType();
+            return finishNode(node);
+        }
+
+        function parseMatchTypeElseClause() {
+            const node = <MatchTypeElseClause>createNode(SyntaxKind.MatchTypeElseClause);
+            parseExpected(SyntaxKind.ElseKeyword);
+            parseExpected(SyntaxKind.ColonToken);
+            node.resultType = parseType();
+            return finishNode(node);
+        }
+
+        function parseMatchTypeCaseOrElseClause(): MatchTypeMatchOrElseClause {
+            return token() === SyntaxKind.ElseKeyword ? parseMatchTypeElseClause() : parseMatchTypeMatchClause();
+        }
+
+        function parseMatchTypeRest(type: TypeNode) {
+            while (true) {
+                type = parseArrayTypeRest(type);
+                if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.MatchKeyword) {
+                    const node = <MatchTypeNode>createNode(SyntaxKind.MatchType, type.pos);
+                    node.typeArgument = type;
+                    parseExpected(SyntaxKind.MatchKeyword);
+                    const matchBlock = <MatchTypeBlock>createNode(SyntaxKind.MatchTypeBlock);
+                    parseExpected(SyntaxKind.OpenBraceToken);
+                    matchBlock.clauses = parseDelimitedList(ParsingContext.MatchTypeClauses, parseMatchTypeCaseOrElseClause, /*considerSemicolonAsDelimiter*/ true);
+                    parseExpected(SyntaxKind.CloseBraceToken);
+                    node.matchBlock = finishNode(matchBlock);
+                    type = finishNode(node);
+                    continue;
+                }
+                return type;
+            }
+        }
+
         function parseTupleType(): TupleTypeNode {
             const node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
@@ -2768,6 +2835,10 @@ namespace ts {
 
         function parseArrayTypeOrHigher(): TypeNode {
             let type = parseJSDocPostfixTypeOrHigher();
+            return parseMatchTypeRest(type);
+        }
+
+        function parseArrayTypeRest(type: TypeNode): TypeNode {
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 if (isStartOfType()) {
                     const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
@@ -6118,6 +6189,7 @@ namespace ts {
             BlockStatements,           // Statements in block
             SwitchClauses,             // Clauses in switch statement
             SwitchClauseStatements,    // Statements in switch clause
+            MatchTypeClauses,          // Clauses in a match type block
             TypeMembers,               // Members in interface or type literal
             ClassMembers,              // Members in class declaration
             EnumMembers,               // Members in enum declaration

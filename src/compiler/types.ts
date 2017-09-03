@@ -187,6 +187,7 @@ namespace ts {
         GetKeyword,
         IsKeyword,
         KeyOfKeyword,
+        MatchKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
@@ -239,6 +240,10 @@ namespace ts {
         TypeOperator,
         IndexedAccessType,
         MappedType,
+        MatchType,
+        MatchTypeBlock,
+        MatchTypeMatchClause,
+        MatchTypeElseClause,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -1003,6 +1008,32 @@ namespace ts {
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken;
         type?: TypeNode;
+    }
+
+    export interface MatchTypeNode extends TypeNode {
+        kind: SyntaxKind.MatchType;
+        typeArgument: TypeNode;
+        matchBlock: MatchTypeBlock;
+    }
+
+    export interface MatchTypeBlock extends Node {
+        kind: SyntaxKind.MatchTypeBlock;
+        clauses: NodeArray<MatchTypeMatchOrElseClause>;
+    }
+
+    export type MatchTypeMatchOrElseClause =
+        | MatchTypeMatchClause
+        | MatchTypeElseClause;
+
+    export interface MatchTypeMatchClause extends Node {
+        kind: SyntaxKind.MatchTypeMatchClause;
+        matchType: TypeNode;
+        resultType: TypeNode;
+    }
+
+    export interface MatchTypeElseClause extends Node {
+        kind: SyntaxKind.MatchTypeElseClause;
+        resultType: TypeNode;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -3156,17 +3187,18 @@ namespace ts {
         Intersection            = 1 << 17,  // Intersection (T & U)
         Index                   = 1 << 18,  // keyof T
         IndexedAccess           = 1 << 19,  // T[K]
+        Match                   = 1 << 20,  // T match { U: V }
         /* @internal */
-        FreshLiteral            = 1 << 20,  // Fresh literal type
+        FreshLiteral            = 1 << 21,  // Fresh literal type
         /* @internal */
-        ContainsWideningType    = 1 << 21,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 23,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 24,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 24,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 25,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 25,  // Jsx attributes type
+        JsxAttributes           = 1 << 26,  // Jsx attributes type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3185,12 +3217,12 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
-        TypeVariable = TypeParameter | IndexedAccess,
+        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess | Match,
+        TypeVariable = TypeParameter | IndexedAccess | Match,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | Match | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -3418,6 +3450,18 @@ namespace ts {
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends Type {
         type: TypeVariable | UnionOrIntersectionType;
+    }
+
+    // T match {} types (TypeFlags.Match)
+    export interface MatchType extends Type {
+        typeArgument: Type;
+        clauses: ReadonlyArray<MatchTypeClause>;
+        elseType?: Type;
+    }
+
+    export interface MatchTypeClause {
+        matchType: Type;
+        resultType: Type;
     }
 
     export const enum SignatureKind {

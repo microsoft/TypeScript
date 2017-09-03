@@ -447,6 +447,8 @@ namespace ts {
                     return emitIndexedAccessType(<IndexedAccessTypeNode>type);
                 case SyntaxKind.MappedType:
                     return emitMappedType(<MappedTypeNode>type);
+                case SyntaxKind.MatchType:
+                    return emitMatchType(<MatchTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -577,6 +579,18 @@ namespace ts {
                 decreaseIndent();
                 write("}");
                 enclosingDeclaration = prevEnclosingDeclaration;
+            }
+
+            function emitMatchType(node: MatchTypeNode) {
+                emitType(node.typeArgument);
+                write(" match {");
+                if (node.matchBlock.clauses.length) {
+                    increaseIndent();
+                    emitCommaList(node.matchBlock.clauses, emitNode);
+                    writeLine();
+                    decreaseIndent();
+                }
+                write("}");
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {
@@ -1808,6 +1822,19 @@ namespace ts {
             }
         }
 
+        function emitMatchTypeMatchClause(node: MatchTypeMatchClause) {
+            writeLine();
+            emitType(node.matchType);
+            write(": ");
+            emitType(node.resultType);
+        }
+
+        function emitMatchTypeElseClause(node: MatchTypeElseClause) {
+            writeLine();
+            write("else: ");
+            emitType(node.resultType);
+        }
+
         function emitNode(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
@@ -1841,6 +1868,10 @@ namespace ts {
                     return emitPropertyDeclaration(<PropertyDeclaration>node);
                 case SyntaxKind.EnumMember:
                     return emitEnumMemberDeclaration(<EnumMember>node);
+                case SyntaxKind.MatchTypeMatchClause:
+                    return emitMatchTypeMatchClause(<MatchTypeMatchClause>node);
+                case SyntaxKind.MatchTypeElseClause:
+                    return emitMatchTypeElseClause(<MatchTypeElseClause>node);
                 case SyntaxKind.ExportAssignment:
                     return emitExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:

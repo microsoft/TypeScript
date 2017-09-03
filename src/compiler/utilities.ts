@@ -4844,7 +4844,6 @@ namespace ts {
             || kind === SyntaxKind.BooleanKeyword
             || kind === SyntaxKind.StringKeyword
             || kind === SyntaxKind.SymbolKeyword
-            || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.VoidKeyword
             || kind === SyntaxKind.UndefinedKeyword
             || kind === SyntaxKind.NullKeyword
@@ -4869,6 +4868,16 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function isMatchTypeBlock(node: Node): node is MatchTypeBlock {
+        return node.kind === SyntaxKind.MatchTypeBlock;
+    }
+
+    export function isMatchTypeMatchOrElseClause(node: Node): node is MatchTypeMatchOrElseClause {
+        const kind = node.kind;
+        return kind === SyntaxKind.MatchTypeMatchClause
+            || kind === SyntaxKind.MatchTypeElseClause;
     }
 
     // Binding patterns

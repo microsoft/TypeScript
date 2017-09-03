@@ -405,6 +405,24 @@ namespace ts {
                     visitNode((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
 
+            case SyntaxKind.MatchType:
+                return updateMatchTypeNode(<MatchTypeNode>node,
+                    visitNode((<MatchTypeNode>node).typeArgument, visitor, isTypeNode),
+                    visitNode((<MatchTypeNode>node).matchBlock, visitor, isMatchTypeBlock));
+
+            case SyntaxKind.MatchTypeBlock:
+                return updateMatchTypeBlock(<MatchTypeBlock>node,
+                    nodesVisitor((<MatchTypeBlock>node).clauses, visitor, isMatchTypeMatchOrElseClause));
+
+            case SyntaxKind.MatchTypeMatchClause:
+                return updateMatchTypeMatchClause(<MatchTypeMatchClause>node,
+                    visitNode((<MatchTypeMatchClause>node).matchType, visitor, isTypeNode),
+                    visitNode((<MatchTypeMatchClause>node).resultType, visitor, isTypeNode));
+
+            case SyntaxKind.MatchTypeElseClause:
+                return updateMatchTypeElseClause(<MatchTypeElseClause>node,
+                    visitNode((<MatchTypeElseClause>node).resultType, visitor, isTypeNode));
+
             case SyntaxKind.LiteralType:
                 return updateLiteralTypeNode(<LiteralTypeNode>node,
                     visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
