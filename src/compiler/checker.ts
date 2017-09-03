@@ -8186,38 +8186,52 @@ namespace ts {
         }
 
         function getAnonymousTypeInstantiation(type: AnonymousType, mapper: TypeMapper) {
-            if (type.objectFlags & ObjectFlags.Instantiated) {
-                mapper = combineTypeMappers(type.mapper, mapper);
-                type = type.target;
-            }
-            const symbol = type.symbol;
+            const target = type.objectFlags & ObjectFlags.Instantiated ? type.target : type;
+            const symbol = target.symbol;
             const links = getSymbolLinks(symbol);
-            if (!links.typeParameters) {
-                // This first time an anonymous type is instantiated we compute and store a list of the type
-                // parameters that are in scope (and therefore potentially referenced).
-                const typeParameters = getOuterTypeParameters(symbol.declarations[0], /*includeThisTypes*/ true);
-                links.typeParameters = typeParameters || emptyArray;
-                if (typeParameters) {
+            let typeParameters = links.typeParameters;
+            if (!typeParameters) {
+                // The first time an anonymous type is instantiated we compute and store a list of the type
+                // parameters that are in scope (and therefore potentially referenced). For type literals that
+                // aren't the right hand side of a generic type alias declaration we optimize by reducing the
+                // set of type parameters to those that are actually referenced somewhere in the literal.
+                const declaration = symbol.declarations[0];
+                const outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true) || emptyArray;
+                typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
+                    filter(outerTypeParameters, tp => isTypeParameterReferencedWithin(tp, declaration)) :
+                    outerTypeParameters;
+                links.typeParameters = typeParameters;
+                if (typeParameters.length) {
                     links.instantiations = createMap<Type>();
-                    links.instantiations.set(getTypeListId(typeParameters), type);
+                    links.instantiations.set(getTypeListId(typeParameters), target);
                 }
             }
-            const typeParameters = links.typeParameters;
             if (typeParameters.length) {
                 // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const typeArguments = map(typeParameters, mapper);
+                const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper, mapper) : mapper;
+                const typeArguments = map(typeParameters, combinedMapper);
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    result = type.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>type, newMapper) : instantiateAnonymousType(type, newMapper);
+                    result = target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) : instantiateAnonymousType(target, newMapper);
                     links.instantiations.set(id, result);
                 }
                 return result;
             }
             return type;
+        }
+
+        function isTypeParameterReferencedWithin(tp: TypeParameter, node: Node) {
+            return tp.isThisType ? forEachChild(node, checkThis) : forEachChild(node, checkIdentifier);
+            function checkThis(node: Node): boolean {
+                return node.kind === SyntaxKind.ThisType || forEachChild(node, checkThis);
+            }
+            function checkIdentifier(node: Node): boolean {
+                return node.kind === SyntaxKind.Identifier && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp || forEachChild(node, checkIdentifier);
+            }
         }
 
         function instantiateMappedType(type: MappedType, mapper: TypeMapper): Type {
@@ -10408,6 +10422,7 @@ namespace ts {
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
+            //sys.write(typeToString(originalSource) + " ==> " + typeToString(originalTarget) + "\n");
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -10475,6 +10490,7 @@ namespace ts {
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
+                            //sys.write("  " + typeToString(source) + "\n");
                             if (!inference.candidates || priority < inference.priority) {
                                 inference.candidates = [source];
                                 inference.priority = priority;
