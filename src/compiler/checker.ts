@@ -9070,7 +9070,7 @@ namespace ts {
                                         const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                         Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
-                                        if (getContainingStatement(errorNode) === getContainingStatement(propDeclaration)) {
+                                        if (findAncestor(errorNode, isStatement) === findAncestor(propDeclaration, isStatement)) {
                                             errorNode = propDeclaration;
                                         }
 
@@ -12813,13 +12813,6 @@ namespace ts {
                 func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? <ObjectLiteralExpression>func.parent :
                 func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? <ObjectLiteralExpression>func.parent.parent :
                     undefined;
-        }
-
-        function getContainingStatement(node: Node): Node {
-            while (node && !isStatement(node)) {
-                node = node.parent;
-            }
-            return node;
         }
 
         function getThisTypeArgument(type: Type): Type {
