@@ -1316,14 +1316,12 @@ namespace ts {
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
-        const end = start + length;
-
         Debug.assertGreaterThanOrEqual(start, 0);
         Debug.assertGreaterThanOrEqual(length, 0);
 
         if (file) {
             Debug.assertLessThanOrEqual(start, file.text.length);
-            Debug.assertLessThanOrEqual(end, file.text.length);
+            Debug.assertLessThanOrEqual(start + length, file.text.length);
         }
 
         let text = getLocaleSpecificMessage(message);

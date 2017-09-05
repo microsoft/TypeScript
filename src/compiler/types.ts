@@ -668,7 +668,7 @@ namespace ts {
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
-        type?: TypeNode;
+        type: TypeNode | undefined;
     }
 
     export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement {
