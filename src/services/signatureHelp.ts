@@ -154,7 +154,7 @@ namespace ts.SignatureHelp {
             const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
-            const argumentIndex = isInsideTemplateLiteral(<LiteralExpression>node, position) ? 0 : 1;
+            const argumentIndex = isInsideTemplateLiteral(node, position) ? 0 : 1;
 
             return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile);
         }
@@ -165,7 +165,7 @@ namespace ts.SignatureHelp {
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
             // If we're just after a template tail, don't show signature help.
-            if (node.kind === SyntaxKind.TemplateTail && !isInsideTemplateLiteral(<LiteralExpression>node, position)) {
+            if (node.kind === SyntaxKind.TemplateTail && !isInsideTemplateLiteral(node, position)) {
                 return undefined;
             }
 

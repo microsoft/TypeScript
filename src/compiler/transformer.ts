@@ -93,7 +93,7 @@ namespace ts {
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
     export function transformNodes<T extends Node>(resolver: EmitResolver, host: EmitHost, options: CompilerOptions, nodes: ReadonlyArray<T>, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): TransformationResult<T> {
-        const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
+        const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count + 1);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
         let lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];

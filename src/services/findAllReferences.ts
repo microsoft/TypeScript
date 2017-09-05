@@ -1063,7 +1063,7 @@ namespace ts.FindAllReferences.Core {
         const containingTypeReference = getContainingTypeReference(refNode);
         if (containingTypeReference && state.markSeenContainingTypeReference(containingTypeReference)) {
             const parent = containingTypeReference.parent;
-            if (isVariableLike(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
+            if (isVariableLike(parent) && canHaveType(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
                 addReference(parent.initializer);
             }
             else if (isFunctionLike(parent) && parent.type === containingTypeReference && (parent as FunctionLikeDeclaration).body) {
@@ -1662,7 +1662,7 @@ namespace ts.FindAllReferences.Core {
             return false;
         }
         else if (isVariableLike(node)) {
-            if (node.initializer) {
+            if (hasInitializer(node)) {
                 return true;
             }
             else if (node.kind === SyntaxKind.VariableDeclaration) {

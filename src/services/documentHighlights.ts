@@ -191,7 +191,7 @@ namespace ts.DocumentHighlights {
         let child: Node = throwStatement;
 
         while (child.parent) {
-            const parent = child.parent;
+            const parent: Node = child.parent;
 
             if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
                 return parent;
@@ -307,7 +307,7 @@ namespace ts.DocumentHighlights {
                     nodes = [...(<ClassDeclaration>declaration).members, declaration];
                 }
                 else {
-                    nodes = (<Block>container).statements;
+                    nodes = container.statements;
                 }
                 break;
             case SyntaxKind.Constructor:
@@ -383,7 +383,7 @@ namespace ts.DocumentHighlights {
 
         return keywords;
 
-        function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
+        function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind.GetAccessor | SyntaxKind.SetAccessor): void {
             const accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
 
             if (accessor) {

@@ -977,7 +977,7 @@ namespace ts {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
 
-    export function isInsideTemplateLiteral(node: LiteralExpression, position: number) {
+    export function isInsideTemplateLiteral(node: LiteralLikeNode, position: number) {
         return isTemplateLiteralKind(node.kind)
             && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
     }
