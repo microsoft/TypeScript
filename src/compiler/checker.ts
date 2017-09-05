@@ -23386,7 +23386,7 @@ namespace ts {
                     return isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol);
                 case SyntaxKind.ExportDeclaration:
                     const exportClause = (<ExportDeclaration>node).exportClause;
-                    return !exportClause || forEach(exportClause.elements, isValueAliasDeclaration);
+                    return exportClause && forEach(exportClause.elements, isValueAliasDeclaration);
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).expression
                         && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier
