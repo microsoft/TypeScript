@@ -235,24 +235,34 @@ namespace ts.server {
         return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 
+    interface QueuedOperation {
+        operationId: string;
+        operation: () => void;
+    }
+
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
         private installerPidReported = false;
         private socket: NodeSocket;
         private projectService: ProjectService;
-        private throttledOperations: ThrottledOperations;
         private eventSender: EventSender;
+        private activeRequestCount = 0;
+        private requestQueue: QueuedOperation[] = [];
+        private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+
+        private static readonly maxActiveRequestCount = 10;
+        private static readonly requestDelayMillis = 100;
+
 
         constructor(
             private readonly telemetryEnabled: boolean,
             private readonly logger: server.Logger,
-            host: ServerHost,
+            private readonly host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
             private readonly npmLocation: string | undefined,
             private newLine: string) {
-            this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
@@ -333,12 +343,26 @@ namespace ts.server {
                     this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);
                 }
             }
-            this.throttledOperations.schedule(project.getProjectName(), /*ms*/ 250, () => {
+
+            const operationId = project.getProjectName();
+            const operation = () => {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Sending request: ${JSON.stringify(request)}`);
                 }
                 this.installer.send(request);
-            });
+            };
+            const queuedRequest: QueuedOperation = { operationId, operation };
+
+            if (this.activeRequestCount < NodeTypingsInstaller.maxActiveRequestCount) {
+                this.scheduleRequest(queuedRequest);
+            }
+            else {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Deferring request for: ${operationId}`);
+                }
+                this.requestQueue.push(queuedRequest);
+                this.requestMap.set(operationId, queuedRequest);
+            }
         }
 
         private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
@@ -399,10 +423,38 @@ namespace ts.server {
                 return;
             }
 
+            if (this.activeRequestCount > 0) {
+                this.activeRequestCount--;
+            }
+            else {
+                Debug.fail("Received too many responses");
+            }
+
+            while (this.requestQueue.length > 0) {
+                const queuedRequest = this.requestQueue.shift();
+                if (this.requestMap.get(queuedRequest.operationId) == queuedRequest) {
+                    this.requestMap.delete(queuedRequest.operationId);
+                    this.scheduleRequest(queuedRequest);
+                    break;
+                }
+
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                }
+            }
+
             this.projectService.updateTypingsForProject(response);
             if (response.kind === ActionSet && this.socket) {
                 this.sendEvent(0, "setTypings", response);
             }
+        }
+
+        private scheduleRequest(request: QueuedOperation) {
+            if(this.logger.hasLevel(LogLevel.verbose)) {
+                this.logger.info(`Scheduling request for: ${request.operationId}`);
+            }
+            this.activeRequestCount++;
+            this.host.setTimeout(request.operation, NodeTypingsInstaller.requestDelayMillis);
         }
     }
 
