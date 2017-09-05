@@ -281,7 +281,7 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer), node)
+            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
             : node;
     }
 
@@ -1016,19 +1016,48 @@ namespace ts {
         return node;
     }
 
+    /* @deprecated */ export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
-        body: ConciseBody) {
+        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
+        body: ConciseBody): ArrowFunction;
+    export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
+        bodyOrUndefined?: ConciseBody): ArrowFunction {
+        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
+        let body: ConciseBody;
+        if (bodyOrUndefined === undefined) {
+            equalsGreaterThanToken = node.equalsGreaterThanToken;
+            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
+        }
+        else {
+            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
+                n.kind === SyntaxKind.EqualsGreaterThanToken);
+            body = bodyOrUndefined;
+        }
+
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
+            || node.equalsGreaterThanToken !== equalsGreaterThanToken
             || node.body !== body
-            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, node.equalsGreaterThanToken, body), node)
+            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
             : node;
     }
 

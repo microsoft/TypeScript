@@ -4666,8 +4666,12 @@ namespace ts {
 
     /* @internal */
     export function isNodeArray<T extends Node>(array: ReadonlyArray<T>): array is NodeArray<T> {
-        return array.hasOwnProperty("pos")
-            && array.hasOwnProperty("end");
+        const res = array.hasOwnProperty("pos") && array.hasOwnProperty("end");
+        if (res) {
+            const { pos, end } = array as NodeArray<T>;
+            Debug.assert(typeof pos === "number" && typeof end === "number");
+        }
+        return res;
     }
 
     // Literals
