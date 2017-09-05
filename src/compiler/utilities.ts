@@ -3975,14 +3975,19 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocClassTag) as JSDocClassTag;
     }
 
+    /** Gets the JSDoc return tag for the node if present */
+    export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
+    }
+
     /** Gets the JSDoc template tag for the node if present */
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
         return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
     }
 
-    /** Gets the JSDoc return tag for the node if present */
-    export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
+    /** Gets the JSDoc type tag for the node if present */
+    export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
     }
 
     /**
