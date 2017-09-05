@@ -239,18 +239,21 @@ namespace ts.server {
         getFileName(f: T): string;
         getScriptKind(f: T): ScriptKind;
         hasMixedContent(f: T, extraFileExtensions: JsFileExtensionInfo[]): boolean;
+        isDynamicFile(f: T): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
         hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
+        isDynamicFile: x => x[0] === "^",
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
         getFileName: x => x.fileName,
         getScriptKind: x => tryConvertScriptKindName(x.scriptKind),
-        hasMixedContent: x => x.hasMixedContent
+        hasMixedContent: x => x.hasMixedContent,
+        isDynamicFile: x => x.fileName[0] === "^",
     };
 
     function findProjectByName<T extends Project>(projectName: string, projects: T[]): T {
@@ -1210,15 +1213,16 @@ namespace ts.server {
         private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: ReadonlyArray<Diagnostic>): void {
             let errors: Diagnostic[];
             for (const f of files) {
-                const rootFilename = propertyReader.getFileName(f);
+                const rootFileName = propertyReader.getFileName(f);
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                const isDynamicFile = propertyReader.isDynamicFile(f);
+                if (isDynamicFile || this.host.fileExists(rootFileName)) {
+                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFileName), /*openedByClient*/ clientFileName === rootFileName, /*fileContent*/ undefined, scriptKind, hasMixedContent, isDynamicFile);
                     project.addRoot(info);
                 }
                 else {
-                    (errors || (errors = [])).push(createFileNotFoundDiagnostic(rootFilename));
+                    (errors || (errors = [])).push(createFileNotFoundDiagnostic(rootFileName));
                 }
             }
             project.setProjectErrors(concatenate(configFileErrors, errors));
@@ -1248,7 +1252,8 @@ namespace ts.server {
             let rootFilesChanged = false;
             for (const f of newUncheckedFiles) {
                 const newRootFile = propertyReader.getFileName(f);
-                if (!this.host.fileExists(newRootFile)) {
+                const isDynamic = propertyReader.isDynamicFile(f);
+                if (!isDynamic && !this.host.fileExists(newRootFile)) {
                     (projectErrors || (projectErrors = [])).push(createFileNotFoundDiagnostic(newRootFile));
                     continue;
                 }
@@ -1259,7 +1264,7 @@ namespace ts.server {
                     if (!scriptInfo) {
                         const scriptKind = propertyReader.getScriptKind(f);
                         const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                        scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                        scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, isDynamic);
                     }
                 }
                 newRootScriptInfos.push(scriptInfo);
@@ -1443,17 +1448,17 @@ namespace ts.server {
 
         watchClosedScriptInfo(info: ScriptInfo) {
             // do not watch files with mixed content - server doesn't know how to interpret it
-            if (!info.hasMixedContent) {
+            if (!info.hasMixedContent && !info.isDynamic) {
                 const { fileName } = info;
                 info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
             }
         }
 
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, isDynamic?: boolean) {
             let info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
-                if (openedByClient || this.host.fileExists(fileName)) {
-                    info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent);
+                if (openedByClient || isDynamic || this.host.fileExists(fileName)) {
+                    info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent, isDynamic);
 
                     this.filenameToScriptInfo.set(info.path, info);
 
@@ -1463,6 +1468,7 @@ namespace ts.server {
                             fileContent = this.host.readFile(fileName) || "";
                         }
                     }
+
                     else {
                         this.watchClosedScriptInfo(info);
                     }
@@ -1642,7 +1648,7 @@ namespace ts.server {
             if (openFiles) {
                 for (const file of openFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
-                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen());
+                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
                     this.openClientFileWithNormalizedPath(normalizedPath, file.content, tryConvertScriptKindName(file.scriptKind), file.hasMixedContent);
                 }

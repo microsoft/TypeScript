@@ -651,10 +651,24 @@ namespace ts {
     }
 
     export interface SignatureDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.CallSignature
+            | SyntaxKind.ConstructSignature
+            | SyntaxKind.MethodSignature
+            | SyntaxKind.IndexSignature
+            | SyntaxKind.FunctionType
+            | SyntaxKind.ConstructorType
+            | SyntaxKind.JSDocFunctionType
+            | SyntaxKind.FunctionDeclaration
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.Constructor
+            | SyntaxKind.GetAccessor
+            | SyntaxKind.SetAccessor
+            | SyntaxKind.FunctionExpression
+            | SyntaxKind.ArrowFunction;
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
-        type?: TypeNode;
+        type: TypeNode | undefined;
     }
 
     export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement {
@@ -1816,6 +1830,7 @@ namespace ts {
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
     export interface ClassLikeDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -2343,7 +2358,8 @@ namespace ts {
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteral>;
-        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral>;
+        // Identifier only if `declare global`
+        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;

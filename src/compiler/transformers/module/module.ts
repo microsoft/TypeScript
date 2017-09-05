@@ -430,11 +430,8 @@ namespace ts {
          */
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (currentModuleInfo.exportEquals) {
-                const expressionResult = importCallExpressionVisitor(currentModuleInfo.exportEquals.expression);
+                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, importCallExpressionVisitor);
                 if (expressionResult) {
-                    if (expressionResult instanceof Array) {
-                        return Debug.fail("export= expression should never be replaced with multiple expressions!");
-                    }
                     if (emitAsReturn) {
                         const statement = createReturn(expressionResult);
                         setTextRange(statement, currentModuleInfo.exportEquals);
