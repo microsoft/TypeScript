@@ -1,0 +1,18 @@
+=== tests/cases/compiler/exportEqualsClassNoRedeclarationError.ts ===
+class SomeClass {
+>SomeClass : SomeClass
+
+    static get someProp(): number {
+>someProp : number
+
+        return 0;
+>0 : 0
+    }
+
+    static set someProp(value: number) {}
+>someProp : number
+>value : number
+}
+export = SomeClass;
+>SomeClass : SomeClass
+

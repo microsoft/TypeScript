@@ -715,7 +715,7 @@ namespace ts {
         return result;
     }
 
-    export function sum<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
+    export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
             // Note: we need the following type assertion because of GH #17069
@@ -769,6 +769,32 @@ namespace ts {
             }
         }
         return to;
+    }
+
+    /**
+     * @return Whether the value was added.
+     */
+    export function pushIfUnique<T>(array: T[], toAdd: T): boolean {
+        if (contains(array, toAdd)) {
+            return false;
+        }
+        else {
+            array.push(toAdd);
+            return true;
+        }
+    }
+
+    /**
+     * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
+     */
+    export function appendIfUnique<T>(array: T[] | undefined, toAdd: T): T[] {
+        if (array) {
+            pushIfUnique(array, toAdd);
+            return array;
+        }
+        else {
+            return [toAdd];
+        }
     }
 
     /**
@@ -1290,14 +1316,12 @@ namespace ts {
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
-        const end = start + length;
-
         Debug.assertGreaterThanOrEqual(start, 0);
         Debug.assertGreaterThanOrEqual(length, 0);
 
         if (file) {
             Debug.assertLessThanOrEqual(start, file.text.length);
-            Debug.assertLessThanOrEqual(end, file.text.length);
+            Debug.assertLessThanOrEqual(start + length, file.text.length);
         }
 
         let text = getLocaleSpecificMessage(message);
@@ -1359,7 +1383,7 @@ namespace ts {
         };
     }
 
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: string[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
 
@@ -2599,5 +2623,9 @@ namespace ts {
 
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
+    }
+
+    export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
+        return (arg: T) => f(arg) && g(arg);
     }
 }

@@ -613,13 +613,16 @@ namespace ts {
 
                 addRange(statements, context.endLexicalEnvironment());
 
+                const iife = createImmediatelyInvokedArrowFunction(statements);
+                setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
+
                 const varStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
                             /*type*/ undefined,
-                            createImmediatelyInvokedFunctionExpression(statements)
+                            iife
                         )
                     ])
                 );
@@ -1944,7 +1947,7 @@ namespace ts {
                     const name = getMutableClone(<Identifier>node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
-                    name.parent = currentScope;
+                    name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
                     if (useFallback) {
                         return createLogicalAnd(
                             createStrictInequality(
