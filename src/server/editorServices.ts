@@ -1214,16 +1214,17 @@ namespace ts.server {
         }
 
         private printProjects() {
-            if (!this.logger.hasLevel(LogLevel.verbose)) {
+            if (!this.logger.hasLevel(LogLevel.normal)) {
                 return;
             }
 
+            const writeProjectFileNames = this.logger.hasLevel(LogLevel.verbose);
             this.logger.startGroup();
             let counter = 0;
             const printProjects = (projects: Project[], counter: number): number => {
                 for (const project of projects) {
                     this.logger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
-                    this.logger.info(project.filesToString());
+                    this.logger.info(project.filesToString(writeProjectFileNames));
                     this.logger.info("-----------------------------------------------");
                     counter++;
                 }

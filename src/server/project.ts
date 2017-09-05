@@ -576,7 +576,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return undefined;
             }
-            return this.getLanguageService().getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles, isDetailed);
+            return this.getLanguageService(/*ensureSynchronized*/ false).getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles, isDetailed);
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
@@ -889,14 +889,16 @@ namespace ts.server {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
         }
 
-        filesToString() {
+        filesToString(writeProjectFileNames: boolean) {
             if (!this.program) {
                 return "\tFiles (0)\n";
             }
             const sourceFiles = this.program.getSourceFiles();
             let strBuilder = `\tFiles (${sourceFiles.length})\n`;
-            for (const file of sourceFiles) {
-                strBuilder += `\t${file.fileName}\n`;
+            if (writeProjectFileNames) {
+                for (const file of sourceFiles) {
+                    strBuilder += `\t${file.fileName}\n`;
+                }
             }
             return strBuilder;
         }
