@@ -9781,7 +9781,7 @@ namespace ts {
             return type.flags & TypeFlags.TypeParameter && !getConstraintFromTypeParameter(<TypeParameter>type);
         }
 
-        function isTypeReferenceWithGenericArguments(type: Type): type is TypeReference {
+        function isTypeReferenceWithGenericArguments(type: Type): boolean {
             return getObjectFlags(type) & ObjectFlags.Reference && some((<TypeReference>type).typeArguments, t => isUnconstrainedTypeParameter(t) || isTypeReferenceWithGenericArguments(t));
         }
 
@@ -9801,7 +9801,7 @@ namespace ts {
                     result += "=" + index;
                 }
                 else if (depth < 4 && isTypeReferenceWithGenericArguments(t)) {
-                    result += "<" + getTypeReferenceId(t, typeParameters, depth + 1) + ">";
+                    result += "<" + getTypeReferenceId(t as TypeReference, typeParameters, depth + 1) + ">";
                 }
                 else {
                     result += "-" + t.id;
@@ -10052,7 +10052,7 @@ namespace ts {
                 getUnionType(types, /*subtypeReduction*/ true);
         }
 
-        function isArrayType(type: Type): type is TypeReference {
+        function isArrayType(type: Type): boolean {
             return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
 
