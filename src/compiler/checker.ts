@@ -1961,7 +1961,7 @@ namespace ts {
         }
 
         function createType(flags: TypeFlags): Type {
-            const result = new Type(checker, flags);
+            const result = new Type(checker, (flags & TypeFlags.TypeVariable) ? flags | TypeFlags.ContainsTypeVariable : flags);
             typeCount++;
             result.id = typeCount;
             return result;
@@ -20509,7 +20509,7 @@ namespace ts {
 
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.TypeVariable)) {
+            if (!isTypeAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.ContainsTypeVariable)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
