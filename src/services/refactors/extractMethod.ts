@@ -516,10 +516,8 @@ namespace ts.refactor.extractMethod {
     export function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<PossibleExtraction> | undefined {
         const { scopes, readsAndWrites: { errorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
-        return scopes.map((scope, i): PossibleExtraction => {
-            const errors = errorsPerScope[i];
-            return { scopeDescription: getDescriptionForScope(scope), errors };
-        });
+        return scopes.map((scope, i): PossibleExtraction =>
+            ({ scopeDescription: getDescriptionForScope(scope), errors: errorsPerScope[i] }));
     }
 
     function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
@@ -705,17 +703,15 @@ namespace ts.refactor.extractMethod {
 
         const newNodes: Node[] = [];
         // replace range with function call
-        let { calledLhsLength, called } = getCalledExpression(scope, range, functionNameText); // tslint:disable-line prefer-const
+        let called = getCalledExpression(scope, range, functionNameText); // tslint:disable-line prefer-const
 
         let call: Expression = createCall(called,
             callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
             call = createYield(createToken(SyntaxKind.AsteriskToken), call);
-            calledLhsLength += "yield* ".length;
         }
         if (range.facts & RangeFacts.IsAsyncFunction) {
-            calledLhsLength += "await ".length;
             call = createAwait(call);
         }
 
@@ -776,13 +772,26 @@ namespace ts.refactor.extractMethod {
 
         const edits = changeTracker.getChanges();
         const renameRange = isReadonlyArray(range.range) ? range.range[0] : range.range;
-        const returnOffset = range.facts & RangeFacts.HasReturn ? "return ".length : 0;
-        return {
-            // TODO: GH#18048
-            renameFilename: writes ? undefined : renameRange.getSourceFile().fileName,
-            renameLocation: writes ? undefined : renameRange.getStart() + calledLhsLength + returnOffset,
-            edits,
-        };
+
+        const renameFilename = renameRange.getSourceFile().fileName;
+        const renameLocation = getRenameLocation(edits, renameFilename, functionNameText);
+        return { renameFilename, renameLocation, edits };
+    }
+
+    function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, functionNameText: string): number {
+        let delta = 0;
+        for (const { fileName, textChanges } of edits) {
+            Debug.assert(fileName === renameFilename);
+            for (const change of textChanges) {
+                const { span, newText } = change;
+                const index = newText.indexOf(functionNameText);
+                if (index !== -1) {
+                    return span.start + delta + index;
+                }
+                delta += newText.length - span.length;
+            }
+        }
+        throw new Error(); // Didn't find the text we inserted?
     }
 
     function getFirstDeclaration(type: Type): Declaration | undefined {
@@ -830,23 +839,14 @@ namespace ts.refactor.extractMethod {
         return type1.id - type2.id;
     }
 
-    function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): { called: Expression, calledLhsLength: number } {
+    function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): Expression {
         const functionReference = createIdentifier(functionNameText);
         if (isClassLike(scope)) {
-            let calledLhsLength: number, lhs: Expression;
-            if (range.facts & RangeFacts.InStaticRegion) {
-                const text = scope.name.text;
-                calledLhsLength = text.length + 1; // +1 for the "."
-                lhs = createIdentifier(text);
-            }
-            else {
-                calledLhsLength = "this.".length;
-                lhs = createThis();
-            }
-            return { called: createPropertyAccess(lhs, functionReference), calledLhsLength };
+            const lhs = range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.text) : createThis();
+            return createPropertyAccess(lhs, functionReference);
         }
         else {
-            return { called: functionReference, calledLhsLength: 0 };
+            return functionReference;
         }
     }
 

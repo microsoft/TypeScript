@@ -13,7 +13,7 @@ namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
 
             function newFunction() {
                 let a1: I = { x: 1 };
@@ -27,7 +27,7 @@ namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
 
         function newFunction() {
@@ -41,7 +41,7 @@ namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 
@@ -55,7 +55,7 @@ namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 }

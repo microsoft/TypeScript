@@ -4,7 +4,7 @@ function F<T, U extends T[], V extends U[]>(v: V) {
 }
 // ==SCOPE::function 'F'==
 function F<T, U extends T[], V extends U[]>(v: V) {
-    newFunction();
+    /*RENAME*/newFunction();
 
     function newFunction() {
         v.toString();
@@ -12,7 +12,7 @@ function F<T, U extends T[], V extends U[]>(v: V) {
 }
 // ==SCOPE::global scope==
 function F<T, U extends T[], V extends U[]>(v: V) {
-    newFunction<T, U, V>(v);
+    /*RENAME*/newFunction<T, U, V>(v);
 }
 function newFunction<T, U extends T[], V extends U[]>(v: V) {
     v.toString();

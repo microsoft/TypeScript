@@ -14,10 +14,9 @@ edit.applyRefactor({
     actionName: "scope_1",
     actionDescription: "Extract function into global scope",
     newContent:
-// TODO: GH#18048
 `function foo() {
     var i = 10;
-    i = newFunction(i);
+    i = /*RENAME*/newFunction(i);
 }
 function newFunction(i: number) {
     i++;

@@ -16,11 +16,10 @@ edit.applyRefactor({
     actionName: "scope_1",
     actionDescription: "Extract function into global scope",
     newContent:
-// TODO: GH#18048
 `function foo() {
     var i = 10;
     var __return: any;
-    ({ __return, i } = newFunction(i));
+    ({ __return, i } = n/*RENAME*/ewFunction(i));
     return __return;
 }
 function newFunction(i) {

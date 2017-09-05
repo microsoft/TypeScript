@@ -23,7 +23,7 @@ namespace A {
         function a() {
             let a = 1;
         
-            return newFunction();
+            return /*RENAME*/newFunction();
 
             function newFunction() {
                 let y = 5;
@@ -44,7 +44,7 @@ namespace A {
             let a = 1;
         
             var __return: any;
-            ({ __return, a } = newFunction(a));
+            ({ __return, a } = /*RENAME*/newFunction(a));
             return __return;
         }
 
@@ -66,7 +66,7 @@ namespace A {
             let a = 1;
         
             var __return: any;
-            ({ __return, a } = newFunction(a));
+            ({ __return, a } = /*RENAME*/newFunction(a));
             return __return;
         }
     }
@@ -88,7 +88,7 @@ namespace A {
             let a = 1;
         
             var __return: any;
-            ({ __return, a } = newFunction(x, a));
+            ({ __return, a } = /*RENAME*/newFunction(x, a));
             return __return;
         }
     }

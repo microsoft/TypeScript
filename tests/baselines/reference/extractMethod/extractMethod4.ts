@@ -20,7 +20,7 @@ namespace A {
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction();
+            return await /*RENAME*/newFunction();
 
             async function newFunction() {
                 let y = 5;
@@ -39,7 +39,7 @@ namespace A {
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1);
+            return await /*RENAME*/newFunction(z, z1);
         }
 
         async function newFunction(z: number, z1: any) {
@@ -58,7 +58,7 @@ namespace A {
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1);
+            return await /*RENAME*/newFunction(z, z1);
         }
     }
 
@@ -77,7 +77,7 @@ namespace A {
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1, foo);
+            return await /*RENAME*/newFunction(z, z1, foo);
         }
     }
 }

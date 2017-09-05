@@ -15,7 +15,7 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            return this.newFunction();
+            return this./*RENAME*/newFunction();
         }
 
         private newFunction() {
@@ -30,7 +30,7 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 
@@ -45,7 +45,7 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 }

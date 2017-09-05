@@ -649,10 +649,12 @@ namespace A {
                 data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
-                    // TODO: GH#18048: Test rename location too
-                    const changes = refactor.extractMethod.getPossibleExtractionAtIndex(result.targetRange, context, results.indexOf(r)).edits;
+                    const { renameLocation, edits } = refactor.extractMethod.getPossibleExtractionAtIndex(result.targetRange, context, results.indexOf(r));
+                    Debug.assert(edits.length === 1);
                     data.push(`// ==SCOPE::${r.scopeDescription}==`);
-                    data.push(textChanges.applyChanges(sourceFile.text, changes[0].textChanges));
+                    const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
+                    const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
+                    data.push(newTextWithRename);
                 }
                 return data.join(newLineCharacter);
             });
