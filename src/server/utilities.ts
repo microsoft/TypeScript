@@ -179,6 +179,12 @@ namespace ts.server {
         constructor(private readonly host: ServerHost) {
         }
 
+        /**
+         * Wait `number` milliseconds and then invoke `cb`.  If, while waiting, schedule
+         * is called again with the same `operationId`, cancel this operation in favor
+         * of the new one.  (Note that the amount of time the canceled operation had been
+         * waiting does not affect the amount of time that the new operation waits.)
+         */
         public schedule(operationId: string, delay: number, cb: () => void) {
             const pendingTimeout = this.pendingTimeouts.get(operationId);
             if (pendingTimeout) {
