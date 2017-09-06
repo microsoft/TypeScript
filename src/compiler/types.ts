@@ -2658,11 +2658,9 @@ namespace ts {
          * So for `{ a } | { b }`, this will include both `a` and `b`.
          * Does not include properties of primitive types.
          */
-        /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
+        /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
-
-        /* @internal */ getUnionType(types: ReadonlyArray<Type>): Type;
     }
 
     export enum NodeBuilderFlags {

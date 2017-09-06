@@ -1765,23 +1765,22 @@ namespace ts.Completions {
      * This ensures that we don't try providing completions for all the methods on e.g. Array.
      */
     function getPropertiesForCompletion(type: Type, checker: TypeChecker): Symbol[] {
-        if (type.flags & TypeFlags.Union) {
-            const propertyOnlyTypes = mapDefined((type as UnionType).types, memberType => {
-                if (memberType.flags & TypeFlags.Primitive) {
-                    return undefined;
-                }
-                if (checker.getPropertiesOfType(memberType).some(p =>
-                    isMethodDeclaration(p.valueDeclaration) || isMethodSignature(p.valueDeclaration))) {
-                    return undefined;
-                }
-                return memberType;
-            });
-            // If there are no property-only types, just provide completions for every type as usual.
-            if (propertyOnlyTypes.length > 0) {
-                type = checker.getUnionType(propertyOnlyTypes);
-            }
+        if (!(type.flags & TypeFlags.Union)) {
+            return checker.getPropertiesOfType(type);
         }
 
-        return checker.getAllPossiblePropertiesOfType(type);
+        const { types } = type as UnionType;
+        const propertyOnlyTypes = mapDefined(types, memberType => {
+            if (memberType.flags & TypeFlags.Primitive) {
+                return undefined;
+            }
+            if (checker.getPropertiesOfType(memberType).some(p =>
+                isMethodDeclaration(p.valueDeclaration) || isMethodSignature(p.valueDeclaration))) {
+                return undefined;
+            }
+            return memberType;
+        });
+        // If there are no property-only types, just provide completions for every type as usual.
+        return checker.getAllPossiblePropertiesOfTypes(propertyOnlyTypes.length > 0 ? propertyOnlyTypes : types);
     }
 }
