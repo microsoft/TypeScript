@@ -10781,9 +10781,15 @@ namespace ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                const isReference = !isWriteAccess(node, /*writeOnly*/ true);
                 links.resolvedSymbol = !nodeIsMissing(node) &&
-                    resolveName(node, node.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node, isReference, Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
+                    resolveName(
+                        node,
+                        node.escapedText,
+                        SymbolFlags.Value | SymbolFlags.ExportValue,
+                        Diagnostics.Cannot_find_name_0,
+                        node,
+                        !isWriteOnlyAccess(node),
+                        Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -14774,7 +14780,7 @@ namespace ts {
                 noUnusedIdentifiers &&
                 (prop.flags & SymbolFlags.ClassMember) &&
                 prop.valueDeclaration && hasModifier(prop.valueDeclaration, ModifierFlags.Private)
-                && !(nodeForCheckWriteOnly && isWriteAccess(nodeForCheckWriteOnly, /*writeOnly*/ true))) {
+                && !(nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly))) {
                 if (getCheckFlags(prop) & CheckFlags.Instantiated) {
                     getSymbolLinks(prop).target.isReferenced = true;
                 }

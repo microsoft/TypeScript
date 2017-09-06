@@ -3467,10 +3467,18 @@ namespace ts {
         return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
     }
 
+    export function isWriteOnlyAccess(node: Node) {
+        return isWriteAccessWorker(node, /*writeOnly*/ true);
+    }
+
+    export function isReadOnlyAccess(node: Node) {
+        return !isWriteAccessWorker(node, /*writeOnly*/ false);
+    }
+
     /**
      * @param writeOnly If set, return true for `x++;` but not for `f(x++);`, which uses `x` in addition to writing to it.
      */
-    export function isWriteAccess(node: Node, writeOnly: boolean): boolean {
+    function isWriteAccessWorker(node: Node, writeOnly: boolean): boolean {
         const { parent } = node;
         if (!parent) return false;
 
@@ -3487,7 +3495,7 @@ namespace ts {
                     (!writeOnly || parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement);
             }
             case SyntaxKind.PropertyAccessExpression:
-                return (parent as PropertyAccessExpression).name === node && isWriteAccess(parent, writeOnly);
+                return (parent as PropertyAccessExpression).name === node && isWriteAccessWorker(parent, writeOnly);
             default:
                 return false;
         }
