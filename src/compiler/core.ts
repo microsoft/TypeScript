@@ -379,9 +379,9 @@ namespace ts {
     export function map<T, U>(array: ReadonlyArray<T>, f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {
-            result = [];
+            result = Array<U>(array.length);
             for (let i = 0; i < array.length; i++) {
-                result.push(f(array[i], i));
+                result[i] = f(array[i], i);
             }
         }
         return result;
@@ -395,14 +395,14 @@ namespace ts {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 if (result) {
-                    result.push(f(array[i], i));
+                    result[i] = f(array[i], i);
                 }
                 else {
                     const item = array[i];
                     const mapped = f(item, i);
                     if (item !== mapped) {
-                        result = array.slice(0, i);
-                        result.push(mapped);
+                        result = array.slice();
+                        result[i] = mapped;
                     }
                 }
             }
