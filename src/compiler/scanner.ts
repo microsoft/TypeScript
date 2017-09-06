@@ -1668,14 +1668,14 @@ namespace ts {
                     if (p >= end) {
                         tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal);
-                        break;
+                        return token;
                     }
 
                     const ch = text.charCodeAt(p);
                     if (isLineBreak(ch)) {
                         tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal);
-                        break;
+                        return token;
                     }
 
                     if (inEscape) {
