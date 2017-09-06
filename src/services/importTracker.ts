@@ -180,7 +180,6 @@ namespace ts.FindAllReferences {
      * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
      */
     function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-        const exportName = exportKind === ExportKind.Default ? "default" : exportSymbol.escapedName;
         const importSearches: Array<[Identifier, Symbol]> = [];
         const singleReferences: Identifier[] = [];
         function addSearch(location: Identifier, symbol: Symbol): void {
@@ -256,7 +255,7 @@ namespace ts.FindAllReferences {
          */
         function handleNamespaceImportLike(importName: Identifier): void {
             // Don't rename an import that already has a different name than the export.
-            if (exportKind === ExportKind.ExportEquals && (!isForRename || importName.escapedText === exportName)) {
+            if (exportKind === ExportKind.ExportEquals && (!isForRename || isNameMatch(importName.escapedText))) {
                 addSearch(importName, checker.getSymbolAtLocation(importName));
             }
         }
@@ -268,7 +267,7 @@ namespace ts.FindAllReferences {
 
             for (const element of namedBindings.elements) {
                 const { name, propertyName } = element;
-                if ((propertyName || name).escapedText !== exportName) {
+                if (!isNameMatch((propertyName || name).escapedText)) {
                     continue;
                 }
 
@@ -287,6 +286,11 @@ namespace ts.FindAllReferences {
                     addSearch(name, localSymbol);
                 }
             }
+        }
+
+        function isNameMatch(name: __String): boolean {
+            // Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
+            return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === "default";
         }
     }
 
