@@ -1186,9 +1186,15 @@ namespace ts.server {
             if (simplifiedResult) {
                 return mapDefined(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
                         const convertedSpan = replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+
+                        const newEntry: protocol.CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                        // avoid serialization when hasAction = false
+                        if (hasAction) {
+                            newEntry.hasAction = true;
+                        }
+                        return newEntry;
                     }
                 }).sort((a, b) => compareStrings(a.name, b.name));
             }
@@ -1201,9 +1207,18 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
+            const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
-            return mapDefined(args.entryNames, entryName =>
-                project.getLanguageService().getCompletionEntryDetails(file, position, entryName));
+            return mapDefined(args.entryNames, entryName => {
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
+                if (details) {
+                    const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
+                    return { ...details, codeActions: mappedCodeActions };
+                }
+                else {
+                    return undefined;
+                }
+            });
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): ReadonlyArray<protocol.CompileOnSaveAffectedFileListSingleProject> {
