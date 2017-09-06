@@ -2631,7 +2631,5 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function never(_: never): never {
-        throw new Error("unreachable");
-    }
+    export function assertTypeIsNever(_: never): void {}
 }

@@ -362,8 +362,10 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.Property:
                         // static method / property
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
-                    default:
-                        return never(kind);
+                    default: {
+                        assertTypeIsNever(kind);
+                        return ScriptElementKind.unknown;
+                    }
                 }
             default:
                 return ScriptElementKind.unknown;
