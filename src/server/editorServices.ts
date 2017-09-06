@@ -588,11 +588,16 @@ namespace ts.server {
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
 
-        getDefaultProjectForFile(fileName: NormalizedPath, refreshInferredProjects: boolean) {
-            if (refreshInferredProjects) {
+        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean) {
+            let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+            if (ensureProject && !scriptInfo || scriptInfo.isOrphan()) {
                 this.ensureProjectStructuresUptoDate();
+                scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+                if (!scriptInfo) {
+                    return Errors.ThrowNoProject();
+                }
+                return scriptInfo.getDefaultProject();
             }
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
             return scriptInfo && !scriptInfo.isOrphan() && scriptInfo.getDefaultProject();
         }
 
@@ -1943,12 +1948,7 @@ namespace ts.server {
                 for (const file of changedFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!!scriptInfo);
-                    // apply changes in reverse order
-                    for (let i = file.changes.length - 1; i >= 0; i--) {
-                        const change = file.changes[i];
-                        scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
-                    }
-                    this.addChangedFile(scriptInfo);
+                    this.applyChangesToFile(scriptInfo, file.changes);
                 }
             }
 
@@ -1965,7 +1965,12 @@ namespace ts.server {
         }
 
         /* @internal */
-        addChangedFile(scriptInfo: ScriptInfo) {
+        applyChangesToFile(scriptInfo: ScriptInfo, changes: TextChange[]) {
+            // apply changes in reverse order
+            for (let i = changes.length - 1; i >= 0; i--) {
+                const change = changes[i];
+                scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
+            }
             if (!this.changedFiles) {
                 this.changedFiles = [scriptInfo];
             }
