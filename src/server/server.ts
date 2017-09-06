@@ -250,6 +250,11 @@ namespace ts.server {
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
 
+        // This number is essentially arbitrary.  Processing more than one typings request
+        // at a time makes sense, but having too many in the pipe results in a hang
+        // (see https://github.com/nodejs/node/issues/7657).
+        // It would be preferable to base our limit on the amount of space left in the
+        // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
 
