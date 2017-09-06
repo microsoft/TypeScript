@@ -1502,16 +1502,7 @@ namespace ts {
         return getJSDocCommentsAndTags(node);
     }
 
-    export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
-        let tags = node.jsDocCache;
-        // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
-        if (tags === undefined) {
-            node.jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
-        }
-        return tags;
-    }
-
-    function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
         let result: Array<JSDoc | JSDocTag> | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
@@ -4023,11 +4014,22 @@ namespace ts {
         return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
     }
 
-    /* Get the first JSDoc tag of a specified kind, or undefined if not present. */
+    /** Get all JSDoc tags related to a node, including those on parent nodes. */
+    export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
+        let tags = node.jsDocCache;
+        // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
+        if (tags === undefined) {
+            node.jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
+        }
+        return tags;
+    }
+
+    /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
     function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag | undefined {
         const tags = getJSDocTags(node);
         return find(tags, doc => doc.kind === kind);
     }
+
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
