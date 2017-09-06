@@ -432,7 +432,7 @@ namespace ts.server {
 
             while (this.requestQueue.length > 0) {
                 const queuedRequest = this.requestQueue.shift();
-                if (this.requestMap.get(queuedRequest.operationId) == queuedRequest) {
+                if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
                     this.requestMap.delete(queuedRequest.operationId);
                     this.scheduleRequest(queuedRequest);
                     break;
@@ -450,7 +450,7 @@ namespace ts.server {
         }
 
         private scheduleRequest(request: QueuedOperation) {
-            if(this.logger.hasLevel(LogLevel.verbose)) {
+            if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Scheduling request for: ${request.operationId}`);
             }
             this.activeRequestCount++;
