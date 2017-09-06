@@ -2238,12 +2238,6 @@ namespace ts {
                 isIdentifierOrPattern() ||
                 isModifierKind(token()) ||
                 token() === SyntaxKind.AtToken ||
-                // a jsdoc parameter can start directly with a type, but shouldn't look ahead
-                // in order to avoid confusion between parenthesized types and arrow functions
-                // eg
-                // declare function f(cb: function(number): void): void;
-                // vs
-                // f((n) => console.log(n));
                 isStartOfType(/*disableLookahead*/ true);
         }
 
