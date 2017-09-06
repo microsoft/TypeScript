@@ -19,7 +19,7 @@ class Vec2_T<A>
 
 //// [genericClasses4.js]
 // once caused stack overflow
-var Vec2_T = (function () {
+var Vec2_T = /** @class */ (function () {
     function Vec2_T(x, y) {
         this.x = x;
         this.y = y;

@@ -60,7 +60,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
-        let currentLineMap: number[];
+        let currentLineMap: ReadonlyArray<number>;
         let currentIdentifiers: Map<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
@@ -349,7 +349,6 @@ namespace ts {
                 errorNameNode = declaration.name;
                 const format = TypeFormatFlags.UseTypeOfFunction |
                     TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
-                    TypeFormatFlags.UseTypeAliasValue |
                     (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
                 errorNameNode = undefined;
@@ -368,7 +367,7 @@ namespace ts {
                 resolver.writeReturnTypeOfSignatureDeclaration(
                     signature,
                     enclosingDeclaration,
-                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                     writer);
                 errorNameNode = undefined;
             }
@@ -633,7 +632,7 @@ namespace ts {
             resolver.writeTypeOfExpression(
                 expr,
                 enclosingDeclaration,
-                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                 writer);
             write(";");
             writeLine();

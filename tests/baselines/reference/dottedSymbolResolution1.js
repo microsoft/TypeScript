@@ -26,7 +26,7 @@ function _setBarAndText(): void {
 }
 
 //// [dottedSymbolResolution1.js]
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     Base.prototype.foo = function () { };

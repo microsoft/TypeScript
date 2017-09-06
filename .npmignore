@@ -17,3 +17,4 @@ Jakefile.js
 .settings/
 .travis.yml
 .vscode/
+test.config

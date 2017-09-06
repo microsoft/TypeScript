@@ -376,6 +376,10 @@ namespace ts.server {
             return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
+        getExcludedFiles(): ReadonlyArray<NormalizedPath> {
+            return emptyArray;
+        }
+
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
             if (!this.program) {
                 return [];
@@ -1166,6 +1170,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
+        excludedFiles: ReadonlyArray<NormalizedPath> = [];
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -1175,6 +1180,11 @@ namespace ts.server {
             public compileOnSaveEnabled: boolean,
             private readonly projectFilePath?: string) {
             super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+
+        }
+
+        getExcludedFiles() {
+            return this.excludedFiles;
         }
 
         getProjectRootPath() {

@@ -651,10 +651,24 @@ namespace ts {
     }
 
     export interface SignatureDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.CallSignature
+            | SyntaxKind.ConstructSignature
+            | SyntaxKind.MethodSignature
+            | SyntaxKind.IndexSignature
+            | SyntaxKind.FunctionType
+            | SyntaxKind.ConstructorType
+            | SyntaxKind.JSDocFunctionType
+            | SyntaxKind.FunctionDeclaration
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.Constructor
+            | SyntaxKind.GetAccessor
+            | SyntaxKind.SetAccessor
+            | SyntaxKind.FunctionExpression
+            | SyntaxKind.ArrowFunction;
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
-        type?: TypeNode;
+        type: TypeNode | undefined;
     }
 
     export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement {
@@ -1816,6 +1830,7 @@ namespace ts {
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
     export interface ClassLikeDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -2254,7 +2269,7 @@ namespace ts {
      */
     export interface SourceFileLike {
         readonly text: string;
-        lineMap: number[];
+        lineMap: ReadonlyArray<number>;
     }
 
 
@@ -2286,16 +2301,16 @@ namespace ts {
          */
         /* @internal */ redirectInfo?: RedirectInfo | undefined;
 
-        amdDependencies: AmdDependency[];
+        amdDependencies: ReadonlyArray<AmdDependency>;
         moduleName: string;
-        referencedFiles: FileReference[];
-        typeReferenceDirectives: FileReference[];
+        referencedFiles: ReadonlyArray<FileReference>;
+        typeReferenceDirectives: ReadonlyArray<FileReference>;
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
-        renamedDependencies?: Map<string>;
+        renamedDependencies?: ReadonlyMap<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -2331,19 +2346,20 @@ namespace ts {
         /* @internal */ jsDocDiagnostics?: Diagnostic[];
 
         // Stores additional file-level diagnostics reported by the program
-        /* @internal */ additionalSyntacticDiagnostics?: Diagnostic[];
+        /* @internal */ additionalSyntacticDiagnostics?: ReadonlyArray<Diagnostic>;
 
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
-        /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: UnderscoreEscapedMap<true>;
+        /* @internal */ lineMap: ReadonlyArray<number>;
+        /* @internal */ classifiableNames?: ReadonlyUnderscoreEscapedMap<true>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteral>;
-        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral>;
+        // Identifier only if `declare global`
+        /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
@@ -2351,7 +2367,7 @@ namespace ts {
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
-        sourceFiles: SourceFile[];
+        sourceFiles: ReadonlyArray<SourceFile>;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -2398,19 +2414,19 @@ namespace ts {
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
-        getRootFileNames(): string[];
+        getRootFileNames(): ReadonlyArray<string>;
 
         /**
          * Get a list of files in the program
          */
-        getSourceFiles(): SourceFile[];
+        getSourceFiles(): ReadonlyArray<SourceFile>;
 
         /**
          * Get a list of file names that were passed to 'createProgram' or referenced in a
          * program source file but could not be located.
          */
         /* @internal */
-        getMissingFilePaths(): Path[];
+        getMissingFilePaths(): ReadonlyArray<Path>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -2424,14 +2440,14 @@ namespace ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
 
-        getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
-        getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
 
         /**
-         * Gets a type checker that can be used to semantically analyze source fils in the program.
+         * Gets a type checker that can be used to semantically analyze source files in the program.
          */
         getTypeChecker(): TypeChecker;
 
@@ -2451,7 +2467,7 @@ namespace ts {
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
 
@@ -2522,7 +2538,7 @@ namespace ts {
     export interface EmitResult {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
-        diagnostics: Diagnostic[];
+        diagnostics: ReadonlyArray<Diagnostic>;
         emittedFiles: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
@@ -2531,9 +2547,9 @@ namespace ts {
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
-        getSourceFiles(): SourceFile[];
+        getSourceFiles(): ReadonlyArray<SourceFile>;
         getSourceFile(fileName: string): SourceFile;
-        getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
     }
 
     export interface TypeChecker {
@@ -2568,6 +2584,15 @@ namespace ts {
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        /**
+         * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
+         * Otherwise returns its input.
+         * For example, at `export type T = number;`:
+         *     - `getSymbolAtLocation` at the location `T` will return the exported symbol for `T`.
+         *     - But the result of `getSymbolsInScope` will contain the *local* symbol for `T`, not the exported symbol.
+         *     - Calling `getExportSymbolOfSymbol` on that local symbol will return the exported symbol.
+         */
+        getExportSymbolOfSymbol(symbol: Symbol): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
@@ -2616,6 +2641,8 @@ namespace ts {
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
+        /* @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
+
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
@@ -2658,6 +2685,14 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 20,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+    }
+
+    /* @internal */
+    export interface SymbolWalker {
+        /** Note: Return values are not ordered. */
+        walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+        /** Note: Return values are not ordered. */
+        walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
     }
 
     export interface SymbolDisplayBuilder {
@@ -2708,11 +2743,12 @@ namespace ts {
         UseFullyQualifiedType           = 1 << 8,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 1 << 9,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 1 << 10,  // Writing type in type alias declaration
-        UseTypeAliasValue               = 1 << 11,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
         SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
         AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
         WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
         InArrayType                     = 1 << 15,  // Writing an array element type
+        UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
+                                                      // even though `T` can't be accessed in the current scope.
     }
 
     export const enum SymbolFormatFlags {
@@ -2921,7 +2957,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        escapedName: __String;                           // Name of symbol
+        escapedName: __String;                  // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members
@@ -2952,6 +2988,7 @@ namespace ts {
         leftSpread?: Symbol;                // Left source for synthetic spread property
         rightSpread?: Symbol;               // Right source for synthetic spread property
         syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
+        syntheticLiteralTypeOrigin?: StringLiteralType; // For a property on a mapped type, indicates the type whose text to use as the declaration name, instead of the symbol name
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
@@ -3126,7 +3163,7 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        ContainsAnyFunctionType = 1 << 23,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
@@ -3294,13 +3331,12 @@ namespace ts {
     }
 
     /* @internal */
-    export interface MappedType extends ObjectType {
+    export interface MappedType extends AnonymousType {
         declaration: MappedTypeNode;
         typeParameter?: TypeParameter;
         constraintType?: Type;
         templateType?: Type;
         modifiersType?: Type;
-        mapper?: TypeMapper;  // Instantiation mapper
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -3357,6 +3393,7 @@ namespace ts {
 
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
+        /** Retrieve using getConstraintFromTypeParameter */
         constraint: Type;        // Constraint
         default?: Type;
         /* @internal */
@@ -3410,6 +3447,8 @@ namespace ts {
         /* @internal */
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         /* @internal */
+        canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
+        /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         typePredicate?: TypePredicate;
@@ -3431,8 +3470,6 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        mappedTypes?: TypeParameter[]; // Types mapped by this mapper
-        instantiations?: Type[];       // Cache of instantiations created using this type mapper.
     }
 
     export const enum InferencePriority {
@@ -3943,12 +3980,7 @@ namespace ts {
     export interface ResolvedModule {
         /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /**
-         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
-         * - be a .d.ts file
-         * - use top level imports\exports
-         * - don't use tripleslash references
-         */
+        /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
     }
 
@@ -4121,7 +4153,7 @@ namespace ts {
     export interface SourceMapSource {
         fileName: string;
         text: string;
-        /* @internal */ lineMap: number[];
+        /* @internal */ lineMap: ReadonlyArray<number>;
         skipTrivia?: (pos: number) => number;
     }
 
@@ -4168,6 +4200,7 @@ namespace ts {
         HasEndOfDeclarationMarker = 1 << 22,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
         Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
         NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+        /*@internal*/ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
     }
 
     export interface EmitHelper {
@@ -4228,7 +4261,7 @@ namespace ts {
 
     /* @internal */
     export interface EmitHost extends ScriptReferenceHost {
-        getSourceFiles(): SourceFile[];
+        getSourceFiles(): ReadonlyArray<SourceFile>;
 
         /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;

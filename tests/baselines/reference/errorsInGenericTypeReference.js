@@ -82,13 +82,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
 // in call type arguments
-var testClass1 = (function () {
+var testClass1 = /** @class */ (function () {
     function testClass1() {
     }
     testClass1.prototype.method = function () { };
@@ -97,14 +97,14 @@ var testClass1 = (function () {
 var tc1 = new testClass1();
 tc1.method(); // error: could not find symbol V
 // in constructor type arguments
-var testClass2 = (function () {
+var testClass2 = /** @class */ (function () {
     function testClass2() {
     }
     return testClass2;
 }());
 var tc2 = new testClass2(); // error: could not find symbol V
 // in method return type annotation
-var testClass3 = (function () {
+var testClass3 = /** @class */ (function () {
     function testClass3() {
     }
     testClass3.prototype.testMethod1 = function () { return null; }; // error: could not find symbol V
@@ -124,19 +124,19 @@ function testFunction2(p) { } // error: could not find symbol V
 // in var type annotation
 var f; // error: could not find symbol V
 // in constraints
-var testClass4 = (function () {
+var testClass4 = /** @class */ (function () {
     function testClass4() {
     }
     return testClass4;
 }()); // error: could not find symbol V
-var testClass6 = (function () {
+var testClass6 = /** @class */ (function () {
     function testClass6() {
     }
     testClass6.prototype.method = function () { }; // error: could not find symbol V
     return testClass6;
 }());
 // in extends clause
-var testClass7 = (function (_super) {
+var testClass7 = /** @class */ (function (_super) {
     __extends(testClass7, _super);
     function testClass7() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -144,7 +144,7 @@ var testClass7 = (function (_super) {
     return testClass7;
 }(Foo)); // error: could not find symbol V
 // in implements clause
-var testClass8 = (function () {
+var testClass8 = /** @class */ (function () {
     function testClass8() {
     }
     return testClass8;

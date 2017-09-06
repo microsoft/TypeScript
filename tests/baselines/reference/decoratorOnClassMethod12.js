@@ -28,13 +28,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var M;
 (function (M) {
-    var S = (function () {
+    var _this = this;
+    var S = /** @class */ (function () {
         function S() {
         }
         S.prototype.decorator = function (target, key) { };
         return S;
     }());
-    var C = (function (_super) {
+    var C = /** @class */ (function (_super) {
         __extends(C, _super);
         function C() {
             return _super !== null && _super.apply(this, arguments) || this;

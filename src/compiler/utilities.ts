@@ -359,6 +359,7 @@ namespace ts {
             case SyntaxKind.TemplateTail:
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.RegularExpressionLiteral:
                 return node.text;
         }
 
@@ -475,6 +476,38 @@ namespace ts {
 
         return false;
     }
+
+    /* @internal */
+    export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
+    export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
+        switch (node.kind) {
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.JSDocFunctionType:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.JSDocTemplateTag:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                staticAssertNever(node);
+                return false;
+        }
+    }
+
+    function staticAssertNever(_: never): void {}
 
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
@@ -647,7 +680,7 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
+        return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
     }
 
     export function getJSDocCommentRanges(node: Node, text: string) {
@@ -2068,9 +2101,9 @@ namespace ts {
             || kind === SyntaxKind.SourceFile;
     }
 
-    export function nodeIsSynthesized(node: TextRange): boolean {
-        return positionIsSynthesized(node.pos)
-            || positionIsSynthesized(node.end);
+    export function nodeIsSynthesized(range: TextRange): boolean {
+        return positionIsSynthesized(range.pos)
+            || positionIsSynthesized(range.end);
     }
 
     export function getOriginalSourceFile(sourceFile: SourceFile) {
@@ -2380,6 +2413,7 @@ namespace ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     });
+    const escapedNullRegExp = /\\0[0-9]/g;
 
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
@@ -2391,7 +2425,11 @@ namespace ts {
             quoteChar === CharacterCodes.backtick ? backtickQuoteEscapedCharsRegExp :
             quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
             doubleQuoteEscapedCharsRegExp;
-        return s.replace(escapedCharsRegExp, getReplacement);
+        return s.replace(escapedCharsRegExp, getReplacement).replace(escapedNullRegExp, nullReplacement);
+    }
+
+    function nullReplacement(c: string) {
+        return "\\x00" + c.charAt(c.length - 1);
     }
 
     function getReplacement(c: string) {
@@ -2572,7 +2610,7 @@ namespace ts {
      * @param host An EmitHost.
      * @param targetSourceFile An optional target source file to emit.
      */
-    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): SourceFile[] {
+    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): ReadonlyArray<SourceFile> {
         const options = host.getCompilerOptions();
         const isSourceFileFromExternalLibrary = (file: SourceFile) => host.isSourceFileFromExternalLibrary(file);
         if (options.outFile || options.out) {
@@ -4980,54 +5018,63 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
-    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.PropertyAccessExpression
-            || kind === SyntaxKind.ElementAccessExpression
-            || kind === SyntaxKind.NewExpression
-            || kind === SyntaxKind.CallExpression
-            || kind === SyntaxKind.JsxElement
-            || kind === SyntaxKind.JsxSelfClosingElement
-            || kind === SyntaxKind.TaggedTemplateExpression
-            || kind === SyntaxKind.ArrayLiteralExpression
-            || kind === SyntaxKind.ParenthesizedExpression
-            || kind === SyntaxKind.ObjectLiteralExpression
-            || kind === SyntaxKind.ClassExpression
-            || kind === SyntaxKind.FunctionExpression
-            || kind === SyntaxKind.Identifier
-            || kind === SyntaxKind.RegularExpressionLiteral
-            || kind === SyntaxKind.NumericLiteral
-            || kind === SyntaxKind.StringLiteral
-            || kind === SyntaxKind.NoSubstitutionTemplateLiteral
-            || kind === SyntaxKind.TemplateExpression
-            || kind === SyntaxKind.FalseKeyword
-            || kind === SyntaxKind.NullKeyword
-            || kind === SyntaxKind.ThisKeyword
-            || kind === SyntaxKind.TrueKeyword
-            || kind === SyntaxKind.SuperKeyword
-            || kind === SyntaxKind.ImportKeyword
-            || kind === SyntaxKind.NonNullExpression
-            || kind === SyntaxKind.MetaProperty;
-    }
-
     /* @internal */
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
         return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
 
-    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.PrefixUnaryExpression
-            || kind === SyntaxKind.PostfixUnaryExpression
-            || kind === SyntaxKind.DeleteExpression
-            || kind === SyntaxKind.TypeOfExpression
-            || kind === SyntaxKind.VoidExpression
-            || kind === SyntaxKind.AwaitExpression
-            || kind === SyntaxKind.TypeAssertionExpression
-            || isLeftHandSideExpressionKind(kind);
+    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.Identifier:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.FalseKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.NonNullExpression:
+            case SyntaxKind.MetaProperty:
+            case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
+                return true;
+            default:
+                return false;
+        }
     }
 
     /* @internal */
     export function isUnaryExpression(node: Node): node is UnaryExpression {
         return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.PostfixUnaryExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.TypeAssertionExpression:
+                return true;
+            default:
+                return isLeftHandSideExpressionKind(kind);
+        }
     }
 
     /* @internal */
@@ -5043,21 +5090,30 @@ namespace ts {
         }
     }
 
-    function isExpressionKind(kind: SyntaxKind) {
-        return kind === SyntaxKind.ConditionalExpression
-            || kind === SyntaxKind.YieldExpression
-            || kind === SyntaxKind.ArrowFunction
-            || kind === SyntaxKind.BinaryExpression
-            || kind === SyntaxKind.SpreadElement
-            || kind === SyntaxKind.AsExpression
-            || kind === SyntaxKind.OmittedExpression
-            || kind === SyntaxKind.CommaListExpression
-            || isUnaryExpressionKind(kind);
-    }
-
     /* @internal */
+    /**
+     * Determines whether a node is an expression based only on its kind.
+     * Use `isPartOfExpression` if not in transforms.
+     */
     export function isExpression(node: Node): node is Expression {
         return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.YieldExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.SpreadElement:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.OmittedExpression:
+            case SyntaxKind.CommaListExpression:
+            case SyntaxKind.PartiallyEmittedExpression:
+                return true;
+            default:
+                return isUnaryExpressionKind(kind);
+        }
     }
 
     export function isAssertionExpression(node: Node): node is AssertionExpression {

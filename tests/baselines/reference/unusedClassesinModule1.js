@@ -9,7 +9,7 @@ module A {
 //// [unusedClassesinModule1.js]
 var A;
 (function (A) {
-    var Calculator = (function () {
+    var Calculator = /** @class */ (function () {
         function Calculator() {
         }
         Calculator.prototype.handelChar = function () {

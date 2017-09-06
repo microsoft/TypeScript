@@ -1116,7 +1116,7 @@ namespace ts {
                     if (option && typeof option.type !== "string") {
                         const customOption = <CommandLineOptionOfCustomType>option;
                         // Validate custom option type
-                        if (!customOption.type.has(text)) {
+                        if (!customOption.type.has(text.toLowerCase())) {
                             errors.push(
                                 createDiagnosticForInvalidCustomType(
                                     customOption,
@@ -1811,7 +1811,7 @@ namespace ts {
             return value;
         }
         else if (typeof option.type !== "string") {
-            return option.type.get(value);
+            return option.type.get(typeof value === "string" ? value.toLowerCase() : value);
         }
         return normalizeNonListOptionValue(option, basePath, value);
     }

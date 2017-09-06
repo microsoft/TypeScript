@@ -84,7 +84,6 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,20): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,23): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,27): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,23): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,24): error TS1138: Parameter declaration expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,28): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,32): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,30): error TS1005: ',' expected.
@@ -94,7 +93,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,32): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): error TS2304: Cannot find name 'm'.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (60 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (59 errors) ====
     class C {
         n: number;
         explicitThis(this: this, m: number): number {
@@ -403,8 +402,6 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): e
     function optional(this?: C): number { return this.n; }
                           ~
 !!! error TS1005: ',' expected.
-                           ~
-!!! error TS1138: Parameter declaration expected.
     function decorated(@deco() this: C): number { return this.n; }
                                ~~~~
 !!! error TS1003: Identifier expected.

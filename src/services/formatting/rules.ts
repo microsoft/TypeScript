@@ -3,18 +3,6 @@
 /* @internal */
 namespace ts.formatting {
     export class Rules {
-        public getRuleName(rule: Rule) {
-            const o: ts.MapLike<any> = <any>this;
-            for (const name in o) {
-                if (o[name] === rule) {
-                    return name;
-                }
-            }
-            throw new Error("Unknown rule");
-        }
-
-        [name: string]: any;
-
         public IgnoreBeforeComment: Rule;
         public IgnoreAfterLineComment: Rule;
 
@@ -569,6 +557,16 @@ namespace ts.formatting {
                 this.SpaceAfterSemicolon,
                 this.SpaceBetweenStatements, this.SpaceAfterTryFinally
             ];
+
+            if (Debug.isDebugging) {
+                const o: ts.MapLike<any> = <any>this;
+                for (const name in o) {
+                    const rule = o[name];
+                    if (rule instanceof Rule) {
+                        rule.debugName = name;
+                    }
+                }
+            }
         }
 
         ///

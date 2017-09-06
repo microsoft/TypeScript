@@ -25,20 +25,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function () { return 1; };
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     B.prototype.foo = function () { return 2; };
     B.prototype.bar = function () {
-        return (function () {
+        return /** @class */ (function () {
             function class_1() {
             }
             class_1.prototype[_super.prototype.foo.call(this)] = function () {

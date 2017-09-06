@@ -22,14 +22,14 @@ var Moclodule;
 (function (Moclodule) {
     var x = 10;
 })(Moclodule || (Moclodule = {}));
-var Moclodule = (function () {
+var Moclodule = /** @class */ (function () {
     function Moclodule() {
     }
     return Moclodule;
 }());
 // Instantiated module.
 (function (Moclodule) {
-    var Manager = (function () {
+    var Manager = /** @class */ (function () {
         function Manager() {
         }
         return Manager;

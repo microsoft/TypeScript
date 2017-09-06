@@ -14,7 +14,7 @@ export default class A
 
 
 //// [es5andes6module.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.B = function () {

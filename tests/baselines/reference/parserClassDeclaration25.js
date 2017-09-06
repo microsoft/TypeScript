@@ -10,7 +10,7 @@ class List<U> implements IList<U> {
 
 
 //// [parserClassDeclaration25.js]
-var List = (function () {
+var List = /** @class */ (function () {
     function List() {
     }
     return List;
