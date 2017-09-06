@@ -559,6 +559,8 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
+                case SyntaxKind.TypeCall:
+                    return emitTypeCall(<TypeCallTypeNode>node);
 
                 // Binding patterns
                 case SyntaxKind.ObjectBindingPattern:
@@ -753,8 +755,6 @@ namespace ts {
                     return emitPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return emitElementAccessExpression(<ElementAccessExpression>node);
-                case SyntaxKind.TypeCall:
-                    return emitTypeCall(<TypeCallTypeNode>node);
                 case SyntaxKind.CallExpression:
                     return emitCallExpression(<CallExpression>node);
                 case SyntaxKind.NewExpression:

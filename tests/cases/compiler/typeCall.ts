@@ -104,11 +104,11 @@ type Obj = {
 }
 
 type T1 = (() => number)();
-type T7 = CallMember<Obj, 'x'>; // fails, got any, want number
-type T8 = IndexCall<() => Obj, 'x'>; // fails, got any, want () => number
+type T7 = CallMember<Obj, 'x'>;
+type T8 = IndexCall<() => Obj, 'x'>;
 type T9 = MappedMemberCall<Obj>; // fails, unresolved, want { x: number, z: { kind: 'Just', value: string } }
 type T13 = keyof (() => Obj)();
-type T14 = KeyOfCall<() => Obj>; // fails, got string, want 'x' | 'y'
+type T14 = KeyOfCall<() => Obj>;
 type T15 = Obj['z']()['kind'];
 type T16 = MapHasKey<Obj, 'kind'>; // fails, unresolved, want { x: 'false', z: 'true' }
 type T17 = Strip1<() => Obj>; // fails, unresolved, want { x: () => number, z: () => { kind: 'Just', value: string } }
@@ -116,14 +116,14 @@ type T19 = Strip2<() => Obj>; // fails, unresolved, want { x: number, z: { kind:
 
 let a1: () => string;
 let b1: typeof a1();
-type Assert<T extends () => any> = T(); // fails, eagerly resolved to any
-let c1: Assert<typeof a1>; // fails, got any, want string
+type Assert<T extends () => any> = T();
+let c1: Assert<typeof a1>;
 
-declare function infer1<T extends () => any>(x: T): T(); // fails, eagerly resolved to any
-infer1(null! as () => number); // fails, got any, want number
+declare function infer1<T extends () => any>(x: T): T();
+infer1(null! as () => number);
 
-declare function infer2<T extends () => any>(x: { a: T }): T(); // fails, eagerly resolved to any
-infer2(null! as { a: () => number }); // fails, got any, want number
+declare function infer2<T extends () => any>(x: { a: T }): T();
+infer2(null! as { a: () => number });
 
 declare function infer3<T>(x: { a: () => T }): T;
 infer3(null! as { a: () => number });

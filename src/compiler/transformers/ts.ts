@@ -359,6 +359,7 @@ namespace ts {
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.LiteralType:
+                case SyntaxKind.TypeCall:
                     // TypeScript type nodes are elided.
 
                 case SyntaxKind.IndexSignature:
@@ -1833,6 +1834,7 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.TypeCall:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:

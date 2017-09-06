@@ -3366,6 +3366,7 @@ namespace ts {
             case SyntaxKind.ThisType:
             case SyntaxKind.TypeOperator:
             case SyntaxKind.IndexedAccessType:
+            case SyntaxKind.TypeCall:
             case SyntaxKind.MappedType:
             case SyntaxKind.LiteralType:
             case SyntaxKind.NamespaceExportDeclaration:

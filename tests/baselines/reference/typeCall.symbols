@@ -228,12 +228,12 @@ type Fn4b = Fn3(typeof ones);
 >Fn3 : Symbol(Fn3, Decl(typeCall.ts, 64, 23))
 >ones : Symbol(ones, Decl(typeCall.ts, 67, 3))
 
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
 type Fn4c = Fn3(1[]);
 >Fn4c : Symbol(Fn4c, Decl(typeCall.ts, 68, 29))
 >Fn3 : Symbol(Fn3, Decl(typeCall.ts, 64, 23))
 
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
 // let x = fn2(fn1(1)); // errors with not assignable, ok
 // type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));
@@ -348,12 +348,12 @@ type Obj = {
 type T1 = (() => number)();
 >T1 : Symbol(T1, Decl(typeCall.ts, 99, 1))
 
-type T7 = CallMember<Obj, 'x'>; // fails, got any, want number
+type T7 = CallMember<Obj, 'x'>;
 >T7 : Symbol(T7, Decl(typeCall.ts, 101, 27))
 >CallMember : Symbol(CallMember, Decl(typeCall.ts, 77, 85))
 >Obj : Symbol(Obj, Decl(typeCall.ts, 94, 91))
 
-type T8 = IndexCall<() => Obj, 'x'>; // fails, got any, want () => number
+type T8 = IndexCall<() => Obj, 'x'>;
 >T8 : Symbol(T8, Decl(typeCall.ts, 102, 31))
 >IndexCall : Symbol(IndexCall, Decl(typeCall.ts, 75, 23))
 >Obj : Symbol(Obj, Decl(typeCall.ts, 94, 91))
@@ -367,7 +367,7 @@ type T13 = keyof (() => Obj)();
 >T13 : Symbol(T13, Decl(typeCall.ts, 104, 32))
 >Obj : Symbol(Obj, Decl(typeCall.ts, 94, 91))
 
-type T14 = KeyOfCall<() => Obj>; // fails, got string, want 'x' | 'y'
+type T14 = KeyOfCall<() => Obj>;
 >T14 : Symbol(T14, Decl(typeCall.ts, 105, 31))
 >KeyOfCall : Symbol(KeyOfCall, Decl(typeCall.ts, 89, 2))
 >Obj : Symbol(Obj, Decl(typeCall.ts, 94, 91))
@@ -398,27 +398,27 @@ let b1: typeof a1();
 >b1 : Symbol(b1, Decl(typeCall.ts, 113, 3))
 >a1 : Symbol(a1, Decl(typeCall.ts, 112, 3))
 
-type Assert<T extends () => any> = T(); // fails, eagerly resolved to any
+type Assert<T extends () => any> = T();
 >Assert : Symbol(Assert, Decl(typeCall.ts, 113, 20))
 >T : Symbol(T, Decl(typeCall.ts, 114, 12))
 >T : Symbol(T, Decl(typeCall.ts, 114, 12))
 
-let c1: Assert<typeof a1>; // fails, got any, want string
+let c1: Assert<typeof a1>;
 >c1 : Symbol(c1, Decl(typeCall.ts, 115, 3))
 >Assert : Symbol(Assert, Decl(typeCall.ts, 113, 20))
 >a1 : Symbol(a1, Decl(typeCall.ts, 112, 3))
 
-declare function infer1<T extends () => any>(x: T): T(); // fails, eagerly resolved to any
+declare function infer1<T extends () => any>(x: T): T();
 >infer1 : Symbol(infer1, Decl(typeCall.ts, 115, 26))
 >T : Symbol(T, Decl(typeCall.ts, 117, 24))
 >x : Symbol(x, Decl(typeCall.ts, 117, 45))
 >T : Symbol(T, Decl(typeCall.ts, 117, 24))
 >T : Symbol(T, Decl(typeCall.ts, 117, 24))
 
-infer1(null! as () => number); // fails, got any, want number
+infer1(null! as () => number);
 >infer1 : Symbol(infer1, Decl(typeCall.ts, 115, 26))
 
-declare function infer2<T extends () => any>(x: { a: T }): T(); // fails, eagerly resolved to any
+declare function infer2<T extends () => any>(x: { a: T }): T();
 >infer2 : Symbol(infer2, Decl(typeCall.ts, 118, 30))
 >T : Symbol(T, Decl(typeCall.ts, 120, 24))
 >x : Symbol(x, Decl(typeCall.ts, 120, 45))
@@ -426,7 +426,7 @@ declare function infer2<T extends () => any>(x: { a: T }): T(); // fails, eagerl
 >T : Symbol(T, Decl(typeCall.ts, 120, 24))
 >T : Symbol(T, Decl(typeCall.ts, 120, 24))
 
-infer2(null! as { a: () => number }); // fails, got any, want number
+infer2(null! as { a: () => number });
 >infer2 : Symbol(infer2, Decl(typeCall.ts, 118, 30))
 >a : Symbol(a, Decl(typeCall.ts, 121, 17))
 

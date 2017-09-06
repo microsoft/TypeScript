@@ -77,6 +77,9 @@ namespace ts {
                 if (type.flags & TypeFlags.IndexedAccess) {
                     visitIndexedAccessType(type as IndexedAccessType);
                 }
+                if (type.flags & TypeFlags.TypeCall) {
+                    visitTypeCallType(type as TypeCallType);
+                }
             }
 
             function visitTypeList(types: Type[]): void {
@@ -109,6 +112,12 @@ namespace ts {
                 visitType(type.objectType);
                 visitType(type.indexType);
                 visitType(type.constraint);
+            }
+
+            function visitTypeCallType(type: TypeCallType): void {
+                visitType(type.function);
+                visitTypeList(type.typeArguments);
+                visitTypeList(type.arguments);
             }
 
             function visitMappedType(type: MappedType): void {

@@ -64,14 +64,14 @@ type h = Id(123);
 >Id : Id
 
 type Wrap<T> = Id(T);
->Wrap : T
+>Wrap : Id(T)
 >T : T
 >Id : Id
 >T : T
 
 type i = Wrap<123>;
->i : 123
->Wrap : T
+>i : Id(T)
+>Wrap : Id(T)
 
 type F5 = () => () => { a: () => 1; };
 >F5 : F5
@@ -126,11 +126,11 @@ type genericIsPrimitive = <T>() => IsPrimitive(T);
 >T : T
 
 type stringIsPrimitive2 = genericIsPrimitive<><string>(); // '1', ok
->stringIsPrimitive2 : "1"
+>stringIsPrimitive2 : IsPrimitive(T)
 >genericIsPrimitive : genericIsPrimitive
 
 type regexpIsPrimitive2 = genericIsPrimitive<><RegExp>();
->regexpIsPrimitive2 : "1"
+>regexpIsPrimitive2 : IsPrimitive(T)
 >genericIsPrimitive : genericIsPrimitive
 
 // fails, see #17471, '1' instead of '0', should delay overload selection until type argument is known
@@ -145,11 +145,11 @@ type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
 >T : T
 
 type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
->stringIsPrimitive3 : "1"
+>stringIsPrimitive3 : IsPrimitive(T)
 >genericIsPrimitive3 : genericIsPrimitive3
 
 type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
->regexpIsPrimitive3 : "1"
+>regexpIsPrimitive3 : IsPrimitive(T)
 >genericIsPrimitive3 : genericIsPrimitive3
 >RegExp : RegExp
 
@@ -175,7 +175,7 @@ type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, o
 >P : P
 
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
->z : { a: any; b: any; c: any; }
+>z : { a: (<T>(v: T) => [T])(O[P]); b: (<T>(v: T) => [T])(O[P]); c: (<T>(v: T) => [T])(O[P]); }
 >map : map
 >T : T
 >v : T
@@ -236,16 +236,16 @@ let ones = null! as 1[];
 >null : null
 
 type Fn4b = Fn3(typeof ones);
->Fn4b : ReadonlyArray<number>
+>Fn4b : Fn2(Fn1(T3))
 >Fn3 : Fn3
 >ones : 1[]
 
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
 type Fn4c = Fn3(1[]);
->Fn4c : ReadonlyArray<number>
+>Fn4c : Fn2(Fn1(T3))
 >Fn3 : Fn3
 
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
 // let x = fn2(fn1(1)); // errors with not assignable, ok
 // type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));
@@ -262,7 +262,7 @@ type Y = Fn2(Fn1(1[]));
 >Fn1 : Fn1
 
 type IndexCall<T extends () => { [k: string]: any }, K extends keyof (T())> = T()[K];
->IndexCall : { [k: string]: any; }[K]
+>IndexCall : T()[K]
 >T : T
 >k : string
 >K : K
@@ -271,7 +271,7 @@ type IndexCall<T extends () => { [k: string]: any }, K extends keyof (T())> = T(
 >K : K
 
 type CallMember<T extends { [k: string]: () => any }, K extends keyof T> = T[K]();
->CallMember : any
+>CallMember : T[K]()
 >T : T
 >k : string
 >K : K
@@ -304,7 +304,7 @@ type HasKey<T, Key extends string> = (
 >Key : Key
 
 type HasKindKey<T extends () => any> = HasKey<T(), 'kind'>;
->HasKindKey : any
+>HasKindKey : ({ [K in keyof T]: "true"; } & { [key: string]: "false"; })["kind"]
 >T : T
 >HasKey : ({ [K in keyof T]: "true"; } & { [key: string]: "false"; })[Key]
 >T : T
@@ -326,7 +326,7 @@ type MapHasKey<T extends { [k: string]: () => any }, Key extends string> = {
 };
 
 type KeyOfCall<T extends () => any> = keyof (T());
->KeyOfCall : string
+>KeyOfCall : keyof T()
 >T : T
 >T : T
 
@@ -362,14 +362,14 @@ type Obj = {
 type T1 = (() => number)();
 >T1 : number
 
-type T7 = CallMember<Obj, 'x'>; // fails, got any, want number
->T7 : any
->CallMember : any
+type T7 = CallMember<Obj, 'x'>;
+>T7 : number
+>CallMember : T[K]()
 >Obj : Obj
 
-type T8 = IndexCall<() => Obj, 'x'>; // fails, got any, want () => number
->T8 : any
->IndexCall : { [k: string]: any; }[K]
+type T8 = IndexCall<() => Obj, 'x'>;
+>T8 : () => number
+>IndexCall : T()[K]
 >Obj : Obj
 
 type T9 = MappedMemberCall<Obj>; // fails, unresolved, want { x: number, z: { kind: 'Just', value: string } }
@@ -381,9 +381,9 @@ type T13 = keyof (() => Obj)();
 >T13 : "x" | "z"
 >Obj : Obj
 
-type T14 = KeyOfCall<() => Obj>; // fails, got string, want 'x' | 'y'
->T14 : string
->KeyOfCall : string
+type T14 = KeyOfCall<() => Obj>;
+>T14 : "x" | "z"
+>KeyOfCall : keyof T()
 >Obj : Obj
 
 type T15 = Obj['z']()['kind'];
@@ -412,41 +412,41 @@ let b1: typeof a1();
 >b1 : string
 >a1 : () => string
 
-type Assert<T extends () => any> = T(); // fails, eagerly resolved to any
->Assert : any
+type Assert<T extends () => any> = T();
+>Assert : T()
 >T : T
 >T : T
 
-let c1: Assert<typeof a1>; // fails, got any, want string
->c1 : any
->Assert : any
+let c1: Assert<typeof a1>;
+>c1 : string
+>Assert : T()
 >a1 : () => string
 
-declare function infer1<T extends () => any>(x: T): T(); // fails, eagerly resolved to any
->infer1 : <T extends () => any>(x: T) => any
+declare function infer1<T extends () => any>(x: T): T();
+>infer1 : <T extends () => any>(x: T) => T()
 >T : T
 >x : T
 >T : T
 >T : T
 
-infer1(null! as () => number); // fails, got any, want number
->infer1(null! as () => number) : any
->infer1 : <T extends () => any>(x: T) => any
+infer1(null! as () => number);
+>infer1(null! as () => number) : number
+>infer1 : <T extends () => any>(x: T) => T()
 >null! as () => number : () => number
 >null! : never
 >null : null
 
-declare function infer2<T extends () => any>(x: { a: T }): T(); // fails, eagerly resolved to any
->infer2 : <T extends () => any>(x: { a: T; }) => any
+declare function infer2<T extends () => any>(x: { a: T }): T();
+>infer2 : <T extends () => any>(x: { a: T; }) => T()
 >T : T
 >x : { a: T; }
 >a : T
 >T : T
 >T : T
 
-infer2(null! as { a: () => number }); // fails, got any, want number
->infer2(null! as { a: () => number }) : any
->infer2 : <T extends () => any>(x: { a: T; }) => any
+infer2(null! as { a: () => number });
+>infer2(null! as { a: () => number }) : number
+>infer2 : <T extends () => any>(x: { a: T; }) => T()
 >null! as { a: () => number } : { a: () => number; }
 >null! : never
 >null : null

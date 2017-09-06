@@ -4132,6 +4132,10 @@ namespace ts {
         return node.kind === SyntaxKind.IndexedAccessType;
     }
 
+    export function isTypeCallTypeNode(node: Node): node is TypeCallTypeNode {
+        return node.kind === SyntaxKind.TypeCall;
+    }
+
     export function isMappedTypeNode(node: Node): node is MappedTypeNode {
         return node.kind === SyntaxKind.MappedType;
     }

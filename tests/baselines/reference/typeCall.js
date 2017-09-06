@@ -68,9 +68,9 @@ type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
 // type Fn4 = Fn3(1); // errors, ok
 let ones = null! as 1[];
 type Fn4b = Fn3(typeof ones);
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
 type Fn4c = Fn3(1[]);
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
 // let x = fn2(fn1(1)); // errors with not assignable, ok
 // type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));
@@ -101,11 +101,11 @@ type Obj = {
 }
 
 type T1 = (() => number)();
-type T7 = CallMember<Obj, 'x'>; // fails, got any, want number
-type T8 = IndexCall<() => Obj, 'x'>; // fails, got any, want () => number
+type T7 = CallMember<Obj, 'x'>;
+type T8 = IndexCall<() => Obj, 'x'>;
 type T9 = MappedMemberCall<Obj>; // fails, unresolved, want { x: number, z: { kind: 'Just', value: string } }
 type T13 = keyof (() => Obj)();
-type T14 = KeyOfCall<() => Obj>; // fails, got string, want 'x' | 'y'
+type T14 = KeyOfCall<() => Obj>;
 type T15 = Obj['z']()['kind'];
 type T16 = MapHasKey<Obj, 'kind'>; // fails, unresolved, want { x: 'false', z: 'true' }
 type T17 = Strip1<() => Obj>; // fails, unresolved, want { x: () => number, z: () => { kind: 'Just', value: string } }
@@ -113,14 +113,14 @@ type T19 = Strip2<() => Obj>; // fails, unresolved, want { x: number, z: { kind:
 
 let a1: () => string;
 let b1: typeof a1();
-type Assert<T extends () => any> = T(); // fails, eagerly resolved to any
-let c1: Assert<typeof a1>; // fails, got any, want string
+type Assert<T extends () => any> = T();
+let c1: Assert<typeof a1>;
 
-declare function infer1<T extends () => any>(x: T): T(); // fails, eagerly resolved to any
-infer1(null! as () => number); // fails, got any, want number
+declare function infer1<T extends () => any>(x: T): T();
+infer1(null! as () => number);
 
-declare function infer2<T extends () => any>(x: { a: T }): T(); // fails, eagerly resolved to any
-infer2(null! as { a: () => number }); // fails, got any, want number
+declare function infer2<T extends () => any>(x: { a: T }): T();
+infer2(null! as { a: () => number });
 
 declare function infer3<T>(x: { a: () => T }): T;
 infer3(null! as { a: () => number });
@@ -171,15 +171,15 @@ var fn1 = null;
 var fn2 = null;
 // type Fn4 = Fn3(1); // errors, ok
 var ones = null;
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
 // let x = fn2(fn1(1)); // errors with not assignable, ok
 // type X = Fn2(Fn1(1)); // errors with not assignable, ok
 var y = fn2(fn1(ones));
 var a1;
 var b1;
-var c1; // fails, got any, want string
-infer1(null); // fails, got any, want number
-infer2(null); // fails, got any, want number
+var c1;
+infer1(null);
+infer2(null);
 infer3(null);
 var res3 = infer3(null);
 infer4(5, function () { return 5; });

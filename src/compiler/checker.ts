@@ -2537,6 +2537,12 @@ namespace ts {
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
+                if (type.flags & TypeFlags.TypeCall) {
+                    const fnNode = typeToTypeNodeHelper((<TypeCallType>type).function, context);
+                    const argNodes = mapToTypeNodes((<TypeCallType>type).arguments, context);
+                    const typeArgNodes = mapToTypeNodes((<TypeCallType>type).typeArguments, context);
+                    return createTypeCall(fnNode, typeArgNodes, argNodes);
+                }
 
                 Debug.fail("Should be unreachable.");
 
@@ -3305,6 +3311,17 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writeType((<IndexedAccessType>type).indexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    }
+                    else if (type.flags & TypeFlags.TypeCall) {
+                        writeType((<TypeCallType>type).function, TypeFormatFlags.None);
+                        if ((<TypeCallType>type).typeArguments && (<TypeCallType>type).typeArguments.length) {
+                            writePunctuation(writer, SyntaxKind.LessThanToken);
+                            writeTypeList((<TypeCallType>type).typeArguments, SyntaxKind.CommaToken);
+                            writePunctuation(writer, SyntaxKind.GreaterThanToken);
+                        }
+                        writePunctuation(writer, SyntaxKind.OpenParenToken);
+                        writeTypeList((<TypeCallType>type).arguments, SyntaxKind.CommaToken);
+                        writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
                     else {
                         // Should never get here
@@ -5912,10 +5929,19 @@ namespace ts {
             }
         }
 
-        function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
+        function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType | TypeCallType): Type {
             return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) :
                 type.flags & TypeFlags.IndexedAccess ? getConstraintOfIndexedAccess(<IndexedAccessType>type) :
-                    getBaseConstraintOfType(type);
+                type.flags & TypeFlags.TypeCall ? getConstraintOfTypeCall(<TypeCallType>type) :
+                getBaseConstraintOfType(type);
+        }
+
+        function getConstraintOfTypeCall(type: TypeCallType): Type {
+            const fn = type.function;
+            const typeArgs = map(type.typeArguments, getConstraintOfType);
+            const args = map(type.arguments, getConstraintOfType);
+            const call = createTypeCallType(fn, typeArgs, args);
+            return getTypeFromTypeCall(call);
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
@@ -7505,7 +7531,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType) {
+        function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType | TypeCallType) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
                 type.resolvedIndexType.type = type;
@@ -7524,7 +7550,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type): Type {
-            return maybeTypeOfKind(type, TypeFlags.TypeVariable) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable) || isGenericTypeCallType(type) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType | TypeCallType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                     type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                         getLiteralTypeFromPropertyNames(type);
@@ -7543,26 +7569,88 @@ namespace ts {
             return links.resolvedType;
         }
 
-         function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
-            const fn = typeNodeToExpression(node.type);
-            const args = map(node.arguments, typeNodeToExpression);
-            const callExpr = createCall(fn, node.typeArguments || [], args);
-            callExpr.parent = node;
-            callExpr.expression.parent = callExpr;
-            callExpr.expression.parent = callExpr.expression;
-            forEach(callExpr.arguments, (arg: Node) => {
-                arg.parent = callExpr;
-                (arg as ParenthesizedExpression).expression.parent = arg;
-            });
-            forEach(callExpr.typeArguments, (arg: Node) => {
-                arg.parent = callExpr;
-            });
-            return checkCallExpression(callExpr);
+        function isGenericTypeCallType(type: Type): boolean {
+            return type.flags & TypeFlags.TypeVariable ? true :
+                type.flags & TypeFlags.UnionOrIntersection ? forEach((<UnionOrIntersectionType>type).types, isGenericTypeCallType) :
+                false;
+        }
+
+        function createTypeCallType(fn: Type, typeArgs: Type[], args: Type[]): TypeCallType {
+            const type = <TypeCallType>createType(TypeFlags.TypeCall);
+            type.function = fn;
+            type.typeArguments = typeArgs;
+            type.arguments = args;
+            return type;
+        }
+
+        // overlap with typeToTypeNode?
+        function createTypeCallNodeFromType(type: TypeCallType): TypeCallTypeNode {
+            const node = <TypeCallTypeNode>createNodeBuilder().typeToTypeNode(type);
+            fixupParentReferences(node);
+            return node;
+        }
+
+        function getTypeCallType(fn: Type, typeArgs: Type[], args: Type[], node?: TypeCallTypeNode): Type {
+            const type = createTypeCallType(fn, typeArgs, args);
+            if (isGenericTypeCallType(fn) || some(typeArgs, isGenericTypeCallType) || some(args, isGenericTypeCallType)) {
+                return type;
+            }
+            return getTypeFromTypeCall(type, node);
+        }
+
+        function getTypeFromTypeCall(type: TypeCallType, node = createTypeCallNodeFromType(type)): Type {
+            const fn = type.function;
+            const typeArgs = type.typeArguments;
+            const args = type.arguments;
+            const calls = getSignaturesOfType(fn, SignatureKind.Call);
+            const sig = resolveCall(node, calls, []);
+            if (!sig.typeParameters || !sig.typeParameters.length) {
+                return getReturnTypeOfSignature(sig);
+            }
+            let signature: Signature;
+            if (typeArgs && typeArgs.length) {
+                signature = getSignatureInstantiation(sig, typeArgs);
+            }
+            else {
+                const inferenceContext = createInferenceContext(sig, InferenceFlags.InferUnionTypes);
+                const types = inferTypeArgumentsForTypeCall(sig, args, inferenceContext); // TODO: add Fn(this: A, B, C) syntax
+                signature = getSignatureInstantiation(sig, types);
+            }
+            return getReturnTypeOfSignature(signature);
+        }
+
+        function inferTypeArgumentsForTypeCall(signature: Signature, args: Type[], context: InferenceContext, thisArgumentType?: Type): Type[] {
+            const thisType = getThisTypeOfSignature(signature);
+            if (thisType) {
+                inferTypes(context.inferences || [], thisArgumentType, thisType);
+            }
+            const argCount = args.length;
+            for (let i = 0; i < argCount; i++) {
+                const paramType = getTypeAtPosition(signature, i);
+                const argType = args[i];
+                inferTypes(context.inferences || [], argType, paramType);
+            }
+            return getInferredTypes(context);
+        }
+
+        function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getTypeCallType(
+                    getTypeFromTypeNode(node.type),
+                    map(node.typeArguments, getTypeFromTypeNode),
+                    map(node.arguments, getTypeFromTypeNode),
+                    node
+                );
+            }
+            return links.resolvedType;
         }
 
         // null! as type
         function typeNodeToExpression(type: TypeNode): Expression {
-            return createAsExpression(createNonNullExpression(createNull()), type);
+            const expr = createAsExpression(createNonNullExpression(createNull()), type);
+            expr.parent = type.parent;
+            return expr;
         }
 
         function createIndexedAccessType(objectType: Type, indexType: Type) {
@@ -7572,28 +7660,21 @@ namespace ts {
             return type;
         }
 
-        // // Parser.fixupParentReferences
-        // function fixupParentReferences(rootNode: Node) {
-        //     let parent: Node = rootNode;
-        //     forEachChild(rootNode, visitNode);
-        //     return;
-        //     function visitNode(n: Node): void {
-        //         if (n.parent !== parent) {
-        //             n.parent = parent;
-        //             const saveParent = parent;
-        //             parent = n;
-        //             forEachChild(n, visitNode);
-        //             if (n.jsDoc) {
-        //                 for (const jsDoc of n.jsDoc) {
-        //                     jsDoc.parent = n;
-        //                     parent = jsDoc;
-        //                     forEachChild(jsDoc, visitNode);
-        //                 }
-        //             }
-        //             parent = saveParent;
-        //         }
-        //     }
-        // }
+        // Parser.fixupParentReferences
+        function fixupParentReferences(rootNode: Node) {
+            let parent: Node = rootNode;
+            forEachChild(rootNode, visitNode);
+            return;
+            function visitNode(n: Node): void {
+                if (n.parent !== parent) {
+                    n.parent = parent;
+                    const saveParent = parent;
+                    parent = n;
+                    forEachChild(n, visitNode);
+                    parent = saveParent;
+                }
+            }
+        }
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
@@ -8253,7 +8334,7 @@ namespace ts {
         }
 
         function isMappableType(type: Type) {
-            return type.flags & (TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.Intersection | TypeFlags.IndexedAccess);
+            return type.flags & (TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.Intersection | TypeFlags.IndexedAccess | TypeFlags.TypeCall);
         }
 
         function instantiateMappedObjectType(type: MappedType, mapper: TypeMapper): Type {
@@ -8400,6 +8481,13 @@ namespace ts {
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
+            }
+            if (type.flags & TypeFlags.TypeCall) {
+                return getTypeCallType(
+                    instantiateType((<TypeCallType>type).function, mapper),
+                    (<TypeCallType>type).typeArguments,
+                    (<TypeCallType>type).arguments
+                );
             }
             return type;
         }
@@ -9355,6 +9443,15 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.TypeCall) {
+                    const constraint = getConstraintOfTypeCall(<TypeCallType>target);
+                    if (constraint) {
+                        if (result = isRelatedTo(source, constraint, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+                }
 
                 if (source.flags & TypeFlags.TypeParameter) {
                     // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
@@ -9398,6 +9495,15 @@ namespace ts {
                         // if we have indexed access types with identical index types, see if relationship holds for
                         // the two object types.
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            return result;
+                        }
+                    }
+                }
+                else if (source.flags & TypeFlags.TypeCall) {
+                    const constraint = getConstraintOfTypeCall(<TypeCallType>source);
+                    if (constraint) {
+                        if (result = isRelatedTo(source, constraint, reportErrors)) {
+                            errorInfo = saveErrorInfo;
                             return result;
                         }
                     }
@@ -15054,12 +15160,12 @@ namespace ts {
             return true;
         }
 
-        function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression {
+        function callLikeExpressionMayHaveTypeArguments(node: CallLike): node is CallExpression | NewExpression {
             // TODO: Also include tagged templates (https://github.com/Microsoft/TypeScript/issues/11947)
             return isCallOrNewExpression(node);
         }
 
-        function resolveUntypedCall(node: CallLikeExpression): Signature {
+        function resolveUntypedCall(node: CallLike): Signature {
             if (callLikeExpressionMayHaveTypeArguments(node)) {
                 // Check type arguments even though we will give an error that untyped calls may not accept type arguments.
                 // This gets us diagnostics for the type arguments and marks them as referenced.
@@ -15077,7 +15183,7 @@ namespace ts {
             return anySignature;
         }
 
-        function resolveErrorCall(node: CallLikeExpression): Signature {
+        function resolveErrorCall(node: CallLike): Signature {
             resolveUntypedCall(node);
             return unknownSignature;
         }
@@ -15146,7 +15252,7 @@ namespace ts {
             return -1;
         }
 
-        function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
+        function hasCorrectArity(node: CallLike, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
             let argCount: number;            // Apparent number of arguments we will have in this call
             let typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
@@ -15257,7 +15363,7 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[], context: InferenceContext): Type[] {
+        function inferTypeArguments(node: CallLike, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[], context: InferenceContext): Type[] {
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (const inference of context.inferences) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
@@ -15273,7 +15379,7 @@ namespace ts {
             // example, given a 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
             // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
             // return type of 'wrap'.
-            if (node.kind !== SyntaxKind.Decorator) {
+            if (node.kind !== SyntaxKind.Decorator && node.kind !== SyntaxKind.TypeCall) {
                 const contextualType = getContextualType(node);
                 if (contextualType) {
                     // We clone the contextual mapper to avoid disturbing a resolution in progress for an
@@ -15410,7 +15516,7 @@ namespace ts {
         }
 
         function checkApplicableSignature(
-            node: CallLikeExpression,
+            node: CallLike,
             args: ReadonlyArray<Expression>,
             signature: Signature,
             relation: Map<RelationComparisonResult>,
@@ -15462,7 +15568,7 @@ namespace ts {
         /**
          * Returns the this argument in calls like x.f(...) and x[f](...). Undefined otherwise.
          */
-        function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression {
+        function getThisArgumentOfCall(node: CallLike): LeftHandSideExpression {
             if (node.kind === SyntaxKind.CallExpression) {
                 const callee = (<CallExpression>node).expression;
                 if (callee.kind === SyntaxKind.PropertyAccessExpression) {
@@ -15483,7 +15589,7 @@ namespace ts {
          * If 'node' is a Decorator, the argument list will be `undefined`, and its arguments and types
          *    will be supplied from calls to `getEffectiveArgumentCount` and `getEffectiveArgumentType`.
          */
-        function getEffectiveCallArguments(node: CallLikeExpression): ReadonlyArray<Expression> {
+        function getEffectiveCallArguments(node: CallLike): ReadonlyArray<Expression> {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 const template = (<TaggedTemplateExpression>node).template;
                 const args: Expression[] = [undefined];
@@ -15502,6 +15608,9 @@ namespace ts {
             }
             else if (isJsxOpeningLikeElement(node)) {
                 return node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
+            }
+            else if (isTypeCallTypeNode(node)) {
+                return map(<NodeArray<TypeNode>>node.arguments, (arg: TypeNode) => typeNodeToExpression(arg)) || emptyArray;
             }
             else {
                 return node.arguments || emptyArray;
@@ -15522,7 +15631,7 @@ namespace ts {
          *       us to match a property decorator.
          * Otherwise, the argument count is the length of the 'args' array.
          */
-        function getEffectiveArgumentCount(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature) {
+        function getEffectiveArgumentCount(node: CallLike, args: ReadonlyArray<Expression>, signature: Signature) {
             if (node.kind === SyntaxKind.Decorator) {
                 switch (node.parent.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -15735,7 +15844,7 @@ namespace ts {
         /**
          * Gets the effective argument type for an argument in a call expression.
          */
-        function getEffectiveArgumentType(node: CallLikeExpression, argIndex: number): Type {
+        function getEffectiveArgumentType(node: CallLike, argIndex: number): Type {
             // Decorators provide special arguments, a tagged template expression provides
             // a special first argument, and string literals get string literal types
             // unless we're reporting errors
@@ -15744,6 +15853,9 @@ namespace ts {
             }
             else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
                 return getGlobalTemplateStringsArrayType();
+            }
+            else if (node.kind === SyntaxKind.TypeCall) {
+                return getTypeFromTypeNode((<TypeCallTypeNode>node).arguments[argIndex]);
             }
 
             // This is not a synthetic argument, so we return 'undefined'
@@ -15754,7 +15866,7 @@ namespace ts {
         /**
          * Gets the effective argument expression for an argument in a call expression.
          */
-        function getEffectiveArgument(node: CallLikeExpression, args: ReadonlyArray<Expression>, argIndex: number) {
+        function getEffectiveArgument(node: CallLike, args: ReadonlyArray<Expression>, argIndex: number) {
             // For a decorator or the first argument of a tagged template expression we return undefined.
             if (node.kind === SyntaxKind.Decorator ||
                 (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression)) {
@@ -15767,7 +15879,7 @@ namespace ts {
         /**
          * Gets the error node to use when reporting errors for an effective argument.
          */
-        function getEffectiveArgumentErrorNode(node: CallLikeExpression, argIndex: number, arg: Expression) {
+        function getEffectiveArgumentErrorNode(node: CallLike, argIndex: number, arg: Expression) {
             if (node.kind === SyntaxKind.Decorator) {
                 // For a decorator, we use the expression of the decorator for error reporting.
                 return (<Decorator>node).expression;
@@ -15781,7 +15893,7 @@ namespace ts {
             }
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLike, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -15792,7 +15904,7 @@ namespace ts {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
-                if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                if (!isTypeCallTypeNode(node) && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
                     forEach(typeArguments, checkSourceElement);
                 }
             }
@@ -22514,7 +22626,17 @@ namespace ts {
             checkSourceElement(node.type);
             forEach(node.arguments, checkSourceElement);
             forEach(node.typeArguments, checkSourceElement);
-            getTypeFromTypeCallNode(node); // construct node and check it (checkCallExpression)
+            const callExpr = getCallExpressionFromTypeCallNode(node);
+            checkCallExpression(callExpr);
+        }
+
+        function getCallExpressionFromTypeCallNode(node: TypeCallTypeNode): CallExpression {
+            const fn = typeNodeToExpression(node.type);
+            const args = map(node.arguments, typeNodeToExpression);
+            const callExpr = createCall(fn, node.typeArguments, args);
+            fixupParentReferences(callExpr);
+            callExpr.parent = node;
+            return callExpr;
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is
