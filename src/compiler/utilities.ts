@@ -3592,7 +3592,10 @@ namespace ts {
         const watcher = addWatch(host, file, (fileName, cbOptional1?) => {
             const optionalInfo = cbOptional1 !== undefined ? ` ${cbOptional1}` : "";
             log(`${watcherCaption}Trigger: ${fileName}${optionalInfo} ${info}`);
+            const start = timestamp();
             cb(fileName, cbOptional1, optional);
+            const elapsed = timestamp() - start;
+            log(`${watcherCaption}Elapsed: ${elapsed}ms Trigger: ${fileName}${optionalInfo} ${info}`);
         }, optional);
         return {
             close: () => {

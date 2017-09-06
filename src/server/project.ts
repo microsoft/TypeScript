@@ -789,7 +789,8 @@ namespace ts.server {
         private updateGraphWorker() {
             const oldProgram = this.program;
 
-            this.writeLog(`Starting Update graph worker: Project: ${this.getProjectName()}`);
+            this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
+            const start = timestamp();
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram();
             this.resolutionCache.finishCachingPerDirectoryResolution();
@@ -843,8 +844,8 @@ namespace ts.server {
                         scriptInfoToDetach.detachFromProject(this);
                     }
                 });
-
-            this.writeLog(`Finishing Update graph worker: Project: ${this.getProjectName()}`);
+            const elapsed = timestamp() - start;
+            this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);
             return hasChanges;
         }
 

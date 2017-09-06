@@ -252,7 +252,7 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             private readonly npmLocation: string | undefined,
             private newLine: string) {
-            this.throttledOperations = new ThrottledOperations(host);
+            this.throttledOperations = new ThrottledOperations(host, this.logger);
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;

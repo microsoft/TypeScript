@@ -401,7 +401,7 @@ namespace ts.server {
 
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
-            this.throttledOperations = new ThrottledOperations(this.host);
+            this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
             this.typingsInstaller.attach(this);
 
