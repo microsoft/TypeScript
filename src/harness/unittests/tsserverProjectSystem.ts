@@ -249,14 +249,9 @@ namespace ts.projectSystem {
 
     function getNodeModuleDirectories(dir: string) {
         const result: string[] = [];
-        while (true) {
-            result.push(combinePaths(dir, "node_modules"));
-            const parentDir = getDirectoryPath(dir);
-            if (parentDir === dir) {
-                break;
-            }
-            dir = parentDir;
-        }
+        forEachAncestorDirectory(dir, ancestor => {
+            result.push(combinePaths(ancestor, "node_modules"));
+        });
         return result;
     }
 
@@ -343,14 +338,9 @@ namespace ts.projectSystem {
     export function getTypeRootsFromLocation(currentDirectory: string) {
         currentDirectory = normalizePath(currentDirectory);
         const result: string[] = [];
-        while (true) {
-            result.push(combinePaths(currentDirectory, "node_modules/@types"));
-            const parentDirectory = getDirectoryPath(currentDirectory);
-            if (parentDirectory === currentDirectory) {
-                break;
-            }
-            currentDirectory = parentDirectory;
-        }
+        forEachAncestorDirectory(currentDirectory, ancestor => {
+            result.push(combinePaths(ancestor, "node_modules/@types"));
+        });
         return result;
     }
 
@@ -4147,6 +4137,7 @@ namespace ts.projectSystem {
                 verifyCalledOnEachEntry,
                 verifyNoHostCalls,
                 verifyNoHostCallsExceptFileExistsOnce,
+                verifyCalledOn,
                 clear
             };
 
@@ -4177,6 +4168,12 @@ namespace ts.projectSystem {
                     };
                     calledMaps[prop] = calledMap;
                 }
+            }
+
+            function verifyCalledOn(callback: keyof CalledMaps, name: string) {
+                const calledMap = calledMaps[callback];
+                const result = calledMap.get(name);
+                assert.isTrue(result && !!result.length, `${callback} should be called with name: ${name}: ${arrayFrom(calledMap.keys())}`);
             }
 
             function verifyNoCall(callback: keyof CalledMaps) {
@@ -4217,6 +4214,161 @@ namespace ts.projectSystem {
                 }
             }
         }
+
+        it("works using legacy resolution logic", () => {
+            let rootContent = `import {x} from "f1"`;
+            const root: FileOrFolder = {
+                path: "/c/d/f0.ts",
+                content: rootContent
+            };
+
+            const imported: FileOrFolder = {
+                path: "/c/f1.ts",
+                content: `foo()`
+            };
+
+            const host = createServerHost([root, imported]);
+            const projectService = createProjectService(host);
+            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
+            projectService.openClientFile(root.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const project = projectService.inferredProjects[0];
+            const rootScriptInfo = project.getRootScriptInfos()[0];
+            assert.equal(rootScriptInfo.fileName, root.path);
+
+            // ensure that imported file was found
+            verifyImportedDiagnostics();
+
+            const callsTrackingHost = createCallsTrackingHost(host);
+
+            // trigger synchronization to make sure that import will be fetched from the cache
+            // ensure file has correct number of errors after edit
+            editContent(`import {x} from "f1";
+                 var x: string = 1;`);
+            verifyImportedDiagnostics();
+            callsTrackingHost.verifyNoHostCalls();
+
+            // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+            editContent(`import {x} from "f2"`);
+            try {
+                // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
+                verifyImportedDiagnostics();
+                assert.isTrue(false, `should not find file '${imported.path}'`);
+            }
+            catch (e) {
+                assert.isTrue(e.message.indexOf(`Could not find file: '${imported.path}'.`) === 0);
+            }
+            const f2Lookups = getLocationsForModuleLookup("f2");
+            callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", f2Lookups, 1);
+            const f2DirLookups = getLocationsForDirectoryLookup();
+            callsTrackingHost.verifyCalledOnEachEntry("directoryExists", f2DirLookups);
+            callsTrackingHost.verifyNoCall("getDirectories");
+            callsTrackingHost.verifyNoCall("readFile");
+            callsTrackingHost.verifyNoCall("readDirectory");
+
+            editContent(`import {x} from "f1"`);
+            verifyImportedDiagnostics();
+            const f1Lookups = f2Lookups.map(s => s.replace("f2", "f1"));
+            f1Lookups.length = f1Lookups.indexOf(imported.path) + 1;
+            const f1DirLookups = ["/c/d", "/c", typeRootFromTsserverLocation];
+            vertifyF1Lookups();
+
+            // setting compiler options discards module resolution cache
+            callsTrackingHost.clear();
+            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true, target: ts.ScriptTarget.ES5 });
+            verifyImportedDiagnostics();
+            vertifyF1Lookups();
+
+            function vertifyF1Lookups() {
+                callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", f1Lookups, 1);
+                callsTrackingHost.verifyCalledOnEachEntryNTimes("directoryExists", f1DirLookups, 1);
+                callsTrackingHost.verifyNoCall("getDirectories");
+                callsTrackingHost.verifyNoCall("readFile");
+                callsTrackingHost.verifyNoCall("readDirectory");
+            }
+
+            function editContent(newContent: string) {
+                callsTrackingHost.clear();
+                rootScriptInfo.editContent(0, rootContent.length, newContent);
+                rootContent = newContent;
+            }
+
+            function verifyImportedDiagnostics() {
+                const diags = project.getLanguageService().getSemanticDiagnostics(imported.path);
+                assert.equal(diags.length, 1);
+                const diag = diags[0];
+                assert.equal(diag.code, Diagnostics.Cannot_find_name_0.code);
+                assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find name 'foo'.");
+            }
+
+            function getLocationsForModuleLookup(module: string) {
+                const locations: string[] = [];
+                forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
+                    locations.push(
+                        combinePaths(ancestor, `${module}.ts`),
+                        combinePaths(ancestor, `${module}.tsx`),
+                        combinePaths(ancestor, `${module}.d.ts`)
+                    );
+                });
+                forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
+                    locations.push(
+                        combinePaths(ancestor, `${module}.js`),
+                        combinePaths(ancestor, `${module}.jsx`)
+                    );
+                });
+                return locations;
+            }
+
+            function getLocationsForDirectoryLookup() {
+                const result = createMap<number>();
+                // Type root
+                result.set(typeRootFromTsserverLocation, 1);
+                forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
+                    // To resolve modules
+                    result.set(ancestor, 2);
+                    // for type roots
+                    result.set(combinePaths(ancestor, `node_modules`), 1);
+                });
+                return result;
+            }
+        });
+
+        it("loads missing files from disk", () => {
+            const root: FileOrFolder = {
+                path: "/c/foo.ts",
+                content: `import {y} from "bar"`
+            };
+
+            const imported: FileOrFolder = {
+                path: "/c/bar.d.ts",
+                content: `export var y = 1`
+            };
+
+            const host = createServerHost([root]);
+            const projectService = createProjectService(host);
+            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
+            const callsTrackingHost = createCallsTrackingHost(host);
+            projectService.openClientFile(root.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const project = projectService.inferredProjects[0];
+            const rootScriptInfo = project.getRootScriptInfos()[0];
+            assert.equal(rootScriptInfo.fileName, root.path);
+
+            let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
+            assert.equal(diags.length, 1);
+            const diag = diags[0];
+            assert.equal(diag.code, Diagnostics.Cannot_find_module_0.code);
+            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'.");
+            callsTrackingHost.verifyCalledOn("fileExists", imported.path);
+
+
+            callsTrackingHost.clear();
+            host.reloadFS([root, imported]);
+            host.runQueuedTimeoutCallbacks();
+            diags = project.getLanguageService().getSemanticDiagnostics(root.path);
+            assert.equal(diags.length, 0);
+            callsTrackingHost.verifyCalledOn("fileExists", imported.path);
+        });
 
         it("when calling goto definition of module", () => {
             const clientFile: FileOrFolder = {
@@ -4371,18 +4523,7 @@ namespace ts.projectSystem {
                 const canonicalFile3Path = useCaseSensitiveFileNames ? file3.path : file3.path.toLocaleLowerCase();
                 const numberOfTimesWatchInvoked = getNumberOfWatchesInvokedForRecursiveWatches(watchingRecursiveDirectories, canonicalFile3Path);
                 callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", [canonicalFile3Path], numberOfTimesWatchInvoked);
-
-                // Called for type root resolution
-                const directoryExistsCalled = createMap<number>();
-                for (let dir = frontendDir; dir !== "/"; dir = getDirectoryPath(dir)) {
-                    directoryExistsCalled.set(`${dir}/node_modules`, 2);
-                }
-                directoryExistsCalled.set(`/node_modules`, 2);
-                directoryExistsCalled.set(`${frontendDir}/types`, 2);
-                directoryExistsCalled.set(`${frontendDir}/node_modules/@types`, 2);
-                directoryExistsCalled.set(canonicalFile3Path, numberOfTimesWatchInvoked);
-                callsTrackingHost.verifyCalledOnEachEntry("directoryExists", directoryExistsCalled);
-
+                callsTrackingHost.verifyCalledOnEachEntryNTimes("directoryExists", [canonicalFile3Path], numberOfTimesWatchInvoked);
                 callsTrackingHost.verifyNoCall("getDirectories");
                 callsTrackingHost.verifyCalledOnEachEntryNTimes("readFile", [file3.path], 1);
                 callsTrackingHost.verifyNoCall("readDirectory");

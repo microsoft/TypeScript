@@ -184,9 +184,9 @@ namespace ts {
 
             const seenNamesInFile = createMap<true>();
             for (const name of names) {
-                // check if this is a duplicate entry in the list
                 let resolution = resolutionsInFile.get(name);
-                if (!moduleResolutionIsValid(resolution, name)) {
+                // Resolution is valid if it is present and not invalidated
+                if (!resolution || resolution.isInvalidated) {
                     const existingResolution = resolution;
                     const resolutionInDirectory = perDirectoryResolution.get(name);
                     if (resolutionInDirectory) {
@@ -220,25 +220,6 @@ namespace ts {
             });
 
             return resolvedModules;
-
-            function moduleResolutionIsValid(resolution: T, name: string): boolean {
-                // This is already calculated resolution in this round of synchronization
-                if (seenNamesInFile.has(name)) {
-                    return true;
-                }
-
-                if (!resolution || resolution.isInvalidated) {
-                    return false;
-                }
-
-                const result = getResult(resolution);
-                if (result) {
-                    return true;
-                }
-                // consider situation if we have no candidate locations as valid resolution.
-                // after all there is no point to invalidate it if we have no idea where to look for the module.
-                return resolution.failedLookupLocations.length === 0;
-            }
 
             function resolutionIsEqualTo(oldResolution: T, newResolution: T): boolean {
                 if (oldResolution === newResolution) {

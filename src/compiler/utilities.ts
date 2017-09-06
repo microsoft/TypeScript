@@ -3609,6 +3609,23 @@ namespace ts {
     export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
         objWithWatcher.watcher.close();
     }
+
+    /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
+    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T): T {
+        while (true) {
+            const result = callback(directory);
+            if (result !== undefined) {
+                return result;
+            }
+
+            const parentPath = getDirectoryPath(directory);
+            if (parentPath === directory) {
+                return undefined;
+            }
+
+            directory = parentPath;
+        }
+    }
 }
 
 namespace ts {
