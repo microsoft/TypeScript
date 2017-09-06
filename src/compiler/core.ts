@@ -1257,7 +1257,7 @@ namespace ts {
                 args[i] = arguments[i];
             }
 
-            return t => reduceLeft<(t: T) => T, T>(args, (u, f) => f(u), t);
+            return t => reduceLeft(args, (u, f) => f(u), t);
         }
         else if (d) {
             return t => d(c(b(a(t))));

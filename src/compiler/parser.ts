@@ -2237,7 +2237,14 @@ namespace ts {
             return token() === SyntaxKind.DotDotDotToken ||
                 isIdentifierOrPattern() ||
                 isModifierKind(token()) ||
-                token() === SyntaxKind.AtToken || isStartOfType();
+                token() === SyntaxKind.AtToken ||
+                // a jsdoc parameter can start directly with a type, but shouldn't look ahead
+                // in order to avoid confusion between parenthesized types and arrow functions
+                // eg
+                // declare function f(cb: function(number): void): void;
+                // vs
+                // f((n) => console.log(n));
+                isStartOfType(/*disableLookahead*/ true);
         }
 
         function parseParameter(): ParameterDeclaration {
@@ -2696,7 +2703,7 @@ namespace ts {
             }
         }
 
-        function isStartOfType(): boolean {
+        function isStartOfType(disableLookahead?: boolean): boolean {
             switch (token()) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -2723,11 +2730,11 @@ namespace ts {
                 case SyntaxKind.AsteriskToken:
                     return true;
                 case SyntaxKind.MinusToken:
-                    return lookAhead(nextTokenIsNumericLiteral);
+                    return !disableLookahead && lookAhead(nextTokenIsNumericLiteral);
                 case SyntaxKind.OpenParenToken:
                     // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
                     // or something that starts a type. We don't want to consider things like '(1)' a type.
-                    return lookAhead(isStartOfParenthesizedOrFunctionType);
+                    return !disableLookahead && lookAhead(isStartOfParenthesizedOrFunctionType);
                 default:
                     return isIdentifier();
             }
