@@ -1287,9 +1287,9 @@ namespace ts.server {
                 const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
                 if (start >= 0) {
                     scriptInfo.editContent(start, end, args.insertString);
+                    this.projectService.addChangedFile(scriptInfo);
                     this.changeSeq++;
                 }
-                this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
             }
         }
 

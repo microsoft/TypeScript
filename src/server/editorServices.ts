@@ -1948,12 +1948,7 @@ namespace ts.server {
                         const change = file.changes[i];
                         scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
                     }
-                    if (!this.changedFiles) {
-                        this.changedFiles = [scriptInfo];
-                    }
-                    else if (!contains(this.changedFiles, scriptInfo)) {
-                        this.changedFiles.push(scriptInfo);
-                    }
+                    this.addChangedFile(scriptInfo);
                 }
             }
 
@@ -1966,6 +1961,16 @@ namespace ts.server {
             // otherwise if there were only changes in files - record changed files in `changedFiles` and defer the update
             if (openFiles || closedFiles) {
                 this.ensureProjectStructuresUptoDate(/*refreshInferredProjects*/ true);
+            }
+        }
+
+        /* @internal */
+        addChangedFile(scriptInfo: ScriptInfo) {
+            if (!this.changedFiles) {
+                this.changedFiles = [scriptInfo];
+            }
+            else if (!contains(this.changedFiles, scriptInfo)) {
+                this.changedFiles.push(scriptInfo);
             }
         }
 
