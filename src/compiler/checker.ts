@@ -6654,9 +6654,8 @@ namespace ts {
             // interface is instantiated with a fresh set of cloned type parameters (which we need to handle scenarios
             // where different generations of the same type parameter are in scope). This leads to a lot of new type
             // identities, and potentially a lot of work comparing those identities, so here we create an instantiation
-            // that reverts back to the original type identities for all unconstrained type parameters.
-            const canonicalTypeArguments = map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp);
-            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, canonicalTypeArguments), /*eraseTypeParameters*/ true);
+            // that uses the original type identities for all unconstrained type parameters.
+            return getSignatureInstantiation(signature, map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp));
         }
 
         function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
@@ -8493,8 +8492,8 @@ namespace ts {
                 return Ternary.False;
             }
 
-            target = getCanonicalSignature(target);
-            if (source.typeParameters) {
+            if (source.typeParameters && source.typeParameters !== target.typeParameters) {
+                target = getCanonicalSignature(target);
                 source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
             }
 
