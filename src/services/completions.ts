@@ -1643,6 +1643,7 @@ namespace ts.Completions {
         // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
         // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
         if (performCharacterChecks && !isIdentifierText(name, target)) {
+            // TODO: GH#18169
             return allowStringLiteral ? JSON.stringify(name) : undefined;
         }
 
