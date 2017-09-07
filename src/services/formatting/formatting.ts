@@ -339,17 +339,17 @@ namespace ts.formatting {
     /* @internal */
     export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number,  rulesProvider: RulesProvider): TextChange[] {
         const range = { pos: 0, end: sourceFileLike.text.length };
-        return formatSpanWorker(
+        return getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end, scanner => formatSpanWorker(
             range,
             node,
             initialIndentation,
             delta,
-            getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end),
+            scanner,
             rulesProvider.getFormatOptions(),
             rulesProvider,
             FormattingRequestKind.FormatSelection,
             _ => false, // assume that node does not have any errors
-            sourceFileLike);
+            sourceFileLike));
     }
 
     function formatNodeLines(node: Node, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
@@ -372,17 +372,17 @@ namespace ts.formatting {
         requestKind: FormattingRequestKind): TextChange[] {
         // find the smallest node that fully wraps the range and compute the initial indentation for the node
         const enclosingNode = findEnclosingNode(originalRange, sourceFile);
-        return formatSpanWorker(
+        return getFormattingScanner(sourceFile.text, sourceFile.languageVariant, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end, scanner => formatSpanWorker(
             originalRange,
             enclosingNode,
             SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options),
             getOwnOrInheritedDelta(enclosingNode, options, sourceFile),
-            getFormattingScanner(sourceFile.text, sourceFile.languageVariant, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end),
+            scanner,
             options,
             rulesProvider,
             requestKind,
             prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange),
-            sourceFile);
+            sourceFile));
     }
 
     function formatSpanWorker(originalRange: TextRange,
@@ -426,8 +426,6 @@ namespace ts.formatting {
                 trimTrailingWhitespacesForRemainingRange();
             }
         }
-
-        formattingScanner.close();
 
         return edits;
 
