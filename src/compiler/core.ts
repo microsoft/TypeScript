@@ -2628,4 +2628,6 @@ namespace ts {
     export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
         return (arg: T) => f(arg) && g(arg);
     }
+
+    export function assertTypeIsNever(_: never): void {}
 }

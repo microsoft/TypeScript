@@ -722,6 +722,12 @@ namespace ts {
                         }
                         break;
 
+                    case SyntaxKind.BinaryExpression:
+                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                           addDeclaration(node as BinaryExpression);
+                        }
+                        // falls through
+
                     default:
                         forEachChild(node, visit);
                 }
