@@ -766,7 +766,6 @@ namespace ts {
     export interface SpreadAssignment extends ObjectLiteralElement {
         parent: ObjectLiteralExpression;
         kind: SyntaxKind.SpreadAssignment;
-        parent?: ObjectLiteralExpression;
         expression: Expression;
     }
 
