@@ -488,8 +488,8 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
-                    visitFunctionBody((<ArrowFunction>node).body, visitor, context),
-                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, n => n.kind === SyntaxKind.EqualsGreaterThanToken));
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, n => n.kind === SyntaxKind.EqualsGreaterThanToken),
+                    visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
                 return updateDelete(<DeleteExpression>node,
@@ -524,10 +524,10 @@ namespace ts {
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression),
                     visitNode((<ConditionalExpression>node).questionToken, visitor, n => n.kind === SyntaxKind.QuestionToken),
-                    visitNode((<ConditionalExpression>node).colonToken, visitor, n => n.kind === SyntaxKind.ColonToken));
+                    visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).colonToken, visitor, n => n.kind === SyntaxKind.ColonToken),
+                    visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
                 return updateTemplateExpression(<TemplateExpression>node,

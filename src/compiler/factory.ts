@@ -1016,15 +1016,41 @@ namespace ts {
         return node;
     }
 
+    /* @deprecated */ export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
-        body: ConciseBody,
-        // Optional for backwards-compatibility only -- should always provide this.
-        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken> = node.equalsGreaterThanToken): ArrowFunction {
+        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
+        body: ConciseBody): ArrowFunction;
+    export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
+        bodyOrUndefined?: ConciseBody,
+    ): ArrowFunction {
+        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
+        let body: ConciseBody;
+        if (bodyOrUndefined === undefined) {
+            equalsGreaterThanToken = node.equalsGreaterThanToken;
+            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
+        }
+        else {
+            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
+                n.kind === SyntaxKind.EqualsGreaterThanToken);
+            body = bodyOrUndefined;
+        }
 
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
@@ -1139,14 +1165,25 @@ namespace ts {
         return node;
     }
 
-    export function updateConditional(
+    /* @deprecated */ export function updateConditional(
         node: ConditionalExpression,
         condition: Expression,
         whenTrue: Expression,
-        whenFalse: Expression,
-        questionToken: Token<SyntaxKind.QuestionToken> = node.questionToken,
-        colonToken: Token<SyntaxKind.ColonToken> = node.colonToken,
-    ) {
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        questionToken: Token<SyntaxKind.QuestionToken>,
+        whenTrue: Expression,
+        colonToken: Token<SyntaxKind.ColonToken>,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
+        if (args.length === 2) {
+            const [whenTrue, whenFalse] = args;
+            return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
+        }
+        Debug.assert(args.length === 4);
+        const [questionToken, whenTrue, colonToken, whenFalse] = args;
         return node.condition !== condition
             || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue

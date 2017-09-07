@@ -595,8 +595,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
                 node.equalsGreaterThanToken,
+                transformFunctionBody(node),
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
             return updated;
