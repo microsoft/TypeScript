@@ -4055,6 +4055,11 @@ namespace ts {
          * If accessing a non-index file, this should include its name e.g. "foo/bar".
          */
         name: string;
+        /**
+         * Name of a submodule within this package.
+         * May be "".
+         */
+        subModuleName: string;
         /** Version of the package, e.g. "1.2.3" */
         version: string;
     }
@@ -4078,6 +4083,7 @@ namespace ts {
         primary: boolean;
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName?: string;
+        packageId?: PackageId;
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
