@@ -14,7 +14,7 @@ var x = d.p;
 //// [exportAssignmentClass_A.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
             this.p = 0;
         }

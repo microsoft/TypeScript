@@ -9,7 +9,7 @@ class C implements I {
 }
 
 //// [overloadOnConstInBaseWithBadImplementationInDerived.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.x1 = function (a, callback) {

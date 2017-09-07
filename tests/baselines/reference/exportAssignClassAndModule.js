@@ -20,7 +20,7 @@ zz.x;
 
 //// [exportAssignClassAndModule_0.js]
 "use strict";
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

@@ -8,7 +8,7 @@ class C {
 }
 
 //// [accessStaticMemberFromInstanceMethod01.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.bar = function () {

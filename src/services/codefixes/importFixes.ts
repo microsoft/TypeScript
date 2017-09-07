@@ -147,7 +147,7 @@ namespace ts.codefix {
             }
             else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-                symbol = checker.getAliasedSymbol(checker.resolveNameAtLocation(token, checker.getJsxNamespace(), SymbolFlags.Value));
+                symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), token.parent.tagName, SymbolFlags.Value));
                 symbolName = symbol.name;
             }
             else {
@@ -394,7 +394,9 @@ namespace ts.codefix {
                     : isNamespaceImport
                         ? createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(symbolName)))
                         : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
+                const moduleSpecifierLiteral = createLiteral(moduleSpecifierWithoutQuotes);
+                moduleSpecifierLiteral.singleQuote = getSingleQuoteStyleFromExistingImports();
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifierLiteral);
                 if (!lastImportDeclaration) {
                     changeTracker.insertNodeAt(sourceFile, getSourceFileImportLocation(sourceFile), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
                 }
@@ -433,6 +435,24 @@ namespace ts.codefix {
                         break;
                     }
                     return position;
+                }
+
+                function getSingleQuoteStyleFromExistingImports() {
+                    const firstModuleSpecifier = forEach(sourceFile.statements, node => {
+                        if (isImportDeclaration(node) || isExportDeclaration(node)) {
+                            if (node.moduleSpecifier && isStringLiteral(node.moduleSpecifier)) {
+                                return node.moduleSpecifier;
+                            }
+                        }
+                        else if (isImportEqualsDeclaration(node)) {
+                            if (isExternalModuleReference(node.moduleReference) && isStringLiteral(node.moduleReference.expression)) {
+                                return node.moduleReference.expression;
+                            }
+                        }
+                    });
+                    if (firstModuleSpecifier) {
+                        return sourceFile.text.charCodeAt(firstModuleSpecifier.getStart()) === CharacterCodes.singleQuote;
+                    }
                 }
 
                 function getModuleSpecifierForNewImport() {
@@ -672,7 +692,7 @@ namespace ts.codefix {
         }
 
         function createChangeTracker() {
-            return textChanges.ChangeTracker.fromCodeFixContext(context);
+            return textChanges.ChangeTracker.fromContext(context);
         }
 
         function createCodeAction(

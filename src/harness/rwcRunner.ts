@@ -90,9 +90,16 @@ namespace RWC {
                         ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
-                    // Load the files
+                    // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
+                    const uniqueNames = ts.createMap<true>();
                     for (const fileName of fileNames) {
-                        inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        // Must maintain order, build result list while checking map
+                        const normalized = ts.normalizeSlashes(fileName);
+                        if (!uniqueNames.has(normalized)) {
+                            uniqueNames.set(normalized, true);
+                            // Load the file
+                            inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        }
                     }
 
                     // Add files to compilation

@@ -36,7 +36,7 @@ class a {
 
 
 //// [parserErrantSemicolonInClass1.js]
-var a = (function () {
+var a = /** @class */ (function () {
     function a(ns) {
     }
     a.prototype.pgF = function () { };

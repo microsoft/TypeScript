@@ -7,7 +7,7 @@ class C {
 }
 
 //// [getAndSetNotIdenticalType.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {

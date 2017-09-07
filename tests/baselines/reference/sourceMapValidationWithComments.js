@@ -22,7 +22,7 @@ class DebugClass {
 }
 
 //// [sourceMapValidationWithComments.js]
-var DebugClass = (function () {
+var DebugClass = /** @class */ (function () {
     function DebugClass() {
     }
     DebugClass.debugFunc = function () {

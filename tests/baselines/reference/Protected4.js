@@ -4,7 +4,7 @@ class C {
 }
 
 //// [Protected4.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.m = function () { };

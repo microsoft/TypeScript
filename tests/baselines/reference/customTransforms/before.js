@@ -1,7 +1,7 @@
 // [source.js]
 /*@before*/
 function f1() { }
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

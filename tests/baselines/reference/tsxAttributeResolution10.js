@@ -34,7 +34,7 @@ export class MyComponent {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var MyComponent = (function () {
+    var MyComponent = /** @class */ (function () {
         function MyComponent() {
         }
         MyComponent.prototype.render = function () {

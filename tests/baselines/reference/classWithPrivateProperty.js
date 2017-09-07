@@ -24,7 +24,7 @@ var r8: string = C.g();
 
 //// [classWithPrivateProperty.js]
 // accessing any private outside the class is an error
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.a = '';
         this.b = '';
