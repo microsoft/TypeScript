@@ -1,0 +1,79 @@
+=== tests/cases/compiler/dontWiden.ts ===
+const c = [1, 'a'];
+>c : Symbol(c, Decl(dontWiden.ts, 0, 5))
+
+const d = { a: 1, b: 'c' };
+>d : Symbol(d, Decl(dontWiden.ts, 1, 5))
+>a : Symbol(a, Decl(dontWiden.ts, 1, 11))
+>b : Symbol(b, Decl(dontWiden.ts, 1, 17))
+
+interface SomeInterface { a: boolean }
+>SomeInterface : Symbol(SomeInterface, Decl(dontWiden.ts, 1, 27))
+>a : Symbol(SomeInterface.a, Decl(dontWiden.ts, 3, 25))
+
+declare function foo<T extends any[]>(arg: T): { hi: T };
+>foo : Symbol(foo, Decl(dontWiden.ts, 3, 38))
+>T : Symbol(T, Decl(dontWiden.ts, 4, 21))
+>arg : Symbol(arg, Decl(dontWiden.ts, 4, 38))
+>T : Symbol(T, Decl(dontWiden.ts, 4, 21))
+>hi : Symbol(hi, Decl(dontWiden.ts, 4, 48))
+>T : Symbol(T, Decl(dontWiden.ts, 4, 21))
+
+declare function boo<T extends number[]>(arg: T): { hi: T };
+>boo : Symbol(boo, Decl(dontWiden.ts, 4, 57))
+>T : Symbol(T, Decl(dontWiden.ts, 5, 21))
+>arg : Symbol(arg, Decl(dontWiden.ts, 5, 41))
+>T : Symbol(T, Decl(dontWiden.ts, 5, 21))
+>hi : Symbol(hi, Decl(dontWiden.ts, 5, 51))
+>T : Symbol(T, Decl(dontWiden.ts, 5, 21))
+
+declare function bar(arg: SomeInterface): void
+>bar : Symbol(bar, Decl(dontWiden.ts, 5, 60))
+>arg : Symbol(arg, Decl(dontWiden.ts, 6, 21))
+>SomeInterface : Symbol(SomeInterface, Decl(dontWiden.ts, 1, 27))
+
+declare function baz(arg: [number, 2, 3 | number]): void
+>baz : Symbol(baz, Decl(dontWiden.ts, 6, 46))
+>arg : Symbol(arg, Decl(dontWiden.ts, 7, 21))
+
+declare function bag(arg: number[]): void
+>bag : Symbol(bag, Decl(dontWiden.ts, 7, 56))
+>arg : Symbol(arg, Decl(dontWiden.ts, 8, 21))
+
+// As variable assignees
+const a: number[] = [1, 2, 3];
+>a : Symbol(a, Decl(dontWiden.ts, 11, 5))
+
+const b: SomeInterface = {a: true};
+>b : Symbol(b, Decl(dontWiden.ts, 12, 5))
+>SomeInterface : Symbol(SomeInterface, Decl(dontWiden.ts, 1, 27))
+>a : Symbol(a, Decl(dontWiden.ts, 12, 26))
+
+const e = [1, 2, 3];
+>e : Symbol(e, Decl(dontWiden.ts, 13, 5))
+
+// Same, but as arguments
+foo([1, 2, 3]);
+>foo : Symbol(foo, Decl(dontWiden.ts, 3, 38))
+
+bar({a: true});
+>bar : Symbol(bar, Decl(dontWiden.ts, 5, 60))
+>a : Symbol(a, Decl(dontWiden.ts, 17, 5))
+
+baz([1, 2, 3]);
+>baz : Symbol(baz, Decl(dontWiden.ts, 6, 46))
+
+bag([1, 2, 3]);
+>bag : Symbol(bag, Decl(dontWiden.ts, 7, 56))
+
+bag(e);
+>bag : Symbol(bag, Decl(dontWiden.ts, 7, 56))
+>e : Symbol(e, Decl(dontWiden.ts, 13, 5))
+
+boo([1, 2, 3]);
+>boo : Symbol(boo, Decl(dontWiden.ts, 4, 57))
+
+boo(e);
+>boo : Symbol(boo, Decl(dontWiden.ts, 4, 57))
+>e : Symbol(e, Decl(dontWiden.ts, 13, 5))
+

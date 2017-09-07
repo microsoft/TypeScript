@@ -2464,6 +2464,7 @@ namespace ts.server.protocol {
         sourceRoot?: string;
         strict?: boolean;
         strictNullChecks?: boolean;
+        widenTypes?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget | ts.ScriptTarget;

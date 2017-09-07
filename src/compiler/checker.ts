@@ -65,6 +65,8 @@ namespace ts {
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
         const strictNullChecks = compilerOptions.strictNullChecks === undefined ? compilerOptions.strict : compilerOptions.strictNullChecks;
+        const widenTypes = compilerOptions.widenTypes === undefined ? true : compilerOptions.widenTypes;
+        const granularConst = !widenTypes;
         const noImplicitAny = compilerOptions.noImplicitAny === undefined ? compilerOptions.strict : compilerOptions.noImplicitAny;
         const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
 
@@ -13345,12 +13347,12 @@ namespace ts {
             return result;
         }
 
-        function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
+        function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode, granular?: boolean): Type {
             if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.SpreadIncludes);
             }
 
-            const arrayOrIterableType = checkExpression(node.expression, checkMode);
+            const arrayOrIterableType = checkExpression(node.expression, checkMode, granular);
             return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
         }
 
@@ -13359,7 +13361,7 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode?: CheckMode): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode?: CheckMode, granular?: boolean): Type {
             const elements = node.elements;
             let hasSpreadElement = false;
             const elementTypes: Type[] = [];
@@ -13378,7 +13380,7 @@ namespace ts {
                     // get the contextual element type from it. So we do something similar to
                     // getContextualTypeForElementExpression, which will crucially not error
                     // if there is no index type / iterated type.
-                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode);
+                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode, granular);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
                         getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
@@ -13386,7 +13388,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const type = checkExpressionForMutableLocation(e, checkMode);
+                    const type = checkExpressionForMutableLocation(e, checkMode, granular);
                     elementTypes.push(type);
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
@@ -13424,9 +13426,10 @@ namespace ts {
                     }
                 }
             }
-            return createArrayType(elementTypes.length ?
-                getUnionType(elementTypes, /*subtypeReduction*/ true) :
-                strictNullChecks ? neverType : undefinedWideningType);
+            return granular ? createTupleType(elementTypes) :
+                createArrayType(elementTypes.length ?
+                    getUnionType(elementTypes, /*subtypeReduction*/ true) :
+                    strictNullChecks ? neverType : undefinedWideningType);
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -13508,7 +13511,7 @@ namespace ts {
             return createIndexInfo(unionType, /*isReadonly*/ false);
         }
 
-        function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
+        function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode, granular?: boolean): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
@@ -13542,14 +13545,14 @@ namespace ts {
 
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                        type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
+                        type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode, granular);
                     }
                     else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
-                        type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, checkMode);
+                        type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, checkMode, granular);
                     }
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode);
+                        type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode, granular);
                     }
 
                     if (jsdocType) {
@@ -13750,7 +13753,7 @@ namespace ts {
          * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
          * which also calls getSpreadType.
          */
-        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean, checkMode?: CheckMode) {
+        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean, checkMode?: CheckMode, granular?: boolean) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createSymbolTable();
             let spread: Type = emptyObjectType;
@@ -13764,7 +13767,7 @@ namespace ts {
                 const member = attributeDecl.symbol;
                 if (isJsxAttribute(attributeDecl)) {
                     const exprType = attributeDecl.initializer ?
-                        checkExpression(attributeDecl.initializer, checkMode) :
+                        checkExpression(attributeDecl.initializer, checkMode, granular) :
                         trueType;  // <Elem attr /> is sugar for <Elem attr={true} />
 
                     const attributeSymbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.escapedName);
@@ -13878,8 +13881,8 @@ namespace ts {
          * (See "checkApplicableSignatureForJsxOpeningLikeElement" for how the function is used)
          * @param node a JSXAttributes to be resolved of its type
          */
-        function checkJsxAttributes(node: JsxAttributes, checkMode?: CheckMode) {
-            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, checkMode);
+        function checkJsxAttributes(node: JsxAttributes, checkMode?: CheckMode, granular?: boolean) {
+            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, checkMode, granular);
         }
 
         function getJsxType(name: __String) {
@@ -14483,9 +14486,9 @@ namespace ts {
             }
         }
 
-        function checkJsxExpression(node: JsxExpression, checkMode?: CheckMode) {
+        function checkJsxExpression(node: JsxExpression, checkMode?: CheckMode, granular?: boolean) {
             if (node.expression) {
-                const type = checkExpression(node.expression, checkMode);
+                const type = checkExpression(node.expression, checkMode, granular);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
                     error(node, Diagnostics.JSX_spread_child_must_be_an_array_type, node.toString(), typeToString(type));
                 }
@@ -16571,8 +16574,8 @@ namespace ts {
             return checkAssertionWorker(node, node.type, node.expression);
         }
 
-        function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
-            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression, checkMode)));
+        function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode, granular?: boolean) {
+            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression, checkMode, granular)));
 
             checkSourceElement(type);
             const targetType = getTypeFromTypeNode(type);
@@ -16728,7 +16731,7 @@ namespace ts {
             return promiseType;
         }
 
-        function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
+        function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode, granular?: boolean): Type {
             const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
@@ -16737,7 +16740,7 @@ namespace ts {
             const functionFlags = getFunctionFlags(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                type = checkExpressionCached(<Expression>func.body, checkMode);
+                type = checkExpressionCached(<Expression>func.body, checkMode, granular);
                 if (functionFlags & FunctionFlags.Async) {
                     // From within an async function you can return either a non-promise value or a promise. Any
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -16749,7 +16752,7 @@ namespace ts {
             else {
                 let types: Type[];
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), checkAndAggregateReturnExpressionTypes(func, checkMode));
+                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode, granular), checkAndAggregateReturnExpressionTypes(func, checkMode, granular));
                     if (!types || types.length === 0) {
                         const iterableIteratorAny = functionFlags & FunctionFlags.Async
                             ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
@@ -16762,7 +16765,7 @@ namespace ts {
                     }
                 }
                 else {
-                    types = checkAndAggregateReturnExpressionTypes(func, checkMode);
+                    types = checkAndAggregateReturnExpressionTypes(func, checkMode, granular);
                     if (!types) {
                         // For an async function, the return type will not be never, but rather a Promise for never.
                         return functionFlags & FunctionFlags.Async
@@ -16806,13 +16809,13 @@ namespace ts {
                 : widenedType; // Generator function, AsyncGenerator function, or normal function
         }
 
-        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
+        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode, granular?: boolean): Type[] {
             const aggregatedTypes: Type[] = [];
             const functionFlags = getFunctionFlags(func);
             forEachYieldExpression(<Block>func.body, yieldExpression => {
                 const expr = yieldExpression.expression;
                 if (expr) {
-                    let type = checkExpressionCached(expr, checkMode);
+                    let type = checkExpressionCached(expr, checkMode, granular);
                     if (yieldExpression.asteriskToken) {
                         // A yield* expression effectively yields everything that its operand yields
                         type = checkIteratedTypeOrElementType(type, yieldExpression.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
@@ -16855,7 +16858,7 @@ namespace ts {
             return true;
         }
 
-        function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
+        function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode, granular?: boolean): Type[] {
             const functionFlags = getFunctionFlags(func);
             const aggregatedTypes: Type[] = [];
             let hasReturnWithNoExpression = functionHasImplicitReturn(func);
@@ -16863,7 +16866,7 @@ namespace ts {
             forEachReturnStatement(<Block>func.body, returnStatement => {
                 const expr = returnStatement.expression;
                 if (expr) {
-                    let type = checkExpressionCached(expr, checkMode);
+                    let type = checkExpressionCached(expr, checkMode, granular);
                     if (functionFlags & FunctionFlags.Async) {
                         // From within an async function you can return either a non-promise value or a promise. Any
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -16946,7 +16949,7 @@ namespace ts {
             }
         }
 
-        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, checkMode?: CheckMode): Type {
+        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, checkMode?: CheckMode, granular?: boolean): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             // The identityMapper object is used to indicate that function expressions are wildcards
@@ -16984,7 +16987,7 @@ namespace ts {
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
                         if (!getEffectiveReturnTypeNode(node) && !signature.resolvedReturnType) {
-                            const returnType = getReturnTypeFromBody(node, checkMode);
+                            const returnType = getReturnTypeFromBody(node, checkMode, granular);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
@@ -17357,7 +17360,7 @@ namespace ts {
             }
         }
 
-        function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
+        function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode, granular?: boolean): Type {
             if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
             }
@@ -17368,13 +17371,13 @@ namespace ts {
             const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
-                checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, checkMode);
+                checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, checkMode, granular);
             }
             return sourceType;
         }
 
         function checkArrayLiteralDestructuringElementAssignment(node: ArrayLiteralExpression, sourceType: Type,
-            elementIndex: number, elementType: Type, checkMode?: CheckMode) {
+            elementIndex: number, elementType: Type, checkMode?: CheckMode, granular?: boolean) {
             const elements = node.elements;
             const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
@@ -17386,7 +17389,7 @@ namespace ts {
                             ? getTypeOfPropertyOfType(sourceType, propName)
                             : elementType;
                     if (type) {
-                        return checkDestructuringAssignment(element, type, checkMode);
+                        return checkDestructuringAssignment(element, type, checkMode, granular);
                     }
                     else {
                         // We still need to check element expression here because we may need to set appropriate flag on the expression
@@ -17410,7 +17413,7 @@ namespace ts {
                             error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
                         }
                         else {
-                            return checkDestructuringAssignment(restExpression, createArrayType(elementType), checkMode);
+                            return checkDestructuringAssignment(restExpression, createArrayType(elementType), checkMode, granular);
                         }
                     }
                 }
@@ -17418,7 +17421,7 @@ namespace ts {
             return undefined;
         }
 
-        function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, checkMode?: CheckMode): Type {
+        function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, checkMode?: CheckMode, granular?: boolean): Type {
             let target: Expression;
             if (exprOrAssignment.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const prop = <ShorthandPropertyAssignment>exprOrAssignment;
@@ -17429,7 +17432,7 @@ namespace ts {
                         !(getFalsyFlags(checkExpression(prop.objectAssignmentInitializer)) & TypeFlags.Undefined)) {
                         sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
                     }
-                    checkBinaryLikeExpression(prop.name, prop.equalsToken, prop.objectAssignmentInitializer, checkMode);
+                    checkBinaryLikeExpression(prop.name, prop.equalsToken, prop.objectAssignmentInitializer, checkMode, granular);
                 }
                 target = (<ShorthandPropertyAssignment>exprOrAssignment).name;
             }
@@ -17438,20 +17441,20 @@ namespace ts {
             }
 
             if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
-                checkBinaryExpression(<BinaryExpression>target, checkMode);
+                checkBinaryExpression(<BinaryExpression>target, checkMode, granular);
                 target = (<BinaryExpression>target).left;
             }
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
                 return checkObjectLiteralAssignment(<ObjectLiteralExpression>target, sourceType);
             }
             if (target.kind === SyntaxKind.ArrayLiteralExpression) {
-                return checkArrayLiteralAssignment(<ArrayLiteralExpression>target, sourceType, checkMode);
+                return checkArrayLiteralAssignment(<ArrayLiteralExpression>target, sourceType, checkMode, granular);
             }
-            return checkReferenceAssignment(target, sourceType, checkMode);
+            return checkReferenceAssignment(target, sourceType, checkMode, granular);
         }
 
-        function checkReferenceAssignment(target: Expression, sourceType: Type, checkMode?: CheckMode): Type {
-            const targetType = checkExpression(target, checkMode);
+        function checkReferenceAssignment(target: Expression, sourceType: Type, checkMode?: CheckMode, granular?: boolean): Type {
+            const targetType = checkExpression(target, checkMode, granular);
             const error = target.parent.kind === SyntaxKind.SpreadAssignment ?
                 Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access :
                 Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access;
@@ -17539,17 +17542,17 @@ namespace ts {
                 getUnionType([type1, type2], /*subtypeReduction*/ true);
         }
 
-        function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
+        function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode, granular?: boolean) {
+            return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, granular, node);
         }
 
-        function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node) {
+        function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, granular?: boolean, errorNode?: Node) {
             const operator = operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode);
+                return checkDestructuringAssignment(left, checkExpression(right, checkMode, granular), checkMode, granular);
             }
-            let leftType = checkExpression(left, checkMode);
-            let rightType = checkExpression(right, checkMode);
+            let leftType = checkExpression(left, checkMode, granular);
+            let rightType = checkExpression(right, checkMode, granular);
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:
@@ -17831,10 +17834,10 @@ namespace ts {
             return anyType;
         }
 
-        function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
+        function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode, granular?: boolean): Type {
             checkExpression(node.condition);
-            const type1 = checkExpression(node.whenTrue, checkMode);
-            const type2 = checkExpression(node.whenFalse, checkMode);
+            const type1 = checkExpression(node.whenTrue, checkMode, granular);
+            const type2 = checkExpression(node.whenFalse, checkMode, granular);
             return getBestChoiceType(type1, type2);
         }
 
@@ -17858,13 +17861,13 @@ namespace ts {
             node.contextualMapper = contextualMapper;
             const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
                 contextualMapper ? CheckMode.Inferential : CheckMode.Normal;
-            const result = checkExpression(node, checkMode);
+            const result = checkExpression(node, checkMode, granularConst);
             node.contextualType = saveContextualType;
             node.contextualMapper = saveContextualMapper;
             return result;
         }
 
-        function checkExpressionCached(node: Expression, checkMode?: CheckMode): Type {
+        function checkExpressionCached(node: Expression, checkMode?: CheckMode, granular?: boolean): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // When computing a type that we're going to cache, we need to ignore any ongoing control flow
@@ -17872,7 +17875,8 @@ namespace ts {
                 // to the top of the stack ensures all transient types are computed from a known point.
                 const saveFlowLoopStart = flowLoopStart;
                 flowLoopStart = flowLoopCount;
-                links.resolvedType = checkExpression(node, checkMode);
+                 // every node is expected to always be checked using the same options, so no mix-ups
+                links.resolvedType = checkExpression(node, checkMode, granular);
                 flowLoopStart = saveFlowLoopStart;
             }
             return links.resolvedType;
@@ -17883,8 +17887,9 @@ namespace ts {
             return node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression;
         }
 
-        function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
-            const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
+        function checkDeclarationInitializer(declaration: VariableLikeDeclaration): Type {
+            const granular = granularConst && !!(getCombinedNodeFlags(declaration) & NodeFlags.Const);
+            const type = getTypeOfExpression(declaration.initializer, /*cache*/ true, granular);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
@@ -17907,12 +17912,12 @@ namespace ts {
             return false;
         }
 
-        function checkExpressionForMutableLocation(node: Expression, checkMode?: CheckMode): Type {
-            const type = checkExpression(node, checkMode);
-            return isTypeAssertion(node) || isLiteralContextualType(getContextualType(node)) ? type : getWidenedLiteralType(type);
+        function checkExpressionForMutableLocation(node: Expression, checkMode?: CheckMode, granular?: boolean): Type {
+            const type = checkExpression(node, checkMode, granular);
+            return granular || isTypeAssertion(node) || isLiteralContextualType(getContextualType(node)) ? type : getWidenedLiteralType(type);
         }
 
-        function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
+        function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode, granular?: boolean): Type {
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including
             // well known symbols.
@@ -17920,10 +17925,10 @@ namespace ts {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
-            return checkExpressionForMutableLocation((<PropertyAssignment>node).initializer, checkMode);
+            return checkExpressionForMutableLocation((<PropertyAssignment>node).initializer, checkMode, granular);
         }
 
-        function checkObjectLiteralMethod(node: MethodDeclaration, checkMode?: CheckMode): Type {
+        function checkObjectLiteralMethod(node: MethodDeclaration, checkMode?: CheckMode, granular?: boolean): Type {
             // Grammar checking
             checkGrammarMethod(node);
 
@@ -17934,7 +17939,7 @@ namespace ts {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
-            const uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, checkMode);
+            const uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, checkMode, granular);
             return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
         }
 
@@ -17961,7 +17966,7 @@ namespace ts {
          * A cache argument of true indicates that if the function performs a full type check, it is ok
          * to cache the result.
          */
-        function getTypeOfExpression(node: Expression, cache?: boolean) {
+        function getTypeOfExpression(node: Expression, cache?: boolean, granular?: boolean): Type {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
             if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
@@ -17974,7 +17979,8 @@ namespace ts {
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
             // should have a parameter that indicates whether full error checking is required such that
             // we can perform the optimizations locally.
-            return cache ? checkExpressionCached(node) : checkExpression(node);
+            const checkMode = CheckMode.Normal;
+            return cache ? checkExpressionCached(node, checkMode, granular) : checkExpression(node, checkMode, granular);
         }
 
         /**
@@ -17999,13 +18005,13 @@ namespace ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
+        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, granular?: boolean): Type {
             let type: Type;
             if (node.kind === SyntaxKind.QualifiedName) {
                 type = checkQualifiedName(<QualifiedName>node);
             }
             else {
-                const uninstantiatedType = checkExpressionWorker(<Expression>node, checkMode);
+                const uninstantiatedType = checkExpressionWorker(<Expression>node, checkMode, granular);
                 type = instantiateTypeWithSingleGenericCallSignature(<Expression>node, uninstantiatedType, checkMode);
             }
 
@@ -18026,19 +18032,19 @@ namespace ts {
             return type;
         }
 
-        function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
+        function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode, granular?: boolean): Type {
             if (isInJavaScriptFile(node) && node.jsDoc) {
                 const typecasts = flatMap(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag && !!(tag as JSDocTypeTag).typeExpression && !!(tag as JSDocTypeTag).typeExpression.type));
                 if (typecasts && typecasts.length) {
                     // We should have already issued an error if there were multiple type jsdocs
                     const cast = typecasts[0] as JSDocTypeTag;
-                    return checkAssertionWorker(cast, cast.typeExpression.type, node.expression, checkMode);
+                    return checkAssertionWorker(cast, cast.typeExpression.type, node.expression, checkMode, granular);
                 }
             }
-            return checkExpression(node.expression, checkMode);
+            return checkExpression(node.expression, checkMode, granular);
         }
 
-        function checkExpressionWorker(node: Expression, checkMode: CheckMode): Type {
+        function checkExpressionWorker(node: Expression, checkMode: CheckMode, granular?: boolean): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -18063,9 +18069,9 @@ namespace ts {
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode);
+                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode, granular);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode);
+                    return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode, granular);
                 case SyntaxKind.PropertyAccessExpression:
                     return checkPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
@@ -23139,7 +23145,7 @@ namespace ts {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = <Expression>expr.parent;
             }
-            return getRegularTypeOfLiteralType(getTypeOfExpression(expr));
+            return getRegularTypeOfLiteralType(getTypeOfExpression(expr, granularConst));
         }
 
         /**

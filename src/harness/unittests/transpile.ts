@@ -413,6 +413,10 @@ var x = 0;`, {
             options: { compilerOptions: { strictNullChecks: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'widenTypes'", "x;", {
+            options: { compilerOptions: { widenTypes: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'stripInternal'", "x;", {
             options: { compilerOptions: { stripInternal: true }, fileName: "input.js", reportDiagnostics: true }
         });

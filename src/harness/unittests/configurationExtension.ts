@@ -16,6 +16,12 @@ namespace ts {
                 strictNullChecks: false
             }
         },
+        "/dev/tsconfig.widenTypes.json": {
+            extends: "./tsconfig",
+            compilerOptions: {
+                widenTypes: false
+            }
+        },
         "/dev/configs/base.json": {
             compilerOptions: {
                 allowJs: true,
