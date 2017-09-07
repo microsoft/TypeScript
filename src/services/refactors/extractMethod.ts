@@ -293,13 +293,14 @@ namespace ts.refactor.extractMethod {
             }
 
             let errors: Diagnostic[];
+            let permittedJumps = PermittedJumps.Return;
             let seenLabels: Array<__String>;
 
-            visit(nodeToCheck, PermittedJumps.Return);
+            visit(nodeToCheck);
 
             return errors;
 
-            function visit(node: Node, permittedJumps: PermittedJumps) {
+            function visit(node: Node) {
                 if (errors) {
                     // already found an error - can stop now
                     return true;
@@ -350,6 +351,7 @@ namespace ts.refactor.extractMethod {
                     // do not dive into functions or classes
                     return false;
                 }
+                const savedPermittedJumps = permittedJumps;
 
                 switch (node.kind) {
                     case SyntaxKind.IfStatement:
@@ -386,7 +388,7 @@ namespace ts.refactor.extractMethod {
                         {
                             const label = (<LabeledStatement>node).label;
                             (seenLabels || (seenLabels = [])).push(label.escapedText);
-                            forEachChild(node, child => visit(child, permittedJumps));
+                            forEachChild(node, visit);
                             seenLabels.pop();
                             break;
                         }
@@ -423,10 +425,11 @@ namespace ts.refactor.extractMethod {
                         }
                         break;
                     default:
-                        forEachChild(node, child => visit(child, permittedJumps));
+                        forEachChild(node, visit);
                         break;
                 }
 
+                permittedJumps = savedPermittedJumps;
             }
         }
     }
