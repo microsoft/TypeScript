@@ -22987,6 +22987,9 @@ namespace ts {
                             : undefined;
                     return objectType && getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
 
+                case SyntaxKind.DefaultKeyword:
+                    return getSymbolOfNode(node.parent);
+
                 default:
                     return undefined;
             }
