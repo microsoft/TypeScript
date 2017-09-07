@@ -410,7 +410,7 @@ namespace ts {
         // See https://github.com/Microsoft/TypeScript/pull/18284#discussion_r137611034
         function emitIfPresent(node: Node | undefined) {
             if (node) {
-                pipelineEmitWithNotification(EmitHint.Unspecified, node);
+                emit(node);
             }
         }
 
@@ -459,7 +459,7 @@ namespace ts {
                 case EmitHint.SourceFile: return pipelineEmitSourceFile(node);
                 case EmitHint.IdentifierName: return pipelineEmitIdentifierName(node);
                 case EmitHint.Expression: return pipelineEmitExpression(node);
-                case EmitHint.MappedTypeParameter: return pipelineEmitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
+                case EmitHint.MappedTypeParameter: return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
                 case EmitHint.Unspecified: return pipelineEmitUnspecified(node);
             }
         }
@@ -474,7 +474,7 @@ namespace ts {
             emitIdentifier(<Identifier>node);
         }
 
-        function pipelineEmitMappedTypeParameter(node: TypeParameterDeclaration): void {
+        function emitMappedTypeParameter(node: TypeParameterDeclaration): void {
             emit(node.name);
             write(" in ");
             emit(node.constraint);
@@ -2390,7 +2390,7 @@ namespace ts {
 
         function emitParametersForArrow(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
             if (canEmitSimpleArrowHead(parentNode, parameters)) {
-                emitSingleElementList(parameters);
+                emitList(parentNode, parameters, ListFormat.Parameters & ~ListFormat.Parenthesis);
             }
             else {
                 emitParameters(parentNode, parameters);
@@ -2399,17 +2399,6 @@ namespace ts {
 
         function emitParametersForIndexSignature(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
             emitList(parentNode, parameters, ListFormat.IndexSignatureParameters);
-        }
-
-        function emitSingleElementList(list: NodeArray<Node>) {
-            Debug.assert(list.length === 1);
-            if (onBeforeEmitNodeArray) {
-                onBeforeEmitNodeArray(list);
-            }
-            emit(list[0]);
-            if (onAfterEmitNodeArray) {
-                onAfterEmitNodeArray(list);
-            }
         }
 
         function emitList(parentNode: Node, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
