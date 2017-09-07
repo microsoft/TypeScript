@@ -2450,8 +2450,8 @@ namespace ts {
             throw e;
         }
 
-        export function assertNever(_member: never, message?: string, stackCrawlMark?: Function): never {
-            return fail(message, stackCrawlMark || assertNever);
+        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+            return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: Function) {
