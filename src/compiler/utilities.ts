@@ -1510,10 +1510,10 @@ namespace ts {
     }
 
     export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
-        let tags = (node as HasJSDocNodes).jsDocCache;
+        let tags = (node as JSDocContainer).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined) {
-            (node as HasJSDocNodes).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
+            (node as JSDocContainer).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
         }
         return tags;
     }
@@ -5433,6 +5433,6 @@ namespace ts {
     /** True if has jsdoc nodes attached to it. */
     /* @internal */
     export function hasJSDocNodes(node: Node): node is HasJSDoc {
-        return !!(node as HasJSDocNodes).jsDoc && (node as HasJSDocNodes).jsDoc.length > 0;
+        return !!(node as JSDocContainer).jsDoc && (node as JSDocContainer).jsDoc.length > 0;
     }
 }

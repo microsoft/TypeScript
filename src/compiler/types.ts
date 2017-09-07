@@ -526,7 +526,7 @@ namespace ts {
         /* @internal */ contextualMapper?: TypeMapper;        // Mapper for contextual type
     }
 
-    export interface HasJSDocNodes {
+    export interface JSDocContainer {
         /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
         /* @internal */ jsDocCache?: ReadonlyArray<JSDocTag>; // Cache for getJSDocTags
     }
@@ -582,7 +582,7 @@ namespace ts {
     export type EqualsToken = Token<SyntaxKind.EqualsToken>;
     export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
-    export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & HasJSDocNodes;
+    export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
@@ -687,7 +687,7 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclarationBase extends NamedDeclaration, HasJSDocNodes {
+    export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SignatureDeclaration["kind"];
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -734,7 +734,7 @@ namespace ts {
         declarations: NodeArray<VariableDeclaration>;
     }
 
-    export interface ParameterDeclaration extends NamedDeclaration, HasJSDocNodes {
+    export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
@@ -753,7 +753,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface PropertySignature extends TypeElement, HasJSDocNodes {
+    export interface PropertySignature extends TypeElement, JSDocContainer {
         kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
         questionToken?: QuestionToken;      // Present on optional property
@@ -761,7 +761,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface PropertyDeclaration extends ClassElement, HasJSDocNodes {
+    export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
         questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         name: PropertyName;
@@ -782,7 +782,7 @@ namespace ts {
         | AccessorDeclaration
         ;
 
-    export interface PropertyAssignment extends ObjectLiteralElement, HasJSDocNodes {
+    export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         parent: ObjectLiteralExpression;
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
@@ -790,7 +790,7 @@ namespace ts {
         initializer: Expression;
     }
 
-    export interface ShorthandPropertyAssignment extends ObjectLiteralElement, HasJSDocNodes {
+    export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         parent: ObjectLiteralExpression;
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
@@ -801,7 +801,7 @@ namespace ts {
         objectAssignmentInitializer?: Expression;
     }
 
-    export interface SpreadAssignment extends ObjectLiteralElement, HasJSDocNodes {
+    export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
         parent: ObjectLiteralExpression;
         kind: SyntaxKind.SpreadAssignment;
         expression: Expression;
@@ -899,13 +899,13 @@ namespace ts {
     // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
-    export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, HasJSDocNodes {
+    export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.MethodDeclaration;
         name: PropertyName;
         body?: FunctionBody;
     }
 
-    export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, HasJSDocNodes {
+    export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
@@ -919,7 +919,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, HasJSDocNodes {
+    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.GetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -928,7 +928,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, HasJSDocNodes {
+    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.SetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -1393,13 +1393,13 @@ namespace ts {
     export type FunctionBody = Block;
     export type ConciseBody = FunctionBody | Expression;
 
-    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, HasJSDocNodes {
+    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
         kind: SyntaxKind.FunctionExpression;
         name?: Identifier;
         body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
-    export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, HasJSDocNodes {
+    export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer {
         kind: SyntaxKind.ArrowFunction;
         equalsGreaterThanToken: EqualsGreaterThanToken;
         body: ConciseBody;
@@ -1478,7 +1478,7 @@ namespace ts {
         literal: TemplateMiddle | TemplateTail;
     }
 
-    export interface ParenthesizedExpression extends PrimaryExpression, HasJSDocNodes {
+    export interface ParenthesizedExpression extends PrimaryExpression, JSDocContainer {
         kind: SyntaxKind.ParenthesizedExpression;
         expression: Expression;
     }
@@ -1734,12 +1734,12 @@ namespace ts {
         /*@internal*/ multiLine?: boolean;
     }
 
-    export interface VariableStatement extends Statement, HasJSDocNodes {
+    export interface VariableStatement extends Statement, JSDocContainer {
         kind: SyntaxKind.VariableStatement;
         declarationList: VariableDeclarationList;
     }
 
-    export interface ExpressionStatement extends Statement, HasJSDocNodes {
+    export interface ExpressionStatement extends Statement, JSDocContainer {
         kind: SyntaxKind.ExpressionStatement;
         expression: Expression;
     }
@@ -1845,7 +1845,7 @@ namespace ts {
 
     export type CaseOrDefaultClause = CaseClause | DefaultClause;
 
-    export interface LabeledStatement extends Statement, HasJSDocNodes {
+    export interface LabeledStatement extends Statement, JSDocContainer {
         kind: SyntaxKind.LabeledStatement;
         label: Identifier;
         statement: Statement;
@@ -1872,7 +1872,7 @@ namespace ts {
 
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
-    export interface ClassLikeDeclarationBase extends NamedDeclaration, HasJSDocNodes {
+    export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -1902,7 +1902,7 @@ namespace ts {
         questionToken?: QuestionToken;
     }
 
-    export interface InterfaceDeclaration extends DeclarationStatement, HasJSDocNodes {
+    export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.InterfaceDeclaration;
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -1917,14 +1917,14 @@ namespace ts {
         types: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    export interface TypeAliasDeclaration extends DeclarationStatement, HasJSDocNodes {
+    export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.TypeAliasDeclaration;
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
     }
 
-    export interface EnumMember extends NamedDeclaration, HasJSDocNodes {
+    export interface EnumMember extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.EnumMember;
         parent?: EnumDeclaration;
         // This does include ComputedPropertyName, but the parser will give an error
@@ -1933,7 +1933,7 @@ namespace ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends DeclarationStatement, HasJSDocNodes {
+    export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.EnumDeclaration;
         name: Identifier;
         members: NodeArray<EnumMember>;
@@ -1943,7 +1943,7 @@ namespace ts {
 
     export type ModuleBody = NamespaceBody | JSDocNamespaceBody;
 
-    export interface ModuleDeclaration extends DeclarationStatement, HasJSDocNodes {
+    export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ModuleDeclaration;
         parent?: ModuleBody | SourceFile;
         name: ModuleName;
@@ -1977,7 +1977,7 @@ namespace ts {
      * - import x = require("mod");
      * - import x = M.x;
      */
-    export interface ImportEqualsDeclaration extends DeclarationStatement, HasJSDocNodes {
+    export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ImportEqualsDeclaration;
         parent?: SourceFile | ModuleBlock;
         name: Identifier;
