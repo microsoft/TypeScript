@@ -722,6 +722,10 @@ namespace ts.refactor.extractMethod {
                 }
                 else {
                     newNodes.push(createStatement(createBinary(assignments[0].name, SyntaxKind.EqualsToken, call)));
+
+                    if (range.facts & RangeFacts.HasReturn) {
+                        newNodes.push(createReturn());
+                    }
                 }
             }
             else {
