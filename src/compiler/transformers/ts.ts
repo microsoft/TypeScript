@@ -2309,7 +2309,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                visitFunctionBody(node.body, visitor, context)
+                node.equalsGreaterThanToken,
+                visitFunctionBody(node.body, visitor, context),
             );
             return updated;
         }

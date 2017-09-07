@@ -726,6 +726,7 @@ namespace ts.formatting {
                 parent: Node,
                 parentStartLine: number,
                 parentDynamicIndentation: DynamicIndentation): void {
+                Debug.assert(isNodeArray(nodes));
 
                 const listStartToken = getOpenTokenForList(parent, nodes);
                 const listEndToken = getCloseTokenForOpenToken(listStartToken);

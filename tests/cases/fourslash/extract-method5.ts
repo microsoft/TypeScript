@@ -20,6 +20,6 @@ verify.currentFileContentIs(
     var x: 1 | 2 | 3 = newFunction();
 
     function newFunction(): 1 | 2 | 3 {
-        return 1 + 1 === 2?1: 2;
+        return 1 + 1 === 2 ? 1 : 2;
     }
 }`);

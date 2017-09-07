@@ -197,9 +197,10 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
+                node.equalsGreaterThanToken,
                 getFunctionFlags(node) & FunctionFlags.Async
                     ? transformAsyncFunctionBody(node)
-                    : visitFunctionBody(node.body, visitor, context)
+                    : visitFunctionBody(node.body, visitor, context),
             );
         }
 
