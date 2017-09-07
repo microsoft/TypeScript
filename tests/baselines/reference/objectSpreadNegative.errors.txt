@@ -17,9 +17,15 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(52,9): error TS2339
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,11): error TS2339: Property 'a' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(61,14): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(78,37): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(81,7): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(83,7): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (16 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (19 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -128,4 +134,23 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,14): error TS269
         f({ a: 1 }, { a: 'mismatch' })
     let overwriteId: { id: string, a: number, c: number, d: string } =
         f({ a: 1, id: true }, { c: 1, d: 'no' })
+    
+    // excess property checks
+    type A = { a: string, b: string };
+    type Extra = { a: string, b: string, extra: string };
+    const extra1: A = { a: "a", b: "b", extra: "extra" };
+                                        ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
+    const extra2 = { a: "a", b: "b", extra: "extra" };
+    const a1: A = { ...extra1 }; // error spans should be here
+    const a2: A = { ...extra2 }; // not on the symbol declarations above
+          ~~
+!!! error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
+    const extra3: Extra = { a: "a", b: "b", extra: "extra" };
+    const a3: A = { ...extra3 }; // same here
+          ~~
+!!! error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
     

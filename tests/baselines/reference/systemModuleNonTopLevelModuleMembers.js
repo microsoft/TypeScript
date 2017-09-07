@@ -21,7 +21,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            TopLevelClass = (function () {
+            TopLevelClass = /** @class */ (function () {
                 function TopLevelClass() {
                 }
                 return TopLevelClass;
@@ -36,7 +36,7 @@ System.register([], function (exports_1, context_1) {
             })(TopLevelEnum || (TopLevelEnum = {}));
             exports_1("TopLevelEnum", TopLevelEnum);
             (function (TopLevelModule2) {
-                var NonTopLevelClass = (function () {
+                var NonTopLevelClass = /** @class */ (function () {
                     function NonTopLevelClass() {
                     }
                     return NonTopLevelClass;

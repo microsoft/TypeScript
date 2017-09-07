@@ -53,18 +53,18 @@ const y = (a) => a + 1;
 >a : any
 >1 : 1
 
-x(1);
->x(1) : any
->x : Function
+y(1);
+>y(1) : any
+>y : Function
 >1 : 1
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
 >x1 : (arg0: number) => any
->(a) => a + 1 : (a: any) => any
->a : any
->a + 1 : any
->a : any
+>(a) => a + 1 : (a: number) => number
+>a : number
+>a + 1 : number
+>a : number
 >1 : 1
 
 x1(0);
@@ -75,14 +75,28 @@ x1(0);
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
 >x2 : (arg0: number) => number
->(a) => a + 1 : (a: any) => any
->a : any
->a + 1 : any
->a : any
+>(a) => a + 1 : (a: number) => number
+>a : number
+>a + 1 : number
+>a : number
 >1 : 1
 
 x2(0);
 >x2(0) : number
 >x2 : (arg0: number) => number
 >0 : 0
+
+/**
+ * @type {object}
+ */
+var props = {};
+>props : any
+>{} : {}
+
+/**
+ * @type {Object}
+ */
+var props = {};
+>props : any
+>{} : {}
 

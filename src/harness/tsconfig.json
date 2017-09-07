@@ -21,9 +21,11 @@
         "../compiler/parser.ts",
         "../compiler/utilities.ts",
         "../compiler/binder.ts",
+        "../compiler/symbolWalker.ts",
         "../compiler/checker.ts",
         "../compiler/factory.ts",
         "../compiler/visitor.ts",
+        "../compiler/transformers/utilities.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
         "../compiler/transformers/esnext.ts",
@@ -73,14 +75,9 @@
         "../services/formatting/tokenRange.ts",
         "../services/codeFixProvider.ts",
         "../services/codefixes/fixes.ts",
-        "../services/codefixes/fixExtendsInterfaceBecomesImplements.ts",
-        "../services/codefixes/fixClassIncorrectlyImplementsInterface.ts",
-        "../services/codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
-        "../services/codefixes/fixClassSuperMustPrecedeThisAccess.ts",
-        "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
-        "../services/codefixes/unusedIdentifierFixes.ts",
+        "../services/codefixes/fixUnusedIdentifier.ts",
         "../services/codefixes/disableJsDiagnostics.ts",
 
         "harness.ts",
@@ -107,6 +104,7 @@
         "./unittests/services/preProcessFile.ts",
         "./unittests/services/patternMatcher.ts",
         "./unittests/session.ts",
+        "./unittests/symbolWalker.ts",
         "./unittests/versionCache.ts",
         "./unittests/convertToBase64.ts",
         "./unittests/transpile.ts",
@@ -127,7 +125,10 @@
         "./unittests/printer.ts",
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
+        "./unittests/extractMethods.ts",
         "./unittests/textChanges.ts",
-        "./unittests/telemetry.ts"
+        "./unittests/telemetry.ts",
+        "./unittests/languageService.ts",
+        "./unittests/programMissingFiles.ts"
     ]
 }

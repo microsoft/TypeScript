@@ -14,13 +14,13 @@ var _this = this;
 // class inheritance to ensure __extends is emitted
 var m;
 (function (m) {
-    var base = (function () {
+    var base = /** @class */ (function () {
         function base() {
         }
         return base;
     }());
     m.base = base;
-    var child = (function (_super) {
+    var child = /** @class */ (function (_super) {
         __extends(child, _super);
         function child() {
             return _super !== null && _super.apply(this, arguments) || this;

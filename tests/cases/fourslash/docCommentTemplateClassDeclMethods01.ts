@@ -1,23 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-const CRLF = "\r\n";
-/**
- * @returns the given value with '\n' normalized to '\r\n' and with no leading newline
- */
-function useCRLFAndStripLeadingNewline(str: string): string {
-    str = str.replace(/\r?\n/g, CRLF);
-    if (str.indexOf(CRLF) === 0) {
-        str = str.slice(CRLF.length);
-    }
-    return str;
-}
-
-function confirmNormalizedJsDoc(markerName: string, indentation: number, template: string): void {
-    goTo.marker(markerName);
-    const normalized = useCRLFAndStripLeadingNewline(template);
-    verify.DocCommentTemplate(normalized, indentation);
-}
-
 const enum Indentation {
     Standard = 8,
     Indented = 12,
@@ -34,26 +16,26 @@ const enum Indentation {
 ////    }
 ////}
 
-confirmNormalizedJsDoc("0", Indentation.Standard, `
-/**
+verify.docCommentTemplateAt("0", Indentation.Standard,
+`/**
  * 
  */`);
 
 
-confirmNormalizedJsDoc("1", Indentation.Indented,
+verify.docCommentTemplateAt("1", Indentation.Indented,
    `/**
      * 
      */`);
 
 
-confirmNormalizedJsDoc("2", Indentation.Indented,
+verify.docCommentTemplateAt("2", Indentation.Indented,
    `/**
      * 
      * @param a
      */
     `);
 
-confirmNormalizedJsDoc("3", Indentation.Indented,
+verify.docCommentTemplateAt("3", Indentation.Indented,
    `/**
      * 
      * @param a
@@ -61,7 +43,7 @@ confirmNormalizedJsDoc("3", Indentation.Indented,
      */
     `);
 
-confirmNormalizedJsDoc("4", Indentation.Indented,
+verify.docCommentTemplateAt("4", Indentation.Indented,
    `/**
      * 
      * @param a
@@ -69,7 +51,7 @@ confirmNormalizedJsDoc("4", Indentation.Indented,
      * @param param2
      */`);
 
-confirmNormalizedJsDoc("5", Indentation.Indented, 
+verify.docCommentTemplateAt("5", Indentation.Indented, 
     `/**
      * 
      * @param a

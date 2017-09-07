@@ -8,7 +8,7 @@ sources: properties.ts
 emittedFile:tests/cases/compiler/properties.js
 sourceFile:properties.ts
 -------------------------------------------------------------------
->>>var MyClass = (function () {
+>>>var MyClass = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >

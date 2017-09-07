@@ -37,7 +37,7 @@ var r4 = b.foo(new Date());
 //// [propertyAccessOnTypeParameterWithConstraints.js]
 // generic types should behave as if they have properties of their constraint type
 // no errors expected 
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function () {

@@ -36,33 +36,33 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A)); // error -- inherits abstract methods
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(A)); // error -- inherits abstract methods
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -70,7 +70,7 @@ var E = (function (_super) {
     E.prototype.foo = function () { return this.t; };
     return E;
 }(A));
-var F = (function (_super) {
+var F = /** @class */ (function (_super) {
     __extends(F, _super);
     function F() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -78,7 +78,7 @@ var F = (function (_super) {
     F.prototype.bar = function (t) { };
     return F;
 }(A));
-var G = (function (_super) {
+var G = /** @class */ (function (_super) {
     __extends(G, _super);
     function G() {
         return _super !== null && _super.apply(this, arguments) || this;

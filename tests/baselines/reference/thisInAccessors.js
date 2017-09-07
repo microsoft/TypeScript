@@ -32,7 +32,7 @@ class GetterAndSetter {
 
 //// [thisInAccessors.js]
 // this capture only in getter
-var GetterOnly = (function () {
+var GetterOnly = /** @class */ (function () {
     function GetterOnly() {
     }
     Object.defineProperty(GetterOnly.prototype, "Value", {
@@ -49,7 +49,7 @@ var GetterOnly = (function () {
     return GetterOnly;
 }());
 // this capture only in setter
-var SetterOnly = (function () {
+var SetterOnly = /** @class */ (function () {
     function SetterOnly() {
     }
     Object.defineProperty(SetterOnly.prototype, "Value", {
@@ -66,7 +66,7 @@ var SetterOnly = (function () {
     return SetterOnly;
 }());
 // this capture only in both setter and getter
-var GetterAndSetter = (function () {
+var GetterAndSetter = /** @class */ (function () {
     function GetterAndSetter() {
     }
     Object.defineProperty(GetterAndSetter.prototype, "Value", {

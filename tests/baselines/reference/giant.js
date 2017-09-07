@@ -700,7 +700,7 @@ define(["require", "exports"], function (require, exports) {
     var V;
     function F() { }
     ;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.pF = function () { };
@@ -749,7 +749,7 @@ define(["require", "exports"], function (require, exports) {
         var V;
         function F() { }
         ;
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             C.prototype.pF = function () { };
@@ -798,7 +798,7 @@ define(["require", "exports"], function (require, exports) {
             var V;
             function F() { }
             ;
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -809,7 +809,7 @@ define(["require", "exports"], function (require, exports) {
             function eF() { }
             M.eF = eF;
             ;
-            var eC = (function () {
+            var eC = /** @class */ (function () {
                 function eC() {
                 }
                 return eC;
@@ -825,7 +825,7 @@ define(["require", "exports"], function (require, exports) {
         function eF() { }
         M_1.eF = eF;
         ;
-        var eC = (function () {
+        var eC = /** @class */ (function () {
             function eC() {
             }
             eC.prototype.pF = function () { };
@@ -875,7 +875,7 @@ define(["require", "exports"], function (require, exports) {
             var V;
             function F() { }
             ;
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -886,7 +886,7 @@ define(["require", "exports"], function (require, exports) {
             function eF() { }
             eM.eF = eF;
             ;
-            var eC = (function () {
+            var eC = /** @class */ (function () {
                 function eC() {
                 }
                 return eC;
@@ -904,7 +904,7 @@ define(["require", "exports"], function (require, exports) {
     function eF() { }
     exports.eF = eF;
     ;
-    var eC = (function () {
+    var eC = /** @class */ (function () {
         function eC() {
         }
         eC.prototype.pF = function () { };
@@ -954,7 +954,7 @@ define(["require", "exports"], function (require, exports) {
         var V;
         function F() { }
         ;
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             C.prototype.pF = function () { };
@@ -1003,7 +1003,7 @@ define(["require", "exports"], function (require, exports) {
             var V;
             function F() { }
             ;
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -1014,7 +1014,7 @@ define(["require", "exports"], function (require, exports) {
             function eF() { }
             M.eF = eF;
             ;
-            var eC = (function () {
+            var eC = /** @class */ (function () {
                 function eC() {
                 }
                 return eC;
@@ -1030,7 +1030,7 @@ define(["require", "exports"], function (require, exports) {
         function eF() { }
         eM_1.eF = eF;
         ;
-        var eC = (function () {
+        var eC = /** @class */ (function () {
             function eC() {
             }
             eC.prototype.pF = function () { };
@@ -1080,7 +1080,7 @@ define(["require", "exports"], function (require, exports) {
             var V;
             function F() { }
             ;
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -1091,7 +1091,7 @@ define(["require", "exports"], function (require, exports) {
             function eF() { }
             eM.eF = eF;
             ;
-            var eC = (function () {
+            var eC = /** @class */ (function () {
                 function eC() {
                 }
                 return eC;

@@ -5,7 +5,7 @@ class C {
 }
 
 //// [readonlyReadonly.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(y) {
         this.y = y;
     }

@@ -222,6 +222,10 @@ if (taskConfigsFolder) {
     }
 }
 else {
+    if (ts.Debug.isDebugging) {
+        ts.Debug.enableDebugInfo();
+    }
+
     runTests(runners);
 }
 if (!runUnitTests) {

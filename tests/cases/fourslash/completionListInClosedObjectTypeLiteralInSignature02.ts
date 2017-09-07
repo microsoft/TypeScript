@@ -14,5 +14,5 @@ verify.completionListContains("TString");
 verify.completionListContains("TNumber");  // REVIEW: Is this intended behavior?
 
 // Ideally the following shouldn't show up since they're not types.
-verify.completionListContains("foo");
-verify.completionListContains("obj");
+verify.not.completionListContains("foo");
+verify.not.completionListContains("obj");

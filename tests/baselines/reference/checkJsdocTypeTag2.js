@@ -18,8 +18,12 @@ var a;
 a = x2(0);
 
 /** @type {function (number): number} */
-const x2 = (a) => a.concat("hi");
-x2(0);
+const x3 = (a) => a.concat("hi");
+x3(0);
+
+/** @type {function (number): string} */
+const x4 = (a) => a + 1;
+x4(0);
 
 //// [0.js]
 // @ts-check
@@ -36,5 +40,8 @@ var x2 = function (a) { return a + 1; };
 var a;
 a = x2(0);
 /** @type {function (number): number} */
-var x2 = function (a) { return a.concat("hi"); };
-x2(0);
+var x3 = function (a) { return a.concat("hi"); };
+x3(0);
+/** @type {function (number): string} */
+var x4 = function (a) { return a + 1; };
+x4(0);

@@ -71,6 +71,10 @@ var nullable;
 var Obj;
 >Obj : any
 
+/** @type {object} */
+var obj;
+>obj : any
+
 /** @type {Function} */
 var Func;
 >Func : Function
@@ -134,6 +138,9 @@ var nullable: number | null;
 
 var Obj: any;
 >Obj : any
+
+var obj: any;
+>obj : any
 
 var Func: Function;
 >Func : Function

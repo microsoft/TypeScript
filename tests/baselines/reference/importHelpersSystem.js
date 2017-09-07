@@ -5,6 +5,7 @@ export class A { }
 
 //// [b.ts]
 import { A } from "./a";
+export * from "./a";
 export class B extends A { }
 
 //// [tslib.d.ts]
@@ -24,7 +25,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = (function () {
+            A = /** @class */ (function () {
                 function A() {
                 }
                 return A;
@@ -38,6 +39,16 @@ System.register(["tslib", "./a"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var tslib_1, a_1, B;
+    var exportedNames_1 = {
+        "B": true
+    };
+    function exportStar_1(m) {
+        var exports = {};
+        for (var n in m) {
+            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+        }
+        exports_1(exports);
+    }
     return {
         setters: [
             function (tslib_1_1) {
@@ -45,10 +56,11 @@ System.register(["tslib", "./a"], function (exports_1, context_1) {
             },
             function (a_1_1) {
                 a_1 = a_1_1;
+                exportStar_1(a_1_1);
             }
         ],
         execute: function () {
-            B = (function (_super) {
+            B = /** @class */ (function (_super) {
                 tslib_1.__extends(B, _super);
                 function B() {
                     return _super !== null && _super.apply(this, arguments) || this;

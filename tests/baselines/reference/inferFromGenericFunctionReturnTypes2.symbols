@@ -103,8 +103,8 @@ foo(wrap(s => s.length));
 
 let a1 = ["a", "b"].map(s => s.length);
 >a1 : Symbol(a1, Decl(inferFromGenericFunctionReturnTypes2.ts, 17, 3))
->["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 17, 24))
 >s.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 17, 24))
@@ -112,8 +112,8 @@ let a1 = ["a", "b"].map(s => s.length);
 
 let a2 = ["a", "b"].map(wrap(s => s.length));
 >a2 : Symbol(a2, Decl(inferFromGenericFunctionReturnTypes2.ts, 18, 3))
->["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
 >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 18, 29))
 >s.length : Symbol(String.length, Decl(lib.d.ts, --, --))
@@ -122,8 +122,8 @@ let a2 = ["a", "b"].map(wrap(s => s.length));
 
 let a3 = ["a", "b"].map(wrap(arrayize(s => s.length)));
 >a3 : Symbol(a3, Decl(inferFromGenericFunctionReturnTypes2.ts, 19, 3))
->["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
 >arrayize : Symbol(arrayize, Decl(inferFromGenericFunctionReturnTypes2.ts, 2, 60))
 >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 19, 38))
@@ -133,8 +133,8 @@ let a3 = ["a", "b"].map(wrap(arrayize(s => s.length)));
 
 let a4 = ["a", "b"].map(combine(wrap(s => s.length), wrap(n => n > 10)));
 >a4 : Symbol(a4, Decl(inferFromGenericFunctionReturnTypes2.ts, 20, 3))
->["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >combine : Symbol(combine, Decl(inferFromGenericFunctionReturnTypes2.ts, 4, 66))
 >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
 >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 20, 37))
@@ -147,8 +147,8 @@ let a4 = ["a", "b"].map(combine(wrap(s => s.length), wrap(n => n > 10)));
 
 let a5 = ["a", "b"].map(combine(identity, wrap(s => s.length)));
 >a5 : Symbol(a5, Decl(inferFromGenericFunctionReturnTypes2.ts, 21, 3))
->["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >combine : Symbol(combine, Decl(inferFromGenericFunctionReturnTypes2.ts, 4, 66))
 >identity : Symbol(identity, Decl(inferFromGenericFunctionReturnTypes2.ts, 82, 1))
 >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
@@ -159,8 +159,8 @@ let a5 = ["a", "b"].map(combine(identity, wrap(s => s.length)));
 
 let a6 = ["a", "b"].map(combine(wrap(s => s.length), identity));
 >a6 : Symbol(a6, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 3))
->["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>["a", "b"].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >combine : Symbol(combine, Decl(inferFromGenericFunctionReturnTypes2.ts, 4, 66))
 >wrap : Symbol(wrap, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 32))
 >s : Symbol(s, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 37))
@@ -217,11 +217,11 @@ class SetOf<A> {
 >index : Symbol(index, Decl(inferFromGenericFunctionReturnTypes2.ts, 36, 20))
 
       this._store.forEach((a, i) => fn(a, i));
->this._store.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>this._store.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >this._store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
 >this : Symbol(SetOf, Decl(inferFromGenericFunctionReturnTypes2.ts, 22, 64))
 >_store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes2.ts, 25, 16))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes2.ts, 37, 27))
 >i : Symbol(i, Decl(inferFromGenericFunctionReturnTypes2.ts, 37, 29))
 >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes2.ts, 36, 10))

@@ -27,9 +27,9 @@ interface Document {
 
 var elements = names.map(function (name) {
 >elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
->names.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>names.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >names : Symbol(names, Decl(genericMethodOverspecialization.ts, 0, 3))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >name : Symbol(name, Decl(genericMethodOverspecialization.ts, 12, 35))
 
     return document.getElementById(name);
@@ -43,9 +43,9 @@ var elements = names.map(function (name) {
 
 var xxx = elements.filter(function (e) {
 >xxx : Symbol(xxx, Decl(genericMethodOverspecialization.ts, 17, 3))
->elements.filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>elements.filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
->filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >e : Symbol(e, Decl(genericMethodOverspecialization.ts, 17, 36))
 
     return !e.isDisabled;
@@ -57,9 +57,9 @@ var xxx = elements.filter(function (e) {
 
 var widths:number[] = elements.map(function (e) { // should not error
 >widths : Symbol(widths, Decl(genericMethodOverspecialization.ts, 21, 3))
->elements.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>elements.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >e : Symbol(e, Decl(genericMethodOverspecialization.ts, 21, 45))
 
     return e.clientWidth;

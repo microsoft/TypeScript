@@ -263,13 +263,15 @@ namespace ts.NavigationBar {
                 break;
 
             default:
-                forEach(node.jsDoc, jsDoc => {
-                    forEach(jsDoc.tags, tag => {
-                        if (tag.kind === SyntaxKind.JSDocTypedefTag) {
-                            addLeafNode(tag);
-                        }
+                if (hasJSDocNodes(node)) {
+                    forEach(node.jsDoc, jsDoc => {
+                        forEach(jsDoc.tags, tag => {
+                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                                addLeafNode(tag);
+                            }
+                        });
                     });
-                });
+                }
 
                 forEachChild(node, addChildrenRecursively);
         }
@@ -380,7 +382,7 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName) {
-            return getPropertyNameForPropertyNameNode(declName);
+            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName));
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -450,7 +452,7 @@ namespace ts.NavigationBar {
                 if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                     const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
                     if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return (<Identifier>nameIdentifier).text;
+                        return nameIdentifier.text;
                     }
                 }
             }
@@ -580,12 +582,12 @@ namespace ts.NavigationBar {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result: string[] = [];
 
-        result.push(moduleDeclaration.name.text);
+        result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
 
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
             moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
-            result.push(moduleDeclaration.name.text);
+            result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
         }
 
         return result.join(".");

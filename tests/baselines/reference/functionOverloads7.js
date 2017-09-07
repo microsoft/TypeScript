@@ -11,7 +11,7 @@ class foo {
 
 
 //// [functionOverloads7.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     foo.prototype.bar = function (foo) { return "foo"; };

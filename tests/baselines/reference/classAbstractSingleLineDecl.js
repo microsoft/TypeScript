@@ -13,19 +13,19 @@ new B;
 new C;
 
 //// [classAbstractSingleLineDecl.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 abstract;
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
 abstract;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

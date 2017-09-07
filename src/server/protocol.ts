@@ -8,6 +8,7 @@ namespace ts.server.protocol {
         /* @internal */
         BraceFull = "brace-full",
         BraceCompletion = "braceCompletion",
+        GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
         Completions = "completions",
@@ -98,8 +99,11 @@ namespace ts.server.protocol {
         GetSupportedCodeFixes = "getSupportedCodeFixes",
 
         GetApplicableRefactors = "getApplicableRefactors",
-        GetRefactorCodeActions = "getRefactorCodeActions",
-        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
+        GetEditsForRefactor = "getEditsForRefactor",
+        /* @internal */
+        GetEditsForRefactorFull = "getEditsForRefactor-full",
+
+        // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
 
     /**
@@ -236,6 +240,21 @@ namespace ts.server.protocol {
      */
     export interface TodoCommentsResponse extends Response {
         body?: TodoComment[];
+    }
+
+    /**
+     * A request to determine if the caret is inside a comment.
+     */
+    export interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+        command: CommandTypes.GetSpanOfEnclosingComment;
+        arguments: SpanOfEnclosingCommentRequestArgs;
+    }
+
+    export interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+         */
+        onlyMultiLine: boolean;
     }
 
     /**
@@ -401,50 +420,96 @@ namespace ts.server.protocol {
 
     export type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
 
+    /**
+     * Request refactorings at a given position or selection area.
+     */
     export interface GetApplicableRefactorsRequest extends Request {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
 
-    export interface ApplicableRefactorInfo {
-        name: string;
-        description: string;
-    }
-
+    /**
+     * Response is a list of available refactorings.
+     * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+     */
     export interface GetApplicableRefactorsResponse extends Response {
         body?: ApplicableRefactorInfo[];
     }
 
-    export interface GetRefactorCodeActionsRequest extends Request {
-        command: CommandTypes.GetRefactorCodeActions;
-        arguments: GetRefactorCodeActionsRequestArgs;
+    /**
+     * A set of one or more available refactoring actions, grouped under a parent refactoring.
+     */
+    export interface ApplicableRefactorInfo {
+        /**
+         * The programmatic name of the refactoring
+         */
+        name: string;
+        /**
+         * A description of this refactoring category to show to the user.
+         * If the refactoring gets inlined (see below), this text will not be visible.
+         */
+        description: string;
+        /**
+         * Inlineable refactorings can have their actions hoisted out to the top level
+         * of a context menu. Non-inlineanable refactorings should always be shown inside
+         * their parent grouping.
+         *
+         * If not specified, this value is assumed to be 'true'
+         */
+        inlineable?: boolean;
+
+        actions: RefactorActionInfo[];
     }
 
-    export type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
-        /* The kind of the applicable refactor */
-        refactorName: string;
-    };
+    /**
+     * Represents a single refactoring action - for example, the "Extract Method..." refactor might
+     * offer several actions, each corresponding to a surround class or closure to extract into.
+     */
+    export interface RefactorActionInfo {
+        /**
+         * The programmatic name of the refactoring action
+         */
+        name: string;
 
-    export type RefactorCodeActions = {
-        actions: protocol.CodeAction[];
-        renameLocation?: number
-    };
-
-    /* @internal */
-    export type RefactorCodeActionsFull = {
-        actions: ts.CodeAction[];
-        renameLocation?: number
-    };
-
-    export interface GetRefactorCodeActionsResponse extends Response {
-        body: RefactorCodeActions;
+        /**
+         * A description of this refactoring action to show to the user.
+         * If the parent refactoring is inlined away, this will be the only text shown,
+         * so this description should make sense by itself if the parent is inlineable=true
+         */
+        description: string;
     }
 
-    /* @internal */
-    export interface GetRefactorCodeActionsFullResponse extends Response {
-        body: RefactorCodeActionsFull;
+    export interface GetEditsForRefactorRequest extends Request {
+        command: CommandTypes.GetEditsForRefactor;
+        arguments: GetEditsForRefactorRequestArgs;
+    }
+
+    /**
+     * Request the edits that a particular refactoring action produces.
+     * Callers must specify the name of the refactor and the name of the action.
+     */
+    export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
+        /* The 'name' property from the refactoring that offered this action */
+        refactor: string;
+        /* The 'name' property from the refactoring action */
+        action: string;
+    };
+
+
+    export interface GetEditsForRefactorResponse extends Response {
+        body?: RefactorEditInfo;
+    }
+
+    export interface RefactorEditInfo {
+        edits: FileCodeEdits[];
+
+        /**
+         * An optional location where the editor should start a rename operation once
+         * the refactoring edits have been applied
+         */
+        renameLocation?: Location;
+        renameFilename?: string;
     }
 
     /**
@@ -591,7 +656,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Location in source code expressed as (one-based) line and character offset.
+     * Location in source code expressed as (one-based) line and (one-based) column offset.
      */
     export interface Location {
         line: number;
@@ -865,7 +930,7 @@ namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
 
     /**
@@ -1255,6 +1320,13 @@ namespace ts.server.protocol {
          * Compiler options to be used with inferred projects.
          */
         options: ExternalProjectCompilerOptions;
+
+        /**
+         * Specifies the project root path used to scope compiler options.
+         * It is an error to provide this property if the server has not been started with
+         * `useInferredProjectPerProjectRoot` enabled.
+         */
+        projectRootPath?: string;
     }
 
     /**
@@ -1894,6 +1966,13 @@ namespace ts.server.protocol {
         source?: string;
     }
 
+    export interface DiagnosticWithFileName extends Diagnostic {
+        /**
+         * Name of the file the diagnostic is in
+         */
+        fileName: string;
+    }
+
     export interface DiagnosticEventBody {
         /**
          * The file for which diagnostic information is reported.
@@ -1928,7 +2007,7 @@ namespace ts.server.protocol {
         /**
          * An arry of diagnostic information items for the found config file.
          */
-        diagnostics: Diagnostic[];
+        diagnostics: DiagnosticWithFileName[];
     }
 
     /**
@@ -2373,6 +2452,7 @@ namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
@@ -2409,6 +2489,7 @@ namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ESNext = "ESNext"
     }
 
     export const enum ModuleResolutionKind {
@@ -2426,5 +2507,8 @@ namespace ts.server.protocol {
         ES5 = "ES5",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2016 = "ES2016",
+        ES2017 = "ES2017",
+        ESNext = "ESNext"
     }
 }

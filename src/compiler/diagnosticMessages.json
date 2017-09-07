@@ -1,4 +1,4 @@
-﻿{
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -707,7 +707,7 @@
         "category": "Error",
         "code": 1223
     },
-    "Signature '{0}' must have a type predicate.": {
+    "Signature '{0}' must be a type predicate.": {
         "category": "Error",
         "code": 1224
     },
@@ -883,6 +883,31 @@
         "category": "Error",
         "code": 1322
     },
+    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
+        "category": "Error",
+        "code": 1323
+    },
+    "Dynamic import must have one specifier as an argument.": {
+        "category": "Error",
+        "code": 1324
+    },
+    "Specifier of dynamic import cannot be spread element.": {
+        "category": "Error",
+        "code": 1325
+    },
+    "Dynamic import cannot have type arguments": {
+        "category": "Error",
+        "code": 1326
+    },
+    "String literal with double quotes expected.": {
+        "category": "Error",
+        "code": 1327
+    },
+    "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
+        "category": "Error",
+        "code": 1328
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1883,6 +1908,18 @@
         "category": "Error",
         "code": 2559
     },
+    "Value of type '{0}' has no properties in common with type '{1}'. Did you mean to call it?": {
+        "category": "Error",
+        "code": 2560
+    },
+    "Object literal may only specify known properties, but '{0}' does not exist in type '{1}'. Did you mean to write '{2}'?": {
+        "category": "Error",
+        "code": 2561
+    },
+    "Base class expressions cannot reference class type parameters.": {
+        "category": "Error",
+        "code": 2562
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1926,10 +1963,6 @@
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
-    },
-    "Cannot emit namespaced JSX elements in React.": {
-        "category": "Error",
-        "code": 2650
     },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
@@ -2043,7 +2076,7 @@
         "category": "Error",
         "code": 2679
     },
-    "A 'this' parameter must be the first parameter.": {
+    "A '{0}' parameter must be the first parameter.": {
         "category": "Error",
         "code": 2680
     },
@@ -2162,6 +2195,18 @@
     "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
         "category": "Error",
         "code": 2710
+    },
+    "A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2711
+    },
+    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2712
+    },
+    "Cannot access '{0}.{1}' because '{0}' is a type, but not a namespace. Did you mean to retrieve the type of the property '{1}' in '{0}' with '{0}[\"{1}\"]'?": {
+        "category": "Error",
+        "code": 2713
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2625,11 +2670,15 @@
         "category": "Message",
         "code": 6012
     },
+    "Do not resolve the real path of symlinks.": {
+        "category": "Message",
+        "code": 6013
+    },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'.": {
+    "Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },
@@ -3257,6 +3306,10 @@
         "category": "Message",
         "code": 6184
     },
+    "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6185
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3365,6 +3418,11 @@
         "category": "Error",
         "code": 7035
     },
+    "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
+        "category": "Error",
+        "code": 7036
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -3417,6 +3475,10 @@
         "category": "Error",
         "code": 8012
     },
+    "'non-null assertions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8015
@@ -3424,6 +3486,22 @@
     "'type assertion expressions' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8016
+    },
+    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8017
+    },
+    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8018
+    },
+    "Report errors in .js files.": {
+        "category": "Message",
+        "code": 8019
+    },
+    "JSDoc types can only be used inside documentation comments.": {
+        "category": "Error",
+        "code": 8020
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -3559,11 +3637,11 @@
         "category": "Message",
         "code": 90015
     },
-    "Add declaration for missing property '{0}'.": {
+    "Declare property '{0}'.": {
         "category": "Message",
         "code": 90016
     },
-    "Add index signature for missing property '{0}'.": {
+    "Add index signature for property '{0}'.": {
         "category": "Message",
         "code": 90017
     },
@@ -3587,6 +3665,22 @@
         "category": "Message",
         "code": 90022
     },
+    "Declare method '{0}'.": {
+        "category": "Message",
+        "code": 90023
+    },
+    "Declare static method '{0}'.": {
+        "category": "Message",
+        "code": 90024
+    },
+    "Prefix '{0}' with an underscore.": {
+        "category": "Message",
+        "code": 90025
+    },
+    "Rewrite as the indexed access type '{0}'.": {
+        "category": "Message",
+        "code": 90026
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -3597,16 +3691,13 @@
         "code": 95002
     },
 
-    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8017
-    },
-    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8018
-    },
-    "Report errors in .js files.": {
+    "Extract function": {
         "category": "Message",
-        "code": 8019
+        "code": 95003
+    },
+
+    "Extract function into {0}": {
+        "category": "Message",
+        "code": 95004
     }
 }

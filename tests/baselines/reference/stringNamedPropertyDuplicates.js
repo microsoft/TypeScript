@@ -22,7 +22,7 @@ var b = {
 }
 
 //// [stringNamedPropertyDuplicates.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

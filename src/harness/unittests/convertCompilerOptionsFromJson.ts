@@ -4,6 +4,11 @@
 namespace ts {
     describe("convertCompilerOptionsFromJson", () => {
         function assertCompilerOptions(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
+            assertCompilerOptionsWithJson(json, configFileName, expectedResult);
+            assertCompilerOptionsWithJsonNode(json, configFileName, expectedResult);
+        }
+
+        function assertCompilerOptionsWithJson(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
             const { options: actualCompilerOptions, errors: actualErrors} = convertCompilerOptionsFromJson(json["compilerOptions"], "/apath/", configFileName);
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
@@ -21,6 +26,34 @@ namespace ts {
             }
         }
 
+        function assertCompilerOptionsWithJsonNode(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
+            const fileText = JSON.stringify(json);
+            const result = parseJsonText(configFileName, fileText);
+            assert(!result.parseDiagnostics.length);
+            assert(!!result.endOfFileToken);
+            const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
+            const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
+            expectedResult.compilerOptions["configFilePath"] = configFileName;
+
+            const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
+            const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
+            assert.equal(parsedCompilerOptions, expectedCompilerOptions);
+            assert.equal(actualCompilerOptions.configFile, result);
+
+            const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+            const expectedErrors = expectedResult.errors;
+            assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
+            for (let i = 0; i < actualErrors.length; i++) {
+                const actualError = actualErrors[i];
+                const expectedError = expectedErrors[i];
+                assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
+                assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
+                assert(actualError.file);
+                assert(actualError.start);
+                assert(actualError.length);
+            }
+        }
+
         // tsconfig.json tests
         it("Convert correctly format tsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
@@ -34,14 +67,14 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -59,7 +92,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -67,7 +100,7 @@ namespace ts {
                         allowJs: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -84,7 +117,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -113,7 +146,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
@@ -122,7 +155,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'.",
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -141,7 +174,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
@@ -168,7 +201,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         noImplicitAny: false,
                         sourceMap: false,
                     },
@@ -194,7 +227,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         noImplicitAny: false,
                         sourceMap: false,
                     },
@@ -222,7 +255,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -253,7 +286,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -284,7 +317,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -315,7 +348,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -346,7 +379,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -382,8 +415,8 @@ namespace ts {
         it("Convert default tsconfig.json to compiler-options ", () => {
             assertCompilerOptions({}, "tsconfig.json",
                 {
-                    compilerOptions: {} as CompilerOptions,
-                    errors: <Diagnostic[]>[]
+                    compilerOptions: {},
+                    errors: []
                 }
             );
         });
@@ -401,7 +434,7 @@ namespace ts {
                     }
                 }, "jsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         allowJs: true,
                         maxNodeModuleJsDepth: 2,
                         allowSyntheticDefaultImports: true,
@@ -412,7 +445,7 @@ namespace ts {
                         sourceMap: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -430,7 +463,7 @@ namespace ts {
                     }
                 }, "jsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         allowJs: false,
                         maxNodeModuleJsDepth: 2,
                         allowSyntheticDefaultImports: true,
@@ -441,7 +474,7 @@ namespace ts {
                         sourceMap: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -483,7 +516,7 @@ namespace ts {
                         allowSyntheticDefaultImports: true,
                         skipLibCheck: true
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });

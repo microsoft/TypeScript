@@ -9,7 +9,7 @@ namespace ts.server {
         newLine: "\n",
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
-        readFile(): string { return void 0; },
+        readFile: () => undefined,
         writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,
@@ -19,25 +19,13 @@ namespace ts.server {
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         getEnvironmentVariable(): string { return ""; },
-        readDirectory(): string[] { return []; },
+        readDirectory() { return []; },
         exit: noop,
         setTimeout() { return 0; },
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: s => s
-    };
-
-    const mockLogger: Logger = {
-        close: noop,
-        hasLevel(): boolean { return false; },
-        loggingEnabled(): boolean { return false; },
-        perftrc: noop,
-        info: noop,
-        startGroup: noop,
-        endGroup: noop,
-        msg: noop,
-        getLogFileName: (): string => undefined
+        createHash: Harness.LanguageService.mockHash,
     };
 
     class TestSession extends Session {
@@ -55,10 +43,11 @@ namespace ts.server {
                 host: mockHost,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
-                logger: mockLogger,
+                logger: projectSystem.nullLogger,
                 canUseEvents: true
             };
             return new TestSession(opts);
@@ -93,14 +82,15 @@ namespace ts.server {
 
                 session.executeCommand(req);
 
-                expect(lastSent).to.deep.equal(<protocol.Response>{
+                const expected: protocol.Response = {
                     command: CommandNames.Unknown,
                     type: "response",
                     seq: 0,
                     message: "Unrecognized JSON command: foobar",
                     request_seq: 0,
                     success: false
-                });
+                };
+                expect(lastSent).to.deep.equal(expected);
             });
             it("should return a tuple containing the response and if a response is required on success", () => {
                 const req: protocol.ConfigureRequest = {
@@ -240,8 +230,8 @@ namespace ts.server {
                 CommandNames.GetCodeFixesFull,
                 CommandNames.GetSupportedCodeFixes,
                 CommandNames.GetApplicableRefactors,
-                CommandNames.GetRefactorCodeActions,
-                CommandNames.GetRefactorCodeActionsFull,
+                CommandNames.GetEditsForRefactor,
+                CommandNames.GetEditsForRefactorFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -389,7 +379,7 @@ namespace ts.server {
                     request_seq: 0,
                     type: "response",
                     command,
-                    body: body,
+                    body,
                     success: true
                 });
             });
@@ -405,10 +395,11 @@ namespace ts.server {
                     host: mockHost,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: mockLogger,
+                    logger: projectSystem.nullLogger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler(this.customHandler, () => {
@@ -436,7 +427,7 @@ namespace ts.server {
                 request_seq: 0,
                 type: "response",
                 command,
-                body: body,
+                body,
                 success: true
             });
         });
@@ -472,10 +463,11 @@ namespace ts.server {
                     host: mockHost,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: mockLogger,
+                    logger: projectSystem.nullLogger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({

@@ -1,11 +1,14 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(57,19): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'T'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(60,19): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'T'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(61,20): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'T'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(62,19): error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(57,29): error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+  Types of parameters 'x' and 'a' are incompatible.
+    Type '1' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(60,30): error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+  Types of parameters 'x' and 'a' are incompatible.
+    Type '1' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(61,31): error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+  Types of parameters 'x' and 'a' are incompatible.
+    Type '1' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts(62,30): error TS2345: Argument of type '(a: number) => string' is not assignable to parameter of type '(a: number) => 1'.
+  Type 'string' is not assignable to type '1'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts (4 errors) ====
@@ -66,22 +69,25 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFu
     
         function other<T, U>(t: T, u: U) {
             var r10 = c.foo2(1, (x: T) => ''); // error
-                      ~~~~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'T'.
+                                ~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+!!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
+!!! error TS2345:     Type '1' is not assignable to type 'T'.
             var r10 = c.foo2(1, (x) => ''); // string
     
             var r11 = c3.foo3(1, (x: T) => '', ''); // error
-                      ~~~~~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'T'.
+                                 ~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+!!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
+!!! error TS2345:     Type '1' is not assignable to type 'T'.
             var r11b = c3.foo3(1, (x: T) => '', 1); // error
-                       ~~~~~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'T'.
+                                  ~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+!!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
+!!! error TS2345:     Type '1' is not assignable to type 'T'.
             var r12 = c3.foo3(1, function (a) { return '' }, 1); // error
-                      ~~~~~~~
-!!! error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate 'string'.
+                                 ~~~~~~~~
+!!! error TS2345: Argument of type '(a: number) => string' is not assignable to parameter of type '(a: number) => 1'.
+!!! error TS2345:   Type 'string' is not assignable to type '1'.
         }
     }

@@ -54,7 +54,7 @@ export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 "use strict";
 exports.__esModule = true;
 // Public elements
-var c_public = (function () {
+var c_public = /** @class */ (function () {
     function c_public() {
     }
     return c_public;
@@ -63,7 +63,7 @@ exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require1.js]
 "use strict";
 exports.__esModule = true;
-var c_public = (function () {
+var c_public = /** @class */ (function () {
     function c_public() {
     }
     return c_public;
