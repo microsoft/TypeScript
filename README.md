@@ -69,7 +69,7 @@ npm install
 
 Use one of the following to build and test:
 
-```bash
+```
 gulp local            # Build the compiler into built/local 
 gulp clean            # Delete the built compiler 
 gulp LKG              # Replace the last known good with the built one.
