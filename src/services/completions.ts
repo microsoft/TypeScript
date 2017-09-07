@@ -1739,7 +1739,7 @@ namespace ts.Completions {
 
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
     function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
-        const { jsDoc } = getJsDocHavingNode(node);
+        const { jsDoc } = getJsDocHavingNode(node) as JSDocContainer;
         if (!jsDoc) return undefined;
 
         for (const { pos, end, tags } of jsDoc) {

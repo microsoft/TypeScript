@@ -2111,7 +2111,7 @@ namespace ts {
             }
 
             forEachChild(node, walk);
-            if (node.jsDoc) {
+            if (hasJSDocNodes(node)) {
                 for (const jsDoc of node.jsDoc) {
                     forEachChild(jsDoc, walk);
                 }

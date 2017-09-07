@@ -2441,13 +2441,17 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): void {
+        export function fail(message?: string, stackCrawlMark?: Function): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
                 (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
             }
             throw e;
+        }
+
+        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+            return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: Function) {
