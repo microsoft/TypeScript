@@ -21516,7 +21516,7 @@ namespace ts {
                 return true;
             }
 
-            type InheritanceInfoMap = { prop: Symbol; containingType: Type };
+            interface InheritanceInfoMap { prop: Symbol; containingType: Type; }
             const seen = createUnderscoreEscapedMap<InheritanceInfoMap>();
             forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.escapedName, { prop: p, containingType: type }); });
             let ok = true;
