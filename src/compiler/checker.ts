@@ -224,6 +224,7 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
+            isArrayLikeType,
             getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => unescapeLeadingUnderscores(getSuggestionForNonexistentProperty(node, type)),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => unescapeLeadingUnderscores(getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning)),
@@ -5896,10 +5897,6 @@ namespace ts {
 
             const props = createSymbolTable();
             for (const memberType of types) {
-                if (memberType.flags & TypeFlags.Primitive) {
-                    continue;
-                }
-
                 for (const { escapedName } of getPropertiesOfType(memberType)) {
                     if (!props.has(escapedName)) {
                         props.set(escapedName, createUnionOrIntersectionProperty(unionType as UnionType, escapedName));

@@ -1770,17 +1770,8 @@ namespace ts.Completions {
         }
 
         const { types } = type as UnionType;
-        const propertyOnlyTypes = mapDefined(types, memberType => {
-            if (memberType.flags & TypeFlags.Primitive) {
-                return undefined;
-            }
-            if (checker.getPropertiesOfType(memberType).some(p =>
-                isMethodDeclaration(p.valueDeclaration) || isMethodSignature(p.valueDeclaration))) {
-                return undefined;
-            }
-            return memberType;
-        });
+        const filteredTypes = types.filter(memberType => !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType)));
         // If there are no property-only types, just provide completions for every type as usual.
-        return checker.getAllPossiblePropertiesOfTypes(propertyOnlyTypes.length > 0 ? propertyOnlyTypes : types);
+        return checker.getAllPossiblePropertiesOfTypes(filteredTypes);
     }
 }

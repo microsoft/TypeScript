@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 ////interface I { x: number; }
-////const x: I | I[] = { /**/ };
+////interface Many<T> extends ReadonlyArray<T> { extra: number; }
+////const x: I | I[] | Many<string> = { /**/ };
 
-// We will choose to provide completions for `I` but not `Array`,
-// since `I` has only properties, not methods.
+// We specifically filter out any array-like types.
 verify.completionsAt("", ["x"]);
