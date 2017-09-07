@@ -1385,6 +1385,12 @@ namespace ts {
         return x === undefined || x === null;
     }
 
+    function directoryOfCombinedPath(fileName: string, basePath: string) {
+        // Use the `identity` function to avoid canonicalizing the path, as it must remain noncanonical
+        // until consistient casing errors are reported
+        return getDirectoryPath(toPath(fileName, basePath, identity));
+    }
+
     /**
      * Parse the contents of a config file from json or json source file (tsconfig.json).
      * @param json The contents of the config file to parse
@@ -1467,7 +1473,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, configFileName ? getDirectoryPath(toPath(configFileName, basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames))) : basePath, options, host, errors, extraFileExtensions, sourceFile);
+            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
 
             if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0) {
                 errors.push(
@@ -1577,7 +1583,7 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
             }
             else {
-                const newBase = configFileName ? getDirectoryPath(toPath(configFileName, basePath, getCanonicalFileName)) : basePath;
+                const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
                 extendedConfigPath = getExtendsConfigPath(json.extends, host, newBase, getCanonicalFileName, errors, createCompilerDiagnostic);
             }
         }
@@ -1610,7 +1616,7 @@ namespace ts {
             onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
                 switch (key) {
                     case "extends":
-                        const newBase = configFileName ? getDirectoryPath(toPath(configFileName, basePath, getCanonicalFileName)) : basePath;
+                        const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
                         extendedConfigPath = getExtendsConfigPath(
                             <string>value,
                             host,
