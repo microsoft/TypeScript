@@ -284,7 +284,7 @@ namespace ts.Completions {
                 addStringLiteralCompletionsFromType(t, result, typeChecker, uniques);
             }
         }
-        else if (type.flags & TypeFlags.StringLiteral) {
+        else if (type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral)) {
             const name = (<StringLiteralType>type).value;
             if (!uniques.has(name)) {
                 uniques.set(name, true);
