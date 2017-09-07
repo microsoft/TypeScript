@@ -8408,6 +8408,7 @@ interface Notification extends EventTarget {
 declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
+    readonly permission: NotificationPermission;
     requestPermission(callback?: NotificationPermissionCallback): Promise<NotificationPermission>;
 };
 
