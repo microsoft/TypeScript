@@ -2422,6 +2422,10 @@ namespace ts {
             }
         }
 
+        export function assertNever(never: never, message?: string, stackCrawlMark?: Function): never {
+            throw fail(message || `Illegal value: ${never}`, stackCrawlMark || assertNever);
+        }
+
         export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
             if (a !== b) {
                 const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
@@ -2627,9 +2631,5 @@ namespace ts {
 
     export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
         return (arg: T) => f(arg) && g(arg);
-    }
-
-    export function never(never: never): never {
-        throw new Error(`Illegal value: ${never}`);
     }
 }
