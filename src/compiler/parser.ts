@@ -2237,7 +2237,8 @@ namespace ts {
             return token() === SyntaxKind.DotDotDotToken ||
                 isIdentifierOrPattern() ||
                 isModifierKind(token()) ||
-                token() === SyntaxKind.AtToken || isStartOfType();
+                token() === SyntaxKind.AtToken ||
+                isStartOfType(/*inStartOfParameter*/ true);
         }
 
         function parseParameter(): ParameterDeclaration {
@@ -2698,7 +2699,7 @@ namespace ts {
             }
         }
 
-        function isStartOfType(): boolean {
+        function isStartOfType(inStartOfParameter?: boolean): boolean {
             switch (token()) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -2728,11 +2729,11 @@ namespace ts {
                 case SyntaxKind.DotDotDotToken:
                     return true;
                 case SyntaxKind.MinusToken:
-                    return lookAhead(nextTokenIsNumericLiteral);
+                    return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);
                 case SyntaxKind.OpenParenToken:
                     // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
                     // or something that starts a type. We don't want to consider things like '(1)' a type.
-                    return lookAhead(isStartOfParenthesizedOrFunctionType);
+                    return !inStartOfParameter && lookAhead(isStartOfParenthesizedOrFunctionType);
                 default:
                     return isIdentifier();
             }
