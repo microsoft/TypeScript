@@ -92,67 +92,74 @@ var arr: any[];
 
 
 //// [taggedTemplateStringsTypeArgumentInference.js]
+var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+    if (Object.freeze && Object.defineProperty) {
+        return Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+    }
+    cooked.raw = raw;
+    return cooked;
+};
 // Generic tag with one parameter
 function noParams(n) { }
-(_a = [""], _a.raw = [""], noParams(_a));
+noParams(_a || (_a = __getTemplateObject([""], [""])));
 // Generic tag with parameter which does not use type parameter
 function noGenericParams(n) { }
-(_b = [""], _b.raw = [""], noGenericParams(_b));
+noGenericParams(_b || (_b = __getTemplateObject([""], [""])));
 // Generic tag with multiple type parameters and only one used in parameter type annotation
 function someGenerics1a(n, m) { }
-(_c = ["", ""], _c.raw = ["", ""], someGenerics1a(_c, 3));
+someGenerics1a(_c || (_c = __getTemplateObject(["", ""], ["", ""])), 3);
 function someGenerics1b(n, m) { }
-(_d = ["", ""], _d.raw = ["", ""], someGenerics1b(_d, 3));
+someGenerics1b(_d || (_d = __getTemplateObject(["", ""], ["", ""])), 3);
 // Generic tag with argument of function type whose parameter is of type parameter type
 function someGenerics2a(strs, n) { }
-(_e = ["", ""], _e.raw = ["", ""], someGenerics2a(_e, function (n) { return n; }));
+someGenerics2a(_e || (_e = __getTemplateObject(["", ""], ["", ""])), function (n) { return n; });
 function someGenerics2b(strs, n) { }
-(_f = ["", ""], _f.raw = ["", ""], someGenerics2b(_f, function (n, x) { return n; }));
+someGenerics2b(_f || (_f = __getTemplateObject(["", ""], ["", ""])), function (n, x) { return n; });
 // Generic tag with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3(strs, producer) { }
-(_g = ["", ""], _g.raw = ["", ""], someGenerics3(_g, function () { return ''; }));
-(_h = ["", ""], _h.raw = ["", ""], someGenerics3(_h, function () { return undefined; }));
-(_j = ["", ""], _j.raw = ["", ""], someGenerics3(_j, function () { return 3; }));
+someGenerics3(_g || (_g = __getTemplateObject(["", ""], ["", ""])), function () { return ''; });
+someGenerics3(_h || (_h = __getTemplateObject(["", ""], ["", ""])), function () { return undefined; });
+someGenerics3(_j || (_j = __getTemplateObject(["", ""], ["", ""])), function () { return 3; });
 // 2 parameter generic tag with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4(strs, n, f) { }
-(_k = ["", "", ""], _k.raw = ["", "", ""], someGenerics4(_k, 4, function () { return null; }));
-(_l = ["", "", ""], _l.raw = ["", "", ""], someGenerics4(_l, '', function () { return 3; }));
-(_m = ["", "", ""], _m.raw = ["", "", ""], someGenerics4(_m, null, null));
+someGenerics4(_k || (_k = __getTemplateObject(["", "", ""], ["", "", ""])), 4, function () { return null; });
+someGenerics4(_l || (_l = __getTemplateObject(["", "", ""], ["", "", ""])), '', function () { return 3; });
+someGenerics4(_m || (_m = __getTemplateObject(["", "", ""], ["", "", ""])), null, null);
 // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5(strs, n, f) { }
-(_o = ["", " ", ""], _o.raw = ["", " ", ""], someGenerics5(_o, 4, function () { return null; }));
-(_p = ["", "", ""], _p.raw = ["", "", ""], someGenerics5(_p, '', function () { return 3; }));
-(_q = ["", "", ""], _q.raw = ["", "", ""], someGenerics5(_q, null, null));
+someGenerics5(_o || (_o = __getTemplateObject(["", " ", ""], ["", " ", ""])), 4, function () { return null; });
+someGenerics5(_p || (_p = __getTemplateObject(["", "", ""], ["", "", ""])), '', function () { return 3; });
+someGenerics5(_q || (_q = __getTemplateObject(["", "", ""], ["", "", ""])), null, null);
 // Generic tag with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6(strs, a, b, c) { }
-(_r = ["", "", "", ""], _r.raw = ["", "", "", ""], someGenerics6(_r, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_s = ["", "", "", ""], _s.raw = ["", "", "", ""], someGenerics6(_s, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_t = ["", "", "", ""], _t.raw = ["", "", "", ""], someGenerics6(_t, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+someGenerics6(_r || (_r = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+someGenerics6(_s || (_s = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+someGenerics6(_t || (_t = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 // Generic tag with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7(strs, a, b, c) { }
-(_u = ["", "", "", ""], _u.raw = ["", "", "", ""], someGenerics7(_u, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_v = ["", "", "", ""], _v.raw = ["", "", "", ""], someGenerics7(_v, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
-(_w = ["", "", "", ""], _w.raw = ["", "", "", ""], someGenerics7(_w, function (n) { return n; }, function (n) { return n; }, function (n) { return n; }));
+someGenerics7(_u || (_u = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+someGenerics7(_v || (_v = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+someGenerics7(_w || (_w = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 // Generic tag with argument of generic function type
 function someGenerics8(strs, n) { return n; }
-var x = (_x = ["", ""], _x.raw = ["", ""], someGenerics8(_x, someGenerics7));
-(_y = ["", "", "", ""], _y.raw = ["", "", "", ""], x(_y, null, null, null));
+var x = someGenerics8(_x || (_x = __getTemplateObject(["", ""], ["", ""])), someGenerics7);
+x(_y || (_y = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), null, null, null);
 // Generic tag with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9(strs, a, b, c) {
     return null;
 }
-var a9a = (_z = ["", "", "", ""], _z.raw = ["", "", "", ""], someGenerics9(_z, '', 0, []));
+var a9a = someGenerics9(_z || (_z = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), '', 0, []);
 var a9a;
-var a9e = (_0 = ["", "", "", ""], _0.raw = ["", "", "", ""], someGenerics9(_0, undefined, { x: 6, z: new Date() }, { x: 6, y: '' }));
+var a9e = someGenerics9(_0 || (_0 = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 var a9e;
 // Generic tag with multiple parameters of generic type passed arguments with a single best common type
-var a9d = (_1 = ["", "", "", ""], _1.raw = ["", "", "", ""], someGenerics9(_1, { x: 3 }, { x: 6 }, { x: 6 }));
+var a9d = someGenerics9(_1 || (_1 = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), { x: 3 }, { x: 6 }, { x: 6 });
 var a9d;
 // Generic tag with multiple parameters of generic type where one argument is of type 'any'
 var anyVar;
-var a = (_2 = ["", "", "", ""], _2.raw = ["", "", "", ""], someGenerics9(_2, 7, anyVar, 4));
+var a = someGenerics9(_2 || (_2 = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), 7, anyVar, 4);
 var a;
 // Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
-var arr = (_3 = ["", "", "", ""], _3.raw = ["", "", "", ""], someGenerics9(_3, [], null, undefined));
+var arr = someGenerics9(_3 || (_3 = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), [], null, undefined);
 var arr;
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;

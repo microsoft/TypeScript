@@ -5,11 +5,18 @@ function foo(...rest: any[]) {
 foo `${function (x: number) { x = "bad"; } }`;
 
 //// [taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.js]
+var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+    if (Object.freeze && Object.defineProperty) {
+        return Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+    }
+    cooked.raw = raw;
+    return cooked;
+};
 function foo() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
     }
 }
-(_a = ["", ""], _a.raw = ["", ""], foo(_a, function (x) { x = "bad"; }));
+foo(_a || (_a = __getTemplateObject(["", ""], ["", ""])), function (x) { x = "bad"; });
 var _a;

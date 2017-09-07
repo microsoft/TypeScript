@@ -11,12 +11,19 @@ var g = tag `Hello ${123} World` as string;
 var h = tag `Hello` as string;
 
 //// [asOperator3.js]
+var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+    if (Object.freeze && Object.defineProperty) {
+        return Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+    }
+    cooked.raw = raw;
+    return cooked;
+};
 var a = "" + (123 + 456);
 var b = "leading " + (123 + 456);
 var c = 123 + 456 + " trailing";
 var d = "Hello " + 123 + " World";
 var e = "Hello";
 var f = 1 + (1 + " end of string");
-var g = (_a = ["Hello ", " World"], _a.raw = ["Hello ", " World"], tag(_a, 123));
-var h = (_b = ["Hello"], _b.raw = ["Hello"], tag(_b));
+var g = tag(_a || (_a = __getTemplateObject(["Hello ", " World"], ["Hello ", " World"])), 123);
+var h = tag(_b || (_b = __getTemplateObject(["Hello"], ["Hello"])));
 var _a, _b;

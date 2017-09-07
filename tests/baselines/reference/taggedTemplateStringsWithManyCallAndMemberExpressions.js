@@ -16,6 +16,13 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 
 
 //// [taggedTemplateStringsWithManyCallAndMemberExpressions.js]
+var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+    if (Object.freeze && Object.defineProperty) {
+        return Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+    }
+    cooked.raw = raw;
+    return cooked;
+};
 var f;
-var x = new new new (_a = ["abc", "def"], _a.raw = ["abc", "def"], f(_a, 0)).member("hello")(42) === true;
+var x = new new new f(_a || (_a = __getTemplateObject(["abc", "def"], ["abc", "def"])), 0).member("hello")(42) === true;
 var _a;

@@ -4,6 +4,13 @@ var x = {
 }
 
 //// [templateStringInPropertyName2.js]
-var x = (_a = ["abc", "def", "ghi"], _a.raw = ["abc", "def", "ghi"], {}(_a, 123, 456));
+var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+    if (Object.freeze && Object.defineProperty) {
+        return Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+    }
+    cooked.raw = raw;
+    return cooked;
+};
+var x = {}(_a || (_a = __getTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"])), 123, 456);
 321;
 var _a;
