@@ -775,7 +775,7 @@ namespace ts.server {
             if (ts.isKeyword(stringToToken(args.identifierName)) || !ts.isIdentifierText(args.identifierName, project.getCompilerOptions().target)) {
                 return {
                     isValid: false,
-                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.The_new_name_is_not_a_valid_identifier)
+                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.The_name_is_not_a_valid_identifier)
                 };
             }
 

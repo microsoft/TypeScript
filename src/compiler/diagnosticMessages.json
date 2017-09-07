@@ -3503,7 +3503,7 @@
         "category": "Error",
         "code": 8020
     },
-    "The new name is not a valid identifier.": {
+    "The name is not a valid identifier.": {
         "category": "Error",
         "code": 8021
     },
