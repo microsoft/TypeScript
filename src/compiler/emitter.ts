@@ -2415,7 +2415,7 @@ namespace ts {
                 return;
             }
 
-            const isEmpty = isUndefined || children.length === 0 || start >= children.length || count === 0;
+            const isEmpty = isUndefined || start >= children.length || count === 0;
             if (isEmpty && format & ListFormat.OptionalIfEmpty) {
                 return;
             }
