@@ -7435,6 +7435,12 @@ namespace ts {
                 type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
                 unionTypes.set(id, type);
                 type.types = types;
+                /*
+                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
+                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
+                (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
+                It's important that we create equivalent union types only once, so that's an unfortunate side effect.
+                */
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
             }
@@ -7528,7 +7534,7 @@ namespace ts {
                 type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
                 intersectionTypes.set(id, type);
                 type.types = typeSet;
-                type.aliasSymbol = aliasSymbol;
+                type.aliasSymbol = aliasSymbol; // See comment in `getUnionTypeFromSortedList`.
                 type.aliasTypeArguments = aliasTypeArguments;
             }
             return type;
