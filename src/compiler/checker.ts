@@ -2095,6 +2095,10 @@ namespace ts {
                     canQualifySymbol(symbolFromSymbolTable, meaning);
             }
 
+            function isUMDExportSymbol(symbol: Symbol) {
+                return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
+            }
+
             function trySymbolTable(symbols: SymbolTable) {
                 // If symbol is directly available by its name in the symbol table
                 if (isAccessible(symbols.get(symbol.escapedName))) {
@@ -2106,6 +2110,7 @@ namespace ts {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
                         && symbolFromSymbolTable.escapedName !== "export="
                         && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)
+                        && !(isUMDExportSymbol(symbolFromSymbolTable) && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
 
@@ -7430,6 +7435,12 @@ namespace ts {
                 type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
                 unionTypes.set(id, type);
                 type.types = types;
+                /*
+                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
+                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
+                (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
+                It's important that we create equivalent union types only once, so that's an unfortunate side effect.
+                */
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
             }
@@ -7523,7 +7534,7 @@ namespace ts {
                 type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
                 intersectionTypes.set(id, type);
                 type.types = typeSet;
-                type.aliasSymbol = aliasSymbol;
+                type.aliasSymbol = aliasSymbol; // See comment in `getUnionTypeFromSortedList`.
                 type.aliasTypeArguments = aliasTypeArguments;
             }
             return type;
@@ -18017,7 +18028,7 @@ namespace ts {
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
             if (isInJavaScriptFile(node) && node.jsDoc) {
-                const typecasts = flatMap(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag));
+                const typecasts = flatMap(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag && !!(tag as JSDocTypeTag).typeExpression && !!(tag as JSDocTypeTag).typeExpression.type));
                 if (typecasts && typecasts.length) {
                     // We should have already issued an error if there were multiple type jsdocs
                     const cast = typecasts[0] as JSDocTypeTag;
@@ -19153,6 +19164,8 @@ namespace ts {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
+                    // A jsdoc typedef is, by definition, a type alias
+                    case SyntaxKind.JSDocTypedefTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d) || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
@@ -19822,7 +19835,7 @@ namespace ts {
                             }
                         }
                         else if (compilerOptions.noUnusedLocals) {
-                            forEach(local.declarations, d => errorUnusedLocal(getNameOfDeclaration(d) || d, unescapeLeadingUnderscores(local.escapedName)));
+                            forEach(local.declarations, d => errorUnusedLocal(d, unescapeLeadingUnderscores(local.escapedName)));
                         }
                     }
                 });
@@ -19837,7 +19850,8 @@ namespace ts {
             return false;
         }
 
-        function errorUnusedLocal(node: Node, name: string) {
+        function errorUnusedLocal(declaration: Declaration, name: string) {
+            const node = getNameOfDeclaration(declaration) || declaration;
             if (isIdentifierThatStartsWithUnderScore(node)) {
                 const declaration = getRootDeclaration(node.parent);
                 if (declaration.kind === SyntaxKind.VariableDeclaration && isForInOrOfStatement(declaration.parent.parent)) {
@@ -19904,7 +19918,7 @@ namespace ts {
                     if (!local.isReferenced && !local.exportSymbol) {
                         for (const declaration of local.declarations) {
                             if (!isAmbientModule(declaration)) {
-                                errorUnusedLocal(getNameOfDeclaration(declaration), unescapeLeadingUnderscores(local.escapedName));
+                                errorUnusedLocal(declaration, unescapeLeadingUnderscores(local.escapedName));
                             }
                         }
                     }
@@ -21511,7 +21525,7 @@ namespace ts {
                 return true;
             }
 
-            type InheritanceInfoMap = { prop: Symbol; containingType: Type };
+            interface InheritanceInfoMap { prop: Symbol; containingType: Type; }
             const seen = createUnderscoreEscapedMap<InheritanceInfoMap>();
             forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.escapedName, { prop: p, containingType: type }); });
             let ok = true;
@@ -22981,6 +22995,9 @@ namespace ts {
                             ? getTypeFromTypeNode(node.parent.parent.objectType)
                             : undefined;
                     return objectType && getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
+
+                case SyntaxKind.DefaultKeyword:
+                    return getSymbolOfNode(node.parent);
 
                 default:
                     return undefined;

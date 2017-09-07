@@ -9,6 +9,15 @@ namespace ts {
     export const version = `${versionMajorMinor}.0`;
 }
 
+namespace ts {
+    export function isExternalModuleNameRelative(moduleName: string): boolean {
+        // TypeScript 1.0 spec (April 2014): 11.2.1
+        // An external module name is "relative" if the first term is "." or "..".
+        // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
+        return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
+    }
+}
+
 /* @internal */
 namespace ts {
 
@@ -40,7 +49,6 @@ namespace ts {
         return new MapCtr<T>() as UnderscoreEscapedMap<T>;
     }
 
-    /* @internal */
     export function createSymbolTable(symbols?: ReadonlyArray<Symbol>): SymbolTable {
         const result = createMap<Symbol>() as SymbolTable;
         if (symbols) {
@@ -1604,16 +1612,8 @@ namespace ts {
         return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
     }
 
-    /* @internal */
     export function pathIsRelative(path: string): boolean {
         return /^\.\.?($|[\\/])/.test(path);
-    }
-
-    export function isExternalModuleNameRelative(moduleName: string): boolean {
-        // TypeScript 1.0 spec (April 2014): 11.2.1
-        // An external module name is "relative" if the first term is "." or "..".
-        // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
-        return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
 
     /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
@@ -1639,7 +1639,6 @@ namespace ts {
         return moduleResolution;
     }
 
-    /* @internal */
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
@@ -1864,17 +1863,14 @@ namespace ts {
         return true;
     }
 
-    /* @internal */
     export function startsWith(str: string, prefix: string): boolean {
         return str.lastIndexOf(prefix, 0) === 0;
     }
 
-    /* @internal */
     export function removePrefix(str: string, prefix: string): string {
         return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
-    /* @internal */
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
@@ -1888,7 +1884,6 @@ namespace ts {
         return path.length > extension.length && endsWith(path, extension);
     }
 
-    /* @internal */
     export function fileExtensionIsOneOf(path: string, extensions: ReadonlyArray<string>): boolean {
         for (const extension of extensions) {
             if (fileExtensionIs(path, extension)) {
@@ -1905,7 +1900,6 @@ namespace ts {
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
-    /* @internal */
     export const commonPackageFolders: ReadonlyArray<string> = ["node_modules", "bower_components", "jspm_packages"];
 
     const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
@@ -2422,10 +2416,6 @@ namespace ts {
             }
         }
 
-        export function assertNever(never: never, message?: string, stackCrawlMark?: Function): never {
-            throw fail(message || `Illegal value: ${never}`, stackCrawlMark || assertNever);
-        }
-
         export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string): void {
             if (a !== b) {
                 const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
@@ -2451,13 +2441,17 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): void {
+        export function fail(message?: string, stackCrawlMark?: Function): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
                 (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
             }
             throw e;
+        }
+
+        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+            return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: Function) {
@@ -2527,7 +2521,6 @@ namespace ts {
      * Return an exact match if possible, or a pattern match, or undefined.
      * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
      */
-    /* @internal */
     export function matchPatternOrExact(patternStrings: ReadonlyArray<string>, candidate: string): string | Pattern | undefined {
         const patterns: Pattern[] = [];
         for (const patternString of patternStrings) {
@@ -2544,7 +2537,6 @@ namespace ts {
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
 
-    /* @internal */
     export function patternText({prefix, suffix}: Pattern): string {
         return `${prefix}*${suffix}`;
     }
@@ -2553,14 +2545,12 @@ namespace ts {
      * Given that candidate matches pattern, returns the text matching the '*'.
      * E.g.: matchedText(tryParsePattern("foo*baz"), "foobarbaz") === "bar"
      */
-    /* @internal */
     export function matchedText(pattern: Pattern, candidate: string): string {
         Debug.assert(isPatternMatch(pattern, candidate));
         return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
     }
 
     /** Return the object corresponding to the best pattern to match `candidate`. */
-    /* @internal */
     export function findBestPatternMatch<T>(values: ReadonlyArray<T>, getPattern: (value: T) => Pattern, candidate: string): T | undefined {
         let matchedValue: T | undefined = undefined;
         // use length of prefix as betterness criteria
@@ -2583,7 +2573,6 @@ namespace ts {
             endsWith(candidate, suffix);
     }
 
-    /* @internal */
     export function tryParsePattern(pattern: string): Pattern | undefined {
         // This should be verified outside of here and a proper error thrown.
         Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
@@ -2632,4 +2621,6 @@ namespace ts {
     export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
         return (arg: T) => f(arg) && g(arg);
     }
+
+    export function assertTypeIsNever(_: never): void {}
 }
