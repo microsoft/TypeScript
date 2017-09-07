@@ -7302,7 +7302,11 @@ namespace ts {
                 if (flags & TypeFlags.Null) typeSet.containsNull = true;
                 if (!(flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
-            else if (!(flags & TypeFlags.Never)) {
+            else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && every((<IntersectionType>type).types, isUnitType))) {
+                // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
+                // another form of 'never' (in that they have an empty value domain). We could in theory turn
+                // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
+                // easier to reason about their origin.
                 if (flags & TypeFlags.String) typeSet.containsString = true;
                 if (flags & TypeFlags.Number) typeSet.containsNumber = true;
                 if (flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
