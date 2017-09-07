@@ -406,6 +406,14 @@ namespace ts {
             setWriter(/*output*/ undefined);
         }
 
+        // TODO: Should this just be `emit`?
+        // See https://github.com/Microsoft/TypeScript/pull/18284#discussion_r137611034
+        function emitIfPresent(node: Node | undefined) {
+            if (node) {
+                pipelineEmitWithNotification(EmitHint.Unspecified, node);
+            }
+        }
+
         function emit(node: Node) {
             pipelineEmitWithNotification(EmitHint.Unspecified, node);
         }
@@ -451,6 +459,7 @@ namespace ts {
                 case EmitHint.SourceFile: return pipelineEmitSourceFile(node);
                 case EmitHint.IdentifierName: return pipelineEmitIdentifierName(node);
                 case EmitHint.Expression: return pipelineEmitExpression(node);
+                case EmitHint.MappedTypeParameter: return pipelineEmitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
                 case EmitHint.Unspecified: return pipelineEmitUnspecified(node);
             }
         }
@@ -463,6 +472,12 @@ namespace ts {
         function pipelineEmitIdentifierName(node: Node): void {
             Debug.assertNode(node, isIdentifier);
             emitIdentifier(<Identifier>node);
+        }
+
+        function pipelineEmitMappedTypeParameter(node: TypeParameterDeclaration): void {
+            emit(node.name);
+            write(" in ");
+            emit(node.constraint);
         }
 
         function pipelineEmitUnspecified(node: Node): void {
@@ -898,9 +913,9 @@ namespace ts {
         function emitParameter(node: ParameterDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            writeIfPresent(node.dotDotDotToken, "...");
+            emitIfPresent(node.dotDotDotToken);
             emit(node.name);
-            writeIfPresent(node.questionToken, "?");
+            emitIfPresent(node.questionToken);
             emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
         }
@@ -918,7 +933,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
-            writeIfPresent(node.questionToken, "?");
+            emitIfPresent(node.questionToken);
             emitWithPrefix(": ", node.type);
             write(";");
         }
@@ -927,7 +942,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
-            writeIfPresent(node.questionToken, "?");
+            emitIfPresent(node.questionToken);
             emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
             write(";");
@@ -937,7 +952,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
-            writeIfPresent(node.questionToken, "?");
+            emitIfPresent(node.questionToken);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
             emitWithPrefix(": ", node.type);
@@ -947,9 +962,9 @@ namespace ts {
         function emitMethodDeclaration(node: MethodDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            writeIfPresent(node.asteriskToken, "*");
+            emitIfPresent(node.asteriskToken);
             emit(node.name);
-            writeIfPresent(node.questionToken, "?");
+            emitIfPresent(node.questionToken);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -1092,16 +1107,16 @@ namespace ts {
                 writeLine();
                 increaseIndent();
             }
-            writeIfPresent(node.readonlyToken, "readonly ");
-
-            if (onEmitNode) {
-                onEmitNode(EmitHint.Unspecified, node.typeParameter, emitMappedTypeParameter);
-            }
-            else {
-                emitMappedTypeParameter(EmitHint.Unspecified, node.typeParameter);
+            if (node.readonlyToken) {
+                emit(node.readonlyToken);
+                write(" ");
             }
 
-            writeIfPresent(node.questionToken, "?");
+            write("[");
+            pipelineEmitWithNotification(EmitHint.MappedTypeParameter, node.typeParameter);
+            write("]");
+
+            emitIfPresent(node.questionToken);
             write(": ");
             emit(node.type);
             write(";");
@@ -1113,14 +1128,6 @@ namespace ts {
                 decreaseIndent();
             }
             write("}");
-        }
-
-        function emitMappedTypeParameter(_hint: EmitHint, node: TypeParameterDeclaration) {
-            write("[");
-            emit(node.name);
-            write(" in ");
-            emit(node.constraint);
-            write("]");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
@@ -1157,7 +1164,7 @@ namespace ts {
 
         function emitBindingElement(node: BindingElement) {
             emitWithSuffix(node.propertyName, ": ");
-            writeIfPresent(node.dotDotDotToken, "...");
+            emitIfPresent(node.dotDotDotToken);
             emit(node.name);
             emitExpressionWithPrefix(" = ", node.initializer);
         }
@@ -1382,9 +1389,7 @@ namespace ts {
 
         function emitYieldExpression(node: YieldExpression) {
             write("yield");
-            if (node.asteriskToken) {
-                emit(node.asteriskToken);
-            }
+            emit(node.asteriskToken);
             emitExpressionWithPrefix(" ", node.expression);
         }
 
@@ -1665,9 +1670,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             write("function");
-            if (node.asteriskToken) {
-                emit(node.asteriskToken);
-            }
+            emitIfPresent(node.asteriskToken);
             write(" ");
             emitIdentifierName(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
@@ -2074,7 +2077,7 @@ namespace ts {
         function emitJsxExpression(node: JsxExpression) {
             if (node.expression) {
                 write("{");
-                writeIfPresent(node.dotDotDotToken, "...");
+                emitIfPresent(node.dotDotDotToken);
                 emitExpression(node.expression);
                 write("}");
             }
@@ -2132,13 +2135,12 @@ namespace ts {
                 emitTrailingCommentsOfPosition(statements.pos);
             }
 
+            let format = ListFormat.CaseOrDefaultClauseStatements;
             if (emitAsSingleStatement) {
                 write(" ");
-                emitSingleElementList(statements);
+                format &= ~(ListFormat.MultiLine | ListFormat.Indented);
             }
-            else {
-                emitList(parentNode, statements, ListFormat.CaseOrDefaultClauseStatements);
-            }
+            emitList(parentNode, statements, format);
         }
 
         function emitHeritageClause(node: HeritageClause) {
@@ -2583,30 +2585,20 @@ namespace ts {
             }
         }
 
-        function writeIfPresent(node: Node, text: string) {
-            if (node) {
-                writeTokenAndCallCallbacks(node, text);
-            }
-        }
-
         function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
             return onEmitSourceMapOfToken
                 ? onEmitSourceMapOfToken(contextNode, token, pos, writeTokenText)
                 : writeTokenText(token, pos);
         }
 
-        function writeTokenAndCallCallbacks(node: Node, text: string) {
+        function writeTokenNode(node: Node) {
             if (onBeforeEmitToken) {
                 onBeforeEmitToken(node);
             }
-            write(text);
+            write(tokenToString(node.kind));
             if (onAfterEmitToken) {
                 onAfterEmitToken(node);
             }
-        }
-
-        function writeTokenNode(node: Node) {
-            writeTokenAndCallCallbacks(node, tokenToString(node.kind));
         }
 
         function writeTokenText(token: SyntaxKind, pos?: number) {
@@ -3127,6 +3119,7 @@ namespace ts {
         NoInterveningComments = 1 << 17, // Do not emit comments between each node
 
         NoSpaceIfEmpty = 1 << 18,       // If the literal is empty, do not add spaces between braces.
+        SingleElement = 1 << 19,
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
