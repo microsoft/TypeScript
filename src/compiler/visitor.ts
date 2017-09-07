@@ -525,7 +525,9 @@ namespace ts {
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
+                    visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).questionToken, visitor, n => n.kind === SyntaxKind.QuestionToken),
+                    visitNode((<ConditionalExpression>node).colonToken, visitor, n => n.kind === SyntaxKind.ColonToken));
 
             case SyntaxKind.TemplateExpression:
                 return updateTemplateExpression(<TemplateExpression>node,

@@ -1363,13 +1363,13 @@ namespace ts {
 
             emitExpression(node.condition);
             increaseIndentIf(indentBeforeQuestion, " ");
-            write("?");
+            emit(node.questionToken);
             increaseIndentIf(indentAfterQuestion, " ");
             emitExpression(node.whenTrue);
             decreaseIndentIf(indentBeforeQuestion, indentAfterQuestion);
 
             increaseIndentIf(indentBeforeColon, " ");
-            write(":");
+            emit(node.colonToken);
             increaseIndentIf(indentAfterColon, " ");
             emitExpression(node.whenFalse);
             decreaseIndentIf(indentBeforeColon, indentAfterColon);

@@ -1139,11 +1139,20 @@ namespace ts {
         return node;
     }
 
-    export function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression) {
+    export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        whenTrue: Expression,
+        whenFalse: Expression,
+        questionToken: Token<SyntaxKind.QuestionToken> = node.questionToken,
+        colonToken: Token<SyntaxKind.ColonToken> = node.colonToken,
+    ) {
         return node.condition !== condition
+            || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue
+            || node.colonToken !== colonToken
             || node.whenFalse !== whenFalse
-            ? updateNode(createConditional(condition, node.questionToken, whenTrue, node.colonToken, whenFalse), node)
+            ? updateNode(createConditional(condition, questionToken, whenTrue, colonToken, whenFalse), node)
             : node;
     }
 
