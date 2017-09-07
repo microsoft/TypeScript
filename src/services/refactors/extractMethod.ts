@@ -95,7 +95,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
         export const TypeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
         export const FunctionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
-        export const InsufficientSelection = createMessage("Select more than a single identifier.");
+        export const InsufficientSelection = createMessage("Select more than a single token.");
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
         export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
         export const CannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
@@ -239,7 +239,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
-            if (isIdentifier(node)) {
+            if (isToken(node)) {
                 return [createDiagnosticForNode(node, Messages.InsufficientSelection)];
             }
             return undefined;
