@@ -1979,11 +1979,12 @@ namespace ts.server {
             }
         }
 
-        private closeConfiguredProject(configFile: NormalizedPath): void {
+        private closeConfiguredProject(configFile: NormalizedPath) {
             const configuredProject = this.findConfiguredProjectByProjectName(configFile);
             if (configuredProject && configuredProject.deleteOpenRef() === 0) {
                 this.removeProject(configuredProject);
             }
+            return configuredProject;
         }
 
         closeExternalProject(uncheckedFileName: string, suppressRefresh = false): void {
