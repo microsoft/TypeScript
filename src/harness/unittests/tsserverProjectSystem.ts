@@ -4953,18 +4953,23 @@ namespace ts.projectSystem {
                     }
 
                     function verifyProjectChangedEvent(filesToEmit: FileOrFolder[], filesToReload?: FileOrFolder[], additionalChangedFiles?: FileOrFolder[]) {
-                        const changedFiles = mapDefined(additionalChangedFiles ? filesToEmit.concat(additionalChangedFiles) : filesToEmit, f => f !== configFile ? f.path : undefined);
                         host.reloadFS(filesToReload || files);
                         host.runQueuedTimeoutCallbacks();
-                        const project = projectService.configuredProjects.get(configFile.path);
-                        verifyProjectChangedEventHandler([{
-                            eventName: server.ProjectChangedEvent,
-                            data: {
-                                project,
-                                changedFiles,
-                                filesToEmit: mapDefined(filesToEmit, f => f !== libFile && f !== configFile ? f.path : undefined)
-                            }
-                        }]);
+                        if (filesToEmit.length) {
+                            const project = projectService.configuredProjects.get(configFile.path);
+                            const changedFiles = mapDefined(additionalChangedFiles ? filesToEmit.concat(additionalChangedFiles) : filesToEmit, f => f !== configFile ? f.path : undefined);
+                            verifyProjectChangedEventHandler([{
+                                eventName: server.ProjectChangedEvent,
+                                data: {
+                                    project,
+                                    changedFiles,
+                                    filesToEmit: mapDefined(filesToEmit, f => f !== libFile && f !== configFile ? f.path : undefined)
+                                }
+                            }]);
+                        }
+                        else {
+                            verifyProjectChangedEventHandler([]);
+                        }
                     }
 
                     function updateContentOfOpenFile(file: FileOrFolder, newContent: string) {
@@ -5000,15 +5005,15 @@ namespace ts.projectSystem {
 
                     // Change file1Consumer1 content to `export let y = Foo();`
                     updateContentOfOpenFile(file1Consumer1, "export let y = Foo();");
-                    verifyProjectChangedEvent([file1Consumer1]);
+                    verifyProjectChangedEvent([]);
 
                     // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
                     moduleFile1.content = `export var T: number;export function Foo() { };`;
-                    verifyProjectChangedEvent([moduleFile1, file1Consumer2]);
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer2, file1Consumer1]);
 
                     // Add the import statements back to file1Consumer1
                     updateContentOfOpenFile(file1Consumer1, `import {Foo} from "./moduleFile1";let y = Foo();`);
-                    verifyProjectChangedEvent([file1Consumer1]);
+                    verifyProjectChangedEvent([]);
 
                     // Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
                     moduleFile1.content = `export var T: number;export var T2: string;export function Foo() { };`;
@@ -5095,11 +5100,11 @@ namespace ts.projectSystem {
                     });
 
                     updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T: number;");
-                    verifyProjectChangedEvent([file1Consumer1, file1Consumer1Consumer1]);
+                    verifyProjectChangedEvent([]);
 
                     // Doesnt change the shape of file1Consumer1
                     moduleFile1.content = `export var T: number;export function Foo() { };`;
-                    verifyProjectChangedEvent([moduleFile1, file1Consumer1, file1Consumer2]);
+                    verifyProjectChangedEvent([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer1Consumer1]);
 
                     // Change both files before the timeout
                     updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T2: number;");
@@ -5120,12 +5125,12 @@ namespace ts.projectSystem {
                     /// <reference path="./file1.ts" />
                     export var t2 = 10;`
                     };
-                    const { configFile, verifyProjectChangedEvent, updateContentOfOpenFile } = getInitialState({
+                    const { configFile, verifyProjectChangedEvent } = getInitialState({
                         getAdditionalFileOrFolder: () => [file1, file2],
                         firstReloadFileList: [file1.path, libFile.path, file2.path, configFilePath]
                     });
 
-                    updateContentOfOpenFile(file1, file1.content + "export var t3 = 10;");
+                    file2.content += "export var t3 = 10;";
                     verifyProjectChangedEvent([file1, file2], [file1, file2, libFile, configFile]);
                 });
 
@@ -5157,7 +5162,7 @@ namespace ts.projectSystem {
                     });
 
                     updateContentOfOpenFile(referenceFile1, referenceFile1.content + "export var yy = Foo();");
-                    verifyProjectChangedEvent([referenceFile1], [libFile, referenceFile1, configFile]);
+                    verifyProjectChangedEvent([], [libFile, referenceFile1, configFile]);
 
                     // Create module File2 and see both files are saved
                     verifyProjectChangedEvent([referenceFile1, moduleFile2], [libFile, moduleFile2, referenceFile1, configFile]);
