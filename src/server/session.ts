@@ -469,12 +469,14 @@ namespace ts.server {
                     index++;
                     if (checkSpec.project.containsFile(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        next.immediate(() => {
-                            this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                            if (checkList.length > index) {
-                                next.delay(followMs, checkOne);
-                            }
-                        });
+                        if (this.changeSeq === seq) {
+                            next.immediate(() => {
+                                this.semanticCheck(checkSpec.fileName, checkSpec.project);
+                                if (checkList.length > index) {
+                                    next.delay(followMs, checkOne);
+                                }
+                            });
+                        }
                     }
                 }
             };
@@ -1287,11 +1289,11 @@ namespace ts.server {
             const start = scriptInfo.lineOffsetToPosition(args.line, args.offset);
             const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
             if (start >= 0) {
+                this.changeSeq++;
                 this.projectService.applyChangesToFile(scriptInfo, [{
                     span: { start, length: end - start },
                     newText: args.insertString
                 }]);
-                this.changeSeq++;
             }
         }
 
@@ -1698,8 +1700,8 @@ namespace ts.server {
                 return this.requiredResponse(converted);
             },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
-                this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);
                 this.changeSeq++;
+                this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);
                 // TODO: report errors
                 return this.requiredResponse(/*response*/ true);
             },

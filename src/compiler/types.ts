@@ -4010,7 +4010,8 @@ namespace ts {
         Tsx = ".tsx",
         Dts = ".d.ts",
         Js = ".js",
-        Jsx = ".jsx"
+        Jsx = ".jsx",
+        Json = ".json"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
@@ -4025,7 +4026,7 @@ namespace ts {
         // True if the type declaration file was found in a primary lookup location
         primary: boolean;
         // The location of the .d.ts file we located, or undefined if resolution failed
-        resolvedFileName?: string;
+        resolvedFileName: string | undefined;
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
