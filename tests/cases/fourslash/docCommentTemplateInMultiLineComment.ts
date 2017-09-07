@@ -3,5 +3,4 @@
 // @Filename: justAComment.ts
 //// /* /*0*/ */
 
-goTo.marker("0");
-verify.noDocCommentTemplate();
+verify.noDocCommentTemplateAt("0");
