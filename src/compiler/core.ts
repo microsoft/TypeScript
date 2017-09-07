@@ -1228,7 +1228,7 @@ namespace ts {
     /** Does nothing. */
     export function noop(): void {}
 
-    /** Passes thru argument. */
+    /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
 
     /** Throws an error because a function is not implemented. */

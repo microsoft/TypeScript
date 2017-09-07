@@ -58,6 +58,7 @@ namespace ts {
         let symbolInstantiationDepth = 0;
 
         const emptySymbols = createSymbolTable();
+        const identityMapper: (type: Type) => Type = identity;
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -8111,10 +8112,6 @@ namespace ts {
             return mapper && isInferenceContext(mapper) ?
                 createInferenceContext(mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.compareTypes, mapper.inferences) :
                 mapper;
-        }
-
-        function identityMapper(type: Type): Type {
-            return type;
         }
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
