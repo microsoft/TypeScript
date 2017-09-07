@@ -62,6 +62,8 @@ namespace ts.server.protocol {
         RenameInfoFull = "rename-full",
         /* @internal */
         RenameLocationsFull = "renameLocations-full",
+        /* @internal */
+        ValidateIdentifierName = "validateIdentifierName",
         Saveto = "saveto",
         SignatureHelp = "signatureHelp",
         /* @internal */
@@ -849,6 +851,29 @@ namespace ts.server.protocol {
      */
     export interface ReferencesResponse extends Response {
         body?: ReferencesResponseBody;
+    }
+
+    /**
+     * Argument for ValidateIdentifier request.
+     */
+    export interface ValidateIdentifierNameArgs {
+        /**
+         * The name of the project.
+         */
+        projectFileName: string;
+        /**
+         * Name of the identifier to validate.
+         */
+        identifierName: string;
+    }
+
+    /**
+     * Validate identifier requests; value of command
+     * is "ValidateIdentifier". Return response indicating
+     * the the identifier is valid or not.
+     */
+    export interface ValidateIdentifierNameRequest extends Request {
+        arguments: ValidateIdentifierNameArgs;
     }
 
     /**

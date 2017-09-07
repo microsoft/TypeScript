@@ -608,6 +608,11 @@ namespace ts {
         triggerSpan: TextSpan;
     }
 
+    export interface IsValidIdentifierName {
+        isValid: boolean;
+        localizedErrorMessage: string;
+    }
+
     export interface SignatureHelpParameter {
         name: string;
         documentation: SymbolDisplayPart[];

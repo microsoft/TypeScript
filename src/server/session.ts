@@ -167,7 +167,7 @@ namespace ts.server {
         private timerHandle: any;
         private immediateId: number | undefined;
 
-        constructor(private readonly operationHost: MultistepOperationHost) {}
+        constructor(private readonly operationHost: MultistepOperationHost) { }
 
         public startNew(action: (next: NextStep) => void) {
             this.complete();
@@ -582,7 +582,7 @@ namespace ts.server {
 
         private getDiagnosticsWorker(
             args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => ReadonlyArray<Diagnostic>, includeLinePosition: boolean
-            ): ReadonlyArray<protocol.DiagnosticWithLinePosition> | ReadonlyArray<protocol.Diagnostic> {
+        ): ReadonlyArray<protocol.DiagnosticWithLinePosition> | ReadonlyArray<protocol.Diagnostic> {
             const { project, file } = this.getFileAndProject(args);
             if (isSemantic && isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                 return emptyArray;
@@ -767,6 +767,22 @@ namespace ts.server {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
             return project.getLanguageService().getRenameInfo(file, position);
+        }
+
+        private isValidIdentifierName(args: protocol.ValidateIdentifierNameArgs): IsValidIdentifierName {
+            const project = this.getProject(args.projectFileName);
+
+            if (ts.isKeyword(stringToToken(args.identifierName)) || !ts.isIdentifierText(args.identifierName, project.getCompilerOptions().target)) {
+                return {
+                    isValid: false,
+                    localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.The_new_name_is_not_a_valid_identifier)
+                };
+            }
+
+            return {
+                isValid: true,
+                localizedErrorMessage: undefined
+            };
         }
 
         private getProjects(args: protocol.FileRequestArgs) {
@@ -1737,6 +1753,9 @@ namespace ts.server {
             },
             [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getRenameInfo(request.arguments));
+            },
+            [CommandNames.ValidateIdentifierName]: (request: protocol.ValidateIdentifierNameRequest) => {
+                return this.requiredResponse(this.isValidIdentifierName(request.arguments));
             },
             [CommandNames.Open]: (request: protocol.OpenRequest) => {
                 this.openClientFile(
