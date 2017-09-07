@@ -16,8 +16,8 @@ class Carousel<T> extends Vue {
             "vue.d.ts": `export namespace Vue { export type Config = { template: string }; }`,
             "vue-class-component.d.ts": `import Vue from "./vue";
 export function Component(x: Config): any;`
-}
-        it("should be able to create a language service which can respond to deinition requests without throwing", () => {           
+};
+        it("should be able to create a language service which can respond to deinition requests without throwing", () => {
             const languageService = ts.createLanguageService({
                 getCompilationSettings() {
                     return {};

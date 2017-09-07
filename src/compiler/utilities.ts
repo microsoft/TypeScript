@@ -61,7 +61,7 @@ namespace ts {
     }
 
     export function usingSingleLineStringWriter(action: (writer: StringSymbolWriter) => void): string {
-        let oldString = stringWriter.string();
+        const oldString = stringWriter.string();
         try {
             action(stringWriter);
             return stringWriter.string();
