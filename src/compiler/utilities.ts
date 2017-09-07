@@ -1487,10 +1487,7 @@ namespace ts {
     }
 
     export function isJSDocConstructSignature(node: Node) {
-        return node.kind === SyntaxKind.JSDocFunctionType &&
-            (node as JSDocFunctionType).parameters.length > 0 &&
-            (node as JSDocFunctionType).parameters[0].name &&
-            ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
+        return isJSDocFunctionType(node) && node.parameters.length !== 0 && node.parameters[0].sort === JSDocFunctionTypeParameterSort.New;
     }
 
     export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
@@ -1633,7 +1630,7 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
     }
 
-    export function getJSDocReturnType(node: Node): TypeNode {
+    function getJSDocReturnType(node: Node): TypeNode {
         const returnTag = getJSDocReturnTag(node);
         return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
     }
@@ -1642,16 +1639,16 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
     }
 
-    export function hasRestParameter(s: SignatureDeclaration): boolean {
-        return isRestParameter(lastOrUndefined(s.parameters));
+    export function hasRestParameter(s: JSDocFunctionType | SignatureDeclaration): boolean {
+        return isRestParameter(lastOrUndefined<JSDocFunctionTypeParameterDeclaration | ParameterDeclaration>(s.parameters));
     }
 
     export function hasDeclaredRestParameter(s: SignatureDeclaration): boolean {
         return isDeclaredRestParam(lastOrUndefined(s.parameters));
     }
 
-    export function isRestParameter(node: ParameterDeclaration) {
-        if (isInJavaScriptFile(node)) {
+    export function isRestParameter(node: JSDocFunctionTypeParameterDeclaration | ParameterDeclaration) {
+        if (node && node.kind === SyntaxKind.Parameter && isInJavaScriptFile(node)) {
             if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
                 forEach(getJSDocParameterTags(node),
                     t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
@@ -1661,7 +1658,7 @@ namespace ts {
         return isDeclaredRestParam(node);
     }
 
-    export function isDeclaredRestParam(node: ParameterDeclaration) {
+    function isDeclaredRestParam(node: JSDocFunctionTypeParameterDeclaration | ParameterDeclaration) {
         return node && node.dotDotDotToken !== undefined;
     }
 
@@ -2767,7 +2764,7 @@ namespace ts {
      * Gets the effective return type annotation of a signature. If the node was parsed in a
      * JavaScript file, gets the return type annotation from JSDoc.
      */
-    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode | undefined {
+    export function getEffectiveReturnTypeNode(node: JSDocFunctionType | SignatureDeclaration): TypeNode | undefined {
         if (node.type) {
             return node.type;
         }

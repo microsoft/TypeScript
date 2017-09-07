@@ -1112,7 +1112,11 @@ namespace ts {
 /* @internal */
 namespace ts {
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
-        return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
+        if (!symbol.declarations || symbol.declarations.length === 0) {
+            return undefined;
+        }
+        const decl = symbol.declarations[0];
+        return decl.kind === SyntaxKind.Parameter || decl.kind === SyntaxKind.JSDocFunctionTypeParameter;
     }
 
     const displayPartWriter = getDisplayPartWriter();

@@ -5,18 +5,11 @@
     "flags": "JSDoc",
     "parameters": {
         "0": {
-            "kind": "Parameter",
+            "kind": "JSDocFunctionTypeParameter",
             "pos": 10,
             "end": 18,
             "flags": "JSDoc",
-            "name": {
-                "kind": "Identifier",
-                "pos": 10,
-                "end": 14,
-                "flags": "JSDoc",
-                "originalKeywordKind": "ThisKeyword",
-                "escapedText": "this"
-            },
+            "sort": 1,
             "type": {
                 "kind": "TypeReference",
                 "pos": 15,

@@ -360,6 +360,7 @@ namespace ts {
         JSDocNonNullableType,
         JSDocOptionalType,
         JSDocFunctionType,
+        JSDocFunctionTypeParameter,
         JSDocVariadicType,
         JSDocComment,
         JSDocTag,
@@ -2090,8 +2091,23 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
+    export interface JSDocFunctionType extends JSDocType, Declaration {
         kind: SyntaxKind.JSDocFunctionType;
+        parameters: NodeArray<JSDocFunctionTypeParameterDeclaration>;
+        type: TypeNode;
+    }
+
+    export const enum JSDocFunctionTypeParameterSort {
+        Regular,
+        This,
+        New,
+    }
+    export interface JSDocFunctionTypeParameterDeclaration extends Declaration {
+        kind: SyntaxKind.JSDocFunctionTypeParameter;
+        parent: JSDocFunctionType;
+        sort: JSDocFunctionTypeParameterSort;
+        dotDotDotToken?: DotDotDotToken; // Present on rest parameter
+        type: TypeNode;
     }
 
     export interface JSDocVariadicType extends JSDocType {
@@ -3430,7 +3446,7 @@ namespace ts {
     }
 
     export interface Signature {
-        declaration: SignatureDeclaration;  // Originating declaration
+        declaration: SignatureDeclaration | JSDocFunctionType; // Originating declaration
         typeParameters?: TypeParameter[];   // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
         /* @internal */
