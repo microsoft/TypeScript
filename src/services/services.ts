@@ -1143,7 +1143,7 @@ namespace ts {
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
                  oldSettings.allowJs !== newSettings.allowJs ||
-                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
+                 oldSettings.disableSizeLimit !== newSettings.disableSizeLimit ||
                  oldSettings.baseUrl !== newSettings.baseUrl ||
                  !equalOwnProperties(oldSettings.paths, newSettings.paths));
 
