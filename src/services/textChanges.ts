@@ -192,7 +192,7 @@ namespace ts.textChanges {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
-        public static fromCodeFixContext(context: { newLineCharacter: string, rulesProvider?: formatting.RulesProvider }) {
+        public static fromContext(context: RefactorContext | CodeFixContext) {
             return new ChangeTracker(getNewlineKind(context), context.rulesProvider);
         }
 

@@ -394,7 +394,7 @@ namespace ts {
      * Represents a single refactoring action - for example, the "Extract Method..." refactor might
      * offer several actions, each corresponding to a surround class or closure to extract into.
      */
-    export type RefactorActionInfo = {
+    export interface RefactorActionInfo {
         /**
          * The programmatic name of the refactoring action
          */
@@ -406,18 +406,17 @@ namespace ts {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
-    };
+    }
 
     /**
      * A set of edits to make in response to a refactor action, plus an optional
      * location where renaming should be invoked from
      */
-    export type RefactorEditInfo = {
+    export interface RefactorEditInfo {
         edits: FileTextChanges[];
         renameFilename?: string;
         renameLocation?: number;
-    };
-
+    }
 
     export interface TextInsertion {
         newText: string;

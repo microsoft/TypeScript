@@ -692,7 +692,7 @@ namespace ts.codefix {
         }
 
         function createChangeTracker() {
-            return textChanges.ChangeTracker.fromCodeFixContext(context);
+            return textChanges.ChangeTracker.fromContext(context);
         }
 
         function createCodeAction(

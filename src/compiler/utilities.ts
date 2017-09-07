@@ -32,7 +32,6 @@ namespace ts {
     }
 
     const stringWriter = createSingleLineStringWriter();
-    let stringWriterAcquired = false;
 
     function createSingleLineStringWriter(): StringSymbolWriter {
         let str = "";
@@ -62,15 +61,14 @@ namespace ts {
     }
 
     export function usingSingleLineStringWriter(action: (writer: StringSymbolWriter) => void): string {
+        const oldString = stringWriter.string();
         try {
-            Debug.assert(!stringWriterAcquired);
-            stringWriterAcquired = true;
             action(stringWriter);
             return stringWriter.string();
         }
         finally {
             stringWriter.clear();
-            stringWriterAcquired = false;
+            stringWriter.writeKeyword(oldString);
         }
     }
 
