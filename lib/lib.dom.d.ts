@@ -2599,7 +2599,7 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap {
     "ratechange": Event;
     "readystatechange": Event;
     "reset": Event;
-    "scroll": UIEvent;
+    "scroll": Event;
     "seeked": Event;
     "seeking": Event;
     "select": UIEvent;
@@ -4237,7 +4237,7 @@ interface HTMLBodyElementEventMap extends HTMLElementEventMap {
     "pageshow": PageTransitionEvent;
     "popstate": PopStateEvent;
     "resize": UIEvent;
-    "scroll": UIEvent;
+    "scroll": Event;
     "storage": StorageEvent;
     "unload": Event;
 }
@@ -4554,7 +4554,7 @@ interface HTMLElementEventMap extends ElementEventMap {
     "progress": ProgressEvent;
     "ratechange": Event;
     "reset": Event;
-    "scroll": UIEvent;
+    "scroll": Event;
     "seeked": Event;
     "seeking": Event;
     "select": UIEvent;
@@ -4962,7 +4962,7 @@ interface HTMLFrameSetElementEventMap extends HTMLElementEventMap {
     "pageshow": PageTransitionEvent;
     "popstate": PopStateEvent;
     "resize": UIEvent;
-    "scroll": UIEvent;
+    "scroll": Event;
     "storage": StorageEvent;
     "unload": Event;
 }
@@ -11312,7 +11312,7 @@ interface SVGSVGElementEventMap extends SVGElementEventMap {
     "SVGAbort": Event;
     "SVGError": Event;
     "resize": UIEvent;
-    "scroll": UIEvent;
+    "scroll": Event;
     "SVGUnload": Event;
     "SVGZoom": SVGZoomEvent;
 }
@@ -13113,7 +13113,7 @@ interface WindowEventMap extends GlobalEventHandlersEventMap {
     "readystatechange": ProgressEvent;
     "reset": Event;
     "resize": UIEvent;
-    "scroll": UIEvent;
+    "scroll": Event;
     "seeked": Event;
     "seeking": Event;
     "select": UIEvent;
