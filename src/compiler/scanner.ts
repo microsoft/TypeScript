@@ -337,6 +337,9 @@ namespace ts {
             Debug.assert(res < lineStarts[line + 1]);
         }
         else if (debugText !== undefined) {
+            if (res === debugText.length) {
+                return res; // Allow single character overflow for trailing newline
+            }
             Debug.assert(res < debugText.length);
         }
         return res;
