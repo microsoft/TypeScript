@@ -279,6 +279,16 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let currentText: string;
         let hierarchyFacts: HierarchyFacts;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
+        function recordTaggedTemplateString(temp: Identifier) {
+            const decl = createVariableDeclaration(temp);
+            if (!taggedTemplateStringDeclarations) {
+                taggedTemplateStringDeclarations = [decl];
+            }
+            else {
+                taggedTemplateStringDeclarations.push(decl);
+            }
+        }
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -307,6 +317,7 @@ namespace ts {
 
             currentSourceFile = undefined;
             currentText = undefined;
+            taggedTemplateStringDeclarations = undefined;
             hierarchyFacts = HierarchyFacts.None;
             return visited;
         }
@@ -520,6 +531,11 @@ namespace ts {
             addCaptureThisForNodeIfNeeded(statements, node);
             statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+            if (taggedTemplateStringDeclarations) {
+                statements.push(
+                    createVariableStatement(/*modifiers*/ undefined,
+                        createVariableDeclarationList(taggedTemplateStringDeclarations)));
+            }
             addRange(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
@@ -3637,10 +3653,12 @@ namespace ts {
             const tag = visitNode(node.tag, visitor, isExpression);
 
             // Allocate storage for the template site object
-            const temp = createTempVariable(hoistVariableDeclaration);
+            const temp = createTempVariable(recordTaggedTemplateString);
 
             // Build up the template arguments and the raw and cooked strings for the template.
-            const templateArguments: Expression[] = [temp];
+            // We start out with 'undefined' for the first argument and revisit later
+            // to avoid walking over the template string twice and shifting all our arguments over after the fact.
+            const templateArguments: Expression[] = [undefined];
             const cookedStrings: Expression[] = [];
             const rawStrings: Expression[] = [];
             const template = node.template;
@@ -3658,16 +3676,14 @@ namespace ts {
                 }
             }
 
-            // NOTE: The parentheses here is entirely optional as we are now able to auto-
-            //       parenthesize when rebuilding the tree. This should be removed in a
-            //       future version. It is here for now to match our existing emit.
-            return createParen(
-                inlineExpressions([
-                    createAssignment(temp, createArrayLiteral(cookedStrings)),
-                    createAssignment(createPropertyAccess(temp, "raw"), createArrayLiteral(rawStrings)),
-                    createCall(tag, /*typeArguments*/ undefined, templateArguments)
-                ])
-            );
+            // Initialize the template object if necessary
+            templateArguments[0] = createLogicalOr(
+                temp,
+                createAssignment(
+                    temp,
+                    createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings))));
+
+            return createCall(tag, /*typeArguments*/ undefined, templateArguments);
         }
 
         /**
@@ -4036,6 +4052,18 @@ namespace ts {
         );
     }
 
+    function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
+        context.requestEmitHelper(templateObjectHelper);
+        return createCall(
+            getHelperName("__getTemplateObject"),
+            /*typeArguments*/ undefined,
+            [
+                cooked,
+                raw
+            ]
+        );
+    }
+
     const extendsHelper: EmitHelper = {
         name: "typescript:extends",
         scoped: false,
@@ -4052,4 +4080,19 @@ namespace ts {
                 };
             })();`
     };
+
+    const templateObjectHelper: EmitHelper = {
+        name: "typescript:getTemplateObject",
+        scoped: false,
+        priority: 0,
+        text: `
+            var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+                if (Object.freeze && Object.defineProperty) {
+                    return Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+                }
+                cooked.raw = raw;
+                return cooked;
+            };`
+    };
+
 }
