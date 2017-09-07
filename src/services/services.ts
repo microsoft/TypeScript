@@ -1398,7 +1398,7 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
                 // Try getting just type at this position and show
@@ -1435,6 +1435,21 @@ namespace ts {
                 documentation: displayPartsDocumentationsAndKind.documentation,
                 tags: displayPartsDocumentationsAndKind.tags
             };
+        }
+
+        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+            if ((isIdentifier(node) || isStringLiteral(node))
+                && isPropertyAssignment(node.parent)
+                && node.parent.name === node) {
+                const type = checker.getContextualType(node.parent.parent);
+                if (type) {
+                    const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
+                    if (property) {
+                        return property;
+                    }
+                }
+            }
+            return checker.getSymbolAtLocation(node);
         }
 
         /// Goto definition
