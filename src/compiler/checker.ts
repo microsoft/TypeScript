@@ -13532,6 +13532,7 @@ namespace ts {
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
                 let member = memberDecl.symbol;
+                let literalName: __String | undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
@@ -13542,6 +13543,12 @@ namespace ts {
 
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                        if (memberDecl.name.kind === SyntaxKind.ComputedPropertyName) {
+                            const t = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
+                            if (t.flags & TypeFlags.Literal) {
+                                literalName = escapeLeadingUnderscores("" + (t as LiteralType).value);
+                            }
+                        }
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
                     }
                     else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
@@ -13558,7 +13565,7 @@ namespace ts {
                     }
 
                     typeFlags |= type.flags;
-                    const prop = createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
+                    const prop = createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
                     if (inDestructuringPattern) {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                         // for the property, make the property optional.
@@ -13568,7 +13575,7 @@ namespace ts {
                         if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
                         }
-                        if (hasDynamicName(memberDecl)) {
+                        if (!literalName && hasDynamicName(memberDecl)) {
                             patternWithComputedProperties = true;
                         }
                     }
@@ -13626,7 +13633,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
-                if (hasDynamicName(memberDecl)) {
+                if (!literalName && hasDynamicName(memberDecl)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
                     }
