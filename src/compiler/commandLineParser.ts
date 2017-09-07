@@ -1467,7 +1467,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, configFileName ? getDirectoryPath(toPath(configFileName, basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames))) : basePath, options, host, errors, extraFileExtensions, sourceFile);
+            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, configFileName ? getDirectoryPath(toPath(configFileName, basePath, identity)) : basePath, options, host, errors, extraFileExtensions, sourceFile);
 
             if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0) {
                 errors.push(
@@ -1577,7 +1577,7 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
             }
             else {
-                const newBase = configFileName ? getDirectoryPath(toPath(configFileName, basePath, getCanonicalFileName)) : basePath;
+                const newBase = configFileName ? getDirectoryPath(toPath(configFileName, basePath, identity)) : basePath;
                 extendedConfigPath = getExtendsConfigPath(json.extends, host, newBase, getCanonicalFileName, errors, createCompilerDiagnostic);
             }
         }
@@ -1610,7 +1610,7 @@ namespace ts {
             onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
                 switch (key) {
                     case "extends":
-                        const newBase = configFileName ? getDirectoryPath(toPath(configFileName, basePath, getCanonicalFileName)) : basePath;
+                        const newBase = configFileName ? getDirectoryPath(toPath(configFileName, basePath, identity)) : basePath;
                         extendedConfigPath = getExtendsConfigPath(
                             <string>value,
                             host,
