@@ -678,7 +678,7 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
                 /*questionToken*/ undefined,
-                /*typeParameters*/[],
+                /*typeParameters*/ undefined,
                 parameters,
                 returnType,
                 body
@@ -690,7 +690,7 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsAsyncFunction ? [createToken(SyntaxKind.AsyncKeyword)] : undefined,
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
-                /*typeParameters*/[],
+                /*typeParameters*/ undefined,
                 parameters,
                 returnType,
                 body

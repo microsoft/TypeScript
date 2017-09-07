@@ -4628,8 +4628,7 @@ namespace ts {
 
     /* @internal */
     export function isNodeArray<T extends Node>(array: ReadonlyArray<T>): array is NodeArray<T> {
-        return array.hasOwnProperty("pos")
-            && array.hasOwnProperty("end");
+        return array.hasOwnProperty("pos") && array.hasOwnProperty("end");
     }
 
     // Literals
