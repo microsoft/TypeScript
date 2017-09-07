@@ -1016,40 +1016,15 @@ namespace ts {
         return node;
     }
 
-    /* @deprecated */ export function updateArrowFunction(
-        node: ArrowFunction,
-        modifiers: ReadonlyArray<Modifier> | undefined,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
-        type: TypeNode | undefined,
-        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
-        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
-        body: ConciseBody): ArrowFunction;
-    export function updateArrowFunction(
-        node: ArrowFunction,
-        modifiers: ReadonlyArray<Modifier> | undefined,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
-        type: TypeNode | undefined,
-        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
-        bodyOrUndefined?: ConciseBody): ArrowFunction {
-        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
-        let body: ConciseBody;
-        if (bodyOrUndefined === undefined) {
-            equalsGreaterThanToken = node.equalsGreaterThanToken;
-            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
-        }
-        else {
-            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
-                n.kind === SyntaxKind.EqualsGreaterThanToken);
-            body = bodyOrUndefined;
-        }
+        body: ConciseBody,
+        // Optional for backwards-compatibility only -- should always provide this.
+        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken> = node.equalsGreaterThanToken): ArrowFunction {
 
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters

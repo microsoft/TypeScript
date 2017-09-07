@@ -488,8 +488,8 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
-                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, n => n.kind === SyntaxKind.EqualsGreaterThanToken),
-                    visitFunctionBody((<ArrowFunction>node).body, visitor, context));
+                    visitFunctionBody((<ArrowFunction>node).body, visitor, context),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, n => n.kind === SyntaxKind.EqualsGreaterThanToken));
 
             case SyntaxKind.DeleteExpression:
                 return updateDelete(<DeleteExpression>node,
