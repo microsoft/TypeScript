@@ -438,8 +438,10 @@ namespace ts {
                         visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
                 }
             case SyntaxKind.JSDocTypeLiteral:
-                for (const tag of (node as JSDocTypeLiteral).jsDocPropertyTags) {
-                    visitNode(cbNode, tag);
+                if ((node as JSDocTypeLiteral).jsDocPropertyTags) {
+                    for (const tag of (node as JSDocTypeLiteral).jsDocPropertyTags) {
+                        visitNode(cbNode, tag);
+                    }
                 }
                 return;
             case SyntaxKind.PartiallyEmittedExpression:
@@ -6667,19 +6669,18 @@ namespace ts {
                     if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
-                        let alreadyHasTypeTag = false;
+                        let childTypeTag: JSDocTypeTag;
                         const start = scanner.getStartPos();
                         while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Property))) {
                             if (!jsdocTypeLiteral) {
                                 jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
                             }
                             if (child.kind === SyntaxKind.JSDocTypeTag) {
-                                if (alreadyHasTypeTag) {
+                                if (childTypeTag) {
                                     break;
                                 }
                                 else {
-                                    jsdocTypeLiteral.jsDocTypeTag = child;
-                                    alreadyHasTypeTag = true;
+                                    childTypeTag = child;
                                 }
                             }
                             else {
@@ -6693,7 +6694,8 @@ namespace ts {
                             if (typeExpression && typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
-                            typedefTag.typeExpression = finishNode(jsdocTypeLiteral);
+                            const useChildTypeTagAsType = childTypeTag && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type);
+                            typedefTag.typeExpression = useChildTypeTagAsType ? childTypeTag.typeExpression : finishNode(jsdocTypeLiteral);
                         }
                     }
 

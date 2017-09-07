@@ -2150,7 +2150,6 @@ namespace ts {
     export interface JSDocTypeLiteral extends JSDocType {
         kind: SyntaxKind.JSDocTypeLiteral;
         jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>;
-        jsDocTypeTag?: JSDocTypeTag;
         /** If true, then this type literal represents an *array* of its type. */
         isArrayType?: boolean;
     }
