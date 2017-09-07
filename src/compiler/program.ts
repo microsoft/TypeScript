@@ -268,7 +268,7 @@ namespace ts {
         return s;
     }
 
-    export function formatDiagnosticsWithColorAndContext(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
+    export function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
         let output = "";
         for (const diagnostic of diagnostics) {
             if (diagnostic.file) {
@@ -284,12 +284,12 @@ namespace ts {
                     gutterWidth = Math.max(ellipsis.length, gutterWidth);
                 }
 
-                output += sys.newLine;
+                output += host.getNewLine();
                 for (let i = firstLine; i <= lastLine; i++) {
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                        output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
+                        output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
                         i = lastLine - 1;
                     }
 
@@ -301,7 +301,7 @@ namespace ts {
 
                     // Output the gutter and the actual contents of the line.
                     output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    output += lineContent + sys.newLine;
+                    output += lineContent + host.getNewLine();
 
                     // Output the gutter and the error span for the line using tildes.
                     output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
@@ -323,17 +323,17 @@ namespace ts {
                     }
                     output += resetEscapeSequence;
 
-                    output += sys.newLine;
+                    output += host.getNewLine();
                 }
 
-                output += sys.newLine;
+                output += host.getNewLine();
                 output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
-            output += sys.newLine;
+            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
+            output += host.getNewLine();
         }
         return output;
     }
