@@ -334,7 +334,7 @@ namespace ts {
         let flowLoopStart = 0;
         let flowLoopCount = 0;
         let sharedFlowCount = 0;
-        let flowAnalysisDisabled = false;
+        let flowNodeCount = 0;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -11495,8 +11495,8 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
-            let flowLength = 0;
-            if (flowAnalysisDisabled) {
+            let flowDepth = 0;
+            if (flowNodeCount < 0) {
                 return unknownType;
             }
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
@@ -11516,14 +11516,14 @@ namespace ts {
             return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
-                flowLength++;
+                flowDepth++;
                 while (true) {
-                    flowLength++;
-                    if (flowLength >= 5000) {
-                        // We have visited as many as 5000 nodes through as many as 2500 recursive invocations. Rather than
-                        // spending an excessive amount of time and possibly overflowing the call stack, we report an error
+                    flowNodeCount++;
+                    if (flowDepth >= 2500 || flowNodeCount >= 100000000) {
+                        // We have made over 2500 recursive invocations or visited over 100M flow nodes. Rather than
+                        // overflowing the call stack or spending an excessive amount of time, we report an error
                         // and disable further control flow analysis in the containing function or module body.
-                        flowAnalysisDisabled = true;
+                        flowNodeCount = -1;
                         reportFlowControlError(reference);
                         return unknownType;
                     }
@@ -11534,6 +11534,7 @@ namespace ts {
                         // antecedent of more than one node.
                         for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
                             if (sharedFlowNodes[i] === flow) {
+                                flowDepth--;
                                 return sharedFlowTypes[i];
                             }
                         }
@@ -11601,6 +11602,7 @@ namespace ts {
                         sharedFlowTypes[sharedFlowCount] = type;
                         sharedFlowCount++;
                     }
+                    flowDepth--;
                     return type;
                 }
             }
@@ -19976,9 +19978,15 @@ namespace ts {
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
-            const saveFlowAnalysisDisabled = flowAnalysisDisabled;
-            forEach(node.statements, checkSourceElement);
-            flowAnalysisDisabled = saveFlowAnalysisDisabled;
+            if (isFunctionOrModuleBlock(node)) {
+                const saveFlowNodeCount = flowNodeCount;
+                flowNodeCount = 0;
+                forEach(node.statements, checkSourceElement);
+                flowNodeCount = saveFlowNodeCount;
+            }
+            else {
+                forEach(node.statements, checkSourceElement);
+            }
             if (node.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
@@ -22568,7 +22576,7 @@ namespace ts {
 
                 deferredNodes = [];
                 deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
-                flowAnalysisDisabled = false;
+                flowNodeCount = 0;
 
                 forEach(node.statements, checkSourceElement);
 
