@@ -378,6 +378,30 @@ namespace A {
             "Cannot extract range containing conditional return statement."
         ]);
 
+        testExtractRangeFailed("extractRangeFailed7",
+        `
+function test(x: number) {
+    while (x) {
+        x--;
+        [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
+        testExtractRangeFailed("extractRangeFailed8",
+        `
+function test(x: number) {
+    switch (x) {
+        case 1:
+            [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single token."]);
 
         testExtractMethod("extractMethod1",
@@ -561,6 +585,15 @@ namespace A {
     let x = 10;
     [#|x++;
     return;|]
+}`);
+        // Return in finally block
+        testExtractMethod("extractMethod22",
+            `function test() {
+    try {
+    }
+    finally {
+        [#|return 1;|]
+    }
 }`);
     });
 
