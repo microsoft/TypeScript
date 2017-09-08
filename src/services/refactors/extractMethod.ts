@@ -568,14 +568,10 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function getUniqueName(isNameOkay: (name: string) => boolean) {
+    function getUniqueName(fileText: string): string {
         let functionNameText = "newFunction";
-        if (isNameOkay(functionNameText)) {
-            return functionNameText;
-        }
-        let i = 1;
-        while (!isNameOkay(functionNameText = `newFunction_${i}`)) {
-            i++;
+        for (let i = 1; fileText.indexOf(functionNameText) !== -1; i++) {
+            functionNameText = `newFunction_${i}`;
         }
         return functionNameText;
     }
@@ -595,7 +591,7 @@ namespace ts.refactor.extractMethod {
 
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();
-        const functionNameText: string = getUniqueName(n => !file.identifiers.has(n));
+        const functionNameText = getUniqueName(file.text);
         const isJS = isInJavaScriptFile(scope);
 
         const functionName = createIdentifier(functionNameText);
@@ -691,7 +687,7 @@ namespace ts.refactor.extractMethod {
 
         const newNodes: Node[] = [];
         // replace range with function call
-        let called = getCalledExpression(scope, range, functionNameText); // tslint:disable-line prefer-const
+        const called = getCalledExpression(scope, range, functionNameText);
 
         let call: Expression = createCall(called,
             callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
@@ -776,6 +772,9 @@ namespace ts.refactor.extractMethod {
             Debug.assert(fileName === renameFilename);
             for (const change of textChanges) {
                 const { span, newText } = change;
+                // Note: We are assuming that the call expression comes before the function declaration,
+                // because we want the new cursor to be on the call expression,
+                // which is closer to where the user was before extracting the function.
                 const index = newText.indexOf(functionNameText);
                 if (index !== -1) {
                     return span.start + delta + index;
