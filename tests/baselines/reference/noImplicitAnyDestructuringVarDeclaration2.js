@@ -22,4 +22,4 @@ var _p = { x: 1, y: 2, z: 3 }, x = _p.x, y = _p.y, z = _p.z; // no error
 var _q = { x1: 1, y1: 2, z1: 3 }, _r = _q.x1, x1 = _r === void 0 ? 10 : _r, _s = _q.y1, y1 = _s === void 0 ? 10 : _s, _t = _q.z1, z1 = _t === void 0 ? 10 : _t; // no error
 var _u = { x2: 1, y2: 2, z2: 3 }, _v = _u.x2, x2 = _v === void 0 ? undefined : _v, _w = _u.y2, y2 = _w === void 0 ? undefined : _w, _x = _u.z2, z2 = _x === void 0 ? undefined : _x; // no error
 var _y = { x3: 1, y3: 2, z3: 3 }, _z = _y.x3, x3 = _z === void 0 ? undefined : _z, _0 = _y.y3, y3 = _0 === void 0 ? null : _0, _1 = _y.z3, z3 = _1 === void 0 ? undefined : _1; // no error
-var x4 = ({ x4: undefined }).x4, y4 = ({ y4: null }).y4; // no error
+var x4 = { x4: undefined }.x4, y4 = { y4: null }.y4; // no error

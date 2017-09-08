@@ -40,7 +40,7 @@ function f3(_a) {
 function ff(_a) {
     var _b = _a.nested, nestedRename = _b === void 0 ? { show: function (v) { return v; } } : _b;
 }
-var _a = ({ stringIdentity: function (x) { return x; } }).stringIdentity, id = _a === void 0 ? function (arg) { return arg.length; } : _a;
+var _a = { stringIdentity: function (x) { return x; } }.stringIdentity, id = _a === void 0 ? function (arg) { return arg.length; } : _a;
 function g(_a) {
     var _b = _a.prop, prop = _b === void 0 ? [101, 1234] : _b;
 }

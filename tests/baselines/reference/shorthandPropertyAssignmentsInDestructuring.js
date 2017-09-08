@@ -174,32 +174,32 @@ function foo({a = 4, b = { x: 5 }}) {
 });
 (function () {
     var y;
-    (_a = ({ y: 1 }).y, y = _a === void 0 ? 5 : _a);
+    (_a = { y: 1 }.y, y = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {
     var y;
-    (_a = ({ y: 1 }).y, y = _a === void 0 ? 5 : _a);
+    (_a = { y: 1 }.y, y = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {
     var y0;
-    (_a = ({ y0: 1 }).y0, y0 = _a === void 0 ? 5 : _a);
+    (_a = { y0: 1 }.y0, y0 = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {
     var y0;
-    (_a = ({ y0: 1 }).y0, y0 = _a === void 0 ? 5 : _a);
+    (_a = { y0: 1 }.y0, y0 = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {
     var y1;
-    (_a = ({}).y1, y1 = _a === void 0 ? 5 : _a);
+    (_a = {}.y1, y1 = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {
     var y1;
-    (_a = ({}).y1, y1 = _a === void 0 ? 5 : _a);
+    (_a = {}.y1, y1 = _a === void 0 ? 5 : _a);
     var _a;
 });
 (function () {
@@ -224,12 +224,12 @@ function foo({a = 4, b = { x: 5 }}) {
 });
 (function () {
     var z;
-    (_a = ({ z: { x: 1 } }).z, z = _a === void 0 ? { x: 5 } : _a);
+    (_a = { z: { x: 1 } }.z, z = _a === void 0 ? { x: 5 } : _a);
     var _a;
 });
 (function () {
     var z;
-    (_a = ({ z: { x: 1 } }).z, z = _a === void 0 ? { x: 5 } : _a);
+    (_a = { z: { x: 1 } }.z, z = _a === void 0 ? { x: 5 } : _a);
     var _a;
 });
 (function () {

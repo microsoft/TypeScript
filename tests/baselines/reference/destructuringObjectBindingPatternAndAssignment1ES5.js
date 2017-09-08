@@ -60,15 +60,15 @@ var {"prop2": d1} = foo1();
 // V is an object assignment pattern and, for each assignment property P in V,
 //      S is the type Any, or
 var a1 = undefined.a1;
-var a2 = ({}).a2;
+var a2 = {}.a2;
 // V is an object assignment pattern and, for each assignment property P in V,
 //      S has an apparent property with the property name specified in
 //          P of a type that is assignable to the target given in P, or
-var b1 = ({ b1: 1 }).b1;
-var _a = ({ b2: { b21: "world" } }).b2, b21 = (_a === void 0 ? { b21: "string" } : _a).b21;
-var b3 = ({ 1: "string" })[1];
-var _b = ({ b4: 100000 }).b4, b4 = _b === void 0 ? 1 : _b;
-var b52 = ({ b5: { b52: b52 } }).b5.b52;
+var b1 = { b1: 1 }.b1;
+var _a = { b2: { b21: "world" } }.b2, b21 = (_a === void 0 ? { b21: "string" } : _a).b21;
+var b3 = { 1: "string" }[1];
+var _b = { b4: 100000 }.b4, b4 = _b === void 0 ? 1 : _b;
+var b52 = { b5: { b52: b52 } }.b5.b52;
 function foo() {
     return {
         1: true

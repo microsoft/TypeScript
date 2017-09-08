@@ -10,9 +10,9 @@ var {"prop"} = { "prop": 1 };
 
 //// [destructuringObjectBindingPatternAndAssignment3.js]
 // Error
-var h = ({ h: 1 }).h;
-var i = ({ i: 2 }).i;
-var i1 = ({ i1: 2 }).i1;
+var h = { h: 1 }.h;
+var i = { i: 2 }.i;
+var i1 = { i1: 2 }.i1;
 var _a = undefined.f2, f21 = (_a === void 0 ? { f212: "string" } : _a).f21;
-var  = ({ 1:  })[1];
-var  = ({ "prop": 1 })["prop"];
+var  = { 1:  }[1];
+var  = { "prop": 1 }["prop"];

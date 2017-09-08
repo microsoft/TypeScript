@@ -201,13 +201,13 @@ function f1() {
 }
 function f2() {
     var _a = { x: 5, y: "hello" }; // Error, no x and y in target
-    var x = ({ x: 5, y: "hello" }).x; // Error, no y in target
-    var y = ({ x: 5, y: "hello" }).y; // Error, no x in target
+    var x = { x: 5, y: "hello" }.x; // Error, no y in target
+    var y = { x: 5, y: "hello" }.y; // Error, no x in target
     var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;
     var x;
     var y;
-    var a = ({ x: 5, y: "hello" }).x; // Error, no y in target
-    var b = ({ x: 5, y: "hello" }).y; // Error, no x in target
+    var a = { x: 5, y: "hello" }.x; // Error, no y in target
+    var b = { x: 5, y: "hello" }.y; // Error, no x in target
     var _c = { x: 5, y: "hello" }, a = _c.x, b = _c.y;
     var a;
     var b;

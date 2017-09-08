@@ -8,20 +8,20 @@ sources: sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.
 emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.js
 sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.ts
 -------------------------------------------------------------------
->>>var x = ({ x: 20 }).x;
+>>>var x = { x: 20 }.x;
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^
-4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^^^^^^^^^^^^^^^
+4 >                   ^
+5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >var {
 2 >
 3 >    x
-4 >                     } = { x: 20 };
+4 >                   } = { x: 20 };
 1 >Emitted(1, 1) Source(1, 6) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
-3 >Emitted(1, 22) Source(1, 7) + SourceIndex(0)
-4 >Emitted(1, 23) Source(1, 21) + SourceIndex(0)
+3 >Emitted(1, 20) Source(1, 7) + SourceIndex(0)
+4 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
 ---
 >>>var _a = { a: 30, b: 40 }, a = _a.a, b = _a.b;
 1->

@@ -48,4 +48,4 @@ function g(_a) {
 function h(_a) {
     var _b = _a.prop, prop = _b === void 0 ? "foo" : _b;
 }
-var _a = ({ stringIdentity: function (x) { return x; } }).stringIdentity, id = _a === void 0 ? function (arg) { return arg; } : _a;
+var _a = { stringIdentity: function (x) { return x; } }.stringIdentity, id = _a === void 0 ? function (arg) { return arg; } : _a;

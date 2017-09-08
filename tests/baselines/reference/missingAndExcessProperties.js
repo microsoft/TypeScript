@@ -54,16 +54,16 @@ function f2() {
 // Excess properties
 function f3() {
     var _a = { x: 0, y: 0 };
-    var x = ({ x: 0, y: 0 }).x;
-    var y = ({ x: 0, y: 0 }).y;
+    var x = { x: 0, y: 0 }.x;
+    var y = { x: 0, y: 0 }.y;
     var _b = { x: 0, y: 0 }, x = _b.x, y = _b.y;
 }
 // Excess properties
 function f4() {
     var x, y;
     ({ x: 0, y: 0 });
-    (x = ({ x: 0, y: 0 }).x);
-    (y = ({ x: 0, y: 0 }).y);
+    (x = { x: 0, y: 0 }.x);
+    (y = { x: 0, y: 0 }.y);
     (_a = { x: 0, y: 0 }, x = _a.x, y = _a.y);
     var _a;
 }

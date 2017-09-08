@@ -22,7 +22,7 @@ var obj = {
 };
 var x1 = 1;
 var x2 = 1;
-var _a = ({ a: "foo" }).a, a = _a === void 0 ? "foo" : _a;
-var _b = ({ b: "bar" }).b, b = _b === void 0 ? "foo" : _b;
-var _c = ({ c: "bar" }).c, c = _c === void 0 ? "foo" : _c;
-var _d = ({ d: "bar" }).d, d = _d === void 0 ? "foo" : _d;
+var _a = { a: "foo" }.a, a = _a === void 0 ? "foo" : _a;
+var _b = { b: "bar" }.b, b = _b === void 0 ? "foo" : _b;
+var _c = { c: "bar" }.c, c = _c === void 0 ? "foo" : _c;
+var _d = { d: "bar" }.d, d = _d === void 0 ? "foo" : _d;
