@@ -13,12 +13,12 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
     actionDescription: "Extract function into function 'f'",
-});
-verify.currentFileContentIs(
+    newContent:
 `function f() {
-    var x: 1 | 2 | 3 = newFunction();
+    var x: 1 | 2 | 3 = /*RENAME*/newFunction();
 
     function newFunction(): 1 | 2 | 3 {
         return 2;
     }
-}`);
+}`
+});

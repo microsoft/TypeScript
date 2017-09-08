@@ -17,11 +17,10 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
     actionDescription: "Extract function into class 'Foo'",
-});
-verify.currentFileContentIs(
+    newContent:
 `class Foo {
     someMethod(m: number) {
-        this.newFunction(m);
+        this./*RENAME*/newFunction(m);
         var q = 10;
         return q;
     }
@@ -33,4 +32,5 @@ verify.currentFileContentIs(
         var z = y + x;
         console.log(z);
     }
-}`);
+}`
+});

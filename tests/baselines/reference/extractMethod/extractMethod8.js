@@ -14,7 +14,7 @@ namespace A {
     namespace B {
         function a() {
             let a1 = 1;
-            return newFunction() + 100;
+            return /*RENAME*/newFunction() + 100;
 
             function newFunction() {
                 return 1 + a1 + x;
@@ -28,7 +28,7 @@ namespace A {
     namespace B {
         function a() {
             let a1 = 1;
-            return newFunction(a1) + 100;
+            return /*RENAME*/newFunction(a1) + 100;
         }
 
         function newFunction(a1: number) {
@@ -42,7 +42,7 @@ namespace A {
     namespace B {
         function a() {
             let a1 = 1;
-            return newFunction(a1) + 100;
+            return /*RENAME*/newFunction(a1) + 100;
         }
     }
 
@@ -56,7 +56,7 @@ namespace A {
     namespace B {
         function a() {
             let a1 = 1;
-            return newFunction(a1, x) + 100;
+            return /*RENAME*/newFunction(a1, x) + 100;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ __return, z } = this.newFunction(z));
+            ({ __return, z } = this./*RENAME*/newFunction(z));
             return __return;
         }
 
@@ -37,7 +37,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ __return, z } = newFunction(z));
+            ({ __return, z } = /*RENAME*/newFunction(z));
             return __return;
         }
     }
@@ -56,7 +56,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ __return, y, z } = newFunction(y, z));
+            ({ __return, y, z } = /*RENAME*/newFunction(y, z));
             return __return;
         }
     }

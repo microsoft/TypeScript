@@ -31,16 +31,16 @@ namespace ts.refactor.extractMethod {
         const usedNames: Map<boolean> = createMap();
 
         let i = 0;
-        for (const extr of extractions) {
+        for (const { scopeDescription, errors } of extractions) {
             // Skip these since we don't have a way to report errors yet
-            if (extr.errors && extr.errors.length) {
+            if (errors.length) {
                 continue;
             }
 
             // Don't issue refactorings with duplicated names.
             // Scopes come back in "innermost first" order, so extractions will
             // preferentially go into nearer scopes
-            const description = formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [extr.scopeDescription]);
+            const description = formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [scopeDescription]);
             if (!usedNames.has(description)) {
                 usedNames.set(description, true);
                 actions.push({
@@ -75,10 +75,7 @@ namespace ts.refactor.extractMethod {
         const index = +parsedIndexMatch[1];
         Debug.assert(isFinite(index), "Expected to parse a finite number from the scope index");
 
-        const extractions = getPossibleExtractions(targetRange, context, index);
-        // Scope is no longer valid from when the user issued the refactor (??)
-        Debug.assert(extractions !== undefined, "The extraction went missing? How?");
-        return ({ edits: extractions[0].changes });
+        return getExtractionAtIndex(targetRange, context, index);
     }
 
     // Move these into diagnostic messages if they become user-facing
@@ -102,7 +99,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
     }
 
-    export enum RangeFacts {
+    enum RangeFacts {
         None = 0,
         HasReturn = 1 << 0,
         IsGenerator = 1 << 1,
@@ -117,7 +114,7 @@ namespace ts.refactor.extractMethod {
     /**
      * Represents an expression or a list of statements that should be extracted with some extra information
      */
-    export interface TargetRange {
+    interface TargetRange {
         readonly range: Expression | Statement[];
         readonly facts: RangeFacts;
         /**
@@ -130,7 +127,7 @@ namespace ts.refactor.extractMethod {
     /**
      * Result of 'getRangeToExtract' operation: contains either a range or a list of errors
      */
-    export type RangeToExtract = {
+    type RangeToExtract = {
         readonly targetRange?: never;
         readonly errors: ReadonlyArray<Diagnostic>;
     } | {
@@ -141,18 +138,7 @@ namespace ts.refactor.extractMethod {
     /*
      * Scopes that can store newly extracted method
      */
-    export type Scope = FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration;
-
-    /**
-     * Result of 'extractRange' operation for a specific scope.
-     * Stores either a list of changes that should be applied to extract a range or a list of errors
-     */
-    export interface ExtractResultForScope {
-        readonly scope: Scope;
-        readonly scopeDescription: string;
-        readonly changes?: FileTextChanges[];
-        readonly errors?: Diagnostic[];
-    }
+    type Scope = FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration;
 
     /**
      * getRangeToExtract takes a span inside a text file and returns either an expression or an array
@@ -160,6 +146,7 @@ namespace ts.refactor.extractMethod {
      * process may fail, in which case a set of errors is returned instead (these are currently
      * not shown to the user, but can be used by us diagnostically)
      */
+    // exported only for tests
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
         const length = span.length || 0;
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
@@ -473,7 +460,7 @@ namespace ts.refactor.extractMethod {
      * you may be able to extract into a class method *or* local closure *or* namespace function,
      * depending on what's in the extracted body.
      */
-    export function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
+    function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
         let current: Node = isReadonlyArray(range.range) ? firstOrUndefined(range.range) : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
@@ -509,12 +496,32 @@ namespace ts.refactor.extractMethod {
         return scopes;
     }
 
+    // exported only for tests
+    export function getExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
+        const { scopes, readsAndWrites: { target, usagesPerScope, errorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
+        Debug.assert(!errorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
+        context.cancellationToken.throwIfCancellationRequested();
+        return extractFunctionInScope(target, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange, context);
+    }
+
+    interface PossibleExtraction {
+        readonly scopeDescription: string;
+        readonly errors: ReadonlyArray<Diagnostic>;
+    }
     /**
      * Given a piece of text to extract ('targetRange'), computes a list of possible extractions.
      * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
      * or an error explaining why we can't extract into that scope.
      */
-    export function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number = undefined): ReadonlyArray<ExtractResultForScope> | undefined {
+    // exported only for tests
+    export function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<PossibleExtraction> | undefined {
+        const extractions = getPossibleExtractionsWorker(targetRange, context);
+        // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
+        return extractions && extractions.scopes.map((scope, i): PossibleExtraction =>
+            ({ scopeDescription: getDescriptionForScope(scope), errors: extractions.readsAndWrites.errorsPerScope[i] }));
+    }
+
+    function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
         const { file: sourceFile } = context;
 
         if (targetRange === undefined) {
@@ -527,34 +534,13 @@ namespace ts.refactor.extractMethod {
         }
 
         const enclosingTextRange = getEnclosingTextRange(targetRange, sourceFile);
-        const { target, usagesPerScope, errorsPerScope } = collectReadsAndWrites(
+        const readsAndWrites = collectReadsAndWrites(
             targetRange,
             scopes,
             enclosingTextRange,
             sourceFile,
             context.program.getTypeChecker());
-
-        context.cancellationToken.throwIfCancellationRequested();
-
-        if (requestedChangesIndex !== undefined) {
-            if (errorsPerScope[requestedChangesIndex].length) {
-                return undefined;
-            }
-            return [extractFunctionInScope(target, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange, context)];
-        }
-        else {
-            return scopes.map((scope, i) => {
-                const errors = errorsPerScope[i];
-                if (errors.length) {
-                    return {
-                        scope,
-                        scopeDescription: getDescriptionForScope(scope),
-                        errors
-                    };
-                }
-                return { scope, scopeDescription: getDescriptionForScope(scope) };
-            });
-        }
+        return { scopes, readsAndWrites };
     }
 
     function getDescriptionForScope(scope: Scope) {
@@ -596,34 +582,33 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function getUniqueName(isNameOkay: (name: string) => boolean) {
+    function getUniqueName(fileText: string): string {
         let functionNameText = "newFunction";
-        if (isNameOkay(functionNameText)) {
-            return functionNameText;
-        }
-        let i = 1;
-        while (!isNameOkay(functionNameText = `newFunction_${i}`)) {
-            i++;
+        for (let i = 1; fileText.indexOf(functionNameText) !== -1; i++) {
+            functionNameText = `newFunction_${i}`;
         }
         return functionNameText;
     }
 
-    export function extractFunctionInScope(
+    /**
+     * Result of 'extractRange' operation for a specific scope.
+     * Stores either a list of changes that should be applied to extract a range or a list of errors
+     */
+    function extractFunctionInScope(
         node: Statement | Expression | Block,
         scope: Scope,
         { usages: usagesInScope, substitutions }: ScopeUsages,
         range: TargetRange,
-        context: RefactorContext): ExtractResultForScope {
+        context: RefactorContext): RefactorEditInfo {
 
         const checker = context.program.getTypeChecker();
 
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();
-        const functionNameText: string = getUniqueName(n => !file.identifiers.has(n));
+        const functionNameText = getUniqueName(file.text);
         const isJS = isInJavaScriptFile(scope);
 
-        const functionName = createIdentifier(functionNameText as string);
-        const functionReference = createIdentifier(functionNameText as string);
+        const functionName = createIdentifier(functionNameText);
 
         let returnType: TypeNode = undefined;
         const parameters: ParameterDeclaration[] = [];
@@ -660,7 +645,7 @@ namespace ts.refactor.extractMethod {
             returnType = checker.typeToTypeNode(contextualType);
         }
 
-        const { body, returnValueProperty } = transformFunctionBody(node);
+        const { body, returnValueProperty } = transformFunctionBody(node, writes, substitutions, !!(range.facts & RangeFacts.HasReturn));
         let newFunction: MethodDeclaration | FunctionDeclaration;
 
         if (isClassLike(scope)) {
@@ -703,8 +688,10 @@ namespace ts.refactor.extractMethod {
 
         const newNodes: Node[] = [];
         // replace range with function call
+        const called = getCalledExpression(scope, range, functionNameText);
+
         let call: Expression = createCall(
-            isClassLike(scope) ? createPropertyAccess(range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.getText()) : createThis(), functionReference) : functionReference,
+            called,
             /*typeArguments*/ undefined,
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
@@ -769,73 +756,96 @@ namespace ts.refactor.extractMethod {
             changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes, { nodeSeparator: context.newLineCharacter });
         }
 
-        return {
-            scope,
-            scopeDescription: getDescriptionForScope(scope),
-            changes: changeTracker.getChanges()
-        };
+        const edits = changeTracker.getChanges();
+        const renameRange = isReadonlyArray(range.range) ? range.range[0] : range.range;
 
-        function getPropertyAssignmentsForWrites(writes: UsageEntry[]) {
-            return writes.map(w => createShorthandPropertyAssignment(w.symbol.name));
-        }
+        const renameFilename = renameRange.getSourceFile().fileName;
+        const renameLocation = getRenameLocation(edits, renameFilename, functionNameText);
+        return { renameFilename, renameLocation, edits };
+    }
 
-        function generateReturnValueProperty() {
-            return "__return";
-        }
-
-        function transformFunctionBody(body: Node) {
-            if (isBlock(body) && !writes && substitutions.size === 0) {
-                // already block, no writes to propagate back, no substitutions - can use node as is
-                return { body: createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
-            }
-            let returnValueProperty: string;
-            const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : createReturn(<Expression>body)]);
-            // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
-            if (writes || substitutions.size) {
-                const rewrittenStatements = visitNodes(statements, visitor).slice();
-                if (writes && !(range.facts & RangeFacts.HasReturn) && isStatement(body)) {
-                    // add return at the end to propagate writes back in case if control flow falls out of the function body
-                    // it is ok to know that range has at least one return since it we only allow unconditional returns
-                    const assignments = getPropertyAssignmentsForWrites(writes);
-                    if (assignments.length === 1) {
-                        rewrittenStatements.push(createReturn(assignments[0].name));
-                    }
-                    else {
-                        rewrittenStatements.push(createReturn(createObjectLiteral(assignments)));
-                    }
+    function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, functionNameText: string): number {
+        let delta = 0;
+        for (const { fileName, textChanges } of edits) {
+            Debug.assert(fileName === renameFilename);
+            for (const change of textChanges) {
+                const { span, newText } = change;
+                // TODO(acasey): We are assuming that the call expression comes before the function declaration,
+                // because we want the new cursor to be on the call expression,
+                // which is closer to where the user was before extracting the function.
+                const index = newText.indexOf(functionNameText);
+                if (index !== -1) {
+                    return span.start + delta + index;
                 }
-                return { body: createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
+                delta += newText.length - span.length;
             }
-            else {
-                return { body: createBlock(statements, /*multiLine*/ true), returnValueProperty: undefined };
-            }
+        }
+        throw new Error(); // Didn't find the text we inserted?
+    }
 
-            function visitor(node: Node): VisitResult<Node> {
-                if (node.kind === SyntaxKind.ReturnStatement && writes) {
-                    const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWrites(writes);
-                    if ((<ReturnStatement>node).expression) {
-                        if (!returnValueProperty) {
-                            returnValueProperty = generateReturnValueProperty();
-                        }
-                        assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
-                    }
-                    if (assignments.length === 1) {
-                        return createReturn(assignments[0].name as Expression);
-                    }
-                    else {
-                        return createReturn(createObjectLiteral(assignments));
-                    }
+    function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): Expression {
+        const functionReference = createIdentifier(functionNameText);
+        if (isClassLike(scope)) {
+            const lhs = range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.text) : createThis();
+            return createPropertyAccess(lhs, functionReference);
+        }
+        else {
+            return functionReference;
+        }
+    }
+
+    function transformFunctionBody(body: Node, writes: ReadonlyArray<UsageEntry>, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string } {
+        if (isBlock(body) && !writes && substitutions.size === 0) {
+            // already block, no writes to propagate back, no substitutions - can use node as is
+            return { body: createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
+        }
+        let returnValueProperty: string;
+        const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : createReturn(<Expression>body)]);
+        // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
+        if (writes || substitutions.size) {
+            const rewrittenStatements = visitNodes(statements, visitor).slice();
+            if (writes && !hasReturn && isStatement(body)) {
+                // add return at the end to propagate writes back in case if control flow falls out of the function body
+                // it is ok to know that range has at least one return since it we only allow unconditional returns
+                const assignments = getPropertyAssignmentsForWrites(writes);
+                if (assignments.length === 1) {
+                    rewrittenStatements.push(createReturn(assignments[0].name));
                 }
                 else {
-                    const substitution = substitutions.get(getNodeId(node).toString());
-                    return substitution || visitEachChild(node, visitor, nullTransformationContext);
+                    rewrittenStatements.push(createReturn(createObjectLiteral(assignments)));
                 }
+            }
+            return { body: createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
+        }
+        else {
+            return { body: createBlock(statements, /*multiLine*/ true), returnValueProperty: undefined };
+        }
+
+        function visitor(node: Node): VisitResult<Node> {
+            if (node.kind === SyntaxKind.ReturnStatement && writes) {
+                const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWrites(writes);
+                if ((<ReturnStatement>node).expression) {
+                    if (!returnValueProperty) {
+                        returnValueProperty = "__return";
+                    }
+                    assignments.unshift(createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
+                }
+                if (assignments.length === 1) {
+                    return createReturn(assignments[0].name as Expression);
+                }
+                else {
+                    return createReturn(createObjectLiteral(assignments));
+                }
+            }
+            else {
+                const substitution = substitutions.get(getNodeId(node).toString());
+                return substitution || visitEachChild(node, visitor, nullTransformationContext);
             }
         }
     }
 
-    function isModuleBlock(n: Node): n is ModuleBlock {
-        return n.kind === SyntaxKind.ModuleBlock;
+    function getPropertyAssignmentsForWrites(writes: ReadonlyArray<UsageEntry>): ShorthandPropertyAssignment[] {
+        return writes.map(w => createShorthandPropertyAssignment(w.symbol.name));
     }
 
     function isReadonlyArray(v: any): v is ReadonlyArray<any> {
@@ -871,16 +881,21 @@ namespace ts.refactor.extractMethod {
     }
 
     interface ScopeUsages {
-        usages: Map<UsageEntry>;
-        substitutions: Map<Node>;
+        readonly usages: Map<UsageEntry>;
+        readonly substitutions: Map<Node>;
     }
 
+    interface ReadsAndWrites {
+        readonly target: Expression | Block;
+        readonly usagesPerScope: ReadonlyArray<ScopeUsages>;
+        readonly errorsPerScope: ReadonlyArray<ReadonlyArray<Diagnostic>>;
+    }
     function collectReadsAndWrites(
         targetRange: TargetRange,
         scopes: Scope[],
         enclosingTextRange: TextRange,
         sourceFile: SourceFile,
-        checker: TypeChecker) {
+        checker: TypeChecker): ReadsAndWrites {
 
         const usagesPerScope: ScopeUsages[] = [];
         const substitutionsPerScope: Map<Node>[] = [];
