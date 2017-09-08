@@ -18,7 +18,7 @@ var resolve = {
     id: /*! @ngInject */ function (details) { return details.id; },
     id1: /* c1 */ "hello",
     id2: 
-    /*! @ngInject */ function (details) { return details.id; },
+    /*! @ngInject */function (details) { return details.id; },
     id3: 
     /*! @ngInject */
     function (details) { return details.id; },

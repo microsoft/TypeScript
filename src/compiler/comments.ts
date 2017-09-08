@@ -274,9 +274,6 @@ namespace ts {
             if (hasTrailingNewLine) {
                 writer.writeLine();
             }
-            else {
-                writer.write(" ");
-            }
         }
 
         function emitLeadingCommentsOfPosition(pos: number) {

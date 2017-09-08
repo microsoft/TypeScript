@@ -5,4 +5,4 @@
 
 
 //// [parserSkippedTokens10.js]
-/*existing trivia*/ ;
+/*existing trivia*/;

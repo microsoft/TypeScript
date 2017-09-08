@@ -56,4 +56,4 @@ var c: C<number>;
 var cc: C<C<number>>;
 
 c = c.m(cc);
-*/ 
+*/
