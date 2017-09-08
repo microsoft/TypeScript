@@ -4,8 +4,8 @@
 // Also checks that we correctly find non-conflicting names in static contexts.
 
 //// class C {
-////     static j = /*c*/100/*d*/;
-////     constructor(q: string = /*a*/"hello"/*b*/) {
+////     static j = /*c*/1 + 1/*d*/;
+////     constructor(q: string = /*a*/"a" + "b"/*b*/) {
 ////     }
 //// }
 
@@ -16,12 +16,12 @@ edit.applyRefactor({
     actionDescription: "Extract function into class 'C'",
     newContent:
 `class C {
-    static j = 100;
+    static j = 1 + 1;
     constructor(q: string = C./*RENAME*/newFunction()) {
     }
 
     private static newFunction(): string {
-        return "hello";
+        return "a" + "b";
     }
 }`
 });
@@ -38,11 +38,11 @@ edit.applyRefactor({
     }
 
     private static newFunction(): string {
-        return "hello";
+        return "a" + "b";
     }
 
     private static newFunction_1() {
-        return 100;
+        return 1 + 1;
     }
 }`
 });

@@ -614,6 +614,13 @@ namespace A {
         return a1.x + 10;|]
     }
 }`);
+        // Write + void return
+        testExtractMethod("extractMethod21",
+            `function foo() {
+    let x = 10;
+    [#|x++;
+    return;|]
+}`);
     });
 
 
