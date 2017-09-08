@@ -7,10 +7,9 @@ declare function require(id: string): any;
 declare var module: any, exports: any;
 
 // @filename: a-ext.js
-function A() {
+exports.A = function () {
     this.x = 1;
 };
-exports.A = A;
 
 // @filename: a.js
 const { A } = require("./a-ext");

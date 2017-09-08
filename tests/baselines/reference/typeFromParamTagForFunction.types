@@ -8,8 +8,12 @@ declare var module: any, exports: any;
 >exports : any
 
 === tests/cases/conformance/salsa/a-ext.js ===
-function A() {
+exports.A = function () {
+>exports.A = function () {    this.x = 1;} : () => void
+>exports.A : () => void
+>exports : typeof "tests/cases/conformance/salsa/a-ext"
 >A : () => void
+>function () {    this.x = 1;} : () => void
 
     this.x = 1;
 >this.x = 1 : 1
@@ -19,12 +23,6 @@ function A() {
 >1 : 1
 
 };
-exports.A = A;
->exports.A = A : () => void
->exports.A : () => void
->exports : typeof "tests/cases/conformance/salsa/a-ext"
->A : () => void
->A : () => void
 
 === tests/cases/conformance/salsa/a.js ===
 const { A } = require("./a-ext");

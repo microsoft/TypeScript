@@ -12780,7 +12780,8 @@ namespace ts {
                     }
                 }
             }
-            if (noImplicitThis || isInJavaScriptFile(func)) {
+            const inJs = isInJavaScriptFile(func);
+            if (noImplicitThis || inJs) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
                     // We have an object literal method. Check if the containing object literal has a contextual type
@@ -12807,10 +12808,20 @@ namespace ts {
                 }
                 // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
                 // contextual type for 'this' is 'obj'.
-                if (func.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>func.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    const target = (<BinaryExpression>func.parent).left;
+                const { parent } = func;
+                if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    const target = (<BinaryExpression>parent).left;
                     if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
-                        return checkExpressionCached((<PropertyAccessExpression | ElementAccessExpression>target).expression);
+                        const { expression } = target as PropertyAccessExpression | ElementAccessExpression;
+                        // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
+                        if (inJs && isIdentifier(expression)) {
+                            const sourceFile = getSourceFileOfNode(parent);
+                            if (sourceFile.commonJsModuleIndicator && getResolvedSymbol(expression) === sourceFile.symbol) {
+                                return undefined;
+                            }
+                        }
+
+                        return checkExpressionCached(expression);
                     }
                 }
             }
