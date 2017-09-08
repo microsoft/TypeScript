@@ -610,7 +610,7 @@ namespace ts {
 
     export interface IsValidIdentifierName {
         isValid: boolean;
-        localizedErrorMessage: string;
+        localizedErrorMessage: string | undefined;
     }
 
     export interface SignatureHelpParameter {

@@ -869,8 +869,8 @@ namespace ts.server.protocol {
 
     /**
      * Validate identifier requests; value of command
-     * is "ValidateIdentifier". Return response indicating
-     * the the identifier is valid or not.
+     * is "validateIdentifier". Return response indicating
+     * whether the identifier is valid or not.
      */
     export interface ValidateIdentifierNameRequest extends Request {
         arguments: ValidateIdentifierNameArgs;

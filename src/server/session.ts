@@ -772,7 +772,7 @@ namespace ts.server {
         private isValidIdentifierName(args: protocol.ValidateIdentifierNameArgs): IsValidIdentifierName {
             const project = this.getProject(args.projectFileName);
 
-            if (ts.isKeyword(stringToToken(args.identifierName)) || !ts.isIdentifierText(args.identifierName, project.getCompilerOptions().target)) {
+            if (isKeyword(stringToToken(args.identifierName)) || !isIdentifierText(args.identifierName, project.getCompilerOptions().target)) {
                 return {
                     isValid: false,
                     localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.The_name_is_not_a_valid_identifier)
