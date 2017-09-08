@@ -19835,7 +19835,7 @@ namespace ts {
                                 !isParameterPropertyDeclaration(parameter) &&
                                 !parameterIsThisKeyword(parameter) &&
                                 !parameterNameStartsWithUnderscore(name)) {
-                                error(name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(local.escapedName));
+                                error(name, Diagnostics._0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(local.escapedName));
                             }
                         }
                         else if (compilerOptions.noUnusedLocals) {
@@ -19863,7 +19863,7 @@ namespace ts {
             }
 
             if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                error(node, Diagnostics._0_is_declared_but_never_used, name);
+                error(node, Diagnostics._0_is_declared_but_its_value_is_never_read, name);
             }
         }
 
@@ -19881,13 +19881,13 @@ namespace ts {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
                             if (!member.symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                error(member.name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(member.symbol.escapedName));
+                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(member.symbol.escapedName));
                             }
                         }
                         else if (member.kind === SyntaxKind.Constructor) {
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
                                 if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_never_used, unescapeLeadingUnderscores(parameter.symbol.escapedName));
+                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(parameter.symbol.escapedName));
                                 }
                             }
                         }
@@ -19908,7 +19908,7 @@ namespace ts {
                     }
                     for (const typeParameter of node.typeParameters) {
                         if (!getMergedSymbol(typeParameter.symbol).isReferenced) {
-                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(typeParameter.symbol.escapedName));
+                            error(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(typeParameter.symbol.escapedName));
                         }
                     }
                 }

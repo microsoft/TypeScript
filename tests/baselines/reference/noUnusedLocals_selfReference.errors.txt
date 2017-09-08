@@ -1,6 +1,6 @@
-tests/cases/compiler/noUnusedLocals_selfReference.ts(3,10): error TS6133: 'f' is declared but never used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(4,7): error TS6133: 'C' is declared but never used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(7,6): error TS6133: 'E' is declared but never used.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(3,10): error TS6133: 'f' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(4,7): error TS6133: 'C' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(7,6): error TS6133: 'E' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/noUnusedLocals_selfReference.ts (3 errors) ====
@@ -8,15 +8,15 @@ tests/cases/compiler/noUnusedLocals_selfReference.ts(7,6): error TS6133: 'E' is 
     
     function f() { f; }
              ~
-!!! error TS6133: 'f' is declared but never used.
+!!! error TS6133: 'f' is declared but its value is never read.
     class C {
           ~
-!!! error TS6133: 'C' is declared but never used.
+!!! error TS6133: 'C' is declared but its value is never read.
         m() { C; }
     }
     enum E { A = 0, B = E.A }
          ~
-!!! error TS6133: 'E' is declared but never used.
+!!! error TS6133: 'E' is declared but its value is never read.
     
     // Does not detect mutual recursion.
     function g() { D; }

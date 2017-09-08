@@ -1,5 +1,5 @@
-tests/cases/compiler/unusedLocalsInMethod2.ts(3,13): error TS6133: 'x' is declared but never used.
-tests/cases/compiler/unusedLocalsInMethod2.ts(3,16): error TS6133: 'y' is declared but never used.
+tests/cases/compiler/unusedLocalsInMethod2.ts(3,13): error TS6133: 'x' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsInMethod2.ts(3,16): error TS6133: 'y' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedLocalsInMethod2.ts (2 errors) ====
@@ -7,9 +7,9 @@ tests/cases/compiler/unusedLocalsInMethod2.ts(3,16): error TS6133: 'y' is declar
         public function1() {
             var x, y = 10;
                 ~
-!!! error TS6133: 'x' is declared but never used.
+!!! error TS6133: 'x' is declared but its value is never read.
                    ~
-!!! error TS6133: 'y' is declared but never used.
+!!! error TS6133: 'y' is declared but its value is never read.
             y++;
         }
     }
