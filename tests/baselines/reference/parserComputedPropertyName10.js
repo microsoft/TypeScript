@@ -4,8 +4,9 @@ class C {
 }
 
 //// [parserComputedPropertyName10.js]
+var _a = e;
 class C {
     constructor() {
-        this[e] = 1;
+        this[_a] = 1;
     }
 }

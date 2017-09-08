@@ -592,7 +592,7 @@ namespace ts {
                 ? createClassDeclarationHeadWithDecorators(node, name, facts, hoistedNameAssignments, decoratedMembers)
                 : createClassDeclarationHeadWithoutDecorators(node, name, facts, hoistedNameAssignments, decoratedMembers);
 
-            let statements: Statement[] = hoistedNameAssignments.length ? [createVariableStatement([], map(hoistedNameAssignments, a => createVariableDeclaration(a.left as Identifier, /**/ undefined, a.right))), classStatement] : [classStatement];
+            let statements: Statement[] = [classStatement];
 
             // Emit static property assignment. Because classDeclaration is lexically evaluated,
             // it is safe to emit static property assignment after classDeclaration
@@ -655,6 +655,9 @@ namespace ts {
                 setSourceMapRange(varStatement, moveRangePastDecorators(node));
                 startOnNewLine(varStatement);
                 statements = [varStatement];
+            }
+            if (hoistedNameAssignments.length) {
+                statements.unshift(createVariableStatement(/*modifiers*/ undefined, map(hoistedNameAssignments, a => createVariableDeclaration(a.left as Identifier, /*type*/ undefined, a.right))));
             }
 
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
@@ -1152,7 +1155,7 @@ namespace ts {
             if (!node.members) return;
             const result: PropertyDeclaration[] = [];
             for (let member of node.members) {
-                if (!isStatic && isComputedNameWhichRequireHoisting(member, node, isStatic)) {
+                if (!isStatic && isComputedNameWhichRequiresHoisting(member, isStatic)) {
                     const tempId = getGeneratedNameForNode(member);
                     const hoistedExpression = createAssignment(tempId, (member.name as ComputedPropertyName).expression);
                     member = updateProperty(member, member.decorators, member.modifiers, createComputedPropertyName(tempId), member.questionToken, member.type, member.initializer);
@@ -1189,25 +1192,19 @@ namespace ts {
                 && (<PropertyDeclaration>member).initializer !== undefined;
         }
 
-        function isComputedNameWhichRequireHoisting(member: ClassElement, node: ClassLikeDeclaration, isStatic: boolean): member is PropertyDeclaration {
+        function isComputedNameWhichRequiresHoisting(member: ClassElement, isStatic: boolean): member is PropertyDeclaration {
             return member.kind === SyntaxKind.PropertyDeclaration
                 && isStatic === hasModifier(member, ModifierFlags.Static)
-                && (isDecoratedPropertyWithComputedName(member, node, isStatic) || isPropertyWithSideEffectingComputedName(member));
-        }
-
-        function isPropertyWithSideEffectingComputedName(member: ClassElement): boolean {
-            return isComputedPropertyName(member.name) && !isSimpleComputedPropertyName(member.name.expression);
+                && isComputedPropertyName(member.name)
+                && !isSimpleComputedPropertyName(member.name.expression);
         }
 
         function isSimpleComputedPropertyName(expression: Expression) {
             return expression.kind === SyntaxKind.StringLiteral ||
                 expression.kind === SyntaxKind.NumericLiteral ||
-                expression.kind === SyntaxKind.Identifier ||
+                expression.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
+                isKeyword(expression.kind) ||
                 isWellKnownSymbolSyntactically(expression);
-        }
-
-        function isDecoratedPropertyWithComputedName(member: ClassElement, node: ClassLikeDeclaration, isStatic: boolean): boolean {
-            return isDecoratedClassElement(member, node, isStatic) && isComputedPropertyName(member.name);
         }
 
         /**
@@ -2050,7 +2047,7 @@ namespace ts {
         function getExpressionForPropertyName(member: ClassElement | EnumMember): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return (<ComputedPropertyName>name).expression;
+                return getSynthesizedClone((<ComputedPropertyName>name).expression);
             }
             else if (isIdentifier(name)) {
                 return createLiteral(idText(name));
@@ -2071,7 +2068,7 @@ namespace ts {
             const name = member.name;
             if (isComputedPropertyName(name)) {
                 let expression = visitNode(name.expression, visitor, isExpression);
-                if (member.decorators) {
+                if (member.decorators && !isSimpleComputedPropertyName(expression)) {
                     const generatedName = getGeneratedNameForNode(name);
                     hoistVariableDeclaration(generatedName);
                     expression = createAssignment(generatedName, expression);

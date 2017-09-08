@@ -6,9 +6,10 @@ class C {
 }
 
 //// [parserComputedPropertyName29.js]
+var _a = e, _b = e2;
 class C {
     constructor() {
         // yes ASI
-        this[e] = id++;
+        this[_a] = id++;
     }
 }
