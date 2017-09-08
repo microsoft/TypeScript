@@ -282,7 +282,7 @@ namespace ts.server {
                 }
                 const isInfoRoot = p.isRoot(this);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
-                p.removeFile(this, /*detachFromProjects*/ false);
+                p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
                 if (isInfoRoot && p.projectKind !== ProjectKind.Inferred) {

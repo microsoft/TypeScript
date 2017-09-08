@@ -667,11 +667,17 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        removeFile(info: ScriptInfo, detachFromProject = true) {
+        removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean) {
             if (this.isRoot(info)) {
                 this.removeRoot(info);
             }
-            this.resolutionCache.invalidateResolutionOfFile(info.path);
+            if (fileExists) {
+                // If file is present, just remove the resolutions for the file
+                this.resolutionCache.removeResolutionsOfFile(info.path);
+            }
+            else {
+                this.resolutionCache.invalidateResolutionOfFile(info.path);
+            }
             this.cachedUnresolvedImportsPerFile.remove(info.path);
 
             if (detachFromProject) {
@@ -807,10 +813,7 @@ namespace ts.server {
                             continue;
                         }
                         // new program does not contain this file - detach it from the project
-                        const scriptInfoToDetach = this.projectService.getScriptInfo(f.fileName);
-                        if (scriptInfoToDetach) {
-                            scriptInfoToDetach.detachFromProject(this);
-                        }
+                        this.detachScriptInfoFromProject(f.fileName);
                     }
                 }
 
@@ -838,15 +841,19 @@ namespace ts.server {
                     const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.partialSystem);
                     scriptInfo.attachToProject(this);
                 },
-                removed => {
-                    const scriptInfoToDetach = this.projectService.getScriptInfo(removed);
-                    if (scriptInfoToDetach) {
-                        scriptInfoToDetach.detachFromProject(this);
-                    }
-                });
+                removed => this.detachScriptInfoFromProject(removed)
+            );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);
             return hasChanges;
+        }
+
+        private detachScriptInfoFromProject(uncheckedFileName: string) {
+            const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
+            if (scriptInfoToDetach) {
+                scriptInfoToDetach.detachFromProject(this);
+                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+            }
         }
 
         private addMissingFileWatcher(missingFilePath: Path) {

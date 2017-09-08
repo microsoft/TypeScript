@@ -12,6 +12,7 @@ namespace ts {
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
         invalidateResolutionOfFile(filePath: Path): void;
+        removeResolutionsOfFile(filePath: Path): void;
         createHasInvalidatedResolution(): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
@@ -25,7 +26,7 @@ namespace ts {
         clear(): void;
     }
 
-    interface NameResolutionWithFailedLookupLocations {
+    interface ResolutionWithFailedLookupLocations {
         readonly failedLookupLocations: ReadonlyArray<string>;
         isInvalidated?: boolean;
     }
@@ -45,6 +46,7 @@ namespace ts {
         projectName?: string;
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
+        maxNumberOfFilesToIterateForInvalidation?: number;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -54,9 +56,17 @@ namespace ts {
         refCount: number;
     }
 
+    /*@internal*/
+    export const maxNumberOfFilesToIterateForInvalidation = 256;
+
+    interface GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> {
+        (resolution: T): R;
+    }
+
     export function createResolutionCache(resolutionHost: ResolutionCacheHost): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Map<true> | undefined;
+        let allFilesHaveInvalidatedResolution = false;
 
         // The resolvedModuleNames and resolvedTypeReferenceDirectives are the cache of resolutions per file.
         // The key in the map is source file's path.
@@ -86,6 +96,7 @@ namespace ts {
             finishCachingPerDirectoryResolution,
             resolveModuleNames,
             resolveTypeReferenceDirectives,
+            removeResolutionsOfFile,
             invalidateResolutionOfFile,
             createHasInvalidatedResolution,
             setRootDirectory,
@@ -121,6 +132,7 @@ namespace ts {
             closeTypeRootsWatch();
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
+            allFilesHaveInvalidatedResolution = false;
             Debug.assert(perDirectoryResolvedModuleNames.size === 0 && perDirectoryResolvedTypeReferenceDirectives.size === 0);
         }
 
@@ -135,6 +147,11 @@ namespace ts {
         }
 
         function createHasInvalidatedResolution(): HasInvalidatedResolution {
+            if (allFilesHaveInvalidatedResolution) {
+                // Any file asked would have invalidated resolution
+                filesWithInvalidatedResolutions = undefined;
+                return returnTrue;
+            }
             const collected = filesWithInvalidatedResolutions;
             filesWithInvalidatedResolutions = undefined;
             return path => collected && collected.has(path);
@@ -145,6 +162,7 @@ namespace ts {
         }
 
         function finishCachingPerDirectoryResolution() {
+            allFilesHaveInvalidatedResolution = false;
             directoryWatchesOfFailedLookups.forEach((watcher, path) => {
                 if (watcher.refCount === 0) {
                     directoryWatchesOfFailedLookups.delete(path);
@@ -178,13 +196,13 @@ namespace ts {
             return primaryResult;
         }
 
-        function resolveNamesWithLocalCache<T extends NameResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
+        function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
             names: string[],
             containingFile: string,
             cache: Map<Map<T>>,
             perDirectoryCache: Map<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
-            getResolutionFromNameResolutionWithFailedLookupLocations: (s: T) => R,
+            getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
             logChanges: boolean): R[] {
 
             const path = resolutionHost.toPath(containingFile);
@@ -203,7 +221,7 @@ namespace ts {
             for (const name of names) {
                 let resolution = resolutionsInFile.get(name);
                 // Resolution is valid if it is present and not invalidated
-                if (!resolution || resolution.isInvalidated) {
+                if (allFilesHaveInvalidatedResolution || !resolution || resolution.isInvalidated) {
                     const existingResolution = resolution;
                     const resolutionInDirectory = perDirectoryResolution.get(name);
                     if (resolutionInDirectory) {
@@ -225,7 +243,7 @@ namespace ts {
                 }
                 Debug.assert(resolution !== undefined && !resolution.isInvalidated);
                 seenNamesInFile.set(name, true);
-                resolvedModules.push(getResolutionFromNameResolutionWithFailedLookupLocations(resolution));
+                resolvedModules.push(getResolutionWithResolvedFileName(resolution));
             }
 
             // Stop watching and remove the unused name
@@ -245,8 +263,8 @@ namespace ts {
                 if (!oldResolution || !newResolution || oldResolution.isInvalidated) {
                     return false;
                 }
-                const oldResult = getResolutionFromNameResolutionWithFailedLookupLocations(oldResolution);
-                const newResult = getResolutionFromNameResolutionWithFailedLookupLocations(newResolution);
+                const oldResult = getResolutionWithResolvedFileName(oldResolution);
+                const newResult = getResolutionWithResolvedFileName(newResolution);
                 if (oldResult === newResult) {
                     return true;
                 }
@@ -321,9 +339,7 @@ namespace ts {
             return fileExtensionIsOneOf(path, failedLookupDefaultExtensions);
         }
 
-        function watchFailedLookupLocationOfResolution<T extends NameResolutionWithFailedLookupLocations>(
-            resolution: T, startIndex?: number
-        ) {
+        function watchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations, startIndex?: number) {
             if (resolution && resolution.failedLookupLocations) {
                 for (let i = startIndex || 0; i < resolution.failedLookupLocations.length; i++) {
                     const failedLookupLocation = resolution.failedLookupLocations[i];
@@ -346,15 +362,11 @@ namespace ts {
             }
         }
 
-        function stopWatchFailedLookupLocationOfResolution<T extends NameResolutionWithFailedLookupLocations>(
-            resolution: T
-        ) {
+        function stopWatchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations) {
             stopWatchFailedLookupLocationOfResolutionFrom(resolution, 0);
         }
 
-        function stopWatchFailedLookupLocationOfResolutionFrom<T extends NameResolutionWithFailedLookupLocations>(
-            resolution: T, startIndex: number
-        ) {
+        function stopWatchFailedLookupLocationOfResolutionFrom(resolution: ResolutionWithFailedLookupLocations, startIndex: number) {
             if (resolution && resolution.failedLookupLocations) {
                 for (let i = startIndex; i < resolution.failedLookupLocations.length; i++) {
                     const failedLookupLocation = resolution.failedLookupLocations[i];
@@ -387,107 +399,106 @@ namespace ts {
                 // If the files are added to project root or node_modules directory, always run through the invalidation process
                 // Otherwise run through invalidation only if adding to the immediate directory
                 if (dirPath === rootPath || isNodeModulesDirectory(dirPath) || getDirectoryPath(fileOrFolderPath) === dirPath) {
-                    let isChangedFailedLookupLocation: (location: string) => boolean;
-                    if (dirPath === fileOrFolderPath) {
-                        // Watching directory is created
-                        // Invalidate any resolution has failed lookup in this directory
-                        isChangedFailedLookupLocation = location => isInDirectoryPath(dirPath, resolutionHost.toPath(location));
-                    }
-                    else {
-                        // Some file or folder in the watching directory is created
-                        // Return early if it does not have any of the watching extension or not the custom failed lookup path
-                        if (!isPathWithDefaultFailedLookupExtension(fileOrFolderPath) && !customFailedLookupPaths.has(fileOrFolderPath)) {
-                            return;
-                        }
-                        // Resolution need to be invalidated if failed lookup location is same as the file or folder getting created
-                        isChangedFailedLookupLocation = location => resolutionHost.toPath(location) === fileOrFolderPath;
-                    }
-                    const hasChangedFailedLookupLocation = (resolution: NameResolutionWithFailedLookupLocations) => some(resolution.failedLookupLocations, isChangedFailedLookupLocation);
-                    if (invalidateResolutionOfFailedLookupLocation(hasChangedFailedLookupLocation)) {
+                    if (invalidateResolutionOfFailedLookupLocation(fileOrFolderPath, dirPath === fileOrFolderPath)) {
                         resolutionHost.onInvalidatedResolution();
                     }
                 }
             }, WatchDirectoryFlags.Recursive);
         }
 
-        function invalidateResolutionCache<T extends NameResolutionWithFailedLookupLocations>(
+        function removeResolutionsOfFileFromCache(cache: Map<Map<ResolutionWithFailedLookupLocations>>, filePath: Path) {
+            // Deleted file, stop watching failed lookups for all the resolutions in the file
+            const resolutions = cache.get(filePath);
+            if (resolutions) {
+                resolutions.forEach(stopWatchFailedLookupLocationOfResolution);
+                cache.delete(filePath);
+            }
+        }
+
+        function removeResolutionsOfFile(filePath: Path) {
+            removeResolutionsOfFileFromCache(resolvedModuleNames, filePath);
+            removeResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath);
+        }
+
+        function invalidateResolutionCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
             cache: Map<Map<T>>,
-            ignoreFile: (resolutions: Map<T>, containingFilePath: Path) => boolean,
-            isInvalidatedResolution: (resolution: T) => boolean
+            isInvalidatedResolution: (resolution: T, getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>) => boolean,
+            getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>
         ) {
             const seen = createMap<Map<true>>();
             cache.forEach((resolutions, containingFilePath) => {
-                if (!ignoreFile(resolutions, containingFilePath as Path) && resolutions) {
-                    const dirPath = getDirectoryPath(containingFilePath);
-                    let seenInDir = seen.get(dirPath);
-                    if (!seenInDir) {
-                        seenInDir = createMap<true>();
-                        seen.set(dirPath, seenInDir);
-                    }
-                    resolutions.forEach((resolution, name) => {
-                        if (seenInDir.has(name)) {
-                            return;
-                        }
-                        seenInDir.set(name, true);
-                        if (!resolution.isInvalidated && isInvalidatedResolution(resolution)) {
-                            // Mark the file as needing re-evaluation of module resolution instead of using it blindly.
-                            resolution.isInvalidated = true;
-                            (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
-                        }
-                    });
+                const dirPath = getDirectoryPath(containingFilePath);
+                let seenInDir = seen.get(dirPath);
+                if (!seenInDir) {
+                    seenInDir = createMap<true>();
+                    seen.set(dirPath, seenInDir);
                 }
+                resolutions.forEach((resolution, name) => {
+                    if (seenInDir.has(name)) {
+                        return;
+                    }
+                    seenInDir.set(name, true);
+                    if (!resolution.isInvalidated && isInvalidatedResolution(resolution, getResolutionWithResolvedFileName)) {
+                        // Mark the file as needing re-evaluation of module resolution instead of using it blindly.
+                        resolution.isInvalidated = true;
+                        (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
+                    }
+                });
             });
         }
 
-        function invalidateResolutionCacheOfDeletedFile<T extends NameResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
-            deletedFilePath: Path,
-            cache: Map<Map<T>>,
-            getResolutionFromNameResolutionWithFailedLookupLocations: (s: T) => R,
-        ) {
-            invalidateResolutionCache(
-                cache,
-                // Ignore file thats same as deleted file path, and handle it here
-                (resolutions, containingFilePath) => {
-                    if (containingFilePath !== deletedFilePath) {
-                        return false;
-                    }
+        function hasReachedResolutionIterationLimit() {
+            const maxSize = resolutionHost.maxNumberOfFilesToIterateForInvalidation || maxNumberOfFilesToIterateForInvalidation;
+            return resolvedModuleNames.size > maxSize || resolvedTypeReferenceDirectives.size > maxSize;
+        }
 
-                    // Deleted file, stop watching failed lookups for all the resolutions in the file
-                    cache.delete(containingFilePath);
-                    resolutions.forEach(stopWatchFailedLookupLocationOfResolution);
-                    return true;
-                },
+        function invalidateResolutions(
+            isInvalidatedResolution: (resolution: ResolutionWithFailedLookupLocations, getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName) => boolean,
+        ) {
+            // If more than maxNumberOfFilesToIterateForInvalidation present,
+            // just invalidated all files and recalculate the resolutions for files instead
+            if (hasReachedResolutionIterationLimit()) {
+                allFilesHaveInvalidatedResolution = true;
+                return;
+            }
+            invalidateResolutionCache(resolvedModuleNames, isInvalidatedResolution, getResolvedModule);
+            invalidateResolutionCache(resolvedTypeReferenceDirectives, isInvalidatedResolution, getResolvedTypeReferenceDirective);
+        }
+
+        function invalidateResolutionOfFile(filePath: Path) {
+            removeResolutionsOfFile(filePath);
+            invalidateResolutions(
                 // Resolution is invalidated if the resulting file name is same as the deleted file path
-                resolution => {
-                    const result = getResolutionFromNameResolutionWithFailedLookupLocations(resolution);
-                    return result && resolutionHost.toPath(result.resolvedFileName) === deletedFilePath;
+                (resolution, getResolutionWithResolvedFileName) => {
+                    const result = getResolutionWithResolvedFileName(resolution);
+                    return result && resolutionHost.toPath(result.resolvedFileName) === filePath;
                 }
             );
         }
 
-        function invalidateResolutionOfFile(filePath: Path) {
-            invalidateResolutionCacheOfDeletedFile(filePath, resolvedModuleNames, getResolvedModule);
-            invalidateResolutionCacheOfDeletedFile(filePath, resolvedTypeReferenceDirectives, getResolvedTypeReferenceDirective);
-        }
-
-        function invalidateResolutionCacheOfFailedLookupLocation<T extends NameResolutionWithFailedLookupLocations>(
-            cache: Map<Map<T>>,
-            hasChangedFailedLookupLocation: (resolution: T) => boolean
-        ) {
-            invalidateResolutionCache(
-                cache,
-                // Do not ignore any file
-                returnFalse,
+        function invalidateResolutionOfFailedLookupLocation(fileOrFolderPath: Path, isCreatingWatchedDirectory: boolean) {
+            let isChangedFailedLookupLocation: (location: string) => boolean;
+            if (isCreatingWatchedDirectory) {
+                // Watching directory is created
+                // Invalidate any resolution has failed lookup in this directory
+                isChangedFailedLookupLocation = location => isInDirectoryPath(fileOrFolderPath, resolutionHost.toPath(location));
+            }
+            else {
+                // Some file or folder in the watching directory is created
+                // Return early if it does not have any of the watching extension or not the custom failed lookup path
+                if (!isPathWithDefaultFailedLookupExtension(fileOrFolderPath) && !customFailedLookupPaths.has(fileOrFolderPath)) {
+                    return false;
+                }
+                // Resolution need to be invalidated if failed lookup location is same as the file or folder getting created
+                isChangedFailedLookupLocation = location => resolutionHost.toPath(location) === fileOrFolderPath;
+            }
+            const hasChangedFailedLookupLocation = (resolution: ResolutionWithFailedLookupLocations) => some(resolution.failedLookupLocations, isChangedFailedLookupLocation);
+            const invalidatedFilesCount = filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size;
+            invalidateResolutions(
                 // Resolution is invalidated if the resulting file name is same as the deleted file path
                 hasChangedFailedLookupLocation
             );
-        }
-
-        function invalidateResolutionOfFailedLookupLocation(hasChangedFailedLookupLocation: (resolution: NameResolutionWithFailedLookupLocations) => boolean) {
-            const invalidatedFilesCount = filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size;
-            invalidateResolutionCacheOfFailedLookupLocation(resolvedModuleNames, hasChangedFailedLookupLocation);
-            invalidateResolutionCacheOfFailedLookupLocation(resolvedTypeReferenceDirectives, hasChangedFailedLookupLocation);
-            return filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size !== invalidatedFilesCount;
+            return allFilesHaveInvalidatedResolution || filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size !== invalidatedFilesCount;
         }
 
         function closeTypeRootsWatch() {

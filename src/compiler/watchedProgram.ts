@@ -501,7 +501,7 @@ namespace ts {
                 }
                 else if (hostSourceFileInfo.sourceFile === oldSourceFile) {
                     sourceFilesCache.delete(oldSourceFile.path);
-                    resolutionCache.invalidateResolutionOfFile(oldSourceFile.path);
+                    resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
                 }
             }
         }

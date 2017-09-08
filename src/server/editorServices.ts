@@ -876,6 +876,8 @@ namespace ts.server {
 
             unorderedRemoveItem(this.openFiles, info);
 
+            const fileExists = this.host.fileExists(info.fileName);
+
             // collect all projects that should be removed
             let projectsToRemove: Project[];
             for (const p of info.containingProjects) {
@@ -896,7 +898,7 @@ namespace ts.server {
                         (projectsToRemove || (projectsToRemove = [])).push(p);
                     }
                     else {
-                        p.removeFile(info);
+                        p.removeFile(info, fileExists, /*detachFromProject*/ true);
                     }
                 }
 
@@ -926,7 +928,7 @@ namespace ts.server {
 
             // If the current info is being just closed - add the watcher file to track changes
             // But if file was deleted, handle that part
-            if (this.host.fileExists(info.fileName)) {
+            if (fileExists) {
                 this.watchClosedScriptInfo(info);
             }
             else {
@@ -1447,7 +1449,7 @@ namespace ts.server {
                     path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path);
                     if (isScriptInfo(existingValue)) {
-                        project.removeFile(existingValue);
+                        project.removeFile(existingValue, /*fileExists*/ false, /*detachFromProject*/ true);
                     }
                     projectRootFilesMap.set(path, normalizedPath);
                     scriptInfo = normalizedPath;
@@ -1476,7 +1478,7 @@ namespace ts.server {
                 projectRootFilesMap.forEach((value, path) => {
                     if (!newRootScriptInfoMap.has(path)) {
                         if (isScriptInfo(value)) {
-                            project.removeFile(value);
+                            project.removeFile(value, project.fileExists(path), /*detachFromProject*/ true);
                         }
                         else {
                             projectRootFilesMap.delete(path);
@@ -1806,7 +1808,7 @@ namespace ts.server {
                     this.removeProject(inferredProject);
                 }
                 else {
-                    inferredProject.removeFile(info);
+                    inferredProject.removeFile(info, /*fileExists*/ true, /*detachFromProject*/ true);
                 }
             }
         }

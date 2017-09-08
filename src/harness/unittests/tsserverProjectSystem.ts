@@ -5168,6 +5168,85 @@ namespace ts.projectSystem {
                     verifyProjectChangedEvent([referenceFile1, moduleFile2], [libFile, moduleFile2, referenceFile1, configFile]);
                 });
             });
+
+            describe("resolution when resolution cache size", () => {
+                function verifyWithMaxCacheLimit(limitHit: boolean) {
+                    const file1: FileOrFolder = {
+                        path: "/a/b/project/file1.ts",
+                        content: 'import a from "file2"'
+                    };
+                    const file2: FileOrFolder = {
+                        path: "/a/b/node_modules/file2.d.ts",
+                        content: "export class a { }"
+                    };
+                    const file3: FileOrFolder = {
+                        path: "/a/b/project/file3.ts",
+                        content: "export class c { }"
+                    };
+                    const configFile: FileOrFolder = {
+                        path: "/a/b/project/tsconfig.json",
+                        content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
+                    };
+
+                    const projectFiles = [file1, file3, libFile, configFile];
+                    const watchedRecursiveDirectories = ["/a/b/project", "/a/b/node_modules", "/a/node_modules", "/node_modules"];
+                    const host = createServerHost(projectFiles);
+                    const { session, verifyInitialOpen, verifyProjectChangedEventHandler } = createSession(host);
+                    const projectService = session.getProjectService();
+                    verifyInitialOpen(file1);
+                    checkNumberOfProjects(projectService, { configuredProjects: 1 });
+                    const project = projectService.configuredProjects.get(configFile.path);
+                    verifyProject();
+                    if (limitHit) {
+                        (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
+                    }
+
+                    file3.content += "export class d {}";
+                    host.reloadFS(projectFiles);
+                    host.checkTimeoutQueueLengthAndRun(2);
+
+                    // Since this is first event
+                    verifyProject();
+                    verifyProjectChangedEventHandler([{
+                        eventName: server.ProjectChangedEvent,
+                        data: {
+                            project,
+                            changedFiles: [libFile.path, file1.path, file3.path],
+                            filesToEmit: [file1.path, file3.path]
+                        }
+                    }]);
+
+                    projectFiles.push(file2);
+                    host.reloadFS(projectFiles);
+                    host.runQueuedTimeoutCallbacks();
+                    watchedRecursiveDirectories.length = 2;
+                    verifyProject();
+
+                    const changedFiles = limitHit ? [file1.path, file2.path, file3.path, libFile.path] : [file1.path, file2.path];
+                    verifyProjectChangedEventHandler([{
+                        eventName: server.ProjectChangedEvent,
+                        data: {
+                            project,
+                            changedFiles,
+                            filesToEmit: changedFiles
+                        }
+                    }]);
+
+                    function verifyProject() {
+                        checkProjectActualFiles(project, map(projectFiles, file => file.path));
+                        checkWatchedDirectories(host, [], /*recursive*/ false);
+                        checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+                    }
+                }
+
+                it("limit not hit", () => {
+                    verifyWithMaxCacheLimit(/*limitHit*/ false);
+                });
+
+                it("limit hit", () => {
+                    verifyWithMaxCacheLimit(/*limitHit*/ true);
+                });
+            });
         }
 
         describe("when event handler is set in the session", () => {
