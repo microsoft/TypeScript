@@ -7,5 +7,5 @@ goTo.select('1', '2');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: 'scope_0',
-    actionDescription: "Extract function into module scope",
+    actionDescription: "Extract to function in module scope",
 });

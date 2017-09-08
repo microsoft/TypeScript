@@ -4,7 +4,7 @@ function F<T>(t1: T) {
         t2.toString();
     }
 }
-// ==SCOPE::function 'F'==
+// ==SCOPE::inner function in function 'F'==
 function F<T>(t1: T) {
     function F<U extends T[]>(t2: U) {
         newFunction();
@@ -14,7 +14,7 @@ function F<T>(t1: T) {
         }
     }
 }
-// ==SCOPE::function 'F'==
+// ==SCOPE::inner function in function 'F'==
 function F<T>(t1: T) {
     function F<U extends T[]>(t2: U) {
         newFunction<U>(t2);
@@ -24,7 +24,7 @@ function F<T>(t1: T) {
         t2.toString();
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 function F<T>(t1: T) {
     function F<U extends T[]>(t2: U) {
         newFunction<T, U>(t2);

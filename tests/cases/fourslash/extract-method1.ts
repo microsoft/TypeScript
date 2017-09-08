@@ -16,7 +16,7 @@ goTo.select('start', 'end')
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into class 'Foo'",
+    actionDescription: "Extract to method in class 'Foo'",
 });
 verify.currentFileContentIs(
 `class Foo {

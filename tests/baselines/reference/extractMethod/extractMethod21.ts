@@ -4,7 +4,7 @@ function foo() {
     x++;
     return;
 }
-// ==SCOPE::function 'foo'==
+// ==SCOPE::inner function in function 'foo'==
 function foo() {
     let x = 10;
     return newFunction();
@@ -14,7 +14,7 @@ function foo() {
         return;
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 function foo() {
     let x = 10;
     x = newFunction(x);

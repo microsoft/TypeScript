@@ -2,7 +2,7 @@
 function F<T>() {
     const array: T[] = [];
 }
-// ==SCOPE::function 'F'==
+// ==SCOPE::inner function in function 'F'==
 function F<T>() {
     const array: T[] = newFunction();
 
@@ -10,7 +10,7 @@ function F<T>() {
         return [];
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 function F<T>() {
     const array: T[] = newFunction<T>();
 }

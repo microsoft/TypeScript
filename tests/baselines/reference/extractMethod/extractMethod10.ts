@@ -9,7 +9,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::class 'C'==
+// ==SCOPE::method in class 'C'==
 namespace A {
     export interface I { x: number };
     class C {
@@ -24,7 +24,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::namespace 'A'==
+// ==SCOPE::function in namespace 'A'==
 namespace A {
     export interface I { x: number };
     class C {
@@ -39,7 +39,7 @@ namespace A {
         return a1.x + 10;
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 namespace A {
     export interface I { x: number };
     class C {

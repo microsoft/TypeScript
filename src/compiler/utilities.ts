@@ -4829,16 +4829,29 @@ namespace ts {
     }
 
     /* @internal */
-    export function isFunctionLikeKind(kind: SyntaxKind): boolean {
+    export function isFunctionLikeDeclaration(node: Node): node is FunctionLikeDeclaration {
+        return node && isFunctionLikeDeclarationKind(node.kind);
+    }
+
+    function isFunctionLikeDeclarationKind(kind: SyntaxKind): boolean {
         switch (kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ArrowFunction:
             case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /* @internal */
+    export function isFunctionLikeKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
@@ -4846,9 +4859,9 @@ namespace ts {
             case SyntaxKind.JSDocFunctionType:
             case SyntaxKind.ConstructorType:
                 return true;
+            default:
+                return isFunctionLikeDeclarationKind(kind);
         }
-
-        return false;
     }
 
     // Classes

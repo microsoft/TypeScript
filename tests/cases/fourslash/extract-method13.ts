@@ -13,14 +13,14 @@ goTo.select('a', 'b');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into class 'C'",
+    actionDescription: "Extract to method in class 'C'",
 });
 
 goTo.select('c', 'd');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into class 'C'",
+    actionDescription: "Extract to method in class 'C'",
 });
 
 verify.currentFileContentIs(`class C {
