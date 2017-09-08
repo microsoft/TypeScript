@@ -333,7 +333,7 @@ namespace ts {
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
-        let visitedFlowCount = 0;
+        let sharedFlowCount = 0;
         let flowAnalysisDisabled = false;
 
         const emptyStringType = getLiteralType("");
@@ -352,8 +352,8 @@ namespace ts {
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
-        const visitedFlowNodes: FlowNode[] = [];
-        const visitedFlowTypes: FlowType[] = [];
+        const sharedFlowNodes: FlowNode[] = [];
+        const sharedFlowTypes: FlowType[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
@@ -11502,9 +11502,9 @@ namespace ts {
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const visitedFlowStart = visitedFlowCount;
+            const sharedFlowStart = sharedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
-            visitedFlowCount = visitedFlowStart;
+            sharedFlowCount = sharedFlowStart;
             // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
@@ -11532,9 +11532,9 @@ namespace ts {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
                         // antecedent of more than one node.
-                        for (let i = visitedFlowStart; i < visitedFlowCount; i++) {
-                            if (visitedFlowNodes[i] === flow) {
-                                return visitedFlowTypes[i];
+                        for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
+                            if (sharedFlowNodes[i] === flow) {
+                                return sharedFlowTypes[i];
                             }
                         }
                     }
@@ -11597,9 +11597,9 @@ namespace ts {
                     }
                     if (flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
-                        visitedFlowNodes[visitedFlowCount] = flow;
-                        visitedFlowTypes[visitedFlowCount] = type;
-                        visitedFlowCount++;
+                        sharedFlowNodes[sharedFlowCount] = flow;
+                        sharedFlowTypes[sharedFlowCount] = type;
+                        sharedFlowCount++;
                     }
                     return type;
                 }
