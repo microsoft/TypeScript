@@ -58,7 +58,6 @@ namespace ts {
         let symbolInstantiationDepth = 0;
 
         const emptySymbols = createSymbolTable();
-        const identityMapper: (type: Type) => Type = identity;
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -5413,7 +5412,7 @@ namespace ts {
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
             if (rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
-                mapper = identityMapper;
+                mapper = identity;
                 members = source.symbol ? source.symbol.members : createSymbolTable(source.declaredProperties);
                 callSignatures = source.declaredCallSignatures;
                 constructSignatures = source.declaredConstructSignatures;
@@ -5794,13 +5793,13 @@ namespace ts {
 
         function getConstraintTypeFromMappedType(type: MappedType) {
             return type.constraintType ||
-                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
+                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identity) || unknownType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!type.declaration.questionToken), type.mapper || identityMapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!type.declaration.questionToken), type.mapper || identity) :
                     unknownType);
         }
 
@@ -5811,7 +5810,7 @@ namespace ts {
                     // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
                     // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
                     // 'keyof T' to a literal union type and we can't recover T from that type.
-                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraintDeclaration).type), type.mapper || identityMapper);
+                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraintDeclaration).type), type.mapper || identity);
                 }
                 else {
                     // Otherwise, get the declared constraint type, and if the constraint type is a type parameter,
@@ -5820,7 +5819,7 @@ namespace ts {
                     const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
                     const constraint = getConstraintTypeFromMappedType(declaredType);
                     const extendedConstraint = constraint && constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
-                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identity) : emptyObjectType;
                 }
             }
             return type.modifiersType;
@@ -8295,7 +8294,7 @@ namespace ts {
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
-            if (type && mapper !== identityMapper) {
+            if (type && mapper !== identity) {
                 if (type.flags & TypeFlags.TypeParameter) {
                     return mapper(<TypeParameter>type);
                 }
@@ -13249,7 +13248,7 @@ namespace ts {
 
         function getContextualMapper(node: Node) {
             node = findAncestor(node, n => !!n.contextualMapper);
-            return node ? node.contextualMapper : identityMapper;
+            return node ? node.contextualMapper : identity;
         }
 
         // If the given type is an object or union type with a single signature, and if that signature has at
@@ -15214,7 +15213,7 @@ namespace ts {
             const context = createInferenceContext(signature, InferenceFlags.InferUnionTypes, compareTypes);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypes(context.inferences, instantiateType(source, contextualMapper || identityMapper), target);
+                inferTypes(context.inferences, instantiateType(source, contextualMapper || identity), target);
             });
             if (!contextualMapper) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
@@ -15282,9 +15281,9 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                        // For context sensitive arguments we pass `identity`, which is a signal to treat all
                         // context sensitive function expressions as wildcards
-                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
+                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identity : context;
                         argType = checkExpressionWithContextualType(arg, paramType, mapper);
                     }
 
@@ -15408,7 +15407,7 @@ namespace ts {
                     // If the effective argument type is undefined, there is no synthetic type for the argument.
                     // In that case, we should check the argument.
                     const argType = getEffectiveArgumentType(node, i) ||
-                        checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identity : undefined);
                     // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
@@ -16953,7 +16952,7 @@ namespace ts {
         function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, checkMode?: CheckMode): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
-            // The identityMapper object is used to indicate that function expressions are wildcards
+            // The `identity` object is used to indicate that function expressions are wildcards
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
                 checkNodeDeferred(node);
                 return anyFunctionType;
@@ -16983,7 +16982,7 @@ namespace ts {
                             if (checkMode === CheckMode.Inferential) {
                                 inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
                             }
-                            const instantiatedContextualSignature = contextualMapper === identityMapper ?
+                            const instantiatedContextualSignature = contextualMapper === identity ?
                                 contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
@@ -17860,7 +17859,7 @@ namespace ts {
             const saveContextualMapper = node.contextualMapper;
             node.contextualType = contextualType;
             node.contextualMapper = contextualMapper;
-            const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
+            const checkMode = contextualMapper === identity ? CheckMode.SkipContextSensitive :
                 contextualMapper ? CheckMode.Inferential : CheckMode.Normal;
             const result = checkExpression(node, checkMode);
             node.contextualType = saveContextualType;
@@ -17997,9 +17996,9 @@ namespace ts {
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
-        // contextualMapper is not undefined and not equal to the identityMapper function object it indicates that the
+        // contextualMapper is not undefined and not equal to the `identity` function object it indicates that the
         // expression is being inferentially typed (section 4.15.2 in spec) and provides the type mapper to use in
-        // conjunction with the generic contextual type. When contextualMapper is equal to the identityMapper function
+        // conjunction with the generic contextual type. When contextualMapper is equal to the `identity` function
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
