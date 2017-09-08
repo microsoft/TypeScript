@@ -130,9 +130,9 @@ namespace ts.TestFSWithWatch {
     }
 
     export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${JSON.stringify(expectedFileNames)}, got ${actualFileNames}`);
+        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${expectedFileNames}, got ${actualFileNames}`);
         for (const f of expectedFileNames) {
-            assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${JSON.stringify(actualFileNames)}`);
+            assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
         }
     }
 

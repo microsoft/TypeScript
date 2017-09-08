@@ -825,7 +825,7 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If we want to reuse resolutions more aggressively, we can refine this to check for whether the
                 // text of the corresponding modulenames has changed.
-                if (file === oldSourceFile) {
+                if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
                     const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
@@ -846,7 +846,7 @@ namespace ts {
                         trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
                     }
                 }
-                else if (!hasInvalidatedResolution(oldProgramState.file.path)) {
+                else {
                     resolvesToAmbientModuleInNonModifiedFile = moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
                 }
 

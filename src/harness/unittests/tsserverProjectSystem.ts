@@ -2306,6 +2306,59 @@ namespace ts.projectSystem {
             });
             assert.isFalse(hasErrorMsg);
         });
+
+        it("Changed module resolution reflected when specifying files list", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: 'import classc from "file2"'
+            };
+            const file2a: FileOrFolder = {
+                path: "/a/file2.ts",
+                content: "export classc { method2a() { return 10; } }"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/file2.ts",
+                content: "export classc { method2() { return 10; } }"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ files: [file1.path], compilerOptions: { module: "amd" } })
+            };
+            const files = [file1, file2a, configFile, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects.get(configFile.path);
+            assert.isDefined(project);
+            checkProjectActualFiles(project, map(files, file => file.path));
+            checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const watchedRecursiveDirectories = getTypeRootsFromLocation("/a/b");
+            watchedRecursiveDirectories.push("/a/b");
+            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+
+            files.push(file2);
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            watchedRecursiveDirectories.pop();
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
+            checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
+            checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+
+            // On next file open the files file2a should be closed and not watched any more
+            projectService.openClientFile(file2.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
+            checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+
+        });
     });
 
     describe("Proper errors", () => {
