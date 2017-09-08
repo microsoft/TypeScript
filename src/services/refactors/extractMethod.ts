@@ -851,7 +851,7 @@ namespace ts.refactor.extractMethod {
                 return scope.members;
             }
             else {
-                staticAssertNever(scope);
+                assertTypeIsNever(scope);
             }
 
             return emptyArray;

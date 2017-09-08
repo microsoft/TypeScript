@@ -500,12 +500,10 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
                 return true;
             default:
-                staticAssertNever(node);
+                assertTypeIsNever(node);
                 return false;
         }
     }
-
-    export function staticAssertNever(_: never): void {}
 
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
