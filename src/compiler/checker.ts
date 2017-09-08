@@ -1687,7 +1687,7 @@ namespace ts {
                     undefined;
             }
             else {
-                Debug.fail("Unknown entity name kind.");
+                Debug.assertNever(name, "Unknown entity name kind.");
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
@@ -16357,7 +16357,7 @@ namespace ts {
                     // This code-path is called by language service
                     return resolveStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
             }
-            Debug.fail("Branch in 'resolveSignature' should be unreachable.");
+            Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
         }
 
         /**
@@ -24535,7 +24535,7 @@ namespace ts {
                     currentKind = SetAccessor;
                 }
                 else {
-                    Debug.fail("Unexpected syntax kind:" + (<Node>prop).kind);
+                    Debug.assertNever(prop, "Unexpected syntax kind:" + (<Node>prop).kind);
                 }
 
                 const effectiveName = getPropertyNameForPropertyNameNode(name);
