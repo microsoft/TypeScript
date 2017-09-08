@@ -2414,7 +2414,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
+        public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
@@ -3908,12 +3908,14 @@ namespace FourSlashInterface {
             this.state.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
-            this.state.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, caretOffset: expectedOffset });
+        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string) {
+            this.state.goToMarker(marker);
+            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset });
         }
 
-        public noDocCommentTemplate() {
-            this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
+        public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
+            this.state.goToMarker(marker);
+            this.state.verifyDocCommentTemplate(/*expected*/ undefined);
         }
 
         public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {

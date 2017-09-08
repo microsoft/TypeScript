@@ -242,8 +242,8 @@ declare namespace FourSlashInterface {
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
-        DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
-        noDocCommentTemplate(): void;
+        docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
+        noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;

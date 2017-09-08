@@ -1132,7 +1132,8 @@ namespace ts {
          */
         function createExportExpression(name: Identifier | StringLiteral, value: Expression) {
             const exportName = isIdentifier(name) ? createLiteral(name) : name;
-            return createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]);
+            setEmitFlags(value, getEmitFlags(value) | EmitFlags.NoComments);
+            return setCommentRange(createCall(exportFunction, /*typeArguments*/ undefined, [exportName, value]), value);
         }
 
         //

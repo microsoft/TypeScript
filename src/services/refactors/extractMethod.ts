@@ -95,7 +95,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
         export const TypeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
         export const FunctionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
-        export const InsufficientSelection = createMessage("Select more than a single identifier.");
+        export const InsufficientSelection = createMessage("Select more than a single token.");
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
         export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
         export const CannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
@@ -239,7 +239,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
-            if (isIdentifier(node)) {
+            if (isToken(node)) {
                 return [createDiagnosticForNode(node, Messages.InsufficientSelection)];
             }
             return undefined;
@@ -656,11 +656,13 @@ namespace ts.refactor.extractMethod {
         const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
         const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
-        const typeParameters: ReadonlyArray<TypeParameterDeclaration> = sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
+        const typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined = sortedTypeParametersAndDeclarations.length === 0
+            ? undefined
+            : sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
 
         // Strictly speaking, we should check whether each name actually binds to the appropriate type
         // parameter.  In cases of shadowing, they may not.
-        const callTypeArguments: ReadonlyArray<TypeNode> | undefined = typeParameters.length > 0
+        const callTypeArguments: ReadonlyArray<TypeNode> | undefined = typeParameters !== undefined
             ? typeParameters.map(decl => createTypeReferenceNode(decl.name, /*typeArguments*/ undefined))
             : undefined;
 
@@ -708,7 +710,7 @@ namespace ts.refactor.extractMethod {
             );
         }
 
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
         // insert function at the end of the scope
         changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
 
@@ -746,6 +748,10 @@ namespace ts.refactor.extractMethod {
                 }
                 else {
                     newNodes.push(createStatement(createBinary(assignments[0].name, SyntaxKind.EqualsToken, call)));
+
+                    if (range.facts & RangeFacts.HasReturn) {
+                        newNodes.push(createReturn());
+                    }
                 }
             }
             else {

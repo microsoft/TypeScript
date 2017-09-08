@@ -284,7 +284,7 @@ namespace ts.Completions {
                 addStringLiteralCompletionsFromType(t, result, typeChecker, uniques);
             }
         }
-        else if (type.flags & TypeFlags.StringLiteral) {
+        else if (type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral)) {
             const name = (<StringLiteralType>type).value;
             if (!uniques.has(name)) {
                 uniques.set(name, true);
@@ -1739,7 +1739,7 @@ namespace ts.Completions {
 
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
     function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
-        const { jsDoc } = getJsDocHavingNode(node);
+        const { jsDoc } = getJsDocHavingNode(node) as JSDocContainer;
         if (!jsDoc) return undefined;
 
         for (const { pos, end, tags } of jsDoc) {

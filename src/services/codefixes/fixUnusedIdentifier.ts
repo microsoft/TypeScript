@@ -175,23 +175,23 @@ namespace ts.codefix {
             }
 
             function deleteNode(n: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNode(sourceFile, n));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNode(sourceFile, n));
             }
 
             function deleteRange(range: TextRange) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteRange(sourceFile, range));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteRange(sourceFile, range));
             }
 
             function deleteNodeInList(n: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeInList(sourceFile, n));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNodeInList(sourceFile, n));
             }
 
             function deleteNodeRange(start: Node, end: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeRange(sourceFile, start, end));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNodeRange(sourceFile, start, end));
             }
 
             function replaceNode(n: Node, newNode: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).replaceNode(sourceFile, n, newNode));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).replaceNode(sourceFile, n, newNode));
             }
 
             function makeChange(changeTracker: textChanges.ChangeTracker): CodeAction {

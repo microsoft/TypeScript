@@ -327,7 +327,7 @@ interface ObjectConstructor {
      * @param o Object that contains the property.
      * @param p Name of the property.
      */
-    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor;
+    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor | undefined;
 
     /**
      * Adds a property to an object, or modifies attributes of an existing property.
