@@ -6699,8 +6699,9 @@ namespace ts {
                             if (typeExpression && typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
-                            const useChildTypeTagAsType = childTypeTag && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type);
-                            typedefTag.typeExpression = useChildTypeTagAsType ? childTypeTag.typeExpression : finishNode(jsdocTypeLiteral);
+                            typedefTag.typeExpression = childTypeTag && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
+                                childTypeTag.typeExpression :
+                                finishNode(jsdocTypeLiteral);
                         }
                     }
 
