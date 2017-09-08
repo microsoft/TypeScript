@@ -11486,6 +11486,13 @@ namespace ts {
             return false;
         }
 
+        function reportFlowControlError(node: Node) {
+            const block = <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
+            const sourceFile = getSourceFileOfNode(node);
+            const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
+            diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
             let flowLength = 0;
@@ -11509,15 +11516,15 @@ namespace ts {
             return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
-                const saveFlowLength = flowLength;
+                flowLength++;
                 while (true) {
                     flowLength++;
-                    if (flowLength === 5000) {
-                        // The length of this particular control flow path is 5000 nodes or more. Rather than spending an
-                        // excessive amount of time and possibly overflowing the call stack, we report an error and disable
-                        // further control flow analysis in the containing function or module body.
+                    if (flowLength >= 5000) {
+                        // We have visited as many as 5000 nodes through as many as 2500 recursive invocations. Rather than
+                        // spending an excessive amount of time and possibly overflowing the call stack, we report an error
+                        // and disable further control flow analysis in the containing function or module body.
                         flowAnalysisDisabled = true;
-                        error(reference, Diagnostics.The_body_of_the_containing_function_or_module_is_too_large_for_control_flow_analysis);
+                        reportFlowControlError(reference);
                         return unknownType;
                     }
                     const flags = flow.flags;
@@ -11527,7 +11534,6 @@ namespace ts {
                         // antecedent of more than one node.
                         for (let i = visitedFlowStart; i < visitedFlowCount; i++) {
                             if (visitedFlowNodes[i] === flow) {
-                                flowLength = saveFlowLength;
                                 return visitedFlowTypes[i];
                             }
                         }
@@ -11595,7 +11601,6 @@ namespace ts {
                         visitedFlowTypes[visitedFlowCount] = type;
                         visitedFlowCount++;
                     }
-                    flowLength = saveFlowLength;
                     return type;
                 }
             }
