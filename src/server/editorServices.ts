@@ -1686,11 +1686,13 @@ namespace ts.server {
             }
         }
 
-        private closeConfiguredProject(configFile: NormalizedPath): void {
+        private closeConfiguredProject(configFile: NormalizedPath): boolean {
             const configuredProject = this.findConfiguredProjectByProjectName(configFile);
             if (configuredProject && configuredProject.deleteOpenRef() === 0) {
                 this.removeProject(configuredProject);
+                return true;
             }
+            return false;
         }
 
         closeExternalProject(uncheckedFileName: string, suppressRefresh = false): void {

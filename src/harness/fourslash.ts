@@ -762,12 +762,16 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionsAt(markerName: string, expected: string[]) {
+        public verifyCompletionsAt(markerName: string, expected: string[], options?: FourSlashInterface.CompletionsAtOptions) {
             this.goToMarker(markerName);
 
             const actualCompletions = this.getCompletionListAtCaret();
             if (!actualCompletions) {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
+            }
+
+            if (options && options.isNewIdentifierLocation !== undefined && actualCompletions.isNewIdentifierLocation !== options.isNewIdentifierLocation) {
+                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
             const actual = actualCompletions.entries;
@@ -2410,7 +2414,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
+        public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
@@ -3705,8 +3709,8 @@ namespace FourSlashInterface {
             super(state);
         }
 
-        public completionsAt(markerName: string, completions: string[]) {
-            this.state.verifyCompletionsAt(markerName, completions);
+        public completionsAt(markerName: string, completions: string[], options?: CompletionsAtOptions) {
+            this.state.verifyCompletionsAt(markerName, completions, options);
         }
 
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
@@ -3904,12 +3908,14 @@ namespace FourSlashInterface {
             this.state.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
-            this.state.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, caretOffset: expectedOffset });
+        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string) {
+            this.state.goToMarker(marker);
+            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset });
         }
 
-        public noDocCommentTemplate() {
-            this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
+        public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
+            this.state.goToMarker(marker);
+            this.state.verifyDocCommentTemplate(/*expected*/ undefined);
         }
 
         public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {
@@ -4313,5 +4319,9 @@ namespace FourSlashInterface {
         refactorName: string;
         actionName: string;
         actionDescription: string;
+    }
+
+    export interface CompletionsAtOptions {
+        isNewIdentifierLocation?: boolean;
     }
 }

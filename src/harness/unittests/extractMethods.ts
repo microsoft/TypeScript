@@ -378,6 +378,32 @@ namespace A {
             "Cannot extract range containing conditional return statement."
         ]);
 
+        testExtractRangeFailed("extractRangeFailed7",
+        `
+function test(x: number) {
+    while (x) {
+        x--;
+        [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed8",
+        `
+function test(x: number) {
+    switch (x) {
+        case 1:
+            [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
+
         testExtractMethod("extractMethod1",
             `namespace A {
     let x = 1;
@@ -612,6 +638,22 @@ namespace A {
     a() {
         [#|let a1 = { x: 1 };
         return a1.x + 10;|]
+    }
+}`);
+        // Write + void return
+        testExtractMethod("extractMethod21",
+            `function foo() {
+    let x = 10;
+    [#|x++;
+    return;|]
+}`);
+        // Return in finally block
+        testExtractMethod("extractMethod22",
+            `function test() {
+    try {
+    }
+    finally {
+        [#|return 1;|]
     }
 }`);
     });

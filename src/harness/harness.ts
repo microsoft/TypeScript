@@ -1284,11 +1284,12 @@ namespace Harness {
             return normalized;
         }
 
-        export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>) {
-            return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
+        export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+            const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() };
+            return (pretty ? ts.formatDiagnosticsWithColorAndContext : ts.formatDiagnostics)(diagnostics, host);
         }
 
-        export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>) {
+        export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
             diagnostics = diagnostics.slice().sort(ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1408,18 +1409,18 @@ namespace Harness {
             // Verify we didn't miss any errors in total
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
 
-            return minimalDiagnosticsToString(diagnostics) +
+            return minimalDiagnosticsToString(diagnostics, pretty) +
                 Harness.IO.newLine() + Harness.IO.newLine() + outputLines;
         }
 
-        export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[]) {
+        export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[], pretty?: boolean) {
             Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
                 if (!errors || (errors.length === 0)) {
                     /* tslint:disable:no-null-keyword */
                     return null;
                     /* tslint:enable:no-null-keyword */
                 }
-                return getErrorBaseline(inputFiles, errors);
+                return getErrorBaseline(inputFiles, errors, pretty);
             });
         }
 
