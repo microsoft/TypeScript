@@ -18,7 +18,7 @@ type Wrap = <T = RegExp>(v: T) => Match(T);
 >T : T
 
 type A = Wrap(RegExp);
->A : 1
+>A : Match(T)
 >Wrap : Wrap
 >RegExp : RegExp
 

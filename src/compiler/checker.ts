@@ -7586,7 +7586,6 @@ namespace ts {
         // overlap with typeToTypeNode?
         function createTypeCallNodeFromType(type: TypeCallType): TypeCallTypeNode {
             const node = <TypeCallTypeNode>createNodeBuilder().typeToTypeNode(type);
-            fixupParentReferences(node);
             return node;
         }
 
@@ -7648,9 +7647,7 @@ namespace ts {
 
         // null! as type
         function typeNodeToExpression(type: TypeNode): Expression {
-            const expr = createAsExpression(createNonNullExpression(createNull()), type);
-            expr.parent = type.parent;
-            return expr;
+            return createAsExpression(createNonNullExpression(createNull()), type);
         }
 
         function createIndexedAccessType(objectType: Type, indexType: Type) {
@@ -7658,22 +7655,6 @@ namespace ts {
             type.objectType = objectType;
             type.indexType = indexType;
             return type;
-        }
-
-        // Parser.fixupParentReferences
-        function fixupParentReferences(rootNode: Node) {
-            let parent: Node = rootNode;
-            forEachChild(rootNode, visitNode);
-            return;
-            function visitNode(n: Node): void {
-                if (n.parent !== parent) {
-                    n.parent = parent;
-                    const saveParent = parent;
-                    parent = n;
-                    forEachChild(n, visitNode);
-                    parent = saveParent;
-                }
-            }
         }
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
@@ -22626,17 +22607,7 @@ namespace ts {
             checkSourceElement(node.type);
             forEach(node.arguments, checkSourceElement);
             forEach(node.typeArguments, checkSourceElement);
-            const callExpr = getCallExpressionFromTypeCallNode(node);
-            checkCallExpression(callExpr);
-        }
-
-        function getCallExpressionFromTypeCallNode(node: TypeCallTypeNode): CallExpression {
-            const fn = typeNodeToExpression(node.type);
-            const args = map(node.arguments, typeNodeToExpression);
-            const callExpr = createCall(fn, node.typeArguments, args);
-            fixupParentReferences(callExpr);
-            callExpr.parent = node;
-            return callExpr;
+            getTypeFromTypeCallNode(node);
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is

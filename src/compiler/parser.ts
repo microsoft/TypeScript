@@ -4293,6 +4293,9 @@ namespace ts {
                 return undefined;
             }
 
+            if (token() !== SyntaxKind.OpenParenToken) {
+                return;
+            }
             const args = parseTypeArgumentList();
             const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
             callExpr.type = type;
