@@ -1,3 +1,4 @@
+// @lib: es6
 // @Filename: complex.d.ts
 interface Ara<T> { t: T }
 interface Collection<K, V> {

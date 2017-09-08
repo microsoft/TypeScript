@@ -10,7 +10,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
             const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
             changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>token.parent, sourceFile), superCall, { suffix: context.newLineCharacter });
 

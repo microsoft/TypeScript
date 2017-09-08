@@ -722,6 +722,12 @@ namespace ts {
                         }
                         break;
 
+                    case SyntaxKind.BinaryExpression:
+                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                           addDeclaration(node as BinaryExpression);
+                        }
+                        // falls through
+
                     default:
                         forEachChild(node, visit);
                 }
@@ -1137,7 +1143,7 @@ namespace ts {
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
                  oldSettings.allowJs !== newSettings.allowJs ||
-                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
+                 oldSettings.disableSizeLimit !== newSettings.disableSizeLimit ||
                  oldSettings.baseUrl !== newSettings.baseUrl ||
                  !equalOwnProperties(oldSettings.paths, newSettings.paths));
 
@@ -1398,7 +1404,7 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
                 // Try getting just type at this position and show
@@ -1435,6 +1441,21 @@ namespace ts {
                 documentation: displayPartsDocumentationsAndKind.documentation,
                 tags: displayPartsDocumentationsAndKind.tags
             };
+        }
+
+        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+            if ((isIdentifier(node) || isStringLiteral(node))
+                && isPropertyAssignment(node.parent)
+                && node.parent.name === node) {
+                const type = checker.getContextualType(node.parent.parent);
+                if (type) {
+                    const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
+                    if (property) {
+                        return property;
+                    }
+                }
+            }
+            return checker.getSymbolAtLocation(node);
         }
 
         /// Goto definition
@@ -2090,7 +2111,7 @@ namespace ts {
             }
 
             forEachChild(node, walk);
-            if (node.jsDoc) {
+            if (hasJSDocNodes(node)) {
                 for (const jsDoc of node.jsDoc) {
                     forEachChild(jsDoc, walk);
                 }
