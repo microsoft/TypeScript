@@ -505,7 +505,7 @@ namespace ts {
         }
     }
 
-    function staticAssertNever(_: never): void {}
+    export function staticAssertNever(_: never): void {}
 
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
