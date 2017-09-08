@@ -339,45 +339,31 @@ namespace ts.refactor.extractMethod {
                     return false;
                 }
                 const savedPermittedJumps = permittedJumps;
-                if (node.parent) {
-                    switch (node.parent.kind) {
-                        case SyntaxKind.IfStatement:
-                            if ((<IfStatement>node.parent).thenStatement === node || (<IfStatement>node.parent).elseStatement === node) {
-                                // forbid all jumps inside thenStatement or elseStatement
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            break;
-                        case SyntaxKind.TryStatement:
-                            if ((<TryStatement>node.parent).tryBlock === node) {
-                                // forbid all jumps inside try blocks
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            else if ((<TryStatement>node.parent).finallyBlock === node) {
-                                // allow unconditional returns from finally blocks
-                                permittedJumps = PermittedJumps.Return;
-                            }
-                            break;
-                        case SyntaxKind.CatchClause:
-                            if ((<CatchClause>node.parent).block === node) {
-                                // forbid all jumps inside the block of catch clause
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            break;
-                        case SyntaxKind.CaseClause:
-                            if ((<CaseClause>node).expression !== node) {
-                                // allow unlabeled break inside case clauses
-                                permittedJumps |= PermittedJumps.Break;
-                            }
-                            break;
-                        default:
-                            if (isIterationStatement(node.parent, /*lookInLabeledStatements*/ false)) {
-                                if ((<IterationStatement>node.parent).statement === node) {
-                                    // allow unlabeled break/continue inside loops
-                                    permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
-                                }
-                            }
-                            break;
-                    }
+
+                switch (node.kind) {
+                    case SyntaxKind.IfStatement:
+                        permittedJumps = PermittedJumps.None;
+                        break;
+                    case SyntaxKind.TryStatement:
+                        // forbid all jumps inside try blocks
+                        permittedJumps = PermittedJumps.None;
+                        break;
+                    case SyntaxKind.Block:
+                        if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (<TryStatement>node).finallyBlock === node) {
+                            // allow unconditional returns from finally blocks
+                            permittedJumps = PermittedJumps.Return;
+                        }
+                        break;
+                    case SyntaxKind.CaseClause:
+                        // allow unlabeled break inside case clauses
+                        permittedJumps |= PermittedJumps.Break;
+                        break;
+                    default:
+                        if (isIterationStatement(node, /*lookInLabeledStatements*/ false)) {
+                            // allow unlabeled break/continue inside loops
+                            permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
+                        }
+                        break;
                 }
 
                 switch (node.kind) {
@@ -404,7 +390,7 @@ namespace ts.refactor.extractMethod {
                                 }
                             }
                             else {
-                                if (!(permittedJumps & (SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                                if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
                                     // attempt to break or continue in a forbidden context
                                     (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements));
                                 }
