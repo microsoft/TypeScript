@@ -1,0 +1,127 @@
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(13,35): error TS2322: Type '{ '0': true; '2': boolean; }' is not assignable to type 'NumBool'.
+  Object literal may only specify known properties, and ''2'' does not exist in type 'NumBool'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(14,5): error TS2322: Type '{ '0': true; }' is not assignable to type 'NumBool'.
+  Property '"1"' is missing in type '{ '0': true; }'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(17,1): error TS7017: Element implicitly has an 'any' type because type 'NumBool' has no index signature.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(27,1): error TS7017: Element implicitly has an 'any' type because type 'StrAny' has no index signature.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(33,49): error TS2322: Type '{ '0': number; [Nums.B]: number; [Nums2.Gimel]: number; }' is not assignable to type 'NumNum'.
+  Object literal may only specify known properties, and '[Nums2.Gimel]' does not exist in type 'NumNum'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(41,40): error TS2322: Type '{ [Nums.A]: number; [Nums.B]: number; }' is not assignable to type 'OneNumNum'.
+  Object literal may only specify known properties, and '[Nums.B]' does not exist in type 'OneNumNum'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(44,1): error TS7017: Element implicitly has an 'any' type because type 'OneNumNum' has no index signature.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(50,6): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(51,6): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(63,4): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(69,5): error TS2322: Type '{ [0]: number; [1]: number; }' is not assignable to type 'MixNum'.
+  Property 'a' is missing in type '{ [0]: number; [1]: number; }'.
+tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts(75,30): error TS2322: Type '{ [0]: number; [1]: number; [2]: number; }' is not assignable to type 'MixConflictNum'.
+  Object literal may only specify known properties, and '[0]' does not exist in type 'MixConflictNum'.
+
+
+==== tests/cases/conformance/types/mapped/mappedTypeNumericEnum.ts (12 errors) ====
+    // with numbers
+    enum Nums {
+        A,
+        B
+    }
+    enum Nums2 {
+        Aleph,
+        Bet,
+        Gimel
+    }
+    type NumBool = { [K in Nums]: boolean }
+    let nb: NumBool = { '0': true, '1': false }
+    let wronb: NumBool = { '0': true, '2': false }
+                                      ~~~~~~~~~~
+!!! error TS2322: Type '{ '0': true; '2': boolean; }' is not assignable to type 'NumBool'.
+!!! error TS2322:   Object literal may only specify known properties, and ''2'' does not exist in type 'NumBool'.
+    let wronb2: NumBool = { '0': true }
+        ~~~~~~
+!!! error TS2322: Type '{ '0': true; }' is not assignable to type 'NumBool'.
+!!! error TS2322:   Property '"1"' is missing in type '{ '0': true; }'.
+    nb[Nums.A] = false;
+    nb[Nums2.Bet] = true;
+    nb[Nums2.Gimel] = false; // only disallowed with --strict
+    ~~~~~~~~~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'NumBool' has no index signature.
+    
+    // with strings
+    enum Strs {
+        A = 'a',
+        B = 'b'
+    }
+    type StrAny = { [K in Strs]: any }
+    let sa: StrAny = { a: 1, b: 2 }
+    sa[Strs.A] = 'a'
+    sa['nope'] = 'not allowed'
+    ~~~~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'StrAny' has no index signature.
+    
+    // union of numbers
+    type Ns = 0 | 1;
+    type NumNum = { [K in Ns]: number }
+    let nn: NumNum = { [Nums.A]: 3, [Nums.B]: 4 }
+    let omnomnom: NumNum = { '0': 12, [Nums.B]: 13, [Nums2.Gimel]: 14 }
+                                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ '0': number; [Nums.B]: number; [Nums2.Gimel]: number; }' is not assignable to type 'NumNum'.
+!!! error TS2322:   Object literal may only specify known properties, and '[Nums2.Gimel]' does not exist in type 'NumNum'.
+    nn[0] = 5
+    nn['1'] = 6
+    
+    // single number
+    type N = 0;
+    type OneNumNum = { [K in N]: number }
+    let onn: OneNumNum = { [Nums.A]: 7 }
+    let wronng: OneNumNum = { [Nums.A]: 7, [Nums.B]: 11 }
+                                           ~~~~~~~~~~~~
+!!! error TS2322: Type '{ [Nums.A]: number; [Nums.B]: number; }' is not assignable to type 'OneNumNum'.
+!!! error TS2322:   Object literal may only specify known properties, and '[Nums.B]' does not exist in type 'OneNumNum'.
+    onn[0] = 8
+    onn['0'] = 9
+    onn[1] = 10 // only disallowed with --strict
+    ~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'OneNumNum' has no index signature.
+    
+    // just number
+    type NumberNum = { [K in number]: number }
+    let numn: NumberNum = { }
+    numn[0] = 31
+    numn['1'] = 32
+         ~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+    numn['oops'] = 33
+         ~~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+    
+    // computed enum gets a string indexer
+    enum Comp {
+        A,
+        B = 1 << 3
+    }
+    
+    type CompNum = { [K in Comp]: number }
+    let cn: CompNum = { [Comp.A]: 15 }
+    let cnn: CompNum = { [Comp.A]: 16, '101': 17 }
+    cn[1001] = 18
+    cn['maybe?'] = 19
+       ~~~~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+    
+    // manual string/number union mixes
+    type Mix = 0 | 1 | 'a' | 'i' | 'u';
+    type MixNum = { [K in Mix]: number }
+    let mn: MixNum = { [0]: 20, '1': 21, a: 22, i: 23, u: 24 }
+    let mnn: MixNum = { [0]: 29, [1]: 30 }
+        ~~~
+!!! error TS2322: Type '{ [0]: number; [1]: number; }' is not assignable to type 'MixNum'.
+!!! error TS2322:   Property 'a' is missing in type '{ [0]: number; [1]: number; }'.
+    
+    // conflicts result in the property being thrown out
+    type MixConflict = 0 | 1 | 1 | 1 | 1 | 1 | 2 | '0' | '1';
+    type MixConflictNum = { [K in MixConflict]: number }
+    let mcn: MixConflictNum = { [2]: 25 }
+    let mcnn: MixConflictNum = { [0]: 26, [1]: 27, [2]: 28 }
+                                 ~~~~~~~
+!!! error TS2322: Type '{ [0]: number; [1]: number; [2]: number; }' is not assignable to type 'MixConflictNum'.
+!!! error TS2322:   Object literal may only specify known properties, and '[0]' does not exist in type 'MixConflictNum'.
+    
