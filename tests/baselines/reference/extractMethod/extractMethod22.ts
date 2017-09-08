@@ -11,7 +11,7 @@ function test() {
     try {
     }
     finally {
-        return newFunction();
+        return /*RENAME*/newFunction();
     }
 
     function newFunction() {
@@ -23,7 +23,7 @@ function test() {
     try {
     }
     finally {
-        return newFunction();
+        return /*RENAME*/newFunction();
     }
 }
 function newFunction() {
