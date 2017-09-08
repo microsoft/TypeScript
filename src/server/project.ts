@@ -376,6 +376,10 @@ namespace ts.server {
             return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
+        getExcludedFiles(): ReadonlyArray<NormalizedPath> {
+            return emptyArray;
+        }
+
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
             if (!this.program) {
                 return [];
@@ -543,33 +547,32 @@ namespace ts.server {
                 this.cachedUnresolvedImportsPerFile.remove(file);
             }
 
-            // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
-            // (can reuse cached imports for files that were not changed)
-            // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
-            // (can reuse cached imports for files that were not changed)
-            // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            let unresolvedImports: SortedReadonlyArray<string>;
-            if (hasChanges || changedFiles.length) {
-                const result: string[] = [];
-                for (const sourceFile of this.program.getSourceFiles()) {
-                    this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
-                }
-                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
-            }
-            unresolvedImports = this.lastCachedUnresolvedImportsList;
-
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, unresolvedImports, hasChanges);
-            if (this.setTypings(cachedTypings)) {
-                hasChanges = this.updateGraphWorker() || hasChanges;
-            }
-
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
             if (this.languageServiceEnabled) {
+                // 1. no changes in structure, no changes in unresolved imports - do nothing
+                // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
+                // (can reuse cached imports for files that were not changed)
+                // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
+                // (can reuse cached imports for files that were not changed)
+                // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
+                if (hasChanges || changedFiles.length) {
+                    const result: string[] = [];
+                    for (const sourceFile of this.program.getSourceFiles()) {
+                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                    }
+                    this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
+                }
+
+                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
+                if (this.setTypings(cachedTypings)) {
+                    hasChanges = this.updateGraphWorker() || hasChanges;
+                }
+
                 this.builder.onProjectUpdateGraph();
             }
             else {
+                this.lastCachedUnresolvedImportsList = undefined;
                 this.builder.clear();
             }
 
@@ -837,6 +840,7 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
+        public readonly projectRootPath: string | undefined;
 
         private static readonly newName = (() => {
             let nextId = 1;
@@ -876,7 +880,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -885,6 +889,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+            this.projectRootPath = projectRootPath;
         }
 
         addRoot(info: ScriptInfo) {
@@ -1164,6 +1169,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
+        excludedFiles: ReadonlyArray<NormalizedPath> = [];
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -1173,6 +1179,11 @@ namespace ts.server {
             public compileOnSaveEnabled: boolean,
             private readonly projectFilePath?: string) {
             super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+
+        }
+
+        getExcludedFiles() {
+            return this.excludedFiles;
         }
 
         getProjectRootPath() {

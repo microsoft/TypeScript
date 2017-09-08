@@ -23,7 +23,7 @@ class Main {
 new Main();
 
 //// [capturedLetConstInLoop13.js]
-var Main = (function () {
+var Main = /** @class */ (function () {
     function Main() {
         this.register("a", "b", "c");
     }

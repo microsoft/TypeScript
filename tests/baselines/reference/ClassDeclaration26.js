@@ -6,7 +6,7 @@ class C {
 }
 
 //// [ClassDeclaration26.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.foo = 10;
     }

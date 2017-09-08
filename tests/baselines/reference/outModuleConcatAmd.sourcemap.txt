@@ -21,7 +21,7 @@ sourceFile:tests/cases/compiler/ref/a.ts
 >>>define("ref/a", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
->>>    var A = (function () {
+>>>    var A = /** @class */ (function () {
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^->
 1 >
@@ -81,7 +81,7 @@ sourceFile:tests/cases/compiler/b.ts
 >>>define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
->>>    var B = (function (_super) {
+>>>    var B = /** @class */ (function (_super) {
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >import {A} from "./ref/a";

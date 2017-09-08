@@ -118,7 +118,7 @@ var spreadFunc = __assign({}, (function () { }));
 var anything;
 var spreadAny = __assign({}, anything);
 // methods are not enumerable
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }

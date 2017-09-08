@@ -32,13 +32,13 @@ var __extends = (this && this.__extends) || (function () {
 // Original test intent:
 // Errors on '_this' should be reported in derived constructors,
 // even if 'super()' is not called.
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         return {};
     }
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         var _this = this;

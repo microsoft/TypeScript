@@ -67,17 +67,16 @@ namespace Utils {
 
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
-    const Buffer: typeof global.Buffer = currentExecutionEnvironment !== ExecutionEnvironment.Browser
-        ? require("buffer").Buffer
-        : undefined;
+    // Thanks to browserify, Buffer is always available nowadays
+    const Buffer: typeof global.Buffer = require("buffer").Buffer;
 
     export function encodeString(s: string): string {
-        return Buffer ? (new Buffer(s)).toString("utf8") : s;
+        return Buffer.from(s).toString("utf8");
     }
 
     export function byteLength(s: string, encoding?: string): number {
         // stub implementation if Buffer is not available (in-browser case)
-        return Buffer ? Buffer.byteLength(s, encoding) : s.length;
+        return Buffer.byteLength(s, encoding);
     }
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -133,17 +132,18 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T): T {
-        const cache: { [idx: string]: any } = {};
+    export function memoize<T extends Function>(f: T, memoKey: (...anything: any[]) => string): T {
+        const cache = ts.createMap<any>();
 
-        return <any>(function(this: any) {
-            const key = Array.prototype.join.call(arguments);
-            const cachedResult = cache[key];
-            if (cachedResult) {
-                return cachedResult;
+        return <any>(function(this: any, ...args: any[]) {
+            const key = memoKey(...args);
+            if (cache.has(key)) {
+                return cache.get(key);
             }
             else {
-                return cache[key] = f.apply(this, arguments);
+                const value = f.apply(this, args);
+                cache.set(key, value);
+                return value;
             }
         });
     }
@@ -207,7 +207,7 @@ namespace Utils {
         return a !== undefined && typeof a.pos === "number";
     }
 
-    export function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
+    export function convertDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>) {
         return diagnostics.map(convertDiagnostic);
     }
 
@@ -337,7 +337,7 @@ namespace Utils {
         }
     }
 
-    export function assertDiagnosticsEquals(array1: ts.Diagnostic[], array2: ts.Diagnostic[]) {
+    export function assertDiagnosticsEquals(array1: ReadonlyArray<ts.Diagnostic>, array2: ReadonlyArray<ts.Diagnostic>) {
         if (array1 === array2) {
             return;
         }
@@ -686,7 +686,7 @@ namespace Harness {
 
                 return dirPath;
             }
-            export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl);
+            export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl, path => path);
 
             export function resolvePath(path: string) {
                 const response = Http.getFileFromServerSync(serverRoot + path + "?resolve=true");
@@ -703,21 +703,22 @@ namespace Harness {
                 return response.status === 200;
             }
 
-            export let listFiles = Utils.memoize((path: string, spec?: RegExp): string[] => {
+            export const listFiles = Utils.memoize((path: string, spec?: RegExp, options?: { recursive?: boolean }): string[] => {
                 const response = Http.getFileFromServerSync(serverRoot + path);
                 if (response.status === 200) {
-                    const results = response.responseText.split(",");
+                    let results = response.responseText.split(",");
                     if (spec) {
-                        return results.filter(file => spec.test(file));
+                        results = results.filter(file => spec.test(file));
                     }
-                    else {
-                        return results;
+                    if (options && !options.recursive) {
+                        results = results.filter(file => (ts.getDirectoryPath(ts.normalizeSlashes(file)) === path));
                     }
+                    return results;
                 }
                 else {
                     return [""];
                 }
-            });
+            }, (path: string, spec?: RegExp, options?: { recursive?: boolean }) => `${path}|${spec}|${options ? options.recursive : undefined}`);
 
             export function readFile(file: string): string | undefined {
                 const response = Http.getFileFromServerSync(serverRoot + file);
@@ -1283,12 +1284,13 @@ namespace Harness {
             return normalized;
         }
 
-        export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
-            return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
+        export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+            const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() };
+            return (pretty ? ts.formatDiagnosticsWithColorAndContext : ts.formatDiagnostics)(diagnostics, host);
         }
 
-        export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
-            diagnostics.sort(ts.compareDiagnostics);
+        export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+            diagnostics = diagnostics.slice().sort(ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
             let totalErrorsReportedInNonLibraryFiles = 0;
@@ -1407,18 +1409,18 @@ namespace Harness {
             // Verify we didn't miss any errors in total
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
 
-            return minimalDiagnosticsToString(diagnostics) +
+            return minimalDiagnosticsToString(diagnostics, pretty) +
                 Harness.IO.newLine() + Harness.IO.newLine() + outputLines;
         }
 
-        export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[]) {
+        export function doErrorBaseline(baselinePath: string, inputFiles: TestFile[], errors: ts.Diagnostic[], pretty?: boolean) {
             Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
                 if (!errors || (errors.length === 0)) {
                     /* tslint:disable:no-null-keyword */
                     return null;
                     /* tslint:enable:no-null-keyword */
                 }
-                return getErrorBaseline(inputFiles, errors);
+                return getErrorBaseline(inputFiles, errors, pretty);
             });
         }
 
@@ -1989,7 +1991,7 @@ namespace Harness {
                     IO.writeFile(actualFileName + ".delete", "");
                 }
                 else {
-                    IO.writeFile(actualFileName, actual);
+                    IO.writeFile(actualFileName, encoded_actual);
                 }
                 throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }

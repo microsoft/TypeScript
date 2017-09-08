@@ -7,7 +7,7 @@ class greeter {
 }
 
 //// [unusedLocalsInMethod2.js]
-var greeter = (function () {
+var greeter = /** @class */ (function () {
     function greeter() {
     }
     greeter.prototype.function1 = function () {

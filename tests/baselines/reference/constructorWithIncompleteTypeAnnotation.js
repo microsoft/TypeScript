@@ -294,7 +294,7 @@ var fs = module;
 ("fs");
 var TypeScriptAllInOne;
 (function (TypeScriptAllInOne) {
-    var Program = (function () {
+    var Program = /** @class */ (function () {
         function Program() {
             this["case"] = bfs.STATEMENTS(4);
         }
@@ -344,7 +344,7 @@ var TypeScriptAllInOne;
     console.log('Done');
     return 0;
 })(TypeScriptAllInOne || (TypeScriptAllInOne = {}));
-var BasicFeatures = (function () {
+var BasicFeatures = /** @class */ (function () {
     function BasicFeatures() {
     }
     /// <summary>
@@ -489,7 +489,7 @@ var BasicFeatures = (function () {
     };
     return BasicFeatures;
 }());
-var CLASS = (function () {
+var CLASS = /** @class */ (function () {
     function CLASS() {
         this.d = function () { yield 0; };
     }
@@ -513,7 +513,7 @@ var CLASS = (function () {
     return CLASS;
 }());
 // todo: use these
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -526,7 +526,7 @@ method2();
 {
     return 2 * this.method1(2);
 }
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -536,7 +536,7 @@ var B = (function (_super) {
     };
     return B;
 }(A));
-var Overloading = (function () {
+var Overloading = /** @class */ (function () {
     function Overloading() {
         this.otherValue = 42;
     }
