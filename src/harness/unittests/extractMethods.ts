@@ -224,7 +224,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         if (x) {
                             return;
                         } |]
@@ -234,7 +234,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         [$|if (x) {
                         }
                         return;|]
@@ -655,6 +655,60 @@ function test(x: number) {
     finally {
         [#|return 1;|]
     }
+}`);
+        // Extraction position - namespace
+        testExtractMethod("extractMethod23",
+            `namespace NS {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - function
+        testExtractMethod("extractMethod24",
+            `function Outer() {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - file
+        testExtractMethod("extractMethod25",
+            `function M1() { }
+function M2() {
+    [#|return 1;|]
+}
+function M3() { }`);
+        // Extraction position - class without ctor
+        testExtractMethod("extractMethod26",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+}`);
+        // Extraction position - class with ctor in middle
+        testExtractMethod("extractMethod27",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    constructor() { }
+    M3() { }
+}`);
+        // Extraction position - class with ctor at end
+        testExtractMethod("extractMethod28",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+    constructor() { }
 }`);
     });
 
