@@ -2834,7 +2834,8 @@ namespace FourSlash {
                 }
             }
             else {
-                // TODO: test editInfo.renameFilename too
+                // TODO: test editInfo.renameFilename value
+                assert.isDefined(editInfo.renameFilename);
                 if (renamePosition !== editInfo.renameLocation) {
                     this.raiseError(`Expected rename position of ${renamePosition}, but got ${editInfo.renameLocation}`);
                 }
