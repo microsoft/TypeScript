@@ -75,7 +75,7 @@ namespace ts.refactor.extractMethod {
         const index = +parsedIndexMatch[1];
         Debug.assert(isFinite(index), "Expected to parse a finite number from the scope index");
 
-        return getPossibleExtractionAtIndex(targetRange, context, index);
+        return getExtractionAtIndex(targetRange, context, index);
     }
 
     // Move these into diagnostic messages if they become user-facing
@@ -482,7 +482,7 @@ namespace ts.refactor.extractMethod {
     }
 
     // exported only for tests
-    export function getPossibleExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
+    export function getExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
         const { scopes, readsAndWrites: { target, usagesPerScope, errorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         Debug.assert(!errorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
         context.cancellationToken.throwIfCancellationRequested();
@@ -689,7 +689,8 @@ namespace ts.refactor.extractMethod {
         // replace range with function call
         const called = getCalledExpression(scope, range, functionNameText);
 
-        let call: Expression = createCall(called,
+        let call: Expression = createCall(
+            called,
             callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
@@ -772,7 +773,7 @@ namespace ts.refactor.extractMethod {
             Debug.assert(fileName === renameFilename);
             for (const change of textChanges) {
                 const { span, newText } = change;
-                // Note: We are assuming that the call expression comes before the function declaration,
+                // TODO(acasey): We are assuming that the call expression comes before the function declaration,
                 // because we want the new cursor to be on the call expression,
                 // which is closer to where the user was before extracting the function.
                 const index = newText.indexOf(functionNameText);
@@ -927,7 +928,7 @@ namespace ts.refactor.extractMethod {
         readonly node: Node;
     }
 
-    export interface ScopeUsages {
+    interface ScopeUsages {
         readonly usages: Map<UsageEntry>;
         readonly typeParameterUsages: Map<TypeParameter>; // Key is type ID
         readonly substitutions: Map<Node>;

@@ -691,7 +691,7 @@ function test(x: number) {
                 data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
-                    const { renameLocation, edits } = refactor.extractMethod.getPossibleExtractionAtIndex(result.targetRange, context, results.indexOf(r));
+                    const { renameLocation, edits } = refactor.extractMethod.getExtractionAtIndex(result.targetRange, context, results.indexOf(r));
                     assert.lengthOf(edits, 1);
                     data.push(`// ==SCOPE::${r.scopeDescription}==`);
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
