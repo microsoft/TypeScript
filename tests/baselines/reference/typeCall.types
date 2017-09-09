@@ -221,6 +221,75 @@ type Y = Fn2(Fn1(1[]));
 >Fn2 : Fn2
 >Fn1 : Fn1
 
+interface isT<T> {
+>isT : isT<T>
+>T : T
+
+  (v: never): '0';
+>v : never
+
+  (v: T): '1';
+>v : T
+>T : T
+
+  (v: any): '0';
+>v : any
+}
+type Matches<V, T> = isT<T>(V);
+>Matches : isT<T>(V)
+>V : V
+>T : T
+>isT : isT<T>
+>T : T
+>V : V
+
+type isBool = isT<boolean>;
+>isBool : isT<boolean>
+>isT : isT<T>
+
+let falseBool: isBool(false); // 1
+>falseBool : "1"
+>isBool : isT<boolean>
+>false : false
+
+let trueBool: isBool(true); // 1
+>trueBool : "1"
+>isBool : isT<boolean>
+>true : true
+
+let strBool: isBool(string); // 0
+>strBool : "0"
+>isBool : isT<boolean>
+
+let anyBool: isBool(any); // 0
+>anyBool : "0"
+>isBool : isT<boolean>
+
+let neverBool: isBool(never); // 0
+>neverBool : "0"
+>isBool : isT<boolean>
+
+interface ObjectHasStringIndex {
+>ObjectHasStringIndex : ObjectHasStringIndex
+
+  // <T extends { [k: string]: any }>(o: T): T[string];
+  (o: { [k: string]: any }): '1';
+>o : { [k: string]: any; }
+>k : string
+
+  (o: {}): '0';
+>o : {}
+}
+let ObjectHasStringIndexTestT: ObjectHasStringIndex({ [k: string]: 123 }); // '1'
+>ObjectHasStringIndexTestT : "1"
+>ObjectHasStringIndex : ObjectHasStringIndex
+>k : string
+
+let ObjectHasStringIndexTestF: ObjectHasStringIndex({ a: 123 }); // wanted '0', got '1'... so can't match for index, and erroring RHS yields `any`. ouch.
+>ObjectHasStringIndexTestF : "1"
+>ObjectHasStringIndex : ObjectHasStringIndex
+>a : 123
+
 type IndexCall<T extends () => { [k: string]: any }, K extends keyof (T())> = T()[K];
 >IndexCall : T()[K]
 >T : T

@@ -61,6 +61,27 @@ type Fn4c = Fn3(1[]);
 let y = fn2(fn1(ones));
 type Y = Fn2(Fn1(1[]));
 
+interface isT<T> {
+  (v: never): '0';
+  (v: T): '1';
+  (v: any): '0';
+}
+type Matches<V, T> = isT<T>(V);
+type isBool = isT<boolean>;
+let falseBool: isBool(false); // 1
+let trueBool: isBool(true); // 1
+let strBool: isBool(string); // 0
+let anyBool: isBool(any); // 0
+let neverBool: isBool(never); // 0
+
+interface ObjectHasStringIndex {
+  // <T extends { [k: string]: any }>(o: T): T[string];
+  (o: { [k: string]: any }): '1';
+  (o: {}): '0';
+}
+let ObjectHasStringIndexTestT: ObjectHasStringIndex({ [k: string]: 123 }); // '1'
+let ObjectHasStringIndexTestF: ObjectHasStringIndex({ a: 123 }); // wanted '0', got '1'... so can't match for index, and erroring RHS yields `any`. ouch.
+
 type IndexCall<T extends () => { [k: string]: any }, K extends keyof (T())> = T()[K];
 type CallMember<T extends { [k: string]: () => any }, K extends keyof T> = T[K]();
 type MappedMemberCall<T extends { [k: string]: () => any }> = { [K in keyof T]: T[K]() };
@@ -159,6 +180,13 @@ var ones = null;
 // let x = fn2(fn1(1)); // errors with not assignable, ok
 // type X = Fn2(Fn1(1)); // errors with not assignable, ok
 var y = fn2(fn1(ones));
+var falseBool; // 1
+var trueBool; // 1
+var strBool; // 0
+var anyBool; // 0
+var neverBool; // 0
+var ObjectHasStringIndexTestT; // '1'
+var ObjectHasStringIndexTestF; // wanted '0', got '1'... so can't match for index, and erroring RHS yields `any`. ouch.
 var a1;
 var b1;
 var c1;
