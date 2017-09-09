@@ -3935,8 +3935,8 @@ declare namespace ts {
      */
     type RefactorEditInfo = {
         edits: FileTextChanges[];
-        renameFilename?: string;
-        renameLocation?: number;
+        renameFilename: string | undefined;
+        renameLocation: number | undefined;
     };
     interface TextInsertion {
         newText: string;
