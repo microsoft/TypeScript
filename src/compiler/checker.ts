@@ -7524,7 +7524,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType | TypeCallType) {
+        function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
                 type.resolvedIndexType.type = type;
@@ -7543,7 +7543,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type): Type {
-            return maybeTypeOfKind(type, TypeFlags.TypeVariable) || isGenericTypeCallType(type) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType | TypeCallType>type) :
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable) || isGenericTypeCallType(type) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                     type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                         getLiteralTypeFromPropertyNames(type);

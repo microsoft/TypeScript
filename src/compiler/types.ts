@@ -3416,8 +3416,6 @@ namespace ts {
     export interface TypeCallType extends TypeVariable {
         function: Type;
         arguments: Type[];
-        /* @internal */
-        resolvedIndexType: IndexType;
     }
 
     // keyof T types (TypeFlags.Index)
