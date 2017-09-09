@@ -8,19 +8,16 @@ interface Match {
   (o: any): 1;
 >o : any
 }
-type Wrap = <T = RegExp>(v: T) => Match(T);
+type Wrap = <T>(v: T) => Match(T);
 >Wrap : Wrap
 >T : T
->RegExp : RegExp
 >v : T
 >T : T
 >Match : Match
 >T : T
 
 type A = Wrap(RegExp);
->A : Match(T)
+>A : 0
 >Wrap : Wrap
 >RegExp : RegExp
-
-// falls thru to 1, `object` checked not with generic val `RegExp` but with its constraint (generic `any`)
 

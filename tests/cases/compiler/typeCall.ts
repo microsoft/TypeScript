@@ -32,25 +32,20 @@ type i = Wrap<123>;
 type F5 = () => () => { a: () => 1; };
 type j = F5()()['a']();
 
-declare function id<T>(v: T): T;
-let l = id<string>('foo');
-
 interface IsPrimitive {
   (o: object): '0';
   (o: any): '1';
 }
-type stringIsPrimitive = IsPrimitive(string); // '1', ok
-type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
+type stringIsPrimitive = IsPrimitive(string);
+type regexpIsPrimitive = IsPrimitive(RegExp);
 
 // alternative, pass as parameters
 type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
-type stringIsPrimitive3 = genericIsPrimitive3(string); // '1', ok
+type stringIsPrimitive3 = genericIsPrimitive3(string);
 type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
-// fails, see #17471, '1' instead of '0', should delay overload selection until type argument is known
 
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
-// FAILS!, wanted `{ a: [1], b: [2], c: [3] }`, got `{ a: any; b: any; c: any; }`.
 
 // binary function composition
 type Fn1 = <T1 extends number>(v1: T1[]) => { [k: string]: T1 };
@@ -61,9 +56,9 @@ type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
 // type Fn4 = Fn3(1); // errors, ok
 let ones = null! as 1[];
 type Fn4b = Fn3(typeof ones);
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 type Fn4c = Fn3(1[]);
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<number>`.
+// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 // let x = fn2(fn1(1)); // errors with not assignable, ok
 // type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));

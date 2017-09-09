@@ -618,6 +618,8 @@ namespace ts {
 
     export type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
 
+    export type Arguments = ReadonlyArray<Expression> | ReadonlyArray<TypeNode>;
+
     export interface Declaration extends Node {
         _declarationBrand: any;
     }
