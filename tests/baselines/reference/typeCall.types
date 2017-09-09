@@ -391,6 +391,35 @@ let neverBool: isBool(never); // 0
 >neverBool : "0"
 >isBool : isT<boolean>
 
+type Assert<T> = (<U>(v: U | null | undefined) => U)(T);
+>Assert : (<U>(v: U | null | undefined) => U)(T)
+>T : T
+>U : U
+>v : U | null | undefined
+>U : U
+>null : null
+>U : U
+>T : T
+
+let assert: Assert<string | undefined>; // string
+>assert : string
+>Assert : (<U>(v: U | null | undefined) => U)(T)
+
+type Minus<A, B> = (<U>(v: U | B) => U)(A);
+>Minus : (<U>(v: B | U) => U)(A)
+>A : A
+>B : B
+>U : U
+>v : B | U
+>U : U
+>B : B
+>U : U
+>A : A
+
+let noNumbers: Minus<string | number, number>; // string
+>noNumbers : string
+>Minus : (<U>(v: B | U) => U)(A)
+
 interface ObjectHasStringIndex {
 >ObjectHasStringIndex : ObjectHasStringIndex
 
@@ -563,14 +592,14 @@ let b1: typeof a1();
 >b1 : string
 >a1 : () => string
 
-type Assert<T extends () => any> = T();
->Assert : T()
+type Abc<T extends () => any> = T();
+>Abc : T()
 >T : T
 >T : T
 
-let c1: Assert<typeof a1>;
+let c1: Abc<typeof a1>;
 >c1 : string
->Assert : T()
+>Abc : T()
 >a1 : () => string
 
 declare function infer1<T extends () => any>(x: T): T();

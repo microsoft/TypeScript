@@ -110,6 +110,9 @@ let strBool: isBool(string); // 0
 let anyBool: isBool(any); // 0
 let neverBool: isBool(never); // 0
 
+type Assert<T> = (<U>(v: U | null | undefined) => U)(T);
+let x: Assert<string | undefined>; // string
+
 interface ObjectHasStringIndex {
   // <T extends { [k: string]: any }>(o: T): T[string];
   (o: { [k: string]: any }): '1';
@@ -155,8 +158,8 @@ type T19 = Strip2<() => Obj>; // fails, unresolved, want { x: number, z: { kind:
 
 let a1: () => string;
 let b1: typeof a1();
-type Assert<T extends () => any> = T();
-let c1: Assert<typeof a1>;
+type Abc<T extends () => any> = T();
+let c1: Abc<typeof a1>;
 
 declare function infer1<T extends () => any>(x: T): T();
 infer1(null! as () => number);
