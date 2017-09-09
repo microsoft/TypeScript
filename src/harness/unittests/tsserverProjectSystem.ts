@@ -5275,7 +5275,7 @@ namespace ts.projectSystem {
                     watchedRecursiveDirectories.length = 2;
                     verifyProject();
 
-                    const changedFiles = limitHit ? [file1.path, file2.path, file3.path, libFile.path] : [file1.path, file2.path];
+                    const changedFiles = [file1.path, file2.path];
                     verifyProjectChangedEventHandler([{
                         eventName: server.ProjectChangedEvent,
                         data: {

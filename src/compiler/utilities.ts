@@ -3513,34 +3513,28 @@ namespace ts {
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
     export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
-        // If there are new values update them
-        if (newMap) {
-            const { createNewValue, onDeleteValue, onExistingValue } = options;
-            // Needs update
-            map.forEach((existingValue, key) => {
-                const valueInNewMap = newMap.get(key);
-                // Not present any more in new map, remove it
-                if (valueInNewMap === undefined) {
-                    map.delete(key);
-                    onDeleteValue(existingValue, key);
-                }
-                // If present notify about existing values
-                else if (onExistingValue) {
-                    onExistingValue(existingValue, valueInNewMap, key);
-                }
-            });
+        const { createNewValue, onDeleteValue, onExistingValue } = options;
+        // Needs update
+        map.forEach((existingValue, key) => {
+            const valueInNewMap = newMap.get(key);
+            // Not present any more in new map, remove it
+            if (valueInNewMap === undefined) {
+                map.delete(key);
+                onDeleteValue(existingValue, key);
+            }
+            // If present notify about existing values
+            else if (onExistingValue) {
+                onExistingValue(existingValue, valueInNewMap, key);
+            }
+        });
 
-            // Add new values that are not already present
-            newMap.forEach((valueInNewMap, key) => {
-                if (!map.has(key)) {
-                    // New values
-                    map.set(key, createNewValue(key, valueInNewMap));
-                }
-            });
-        }
-        else {
-            clearMap(map, options.onDeleteValue);
-        }
+        // Add new values that are not already present
+        newMap.forEach((valueInNewMap, key) => {
+            if (!map.has(key)) {
+                // New values
+                map.set(key, createNewValue(key, valueInNewMap));
+            }
+        });
     }
 
     /**

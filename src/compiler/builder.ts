@@ -48,6 +48,7 @@ namespace ts {
         addScriptInfo(program: Program, sourceFile: SourceFile): void;
         removeScriptInfo(path: Path): void;
         updateScriptInfo(program: Program, sourceFile: SourceFile): void;
+        updaterScriptInfoWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
         /**
          * Gets the files affected by the script info which has updated shape from the known one
          */
@@ -143,10 +144,14 @@ namespace ts {
         }
 
         function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile, hasInvalidatedResolution: HasInvalidatedResolution) {
-            if (existingInfo.version !== sourceFile.version || hasInvalidatedResolution(sourceFile.path)) {
+            if (existingInfo.version !== sourceFile.version) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
                 existingInfo.version = sourceFile.version;
                 emitHandler.updateScriptInfo(program, sourceFile);
+            }
+            else if (hasInvalidatedResolution(sourceFile.path) &&
+                emitHandler.updaterScriptInfoWithSameVersion(program, sourceFile)) {
+                registerChangedFile(sourceFile.path, sourceFile.fileName);
             }
         }
 
@@ -338,8 +343,8 @@ namespace ts {
         /**
          * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
          */
-        function getReferencedFiles(program: Program, sourceFile: SourceFile): Map<true> {
-            const referencedFiles = createMap<true>();
+        function getReferencedFiles(program: Program, sourceFile: SourceFile): Map<true> | undefined {
+            let referencedFiles: Map<true> | undefined;
 
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
@@ -351,7 +356,7 @@ namespace ts {
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
                         const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
                         if (declarationSourceFile) {
-                            referencedFiles.set(declarationSourceFile.path, true);
+                            addReferencedFile(declarationSourceFile.path);
                         }
                     }
                 }
@@ -362,7 +367,7 @@ namespace ts {
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
                     const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
-                    referencedFiles.set(referencedPath, true);
+                    addReferencedFile(referencedPath);
                 }
             }
 
@@ -375,11 +380,18 @@ namespace ts {
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, sourceFileDirectory, getCanonicalFileName);
-                    referencedFiles.set(typeFilePath, true);
+                    addReferencedFile(typeFilePath);
                 });
             }
 
             return referencedFiles;
+
+            function addReferencedFile(referencedPath: Path) {
+                if (!referencedFiles) {
+                    referencedFiles = createMap<true>();
+                }
+                referencedFiles.set(referencedPath, true);
+            }
         }
 
         /**
@@ -402,6 +414,7 @@ namespace ts {
                 addScriptInfo: noop,
                 removeScriptInfo: noop,
                 updateScriptInfo: noop,
+                updaterScriptInfoWithSameVersion: returnFalse,
                 getFilesAffectedByUpdatedShape
             };
 
@@ -421,12 +434,45 @@ namespace ts {
             return {
                 addScriptInfo: setReferences,
                 removeScriptInfo,
-                updateScriptInfo: setReferences,
+                updateScriptInfo: updateReferences,
+                updaterScriptInfoWithSameVersion: updateReferencesTrackingChangedReferences,
                 getFilesAffectedByUpdatedShape
             };
 
             function setReferences(program: Program, sourceFile: SourceFile) {
-                references.set(sourceFile.path, getReferencedFiles(program, sourceFile));
+                const newReferences = getReferencedFiles(program, sourceFile);
+                if (newReferences) {
+                    references.set(sourceFile.path, getReferencedFiles(program, sourceFile));
+                }
+            }
+
+            function updateReferences(program: Program, sourceFile: SourceFile) {
+                const newReferences = getReferencedFiles(program, sourceFile);
+                if (newReferences) {
+                    references.set(sourceFile.path, newReferences);
+                }
+                else {
+                    references.delete(sourceFile.path);
+                }
+            }
+
+            function updateReferencesTrackingChangedReferences(program: Program, sourceFile: SourceFile) {
+                const newReferences = getReferencedFiles(program, sourceFile);
+                if (!newReferences) {
+                    // Changed if we had references
+                    return references.delete(sourceFile.path);
+                }
+
+                const oldReferences = references.get(sourceFile.path);
+                references.set(sourceFile.path, newReferences);
+                if (!oldReferences || oldReferences.size !== newReferences.size) {
+                    return true;
+                }
+
+                // If there are any new references that werent present previously there is change
+                return forEachEntry(newReferences, (_true, referencedPath) => !oldReferences.delete(referencedPath)) ||
+                    // Otherwise its changed if there are more references previously than now
+                    !!oldReferences.size;
             }
 
             function removeScriptInfo(removedFilePath: Path) {
