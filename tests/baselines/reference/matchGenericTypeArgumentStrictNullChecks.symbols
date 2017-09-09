@@ -1,0 +1,309 @@
+=== tests/cases/conformance/types/match/matchGenericTypeArgumentStrictNullChecks.ts ===
+// all of these test `match` with generics and --strictNullChecks.
+
+// empty
+type A<T> = T match {
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 3, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 3, 7))
+
+};
+declare const A1: A<1>;
+>A1 : Symbol(A1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 5, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+
+declare const A1or2: A<1 | 2>;
+>A1or2 : Symbol(A1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 6, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+
+declare const Astring: A<"">;
+>Astring : Symbol(Astring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 7, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+
+declare const Aempty: A<{}>;
+>Aempty : Symbol(Aempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 8, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+
+declare const Anever: A<never>;
+>Anever : Symbol(Anever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 9, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+
+declare const Aany: A<any>;
+>Aany : Symbol(Aany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 10, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+
+declare const Aundefined: A<undefined>;
+>Aundefined : Symbol(Aundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 0, 0))
+
+// only else
+type B<T> = T match {
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 14, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 14, 7))
+
+    else: "else"
+};
+declare const B1: B<1>;
+>B1 : Symbol(B1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 17, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+
+declare const B1or2: B<1 | 2>;
+>B1or2 : Symbol(B1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 18, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+
+declare const Bstring: B<"">;
+>Bstring : Symbol(Bstring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 19, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+
+declare const Bempty: B<{}>;
+>Bempty : Symbol(Bempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 20, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+
+declare const Bnever: B<never>;
+>Bnever : Symbol(Bnever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 21, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+
+declare const Bany: B<any>;
+>Bany : Symbol(Bany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 22, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+
+declare const Bundefined: B<undefined>;
+>Bundefined : Symbol(Bundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 11, 39))
+
+// only one exact match, no else
+type C<T> = T match {
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 26, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 26, 7))
+
+    1: "1"
+};
+declare const C1: C<1>;
+>C1 : Symbol(C1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 29, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+
+declare const C1or2: C<1 | 2>;
+>C1or2 : Symbol(C1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 30, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+
+declare const Cstring: C<"">;
+>Cstring : Symbol(Cstring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 31, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+
+declare const Cempty: C<{}>;
+>Cempty : Symbol(Cempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 32, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+
+declare const Cnever: C<never>;
+>Cnever : Symbol(Cnever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 33, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+
+declare const Cany: C<any>;
+>Cany : Symbol(Cany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 34, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+
+declare const Cundefined: C<undefined>;
+>Cundefined : Symbol(Cundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 23, 39))
+
+// only one subtype match, no else
+type D<T> = T match {
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 38, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 38, 7))
+
+    number: "number"
+};
+declare const D1: D<1>;
+>D1 : Symbol(D1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 41, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+
+declare const D1or2: D<1 | 2>;
+>D1or2 : Symbol(D1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 42, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+
+declare const Dstring: D<"">;
+>Dstring : Symbol(Dstring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 43, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+
+declare const Dempty: D<{}>;
+>Dempty : Symbol(Dempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 44, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+
+declare const Dnever: D<never>;
+>Dnever : Symbol(Dnever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 45, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+
+declare const Dany: D<any>;
+>Dany : Symbol(Dany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 46, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+
+declare const Dundefined: D<undefined>;
+>Dundefined : Symbol(Dundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 35, 39))
+
+// multiple possible subtype matches, no else
+type E<T> = T match {
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 50, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 50, 7))
+
+    1 | 2: "1 | 2",
+    number: "number"
+};
+declare const E1: E<1>;
+>E1 : Symbol(E1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 54, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+declare const E1or2: E<1 | 2>;
+>E1or2 : Symbol(E1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 55, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+declare const E3: E<3>;
+>E3 : Symbol(E3, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 56, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+declare const Estring: E<"">;
+>Estring : Symbol(Estring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 57, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+declare const Eempty: E<{}>;
+>Eempty : Symbol(Eempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 58, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+declare const Enever: E<never>;
+>Enever : Symbol(Enever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 59, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+declare const Eany: E<any>;
+>Eany : Symbol(Eany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 60, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+declare const Eundefined: E<undefined>;
+>Eundefined : Symbol(Eundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 47, 39))
+
+// multiple possible matches (subtype first), no else
+type F<T> = T match {
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 64, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 64, 7))
+
+    1 | 2: "1 | 2",
+    1: "1",
+    number: "number"
+};
+declare const F1: F<1>;
+>F1 : Symbol(F1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 69, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const F1or2: F<1 | 2>;
+>F1or2 : Symbol(F1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 70, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const F2or3: F<2 | 3>;
+>F2or3 : Symbol(F2or3, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 71, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const F3: F<3>;
+>F3 : Symbol(F3, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 72, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const Fstring: F<"">;
+>Fstring : Symbol(Fstring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 73, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const Fempty: F<{}>;
+>Fempty : Symbol(Fempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 74, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const Fnever: F<never>;
+>Fnever : Symbol(Fnever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 75, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const Fany: F<any>;
+>Fany : Symbol(Fany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 76, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+declare const Fundefined: F<undefined>;
+>Fundefined : Symbol(Fundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 61, 39))
+
+// never
+type G<T> = T match {
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 80, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 80, 7))
+
+    never: "never",
+    number: "number",
+    else: "else"
+};
+declare const G1: G<1>;
+>G1 : Symbol(G1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 85, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+
+declare const G1or2: G<1 | 2>;
+>G1or2 : Symbol(G1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 86, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+
+declare const Gstring: G<"">;
+>Gstring : Symbol(Gstring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 87, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+
+declare const Gempty: G<{}>;
+>Gempty : Symbol(Gempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 88, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+
+declare const Gnever: G<never>;
+>Gnever : Symbol(Gnever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 89, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+
+declare const Gany: G<any>;
+>Gany : Symbol(Gany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 90, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+
+declare const Gundefined: G<undefined>;
+>Gundefined : Symbol(Gundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 77, 39))
+
+// undefined
+type H<T> = T match {
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 94, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 94, 7))
+
+    undefined: "undefined",
+    number: "number",
+    else: "else"
+};
+declare const H1: H<1>;
+>H1 : Symbol(H1, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 99, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+
+declare const H1or2: H<1 | 2>;
+>H1or2 : Symbol(H1or2, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 100, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+
+declare const Hstring: H<"">;
+>Hstring : Symbol(Hstring, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 101, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+
+declare const Hempty: H<{}>;
+>Hempty : Symbol(Hempty, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 102, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+
+declare const Hnever: H<never>;
+>Hnever : Symbol(Hnever, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 103, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+
+declare const Hany: H<any>;
+>Hany : Symbol(Hany, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 104, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+
+declare const Hundefined: H<undefined>;
+>Hundefined : Symbol(Hundefined, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 105, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgumentStrictNullChecks.ts, 91, 39))
+

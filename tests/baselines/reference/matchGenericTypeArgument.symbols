@@ -1,0 +1,445 @@
+=== tests/cases/conformance/types/match/matchGenericTypeArgument.ts ===
+// all of these test `match` with generics.
+
+// empty
+type A<T> = T match {
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 3, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 3, 7))
+
+};
+declare const A1: A<1>;
+>A1 : Symbol(A1, Decl(matchGenericTypeArgument.ts, 5, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+
+declare const A1or2: A<1 | 2>;
+>A1or2 : Symbol(A1or2, Decl(matchGenericTypeArgument.ts, 6, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+
+declare const Astring: A<"">;
+>Astring : Symbol(Astring, Decl(matchGenericTypeArgument.ts, 7, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+
+declare const Aempty: A<{}>;
+>Aempty : Symbol(Aempty, Decl(matchGenericTypeArgument.ts, 8, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+
+declare const Anever: A<never>;
+>Anever : Symbol(Anever, Decl(matchGenericTypeArgument.ts, 9, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+
+declare const Aany: A<any>;
+>Aany : Symbol(Aany, Decl(matchGenericTypeArgument.ts, 10, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+
+declare const Aundefined: A<undefined>;
+>Aundefined : Symbol(Aundefined, Decl(matchGenericTypeArgument.ts, 11, 13))
+>A : Symbol(A, Decl(matchGenericTypeArgument.ts, 0, 0))
+
+// only else
+type B<T> = T match {
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 14, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 14, 7))
+
+    else: "else"
+};
+declare const B1: B<1>;
+>B1 : Symbol(B1, Decl(matchGenericTypeArgument.ts, 17, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+
+declare const B1or2: B<1 | 2>;
+>B1or2 : Symbol(B1or2, Decl(matchGenericTypeArgument.ts, 18, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+
+declare const Bstring: B<"">;
+>Bstring : Symbol(Bstring, Decl(matchGenericTypeArgument.ts, 19, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+
+declare const Bempty: B<{}>;
+>Bempty : Symbol(Bempty, Decl(matchGenericTypeArgument.ts, 20, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+
+declare const Bnever: B<never>;
+>Bnever : Symbol(Bnever, Decl(matchGenericTypeArgument.ts, 21, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+
+declare const Bany: B<any>;
+>Bany : Symbol(Bany, Decl(matchGenericTypeArgument.ts, 22, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+
+declare const Bundefined: B<undefined>;
+>Bundefined : Symbol(Bundefined, Decl(matchGenericTypeArgument.ts, 23, 13))
+>B : Symbol(B, Decl(matchGenericTypeArgument.ts, 11, 39))
+
+// only one exact match, no else
+type C<T> = T match {
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 26, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 26, 7))
+
+    1: "1"
+};
+declare const C1: C<1>;
+>C1 : Symbol(C1, Decl(matchGenericTypeArgument.ts, 29, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+
+declare const C1or2: C<1 | 2>;
+>C1or2 : Symbol(C1or2, Decl(matchGenericTypeArgument.ts, 30, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+
+declare const Cstring: C<"">;
+>Cstring : Symbol(Cstring, Decl(matchGenericTypeArgument.ts, 31, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+
+declare const Cempty: C<{}>;
+>Cempty : Symbol(Cempty, Decl(matchGenericTypeArgument.ts, 32, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+
+declare const Cnever: C<never>;
+>Cnever : Symbol(Cnever, Decl(matchGenericTypeArgument.ts, 33, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+
+declare const Cany: C<any>;
+>Cany : Symbol(Cany, Decl(matchGenericTypeArgument.ts, 34, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+
+declare const Cundefined: C<undefined>;
+>Cundefined : Symbol(Cundefined, Decl(matchGenericTypeArgument.ts, 35, 13))
+>C : Symbol(C, Decl(matchGenericTypeArgument.ts, 23, 39))
+
+// only one subtype match, no else
+type D<T> = T match {
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 38, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 38, 7))
+
+    number: "number"
+};
+declare const D1: D<1>;
+>D1 : Symbol(D1, Decl(matchGenericTypeArgument.ts, 41, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+
+declare const D1or2: D<1 | 2>;
+>D1or2 : Symbol(D1or2, Decl(matchGenericTypeArgument.ts, 42, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+
+declare const Dstring: D<"">;
+>Dstring : Symbol(Dstring, Decl(matchGenericTypeArgument.ts, 43, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+
+declare const Dempty: D<{}>;
+>Dempty : Symbol(Dempty, Decl(matchGenericTypeArgument.ts, 44, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+
+declare const Dnever: D<never>;
+>Dnever : Symbol(Dnever, Decl(matchGenericTypeArgument.ts, 45, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+
+declare const Dany: D<any>;
+>Dany : Symbol(Dany, Decl(matchGenericTypeArgument.ts, 46, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+
+declare const Dundefined: D<undefined>;
+>Dundefined : Symbol(Dundefined, Decl(matchGenericTypeArgument.ts, 47, 13))
+>D : Symbol(D, Decl(matchGenericTypeArgument.ts, 35, 39))
+
+// multiple possible subtype matches, no else
+type E<T> = T match {
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 50, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 50, 7))
+
+    1 | 2: "1 | 2",
+    number: "number"
+};
+declare const E1: E<1>;
+>E1 : Symbol(E1, Decl(matchGenericTypeArgument.ts, 54, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+declare const E1or2: E<1 | 2>;
+>E1or2 : Symbol(E1or2, Decl(matchGenericTypeArgument.ts, 55, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+declare const E3: E<3>;
+>E3 : Symbol(E3, Decl(matchGenericTypeArgument.ts, 56, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+declare const Estring: E<"">;
+>Estring : Symbol(Estring, Decl(matchGenericTypeArgument.ts, 57, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+declare const Eempty: E<{}>;
+>Eempty : Symbol(Eempty, Decl(matchGenericTypeArgument.ts, 58, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+declare const Enever: E<never>;
+>Enever : Symbol(Enever, Decl(matchGenericTypeArgument.ts, 59, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+declare const Eany: E<any>;
+>Eany : Symbol(Eany, Decl(matchGenericTypeArgument.ts, 60, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+declare const Eundefined: E<undefined>;
+>Eundefined : Symbol(Eundefined, Decl(matchGenericTypeArgument.ts, 61, 13))
+>E : Symbol(E, Decl(matchGenericTypeArgument.ts, 47, 39))
+
+// multiple possible matches (subtype first), no else
+type F<T> = T match {
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 64, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 64, 7))
+
+    1 | 2: "1 | 2",
+    1: "1",
+    number: "number"
+};
+declare const F1: F<1>;
+>F1 : Symbol(F1, Decl(matchGenericTypeArgument.ts, 69, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const F1or2: F<1 | 2>;
+>F1or2 : Symbol(F1or2, Decl(matchGenericTypeArgument.ts, 70, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const F2or3: F<2 | 3>;
+>F2or3 : Symbol(F2or3, Decl(matchGenericTypeArgument.ts, 71, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const F3: F<3>;
+>F3 : Symbol(F3, Decl(matchGenericTypeArgument.ts, 72, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const Fstring: F<"">;
+>Fstring : Symbol(Fstring, Decl(matchGenericTypeArgument.ts, 73, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const Fempty: F<{}>;
+>Fempty : Symbol(Fempty, Decl(matchGenericTypeArgument.ts, 74, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const Fnever: F<never>;
+>Fnever : Symbol(Fnever, Decl(matchGenericTypeArgument.ts, 75, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const Fany: F<any>;
+>Fany : Symbol(Fany, Decl(matchGenericTypeArgument.ts, 76, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+declare const Fundefined: F<undefined>;
+>Fundefined : Symbol(Fundefined, Decl(matchGenericTypeArgument.ts, 77, 13))
+>F : Symbol(F, Decl(matchGenericTypeArgument.ts, 61, 39))
+
+// never
+type G<T> = T match {
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 80, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 80, 7))
+
+    never: "never",
+    number: "number",
+    else: "else"
+};
+declare const G1: G<1>;
+>G1 : Symbol(G1, Decl(matchGenericTypeArgument.ts, 85, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+
+declare const G1or2: G<1 | 2>;
+>G1or2 : Symbol(G1or2, Decl(matchGenericTypeArgument.ts, 86, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+
+declare const Gstring: G<"">;
+>Gstring : Symbol(Gstring, Decl(matchGenericTypeArgument.ts, 87, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+
+declare const Gempty: G<{}>;
+>Gempty : Symbol(Gempty, Decl(matchGenericTypeArgument.ts, 88, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+
+declare const Gnever: G<never>;
+>Gnever : Symbol(Gnever, Decl(matchGenericTypeArgument.ts, 89, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+
+declare const Gany: G<any>;
+>Gany : Symbol(Gany, Decl(matchGenericTypeArgument.ts, 90, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+
+declare const Gundefined: G<undefined>;
+>Gundefined : Symbol(Gundefined, Decl(matchGenericTypeArgument.ts, 91, 13))
+>G : Symbol(G, Decl(matchGenericTypeArgument.ts, 77, 39))
+
+// undefined
+type H<T> = T match {
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 94, 7))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 94, 7))
+
+    undefined: "undefined",
+    number: "number",
+    else: "else"
+};
+declare const H1: H<1>;
+>H1 : Symbol(H1, Decl(matchGenericTypeArgument.ts, 99, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+
+declare const H1or2: H<1 | 2>;
+>H1or2 : Symbol(H1or2, Decl(matchGenericTypeArgument.ts, 100, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+
+declare const Hstring: H<"">;
+>Hstring : Symbol(Hstring, Decl(matchGenericTypeArgument.ts, 101, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+
+declare const Hempty: H<{}>;
+>Hempty : Symbol(Hempty, Decl(matchGenericTypeArgument.ts, 102, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+
+declare const Hnever: H<never>;
+>Hnever : Symbol(Hnever, Decl(matchGenericTypeArgument.ts, 103, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+
+declare const Hany: H<any>;
+>Hany : Symbol(Hany, Decl(matchGenericTypeArgument.ts, 104, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+
+declare const Hundefined: H<undefined>;
+>Hundefined : Symbol(Hundefined, Decl(matchGenericTypeArgument.ts, 105, 13))
+>H : Symbol(H, Decl(matchGenericTypeArgument.ts, 91, 39))
+
+// union, both match, no else
+type I<T, U> = (T | U) match {
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 108, 7))
+>U : Symbol(U, Decl(matchGenericTypeArgument.ts, 108, 9))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 108, 7))
+>U : Symbol(U, Decl(matchGenericTypeArgument.ts, 108, 9))
+
+    1: "1",
+    2: "2"
+};
+declare const I11: I<1, 1>;
+>I11 : Symbol(I11, Decl(matchGenericTypeArgument.ts, 112, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+declare const I12: I<1, 2>;
+>I12 : Symbol(I12, Decl(matchGenericTypeArgument.ts, 113, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+declare const I11or2: I<1, 1 | 2>;
+>I11or2 : Symbol(I11or2, Decl(matchGenericTypeArgument.ts, 114, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+declare const I1string: I<1, "">;
+>I1string : Symbol(I1string, Decl(matchGenericTypeArgument.ts, 115, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+declare const I1empty: I<1, {}>;
+>I1empty : Symbol(I1empty, Decl(matchGenericTypeArgument.ts, 116, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+declare const I1never: I<1, never>;
+>I1never : Symbol(I1never, Decl(matchGenericTypeArgument.ts, 117, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+declare const I1any: I<1, any>;
+>I1any : Symbol(I1any, Decl(matchGenericTypeArgument.ts, 118, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+declare const I1undefined: I<1, undefined>;
+>I1undefined : Symbol(I1undefined, Decl(matchGenericTypeArgument.ts, 119, 13))
+>I : Symbol(I, Decl(matchGenericTypeArgument.ts, 105, 39))
+
+// union, one match, no else
+type J<T, U> = (T | U) match {
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 122, 7))
+>U : Symbol(U, Decl(matchGenericTypeArgument.ts, 122, 9))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 122, 7))
+>U : Symbol(U, Decl(matchGenericTypeArgument.ts, 122, 9))
+
+    1: "1"
+};
+declare const J11: J<1, 1>;
+>J11 : Symbol(J11, Decl(matchGenericTypeArgument.ts, 125, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J12: J<1, 2>;
+>J12 : Symbol(J12, Decl(matchGenericTypeArgument.ts, 126, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J22: J<2, 2>;
+>J22 : Symbol(J22, Decl(matchGenericTypeArgument.ts, 127, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J11or2: J<1, 1 | 2>;
+>J11or2 : Symbol(J11or2, Decl(matchGenericTypeArgument.ts, 128, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J1string: J<1, "">;
+>J1string : Symbol(J1string, Decl(matchGenericTypeArgument.ts, 129, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J1empty: J<1, {}>;
+>J1empty : Symbol(J1empty, Decl(matchGenericTypeArgument.ts, 130, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J1never: J<1, never>;
+>J1never : Symbol(J1never, Decl(matchGenericTypeArgument.ts, 131, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J1any: J<1, any>;
+>J1any : Symbol(J1any, Decl(matchGenericTypeArgument.ts, 132, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+declare const J1undefined: J<1, undefined>;
+>J1undefined : Symbol(J1undefined, Decl(matchGenericTypeArgument.ts, 133, 13))
+>J : Symbol(J, Decl(matchGenericTypeArgument.ts, 119, 43))
+
+// union, one match, else
+type K<T, U> = (T | U) match {
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 136, 7))
+>U : Symbol(U, Decl(matchGenericTypeArgument.ts, 136, 9))
+>T : Symbol(T, Decl(matchGenericTypeArgument.ts, 136, 7))
+>U : Symbol(U, Decl(matchGenericTypeArgument.ts, 136, 9))
+
+    1: "1",
+    else: "else"
+};
+declare const K11: K<1, 1>;
+>K11 : Symbol(K11, Decl(matchGenericTypeArgument.ts, 140, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K12: K<1, 2>;
+>K12 : Symbol(K12, Decl(matchGenericTypeArgument.ts, 141, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K22: K<2, 2>;
+>K22 : Symbol(K22, Decl(matchGenericTypeArgument.ts, 142, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K11or2: K<1, 1 | 2>;
+>K11or2 : Symbol(K11or2, Decl(matchGenericTypeArgument.ts, 143, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K1string: K<1, "">;
+>K1string : Symbol(K1string, Decl(matchGenericTypeArgument.ts, 144, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K1empty: K<1, {}>;
+>K1empty : Symbol(K1empty, Decl(matchGenericTypeArgument.ts, 145, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K1never: K<1, never>;
+>K1never : Symbol(K1never, Decl(matchGenericTypeArgument.ts, 146, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K1any: K<1, any>;
+>K1any : Symbol(K1any, Decl(matchGenericTypeArgument.ts, 147, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+
+declare const K1undefined: K<1, undefined>;
+>K1undefined : Symbol(K1undefined, Decl(matchGenericTypeArgument.ts, 148, 13))
+>K : Symbol(K, Decl(matchGenericTypeArgument.ts, 133, 43))
+

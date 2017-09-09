@@ -7789,9 +7789,9 @@ namespace ts {
             return getUnionType(constituents);
         }
 
-        function getMatchType(typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
-            if (clauses.length > 0 && (isGenericObjectType(typeArgument) || forEach(clauses, isGenericMatchTypeClause))) {
-                if (clauses.length > 0) {
+        function getMatchType(typeArgument: Type, clauses: ReadonlyArray<MatchTypeClause>, elseType: Type | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            if (clauses.length > 0) {
+                if (isGenericObjectType(typeArgument) || forEach(clauses, isGenericMatchTypeClause)) {
                     const type = <MatchType>createType(TypeFlags.Match);
                     type.typeArgument = typeArgument;
                     type.clauses = clauses;
@@ -7800,14 +7800,19 @@ namespace ts {
                     type.aliasTypeArguments = aliasTypeArguments;
                     return type;
                 }
-            }
 
-            for (const clause of clauses) {
-                if (isTypeAssignableTo(typeArgument, clause.matchType)) {
-                    return clause.resultType;
+                // distribute `match` across unions
+                if (typeArgument.flags & TypeFlags.Union) {
+                    const types = map((<UnionType>typeArgument).types, constituent => getMatchType(constituent, clauses, elseType));
+                    return getUnionType(types, /*subtypeReduction*/ false);
+                }
+
+                for (const clause of clauses) {
+                    if (isTypeAssignableTo(typeArgument, clause.matchType)) {
+                        return clause.resultType;
+                    }
                 }
             }
-
             return elseType || neverType;
         }
 

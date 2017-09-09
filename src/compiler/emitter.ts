@@ -1125,6 +1125,7 @@ namespace ts {
 
         function emitMatchType(node: MatchTypeNode) {
             emit(node.typeArgument);
+            write(" ");
             writeToken(SyntaxKind.MatchKeyword, node.typeArgument.end);
             write(" ");
             emit(node.matchBlock);
