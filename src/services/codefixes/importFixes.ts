@@ -133,7 +133,7 @@ namespace ts.codefix {
         const symbolIdActionMap = new ImportCodeActionMap();
 
         // this is a module id -> module import declaration map
-        const cachedImportDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[][] = [];
+        const cachedImportDeclarations: AnyImportSyntax[][] = [];
         let lastImportDeclaration: Node;
 
         const currentTokenMeaning = getMeaningFromLocation(token);
@@ -199,28 +199,20 @@ namespace ts.codefix {
                 return cached;
             }
 
-            const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
-            for (const importModuleSpecifier of sourceFile.imports) {
-                const importSymbol = checker.getSymbolAtLocation(importModuleSpecifier);
-                if (importSymbol === moduleSymbol) {
-                    existingDeclarations.push(getImportDeclaration(importModuleSpecifier));
-                }
-            }
+            const existingDeclarations = mapDefined(sourceFile.imports, importModuleSpecifier =>
+                checker.getSymbolAtLocation(importModuleSpecifier) === moduleSymbol ? getImportDeclaration(importModuleSpecifier) : undefined);
             cachedImportDeclarations[moduleSymbolId] = existingDeclarations;
             return existingDeclarations;
 
-            function getImportDeclaration(moduleSpecifier: LiteralExpression) {
-                let node: Node = moduleSpecifier;
-                while (node) {
-                    if (node.kind === SyntaxKind.ImportDeclaration) {
-                        return <ImportDeclaration>node;
-                    }
-                    if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                        return <ImportEqualsDeclaration>node;
-                    }
-                    node = node.parent;
+            function getImportDeclaration({ parent }: LiteralExpression): AnyImportSyntax {
+                switch (parent.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                        return parent as ImportDeclaration;
+                    case SyntaxKind.ExternalModuleReference:
+                        return (parent as ExternalModuleReference).parent;
+                    default:
+                        return undefined;
                 }
-                return undefined;
             }
         }
 
