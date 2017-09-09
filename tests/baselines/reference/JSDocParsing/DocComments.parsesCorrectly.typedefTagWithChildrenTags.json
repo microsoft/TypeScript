@@ -34,38 +34,6 @@
                 "kind": "JSDocTypeLiteral",
                 "pos": 26,
                 "end": 98,
-                "jsDocTypeTag": {
-                    "kind": "JSDocTypeTag",
-                    "pos": 28,
-                    "end": 42,
-                    "atToken": {
-                        "kind": "AtToken",
-                        "pos": 28,
-                        "end": 29
-                    },
-                    "tagName": {
-                        "kind": "Identifier",
-                        "pos": 29,
-                        "end": 33,
-                        "escapedText": "type"
-                    },
-                    "typeExpression": {
-                        "kind": "JSDocTypeExpression",
-                        "pos": 34,
-                        "end": 42,
-                        "type": {
-                            "kind": "TypeReference",
-                            "pos": 35,
-                            "end": 41,
-                            "typeName": {
-                                "kind": "Identifier",
-                                "pos": 35,
-                                "end": 41,
-                                "escapedText": "Object"
-                            }
-                        }
-                    }
-                },
                 "jsDocPropertyTags": [
                     {
                         "kind": "JSDocPropertyTag",
