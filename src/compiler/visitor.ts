@@ -448,8 +448,7 @@ namespace ts {
 
             case SyntaxKind.TypeCall:
                 return updateTypeCall(<TypeCallTypeNode>node,
-                    visitNode((<TypeCallTypeNode>node).type, visitor, isTypeNode),
-                    nodesVisitor((<TypeCallTypeNode>node).typeArguments, visitor, isTypeNode),
+                    visitNode((<TypeCallTypeNode>node).function, visitor, isTypeNode),
                     nodesVisitor((<TypeCallTypeNode>node).arguments, visitor, isTypeNode));
 
             case SyntaxKind.CallExpression:
@@ -1398,7 +1397,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.TypeCall:
-                result = reduceNode((<TypeCallTypeNode>node).type, cbNode, result);
+                result = reduceNode((<TypeCallTypeNode>node).function, cbNode, result);
                 break;
 
             // Enum

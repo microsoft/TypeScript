@@ -116,7 +116,6 @@ namespace ts {
 
             function visitTypeCallType(type: TypeCallType): void {
                 visitType(type.function);
-                visitTypeList(type.typeArguments);
                 visitTypeList(type.arguments);
             }
 

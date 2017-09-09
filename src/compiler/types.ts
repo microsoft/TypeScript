@@ -1498,8 +1498,7 @@ namespace ts {
 
     export interface TypeCallTypeNode extends TypeNode {
         kind: SyntaxKind.TypeCall;
-        type: TypeNode;
-        typeArguments?: NodeArray<TypeNode>;
+        function: TypeNode;
         arguments: NodeArray<TypeNode>;
     }
 
@@ -3414,7 +3413,6 @@ namespace ts {
     // F(T) types (TypeFlags.TypeCall)
     export interface TypeCallType extends TypeVariable {
         function: Type;
-        typeArguments: Type[];
         arguments: Type[];
         /* @internal */
         resolvedIndexType: IndexType;

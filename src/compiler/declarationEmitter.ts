@@ -556,12 +556,7 @@ namespace ts {
             }
 
             function emitTypeCall(node: TypeCallTypeNode) {
-                emitType(node.type);
-                if (node.typeArguments && node.typeArguments.length) {
-                    write("<");
-                    emitCommaList(node.typeArguments, emitType);
-                    write(">");
-                }
+                emitType(node.function);
                 write("(");
                 emitCommaList(node.arguments, emitType);
                 write(")");

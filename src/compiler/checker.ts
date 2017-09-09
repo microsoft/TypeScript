@@ -2540,8 +2540,7 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeCall) {
                     const fnNode = typeToTypeNodeHelper((<TypeCallType>type).function, context);
                     const argNodes = mapToTypeNodes((<TypeCallType>type).arguments, context);
-                    const typeArgNodes = mapToTypeNodes((<TypeCallType>type).typeArguments, context);
-                    return createTypeCall(fnNode, typeArgNodes, argNodes);
+                    return createTypeCall(fnNode, argNodes);
                 }
 
                 Debug.fail("Should be unreachable.");
@@ -3314,11 +3313,6 @@ namespace ts {
                     }
                     else if (type.flags & TypeFlags.TypeCall) {
                         writeType((<TypeCallType>type).function, TypeFormatFlags.None);
-                        if ((<TypeCallType>type).typeArguments && (<TypeCallType>type).typeArguments.length) {
-                            writePunctuation(writer, SyntaxKind.LessThanToken);
-                            writeTypeList((<TypeCallType>type).typeArguments, SyntaxKind.CommaToken);
-                            writePunctuation(writer, SyntaxKind.GreaterThanToken);
-                        }
                         writePunctuation(writer, SyntaxKind.OpenParenToken);
                         writeTypeList((<TypeCallType>type).arguments, SyntaxKind.CommaToken);
                         writePunctuation(writer, SyntaxKind.CloseParenToken);
@@ -5938,9 +5932,8 @@ namespace ts {
 
         function getConstraintOfTypeCall(type: TypeCallType): Type {
             const fn = type.function;
-            const typeArgs = map(type.typeArguments, getConstraintOfType);
             const args = map(type.arguments, getConstraintOfType);
-            const call = createTypeCallType(fn, typeArgs, args);
+            const call = createTypeCallType(fn, args);
             return getTypeFromTypeCall(call);
         }
 
@@ -6815,7 +6808,7 @@ namespace ts {
                 const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
-            if (node.typeArguments　&& node.typeArguments.length) {
+            if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
                 return unknownType;
             }
@@ -6857,7 +6850,7 @@ namespace ts {
                 }
                 return getTypeAliasInstantiation(symbol, typeArguments);
             }
-            if (node.typeArguments　&& node.typeArguments.length) {
+            if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                 return unknownType;
             }
@@ -6868,7 +6861,7 @@ namespace ts {
          * Get type from reference to named type that cannot be generic (enum or type parameter)
          */
         function getTypeFromNonGenericTypeReference(node: TypeReferenceType, symbol: Symbol): Type {
-            if (node.typeArguments　&& node.typeArguments.length) {
+            if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                 return unknownType;
             }
@@ -7575,23 +7568,21 @@ namespace ts {
                 false;
         }
 
-        function createTypeCallType(fn: Type, typeArgs: Type[], args: Type[]): TypeCallType {
+        function createTypeCallType(fn: Type, args: Type[]): TypeCallType {
             const type = <TypeCallType>createType(TypeFlags.TypeCall);
             type.function = fn;
-            type.typeArguments = typeArgs;
             type.arguments = args;
             return type;
         }
 
         // overlap with typeToTypeNode?
         function createTypeCallNodeFromType(type: TypeCallType): TypeCallTypeNode {
-            const node = <TypeCallTypeNode>createNodeBuilder().typeToTypeNode(type);
-            return node;
+            return <TypeCallTypeNode>createNodeBuilder().typeToTypeNode(type);
         }
 
-        function getTypeCallType(fn: Type, typeArgs: Type[], args: Type[], node?: TypeCallTypeNode): Type {
-            const type = createTypeCallType(fn, typeArgs, args);
-            if (isGenericTypeCallType(fn) || some(typeArgs, isGenericTypeCallType) || some(args, isGenericTypeCallType)) {
+        function getTypeCallType(fn: Type, args: Type[], node?: TypeCallTypeNode): Type {
+            const type = createTypeCallType(fn, args);
+            if (isGenericTypeCallType(fn) || some(args, isGenericTypeCallType)) {
                 return type;
             }
             return getTypeFromTypeCall(type, node);
@@ -7599,22 +7590,15 @@ namespace ts {
 
         function getTypeFromTypeCall(type: TypeCallType, node = createTypeCallNodeFromType(type)): Type {
             const fn = type.function;
-            const typeArgs = type.typeArguments;
             const args = type.arguments;
             const calls = getSignaturesOfType(fn, SignatureKind.Call);
             const sig = resolveCall(node, calls, []);
             if (!sig.typeParameters || !sig.typeParameters.length) {
                 return getReturnTypeOfSignature(sig);
             }
-            let signature: Signature;
-            if (typeArgs && typeArgs.length) {
-                signature = getSignatureInstantiation(sig, typeArgs);
-            }
-            else {
-                const inferenceContext = createInferenceContext(sig, InferenceFlags.InferUnionTypes);
-                const types = inferTypeArgumentsForTypeCall(sig, args, inferenceContext); // TODO: add Fn(this: A, B, C) syntax
-                signature = getSignatureInstantiation(sig, types);
-            }
+            const inferenceContext = createInferenceContext(sig, InferenceFlags.InferUnionTypes);
+            const types = inferTypeArgumentsForTypeCall(sig, args, inferenceContext); // TODO: add Fn(this: A, B, C) syntax
+            const signature = getSignatureInstantiation(sig, types);
             return getReturnTypeOfSignature(signature);
         }
 
@@ -7636,8 +7620,7 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getTypeCallType(
-                    getTypeFromTypeNode(node.type),
-                    map(node.typeArguments, getTypeFromTypeNode),
+                    getTypeFromTypeNode(node.function),
                     map(node.arguments, getTypeFromTypeNode),
                     node
                 );
@@ -8466,7 +8449,6 @@ namespace ts {
             if (type.flags & TypeFlags.TypeCall) {
                 return getTypeCallType(
                     instantiateType((<TypeCallType>type).function, mapper),
-                    (<TypeCallType>type).typeArguments,
                     (<TypeCallType>type).arguments
                 );
             }
@@ -18904,7 +18886,7 @@ namespace ts {
             }
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
-                if (node.typeArguments　&& node.typeArguments.length) {
+                if (node.typeArguments) {
                     // Do type argument local checks only if referenced type is successfully resolved
                     forEach(node.typeArguments, checkSourceElement);
                     if (produceDiagnostics) {
@@ -22603,10 +22585,8 @@ namespace ts {
         }
 
         function checkTypeCallNode(node: TypeCallTypeNode) {
-            checkGrammarTypeArguments(node, node.typeArguments);
-            checkSourceElement(node.type);
+            checkSourceElement(node.function);
             forEach(node.arguments, checkSourceElement);
-            forEach(node.typeArguments, checkSourceElement);
             getTypeFromTypeCallNode(node);
         }
 
@@ -24490,7 +24470,7 @@ namespace ts {
 
         function checkGrammarTypeArguments(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
             return checkGrammarForDisallowedTrailingComma(typeArguments) ||
-                false && checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
+                checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
         function checkGrammarForOmittedArgument(args: NodeArray<Expression>): boolean {

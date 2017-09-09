@@ -29,10 +29,6 @@ type i = Wrap<123>;
 type F5 = () => () => { a: () => 1; };
 type j = F5()()['a']();
 
-// type k1 = Id<string>('foo');
-// ^ errors, `<string>` is part of the type reference, not the function call
-type k2 = Id<><string>('foo'); // ok, `string`
-
 declare function id<T>(v: T): T;
 let l = id<string>('foo');
 
@@ -42,12 +38,6 @@ interface IsPrimitive {
 }
 type stringIsPrimitive = IsPrimitive(string); // '1', ok
 type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
-
-// explicit type arguments need to go after the type arguments of the type reference, empty `<>` if n/a
-type genericIsPrimitive = <T>() => IsPrimitive(T);
-type stringIsPrimitive2 = genericIsPrimitive<><string>(); // '1', ok
-type regexpIsPrimitive2 = genericIsPrimitive<><RegExp>();
-// fails, see #17471, '1' instead of '0', should delay overload selection until type argument is known
 
 // alternative, pass as parameters
 type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);

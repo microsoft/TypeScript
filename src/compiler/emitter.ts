@@ -1243,8 +1243,7 @@ namespace ts {
         }
 
         function emitTypeCall(node: TypeCallTypeNode) {
-            emit(node.type);
-            emitTypeArguments(node, node.typeArguments);
+            emit(node.function);
             emitList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
 

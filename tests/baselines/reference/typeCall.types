@@ -81,12 +81,6 @@ type j = F5()()['a']();
 >j : 1
 >F5 : F5
 
-// type k1 = Id<string>('foo');
-// ^ errors, `<string>` is part of the type reference, not the function call
-type k2 = Id<><string>('foo'); // ok, `string`
->k2 : "foo"
->Id : Id
-
 declare function id<T>(v: T): T;
 >id : <T>(v: T) => T
 >T : T
@@ -117,23 +111,6 @@ type regexpIsPrimitive = IsPrimitive(RegExp); // '0', ok
 >regexpIsPrimitive : "0"
 >IsPrimitive : IsPrimitive
 >RegExp : RegExp
-
-// explicit type arguments need to go after the type arguments of the type reference, empty `<>` if n/a
-type genericIsPrimitive = <T>() => IsPrimitive(T);
->genericIsPrimitive : genericIsPrimitive
->T : T
->IsPrimitive : IsPrimitive
->T : T
-
-type stringIsPrimitive2 = genericIsPrimitive<><string>(); // '1', ok
->stringIsPrimitive2 : IsPrimitive(T)
->genericIsPrimitive : genericIsPrimitive
-
-type regexpIsPrimitive2 = genericIsPrimitive<><RegExp>();
->regexpIsPrimitive2 : IsPrimitive(T)
->genericIsPrimitive : genericIsPrimitive
-
-// fails, see #17471, '1' instead of '0', should delay overload selection until type argument is known
 
 // alternative, pass as parameters
 type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);

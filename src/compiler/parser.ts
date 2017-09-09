@@ -171,8 +171,7 @@ namespace ts {
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
                     visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
             case SyntaxKind.TypeCall:
-                return visitNode(cbNode, (<TypeCallTypeNode>node).type) ||
-                    visitNodes(cbNode, cbNodes, (<TypeCallTypeNode>node).typeArguments) ||
+                return visitNode(cbNode, (<TypeCallTypeNode>node).function) ||
                     visitNodes(cbNode, cbNodes, (<TypeCallTypeNode>node).arguments);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
@@ -4247,46 +4246,23 @@ namespace ts {
 
         // type equivalent of parseCallExpressionRest
         function parseTypeCallRest(type?: TypeNode): TypeNode {
-            // console.log("parseTypeCallRest");
             while (true) {
                 type = parseArrayTypeOrHigher(type);
                 // crap, the type may have parsed a semicolon...
                 if (!~[SyntaxKind.ThisType, SyntaxKind.ArrayType, SyntaxKind.TupleType, SyntaxKind.TypeOperator, SyntaxKind.LiteralType, SyntaxKind.NullKeyword, SyntaxKind.TrueKeyword, SyntaxKind.FalseKeyword, SyntaxKind.AnyKeyword, SyntaxKind.NumberKeyword, SyntaxKind.ObjectKeyword, SyntaxKind.BooleanKeyword, SyntaxKind.StringKeyword, SyntaxKind.SymbolKeyword, SyntaxKind.ThisKeyword, SyntaxKind.VoidKeyword, SyntaxKind.UndefinedKeyword, SyntaxKind.NullKeyword, SyntaxKind.NeverKeyword].indexOf(type.kind)) {
-                    if (token() === SyntaxKind.LessThanToken) {
-                        // See if this is the start of a generic invocation.  If so, consume it and
-                        // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
-                        // part of an arithmetic expression.  Break out so we consume it higher in the
-                        // stack.
-                        const typeArguments = tryParse(parseTypeArgumentsInExpression);
-                        if (!typeArguments) {
-                            return type;
-                        }
-
+                    if (token() === SyntaxKind.OpenParenToken) {
                         const call = tryParse(() => parseTypeCall(type));
                         if (call) {
                             type = call;
                             continue;
                         }
                     }
-                    else if (token() === SyntaxKind.OpenParenToken) {
-                        const call = tryParse(() => parseTypeCall(type));
-                        if (call) {
-                            type = call;
-                            continue;
-                        }
-                    }
-
                 }
                 return type;
             }
         }
 
         function parseTypeCall(type: TypeNode) {
-            let typeArguments: NodeArray<TypeNode>;
-            if (token() === SyntaxKind.LessThanToken) {
-                typeArguments = tryParse(parseTypeArgumentsInExpression);
-            }
-
             // if we're in what looks like a function declaration, scram
             const arg = lookAhead(parseFirstParam);
             if (arg && arg.type) {
@@ -4297,11 +4273,10 @@ namespace ts {
                 return;
             }
             const args = parseTypeArgumentList();
-            const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
-            callExpr.type = type;
-            callExpr.typeArguments = typeArguments;
-            callExpr.arguments = args;
-            return finishNode(callExpr);
+            const typeCall = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
+            typeCall.function = type;
+            typeCall.arguments = args;
+            return finishNode(typeCall);
         }
 
         function parseFirstParam() {

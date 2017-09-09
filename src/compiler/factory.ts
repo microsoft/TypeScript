@@ -888,19 +888,17 @@ namespace ts {
             : node;
     }
 
-    export function createTypeCall(type: TypeNode, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<TypeNode>) {
+    export function createTypeCall(fn: TypeNode, argumentsArray: ReadonlyArray<TypeNode>) {
         const node = <TypeCallTypeNode>createSynthesizedNode(SyntaxKind.TypeCall);
-        node.type = parenthesizeElementTypeMember(type);
-        node.typeArguments = asNodeArray(typeArguments);
+        node.function = parenthesizeElementTypeMember(fn);
         node.arguments = parenthesizeElementTypeMembers(createNodeArray(argumentsArray));
         return node;
     }
 
-    export function updateTypeCall(node: TypeCallTypeNode, type: TypeNode, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<TypeNode>) {
-        return node.type !== type
-            || node.typeArguments !== typeArguments
+    export function updateTypeCall(node: TypeCallTypeNode, fn: TypeNode, argumentsArray: ReadonlyArray<TypeNode>) {
+        return node.function !== fn
             || node.arguments !== argumentsArray
-            ? updateNode(createTypeCall(type, typeArguments, argumentsArray), node)
+            ? updateNode(createTypeCall(fn, argumentsArray), node)
             : node;
     }
 
