@@ -111,7 +111,40 @@ let anyBool: isBool(any); // 0
 let neverBool: isBool(never); // 0
 
 type Assert<T> = (<U>(v: U | null | undefined) => U)(T);
-let x: Assert<string | undefined>; // string
+let assert: Assert<string | undefined>; // string
+
+type Minus<A, B> = (<U>(v: U | B) => U)(A);
+let noNumbers: Minus<string | number, number>; // string
+
+interface UnwrapPromise {
+  <U>(v: PromiseLike<U>): UnwrapPromise(U);
+  <U>(v: U): U;
+};
+declare const testUnwrap1: UnwrapPromise(string);
+declare const testUnwrap2: UnwrapPromise(Promise<string>);
+declare const testUnwrap3: UnwrapPromise(boolean | Promise<string>);
+declare function myThen<T, TResult1 = T, TResult2 = never>(
+        prom: Promise<T>,
+        onfulfilled?: ((value: T) => TResult1) | undefined | null, 
+        onrejected?: ((reason: any) => TResult2) | undefined | null
+    ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
+declare const pr: Promise<number>;
+declare function f(x: number): Promise<string>;
+declare function g(x: number): number | Promise<boolean>;
+const testThen = myThen(pr, f, g);
+
+interface Promise<T> {
+    then<TResult1 = T, TResult2 = never>(
+        onfulfilled?: ((value: T) => TResult1) | undefined | null, 
+        onrejected?: ((reason: any) => TResult2) | undefined | null
+    ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
+}
+// error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter
+// of type '(value: number) => string | PromiseLike<string>';
+const tryProm = pr.then((x: number) => { 
+    if (x < 0) return f(x);
+    return x;
+});
 
 interface ObjectHasStringIndex {
   // <T extends { [k: string]: any }>(o: T): T[string];

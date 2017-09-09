@@ -420,6 +420,146 @@ let noNumbers: Minus<string | number, number>; // string
 >noNumbers : string
 >Minus : (<U>(v: B | U) => U)(A)
 
+interface UnwrapPromise {
+>UnwrapPromise : UnwrapPromise
+
+  <U>(v: PromiseLike<U>): UnwrapPromise(U);
+>U : U
+>v : PromiseLike<U>
+>PromiseLike : PromiseLike<T>
+>U : U
+>UnwrapPromise : UnwrapPromise
+>U : U
+
+  <U>(v: U): U;
+>U : U
+>v : U
+>U : U
+>U : U
+
+};
+declare const testUnwrap1: UnwrapPromise(string);
+>testUnwrap1 : string
+>UnwrapPromise : UnwrapPromise
+
+declare const testUnwrap2: UnwrapPromise(Promise<string>);
+>testUnwrap2 : string
+>UnwrapPromise : UnwrapPromise
+>Promise : Promise<T>
+
+declare const testUnwrap3: UnwrapPromise(boolean | Promise<string>);
+>testUnwrap3 : boolean | Promise<string>
+>UnwrapPromise : UnwrapPromise
+>Promise : Promise<T>
+
+declare function myThen<T, TResult1 = T, TResult2 = never>(
+>myThen : <T, TResult1 = T, TResult2 = never>(prom: Promise<T>, onfulfilled?: ((value: T) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>
+>T : T
+>TResult1 : TResult1
+>T : T
+>TResult2 : TResult2
+
+        prom: Promise<T>,
+>prom : Promise<T>
+>Promise : Promise<T>
+>T : T
+
+        onfulfilled?: ((value: T) => TResult1) | undefined | null, 
+>onfulfilled : ((value: T) => TResult1) | null | undefined
+>value : T
+>T : T
+>TResult1 : TResult1
+>null : null
+
+        onrejected?: ((reason: any) => TResult2) | undefined | null
+>onrejected : ((reason: any) => TResult2) | null | undefined
+>reason : any
+>TResult2 : TResult2
+>null : null
+
+    ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
+>Promise : Promise<T>
+>UnwrapPromise : UnwrapPromise
+>TResult1 : TResult1
+>UnwrapPromise : UnwrapPromise
+>TResult2 : TResult2
+
+declare const pr: Promise<number>;
+>pr : Promise<number>
+>Promise : Promise<T>
+
+declare function f(x: number): Promise<string>;
+>f : (x: number) => Promise<string>
+>x : number
+>Promise : Promise<T>
+
+declare function g(x: number): number | Promise<boolean>;
+>g : (x: number) => number | Promise<boolean>
+>x : number
+>Promise : Promise<T>
+
+const testThen = myThen(pr, f, g);
+>testThen : Promise<string | number | Promise<boolean>>
+>myThen(pr, f, g) : Promise<string | number | Promise<boolean>>
+>myThen : <T, TResult1 = T, TResult2 = never>(prom: Promise<T>, onfulfilled?: ((value: T) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>
+>pr : Promise<number>
+>f : (x: number) => Promise<string>
+>g : (x: number) => number | Promise<boolean>
+
+interface Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    then<TResult1 = T, TResult2 = never>(
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }
+>TResult1 : TResult1
+>T : T
+>TResult2 : TResult2
+
+        onfulfilled?: ((value: T) => TResult1) | undefined | null, 
+>onfulfilled : ((value: T) => TResult1) | null | undefined
+>value : T
+>T : T
+>TResult1 : TResult1
+>null : null
+
+        onrejected?: ((reason: any) => TResult2) | undefined | null
+>onrejected : ((reason: any) => TResult2) | null | undefined
+>reason : any
+>TResult2 : TResult2
+>null : null
+
+    ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
+>Promise : Promise<T>
+>UnwrapPromise : UnwrapPromise
+>TResult1 : TResult1
+>UnwrapPromise : UnwrapPromise
+>TResult2 : TResult2
+}
+// error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter
+// of type '(value: number) => string | PromiseLike<string>';
+const tryProm = pr.then((x: number) => { 
+>tryProm : Promise<number | {} | Promise<string>>
+>pr.then((x: number) => {     if (x < 0) return f(x);    return x;}) : Promise<number | {} | Promise<string>>
+>pr.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }
+>pr : Promise<number>
+>then : { <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }
+>(x: number) => {     if (x < 0) return f(x);    return x;} : (x: number) => number | Promise<string>
+>x : number
+
+    if (x < 0) return f(x);
+>x < 0 : boolean
+>x : number
+>0 : 0
+>f(x) : Promise<string>
+>f : (x: number) => Promise<string>
+>x : number
+
+    return x;
+>x : number
+
+});
+
 interface ObjectHasStringIndex {
 >ObjectHasStringIndex : ObjectHasStringIndex
 
