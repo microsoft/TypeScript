@@ -710,6 +710,25 @@ function M3() { }`);
     M3() { }
     constructor() { }
 }`);
+        // Shorthand property names
+        testExtractMethod("extractMethod29",
+            `interface UnaryExpression {
+    kind: "Unary";
+    operator: string;
+    operand: any;
+}
+
+function parseUnaryExpression(operator: string): UnaryExpression {
+    [#|return {
+        kind: "Unary",
+        operator,
+        operand: parsePrimaryExpression(),
+    };|]
+}
+
+function parsePrimaryExpression(): any {
+    throw "Not implemented";
+}`);
     });
 
 
