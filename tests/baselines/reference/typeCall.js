@@ -43,6 +43,39 @@ type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
 
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
+declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): map(Fn, O);
+// let z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
+// // fails with error: Cannot read property 'parent' of undefined at createDiagnosticForNodeFromMessageChain
+
+type Inc = { [k: string]: string; 0:'1', 1:'2', 2:'3', 3:'4', 4:'5', 5:'6', 6:'7', 7:'8', 8:'9' };
+type StringToNumber = { [k: string]: number; 0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8};
+type TupleHasIndex<Arr extends any[], I extends string> = ({[K in keyof Arr]: '1' } & { [k: string]: '0' })[I];
+type PathFn<T extends { [k: string]: any }, R extends Array<string>, I extends string = '0'> =
+    { 1: PathFn<T[R[StringToNumber[I]]], R, Inc[I]>, 0: T }[TupleHasIndex<R, I>];
+type PathTest = PathFn<{ a: { b: ['c', { d: 'e' }] } }, ['a', 'b', '1', 'd']>;
+declare function path<T extends { [k: string]: any }, R extends Array<string>>(obj: T, path: R): PathFn<T, R>;
+const obj = null! as { a: { b: ['c', { d: 'e' }] } };
+const keys = null! as ['a', 'b', '1', 'd'];
+const pathTest = path(obj, keys);
+// "e"
+
+// type Reduce<
+//     Fn extends (previousValue: T, currentValue: R[number], currentIndex?: number, array?: R) => any,
+//     T,
+//     R extends any[],
+//     I extends string = '0'
+// > = { 1: Reduce<Fn(T, R[StringToNumber[I]], I, R), R, Inc[I]>, 0: T }[TupleHasIndex<R, I>];
+// // fails with error: Cannot read property 'kind' of undefined at resolveCall
+// declare function reduce<
+//     Fn extends (previousValue: any, currentValue: R[number], currentIndex?: number, array?: R) => any,
+//     R extends any[],
+//     U,
+//     I extends string = '0'
+// >(callbackfn: Fn, initialValue: U, array: R): Reduce<Fn, U, R>;
+// declare function path2<T extends { [k: string]: any }, R extends Array<string>>(obj: T, path: R):
+//     Reduce<<Prev, Curr>(previousValue: Prev, currentValue: Curr, currentIndex?: number, array?: any[]) => Prev[Curr], T, R>;
+// const pathTest2 = path2(obj, keys);
+// // "e"
 
 // binary function composition
 type Fn1 = <T1 extends number>(v1: T1[]) => { [k: string]: T1 };
@@ -172,6 +205,9 @@ function comparability<T>(x: T, y: () => T) {
 
 //// [typeCall.js]
 var a = 'foo';
+var obj = null;
+var keys = null;
+var pathTest = path(obj, keys);
 var fn1 = null;
 var fn2 = null;
 // type Fn4 = Fn3(1); // errors, ok
