@@ -12,7 +12,7 @@ goTo.select('start', 'end');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into function 'f'",
+    actionDescription: "Extract to inner function in function 'f'",
 });
 // TODO: GH#18091 (fix formatting to use `2 ? 1 :` and not `2?1:`)
 verify.currentFileContentIs(

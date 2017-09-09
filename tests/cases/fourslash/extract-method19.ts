@@ -12,7 +12,7 @@ goTo.select('a', 'b')
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into function 'fn'",
+    actionDescription: "Extract to inner function in function 'fn'",
 });
 verify.currentFileContentIs(`function fn() {
     newFunction_1();

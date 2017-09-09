@@ -5,7 +5,7 @@ const _ = class {
         return a1.x + 10;
     }
 }
-// ==SCOPE::anonymous class expression==
+// ==SCOPE::method in anonymous class expression==
 const _ = class {
     a() {
         return this.newFunction();
@@ -16,7 +16,7 @@ const _ = class {
         return a1.x + 10;
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 const _ = class {
     a() {
         return newFunction();
