@@ -7575,11 +7575,6 @@ namespace ts {
             return type;
         }
 
-        // overlap with typeToTypeNode?
-        function createTypeCallNodeFromType(type: TypeCallType): TypeCallTypeNode {
-            return <TypeCallTypeNode>createNodeBuilder().typeToTypeNode(type);
-        }
-
         function getTypeCallType(fn: Type, args: Type[], node?: TypeCallTypeNode): Type {
             const type = createTypeCallType(fn, args);
             if (isGenericTypeCallType(fn) || some(args, isGenericTypeCallType)) {
@@ -7588,7 +7583,7 @@ namespace ts {
             return getTypeFromTypeCall(type, node);
         }
 
-        function getTypeFromTypeCall(type: TypeCallType, node = createTypeCallNodeFromType(type)): Type {
+        function getTypeFromTypeCall(type: TypeCallType, node = <TypeCallTypeNode>nodeBuilder.typeToTypeNode(type)): Type {
             const fn = type.function;
             const args = type.arguments;
             const calls = getSignaturesOfType(fn, SignatureKind.Call);
