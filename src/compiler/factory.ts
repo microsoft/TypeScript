@@ -4158,7 +4158,8 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = hasExportStarsToExportValues
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015;
+                && moduleKind !== ModuleKind.ES2015
+                && moduleKind !== ModuleKind.ESNext;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {
