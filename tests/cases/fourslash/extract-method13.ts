@@ -4,16 +4,24 @@
 // Also checks that we correctly find non-conflicting names in static contexts.
 
 //// class C {
-////     static j = /*c*/100/*d*/;
-////     constructor(q: string = /*a*/"hello"/*b*/) {
+////     static j = /*c*/1 + 1/*d*/;
+////     constructor(q: string = /*a*/"a" + "b"/*b*/) {
 ////     }
 //// }
 
 goTo.select('a', 'b');
-edit.applyRefactor('Extract Method', 'scope_0');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to method in class 'C'",
+});
 
 goTo.select('c', 'd');
-edit.applyRefactor('Extract Method', 'scope_0');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to method in class 'C'",
+});
 
 verify.currentFileContentIs(`class C {
     static j = C.newFunction_1();
@@ -21,10 +29,10 @@ verify.currentFileContentIs(`class C {
     }
 
     private static newFunction(): string {
-        return "hello";
+        return "a" + "b";
     }
 
     private static newFunction_1() {
-        return 100;
+        return 1 + 1;
     }
 }`);

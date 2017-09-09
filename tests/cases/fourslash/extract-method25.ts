@@ -8,7 +8,11 @@
 //// }
 
 goTo.select('a', 'b')
-edit.applyRefactor('Extract Method', 'scope_0');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to inner function in function 'fn'",
+});
 verify.currentFileContentIs(`function fn() {
     var q = newFunction()
     q[0]++

@@ -18,14 +18,28 @@ namespace ts.projectSystem {
         })
     };
 
-    const customSafeList = {
-        path: <Path>"/typeMapList.json",
-        content: JSON.stringify({
-            "quack": {
-                "match": "/duckquack-(\\d+)\\.min\\.js",
-                "types": ["duck-types"]
+    export const customTypesMap = {
+        path: <Path>"/typesMap.json",
+        content: `{
+            "typesMap": {
+                "jquery": {
+                    "match": "jquery(-(\\\\.?\\\\d+)+)?(\\\\.intellisense)?(\\\\.min)?\\\\.js$",
+                    "types": ["jquery"]
+                },
+                "quack": {
+                    "match": "/duckquack-(\\\\d+)\\\\.min\\\\.js",
+                    "types": ["duck-types"]
+                }
             },
-        })
+            "simpleMap": {
+                "Bacon": "baconjs",
+                "bliss": "blissfuljs",
+                "commander": "commander",
+                "cordova": "cordova",
+                "react": "react",
+                "lodash": "lodash"
+            }
+        }`
     };
 
     export interface PostExecAction {
@@ -59,7 +73,7 @@ namespace ts.projectSystem {
             installTypingHost: server.ServerHost,
             readonly typesRegistry = createMap<void>(),
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, customTypesMap.path, throttleLimit, log);
         }
 
         protected postExecActions: PostExecAction[] = [];
@@ -229,6 +243,7 @@ namespace ts.projectSystem {
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller,
+                typesMapLocation: customTypesMap.path,
                 eventHandler,
                 ...opts
             });
@@ -1491,9 +1506,8 @@ namespace ts.projectSystem {
                 path: "/lib/duckquack-3.min.js",
                 content: "whoa do @@ not parse me ok thanks!!!"
             };
-            const host = createServerHost([customSafeList, file1, office]);
+            const host = createServerHost([file1, office, customTypesMap]);
             const projectService = createProjectService(host);
-            projectService.loadSafeList(customSafeList.path);
             try {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
                 const proj = projectService.externalProjects[0];
@@ -1760,6 +1774,28 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path, file3.path]);
         });
 
+        it("regression test for crash in acquireOrUpdateDocument", () => {
+            const tsFile = {
+                fileName: "/a/b/file1.ts",
+                path: "/a/b/file1.ts",
+                content: ""
+            };
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "var x = 10;",
+                fileName: "/a/b/file1.js",
+                scriptKind: "JS" as "JS"
+            };
+
+            const host = createServerHost([]);
+            const projectService = createProjectService(host);
+            projectService.applyChangesInOpenFiles([tsFile], [], []);
+            const projs = projectService.synchronizeProjectList([]);
+            projectService.findProject(projs[0].info.projectName).getLanguageService().getNavigationBarItems(tsFile.fileName);
+            projectService.synchronizeProjectList([projs[0].info]);
+            projectService.applyChangesInOpenFiles([jsFile], [], []);
+        });
+
         it("config file is deleted", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1860,7 +1896,7 @@ namespace ts.projectSystem {
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
-                /*openFiles*/ [{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
+                /*openFiles*/[{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
                 /*changedFiles*/ undefined,
                 /*closedFiles*/ undefined);
 
@@ -1877,7 +1913,7 @@ namespace ts.projectSystem {
             projectService.applyChangesInOpenFiles(
                 /*openFiles*/ undefined,
                 /*changedFiles*/ undefined,
-                /*closedFiles*/ [file2.path]);
+                /*closedFiles*/[file2.path]);
 
             // HTML file is still included in project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -2474,8 +2510,8 @@ namespace ts.projectSystem {
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
                 "File '/a/cache/node_modules/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
+                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
             ]);
             checkProjectActualFiles(proj, [file1.path, lib.path]);
@@ -3308,7 +3344,7 @@ namespace ts.projectSystem {
             const error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
             assert.isTrue(error1Result.length === 0);
 
-             const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+            const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile2.path }
             );

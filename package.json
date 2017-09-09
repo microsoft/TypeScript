@@ -49,6 +49,7 @@
         "@types/run-sequence": "latest",
         "@types/through2": "latest",
         "browserify": "latest",
+        "browser-resolve": "^1.11.2",
         "chai": "latest",
         "convert-source-map": "latest",
         "del": "latest",
