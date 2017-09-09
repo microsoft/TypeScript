@@ -14,6 +14,16 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
     actionDescription: "Extract function into class 'C'",
+    newContent:
+`class C {
+    static j = 100;
+    constructor(q: string = C./*RENAME*/newFunction()) {
+    }
+
+    private static newFunction(): string {
+        return "hello";
+    }
+}`
 });
 
 goTo.select('c', 'd');
@@ -21,10 +31,9 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
     actionDescription: "Extract function into class 'C'",
-});
-
-verify.currentFileContentIs(`class C {
-    static j = C.newFunction_1();
+    newContent:
+`class C {
+    static j = C./*RENAME*/newFunction_1();
     constructor(q: string = C.newFunction()) {
     }
 
@@ -35,4 +44,5 @@ verify.currentFileContentIs(`class C {
     private static newFunction_1() {
         return 100;
     }
-}`);
+}`
+});

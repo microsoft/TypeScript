@@ -10,10 +10,8 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_1",
     actionDescription: "Extract function into global scope",
-});
-verify.currentFileContentIs(
-`function f(x: number): number {
-    return newFunction(x);
+    newContent: `function f(x: number): number {
+    return /*RENAME*/newFunction(x);
 }
 function newFunction(x: number) {
     switch (x) {
@@ -21,4 +19,5 @@ function newFunction(x: number) {
             return 0;
     }
 }
-`);
+`
+});

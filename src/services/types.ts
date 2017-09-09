@@ -412,10 +412,9 @@ namespace ts {
      */
     export type RefactorEditInfo = {
         edits: FileTextChanges[];
-        renameFilename?: string;
-        renameLocation?: number;
+        renameFilename: string | undefined;
+        renameLocation: number | undefined;
     };
-
 
     export interface TextInsertion {
         newText: string;

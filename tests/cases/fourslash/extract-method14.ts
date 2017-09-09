@@ -15,14 +15,15 @@ edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_1",
     actionDescription: "Extract function into global scope",
-});
-verify.currentFileContentIs(`function foo() {
+    newContent:
+`function foo() {
     var i = 10;
     var __return: any;
-    ({ __return, i } = newFunction(i));
+    ({ __return, i } = n/*RENAME*/ewFunction(i));
     return __return;
 }
 function newFunction(i) {
     return { __return: i++, i };
 }
-`);
+`
+});
