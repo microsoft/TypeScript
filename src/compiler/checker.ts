@@ -10578,7 +10578,7 @@ namespace ts {
                         priority = savePriority;
                     }
                 }
-                else if (source.flags & TypeFlags.UnionOrIntersection) {
+                else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
                     const sourceTypes = (<UnionOrIntersectionType>source).types;
                     for (const sourceType of sourceTypes) {
@@ -10587,7 +10587,7 @@ namespace ts {
                 }
                 else {
                     source = getApparentType(source);
-                    if (source.flags & TypeFlags.Object) {
+                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
                         if (visited && visited.get(key)) {
                             return;
@@ -10667,7 +10667,7 @@ namespace ts {
             function inferFromProperties(source: Type, target: Type) {
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
-                    const sourceProp = getPropertyOfObjectType(source, targetProp.escapedName);
+                    const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                     if (sourceProp) {
                         inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
                     }
