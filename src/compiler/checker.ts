@@ -16128,16 +16128,6 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            // If the expression is a class of abstract type, then it cannot be instantiated.
-            // Note, only class declarations can be declared abstract.
-            // In the case of a merged class-module or class-interface declaration,
-            // only the class declaration node will have the Abstract flag set.
-            const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
-            if (valueDecl && hasModifier(valueDecl, ModifierFlags.Abstract)) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(getNameOfDeclaration(valueDecl)));
-                return resolveErrorCall(node);
-            }
-
             // TS 1.0 spec: 4.11
             // If expressionType is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
@@ -16157,6 +16147,16 @@ namespace ts {
                 if (!isConstructorAccessible(node, constructSignatures[0])) {
                     return resolveErrorCall(node);
                 }
+                // If the expression is a class of abstract type, then it cannot be instantiated.
+                // Note, only class declarations can be declared abstract.
+                // In the case of a merged class-module or class-interface declaration,
+                // only the class declaration node will have the Abstract flag set.
+                const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
+                if (valueDecl && hasModifier(valueDecl, ModifierFlags.Abstract)) {
+                    error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(getNameOfDeclaration(valueDecl)));
+                    return resolveErrorCall(node);
+                }
+
                 return resolveCall(node, constructSignatures, candidatesOutArray);
             }
 
