@@ -48,30 +48,32 @@ declare function angularFactory<G extends (...args: any[]) => R, R extends <T>(f
 angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T])
 
 interface BoolToString {
+    (v: false & true): never;
     (v: false): 'false';
     (v: true): 'true';
+    (v: boolean): 'true' | 'false';
 }
 type strTrue = BoolToString(true);
 type strFalse = BoolToString(false);
 type strEither = BoolToString(true | false);
 type strBool = BoolToString(boolean);
-type strAny = BoolToString(any);
+type strAny = BoolToString(any); // fails, want the fallback, but yields 'false'
 
-declare function safeDivide<
-  B extends number,
-  NotZero = ((v: '1') => 'whatever')({
-    (v: 0): '0';
-    (v: number): '1';
-  }(B))
->(a: number, b: B): number;
-safeDivide(3, 1);
-safeDivide(3, 0); // fails, should error but doesn't
+// declare function safeDivide<
+//   B extends number,
+//   NotZero = ((v: '1') => 'whatever')({
+//     (v: 0): '0';
+//     (v: number): '1';
+//   }(B))
+// >(a: number, b: B): number;
+// // Argument of type '"0"' is not assignable to parameter of type '"1"'
+// safeDivide(3, 1);
+// safeDivide(3, 0); // should error
 
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): map(Fn, O);
-// let z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
-// // fails with error: Cannot read property 'parent' of undefined at createDiagnosticForNodeFromMessageChain
+let z = map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 });
 
 type Inc = { [k: string]: string; 0:'1', 1:'2', 2:'3', 3:'4', 4:'5', 5:'6', 6:'7', 7:'8', 8:'9' };
 type StringToNumber = { [k: string]: number; 0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8};

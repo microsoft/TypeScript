@@ -3416,6 +3416,7 @@ namespace ts {
     export interface TypeCallType extends TypeVariable {
         function: Type;
         arguments: Type[];
+        node: TypeCallTypeNode;
     }
 
     // keyof T types (TypeFlags.Index)

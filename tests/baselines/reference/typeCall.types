@@ -148,6 +148,11 @@ angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T])
 interface BoolToString {
 >BoolToString : BoolToString
 
+    (v: false & true): never;
+>v : false & true
+>false : false
+>true : true
+
     (v: false): 'false';
 >v : false
 >false : false
@@ -155,6 +160,9 @@ interface BoolToString {
     (v: true): 'true';
 >v : true
 >true : true
+
+    (v: boolean): 'true' | 'false';
+>v : boolean
 }
 type strTrue = BoolToString(true);
 >strTrue : "true"
@@ -167,54 +175,29 @@ type strFalse = BoolToString(false);
 >false : false
 
 type strEither = BoolToString(true | false);
->strEither : any
+>strEither : "false" | "true"
 >BoolToString : BoolToString
 >true : true
 >false : false
 
 type strBool = BoolToString(boolean);
->strBool : any
+>strBool : "false" | "true"
 >BoolToString : BoolToString
 
-type strAny = BoolToString(any);
->strAny : any
+type strAny = BoolToString(any); // fails, want the fallback, but yields 'false'
+>strAny : "false"
 >BoolToString : BoolToString
 
-declare function safeDivide<
->safeDivide : <B extends number, NotZero = ((v: "1") => "whatever")({ (v: 0): "0"; (v: number): "1"; }(B))>(a: number, b: B) => number
-
-  B extends number,
->B : B
-
-  NotZero = ((v: '1') => 'whatever')({
->NotZero : NotZero
->v : "1"
-
-    (v: 0): '0';
->v : 0
-
-    (v: number): '1';
->v : number
-
-  }(B))
->B : B
-
->(a: number, b: B): number;
->a : number
->b : B
->B : B
-
-safeDivide(3, 1);
->safeDivide(3, 1) : number
->safeDivide : <B extends number, NotZero = ((v: "1") => "whatever")({ (v: 0): "0"; (v: number): "1"; }(B))>(a: number, b: B) => number
->3 : 3
->1 : 1
-
-safeDivide(3, 0); // fails, should error but doesn't
->safeDivide(3, 0) : number
->safeDivide : <B extends number, NotZero = ((v: "1") => "whatever")({ (v: 0): "0"; (v: number): "1"; }(B))>(a: number, b: B) => number
->3 : 3
->0 : 0
+// declare function safeDivide<
+//   B extends number,
+//   NotZero = ((v: '1') => 'whatever')({
+//     (v: 0): '0';
+//     (v: number): '1';
+//   }(B))
+// >(a: number, b: B): number;
+// // Argument of type '"0"' is not assignable to parameter of type '"1"'
+// safeDivide(3, 1);
+// safeDivide(3, 0); // should error
 
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 >map : map
@@ -263,8 +246,29 @@ declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(
 >Fn : Fn
 >O : O
 
-// let z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
-// // fails with error: Cannot read property 'parent' of undefined at createDiagnosticForNodeFromMessageChain
+let z = map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 });
+>z : { a: [{}]; b: [{}]; c: [{}]; }
+>map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 }) : { a: [{}]; b: [{}]; c: [{}]; }
+>map : <Fn extends (v: T) => any, O extends { [k: string]: T; }, T>(fn: Fn, obj: O) => map(Fn, O)
+><T>(v: T) => [v] as [T] : <T>(v: T) => [T]
+>T : T
+>v : T
+>T : T
+>[v] as [T] : [T]
+>[v] : [T]
+>v : T
+>T : T
+>{ a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 } : { a: 1; b: 2; c: 3; }
+>{ a: 1, b: 2, c: 3 } : { a: 1; b: 2; c: 3; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+>a : 1
+>b : 2
+>c : 3
 
 type Inc = { [k: string]: string; 0:'1', 1:'2', 2:'3', 3:'4', 4:'5', 5:'6', 6:'7', 7:'8', 8:'9' };
 >Inc : Inc
@@ -409,7 +413,6 @@ type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
 >Fn1 : Fn1
 >T3 : T3
 
-// type Fn4 = Fn3(1); // errors, ok
 let ones = null! as 1[];
 >ones : 1[]
 >null! as 1[] : 1[]
@@ -417,18 +420,16 @@ let ones = null! as 1[];
 >null : null
 
 type Fn4b = Fn3(typeof ones);
->Fn4b : ReadonlyArray<{}>
+>Fn4b : ReadonlyArray<1>
 >Fn3 : Fn3
 >ones : 1[]
 
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 type Fn4c = Fn3(1[]);
->Fn4c : ReadonlyArray<{}>
+>Fn4c : ReadonlyArray<1>
 >Fn3 : Fn3
 
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
-// let x = fn2(fn1(1)); // errors with not assignable, ok
-// type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));
 >y : ReadonlyArray<1>
 >fn2(fn1(ones)) : ReadonlyArray<1>
@@ -635,8 +636,7 @@ interface Promise<T> {
 >UnwrapPromise : UnwrapPromise
 >TResult2 : TResult2
 }
-// error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter
-// of type '(value: number) => string | PromiseLike<string>';
+// prevents error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter of type '(value: number) => string | PromiseLike<string>';
 const tryProm = pr.then((x: number) => { 
 >tryProm : Promise<number | {} | Promise<string>>
 >pr.then((x: number) => {     if (x < 0) return f(x);    return x;}) : Promise<number | {} | Promise<string>>
@@ -929,27 +929,6 @@ function assignability<T>(x: T, y: () => T) {
 >T : T
 >y() : T
 >y : () => T
-}
-
-function comparability<T>(x: T, y: () => T) {
->comparability : <T>(x: T, y: () => T) => void
->T : T
->x : T
->T : T
->y : () => T
->T : T
-
-    x === x;
->x === x : boolean
->x : T
->x : T
-
-    y === y;
->y === y : boolean
->y : () => T
->y : () => T
-
-    // x === y; // rightfully errors
 }
 
 // function mappedAssignability<T>(x: T, y: CallMember<T>) {

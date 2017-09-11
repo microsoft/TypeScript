@@ -5933,8 +5933,8 @@ namespace ts {
         function getConstraintOfTypeCall(type: TypeCallType): Type {
             const fn = type.function;
             const args = map(type.arguments, getConstraintOfType);
-            const call = createTypeCallType(fn, args);
-            return getTypeFromTypeCall(call);
+            const call = createTypeCallType(fn, args, type.node);
+            return getTypeFromTypeCall(call, type.node);
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
@@ -7568,26 +7568,27 @@ namespace ts {
                 false;
         }
 
-        function createTypeCallType(fn: Type, args: Type[]): TypeCallType {
+        function createTypeCallType(fn: Type, args: Type[], node: TypeCallTypeNode): TypeCallType {
             const type = <TypeCallType>createType(TypeFlags.TypeCall);
             type.function = fn;
             type.arguments = args;
+            type.node = node;
             return type;
         }
 
-        function getTypeCallType(fn: Type, args: Type[], node?: TypeCallTypeNode): Type {
-            const type = createTypeCallType(fn, args);
+        function getTypeCallType(fn: Type, args: Type[], node: TypeCallTypeNode): Type {
+            const type = createTypeCallType(fn, args, node);
             if (isGenericTypeCallType(fn) || some(args, isGenericTypeCallType)) {
                 return type;
             }
             return getTypeFromTypeCall(type, node);
         }
 
-        function getTypeFromTypeCall(type: TypeCallType, node = <TypeCallTypeNode>nodeBuilder.typeToTypeNode(type)): Type {
+        function getTypeFromTypeCall(type: TypeCallType, node: TypeCallTypeNode): Type {
             const fn = type.function;
             const args = type.arguments;
             const calls = getSignaturesOfType(fn, SignatureKind.Call);
-            const sig = resolveCall(node, calls, []);
+            const sig = resolveCall(node, calls, /*candidatesOutArray*/ [], /*fallBackError*/ undefined, args);
             return sig ? getReturnTypeOfSignature(sig) : unknownType;
          }
 
@@ -7602,7 +7603,6 @@ namespace ts {
             }
             return links.resolvedType;
         }
-
 
         function createIndexedAccessType(objectType: Type, indexType: Type) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
@@ -8418,9 +8418,12 @@ namespace ts {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
             if (type.flags & TypeFlags.TypeCall) {
+                const typeCallNode = <TypeCallTypeNode>nodeBuilder.typeToTypeNode(type);
+                typeCallNode.parent = (type as TypeCallType).node;
                 return getTypeCallType(
                     instantiateType((<TypeCallType>type).function, mapper),
-                    instantiateTypes((<TypeCallType>type).arguments, mapper)
+                    instantiateTypes((<TypeCallType>type).arguments, mapper),
+                    typeCallNode
                 );
             }
             return type;
@@ -15297,7 +15300,7 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(node: CallLike, signature: Signature, args: Arguments, excludeArgument: boolean[], context: InferenceContext): Type[] {
+        function inferTypeArguments(node: CallLike, signature: Signature, args: Arguments, excludeArgument: boolean[], context: InferenceContext, argTypes?: Type[]): Type[] {
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (const inference of context.inferences) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
@@ -15352,7 +15355,7 @@ namespace ts {
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
                 if (isTypeCallTypeNode(node) || arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    let argType = getEffectiveArgumentType(node, i);
+                    let argType = argTypes ? argTypes[i] : getEffectiveArgumentType(node, i);
 
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
@@ -15455,7 +15458,8 @@ namespace ts {
             signature: Signature,
             relation: Map<RelationComparisonResult>,
             excludeArgument: boolean[],
-            reportErrors: boolean) {
+            reportErrors: boolean,
+            argTypes: Type[]) {
             if (isJsxOpeningLikeElement(node)) {
                 return checkApplicableSignatureForJsxOpeningLikeElement(<JsxOpeningLikeElement>node, signature, relation);
             }
@@ -15465,7 +15469,7 @@ namespace ts {
                 // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
                 // If the expression is a new expression, then the check is skipped.
                 const thisArgumentNode = getThisArgumentOfCall(node);
-                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
+                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType; // type calls: TODO
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, getThisTypeOfSignature(signature), relation, errorNode, headMessage)) {
@@ -15482,7 +15486,7 @@ namespace ts {
                     const paramType = getTypeAtPosition(signature, i);
                     // If the effective argument type is undefined, there is no synthetic type for the argument.
                     // In that case, we should check the argument.
-                    const argType = getEffectiveArgumentType(node, i) ||
+                    const argType = argTypes ? argTypes[i] : getEffectiveArgumentType(node, i) ||
                         checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
@@ -15820,11 +15824,11 @@ namespace ts {
                 return (<TaggedTemplateExpression>node).template;
             }
             else {
-                return arg;
+                return arg || node;
             }
         }
 
-        function resolveCall(node: CallLike, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLike, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage, argTypes?: Type[]): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -15945,7 +15949,7 @@ namespace ts {
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
-                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true, argTypes);
             }
             else if (candidateForTypeArgumentError) {
                 const typeArguments = (<CallExpression>node).typeArguments;
@@ -16026,7 +16030,7 @@ namespace ts {
                     if (!hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         return undefined;
                     }
-                    if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false, argTypes)) {
                         candidateForArgumentError = candidate;
                         return undefined;
                     }
@@ -16056,11 +16060,11 @@ namespace ts {
                                 }
                             }
                             else {
-                                typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
+                                typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext, argTypes);
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
-                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false, argTypes)) {
                             candidateForArgumentError = candidate;
                             break;
                         }

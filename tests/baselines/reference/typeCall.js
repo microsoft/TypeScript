@@ -45,30 +45,32 @@ declare function angularFactory<G extends (...args: any[]) => R, R extends <T>(f
 angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T])
 
 interface BoolToString {
+    (v: false & true): never;
     (v: false): 'false';
     (v: true): 'true';
+    (v: boolean): 'true' | 'false';
 }
 type strTrue = BoolToString(true);
 type strFalse = BoolToString(false);
 type strEither = BoolToString(true | false);
 type strBool = BoolToString(boolean);
-type strAny = BoolToString(any);
+type strAny = BoolToString(any); // fails, want the fallback, but yields 'false'
 
-declare function safeDivide<
-  B extends number,
-  NotZero = ((v: '1') => 'whatever')({
-    (v: 0): '0';
-    (v: number): '1';
-  }(B))
->(a: number, b: B): number;
-safeDivide(3, 1);
-safeDivide(3, 0); // fails, should error but doesn't
+// declare function safeDivide<
+//   B extends number,
+//   NotZero = ((v: '1') => 'whatever')({
+//     (v: 0): '0';
+//     (v: number): '1';
+//   }(B))
+// >(a: number, b: B): number;
+// // Argument of type '"0"' is not assignable to parameter of type '"1"'
+// safeDivide(3, 1);
+// safeDivide(3, 0); // should error
 
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): map(Fn, O);
-// let z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
-// // fails with error: Cannot read property 'parent' of undefined at createDiagnosticForNodeFromMessageChain
+let z = map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 });
 
 type Inc = { [k: string]: string; 0:'1', 1:'2', 2:'3', 3:'4', 4:'5', 5:'6', 6:'7', 7:'8', 8:'9' };
 type StringToNumber = { [k: string]: number; 0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8};
@@ -106,14 +108,11 @@ type Fn2 = <T2>(v2: { [k: string]: T2 }) => ReadonlyArray<T2>;
 let fn1 = null! as Fn1;
 let fn2 = null! as Fn2;
 type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
-// type Fn4 = Fn3(1); // errors, ok
 let ones = null! as 1[];
 type Fn4b = Fn3(typeof ones);
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 type Fn4c = Fn3(1[]);
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
-// let x = fn2(fn1(1)); // errors with not assignable, ok
-// type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));
 type Y = Fn2(Fn1(1[]));
 
@@ -231,12 +230,6 @@ function assignability<T>(x: T, y: () => T) {
     const b: T = y();
 }
 
-function comparability<T>(x: T, y: () => T) {
-    x === x;
-    y === y;
-    // x === y; // rightfully errors
-}
-
 // function mappedAssignability<T>(x: T, y: CallMember<T>) {
 //     const d: T() = y;
 // }
@@ -270,19 +263,14 @@ angularFactory(function () {
     }
     return function (foo) { return [foo]; };
 });
-safeDivide(3, 1);
-safeDivide(3, 0); // fails, should error but doesn't
 var z = map(function (v) { return [v]; }, { a: 1, b: 2, c: 3 });
 var obj = null;
 var keys = null;
 var pathTest = path(obj, keys);
 var fn1 = null;
 var fn2 = null;
-// type Fn4 = Fn3(1); // errors, ok
 var ones = null;
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
-// let x = fn2(fn1(1)); // errors with not assignable, ok
-// type X = Fn2(Fn1(1)); // errors with not assignable, ok
 var y = fn2(fn1(ones));
 var falseBool; // 1
 var trueBool; // 1
@@ -312,11 +300,6 @@ infer4(5, function () { return 5; });
 function assignability(x, y) {
     var a = x;
     var b = y();
-}
-function comparability(x, y) {
-    x === x;
-    y === y;
-    // x === y; // rightfully errors
 }
 // function mappedAssignability<T>(x: T, y: CallMember<T>) {
 //     const d: T() = y;

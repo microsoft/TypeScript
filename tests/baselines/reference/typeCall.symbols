@@ -44,12 +44,12 @@ let a = 'foo';
 >a : Symbol(a, Decl(typeCall.ts, 0, 18), Decl(typeCall.ts, 16, 3))
 
 type f = typeof f4(typeof a);
->f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 126, 34))
+>f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 148, 34))
 >f4 : Symbol(f4, Decl(typeCall.ts, 13, 19))
 >a : Symbol(a, Decl(typeCall.ts, 0, 18), Decl(typeCall.ts, 16, 3))
 
 type g = (() => 1)();
->g : Symbol(g, Decl(typeCall.ts, 17, 29), Decl(typeCall.ts, 127, 47))
+>g : Symbol(g, Decl(typeCall.ts, 17, 29), Decl(typeCall.ts, 149, 47))
 
 type Id = <T>(v: T) => T;
 >Id : Symbol(Id, Decl(typeCall.ts, 19, 21))
@@ -142,198 +142,185 @@ angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T])
 interface BoolToString {
 >BoolToString : Symbol(BoolToString, Decl(typeCall.ts, 43, 63))
 
-    (v: false): 'false';
+    (v: false & true): never;
 >v : Symbol(v, Decl(typeCall.ts, 46, 5))
 
-    (v: true): 'true';
+    (v: false): 'false';
 >v : Symbol(v, Decl(typeCall.ts, 47, 5))
+
+    (v: true): 'true';
+>v : Symbol(v, Decl(typeCall.ts, 48, 5))
+
+    (v: boolean): 'true' | 'false';
+>v : Symbol(v, Decl(typeCall.ts, 49, 5))
 }
 type strTrue = BoolToString(true);
->strTrue : Symbol(strTrue, Decl(typeCall.ts, 48, 1))
+>strTrue : Symbol(strTrue, Decl(typeCall.ts, 50, 1))
 >BoolToString : Symbol(BoolToString, Decl(typeCall.ts, 43, 63))
 
 type strFalse = BoolToString(false);
->strFalse : Symbol(strFalse, Decl(typeCall.ts, 49, 34))
+>strFalse : Symbol(strFalse, Decl(typeCall.ts, 51, 34))
 >BoolToString : Symbol(BoolToString, Decl(typeCall.ts, 43, 63))
 
 type strEither = BoolToString(true | false);
->strEither : Symbol(strEither, Decl(typeCall.ts, 50, 36))
+>strEither : Symbol(strEither, Decl(typeCall.ts, 52, 36))
 >BoolToString : Symbol(BoolToString, Decl(typeCall.ts, 43, 63))
 
 type strBool = BoolToString(boolean);
->strBool : Symbol(strBool, Decl(typeCall.ts, 51, 44), Decl(typeCall.ts, 124, 3))
+>strBool : Symbol(strBool, Decl(typeCall.ts, 53, 44), Decl(typeCall.ts, 126, 3))
 >BoolToString : Symbol(BoolToString, Decl(typeCall.ts, 43, 63))
 
-type strAny = BoolToString(any);
->strAny : Symbol(strAny, Decl(typeCall.ts, 52, 37))
+type strAny = BoolToString(any); // fails, want the fallback, but yields 'false'
+>strAny : Symbol(strAny, Decl(typeCall.ts, 54, 37))
 >BoolToString : Symbol(BoolToString, Decl(typeCall.ts, 43, 63))
 
-declare function safeDivide<
->safeDivide : Symbol(safeDivide, Decl(typeCall.ts, 53, 32))
-
-  B extends number,
->B : Symbol(B, Decl(typeCall.ts, 55, 28))
-
-  NotZero = ((v: '1') => 'whatever')({
->NotZero : Symbol(NotZero, Decl(typeCall.ts, 56, 19))
->v : Symbol(v, Decl(typeCall.ts, 57, 14))
-
-    (v: 0): '0';
->v : Symbol(v, Decl(typeCall.ts, 58, 5))
-
-    (v: number): '1';
->v : Symbol(v, Decl(typeCall.ts, 59, 5))
-
-  }(B))
->B : Symbol(B, Decl(typeCall.ts, 55, 28))
-
->(a: number, b: B): number;
->a : Symbol(a, Decl(typeCall.ts, 61, 2))
->b : Symbol(b, Decl(typeCall.ts, 61, 12))
->B : Symbol(B, Decl(typeCall.ts, 55, 28))
-
-safeDivide(3, 1);
->safeDivide : Symbol(safeDivide, Decl(typeCall.ts, 53, 32))
-
-safeDivide(3, 0); // fails, should error but doesn't
->safeDivide : Symbol(safeDivide, Decl(typeCall.ts, 53, 32))
+// declare function safeDivide<
+//   B extends number,
+//   NotZero = ((v: '1') => 'whatever')({
+//     (v: 0): '0';
+//     (v: number): '1';
+//   }(B))
+// >(a: number, b: B): number;
+// // Argument of type '"0"' is not assignable to parameter of type '"1"'
+// safeDivide(3, 1);
+// safeDivide(3, 0); // should error
 
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
->map : Symbol(map, Decl(typeCall.ts, 63, 17), Decl(typeCall.ts, 66, 53))
->Fn : Symbol(Fn, Decl(typeCall.ts, 65, 12))
->v : Symbol(v, Decl(typeCall.ts, 65, 24))
->T : Symbol(T, Decl(typeCall.ts, 65, 67))
->O : Symbol(O, Decl(typeCall.ts, 65, 37))
->k : Symbol(k, Decl(typeCall.ts, 65, 51))
->T : Symbol(T, Decl(typeCall.ts, 65, 67))
->T : Symbol(T, Decl(typeCall.ts, 65, 67))
->fn : Symbol(fn, Decl(typeCall.ts, 65, 71))
->Fn : Symbol(Fn, Decl(typeCall.ts, 65, 12))
->obj : Symbol(obj, Decl(typeCall.ts, 65, 78))
->O : Symbol(O, Decl(typeCall.ts, 65, 37))
->P : Symbol(P, Decl(typeCall.ts, 65, 93))
->O : Symbol(O, Decl(typeCall.ts, 65, 37))
->Fn : Symbol(Fn, Decl(typeCall.ts, 65, 12))
->O : Symbol(O, Decl(typeCall.ts, 65, 37))
->P : Symbol(P, Decl(typeCall.ts, 65, 93))
+>map : Symbol(map, Decl(typeCall.ts, 55, 32), Decl(typeCall.ts, 69, 53))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 68, 12))
+>v : Symbol(v, Decl(typeCall.ts, 68, 24))
+>T : Symbol(T, Decl(typeCall.ts, 68, 67))
+>O : Symbol(O, Decl(typeCall.ts, 68, 37))
+>k : Symbol(k, Decl(typeCall.ts, 68, 51))
+>T : Symbol(T, Decl(typeCall.ts, 68, 67))
+>T : Symbol(T, Decl(typeCall.ts, 68, 67))
+>fn : Symbol(fn, Decl(typeCall.ts, 68, 71))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 68, 12))
+>obj : Symbol(obj, Decl(typeCall.ts, 68, 78))
+>O : Symbol(O, Decl(typeCall.ts, 68, 37))
+>P : Symbol(P, Decl(typeCall.ts, 68, 93))
+>O : Symbol(O, Decl(typeCall.ts, 68, 37))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 68, 12))
+>O : Symbol(O, Decl(typeCall.ts, 68, 37))
+>P : Symbol(P, Decl(typeCall.ts, 68, 93))
 
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
->z : Symbol(z, Decl(typeCall.ts, 65, 119), Decl(typeCall.ts, 68, 3))
->map : Symbol(map, Decl(typeCall.ts, 63, 17), Decl(typeCall.ts, 66, 53))
->T : Symbol(T, Decl(typeCall.ts, 66, 14))
->v : Symbol(v, Decl(typeCall.ts, 66, 17))
->T : Symbol(T, Decl(typeCall.ts, 66, 14))
->T : Symbol(T, Decl(typeCall.ts, 66, 14))
->a : Symbol(a, Decl(typeCall.ts, 66, 32))
->b : Symbol(b, Decl(typeCall.ts, 66, 38))
->c : Symbol(c, Decl(typeCall.ts, 66, 44))
+>z : Symbol(z, Decl(typeCall.ts, 68, 119), Decl(typeCall.ts, 71, 3))
+>map : Symbol(map, Decl(typeCall.ts, 55, 32), Decl(typeCall.ts, 69, 53))
+>T : Symbol(T, Decl(typeCall.ts, 69, 14))
+>v : Symbol(v, Decl(typeCall.ts, 69, 17))
+>T : Symbol(T, Decl(typeCall.ts, 69, 14))
+>T : Symbol(T, Decl(typeCall.ts, 69, 14))
+>a : Symbol(a, Decl(typeCall.ts, 69, 32))
+>b : Symbol(b, Decl(typeCall.ts, 69, 38))
+>c : Symbol(c, Decl(typeCall.ts, 69, 44))
 
 declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): map(Fn, O);
->map : Symbol(map, Decl(typeCall.ts, 63, 17), Decl(typeCall.ts, 66, 53))
->Fn : Symbol(Fn, Decl(typeCall.ts, 67, 21))
->v : Symbol(v, Decl(typeCall.ts, 67, 33))
->T : Symbol(T, Decl(typeCall.ts, 67, 76))
->O : Symbol(O, Decl(typeCall.ts, 67, 46))
->k : Symbol(k, Decl(typeCall.ts, 67, 60))
->T : Symbol(T, Decl(typeCall.ts, 67, 76))
->T : Symbol(T, Decl(typeCall.ts, 67, 76))
->fn : Symbol(fn, Decl(typeCall.ts, 67, 80))
->Fn : Symbol(Fn, Decl(typeCall.ts, 67, 21))
->obj : Symbol(obj, Decl(typeCall.ts, 67, 87))
->O : Symbol(O, Decl(typeCall.ts, 67, 46))
->map : Symbol(map, Decl(typeCall.ts, 63, 17), Decl(typeCall.ts, 66, 53))
->Fn : Symbol(Fn, Decl(typeCall.ts, 67, 21))
->O : Symbol(O, Decl(typeCall.ts, 67, 46))
+>map : Symbol(map, Decl(typeCall.ts, 55, 32), Decl(typeCall.ts, 69, 53))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 70, 21))
+>v : Symbol(v, Decl(typeCall.ts, 70, 33))
+>T : Symbol(T, Decl(typeCall.ts, 70, 76))
+>O : Symbol(O, Decl(typeCall.ts, 70, 46))
+>k : Symbol(k, Decl(typeCall.ts, 70, 60))
+>T : Symbol(T, Decl(typeCall.ts, 70, 76))
+>T : Symbol(T, Decl(typeCall.ts, 70, 76))
+>fn : Symbol(fn, Decl(typeCall.ts, 70, 80))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 70, 21))
+>obj : Symbol(obj, Decl(typeCall.ts, 70, 87))
+>O : Symbol(O, Decl(typeCall.ts, 70, 46))
+>map : Symbol(map, Decl(typeCall.ts, 55, 32), Decl(typeCall.ts, 69, 53))
+>Fn : Symbol(Fn, Decl(typeCall.ts, 70, 21))
+>O : Symbol(O, Decl(typeCall.ts, 70, 46))
 
 let z = map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 });
->z : Symbol(z, Decl(typeCall.ts, 65, 119), Decl(typeCall.ts, 68, 3))
->map : Symbol(map, Decl(typeCall.ts, 63, 17), Decl(typeCall.ts, 66, 53))
->T : Symbol(T, Decl(typeCall.ts, 68, 13))
->v : Symbol(v, Decl(typeCall.ts, 68, 16))
->T : Symbol(T, Decl(typeCall.ts, 68, 13))
->v : Symbol(v, Decl(typeCall.ts, 68, 16))
->T : Symbol(T, Decl(typeCall.ts, 68, 13))
->a : Symbol(a, Decl(typeCall.ts, 68, 38))
->b : Symbol(b, Decl(typeCall.ts, 68, 44))
->c : Symbol(c, Decl(typeCall.ts, 68, 50))
->a : Symbol(a, Decl(typeCall.ts, 68, 62))
->b : Symbol(b, Decl(typeCall.ts, 68, 68))
->c : Symbol(c, Decl(typeCall.ts, 68, 74))
+>z : Symbol(z, Decl(typeCall.ts, 68, 119), Decl(typeCall.ts, 71, 3))
+>map : Symbol(map, Decl(typeCall.ts, 55, 32), Decl(typeCall.ts, 69, 53))
+>T : Symbol(T, Decl(typeCall.ts, 71, 13))
+>v : Symbol(v, Decl(typeCall.ts, 71, 16))
+>T : Symbol(T, Decl(typeCall.ts, 71, 13))
+>v : Symbol(v, Decl(typeCall.ts, 71, 16))
+>T : Symbol(T, Decl(typeCall.ts, 71, 13))
+>a : Symbol(a, Decl(typeCall.ts, 71, 38))
+>b : Symbol(b, Decl(typeCall.ts, 71, 44))
+>c : Symbol(c, Decl(typeCall.ts, 71, 50))
+>a : Symbol(a, Decl(typeCall.ts, 71, 62))
+>b : Symbol(b, Decl(typeCall.ts, 71, 68))
+>c : Symbol(c, Decl(typeCall.ts, 71, 74))
 
 type Inc = { [k: string]: string; 0:'1', 1:'2', 2:'3', 3:'4', 4:'5', 5:'6', 6:'7', 7:'8', 8:'9' };
->Inc : Symbol(Inc, Decl(typeCall.ts, 68, 83))
->k : Symbol(k, Decl(typeCall.ts, 70, 14))
+>Inc : Symbol(Inc, Decl(typeCall.ts, 71, 83))
+>k : Symbol(k, Decl(typeCall.ts, 73, 14))
 
 type StringToNumber = { [k: string]: number; 0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8};
->StringToNumber : Symbol(StringToNumber, Decl(typeCall.ts, 70, 98))
->k : Symbol(k, Decl(typeCall.ts, 71, 25))
+>StringToNumber : Symbol(StringToNumber, Decl(typeCall.ts, 73, 98))
+>k : Symbol(k, Decl(typeCall.ts, 74, 25))
 
 type TupleHasIndex<Arr extends any[], I extends string> = ({[K in keyof Arr]: '1' } & { [k: string]: '0' })[I];
->TupleHasIndex : Symbol(TupleHasIndex, Decl(typeCall.ts, 71, 82))
->Arr : Symbol(Arr, Decl(typeCall.ts, 72, 19))
->I : Symbol(I, Decl(typeCall.ts, 72, 37))
->K : Symbol(K, Decl(typeCall.ts, 72, 61))
->Arr : Symbol(Arr, Decl(typeCall.ts, 72, 19))
->k : Symbol(k, Decl(typeCall.ts, 72, 89))
->I : Symbol(I, Decl(typeCall.ts, 72, 37))
+>TupleHasIndex : Symbol(TupleHasIndex, Decl(typeCall.ts, 74, 82))
+>Arr : Symbol(Arr, Decl(typeCall.ts, 75, 19))
+>I : Symbol(I, Decl(typeCall.ts, 75, 37))
+>K : Symbol(K, Decl(typeCall.ts, 75, 61))
+>Arr : Symbol(Arr, Decl(typeCall.ts, 75, 19))
+>k : Symbol(k, Decl(typeCall.ts, 75, 89))
+>I : Symbol(I, Decl(typeCall.ts, 75, 37))
 
 type PathFn<T extends { [k: string]: any }, R extends Array<string>, I extends string = '0'> =
->PathFn : Symbol(PathFn, Decl(typeCall.ts, 72, 111))
->T : Symbol(T, Decl(typeCall.ts, 73, 12))
->k : Symbol(k, Decl(typeCall.ts, 73, 25))
->R : Symbol(R, Decl(typeCall.ts, 73, 43))
+>PathFn : Symbol(PathFn, Decl(typeCall.ts, 75, 111))
+>T : Symbol(T, Decl(typeCall.ts, 76, 12))
+>k : Symbol(k, Decl(typeCall.ts, 76, 25))
+>R : Symbol(R, Decl(typeCall.ts, 76, 43))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->I : Symbol(I, Decl(typeCall.ts, 73, 68))
+>I : Symbol(I, Decl(typeCall.ts, 76, 68))
 
     { 1: PathFn<T[R[StringToNumber[I]]], R, Inc[I]>, 0: T }[TupleHasIndex<R, I>];
->PathFn : Symbol(PathFn, Decl(typeCall.ts, 72, 111))
->T : Symbol(T, Decl(typeCall.ts, 73, 12))
->R : Symbol(R, Decl(typeCall.ts, 73, 43))
->StringToNumber : Symbol(StringToNumber, Decl(typeCall.ts, 70, 98))
->I : Symbol(I, Decl(typeCall.ts, 73, 68))
->R : Symbol(R, Decl(typeCall.ts, 73, 43))
->Inc : Symbol(Inc, Decl(typeCall.ts, 68, 83))
->I : Symbol(I, Decl(typeCall.ts, 73, 68))
->T : Symbol(T, Decl(typeCall.ts, 73, 12))
->TupleHasIndex : Symbol(TupleHasIndex, Decl(typeCall.ts, 71, 82))
->R : Symbol(R, Decl(typeCall.ts, 73, 43))
->I : Symbol(I, Decl(typeCall.ts, 73, 68))
+>PathFn : Symbol(PathFn, Decl(typeCall.ts, 75, 111))
+>T : Symbol(T, Decl(typeCall.ts, 76, 12))
+>R : Symbol(R, Decl(typeCall.ts, 76, 43))
+>StringToNumber : Symbol(StringToNumber, Decl(typeCall.ts, 73, 98))
+>I : Symbol(I, Decl(typeCall.ts, 76, 68))
+>R : Symbol(R, Decl(typeCall.ts, 76, 43))
+>Inc : Symbol(Inc, Decl(typeCall.ts, 71, 83))
+>I : Symbol(I, Decl(typeCall.ts, 76, 68))
+>T : Symbol(T, Decl(typeCall.ts, 76, 12))
+>TupleHasIndex : Symbol(TupleHasIndex, Decl(typeCall.ts, 74, 82))
+>R : Symbol(R, Decl(typeCall.ts, 76, 43))
+>I : Symbol(I, Decl(typeCall.ts, 76, 68))
 
 type PathTest = PathFn<{ a: { b: ['c', { d: 'e' }] } }, ['a', 'b', '1', 'd']>;
->PathTest : Symbol(PathTest, Decl(typeCall.ts, 74, 81))
->PathFn : Symbol(PathFn, Decl(typeCall.ts, 72, 111))
->a : Symbol(a, Decl(typeCall.ts, 75, 24))
->b : Symbol(b, Decl(typeCall.ts, 75, 29))
->d : Symbol(d, Decl(typeCall.ts, 75, 40))
+>PathTest : Symbol(PathTest, Decl(typeCall.ts, 77, 81))
+>PathFn : Symbol(PathFn, Decl(typeCall.ts, 75, 111))
+>a : Symbol(a, Decl(typeCall.ts, 78, 24))
+>b : Symbol(b, Decl(typeCall.ts, 78, 29))
+>d : Symbol(d, Decl(typeCall.ts, 78, 40))
 
 declare function path<T extends { [k: string]: any }, R extends Array<string>>(obj: T, path: R): PathFn<T, R>;
->path : Symbol(path, Decl(typeCall.ts, 75, 78))
->T : Symbol(T, Decl(typeCall.ts, 76, 22))
->k : Symbol(k, Decl(typeCall.ts, 76, 35))
->R : Symbol(R, Decl(typeCall.ts, 76, 53))
+>path : Symbol(path, Decl(typeCall.ts, 78, 78))
+>T : Symbol(T, Decl(typeCall.ts, 79, 22))
+>k : Symbol(k, Decl(typeCall.ts, 79, 35))
+>R : Symbol(R, Decl(typeCall.ts, 79, 53))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->obj : Symbol(obj, Decl(typeCall.ts, 76, 79))
->T : Symbol(T, Decl(typeCall.ts, 76, 22))
->path : Symbol(path, Decl(typeCall.ts, 76, 86))
->R : Symbol(R, Decl(typeCall.ts, 76, 53))
->PathFn : Symbol(PathFn, Decl(typeCall.ts, 72, 111))
->T : Symbol(T, Decl(typeCall.ts, 76, 22))
->R : Symbol(R, Decl(typeCall.ts, 76, 53))
+>obj : Symbol(obj, Decl(typeCall.ts, 79, 79))
+>T : Symbol(T, Decl(typeCall.ts, 79, 22))
+>path : Symbol(path, Decl(typeCall.ts, 79, 86))
+>R : Symbol(R, Decl(typeCall.ts, 79, 53))
+>PathFn : Symbol(PathFn, Decl(typeCall.ts, 75, 111))
+>T : Symbol(T, Decl(typeCall.ts, 79, 22))
+>R : Symbol(R, Decl(typeCall.ts, 79, 53))
 
 const obj = null! as { a: { b: ['c', { d: 'e' }] } };
->obj : Symbol(obj, Decl(typeCall.ts, 77, 5))
->a : Symbol(a, Decl(typeCall.ts, 77, 22))
->b : Symbol(b, Decl(typeCall.ts, 77, 27))
->d : Symbol(d, Decl(typeCall.ts, 77, 38))
+>obj : Symbol(obj, Decl(typeCall.ts, 80, 5))
+>a : Symbol(a, Decl(typeCall.ts, 80, 22))
+>b : Symbol(b, Decl(typeCall.ts, 80, 27))
+>d : Symbol(d, Decl(typeCall.ts, 80, 38))
 
 const keys = null! as ['a', 'b', '1', 'd'];
->keys : Symbol(keys, Decl(typeCall.ts, 78, 5))
+>keys : Symbol(keys, Decl(typeCall.ts, 81, 5))
 
 const pathTest = path(obj, keys);
->pathTest : Symbol(pathTest, Decl(typeCall.ts, 79, 5))
->path : Symbol(path, Decl(typeCall.ts, 75, 78))
->obj : Symbol(obj, Decl(typeCall.ts, 77, 5))
->keys : Symbol(keys, Decl(typeCall.ts, 78, 5))
+>pathTest : Symbol(pathTest, Decl(typeCall.ts, 82, 5))
+>path : Symbol(path, Decl(typeCall.ts, 78, 78))
+>obj : Symbol(obj, Decl(typeCall.ts, 80, 5))
+>keys : Symbol(keys, Decl(typeCall.ts, 81, 5))
 
 // "e"
 
@@ -357,539 +344,516 @@ const pathTest = path(obj, keys);
 
 // binary function composition
 type Fn1 = <T1 extends number>(v1: T1[]) => { [k: string]: T1 };
->Fn1 : Symbol(Fn1, Decl(typeCall.ts, 57, 33))
->T1 : Symbol(T1, Decl(typeCall.ts, 79, 12))
->v1 : Symbol(v1, Decl(typeCall.ts, 79, 31))
->T1 : Symbol(T1, Decl(typeCall.ts, 79, 12))
->k : Symbol(k, Decl(typeCall.ts, 79, 47))
->T1 : Symbol(T1, Decl(typeCall.ts, 79, 12))
+>Fn1 : Symbol(Fn1, Decl(typeCall.ts, 82, 33))
+>T1 : Symbol(T1, Decl(typeCall.ts, 104, 12))
+>v1 : Symbol(v1, Decl(typeCall.ts, 104, 31))
+>T1 : Symbol(T1, Decl(typeCall.ts, 104, 12))
+>k : Symbol(k, Decl(typeCall.ts, 104, 47))
+>T1 : Symbol(T1, Decl(typeCall.ts, 104, 12))
 
 type Fn2 = <T2>(v2: { [k: string]: T2 }) => ReadonlyArray<T2>;
->Fn2 : Symbol(Fn2, Decl(typeCall.ts, 79, 64))
->T2 : Symbol(T2, Decl(typeCall.ts, 80, 12))
->v2 : Symbol(v2, Decl(typeCall.ts, 80, 16))
->k : Symbol(k, Decl(typeCall.ts, 80, 23))
->T2 : Symbol(T2, Decl(typeCall.ts, 80, 12))
+>Fn2 : Symbol(Fn2, Decl(typeCall.ts, 104, 64))
+>T2 : Symbol(T2, Decl(typeCall.ts, 105, 12))
+>v2 : Symbol(v2, Decl(typeCall.ts, 105, 16))
+>k : Symbol(k, Decl(typeCall.ts, 105, 23))
+>T2 : Symbol(T2, Decl(typeCall.ts, 105, 12))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
->T2 : Symbol(T2, Decl(typeCall.ts, 80, 12))
+>T2 : Symbol(T2, Decl(typeCall.ts, 105, 12))
 
 let fn1 = null! as Fn1;
->fn1 : Symbol(fn1, Decl(typeCall.ts, 81, 3))
->Fn1 : Symbol(Fn1, Decl(typeCall.ts, 57, 33))
+>fn1 : Symbol(fn1, Decl(typeCall.ts, 106, 3))
+>Fn1 : Symbol(Fn1, Decl(typeCall.ts, 82, 33))
 
 let fn2 = null! as Fn2;
->fn2 : Symbol(fn2, Decl(typeCall.ts, 82, 3))
->Fn2 : Symbol(Fn2, Decl(typeCall.ts, 79, 64))
+>fn2 : Symbol(fn2, Decl(typeCall.ts, 107, 3))
+>Fn2 : Symbol(Fn2, Decl(typeCall.ts, 104, 64))
 
 type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
->Fn3 : Symbol(Fn3, Decl(typeCall.ts, 82, 23))
->T3 : Symbol(T3, Decl(typeCall.ts, 83, 12))
->v3 : Symbol(v3, Decl(typeCall.ts, 83, 33))
->T3 : Symbol(T3, Decl(typeCall.ts, 83, 12))
->Fn2 : Symbol(Fn2, Decl(typeCall.ts, 79, 64))
->Fn1 : Symbol(Fn1, Decl(typeCall.ts, 57, 33))
->T3 : Symbol(T3, Decl(typeCall.ts, 83, 12))
+>Fn3 : Symbol(Fn3, Decl(typeCall.ts, 107, 23))
+>T3 : Symbol(T3, Decl(typeCall.ts, 108, 12))
+>v3 : Symbol(v3, Decl(typeCall.ts, 108, 33))
+>T3 : Symbol(T3, Decl(typeCall.ts, 108, 12))
+>Fn2 : Symbol(Fn2, Decl(typeCall.ts, 104, 64))
+>Fn1 : Symbol(Fn1, Decl(typeCall.ts, 82, 33))
+>T3 : Symbol(T3, Decl(typeCall.ts, 108, 12))
 
-// type Fn4 = Fn3(1); // errors, ok
 let ones = null! as 1[];
->ones : Symbol(ones, Decl(typeCall.ts, 85, 3))
+>ones : Symbol(ones, Decl(typeCall.ts, 109, 3))
 
 type Fn4b = Fn3(typeof ones);
->Fn4b : Symbol(Fn4b, Decl(typeCall.ts, 85, 24))
->Fn3 : Symbol(Fn3, Decl(typeCall.ts, 82, 23))
->ones : Symbol(ones, Decl(typeCall.ts, 85, 3))
+>Fn4b : Symbol(Fn4b, Decl(typeCall.ts, 109, 24))
+>Fn3 : Symbol(Fn3, Decl(typeCall.ts, 107, 23))
+>ones : Symbol(ones, Decl(typeCall.ts, 109, 3))
 
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 type Fn4c = Fn3(1[]);
->Fn4c : Symbol(Fn4c, Decl(typeCall.ts, 86, 29))
->Fn3 : Symbol(Fn3, Decl(typeCall.ts, 82, 23))
+>Fn4c : Symbol(Fn4c, Decl(typeCall.ts, 110, 29))
+>Fn3 : Symbol(Fn3, Decl(typeCall.ts, 107, 23))
 
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
-// let x = fn2(fn1(1)); // errors with not assignable, ok
-// type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));
->y : Symbol(y, Decl(typeCall.ts, 92, 3))
->fn2 : Symbol(fn2, Decl(typeCall.ts, 82, 3))
->fn1 : Symbol(fn1, Decl(typeCall.ts, 81, 3))
->ones : Symbol(ones, Decl(typeCall.ts, 85, 3))
+>y : Symbol(y, Decl(typeCall.ts, 114, 3))
+>fn2 : Symbol(fn2, Decl(typeCall.ts, 107, 3))
+>fn1 : Symbol(fn1, Decl(typeCall.ts, 106, 3))
+>ones : Symbol(ones, Decl(typeCall.ts, 109, 3))
 
 type Y = Fn2(Fn1(1[]));
->Y : Symbol(Y, Decl(typeCall.ts, 92, 23))
->Fn2 : Symbol(Fn2, Decl(typeCall.ts, 79, 64))
->Fn1 : Symbol(Fn1, Decl(typeCall.ts, 57, 33))
+>Y : Symbol(Y, Decl(typeCall.ts, 114, 23))
+>Fn2 : Symbol(Fn2, Decl(typeCall.ts, 104, 64))
+>Fn1 : Symbol(Fn1, Decl(typeCall.ts, 82, 33))
 
 interface isT<T> {
->isT : Symbol(isT, Decl(typeCall.ts, 93, 23))
->T : Symbol(T, Decl(typeCall.ts, 95, 14))
+>isT : Symbol(isT, Decl(typeCall.ts, 115, 23))
+>T : Symbol(T, Decl(typeCall.ts, 117, 14))
 
   (v: never): '0';
->v : Symbol(v, Decl(typeCall.ts, 96, 3))
+>v : Symbol(v, Decl(typeCall.ts, 118, 3))
 
   (v: T): '1';
->v : Symbol(v, Decl(typeCall.ts, 97, 3))
->T : Symbol(T, Decl(typeCall.ts, 95, 14))
+>v : Symbol(v, Decl(typeCall.ts, 119, 3))
+>T : Symbol(T, Decl(typeCall.ts, 117, 14))
 
   (v: any): '0';
->v : Symbol(v, Decl(typeCall.ts, 98, 3))
+>v : Symbol(v, Decl(typeCall.ts, 120, 3))
 }
 type Matches<V, T> = isT<T>(V);
->Matches : Symbol(Matches, Decl(typeCall.ts, 99, 1))
->V : Symbol(V, Decl(typeCall.ts, 100, 13))
->T : Symbol(T, Decl(typeCall.ts, 100, 15))
->isT : Symbol(isT, Decl(typeCall.ts, 93, 23))
->T : Symbol(T, Decl(typeCall.ts, 100, 15))
->V : Symbol(V, Decl(typeCall.ts, 100, 13))
+>Matches : Symbol(Matches, Decl(typeCall.ts, 121, 1))
+>V : Symbol(V, Decl(typeCall.ts, 122, 13))
+>T : Symbol(T, Decl(typeCall.ts, 122, 15))
+>isT : Symbol(isT, Decl(typeCall.ts, 115, 23))
+>T : Symbol(T, Decl(typeCall.ts, 122, 15))
+>V : Symbol(V, Decl(typeCall.ts, 122, 13))
 
 type isBool = isT<boolean>;
->isBool : Symbol(isBool, Decl(typeCall.ts, 100, 31))
->isT : Symbol(isT, Decl(typeCall.ts, 93, 23))
+>isBool : Symbol(isBool, Decl(typeCall.ts, 122, 31))
+>isT : Symbol(isT, Decl(typeCall.ts, 115, 23))
 
 let falseBool: isBool(false); // 1
->falseBool : Symbol(falseBool, Decl(typeCall.ts, 102, 3))
->isBool : Symbol(isBool, Decl(typeCall.ts, 100, 31))
+>falseBool : Symbol(falseBool, Decl(typeCall.ts, 124, 3))
+>isBool : Symbol(isBool, Decl(typeCall.ts, 122, 31))
 
 let trueBool: isBool(true); // 1
->trueBool : Symbol(trueBool, Decl(typeCall.ts, 103, 3))
->isBool : Symbol(isBool, Decl(typeCall.ts, 100, 31))
+>trueBool : Symbol(trueBool, Decl(typeCall.ts, 125, 3))
+>isBool : Symbol(isBool, Decl(typeCall.ts, 122, 31))
 
 let strBool: isBool(string); // 0
->strBool : Symbol(strBool, Decl(typeCall.ts, 104, 3))
->isBool : Symbol(isBool, Decl(typeCall.ts, 100, 31))
+>strBool : Symbol(strBool, Decl(typeCall.ts, 53, 44), Decl(typeCall.ts, 126, 3))
+>isBool : Symbol(isBool, Decl(typeCall.ts, 122, 31))
 
 let anyBool: isBool(any); // 0
->anyBool : Symbol(anyBool, Decl(typeCall.ts, 105, 3))
->isBool : Symbol(isBool, Decl(typeCall.ts, 100, 31))
+>anyBool : Symbol(anyBool, Decl(typeCall.ts, 127, 3))
+>isBool : Symbol(isBool, Decl(typeCall.ts, 122, 31))
 
 let neverBool: isBool(never); // 0
->neverBool : Symbol(neverBool, Decl(typeCall.ts, 106, 3))
->isBool : Symbol(isBool, Decl(typeCall.ts, 100, 31))
+>neverBool : Symbol(neverBool, Decl(typeCall.ts, 128, 3))
+>isBool : Symbol(isBool, Decl(typeCall.ts, 122, 31))
 
 type Assert<T> = (<U>(v: U | null | undefined) => U)(T);
->Assert : Symbol(Assert, Decl(typeCall.ts, 106, 29))
->T : Symbol(T, Decl(typeCall.ts, 108, 12))
->U : Symbol(U, Decl(typeCall.ts, 108, 19))
->v : Symbol(v, Decl(typeCall.ts, 108, 22))
->U : Symbol(U, Decl(typeCall.ts, 108, 19))
->U : Symbol(U, Decl(typeCall.ts, 108, 19))
->T : Symbol(T, Decl(typeCall.ts, 108, 12))
+>Assert : Symbol(Assert, Decl(typeCall.ts, 128, 29))
+>T : Symbol(T, Decl(typeCall.ts, 130, 12))
+>U : Symbol(U, Decl(typeCall.ts, 130, 19))
+>v : Symbol(v, Decl(typeCall.ts, 130, 22))
+>U : Symbol(U, Decl(typeCall.ts, 130, 19))
+>U : Symbol(U, Decl(typeCall.ts, 130, 19))
+>T : Symbol(T, Decl(typeCall.ts, 130, 12))
 
 let assert: Assert<string | undefined>; // string
->assert : Symbol(assert, Decl(typeCall.ts, 109, 3))
->Assert : Symbol(Assert, Decl(typeCall.ts, 106, 29))
+>assert : Symbol(assert, Decl(typeCall.ts, 131, 3))
+>Assert : Symbol(Assert, Decl(typeCall.ts, 128, 29))
 
 type Minus<A, B> = (<U>(v: U | B) => U)(A);
->Minus : Symbol(Minus, Decl(typeCall.ts, 109, 39))
->A : Symbol(A, Decl(typeCall.ts, 111, 11))
->B : Symbol(B, Decl(typeCall.ts, 111, 13))
->U : Symbol(U, Decl(typeCall.ts, 111, 21))
->v : Symbol(v, Decl(typeCall.ts, 111, 24))
->U : Symbol(U, Decl(typeCall.ts, 111, 21))
->B : Symbol(B, Decl(typeCall.ts, 111, 13))
->U : Symbol(U, Decl(typeCall.ts, 111, 21))
->A : Symbol(A, Decl(typeCall.ts, 111, 11))
+>Minus : Symbol(Minus, Decl(typeCall.ts, 131, 39))
+>A : Symbol(A, Decl(typeCall.ts, 133, 11))
+>B : Symbol(B, Decl(typeCall.ts, 133, 13))
+>U : Symbol(U, Decl(typeCall.ts, 133, 21))
+>v : Symbol(v, Decl(typeCall.ts, 133, 24))
+>U : Symbol(U, Decl(typeCall.ts, 133, 21))
+>B : Symbol(B, Decl(typeCall.ts, 133, 13))
+>U : Symbol(U, Decl(typeCall.ts, 133, 21))
+>A : Symbol(A, Decl(typeCall.ts, 133, 11))
 
 let noNumbers: Minus<string | number, number>; // string
->noNumbers : Symbol(noNumbers, Decl(typeCall.ts, 112, 3))
->Minus : Symbol(Minus, Decl(typeCall.ts, 109, 39))
+>noNumbers : Symbol(noNumbers, Decl(typeCall.ts, 134, 3))
+>Minus : Symbol(Minus, Decl(typeCall.ts, 131, 39))
 
 interface UnwrapPromise {
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
 
   <U>(v: PromiseLike<U>): UnwrapPromise(U);
->U : Symbol(U, Decl(typeCall.ts, 115, 3))
->v : Symbol(v, Decl(typeCall.ts, 115, 6))
+>U : Symbol(U, Decl(typeCall.ts, 137, 3))
+>v : Symbol(v, Decl(typeCall.ts, 137, 6))
 >PromiseLike : Symbol(PromiseLike, Decl(lib.d.ts, --, --))
->U : Symbol(U, Decl(typeCall.ts, 115, 3))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
->U : Symbol(U, Decl(typeCall.ts, 115, 3))
+>U : Symbol(U, Decl(typeCall.ts, 137, 3))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
+>U : Symbol(U, Decl(typeCall.ts, 137, 3))
 
   <U>(v: U): U;
->U : Symbol(U, Decl(typeCall.ts, 116, 3))
->v : Symbol(v, Decl(typeCall.ts, 116, 6))
->U : Symbol(U, Decl(typeCall.ts, 116, 3))
->U : Symbol(U, Decl(typeCall.ts, 116, 3))
+>U : Symbol(U, Decl(typeCall.ts, 138, 3))
+>v : Symbol(v, Decl(typeCall.ts, 138, 6))
+>U : Symbol(U, Decl(typeCall.ts, 138, 3))
+>U : Symbol(U, Decl(typeCall.ts, 138, 3))
 
 };
 declare const testUnwrap1: UnwrapPromise(string);
->testUnwrap1 : Symbol(testUnwrap1, Decl(typeCall.ts, 118, 13))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
+>testUnwrap1 : Symbol(testUnwrap1, Decl(typeCall.ts, 140, 13))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
 
 declare const testUnwrap2: UnwrapPromise(Promise<string>);
->testUnwrap2 : Symbol(testUnwrap2, Decl(typeCall.ts, 119, 13))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
+>testUnwrap2 : Symbol(testUnwrap2, Decl(typeCall.ts, 141, 13))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
 
 declare const testUnwrap3: UnwrapPromise(boolean | Promise<string>);
->testUnwrap3 : Symbol(testUnwrap3, Decl(typeCall.ts, 120, 13))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
+>testUnwrap3 : Symbol(testUnwrap3, Decl(typeCall.ts, 142, 13))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
 
 declare function myThen<T, TResult1 = T, TResult2 = never>(
->myThen : Symbol(myThen, Decl(typeCall.ts, 120, 68))
->T : Symbol(T, Decl(typeCall.ts, 121, 24))
->TResult1 : Symbol(TResult1, Decl(typeCall.ts, 121, 26))
->T : Symbol(T, Decl(typeCall.ts, 121, 24))
->TResult2 : Symbol(TResult2, Decl(typeCall.ts, 121, 40))
+>myThen : Symbol(myThen, Decl(typeCall.ts, 142, 68))
+>T : Symbol(T, Decl(typeCall.ts, 143, 24))
+>TResult1 : Symbol(TResult1, Decl(typeCall.ts, 143, 26))
+>T : Symbol(T, Decl(typeCall.ts, 143, 24))
+>TResult2 : Symbol(TResult2, Decl(typeCall.ts, 143, 40))
 
         prom: Promise<T>,
->prom : Symbol(prom, Decl(typeCall.ts, 121, 59))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
->T : Symbol(T, Decl(typeCall.ts, 121, 24))
+>prom : Symbol(prom, Decl(typeCall.ts, 143, 59))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
+>T : Symbol(T, Decl(typeCall.ts, 143, 24))
 
         onfulfilled?: ((value: T) => TResult1) | undefined | null, 
->onfulfilled : Symbol(onfulfilled, Decl(typeCall.ts, 122, 25))
->value : Symbol(value, Decl(typeCall.ts, 123, 24))
->T : Symbol(T, Decl(typeCall.ts, 121, 24))
->TResult1 : Symbol(TResult1, Decl(typeCall.ts, 121, 26))
+>onfulfilled : Symbol(onfulfilled, Decl(typeCall.ts, 144, 25))
+>value : Symbol(value, Decl(typeCall.ts, 145, 24))
+>T : Symbol(T, Decl(typeCall.ts, 143, 24))
+>TResult1 : Symbol(TResult1, Decl(typeCall.ts, 143, 26))
 
         onrejected?: ((reason: any) => TResult2) | undefined | null
->onrejected : Symbol(onrejected, Decl(typeCall.ts, 123, 66))
->reason : Symbol(reason, Decl(typeCall.ts, 124, 23))
->TResult2 : Symbol(TResult2, Decl(typeCall.ts, 121, 40))
+>onrejected : Symbol(onrejected, Decl(typeCall.ts, 145, 66))
+>reason : Symbol(reason, Decl(typeCall.ts, 146, 23))
+>TResult2 : Symbol(TResult2, Decl(typeCall.ts, 143, 40))
 
     ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
->TResult1 : Symbol(TResult1, Decl(typeCall.ts, 121, 26))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
->TResult2 : Symbol(TResult2, Decl(typeCall.ts, 121, 40))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
+>TResult1 : Symbol(TResult1, Decl(typeCall.ts, 143, 26))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
+>TResult2 : Symbol(TResult2, Decl(typeCall.ts, 143, 40))
 
 declare const pr: Promise<number>;
->pr : Symbol(pr, Decl(typeCall.ts, 126, 13))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
+>pr : Symbol(pr, Decl(typeCall.ts, 148, 13))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
 
 declare function f(x: number): Promise<string>;
->f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 126, 34))
->x : Symbol(x, Decl(typeCall.ts, 127, 19))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
+>f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 148, 34))
+>x : Symbol(x, Decl(typeCall.ts, 149, 19))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
 
 declare function g(x: number): number | Promise<boolean>;
->g : Symbol(g, Decl(typeCall.ts, 17, 29), Decl(typeCall.ts, 127, 47))
->x : Symbol(x, Decl(typeCall.ts, 128, 19))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
+>g : Symbol(g, Decl(typeCall.ts, 17, 29), Decl(typeCall.ts, 149, 47))
+>x : Symbol(x, Decl(typeCall.ts, 150, 19))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
 
 const testThen = myThen(pr, f, g);
->testThen : Symbol(testThen, Decl(typeCall.ts, 129, 5))
->myThen : Symbol(myThen, Decl(typeCall.ts, 120, 68))
->pr : Symbol(pr, Decl(typeCall.ts, 126, 13))
->f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 126, 34))
->g : Symbol(g, Decl(typeCall.ts, 17, 29), Decl(typeCall.ts, 127, 47))
+>testThen : Symbol(testThen, Decl(typeCall.ts, 151, 5))
+>myThen : Symbol(myThen, Decl(typeCall.ts, 142, 68))
+>pr : Symbol(pr, Decl(typeCall.ts, 148, 13))
+>f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 148, 34))
+>g : Symbol(g, Decl(typeCall.ts, 17, 29), Decl(typeCall.ts, 149, 47))
 
 interface Promise<T> {
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 131, 18))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 153, 18))
 
     then<TResult1 = T, TResult2 = never>(
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 131, 22))
->TResult1 : Symbol(TResult1, Decl(typeCall.ts, 132, 9))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 131, 18))
->TResult2 : Symbol(TResult2, Decl(typeCall.ts, 132, 22))
+>then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 153, 22))
+>TResult1 : Symbol(TResult1, Decl(typeCall.ts, 154, 9))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 153, 18))
+>TResult2 : Symbol(TResult2, Decl(typeCall.ts, 154, 22))
 
         onfulfilled?: ((value: T) => TResult1) | undefined | null, 
->onfulfilled : Symbol(onfulfilled, Decl(typeCall.ts, 132, 41))
->value : Symbol(value, Decl(typeCall.ts, 133, 24))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 131, 18))
->TResult1 : Symbol(TResult1, Decl(typeCall.ts, 132, 9))
+>onfulfilled : Symbol(onfulfilled, Decl(typeCall.ts, 154, 41))
+>value : Symbol(value, Decl(typeCall.ts, 155, 24))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 153, 18))
+>TResult1 : Symbol(TResult1, Decl(typeCall.ts, 154, 9))
 
         onrejected?: ((reason: any) => TResult2) | undefined | null
->onrejected : Symbol(onrejected, Decl(typeCall.ts, 133, 66))
->reason : Symbol(reason, Decl(typeCall.ts, 134, 23))
->TResult2 : Symbol(TResult2, Decl(typeCall.ts, 132, 22))
+>onrejected : Symbol(onrejected, Decl(typeCall.ts, 155, 66))
+>reason : Symbol(reason, Decl(typeCall.ts, 156, 23))
+>TResult2 : Symbol(TResult2, Decl(typeCall.ts, 154, 22))
 
     ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 129, 34))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
->TResult1 : Symbol(TResult1, Decl(typeCall.ts, 132, 9))
->UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 112, 46))
->TResult2 : Symbol(TResult2, Decl(typeCall.ts, 132, 22))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 151, 34))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
+>TResult1 : Symbol(TResult1, Decl(typeCall.ts, 154, 9))
+>UnwrapPromise : Symbol(UnwrapPromise, Decl(typeCall.ts, 134, 46))
+>TResult2 : Symbol(TResult2, Decl(typeCall.ts, 154, 22))
 }
-// error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter
-// of type '(value: number) => string | PromiseLike<string>';
+// prevents error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter of type '(value: number) => string | PromiseLike<string>';
 const tryProm = pr.then((x: number) => { 
->tryProm : Symbol(tryProm, Decl(typeCall.ts, 139, 5))
->pr.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 131, 22))
->pr : Symbol(pr, Decl(typeCall.ts, 126, 13))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 131, 22))
->x : Symbol(x, Decl(typeCall.ts, 139, 25))
+>tryProm : Symbol(tryProm, Decl(typeCall.ts, 160, 5))
+>pr.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 153, 22))
+>pr : Symbol(pr, Decl(typeCall.ts, 148, 13))
+>then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(typeCall.ts, 153, 22))
+>x : Symbol(x, Decl(typeCall.ts, 160, 25))
 
     if (x < 0) return f(x);
->x : Symbol(x, Decl(typeCall.ts, 139, 25))
->f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 126, 34))
->x : Symbol(x, Decl(typeCall.ts, 139, 25))
+>x : Symbol(x, Decl(typeCall.ts, 160, 25))
+>f : Symbol(f, Decl(typeCall.ts, 16, 14), Decl(typeCall.ts, 148, 34))
+>x : Symbol(x, Decl(typeCall.ts, 160, 25))
 
     return x;
->x : Symbol(x, Decl(typeCall.ts, 139, 25))
+>x : Symbol(x, Decl(typeCall.ts, 160, 25))
 
 });
 
 interface ObjectHasStringIndex {
->ObjectHasStringIndex : Symbol(ObjectHasStringIndex, Decl(typeCall.ts, 142, 3))
+>ObjectHasStringIndex : Symbol(ObjectHasStringIndex, Decl(typeCall.ts, 163, 3))
 
   // <T extends { [k: string]: any }>(o: T): T[string];
   (o: { [k: string]: any }): '1';
->o : Symbol(o, Decl(typeCall.ts, 146, 3))
->k : Symbol(k, Decl(typeCall.ts, 146, 9))
+>o : Symbol(o, Decl(typeCall.ts, 167, 3))
+>k : Symbol(k, Decl(typeCall.ts, 167, 9))
 
   (o: {}): '0';
->o : Symbol(o, Decl(typeCall.ts, 147, 3))
+>o : Symbol(o, Decl(typeCall.ts, 168, 3))
 }
 let ObjectHasStringIndexTestT: ObjectHasStringIndex({ [k: string]: 123 }); // '1'
->ObjectHasStringIndexTestT : Symbol(ObjectHasStringIndexTestT, Decl(typeCall.ts, 149, 3))
->ObjectHasStringIndex : Symbol(ObjectHasStringIndex, Decl(typeCall.ts, 142, 3))
->k : Symbol(k, Decl(typeCall.ts, 149, 55))
+>ObjectHasStringIndexTestT : Symbol(ObjectHasStringIndexTestT, Decl(typeCall.ts, 170, 3))
+>ObjectHasStringIndex : Symbol(ObjectHasStringIndex, Decl(typeCall.ts, 163, 3))
+>k : Symbol(k, Decl(typeCall.ts, 170, 55))
 
 let ObjectHasStringIndexTestF: ObjectHasStringIndex({ a: 123 }); // wanted '0', got '1'... so can't match for index, and erroring RHS yields `any`. ouch.
->ObjectHasStringIndexTestF : Symbol(ObjectHasStringIndexTestF, Decl(typeCall.ts, 150, 3))
->ObjectHasStringIndex : Symbol(ObjectHasStringIndex, Decl(typeCall.ts, 142, 3))
->a : Symbol(a, Decl(typeCall.ts, 150, 53))
+>ObjectHasStringIndexTestF : Symbol(ObjectHasStringIndexTestF, Decl(typeCall.ts, 171, 3))
+>ObjectHasStringIndex : Symbol(ObjectHasStringIndex, Decl(typeCall.ts, 163, 3))
+>a : Symbol(a, Decl(typeCall.ts, 171, 53))
 
 type IndexCall<T extends () => { [k: string]: any }, K extends keyof (T())> = T()[K];
->IndexCall : Symbol(IndexCall, Decl(typeCall.ts, 150, 64))
->T : Symbol(T, Decl(typeCall.ts, 152, 15))
->k : Symbol(k, Decl(typeCall.ts, 152, 34))
->K : Symbol(K, Decl(typeCall.ts, 152, 52))
->T : Symbol(T, Decl(typeCall.ts, 152, 15))
->T : Symbol(T, Decl(typeCall.ts, 152, 15))
->K : Symbol(K, Decl(typeCall.ts, 152, 52))
+>IndexCall : Symbol(IndexCall, Decl(typeCall.ts, 171, 64))
+>T : Symbol(T, Decl(typeCall.ts, 173, 15))
+>k : Symbol(k, Decl(typeCall.ts, 173, 34))
+>K : Symbol(K, Decl(typeCall.ts, 173, 52))
+>T : Symbol(T, Decl(typeCall.ts, 173, 15))
+>T : Symbol(T, Decl(typeCall.ts, 173, 15))
+>K : Symbol(K, Decl(typeCall.ts, 173, 52))
 
 type CallMember<T extends { [k: string]: () => any }, K extends keyof T> = T[K]();
->CallMember : Symbol(CallMember, Decl(typeCall.ts, 152, 85))
->T : Symbol(T, Decl(typeCall.ts, 153, 16))
->k : Symbol(k, Decl(typeCall.ts, 153, 29))
->K : Symbol(K, Decl(typeCall.ts, 153, 53))
->T : Symbol(T, Decl(typeCall.ts, 153, 16))
->T : Symbol(T, Decl(typeCall.ts, 153, 16))
->K : Symbol(K, Decl(typeCall.ts, 153, 53))
+>CallMember : Symbol(CallMember, Decl(typeCall.ts, 173, 85))
+>T : Symbol(T, Decl(typeCall.ts, 174, 16))
+>k : Symbol(k, Decl(typeCall.ts, 174, 29))
+>K : Symbol(K, Decl(typeCall.ts, 174, 53))
+>T : Symbol(T, Decl(typeCall.ts, 174, 16))
+>T : Symbol(T, Decl(typeCall.ts, 174, 16))
+>K : Symbol(K, Decl(typeCall.ts, 174, 53))
 
 type MappedMemberCall<T extends { [k: string]: () => any }> = { [K in keyof T]: T[K]() };
->MappedMemberCall : Symbol(MappedMemberCall, Decl(typeCall.ts, 153, 82))
->T : Symbol(T, Decl(typeCall.ts, 154, 22))
->k : Symbol(k, Decl(typeCall.ts, 154, 35))
->K : Symbol(K, Decl(typeCall.ts, 154, 65))
->T : Symbol(T, Decl(typeCall.ts, 154, 22))
->T : Symbol(T, Decl(typeCall.ts, 154, 22))
->K : Symbol(K, Decl(typeCall.ts, 154, 65))
+>MappedMemberCall : Symbol(MappedMemberCall, Decl(typeCall.ts, 174, 82))
+>T : Symbol(T, Decl(typeCall.ts, 175, 22))
+>k : Symbol(k, Decl(typeCall.ts, 175, 35))
+>K : Symbol(K, Decl(typeCall.ts, 175, 65))
+>T : Symbol(T, Decl(typeCall.ts, 175, 22))
+>T : Symbol(T, Decl(typeCall.ts, 175, 22))
+>K : Symbol(K, Decl(typeCall.ts, 175, 65))
 
 type HasKey<T, Key extends string> = (
->HasKey : Symbol(HasKey, Decl(typeCall.ts, 154, 89))
->T : Symbol(T, Decl(typeCall.ts, 156, 12))
->Key : Symbol(Key, Decl(typeCall.ts, 156, 14))
+>HasKey : Symbol(HasKey, Decl(typeCall.ts, 175, 89))
+>T : Symbol(T, Decl(typeCall.ts, 177, 12))
+>Key : Symbol(Key, Decl(typeCall.ts, 177, 14))
 
   { [K in keyof T]: 'true' } &
->K : Symbol(K, Decl(typeCall.ts, 157, 5))
->T : Symbol(T, Decl(typeCall.ts, 156, 12))
+>K : Symbol(K, Decl(typeCall.ts, 178, 5))
+>T : Symbol(T, Decl(typeCall.ts, 177, 12))
 
   { [key: string]: 'false' }
->key : Symbol(key, Decl(typeCall.ts, 158, 5))
+>key : Symbol(key, Decl(typeCall.ts, 179, 5))
 
 )[Key];
->Key : Symbol(Key, Decl(typeCall.ts, 156, 14))
+>Key : Symbol(Key, Decl(typeCall.ts, 177, 14))
 
 type HasKindKey<T extends () => any> = HasKey<T(), 'kind'>;
->HasKindKey : Symbol(HasKindKey, Decl(typeCall.ts, 159, 7))
->T : Symbol(T, Decl(typeCall.ts, 161, 16))
->HasKey : Symbol(HasKey, Decl(typeCall.ts, 154, 89))
->T : Symbol(T, Decl(typeCall.ts, 161, 16))
+>HasKindKey : Symbol(HasKindKey, Decl(typeCall.ts, 180, 7))
+>T : Symbol(T, Decl(typeCall.ts, 182, 16))
+>HasKey : Symbol(HasKey, Decl(typeCall.ts, 175, 89))
+>T : Symbol(T, Decl(typeCall.ts, 182, 16))
 
 type MapHasKey<T extends { [k: string]: () => any }, Key extends string> = {
->MapHasKey : Symbol(MapHasKey, Decl(typeCall.ts, 161, 59))
->T : Symbol(T, Decl(typeCall.ts, 162, 15))
->k : Symbol(k, Decl(typeCall.ts, 162, 28))
->Key : Symbol(Key, Decl(typeCall.ts, 162, 52))
+>MapHasKey : Symbol(MapHasKey, Decl(typeCall.ts, 182, 59))
+>T : Symbol(T, Decl(typeCall.ts, 183, 15))
+>k : Symbol(k, Decl(typeCall.ts, 183, 28))
+>Key : Symbol(Key, Decl(typeCall.ts, 183, 52))
 
     [K in keyof T]: HasKey<T[K](), Key>
->K : Symbol(K, Decl(typeCall.ts, 163, 5))
->T : Symbol(T, Decl(typeCall.ts, 162, 15))
->HasKey : Symbol(HasKey, Decl(typeCall.ts, 154, 89))
->T : Symbol(T, Decl(typeCall.ts, 162, 15))
->K : Symbol(K, Decl(typeCall.ts, 163, 5))
->Key : Symbol(Key, Decl(typeCall.ts, 162, 52))
+>K : Symbol(K, Decl(typeCall.ts, 184, 5))
+>T : Symbol(T, Decl(typeCall.ts, 183, 15))
+>HasKey : Symbol(HasKey, Decl(typeCall.ts, 175, 89))
+>T : Symbol(T, Decl(typeCall.ts, 183, 15))
+>K : Symbol(K, Decl(typeCall.ts, 184, 5))
+>Key : Symbol(Key, Decl(typeCall.ts, 183, 52))
 
 };
 
 type KeyOfCall<T extends () => any> = keyof (T());
->KeyOfCall : Symbol(KeyOfCall, Decl(typeCall.ts, 164, 2))
->T : Symbol(T, Decl(typeCall.ts, 166, 15))
->T : Symbol(T, Decl(typeCall.ts, 166, 15))
+>KeyOfCall : Symbol(KeyOfCall, Decl(typeCall.ts, 185, 2))
+>T : Symbol(T, Decl(typeCall.ts, 187, 15))
+>T : Symbol(T, Decl(typeCall.ts, 187, 15))
 
 type Strip1<T extends () => any> = { [K in keyof (T())]: T()[K] };
->Strip1 : Symbol(Strip1, Decl(typeCall.ts, 166, 50))
->T : Symbol(T, Decl(typeCall.ts, 168, 12))
->K : Symbol(K, Decl(typeCall.ts, 168, 38))
->T : Symbol(T, Decl(typeCall.ts, 168, 12))
->T : Symbol(T, Decl(typeCall.ts, 168, 12))
->K : Symbol(K, Decl(typeCall.ts, 168, 38))
+>Strip1 : Symbol(Strip1, Decl(typeCall.ts, 187, 50))
+>T : Symbol(T, Decl(typeCall.ts, 189, 12))
+>K : Symbol(K, Decl(typeCall.ts, 189, 38))
+>T : Symbol(T, Decl(typeCall.ts, 189, 12))
+>T : Symbol(T, Decl(typeCall.ts, 189, 12))
+>K : Symbol(K, Decl(typeCall.ts, 189, 38))
 
 type Strip2<T extends () => { [k: string]: () => any }> = { [K in keyof (T())]: T()[K]() };
->Strip2 : Symbol(Strip2, Decl(typeCall.ts, 168, 66))
->T : Symbol(T, Decl(typeCall.ts, 169, 12))
->k : Symbol(k, Decl(typeCall.ts, 169, 31))
->K : Symbol(K, Decl(typeCall.ts, 169, 61))
->T : Symbol(T, Decl(typeCall.ts, 169, 12))
->T : Symbol(T, Decl(typeCall.ts, 169, 12))
->K : Symbol(K, Decl(typeCall.ts, 169, 61))
+>Strip2 : Symbol(Strip2, Decl(typeCall.ts, 189, 66))
+>T : Symbol(T, Decl(typeCall.ts, 190, 12))
+>k : Symbol(k, Decl(typeCall.ts, 190, 31))
+>K : Symbol(K, Decl(typeCall.ts, 190, 61))
+>T : Symbol(T, Decl(typeCall.ts, 190, 12))
+>T : Symbol(T, Decl(typeCall.ts, 190, 12))
+>K : Symbol(K, Decl(typeCall.ts, 190, 61))
 
 type Obj = {
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
     x: () => number,
->x : Symbol(x, Decl(typeCall.ts, 171, 12))
+>x : Symbol(x, Decl(typeCall.ts, 192, 12))
 
     z: () => { kind: 'Just', value: string }
->z : Symbol(z, Decl(typeCall.ts, 172, 20))
->kind : Symbol(kind, Decl(typeCall.ts, 173, 14))
->value : Symbol(value, Decl(typeCall.ts, 173, 28))
+>z : Symbol(z, Decl(typeCall.ts, 193, 20))
+>kind : Symbol(kind, Decl(typeCall.ts, 194, 14))
+>value : Symbol(value, Decl(typeCall.ts, 194, 28))
 }
 
 type T1 = (() => number)();
->T1 : Symbol(T1, Decl(typeCall.ts, 174, 1))
+>T1 : Symbol(T1, Decl(typeCall.ts, 195, 1))
 
 type T7 = CallMember<Obj, 'x'>;
->T7 : Symbol(T7, Decl(typeCall.ts, 176, 27))
->CallMember : Symbol(CallMember, Decl(typeCall.ts, 152, 85))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T7 : Symbol(T7, Decl(typeCall.ts, 197, 27))
+>CallMember : Symbol(CallMember, Decl(typeCall.ts, 173, 85))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T8 = IndexCall<() => Obj, 'x'>;
->T8 : Symbol(T8, Decl(typeCall.ts, 177, 31))
->IndexCall : Symbol(IndexCall, Decl(typeCall.ts, 150, 64))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T8 : Symbol(T8, Decl(typeCall.ts, 198, 31))
+>IndexCall : Symbol(IndexCall, Decl(typeCall.ts, 171, 64))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T9 = MappedMemberCall<Obj>; // fails, unresolved, want { x: number, z: { kind: 'Just', value: string } }
->T9 : Symbol(T9, Decl(typeCall.ts, 178, 36))
->MappedMemberCall : Symbol(MappedMemberCall, Decl(typeCall.ts, 153, 82))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T9 : Symbol(T9, Decl(typeCall.ts, 199, 36))
+>MappedMemberCall : Symbol(MappedMemberCall, Decl(typeCall.ts, 174, 82))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T13 = keyof (() => Obj)();
->T13 : Symbol(T13, Decl(typeCall.ts, 179, 32))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T13 : Symbol(T13, Decl(typeCall.ts, 200, 32))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T14 = KeyOfCall<() => Obj>;
->T14 : Symbol(T14, Decl(typeCall.ts, 180, 31))
->KeyOfCall : Symbol(KeyOfCall, Decl(typeCall.ts, 164, 2))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T14 : Symbol(T14, Decl(typeCall.ts, 201, 31))
+>KeyOfCall : Symbol(KeyOfCall, Decl(typeCall.ts, 185, 2))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T15 = Obj['z']()['kind'];
->T15 : Symbol(T15, Decl(typeCall.ts, 181, 32))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T15 : Symbol(T15, Decl(typeCall.ts, 202, 32))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T16 = MapHasKey<Obj, 'kind'>; // fails, unresolved, want { x: 'false', z: 'true' }
->T16 : Symbol(T16, Decl(typeCall.ts, 182, 30))
->MapHasKey : Symbol(MapHasKey, Decl(typeCall.ts, 161, 59))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T16 : Symbol(T16, Decl(typeCall.ts, 203, 30))
+>MapHasKey : Symbol(MapHasKey, Decl(typeCall.ts, 182, 59))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T17 = Strip1<() => Obj>; // fails, unresolved, want { x: () => number, z: () => { kind: 'Just', value: string } }
->T17 : Symbol(T17, Decl(typeCall.ts, 183, 34))
->Strip1 : Symbol(Strip1, Decl(typeCall.ts, 166, 50))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T17 : Symbol(T17, Decl(typeCall.ts, 204, 34))
+>Strip1 : Symbol(Strip1, Decl(typeCall.ts, 187, 50))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 type T19 = Strip2<() => Obj>; // fails, unresolved, want { x: number, z: { kind: 'Just', value: string } }
->T19 : Symbol(T19, Decl(typeCall.ts, 184, 29))
->Strip2 : Symbol(Strip2, Decl(typeCall.ts, 168, 66))
->Obj : Symbol(Obj, Decl(typeCall.ts, 169, 91))
+>T19 : Symbol(T19, Decl(typeCall.ts, 205, 29))
+>Strip2 : Symbol(Strip2, Decl(typeCall.ts, 189, 66))
+>Obj : Symbol(Obj, Decl(typeCall.ts, 190, 91))
 
 let a1: () => string;
->a1 : Symbol(a1, Decl(typeCall.ts, 187, 3))
+>a1 : Symbol(a1, Decl(typeCall.ts, 208, 3))
 
 let b1: typeof a1();
->b1 : Symbol(b1, Decl(typeCall.ts, 188, 3))
->a1 : Symbol(a1, Decl(typeCall.ts, 187, 3))
+>b1 : Symbol(b1, Decl(typeCall.ts, 209, 3))
+>a1 : Symbol(a1, Decl(typeCall.ts, 208, 3))
 
 type Abc<T extends () => any> = T();
->Abc : Symbol(Abc, Decl(typeCall.ts, 188, 20))
->T : Symbol(T, Decl(typeCall.ts, 189, 9))
->T : Symbol(T, Decl(typeCall.ts, 189, 9))
+>Abc : Symbol(Abc, Decl(typeCall.ts, 209, 20))
+>T : Symbol(T, Decl(typeCall.ts, 210, 9))
+>T : Symbol(T, Decl(typeCall.ts, 210, 9))
 
 let c1: Abc<typeof a1>;
->c1 : Symbol(c1, Decl(typeCall.ts, 190, 3))
->Abc : Symbol(Abc, Decl(typeCall.ts, 188, 20))
->a1 : Symbol(a1, Decl(typeCall.ts, 187, 3))
+>c1 : Symbol(c1, Decl(typeCall.ts, 211, 3))
+>Abc : Symbol(Abc, Decl(typeCall.ts, 209, 20))
+>a1 : Symbol(a1, Decl(typeCall.ts, 208, 3))
 
 declare function infer1<T extends () => any>(x: T): T();
->infer1 : Symbol(infer1, Decl(typeCall.ts, 190, 23))
->T : Symbol(T, Decl(typeCall.ts, 192, 24))
->x : Symbol(x, Decl(typeCall.ts, 192, 45))
->T : Symbol(T, Decl(typeCall.ts, 192, 24))
->T : Symbol(T, Decl(typeCall.ts, 192, 24))
+>infer1 : Symbol(infer1, Decl(typeCall.ts, 211, 23))
+>T : Symbol(T, Decl(typeCall.ts, 213, 24))
+>x : Symbol(x, Decl(typeCall.ts, 213, 45))
+>T : Symbol(T, Decl(typeCall.ts, 213, 24))
+>T : Symbol(T, Decl(typeCall.ts, 213, 24))
 
 infer1(null! as () => number);
->infer1 : Symbol(infer1, Decl(typeCall.ts, 190, 23))
+>infer1 : Symbol(infer1, Decl(typeCall.ts, 211, 23))
 
 declare function infer2<T extends () => any>(x: { a: T }): T();
->infer2 : Symbol(infer2, Decl(typeCall.ts, 193, 30))
->T : Symbol(T, Decl(typeCall.ts, 195, 24))
->x : Symbol(x, Decl(typeCall.ts, 195, 45))
->a : Symbol(a, Decl(typeCall.ts, 195, 49))
->T : Symbol(T, Decl(typeCall.ts, 195, 24))
->T : Symbol(T, Decl(typeCall.ts, 195, 24))
+>infer2 : Symbol(infer2, Decl(typeCall.ts, 214, 30))
+>T : Symbol(T, Decl(typeCall.ts, 216, 24))
+>x : Symbol(x, Decl(typeCall.ts, 216, 45))
+>a : Symbol(a, Decl(typeCall.ts, 216, 49))
+>T : Symbol(T, Decl(typeCall.ts, 216, 24))
+>T : Symbol(T, Decl(typeCall.ts, 216, 24))
 
 infer2(null! as { a: () => number });
->infer2 : Symbol(infer2, Decl(typeCall.ts, 193, 30))
->a : Symbol(a, Decl(typeCall.ts, 196, 17))
+>infer2 : Symbol(infer2, Decl(typeCall.ts, 214, 30))
+>a : Symbol(a, Decl(typeCall.ts, 217, 17))
 
 declare function infer3<T>(x: { a: () => T }): T;
->infer3 : Symbol(infer3, Decl(typeCall.ts, 196, 37))
->T : Symbol(T, Decl(typeCall.ts, 198, 24))
->x : Symbol(x, Decl(typeCall.ts, 198, 27))
->a : Symbol(a, Decl(typeCall.ts, 198, 31))
->T : Symbol(T, Decl(typeCall.ts, 198, 24))
->T : Symbol(T, Decl(typeCall.ts, 198, 24))
+>infer3 : Symbol(infer3, Decl(typeCall.ts, 217, 37))
+>T : Symbol(T, Decl(typeCall.ts, 219, 24))
+>x : Symbol(x, Decl(typeCall.ts, 219, 27))
+>a : Symbol(a, Decl(typeCall.ts, 219, 31))
+>T : Symbol(T, Decl(typeCall.ts, 219, 24))
+>T : Symbol(T, Decl(typeCall.ts, 219, 24))
 
 infer3(null! as { a: () => number });
->infer3 : Symbol(infer3, Decl(typeCall.ts, 196, 37))
->a : Symbol(a, Decl(typeCall.ts, 199, 17))
+>infer3 : Symbol(infer3, Decl(typeCall.ts, 217, 37))
+>a : Symbol(a, Decl(typeCall.ts, 220, 17))
 
 const res3: number = infer3(null! as { a: () => number });
->res3 : Symbol(res3, Decl(typeCall.ts, 200, 5))
->infer3 : Symbol(infer3, Decl(typeCall.ts, 196, 37))
->a : Symbol(a, Decl(typeCall.ts, 200, 38))
+>res3 : Symbol(res3, Decl(typeCall.ts, 221, 5))
+>infer3 : Symbol(infer3, Decl(typeCall.ts, 217, 37))
+>a : Symbol(a, Decl(typeCall.ts, 221, 38))
 
 declare function infer4<T>(x: T, y: () => T): void;
->infer4 : Symbol(infer4, Decl(typeCall.ts, 200, 58))
->T : Symbol(T, Decl(typeCall.ts, 202, 24))
->x : Symbol(x, Decl(typeCall.ts, 202, 27))
->T : Symbol(T, Decl(typeCall.ts, 202, 24))
->y : Symbol(y, Decl(typeCall.ts, 202, 32))
->T : Symbol(T, Decl(typeCall.ts, 202, 24))
+>infer4 : Symbol(infer4, Decl(typeCall.ts, 221, 58))
+>T : Symbol(T, Decl(typeCall.ts, 223, 24))
+>x : Symbol(x, Decl(typeCall.ts, 223, 27))
+>T : Symbol(T, Decl(typeCall.ts, 223, 24))
+>y : Symbol(y, Decl(typeCall.ts, 223, 32))
+>T : Symbol(T, Decl(typeCall.ts, 223, 24))
 
 infer4(5, () => 5);
->infer4 : Symbol(infer4, Decl(typeCall.ts, 200, 58))
+>infer4 : Symbol(infer4, Decl(typeCall.ts, 221, 58))
 
 function assignability<T>(x: T, y: () => T) {
->assignability : Symbol(assignability, Decl(typeCall.ts, 203, 19))
->T : Symbol(T, Decl(typeCall.ts, 205, 23))
->x : Symbol(x, Decl(typeCall.ts, 205, 26))
->T : Symbol(T, Decl(typeCall.ts, 205, 23))
->y : Symbol(y, Decl(typeCall.ts, 205, 31))
->T : Symbol(T, Decl(typeCall.ts, 205, 23))
+>assignability : Symbol(assignability, Decl(typeCall.ts, 224, 19))
+>T : Symbol(T, Decl(typeCall.ts, 226, 23))
+>x : Symbol(x, Decl(typeCall.ts, 226, 26))
+>T : Symbol(T, Decl(typeCall.ts, 226, 23))
+>y : Symbol(y, Decl(typeCall.ts, 226, 31))
+>T : Symbol(T, Decl(typeCall.ts, 226, 23))
 
     const a: T = x;
->a : Symbol(a, Decl(typeCall.ts, 206, 9))
->T : Symbol(T, Decl(typeCall.ts, 205, 23))
->x : Symbol(x, Decl(typeCall.ts, 205, 26))
+>a : Symbol(a, Decl(typeCall.ts, 227, 9))
+>T : Symbol(T, Decl(typeCall.ts, 226, 23))
+>x : Symbol(x, Decl(typeCall.ts, 226, 26))
 
     const b: T = y();
->b : Symbol(b, Decl(typeCall.ts, 207, 9))
->T : Symbol(T, Decl(typeCall.ts, 205, 23))
->y : Symbol(y, Decl(typeCall.ts, 205, 31))
-}
-
-function comparability<T>(x: T, y: () => T) {
->comparability : Symbol(comparability, Decl(typeCall.ts, 208, 1))
->T : Symbol(T, Decl(typeCall.ts, 210, 23))
->x : Symbol(x, Decl(typeCall.ts, 210, 26))
->T : Symbol(T, Decl(typeCall.ts, 210, 23))
->y : Symbol(y, Decl(typeCall.ts, 210, 31))
->T : Symbol(T, Decl(typeCall.ts, 210, 23))
-
-    x === x;
->x : Symbol(x, Decl(typeCall.ts, 210, 26))
->x : Symbol(x, Decl(typeCall.ts, 210, 26))
-
-    y === y;
->y : Symbol(y, Decl(typeCall.ts, 210, 31))
->y : Symbol(y, Decl(typeCall.ts, 210, 31))
-
-    // x === y; // rightfully errors
+>b : Symbol(b, Decl(typeCall.ts, 228, 9))
+>T : Symbol(T, Decl(typeCall.ts, 226, 23))
+>y : Symbol(y, Decl(typeCall.ts, 226, 31))
 }
 
 // function mappedAssignability<T>(x: T, y: CallMember<T>) {
