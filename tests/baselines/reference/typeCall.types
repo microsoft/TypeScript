@@ -360,7 +360,7 @@ const pathTest = path(obj, keys);
 //     R extends any[],
 //     I extends string = '0'
 // > = { 1: Reduce<Fn(T, R[StringToNumber[I]], I, R), R, Inc[I]>, 0: T }[TupleHasIndex<R, I>];
-// // fails with error: Cannot read property 'kind' of undefined at resolveCall
+// // fails with error: Cannot read property 'flags' of undefined
 // declare function reduce<
 //     Fn extends (previousValue: any, currentValue: R[number], currentIndex?: number, array?: R) => any,
 //     R extends any[],
@@ -413,6 +413,26 @@ type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
 >Fn1 : Fn1
 >T3 : T3
 
+declare function fn3<Fun1 extends (/*...args: any[]*/ p1: P1) => T, Fun2 extends (v: T) => any, P1, T>(fun1: Fun1, fun2: Fun2): (...args: any[] /* todo: specify*/) => Fn2(Fn1(P1));
+>fn3 : <Fun1 extends (p1: P1) => T, Fun2 extends (v: T) => any, P1, T>(fun1: Fun1, fun2: Fun2) => (...args: any[]) => Fn2(Fn1(P1))
+>Fun1 : Fun1
+>p1 : P1
+>P1 : P1
+>T : T
+>Fun2 : Fun2
+>v : T
+>T : T
+>P1 : P1
+>T : T
+>fun1 : Fun1
+>Fun1 : Fun1
+>fun2 : Fun2
+>Fun2 : Fun2
+>args : any[]
+>Fn2 : Fn2
+>Fn1 : Fn1
+>P1 : P1
+
 let ones = null! as 1[];
 >ones : 1[]
 >null! as 1[] : 1[]
@@ -424,12 +444,10 @@ type Fn4b = Fn3(typeof ones);
 >Fn3 : Fn3
 >ones : 1[]
 
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 type Fn4c = Fn3(1[]);
 >Fn4c : ReadonlyArray<1>
 >Fn3 : Fn3
 
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 let y = fn2(fn1(ones));
 >y : ReadonlyArray<1>
 >fn2(fn1(ones)) : ReadonlyArray<1>
@@ -442,6 +460,8 @@ type Y = Fn2(Fn1(1[]));
 >Y : ReadonlyArray<1>
 >Fn2 : Fn2
 >Fn1 : Fn1
+
+// let z2 = fn3(fn1, fn2)(ones); // Cannot read property 'parent' of undefined
 
 interface isT<T> {
 >isT : isT<T>
@@ -491,34 +511,48 @@ let neverBool: isBool(never); // 0
 >neverBool : "0"
 >isBool : isT<boolean>
 
-type Assert<T> = (<U>(v: U | null | undefined) => U)(T);
->Assert : (<U>(v: U | null | undefined) => U)(T)
+type Assert<T> = {
+>Assert : { (v: null | undefined): never; <U>(v: U): U; }(T)
 >T : T
->U : U
->v : U | null | undefined
->U : U
+
+  (v: null | undefined): never;
+>v : null | undefined
 >null : null
+
+  <U>(v: U): U;
 >U : U
+>v : U
+>U : U
+>U : U
+
+}(T);
 >T : T
 
 let assert: Assert<string | undefined>; // string
 >assert : string
->Assert : (<U>(v: U | null | undefined) => U)(T)
+>Assert : { (v: null | undefined): never; <U>(v: U): U; }(T)
 
-type Minus<A, B> = (<U>(v: U | B) => U)(A);
->Minus : (<U>(v: B | U) => U)(A)
+type Minus<A, B> = {
+>Minus : { (v: B): never; <U>(v: U): U; }(A)
 >A : A
 >B : B
->U : U
->v : B | U
->U : U
+
+  (v: B): never;
+>v : B
 >B : B
+
+  <U>(v: U): U;
 >U : U
+>v : U
+>U : U
+>U : U
+
+}(A);
 >A : A
 
 let noNumbers: Minus<string | number, number>; // string
 >noNumbers : string
->Minus : (<U>(v: B | U) => U)(A)
+>Minus : { (v: B): never; <U>(v: U): U; }(A)
 
 interface UnwrapPromise {
 >UnwrapPromise : UnwrapPromise
@@ -548,7 +582,7 @@ declare const testUnwrap2: UnwrapPromise(Promise<string>);
 >Promise : Promise<T>
 
 declare const testUnwrap3: UnwrapPromise(boolean | Promise<string>);
->testUnwrap3 : boolean | Promise<string>
+>testUnwrap3 : string | boolean
 >UnwrapPromise : UnwrapPromise
 >Promise : Promise<T>
 
@@ -599,8 +633,8 @@ declare function g(x: number): number | Promise<boolean>;
 >Promise : Promise<T>
 
 const testThen = myThen(pr, f, g);
->testThen : Promise<string | number | Promise<boolean>>
->myThen(pr, f, g) : Promise<string | number | Promise<boolean>>
+>testThen : Promise<string | number | boolean>
+>myThen(pr, f, g) : Promise<string | number | boolean>
 >myThen : <T, TResult1 = T, TResult2 = never>(prom: Promise<T>, onfulfilled?: ((value: T) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>
 >pr : Promise<number>
 >f : (x: number) => Promise<string>
@@ -638,8 +672,8 @@ interface Promise<T> {
 }
 // prevents error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter of type '(value: number) => string | PromiseLike<string>';
 const tryProm = pr.then((x: number) => { 
->tryProm : Promise<number | {} | Promise<string>>
->pr.then((x: number) => {     if (x < 0) return f(x);    return x;}) : Promise<number | {} | Promise<string>>
+>tryProm : Promise<string | number | {}>
+>pr.then((x: number) => {     if (x < 0) return f(x);    return x;}) : Promise<string | number | {}>
 >pr.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }
 >pr : Promise<number>
 >then : { <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }

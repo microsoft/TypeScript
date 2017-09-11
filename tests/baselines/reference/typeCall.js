@@ -90,7 +90,7 @@ const pathTest = path(obj, keys);
 //     R extends any[],
 //     I extends string = '0'
 // > = { 1: Reduce<Fn(T, R[StringToNumber[I]], I, R), R, Inc[I]>, 0: T }[TupleHasIndex<R, I>];
-// // fails with error: Cannot read property 'kind' of undefined at resolveCall
+// // fails with error: Cannot read property 'flags' of undefined
 // declare function reduce<
 //     Fn extends (previousValue: any, currentValue: R[number], currentIndex?: number, array?: R) => any,
 //     R extends any[],
@@ -108,13 +108,13 @@ type Fn2 = <T2>(v2: { [k: string]: T2 }) => ReadonlyArray<T2>;
 let fn1 = null! as Fn1;
 let fn2 = null! as Fn2;
 type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
+declare function fn3<Fun1 extends (/*...args: any[]*/ p1: P1) => T, Fun2 extends (v: T) => any, P1, T>(fun1: Fun1, fun2: Fun2): (...args: any[] /* todo: specify*/) => Fn2(Fn1(P1));
 let ones = null! as 1[];
 type Fn4b = Fn3(typeof ones);
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 type Fn4c = Fn3(1[]);
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 let y = fn2(fn1(ones));
 type Y = Fn2(Fn1(1[]));
+// let z2 = fn3(fn1, fn2)(ones); // Cannot read property 'parent' of undefined
 
 interface isT<T> {
   (v: never): '0';
@@ -129,10 +129,16 @@ let strBool: isBool(string); // 0
 let anyBool: isBool(any); // 0
 let neverBool: isBool(never); // 0
 
-type Assert<T> = (<U>(v: U | null | undefined) => U)(T);
+type Assert<T> = {
+  (v: null | undefined): never;
+  <U>(v: U): U;
+}(T);
 let assert: Assert<string | undefined>; // string
 
-type Minus<A, B> = (<U>(v: U | B) => U)(A);
+type Minus<A, B> = {
+  (v: B): never;
+  <U>(v: U): U;
+}(A);
 let noNumbers: Minus<string | number, number>; // string
 
 interface UnwrapPromise {
@@ -270,7 +276,6 @@ var pathTest = path(obj, keys);
 var fn1 = null;
 var fn2 = null;
 var ones = null;
-// FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 var y = fn2(fn1(ones));
 var falseBool; // 1
 var trueBool; // 1

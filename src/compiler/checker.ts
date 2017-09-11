@@ -7587,9 +7587,52 @@ namespace ts {
         function getTypeFromTypeCall(type: TypeCallType, node: TypeCallTypeNode): Type {
             const fn = type.function;
             const args = type.arguments;
-            const calls = getSignaturesOfType(fn, SignatureKind.Call);
-            const sig = resolveCall(node, calls, /*candidatesOutArray*/ [], /*fallBackError*/ undefined, args);
-            return sig ? getReturnTypeOfSignature(sig) : unknownType;
+            const candidates = getSignaturesOfType(fn, SignatureKind.Call);
+            const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
+            if (isSingleNonGenericCandidate) {
+                const sig = resolveCall(node, candidates, /*candidatesOutArray*/ [], /*fallBackError*/ undefined, args);
+                return sig ? getReturnTypeOfSignature(sig) : unknownType;
+            }
+            else {
+                // we have unions and they matter -- separately calculate the result for each permutation
+                const types: Type[] = [];
+                const indices: number[] = map(args, (tp: Type, i: number) => tp.flags & TypeFlags.Union &&
+                    some(candidates, (sig: Signature) => isGenericObjectType(getTypeAtPosition(sig, i))) ?
+                    // ^ future consideration: argument/parameter i correspondence breaks down with tuple spreads
+                        0 : undefined);
+                const argTypes: Array<Type[] | Type> = map(args, (tp: Type, i: number) => indices[i] !== undefined ? (<UnionType>tp).types : tp);
+                checkParams: while (true) {
+                    const myArgs = map(argTypes, (tp: Type[] | Type, i: number) => {
+                        const argIdx = indices[i];
+                        return argIdx === undefined ? <Type>tp : (<Type[]>tp)[argIdx];
+                    });
+                    const sig = resolveCall(node, candidates, /*candidatesOutArray*/ [], /*fallBackError*/ undefined, myArgs);
+                    if (sig) {
+                        types.push(getReturnTypeOfSignature(sig));
+                    }
+                    // increment the next index to try the next permutation
+                    for (let i = 0; i < indices.length; i++) {
+                        const idx = indices[i];
+                        if (idx === undefined) {
+                            // nothing to do here, try switching the next argument
+                            continue;
+                        }
+                        else if (idx < (<Type[]>argTypes[i]).length - 1) {
+                            // can increment without overflow
+                            indices[i] = indices[i] + 1;
+                            continue checkParams;
+                        }
+                        else {
+                            // overflow, try switching the next argument as well
+                            indices[i] = 0;
+                            continue;
+                        }
+                    }
+                    // all options tried, full overflow throughout for-loop, done
+                    break;
+                }
+                return getUnionType(types);
+            }
          }
 
         function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
