@@ -58,12 +58,12 @@ var E;
     E[E["e1"] = 0] = "e1";
     E[E["e2"] = 1] = "e2";
 })(E || (E = {}));
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var A2 = (function () {
+var A2 = /** @class */ (function () {
     function A2() {
     }
     return A2;
@@ -72,7 +72,7 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

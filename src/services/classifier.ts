@@ -260,11 +260,11 @@ namespace ts {
                                     templateStack.pop();
                                 }
                                 else {
-                                    Debug.assert(token === SyntaxKind.TemplateMiddle, "Should have been a template middle. Was " + token);
+                                    Debug.assertEqual(token, SyntaxKind.TemplateMiddle, "Should have been a template middle.");
                                 }
                             }
                             else {
-                                Debug.assert(lastTemplateStackToken === SyntaxKind.OpenBraceToken, "Should have been an open brace. Was: " + token);
+                                Debug.assertEqual(lastTemplateStackToken, SyntaxKind.OpenBraceToken, "Should have been an open brace");
                                 templateStack.pop();
                             }
                         }
@@ -699,7 +699,8 @@ namespace ts {
                 // specially.
                 const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
                 if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDoc) {
-                    docCommentAndDiagnostics.jsDoc.parent = token;
+                    // TODO: This should be predicated on `token["kind"]` being compatible with `HasJSDoc["kind"]`
+                    docCommentAndDiagnostics.jsDoc.parent = token as HasJSDoc;
                     classifyJSDocComment(docCommentAndDiagnostics.jsDoc);
                     return;
                 }

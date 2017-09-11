@@ -1,6 +1,6 @@
 /* @internal */
 
-namespace ts.refactor {
+namespace ts.refactor.convertFunctionToES6Class {
     const actionName = "convert";
 
     const convertFunctionToES6Class: Refactor = {
@@ -63,7 +63,7 @@ namespace ts.refactor {
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context as { newLineCharacter: string, rulesProvider: formatting.RulesProvider });
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         let precedingNode: Node;
         let newClassDeclaration: ClassDeclaration;

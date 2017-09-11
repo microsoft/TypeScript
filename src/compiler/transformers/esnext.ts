@@ -101,6 +101,8 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(node as CatchClause);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -156,8 +158,8 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElement>): Expression[] {
-            let chunkObject: (ShorthandPropertyAssignment | PropertyAssignment)[];
+        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
+            let chunkObject: ObjectLiteralElementLike[];
             const objects: Expression[] = [];
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
@@ -177,7 +179,7 @@ namespace ts {
                         chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
                     }
                     else {
-                        chunkObject.push(e as ShorthandPropertyAssignment);
+                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
                     }
                 }
             }
@@ -210,6 +212,17 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        }
+
+        function visitCatchClause(node: CatchClause): CatchClause {
+            if (!node.variableDeclaration) {
+                return updateCatchClause(
+                    node,
+                    createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined)),
+                    visitNode(node.block, visitor, isBlock)
+                );
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -582,7 +595,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                node.equalsGreaterThanToken,
+                transformFunctionBody(node),
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
             return updated;

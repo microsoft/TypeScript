@@ -27,26 +27,11 @@ namespace ts {
         return undefined;
     }
 
-    export function findDeclaration<T extends Declaration>(symbol: Symbol, predicate: (node: Declaration) => node is T): T | undefined;
-    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined;
-    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined {
-        const declarations = symbol.declarations;
-        if (declarations) {
-            for (const declaration of declarations) {
-                if (predicate(declaration)) {
-                    return declaration;
-                }
-            }
-        }
-        return undefined;
-    }
-
     export interface StringSymbolWriter extends SymbolWriter {
         string(): string;
     }
 
     const stringWriter = createSingleLineStringWriter();
-    let stringWriterAcquired = false;
 
     function createSingleLineStringWriter(): StringSymbolWriter {
         let str = "";
@@ -76,15 +61,14 @@ namespace ts {
     }
 
     export function usingSingleLineStringWriter(action: (writer: StringSymbolWriter) => void): string {
+        const oldString = stringWriter.string();
         try {
-            Debug.assert(!stringWriterAcquired);
-            stringWriterAcquired = true;
             action(stringWriter);
             return stringWriter.string();
         }
         finally {
             stringWriter.clear();
-            stringWriterAcquired = false;
+            stringWriter.writeKeyword(oldString);
         }
     }
 
@@ -112,19 +96,21 @@ namespace ts {
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
-    /* @internal */
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
             oldResolution.extension === newResolution.extension &&
-            oldResolution.resolvedFileName === newResolution.resolvedFileName;
+            oldResolution.resolvedFileName === newResolution.resolvedFileName &&
+            packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
     }
 
-    /* @internal */
+    function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
+        return a === b || a && b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
+    }
+
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
     }
 
-    /* @internal */
     export function hasChangesInResolutions<T>(
         names: ReadonlyArray<string>,
         newResolutions: ReadonlyArray<T>,
@@ -203,14 +189,6 @@ namespace ts {
         return `${file.fileName}(${loc.line + 1},${loc.character + 1})`;
     }
 
-    export function getStartPosOfNode(node: Node): number {
-        return node.pos;
-    }
-
-    export function isDefined(value: any): boolean {
-        return value !== undefined;
-    }
-
     export function getEndLinePosition(line: number, sourceFile: SourceFileLike): number {
         Debug.assert(line >= 0);
         const lineStarts = getLineStarts(sourceFile);
@@ -262,6 +240,32 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
+    /**
+     * Determine if the given comment is a triple-slash
+     *
+     * @return true if the comment is a triple-slash comment else false
+     */
+    export function isRecognizedTripleSlashComment(text: string, commentPos: number, commentEnd: number) {
+        // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+        // so that we don't end up computing comment string and doing match for all // comments
+        if (text.charCodeAt(commentPos + 1) === CharacterCodes.slash &&
+            commentPos + 2 < commentEnd &&
+            text.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
+            const textSubStr = text.substring(commentPos, commentEnd);
+            return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
+                textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ||
+                textSubStr.match(fullTripleSlashReferenceTypeReferenceDirectiveRegEx) ||
+                textSubStr.match(defaultLibReferenceRegEx) ?
+                true : false;
+        }
+        return false;
+    }
+
+    export function isPinnedComment(text: string, comment: CommentRange) {
+        return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+    }
+
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
@@ -273,7 +277,7 @@ namespace ts {
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
-        if (includeJsDoc && node.jsDoc && node.jsDoc.length > 0) {
+        if (includeJsDoc && hasJSDocNodes(node)) {
             return getTokenPosOfNode(node.jsDoc[0]);
         }
 
@@ -338,16 +342,22 @@ namespace ts {
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
-                return '"' + escapeText(node.text) + '"';
+                if ((<StringLiteral>node).singleQuote) {
+                    return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
+                }
+                else {
+                    return '"' + escapeText(node.text, CharacterCodes.doubleQuote) + '"';
+                }
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return "`" + escapeText(node.text) + "`";
+                return "`" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.TemplateHead:
-                return "`" + escapeText(node.text) + "${";
+                return "`" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateMiddle:
-                return "}" + escapeText(node.text) + "${";
+                return "}" + escapeText(node.text, CharacterCodes.backtick) + "${";
             case SyntaxKind.TemplateTail:
-                return "}" + escapeText(node.text) + "`";
+                return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.RegularExpressionLiteral:
                 return node.text;
         }
 
@@ -437,6 +447,7 @@ namespace ts {
         return isExternalModule(node) || compilerOptions.isolatedModules;
     }
 
+    /* @internal */
     export function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -463,6 +474,38 @@ namespace ts {
 
         return false;
     }
+
+    /* @internal */
+    export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
+    export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
+        switch (node.kind) {
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.JSDocFunctionType:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.JSDocTemplateTag:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                staticAssertNever(node);
+                return false;
+        }
+    }
+
+    function staticAssertNever(_: never): void {}
 
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
@@ -635,11 +678,7 @@ namespace ts {
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
-    }
-
-    export function getLeadingCommentRangesOfNodeFromText(node: Node, text: string) {
-        return getLeadingCommentRanges(text, node.pos);
+        return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
     }
 
     export function getJSDocCommentRanges(node: Node, text: string) {
@@ -649,7 +688,7 @@ namespace ts {
             node.kind === SyntaxKind.ArrowFunction ||
             node.kind === SyntaxKind.ParenthesizedExpression) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
-            getLeadingCommentRangesOfNodeFromText(node, text);
+            getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'
         return filter(commentRanges, comment =>
             text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
@@ -657,9 +696,10 @@ namespace ts {
             text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
     }
 
-    export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export let fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export let fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
+    export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
 
     export function isPartOfTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -922,21 +962,11 @@ namespace ts {
     }
 
     export function getContainingFunction(node: Node): FunctionLike {
-        while (true) {
-            node = node.parent;
-            if (!node || isFunctionLike(node)) {
-                return <FunctionLike>node;
-            }
-        }
+        return findAncestor(node.parent, isFunctionLike);
     }
 
     export function getContainingClass(node: Node): ClassLikeDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || isClassLike(node)) {
-                return <ClassLikeDeclaration>node;
-            }
-        }
+        return findAncestor(node.parent, isClassLike);
     }
 
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
@@ -1480,10 +1510,10 @@ namespace ts {
     }
 
     export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
-        let tags = node.jsDocCache;
+        let tags = (node as JSDocContainer).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined) {
-            node.jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
+            (node as JSDocContainer).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
         }
         return tags;
     }
@@ -1509,8 +1539,8 @@ namespace ts {
                 parent.parent.kind === SyntaxKind.VariableStatement;
             const variableStatementNode =
                 isInitializerOfVariableDeclarationInStatement ? parent.parent.parent :
-                isVariableOfVariableDeclarationStatement ? parent.parent :
-                undefined;
+                    isVariableOfVariableDeclarationStatement ? parent.parent :
+                        undefined;
             if (variableStatementNode) {
                 getJSDocCommentsAndTagsWorker(variableStatementNode);
             }
@@ -1537,11 +1567,13 @@ namespace ts {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
-            if (isVariableLike(node) && node.initializer) {
+            if (isVariableLike(node) && node.initializer && hasJSDocNodes(node.initializer)) {
                 result = addRange(result, node.initializer.jsDoc);
             }
 
-            result = addRange(result, node.jsDoc);
+            if (hasJSDocNodes(node)) {
+                result = addRange(result, node.jsDoc);
+            }
         }
     }
 
@@ -1624,7 +1656,7 @@ namespace ts {
         if (isInJavaScriptFile(node)) {
             if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
                 forEach(getJSDocParameterTags(node),
-                        t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
+                    t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
                 return true;
             }
         }
@@ -1856,7 +1888,7 @@ namespace ts {
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
         const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        const isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegEx.source, "gim");
         if (simpleReferenceRegEx.test(comment)) {
             if (isNoDefaultLibRegEx.test(comment)) {
                 return { isNoDefaultLib: true };
@@ -2069,17 +2101,13 @@ namespace ts {
             || kind === SyntaxKind.SourceFile;
     }
 
-    export function nodeIsSynthesized(node: TextRange): boolean {
-        return positionIsSynthesized(node.pos)
-            || positionIsSynthesized(node.end);
+    export function nodeIsSynthesized(range: TextRange): boolean {
+        return positionIsSynthesized(range.pos)
+            || positionIsSynthesized(range.end);
     }
 
     export function getOriginalSourceFile(sourceFile: SourceFile) {
         return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
-    }
-
-    export function getOriginalSourceFiles(sourceFiles: ReadonlyArray<SourceFile>) {
-        return sameMap(sourceFiles, getOriginalSourceFile);
     }
 
     export const enum Associativity {
@@ -2366,7 +2394,9 @@ namespace ts {
     // the language service. These characters should be escaped when printing, and if any characters are added,
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
-    const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const backtickQuoteEscapedCharsRegExp = /[\\\`\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const escapedCharsMap = createMapFromTemplate({
         "\0": "\\0",
         "\t": "\\t",
@@ -2377,19 +2407,29 @@ namespace ts {
         "\n": "\\n",
         "\\": "\\\\",
         "\"": "\\\"",
+        "\'": "\\\'",
+        "\`": "\\\`",
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     });
-
+    const escapedNullRegExp = /\\0[0-9]/g;
 
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
      * Note that this doesn't actually wrap the input in double quotes.
      */
-    export function escapeString(s: string): string {
-        return s.replace(escapedCharsRegExp, getReplacement);
+    export function escapeString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
+        const escapedCharsRegExp =
+            quoteChar === CharacterCodes.backtick ? backtickQuoteEscapedCharsRegExp :
+            quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
+            doubleQuoteEscapedCharsRegExp;
+        return s.replace(escapedCharsRegExp, getReplacement).replace(escapedNullRegExp, nullReplacement);
+    }
+
+    function nullReplacement(c: string) {
+        return "\\x00" + c.charAt(c.length - 1);
     }
 
     function getReplacement(c: string) {
@@ -2410,8 +2450,8 @@ namespace ts {
     }
 
     const nonAsciiCharacters = /[^\u0000-\u007F]/g;
-    export function escapeNonAsciiString(s: string): string {
-        s = escapeString(s);
+    export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
+        s = escapeString(s, quoteChar);
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
         // Otherwise just return the original string.
         return nonAsciiCharacters.test(s) ?
@@ -2570,7 +2610,7 @@ namespace ts {
      * @param host An EmitHost.
      * @param targetSourceFile An optional target source file to emit.
      */
-    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): SourceFile[] {
+    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): ReadonlyArray<SourceFile> {
         const options = host.getCompilerOptions();
         const isSourceFileFromExternalLibrary = (file: SourceFile) => host.isSourceFileFromExternalLibrary(file);
         if (options.outFile || options.out) {
@@ -2833,7 +2873,7 @@ namespace ts {
             //
             //      var x = 10;
             if (node.pos === 0) {
-                leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedComment);
+                leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedCommentLocal);
             }
         }
         else {
@@ -2879,9 +2919,8 @@ namespace ts {
 
         return currentDetachedCommentInfo;
 
-        function isPinnedComment(comment: CommentRange) {
-            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+        function isPinnedCommentLocal(comment: CommentRange) {
+            return isPinnedComment(text, comment);
         }
 
     }
@@ -2987,8 +3026,12 @@ namespace ts {
         return getModifierFlags(node) !== ModifierFlags.None;
     }
 
-    export function hasModifier(node: Node, flags: ModifierFlags) {
-        return (getModifierFlags(node) & flags) !== 0;
+    export function hasModifier(node: Node, flags: ModifierFlags): boolean {
+        return !!getSelectedModifierFlags(node, flags);
+    }
+
+    export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
+        return getModifierFlags(node) & flags;
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {
@@ -3072,24 +3115,6 @@ namespace ts {
         }
 
         return false;
-    }
-
-    // Returns false if this heritage clause element's expression contains something unsupported
-    // (i.e. not a name or dotted name).
-    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
-        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
-    }
-
-    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
-        if (node.kind === SyntaxKind.Identifier) {
-            return true;
-        }
-        else if (isPropertyAccessExpression(node)) {
-            return isSupportedExpressionWithTypeArgumentsRest(node.expression);
-        }
-        else {
-            return false;
-        }
     }
 
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
@@ -3229,81 +3254,6 @@ namespace ts {
     }
 
     /**
-     * Tests whether a node and its subtree is simple enough to have its position
-     * information ignored when emitting source maps in a destructuring assignment.
-     *
-     * @param node The expression to test.
-     */
-    export function isSimpleExpression(node: Expression): boolean {
-        return isSimpleExpressionWorker(node, 0);
-    }
-
-    function isSimpleExpressionWorker(node: Expression, depth: number): boolean {
-        if (depth <= 5) {
-            const kind = node.kind;
-            if (kind === SyntaxKind.StringLiteral
-                || kind === SyntaxKind.NumericLiteral
-                || kind === SyntaxKind.RegularExpressionLiteral
-                || kind === SyntaxKind.NoSubstitutionTemplateLiteral
-                || kind === SyntaxKind.Identifier
-                || kind === SyntaxKind.ThisKeyword
-                || kind === SyntaxKind.SuperKeyword
-                || kind === SyntaxKind.TrueKeyword
-                || kind === SyntaxKind.FalseKeyword
-                || kind === SyntaxKind.NullKeyword) {
-                return true;
-            }
-            else if (kind === SyntaxKind.PropertyAccessExpression) {
-                return isSimpleExpressionWorker((<PropertyAccessExpression>node).expression, depth + 1);
-            }
-            else if (kind === SyntaxKind.ElementAccessExpression) {
-                return isSimpleExpressionWorker((<ElementAccessExpression>node).expression, depth + 1)
-                    && isSimpleExpressionWorker((<ElementAccessExpression>node).argumentExpression, depth + 1);
-            }
-            else if (kind === SyntaxKind.PrefixUnaryExpression
-                || kind === SyntaxKind.PostfixUnaryExpression) {
-                return isSimpleExpressionWorker((<PrefixUnaryExpression | PostfixUnaryExpression>node).operand, depth + 1);
-            }
-            else if (kind === SyntaxKind.BinaryExpression) {
-                return (<BinaryExpression>node).operatorToken.kind !== SyntaxKind.AsteriskAsteriskToken
-                    && isSimpleExpressionWorker((<BinaryExpression>node).left, depth + 1)
-                    && isSimpleExpressionWorker((<BinaryExpression>node).right, depth + 1);
-            }
-            else if (kind === SyntaxKind.ConditionalExpression) {
-                return isSimpleExpressionWorker((<ConditionalExpression>node).condition, depth + 1)
-                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenTrue, depth + 1)
-                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenFalse, depth + 1);
-            }
-            else if (kind === SyntaxKind.VoidExpression
-                || kind === SyntaxKind.TypeOfExpression
-                || kind === SyntaxKind.DeleteExpression) {
-                return isSimpleExpressionWorker((<VoidExpression | TypeOfExpression | DeleteExpression>node).expression, depth + 1);
-            }
-            else if (kind === SyntaxKind.ArrayLiteralExpression) {
-                return (<ArrayLiteralExpression>node).elements.length === 0;
-            }
-            else if (kind === SyntaxKind.ObjectLiteralExpression) {
-                return (<ObjectLiteralExpression>node).properties.length === 0;
-            }
-            else if (kind === SyntaxKind.CallExpression) {
-                if (!isSimpleExpressionWorker((<CallExpression>node).expression, depth + 1)) {
-                    return false;
-                }
-
-                for (const argument of (<CallExpression>node).arguments) {
-                    if (!isSimpleExpressionWorker(argument, depth + 1)) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Formats an enum value as a string for debugging and debug assertions.
      */
     function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
@@ -3375,24 +3325,6 @@ namespace ts {
         return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
     }
 
-    export function getRangePos(range: TextRange | undefined) {
-        return range ? range.pos : -1;
-    }
-
-    export function getRangeEnd(range: TextRange | undefined) {
-        return range ? range.end : -1;
-    }
-
-    /**
-     * Increases (or decreases) a position by the provided amount.
-     *
-     * @param pos The position.
-     * @param value The delta.
-     */
-    export function movePos(pos: number, value: number) {
-        return positionIsSynthesized(pos) ? -1 : pos + value;
-    }
-
     /**
      * Creates a new TextRange from the provided pos and end.
      *
@@ -3448,26 +3380,6 @@ namespace ts {
      */
     export function isCollapsedRange(range: TextRange) {
         return range.pos === range.end;
-    }
-
-    /**
-     * Creates a new TextRange from a provided range with its end position collapsed to its
-     * start position.
-     *
-     * @param range A TextRange.
-     */
-    export function collapseRangeToStart(range: TextRange): TextRange {
-        return isCollapsedRange(range) ? range : moveRangeEnd(range, range.pos);
-    }
-
-    /**
-     * Creates a new TextRange from a provided range with its start position collapsed to its
-     * end position.
-     *
-     * @param range A TextRange.
-     */
-    export function collapseRangeToEnd(range: TextRange): TextRange {
-        return isCollapsedRange(range) ? range : moveRangePos(range, range.end);
     }
 
     /**
@@ -3531,31 +3443,6 @@ namespace ts {
 
     function isInitializedVariable(node: VariableDeclaration) {
         return node.initializer !== undefined;
-    }
-
-    /**
-     * Gets a value indicating whether a node is merged with a class declaration in the same scope.
-     */
-    export function isMergedWithClass(node: Node) {
-        if (node.symbol) {
-            for (const declaration of node.symbol.declarations) {
-                if (declaration.kind === SyntaxKind.ClassDeclaration && declaration !== node) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets a value indicating whether a node is the first declaration of its kind.
-     *
-     * @param node A Declaration node.
-     * @param kind The SyntaxKind to find among related declarations.
-     */
-    export function isFirstDeclarationOfKind(node: Node, kind: SyntaxKind) {
-        return node.symbol && getDeclarationOfKind(node.symbol, kind) === node;
     }
 
     export function isWatchSet(options: CompilerOptions) {
@@ -3866,6 +3753,20 @@ namespace ts {
         return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 
+    export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
+        if (isBindingPattern(node)) {
+            return every(node.elements, isEmptyBindingElement);
+        }
+        return false;
+    }
+
+    export function isEmptyBindingElement(node: BindingElement): boolean {
+        if (isOmittedExpression(node)) {
+            return true;
+        }
+        return isEmptyBindingPattern(node.name);
+    }
+
     function walkUpBindingElementsAndPatterns(node: Node): Node {
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
             node = node.parent;
@@ -4059,7 +3960,66 @@ namespace ts {
         return id;
     }
 
-    export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
+    /**
+     * A JSDocTypedef tag has an _optional_ name field - if a name is not directly present, we should
+     * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
+     * will be merged with)
+     */
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+        const hostNode = declaration.parent.parent;
+        if (!hostNode) {
+            return undefined;
+        }
+        // Covers classes, functions - any named declaration host node
+        if (isDeclaration(hostNode)) {
+            return getDeclarationIdentifier(hostNode);
+        }
+        // Covers remaining cases
+        switch (hostNode.kind) {
+            case SyntaxKind.VariableStatement:
+                if ((hostNode as VariableStatement).declarationList &&
+                (hostNode as VariableStatement).declarationList.declarations[0]) {
+                    return getDeclarationIdentifier((hostNode as VariableStatement).declarationList.declarations[0]);
+                }
+                return undefined;
+            case SyntaxKind.ExpressionStatement:
+                const expr = (hostNode as ExpressionStatement).expression;
+                switch (expr.kind) {
+                    case SyntaxKind.PropertyAccessExpression:
+                        return (expr as PropertyAccessExpression).name;
+                    case SyntaxKind.ElementAccessExpression:
+                        const arg = (expr as ElementAccessExpression).argumentExpression;
+                        if (isIdentifier(arg)) {
+                            return arg;
+                        }
+                }
+                return undefined;
+            case SyntaxKind.EndOfFileToken:
+                return undefined;
+            case SyntaxKind.ParenthesizedExpression: {
+                return getDeclarationIdentifier(hostNode.expression);
+            }
+            case SyntaxKind.LabeledStatement: {
+                if (isDeclaration(hostNode.statement) || isExpression(hostNode.statement)) {
+                    return getDeclarationIdentifier(hostNode.statement);
+                }
+                return undefined;
+            }
+            default:
+                Debug.assertNever(hostNode, "Found typedef tag attached to node which it should not be!");
+        }
+    }
+
+    function getDeclarationIdentifier(node: Declaration | Expression) {
+        const name = getNameOfDeclaration(node);
+        return isIdentifier(name) ? name : undefined;
+    }
+
+    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+        return declaration.name || nameForNamelessJSDocTypedef(declaration as JSDocTypedefTag);
+    }
+
+    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (!declaration) {
             return undefined;
         }
@@ -4077,6 +4037,9 @@ namespace ts {
                 default:
                     return undefined;
             }
+        }
+        else if (declaration.kind === SyntaxKind.JSDocTypedefTag) {
+            return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
         }
         else {
             return (declaration as NamedDeclaration).name;
@@ -4765,8 +4728,7 @@ namespace ts {
 
     /* @internal */
     export function isNodeArray<T extends Node>(array: ReadonlyArray<T>): array is NodeArray<T> {
-        return array.hasOwnProperty("pos")
-            && array.hasOwnProperty("end");
+        return array.hasOwnProperty("pos") && array.hasOwnProperty("end");
     }
 
     // Literals
@@ -4867,16 +4829,29 @@ namespace ts {
     }
 
     /* @internal */
-    export function isFunctionLikeKind(kind: SyntaxKind): boolean {
+    export function isFunctionLikeDeclaration(node: Node): node is FunctionLikeDeclaration {
+        return node && isFunctionLikeDeclarationKind(node.kind);
+    }
+
+    function isFunctionLikeDeclarationKind(kind: SyntaxKind): boolean {
         switch (kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ArrowFunction:
             case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /* @internal */
+    export function isFunctionLikeKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
@@ -4884,9 +4859,9 @@ namespace ts {
             case SyntaxKind.JSDocFunctionType:
             case SyntaxKind.ConstructorType:
                 return true;
+            default:
+                return isFunctionLikeDeclarationKind(kind);
         }
-
-        return false;
     }
 
     // Classes
@@ -5083,49 +5058,43 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
-    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.PropertyAccessExpression
-            || kind === SyntaxKind.ElementAccessExpression
-            || kind === SyntaxKind.NewExpression
-            || kind === SyntaxKind.CallExpression
-            || kind === SyntaxKind.JsxElement
-            || kind === SyntaxKind.JsxSelfClosingElement
-            || kind === SyntaxKind.TaggedTemplateExpression
-            || kind === SyntaxKind.ArrayLiteralExpression
-            || kind === SyntaxKind.ParenthesizedExpression
-            || kind === SyntaxKind.ObjectLiteralExpression
-            || kind === SyntaxKind.ClassExpression
-            || kind === SyntaxKind.FunctionExpression
-            || kind === SyntaxKind.Identifier
-            || kind === SyntaxKind.RegularExpressionLiteral
-            || kind === SyntaxKind.NumericLiteral
-            || kind === SyntaxKind.StringLiteral
-            || kind === SyntaxKind.NoSubstitutionTemplateLiteral
-            || kind === SyntaxKind.TemplateExpression
-            || kind === SyntaxKind.FalseKeyword
-            || kind === SyntaxKind.NullKeyword
-            || kind === SyntaxKind.ThisKeyword
-            || kind === SyntaxKind.TrueKeyword
-            || kind === SyntaxKind.SuperKeyword
-            || kind === SyntaxKind.ImportKeyword
-            || kind === SyntaxKind.NonNullExpression
-            || kind === SyntaxKind.MetaProperty;
-    }
-
     /* @internal */
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
         return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
 
-    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.PrefixUnaryExpression
-            || kind === SyntaxKind.PostfixUnaryExpression
-            || kind === SyntaxKind.DeleteExpression
-            || kind === SyntaxKind.TypeOfExpression
-            || kind === SyntaxKind.VoidExpression
-            || kind === SyntaxKind.AwaitExpression
-            || kind === SyntaxKind.TypeAssertionExpression
-            || isLeftHandSideExpressionKind(kind);
+    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.Identifier:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.FalseKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.NonNullExpression:
+            case SyntaxKind.MetaProperty:
+            case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
+                return true;
+            default:
+                return false;
+        }
     }
 
     /* @internal */
@@ -5133,21 +5102,58 @@ namespace ts {
         return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
     }
 
-    function isExpressionKind(kind: SyntaxKind) {
-        return kind === SyntaxKind.ConditionalExpression
-            || kind === SyntaxKind.YieldExpression
-            || kind === SyntaxKind.ArrowFunction
-            || kind === SyntaxKind.BinaryExpression
-            || kind === SyntaxKind.SpreadElement
-            || kind === SyntaxKind.AsExpression
-            || kind === SyntaxKind.OmittedExpression
-            || kind === SyntaxKind.CommaListExpression
-            || isUnaryExpressionKind(kind);
+    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.PostfixUnaryExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.TypeAssertionExpression:
+                return true;
+            default:
+                return isLeftHandSideExpressionKind(kind);
+        }
     }
 
     /* @internal */
+    export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpression | PostfixUnaryExpression {
+        switch (expr.kind) {
+            case SyntaxKind.PostfixUnaryExpression:
+                return true;
+            case SyntaxKind.PrefixUnaryExpression:
+                return (<PrefixUnaryExpression>expr).operator === SyntaxKind.PlusPlusToken ||
+                    (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusMinusToken;
+            default:
+                return false;
+        }
+    }
+
+    /* @internal */
+    /**
+     * Determines whether a node is an expression based only on its kind.
+     * Use `isPartOfExpression` if not in transforms.
+     */
     export function isExpression(node: Node): node is Expression {
         return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isExpressionKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.YieldExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.SpreadElement:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.OmittedExpression:
+            case SyntaxKind.CommaListExpression:
+            case SyntaxKind.PartiallyEmittedExpression:
+                return true;
+            default:
+                return isUnaryExpressionKind(kind);
+        }
     }
 
     export function isAssertionExpression(node: Node): node is AssertionExpression {
@@ -5347,7 +5353,17 @@ namespace ts {
         const kind = node.kind;
         return isStatementKindButNotDeclarationKind(kind)
             || isDeclarationStatementKind(kind)
-            || kind === SyntaxKind.Block;
+            || isBlockStatement(node);
+    }
+
+    function isBlockStatement(node: Node): node is Block {
+        if (node.kind !== SyntaxKind.Block) return false;
+        if (node.parent !== undefined) {
+            if (node.parent.kind === SyntaxKind.TryStatement || node.parent.kind === SyntaxKind.CatchClause) {
+                return false;
+            }
+        }
+        return !isFunctionBlock(node);
     }
 
     // Module references
@@ -5424,5 +5440,11 @@ namespace ts {
     /* @internal */
     export function isJSDocTag(node: Node): boolean {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
+    }
+
+    /** True if has jsdoc nodes attached to it. */
+    /* @internal */
+    export function hasJSDocNodes(node: Node): node is HasJSDoc {
+        return !!(node as JSDocContainer).jsDoc && (node as JSDocContainer).jsDoc.length > 0;
     }
 }

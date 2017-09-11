@@ -88,6 +88,8 @@ var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/t
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
 
+var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
+
 var harnessCoreSources = [
     "harness.ts",
     "virtualFileSystem.ts",
@@ -133,12 +135,15 @@ var harnessSources = harnessCoreSources.concat([
     "projectErrors.ts",
     "matchFiles.ts",
     "initializeTSConfig.ts",
+    "extractMethods.ts",
     "printer.ts",
     "textChanges.ts",
     "telemetry.ts",
     "transform.ts",
     "customTransforms.ts",
     "programMissingFiles.ts",
+    "symbolWalker.ts",
+    "languageService.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -422,6 +427,7 @@ var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
 var buildProtocolDts = path.join(builtLocalDirectory, "protocol.d.ts");
 var typescriptServicesDts = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+var typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 
 file(buildProtocolTs);
 
@@ -533,7 +539,6 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
@@ -572,22 +577,6 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
         fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
     });
 
-compileFile(
-    servicesFileInBrowserTest,
-    servicesSources,
-    [builtLocalDirectory, copyright].concat(servicesSources),
-    /*prefixes*/[copyright],
-    /*useBuiltCompiler*/ true,
-    {
-        noOutFile: false,
-        generateDeclarations: true,
-        preserveConstEnums: true,
-        keepComments: true,
-        noResolve: false,
-        stripInternal: true,
-        inlineSourceMap: true
-    });
-
 file(typescriptServicesDts, [servicesFile]);
 
 var cancellationTokenFile = path.join(builtLocalDirectory, "cancellationToken.js");
@@ -603,6 +592,16 @@ var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
+file(typesMapOutputPath, function() {
+    var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
+    // Validate that it's valid JSON
+    try {
+        JSON.parse(content);
+    } catch (e) {
+        console.log("Parse error in typesMap.json: " + e);
+    }
+    fs.writeFileSync(typesMapOutputPath, content);
+});
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
@@ -625,7 +624,7 @@ compileFile(
 
 // Local target to build the language service server library
 desc("Builds language service server library");
-task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
+task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile, typesMapOutputPath]);
 
 desc("Emit the start of the build fold");
 task("build-fold-start", [], function () {
@@ -653,7 +652,6 @@ task("release", function () {
 
 // Set the default task to "local"
 task("default", ["local"]);
-
 
 // Cleans the built directory
 desc("Cleans the compiler output, declare files, and tests");
@@ -725,7 +723,7 @@ compileFile(
     /*prereqs*/[builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/[],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"], lib: "es6" });
+    /*opts*/ { types: ["node", "mocha", "chai"], lib: "es6" });
 
 var internalTests = "internal/";
 
@@ -961,13 +959,14 @@ var nodeServerInFile = "tests/webTestServer.ts";
 compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true, lib: "es6" });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
-task("browserify", ["tests", run, builtLocalDirectory, nodeServerOutFile], function() {
-    var cmd = 'browserify built/local/run.js -t ./scripts/browserify-optional -d -o built/local/bundle.js';
+task("browserify", [], function() {
+    // Shell out to `gulp`, since we do the work to handle sourcemaps correctly w/o inline maps there
+    var cmd = 'gulp browserify --silent';
     exec(cmd);
 }, { async: true });
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], browser=[chrome|IE]");
-task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function () {
+task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
     browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
@@ -1101,7 +1100,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function () {
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
 var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
-compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true, { lib: "es6", types: ["node"] });
+compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true, { lib: "es6", types: ["node"], noOutFile: true, outDir: builtLocalDirectory });
 
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function () {
@@ -1122,14 +1121,15 @@ task("update-sublime", ["local", serverFile], function () {
 
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = [
-    "nextLineRule",
     "booleanTriviaRule",
-    "typeOperatorSpacingRule",
-    "noInOperatorRule",
+    "debugAssertRule",
+    "nextLineRule",
+    "noBomRule",
     "noIncrementDecrementRule",
-    "objectLiteralSurroundingSpaceRule",
+    "noInOperatorRule",
     "noTypeAssertionWhitespaceRule",
-    "noBomRule"
+    "objectLiteralSurroundingSpaceRule",
+    "typeOperatorSpacingRule",
 ];
 var tslintRulesFiles = tslintRules.map(function (p) {
     return path.join(tslintRuleDir, p + ".ts");

@@ -4,7 +4,7 @@ class C {
 }
 
 //// [parserES5ComputedPropertyName10.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this[e] = 1;
     }

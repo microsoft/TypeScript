@@ -52,7 +52,7 @@ var Test1;
 })(Test1 || (Test1 = {}));
 var Test2;
 (function (Test2) {
-    var Foo = (function () {
+    var Foo = /** @class */ (function () {
         function Foo() {
         }
         return Foo;

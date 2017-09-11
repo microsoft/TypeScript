@@ -119,19 +119,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -159,7 +159,7 @@ function foo2c() {
 }
 var r3 = foo2b(d1); // Base
 var r3b = foo2c(); // Base
-var C = (function () {
+var C = /** @class */ (function () {
     function C(t, u) {
         this.t = t;
         this.u = u;

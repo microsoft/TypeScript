@@ -101,30 +101,30 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // Derived1 is assignable to, but not a subtype of, Base
-var Derived1 = (function () {
+var Derived1 = /** @class */ (function () {
     function Derived1() {
     }
     return Derived1;
 }());
 // Derived2 is a subtype of Base that is not assignable to Derived1
-var Derived2 = (function () {
+var Derived2 = /** @class */ (function () {
     function Derived2() {
     }
     return Derived2;
 }());
-var Animal = (function () {
+var Animal = /** @class */ (function () {
     function Animal() {
     }
     return Animal;
 }());
-var Mammal = (function (_super) {
+var Mammal = /** @class */ (function (_super) {
     __extends(Mammal, _super);
     function Mammal() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Mammal;
 }(Animal));
-var Giraffe = (function (_super) {
+var Giraffe = /** @class */ (function (_super) {
     __extends(Giraffe, _super);
     function Giraffe() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -180,7 +180,7 @@ function fn7(x) {
         var y = x;
     }
 }
-var ABC = (function () {
+var ABC = /** @class */ (function () {
     function ABC() {
     }
     return ABC;

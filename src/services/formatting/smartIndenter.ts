@@ -32,13 +32,36 @@ namespace ts.formatting {
             }
 
             const precedingToken = findPrecedingToken(position, sourceFile);
+
+            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true, precedingToken || null); // tslint:disable-line:no-null-keyword
+            if (enclosingCommentRange) {
+                const previousLine = getLineAndCharacterOfPosition(sourceFile, position).line - 1;
+                const commentStartLine = getLineAndCharacterOfPosition(sourceFile, enclosingCommentRange.pos).line;
+
+                Debug.assert(commentStartLine >= 0);
+
+                if (previousLine <= commentStartLine) {
+                    return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
+                }
+
+                const startPostionOfLine = getStartPositionOfLine(previousLine, sourceFile);
+                const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPostionOfLine, position, sourceFile, options);
+
+                if (column === 0) {
+                    return column;
+                }
+
+                const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPostionOfLine + character);
+                return firstNonWhitespaceCharacterCode === CharacterCodes.asterisk ? column - 1 : column;
+            }
+
             if (!precedingToken) {
                 return getBaseIndentation(options);
             }
 
             // no indentation in string \regex\template literals
             const precedingTokenIsLiteral = isStringOrRegularExpressionOrTemplateLiteral(precedingToken.kind);
-            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
+            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && position < precedingToken.end) {
                 return 0;
             }
 
@@ -405,13 +428,13 @@ namespace ts.formatting {
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
-        /*
-            Character is the actual index of the character since the beginning of the line.
-            Column - position of the character after expanding tabs to spaces
-            "0\t2$"
-            value of 'character' for '$' is 3
-            value of 'column' for '$' is 6 (assuming that tab size is 4)
-        */
+        /**
+         * Character is the actual index of the character since the beginning of the line.
+         * Column - position of the character after expanding tabs to spaces.
+         * "0\t2$"
+         * value of 'character' for '$' is 3
+         * value of 'column' for '$' is 6 (assuming that tab size is 4)
+         */
         export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings) {
             let character = 0;
             let column = 0;

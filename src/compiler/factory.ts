@@ -281,7 +281,7 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer), node)
+            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
             : node;
     }
 
@@ -1016,19 +1016,49 @@ namespace ts {
         return node;
     }
 
+    /* @deprecated */ export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
-        body: ConciseBody) {
+        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
+        body: ConciseBody): ArrowFunction;
+    export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
+        bodyOrUndefined?: ConciseBody,
+    ): ArrowFunction {
+        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
+        let body: ConciseBody;
+        if (bodyOrUndefined === undefined) {
+            equalsGreaterThanToken = node.equalsGreaterThanToken;
+            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
+        }
+        else {
+            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
+                n.kind === SyntaxKind.EqualsGreaterThanToken);
+            body = bodyOrUndefined;
+        }
+
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
+            || node.equalsGreaterThanToken !== equalsGreaterThanToken
             || node.body !== body
-            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, node.equalsGreaterThanToken, body), node)
+            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
             : node;
     }
 
@@ -1135,11 +1165,31 @@ namespace ts {
         return node;
     }
 
-    export function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression) {
+    /* @deprecated */ export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        whenTrue: Expression,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        questionToken: Token<SyntaxKind.QuestionToken>,
+        whenTrue: Expression,
+        colonToken: Token<SyntaxKind.ColonToken>,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
+        if (args.length === 2) {
+            const [whenTrue, whenFalse] = args;
+            return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
+        }
+        Debug.assert(args.length === 4);
+        const [questionToken, whenTrue, colonToken, whenFalse] = args;
         return node.condition !== condition
+            || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue
+            || node.colonToken !== colonToken
             || node.whenFalse !== whenFalse
-            ? updateNode(createConditional(condition, node.questionToken, whenTrue, node.colonToken, whenFalse), node)
+            ? updateNode(createConditional(condition, questionToken, whenTrue, colonToken, whenFalse), node)
             : node;
     }
 
@@ -2128,14 +2178,14 @@ namespace ts {
             : node;
     }
 
-    export function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block) {
+    export function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
         const node = <CatchClause>createSynthesizedNode(SyntaxKind.CatchClause);
         node.variableDeclaration = typeof variableDeclaration === "string" ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
         node.block = block;
         return node;
     }
 
-    export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block) {
+    export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block) {
         return node.variableDeclaration !== variableDeclaration
             || node.block !== block
             ? updateNode(createCatchClause(variableDeclaration, block), node)
@@ -2339,13 +2389,13 @@ namespace ts {
             : node;
     }
 
-    export function createBundle(sourceFiles: SourceFile[]) {
+    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.sourceFiles = sourceFiles;
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: SourceFile[]) {
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>) {
         if (node.sourceFiles !== sourceFiles) {
             return createBundle(sourceFiles);
         }
@@ -2371,6 +2421,24 @@ namespace ts {
             /*argumentsArray*/ paramValue ? [paramValue] : []
         );
     }
+
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[]): CallExpression;
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
+        return createCall(
+            createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ param ? [param] : [],
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                createBlock(statements, /*multiLine*/ true)
+            ),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ paramValue ? [paramValue] : []
+        );
+    }
+
 
     export function createComma(left: Expression, right: Expression) {
         return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
@@ -2586,7 +2654,7 @@ namespace ts {
     }
 
     export function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-        return setSyntheticLeadingComments(node, append(getSyntheticLeadingComments(node), <SynthesizedComment>{ kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+        return setSyntheticLeadingComments(node, append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
     }
 
     export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
@@ -2600,7 +2668,7 @@ namespace ts {
     }
 
     export function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-        return setSyntheticTrailingComments(node, append(getSyntheticTrailingComments(node), <SynthesizedComment>{ kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+        return setSyntheticTrailingComments(node, append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
     }
 
     /**
@@ -2636,9 +2704,7 @@ namespace ts {
         if (some(helpers)) {
             const emitNode = getOrCreateEmitNode(node);
             for (const helper of helpers) {
-                if (!contains(emitNode.helpers, helper)) {
-                    emitNode.helpers = append(emitNode.helpers, helper);
-                }
+                emitNode.helpers = appendIfUnique(emitNode.helpers, helper);
             }
         }
         return node;
@@ -2680,9 +2746,7 @@ namespace ts {
             const helper = sourceEmitHelpers[i];
             if (predicate(helper)) {
                 helpersRemoved++;
-                if (!contains(targetEmitNode.helpers, helper)) {
-                    targetEmitNode.helpers = append(targetEmitNode.helpers, helper);
-                }
+                targetEmitNode.helpers = appendIfUnique(targetEmitNode.helpers, helper);
             }
             else if (helpersRemoved > 0) {
                 sourceEmitHelpers[i - helpersRemoved] = helper;
@@ -4040,8 +4104,31 @@ namespace ts {
         }
     }
 
+    /**
+     * Determines whether a node is a parenthesized expression that can be ignored when recreating outer expressions.
+     *
+     * A parenthesized expression can be ignored when all of the following are true:
+     *
+     * - It's `pos` and `end` are not -1
+     * - It does not have a custom source map range
+     * - It does not have a custom comment range
+     * - It does not have synthetic leading or trailing comments
+     *
+     * If an outermost parenthesized expression is ignored, but the containing expression requires a parentheses around
+     * the expression to maintain precedence, a new parenthesized expression should be created automatically when
+     * the containing expression is created/updated.
+     */
+    function isIgnorableParen(node: Expression) {
+        return node.kind === SyntaxKind.ParenthesizedExpression
+            && nodeIsSynthesized(node)
+            && nodeIsSynthesized(getSourceMapRange(node))
+            && nodeIsSynthesized(getCommentRange(node))
+            && !some(getSyntheticLeadingComments(node))
+            && !some(getSyntheticTrailingComments(node));
+    }
+
     export function recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds = OuterExpressionKinds.All): Expression {
-        if (outerExpression && isOuterExpression(outerExpression, kinds)) {
+        if (outerExpression && isOuterExpression(outerExpression, kinds) && !isIgnorableParen(outerExpression)) {
             return updateOuterExpression(
                 outerExpression,
                 recreateOuterExpressions(outerExpression.expression, innerExpression)
@@ -4071,7 +4158,8 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = hasExportStarsToExportValues
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015;
+                && moduleKind !== ModuleKind.ES2015
+                && moduleKind !== ModuleKind.ESNext;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {

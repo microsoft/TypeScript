@@ -10,7 +10,7 @@ var x4 = new SS;           // Should be allowed, but currently give error ('supp
 
 
 //// [genericObjectCreationWithoutTypeArgs.js]
-var SS = (function () {
+var SS = /** @class */ (function () {
     function SS() {
     }
     return SS;

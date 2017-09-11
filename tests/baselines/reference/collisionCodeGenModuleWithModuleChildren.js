@@ -55,7 +55,7 @@ var M;
 (function (M_2) {
     var m2;
     (function (m2) {
-        var M = (function () {
+        var M = /** @class */ (function () {
             function M() {
             }
             return M;

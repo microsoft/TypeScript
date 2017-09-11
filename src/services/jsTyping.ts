@@ -35,7 +35,7 @@ namespace ts.JsTyping {
         "crypto", "stream", "util", "assert", "tty", "domain",
         "constants", "process", "v8", "timers", "console"];
 
-    const nodeCoreModules = arrayToMap(<string[]>nodeCoreModuleList, x => x);
+    const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
     /**
      * A map of loose file names to library names that we are confident require typings
@@ -45,6 +45,14 @@ namespace ts.JsTyping {
     export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
         const result = readConfigFile(safeListPath, path => host.readFile(path));
         return createMapFromTemplate<string>(result.config);
+    }
+
+    export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
+        const result = readConfigFile(typesMapPath, path => host.readFile(path));
+        if (result.config) {
+            return createMapFromTemplate<string>(result.config.simpleMap);
+        }
+        return undefined;
     }
 
     /**

@@ -12,9 +12,13 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(17,11): error TS802
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,17): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,17): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(21,16): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(22,16): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(23,17): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(24,17): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (14 errors) ====
+==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (18 errors) ====
     // grammar error from checker
     var ara: Array.<number> = [1,2,3];
                   ~
@@ -62,4 +66,18 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,17): error TS802
 !!! error TS2322: Type 'undefined' is not assignable to type 'number | null'.
                     ~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
+    
+    var nns: Array<?number>;
+                   ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var dns: Array<!number>;
+                   ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var anys: Array<*>;
+                    ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    var vars: Array<...number>;
+                    ~~~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    
     

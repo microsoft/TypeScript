@@ -9,12 +9,9 @@ maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it i
         "maxNodeModuleJsDepth": 1, // Note: Module m1 is already included as a root file
         "outDir": "built"
       },
-      "include": ["**/*"],
+      "include": ["**/*", "node_modules/**/*"],
       "exclude": ["node_modules/m2/**/*"]
     }
-    
-==== relative.js (0 errors) ====
-    exports.relativeProp = true;
     
 ==== index.js (0 errors) ====
     var m2 = require('m2');
@@ -51,4 +48,7 @@ maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it i
     	"b": "hello, world",
     	"person": m3.person
     };
+    
+==== relative.js (0 errors) ====
+    exports.relativeProp = true;
     

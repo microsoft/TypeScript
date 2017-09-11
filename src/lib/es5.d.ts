@@ -127,7 +127,7 @@ interface ObjectConstructor {
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
-    getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor;
+    getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor | undefined;
 
     /**
       * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
@@ -216,7 +216,7 @@ interface ObjectConstructor {
       * Returns the names of the enumerable properties and methods of an object.
       * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
       */
-    keys(o: any): string[];
+    keys(o: {}): string[];
 }
 
 /**
@@ -980,12 +980,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[][]): T[];
+    concat(...items: ReadonlyArray<T>[]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: (T | T[])[]): T[];
+    concat(...items: (T | ReadonlyArray<T>)[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1099,12 +1099,12 @@ interface Array<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[][]): T[];
+    concat(...items: ReadonlyArray<T>[]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: (T | T[])[]): T[];
+    concat(...items: (T | ReadonlyArray<T>)[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1635,7 +1635,7 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
+    map(callbackfn: (value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -1902,7 +1902,7 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
+    map(callbackfn: (value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2169,7 +2169,7 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2366,7 +2366,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (this: void, value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
+    filter(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2434,7 +2434,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
+    map(callbackfn: (value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2702,7 +2702,7 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
+    map(callbackfn: (value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3235,7 +3235,7 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
+    map(callbackfn: (value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3502,7 +3502,7 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
+    map(callbackfn: (value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3770,7 +3770,7 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (this: void, value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
+    map(callbackfn: (value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of

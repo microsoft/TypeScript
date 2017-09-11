@@ -3,18 +3,6 @@
 /* @internal */
 namespace ts.formatting {
     export class Rules {
-        public getRuleName(rule: Rule) {
-            const o: ts.MapLike<any> = <any>this;
-            for (const name in o) {
-                if (o[name] === rule) {
-                    return name;
-                }
-            }
-            throw new Error("Unknown rule");
-        }
-
-        [name: string]: any;
-
         public IgnoreBeforeComment: Rule;
         public IgnoreAfterLineComment: Rule;
 
@@ -195,6 +183,7 @@ namespace ts.formatting {
         // Insert space after opening and before closing nonempty parenthesis
         public SpaceAfterOpenParen: Rule;
         public SpaceBeforeCloseParen: Rule;
+        public SpaceBetweenOpenParens: Rule;
         public NoSpaceBetweenParens: Rule;
         public NoSpaceAfterOpenParen: Rule;
         public NoSpaceBeforeCloseParen: Rule;
@@ -457,6 +446,7 @@ namespace ts.formatting {
             // Insert space after opening and before closing nonempty parenthesis
             this.SpaceAfterOpenParen = new Rule(RuleDescriptor.create3(SyntaxKind.OpenParenToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.SpaceBeforeCloseParen = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.SpaceBetweenOpenParens = new Rule(RuleDescriptor.create1(SyntaxKind.OpenParenToken, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.NoSpaceBetweenParens = new Rule(RuleDescriptor.create1(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterOpenParen = new Rule(RuleDescriptor.create3(SyntaxKind.OpenParenToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceBeforeCloseParen = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
@@ -544,7 +534,7 @@ namespace ts.formatting {
                 this.SpaceAfterComma, this.NoSpaceAfterComma,
                 this.SpaceAfterAnonymousFunctionKeyword, this.NoSpaceAfterAnonymousFunctionKeyword,
                 this.SpaceAfterKeywordInControl, this.NoSpaceAfterKeywordInControl,
-                this.SpaceAfterOpenParen, this.SpaceBeforeCloseParen, this.NoSpaceBetweenParens, this.NoSpaceAfterOpenParen, this.NoSpaceBeforeCloseParen,
+                this.SpaceAfterOpenParen, this.SpaceBeforeCloseParen, this.SpaceBetweenOpenParens, this.NoSpaceBetweenParens, this.NoSpaceAfterOpenParen, this.NoSpaceBeforeCloseParen,
                 this.SpaceAfterOpenBracket, this.SpaceBeforeCloseBracket, this.NoSpaceBetweenBrackets, this.NoSpaceAfterOpenBracket, this.NoSpaceBeforeCloseBracket,
                 this.SpaceAfterOpenBrace, this.SpaceBeforeCloseBrace, this.NoSpaceBetweenEmptyBraceBrackets, this.NoSpaceAfterOpenBrace, this.NoSpaceBeforeCloseBrace,
                 this.SpaceAfterTemplateHeadAndMiddle, this.SpaceBeforeTemplateMiddleAndTail, this.NoSpaceAfterTemplateHeadAndMiddle, this.NoSpaceBeforeTemplateMiddleAndTail,
@@ -567,6 +557,16 @@ namespace ts.formatting {
                 this.SpaceAfterSemicolon,
                 this.SpaceBetweenStatements, this.SpaceAfterTryFinally
             ];
+
+            if (Debug.isDebugging) {
+                const o: ts.MapLike<any> = <any>this;
+                for (const name in o) {
+                    const rule = o[name];
+                    if (rule instanceof Rule) {
+                        rule.debugName = name;
+                    }
+                }
+            }
         }
 
         ///

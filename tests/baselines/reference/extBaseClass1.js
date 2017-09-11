@@ -32,14 +32,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var M;
 (function (M) {
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B() {
             this.x = 10;
         }
         return B;
     }());
     M.B = B;
-    var C = (function (_super) {
+    var C = /** @class */ (function (_super) {
         __extends(C, _super);
         function C() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -49,7 +49,7 @@ var M;
     M.C = C;
 })(M || (M = {}));
 (function (M) {
-    var C2 = (function (_super) {
+    var C2 = /** @class */ (function (_super) {
         __extends(C2, _super);
         function C2() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -60,7 +60,7 @@ var M;
 })(M || (M = {}));
 var N;
 (function (N) {
-    var C3 = (function (_super) {
+    var C3 = /** @class */ (function (_super) {
         __extends(C3, _super);
         function C3() {
             return _super !== null && _super.apply(this, arguments) || this;

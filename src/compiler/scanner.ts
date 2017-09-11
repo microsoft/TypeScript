@@ -337,13 +337,13 @@ namespace ts {
             Debug.assert(res < lineStarts[line + 1]);
         }
         else if (debugText !== undefined) {
-            Debug.assert(res < debugText.length);
+            Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
         }
         return res;
     }
 
     /* @internal */
-    export function getLineStarts(sourceFile: SourceFileLike): number[] {
+    export function getLineStarts(sourceFile: SourceFileLike): ReadonlyArray<number> {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 

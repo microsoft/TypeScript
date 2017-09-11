@@ -205,13 +205,15 @@ namespace ts {
     }
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
-        let diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
-            program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-            program.getGlobalDiagnostics(cancellationToken),
-            program.getSemanticDiagnostics(sourceFile, cancellationToken));
+        const diagnostics = [
+            ...program.getOptionsDiagnostics(cancellationToken),
+            ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+            ...program.getGlobalDiagnostics(cancellationToken),
+            ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+        ];
 
         if (program.getCompilerOptions().declaration) {
-            diagnostics = diagnostics.concat(program.getDeclarationDiagnostics(sourceFile, cancellationToken));
+            addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
         }
 
         return sortAndDeduplicateDiagnostics(diagnostics);
@@ -223,7 +225,7 @@ namespace ts {
         getNewLine(): string;
     }
 
-    export function formatDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
+    export function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
         let output = "";
 
         for (const diagnostic of diagnostics) {
@@ -243,7 +245,7 @@ namespace ts {
     const redForegroundEscapeSequence = "\u001b[91m";
     const yellowForegroundEscapeSequence = "\u001b[93m";
     const blueForegroundEscapeSequence = "\u001b[93m";
-    const gutterStyleSequence = "\u001b[100;30m";
+    const gutterStyleSequence = "\u001b[30;47m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
@@ -266,7 +268,7 @@ namespace ts {
         return s;
     }
 
-    export function formatDiagnosticsWithColorAndContext(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
+    export function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
         let output = "";
         for (const diagnostic of diagnostics) {
             if (diagnostic.file) {
@@ -282,12 +284,12 @@ namespace ts {
                     gutterWidth = Math.max(ellipsis.length, gutterWidth);
                 }
 
-                output += sys.newLine;
+                output += host.getNewLine();
                 for (let i = firstLine; i <= lastLine; i++) {
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                        output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
+                        output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
                         i = lastLine - 1;
                     }
 
@@ -299,7 +301,7 @@ namespace ts {
 
                     // Output the gutter and the actual contents of the line.
                     output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    output += lineContent + sys.newLine;
+                    output += lineContent + host.getNewLine();
 
                     // Output the gutter and the error span for the line using tildes.
                     output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
@@ -321,17 +323,17 @@ namespace ts {
                     }
                     output += resetEscapeSequence;
 
-                    output += sys.newLine;
+                    output += host.getNewLine();
                 }
 
-                output += sys.newLine;
+                output += host.getNewLine();
                 output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
-            output += sys.newLine;
+            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
+            output += host.getNewLine();
         }
         return output;
     }
@@ -399,7 +401,7 @@ namespace ts {
      * @param oldProgram - Reuses an old program structure.
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -471,6 +473,15 @@ namespace ts {
             const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective;
             resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(checkAllDefined(typeReferenceDirectiveNames), containingFile, loader);
         }
+
+        // Map from a stringified PackageId to the source file with that id.
+        // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
+        // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
+        const packageIdToSourceFile = createMap<SourceFile>();
+        // Maps from a SourceFile's `.path` to the name of the package it was imported with.
+        let sourceFileToPackageName = createMap<string>();
+        // See `sourceFileIsRedirectedTo`.
+        let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();
         // stores 'filename -> file association' ignoring case
@@ -548,6 +559,8 @@ namespace ts {
             isSourceFileFromExternalLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
+            sourceFileToPackageName,
+            redirectTargetsSet,
         };
 
         verifyCompilerOptions();
@@ -773,8 +786,12 @@ namespace ts {
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
             oldProgram.structureIsReused = StructureIsReused.Completely;
 
-            for (const oldSourceFile of oldProgram.getSourceFiles()) {
-                const newSourceFile = host.getSourceFileByPath
+            const oldSourceFiles = oldProgram.getSourceFiles();
+            const enum SeenPackageName { Exists, Modified }
+            const seenPackageNames = createMap<SeenPackageName>();
+
+            for (const oldSourceFile of oldSourceFiles) {
+                let newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
 
@@ -782,10 +799,46 @@ namespace ts {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
                 }
 
+                Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
+
+                let fileChanged: boolean;
+                if (oldSourceFile.redirectInfo) {
+                    // We got `newSourceFile` by path, so it is actually for the unredirected file.
+                    // This lets us know if the unredirected file has changed. If it has we should break the redirect.
+                    if (newSourceFile !== oldSourceFile.redirectInfo.unredirected) {
+                        // Underlying file has changed. Might not redirect anymore. Must rebuild program.
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
+                    fileChanged = false;
+                    newSourceFile = oldSourceFile; // Use the redirect.
+                }
+                else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
+                    // If a redirected-to source file changes, the redirect may be broken.
+                    if (newSourceFile !== oldSourceFile) {
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
+                    fileChanged = false;
+                }
+                else {
+                    fileChanged = newSourceFile !== oldSourceFile;
+                }
+
                 newSourceFile.path = oldSourceFile.path;
                 filePaths.push(newSourceFile.path);
 
-                if (oldSourceFile !== newSourceFile) {
+                const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
+                if (packageName !== undefined) {
+                    // If there are 2 different source files for the same package name and at least one of them changes,
+                    // they might become redirects. So we must rebuild the program.
+                    const prevKind = seenPackageNames.get(packageName);
+                    const newKind = fileChanged ? SeenPackageName.Modified : SeenPackageName.Exists;
+                    if ((prevKind !== undefined && newKind === SeenPackageName.Modified) || prevKind === SeenPackageName.Modified) {
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
+                    seenPackageNames.set(packageName, newKind);
+                }
+
+                if (fileChanged) {
                     // The `newSourceFile` object was created for the new program.
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
@@ -837,7 +890,7 @@ namespace ts {
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
-                    const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
+                    const moduleNames = getModuleNames(newSourceFile);
                     const oldProgramState = { program: oldProgram, file: oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
@@ -897,6 +950,9 @@ namespace ts {
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
 
+            sourceFileToPackageName = oldProgram.sourceFileToPackageName;
+            redirectTargetsSet = oldProgram.redirectTargetsSet;
+
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
 
@@ -942,7 +998,7 @@ namespace ts {
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
-            let declarationDiagnostics: Diagnostic[] = [];
+            let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
             if (options.noEmit) {
                 return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
@@ -952,10 +1008,12 @@ namespace ts {
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
             // get any preEmit diagnostics, not just the ones
             if (options.noEmitOnError) {
-                const diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
-                    program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-                    program.getGlobalDiagnostics(cancellationToken),
-                    program.getSemanticDiagnostics(sourceFile, cancellationToken));
+                const diagnostics = [
+                    ...program.getOptionsDiagnostics(cancellationToken),
+                    ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                    ...program.getGlobalDiagnostics(cancellationToken),
+                    ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+                ];
 
                 if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
                     declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
@@ -1006,8 +1064,8 @@ namespace ts {
 
         function getDiagnosticsHelper(
             sourceFile: SourceFile,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[],
-            cancellationToken: CancellationToken): Diagnostic[] {
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => ReadonlyArray<Diagnostic>,
+            cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
@@ -1019,15 +1077,15 @@ namespace ts {
             }));
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<Diagnostic> {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
@@ -1038,7 +1096,7 @@ namespace ts {
             }
         }
 
-        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
+        function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<Diagnostic> {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
             if (isSourceFileJavaScript(sourceFile)) {
@@ -1369,19 +1427,17 @@ namespace ts {
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib);
+            processSourceFile(normalizePath(fileName), isDefaultLib, /*packageId*/ undefined);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
             return a.fileName === b.fileName;
         }
 
-        function moduleNameIsEqualTo(a: LiteralExpression, b: LiteralExpression): boolean {
-            return a.text === b.text;
-        }
-
-        function getTextOfLiteral(literal: LiteralExpression): string {
-            return literal.text;
+        function moduleNameIsEqualTo(a: StringLiteral | Identifier, b: StringLiteral | Identifier): boolean {
+            return a.kind === SyntaxKind.StringLiteral
+                ? b.kind === SyntaxKind.StringLiteral && a.text === b.text
+                : b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText;
         }
 
         function collectExternalModuleReferences(file: SourceFile): void {
@@ -1394,7 +1450,7 @@ namespace ts {
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: StringLiteral[];
-            let moduleAugmentations: StringLiteral[];
+            let moduleAugmentations: Array<StringLiteral | Identifier>;
             let ambientModules: string[];
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
@@ -1423,7 +1479,7 @@ namespace ts {
 
             return;
 
-            function collectModuleReferences(node: Node, inAmbientModule: boolean): void {
+            function collectModuleReferences(node: Statement, inAmbientModule: boolean): void {
                 switch (node.kind) {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
@@ -1445,8 +1501,8 @@ namespace ts {
                         break;
                     case SyntaxKind.ModuleDeclaration:
                         if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
-                            const moduleName = <StringLiteral>(<ModuleDeclaration>node).name; // TODO: GH#17347
-                            const nameText = ts.getTextOfIdentifierOrLiteral(moduleName);
+                            const moduleName = (<ModuleDeclaration>node).name;
+                            const nameText = getTextOfIdentifierOrLiteral(moduleName);
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
                             // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
@@ -1535,9 +1591,9 @@ namespace ts {
         }
 
         /** This has side effects through `findSourceFile`. */
-        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, packageId: PackageId | undefined, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
             getSourceFileFromReferenceWorker(fileName,
-                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, refFile, refPos, refEnd),
+                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, refFile, refPos, refEnd, packageId),
                 (diagnostic, ...args) => {
                     fileProcessingDiagnostics.add(refFile !== undefined && refEnd !== undefined && refPos !== undefined
                         ? createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...args)
@@ -1556,8 +1612,26 @@ namespace ts {
             }
         }
 
+        function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path): SourceFile {
+            const redirect: SourceFile = Object.create(redirectTarget);
+            redirect.fileName = fileName;
+            redirect.path = path;
+            redirect.redirectInfo = { redirectTarget, unredirected };
+            Object.defineProperties(redirect, {
+                id: {
+                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.id; },
+                    set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo.redirectTarget.id = value; },
+                },
+                symbol: {
+                    get(this: SourceFile) { return this.redirectInfo.redirectTarget.symbol; },
+                    set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo.redirectTarget.symbol = value; },
+                },
+            });
+            return redirect;
+        }
+
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile: SourceFile, refPos: number, refEnd: number, packageId: PackageId | undefined): SourceFile | undefined {
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1600,6 +1674,26 @@ namespace ts {
                 }
             });
 
+            if (packageId) {
+                const packageIdKey = `${packageId.name}/${packageId.subModuleName}@${packageId.version}`;
+                const fileFromPackageId = packageIdToSourceFile.get(packageIdKey);
+                if (fileFromPackageId) {
+                    // Some other SourceFile already exists with this package name and version.
+                    // Instead of creating a duplicate, just redirect to the existing one.
+                    const dupFile = createRedirectSourceFile(fileFromPackageId, file, fileName, path);
+                    redirectTargetsSet.set(fileFromPackageId.path, true);
+                    filesByName.set(path, dupFile);
+                    sourceFileToPackageName.set(path, packageId.name);
+                    files.push(dupFile);
+                    return dupFile;
+                }
+                else if (file) {
+                    // This is the first source file to have this packageId.
+                    packageIdToSourceFile.set(packageIdKey, file);
+                    sourceFileToPackageName.set(path, packageId.name);
+                }
+            }
+
             filesByName.set(path, file);
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
@@ -1641,7 +1735,7 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, isDefaultLib, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, isDefaultLib, /*packageId*/ undefined, file, ref.pos, ref.end);
             });
         }
 
@@ -1672,7 +1766,7 @@ namespace ts {
             if (resolvedTypeReferenceDirective) {
                 if (resolvedTypeReferenceDirective.primary) {
                     // resolved from the primary path
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
+                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
                 }
                 else {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
@@ -1695,7 +1789,7 @@ namespace ts {
                     }
                     else {
                         // First resolution of this library
-                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
+                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
                     }
                 }
             }
@@ -1725,8 +1819,7 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
-                const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
-                const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
+                const moduleNames = getModuleNames(file);
                 const oldProgramState = { program: oldProgram, file, modifiedFilePaths };
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
@@ -1762,7 +1855,7 @@ namespace ts {
                     else if (shouldAddFile) {
                         const path = toPath(resolvedFileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);
-                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, file, pos, file.imports[i].end);
+                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, file, pos, file.imports[i].end, resolution.packageId);
                     }
 
                     if (isFromNodeModulesSearch) {
@@ -2136,5 +2229,16 @@ namespace ts {
     function checkAllDefined(names: string[]): string[] {
         Debug.assert(names.every(name => name !== undefined), "A name is undefined.", () => JSON.stringify(names));
         return names;
+    }
+
+    function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {
+        const res = imports.map(i => i.text);
+        for (const aug of moduleAugmentations) {
+            if (aug.kind === SyntaxKind.StringLiteral) {
+                res.push(aug.text);
+            }
+            // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
+        }
+        return res;
     }
 }
