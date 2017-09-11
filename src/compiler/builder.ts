@@ -80,6 +80,12 @@ namespace ts {
         }
     }
 
+    interface FileInfo {
+        fileName: string;
+        version: string;
+        signature: string;
+    }
+
     export function createBuilder(
         getCanonicalFileName: (fileName: string) => string,
         getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed,
@@ -87,10 +93,8 @@ namespace ts {
         shouldEmitFile: (sourceFile: SourceFile) => boolean
     ): Builder {
         let isModuleEmit: boolean | undefined;
-        // Last checked shape signature for the file info
-        type FileInfo = { fileName: string; version: string; signature: string; };
         const fileInfos = createMap<FileInfo>();
-        const semanticDiagnosticsPerFile = createMap<Diagnostic[]>();
+        const semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
         /** The map has key by source file's path that has been changed */
         const changedFileNames = createMap<string>();
         let emitHandler: EmitHandler;
@@ -257,13 +261,13 @@ namespace ts {
                 const cachedDiagnostics = semanticDiagnosticsPerFile.get(path);
                 // Report the semantic diagnostics from the cache if we already have those diagnostics present
                 if (cachedDiagnostics) {
-                    diagnostics = concatenate(diagnostics, cachedDiagnostics);
+                    diagnostics = addRange(diagnostics, cachedDiagnostics);
                 }
                 else {
                     // Diagnostics werent cached, get them from program, and cache the result
                     const cachedDiagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
                     semanticDiagnosticsPerFile.set(path, cachedDiagnostics);
-                    diagnostics = concatenate(diagnostics, cachedDiagnostics);
+                    diagnostics = addRange(diagnostics, cachedDiagnostics);
                 }
             }
             return diagnostics || emptyArray;

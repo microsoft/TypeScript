@@ -495,7 +495,7 @@ namespace ts {
         public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
-        public lineMap: number[];
+        public lineMap: ReadonlyArray<number>;
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
@@ -545,7 +545,7 @@ namespace ts {
             return ts.getLineAndCharacterOfPosition(this, position);
         }
 
-        public getLineStarts(): number[] {
+        public getLineStarts(): ReadonlyArray<number> {
             return getLineStarts(this);
         }
 
@@ -721,6 +721,12 @@ namespace ts {
                             }
                         }
                         break;
+
+                    case SyntaxKind.BinaryExpression:
+                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                           addDeclaration(node as BinaryExpression);
+                        }
+                        // falls through
 
                     default:
                         forEachChild(node, visit);
@@ -1285,10 +1291,10 @@ namespace ts {
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(fileName: string) {
+        function getSyntacticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
         }
 
         /**
@@ -1305,18 +1311,17 @@ namespace ts {
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
-                return semanticDiagnostics;
+                return semanticDiagnostics.slice();
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-            return concatenate(semanticDiagnostics, declarationDiagnostics);
+            return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getOptionsDiagnostics(cancellationToken).concat(
-                   program.getGlobalDiagnostics(cancellationToken));
+            return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
@@ -1348,7 +1353,7 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
                 // Try getting just type at this position and show
@@ -1385,6 +1390,21 @@ namespace ts {
                 documentation: displayPartsDocumentationsAndKind.documentation,
                 tags: displayPartsDocumentationsAndKind.tags
             };
+        }
+
+        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+            if ((isIdentifier(node) || isStringLiteral(node))
+                && isPropertyAssignment(node.parent)
+                && node.parent.name === node) {
+                const type = checker.getContextualType(node.parent.parent);
+                if (type) {
+                    const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
+                    if (property) {
+                        return property;
+                    }
+                }
+            }
+            return checker.getSymbolAtLocation(node);
         }
 
         /// Goto definition
@@ -2029,7 +2049,7 @@ namespace ts {
             }
 
             forEachChild(node, walk);
-            if (node.jsDoc) {
+            if (hasJSDocNodes(node)) {
                 for (const jsDoc of node.jsDoc) {
                     forEachChild(jsDoc, walk);
                 }

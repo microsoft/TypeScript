@@ -14,6 +14,7 @@
         "parser.ts",
         "utilities.ts",
         "binder.ts",
+        "symbolWalker.ts",
         "checker.ts",
         "factory.ts",
         "visitor.ts",

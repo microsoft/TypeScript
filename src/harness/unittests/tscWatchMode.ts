@@ -1030,7 +1030,7 @@ namespace ts.tscWatch {
         const file1Consumer1Path = "/a/b/file1Consumer1.ts";
         const moduleFile1Path = "/a/b/moduleFile1.ts";
         const configFilePath = "/a/b/tsconfig.json";
-        type InitialStateParams = {
+        interface InitialStateParams {
             /** custom config file options */
             configObj?: any;
             /** list of the files that will be emitted for first compilation */
@@ -1041,7 +1041,7 @@ namespace ts.tscWatch {
             getAdditionalFileOrFolder?(): FileOrFolder[];
             /** initial list of files to emit if not the default list */
             firstReloadFileList?: string[];
-        };
+        }
         function getInitialState({ configObj = {}, firstCompilationEmitFiles, getEmitLine, getAdditionalFileOrFolder, firstReloadFileList }: InitialStateParams = {}) {
             const host = createWatchedSystem([]);
             const getOutputName = getEmitLine ? (file: FileOrFolder) => getEmitLine(file, host) :

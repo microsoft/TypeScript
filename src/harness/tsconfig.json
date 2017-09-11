@@ -21,6 +21,7 @@
         "../compiler/parser.ts",
         "../compiler/utilities.ts",
         "../compiler/binder.ts",
+        "../compiler/symbolWalker.ts",
         "../compiler/checker.ts",
         "../compiler/factory.ts",
         "../compiler/visitor.ts",
@@ -105,6 +106,7 @@
         "./unittests/services/preProcessFile.ts",
         "./unittests/services/patternMatcher.ts",
         "./unittests/session.ts",
+        "./unittests/symbolWalker.ts",
         "./unittests/versionCache.ts",
         "./unittests/convertToBase64.ts",
         "./unittests/transpile.ts",
@@ -125,8 +127,10 @@
         "./unittests/printer.ts",
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
+        "./unittests/extractMethods.ts",
         "./unittests/textChanges.ts",
         "./unittests/telemetry.ts",
+        "./unittests/languageService.ts",
         "./unittests/programMissingFiles.ts"
     ]
 }

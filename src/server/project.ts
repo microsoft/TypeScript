@@ -426,7 +426,7 @@ namespace ts.server {
                     this.projectService.toCanonicalFileName,
                     (_program, sourceFile, emitOnlyDts, isDetailed) => this.getFileEmitOutput(sourceFile, emitOnlyDts, isDetailed),
                     data => this.projectService.host.createHash(data),
-                    sourceFile => !this.projectService.getScriptInfoForPath(sourceFile.path).hasMixedContent
+                    sourceFile => !this.projectService.getScriptInfoForPath(sourceFile.path).isDynamicOrHasMixedContent()
                 );
             }
         }
@@ -577,6 +577,10 @@ namespace ts.server {
                 return undefined;
             }
             return this.getLanguageService(/*ensureSynchronized*/ false).getEmitOutput(sourceFile.fileName, emitOnlyDtsFiles, isDetailed);
+        }
+
+        getExcludedFiles(): ReadonlyArray<NormalizedPath> {
+            return emptyArray;
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
@@ -744,35 +748,34 @@ namespace ts.server {
                 this.cachedUnresolvedImportsPerFile.remove(file);
             }
 
-            // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
-            // (can reuse cached imports for files that were not changed)
-            // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
-            // (can reuse cached imports for files that were not changed)
-            // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            let unresolvedImports: SortedReadonlyArray<string>;
-            if (hasChanges || changedFiles.length) {
-                const result: string[] = [];
-                for (const sourceFile of this.program.getSourceFiles()) {
-                    this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
-                }
-                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
-            }
-            unresolvedImports = this.lastCachedUnresolvedImportsList;
-
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, unresolvedImports, hasChanges);
-            if (this.setTypings(cachedTypings)) {
-                hasChanges = this.updateGraphWorker() || hasChanges;
-            }
-
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
-            // Note we are retaining builder so we can send events for project change
-            if (this.builder) {
-                if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled) {
+                // 1. no changes in structure, no changes in unresolved imports - do nothing
+                // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
+                // (can reuse cached imports for files that were not changed)
+                // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
+                // (can reuse cached imports for files that were not changed)
+                // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
+                if (hasChanges || changedFiles.length) {
+                    const result: string[] = [];
+                    for (const sourceFile of this.program.getSourceFiles()) {
+                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                    }
+                    this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
+                }
+
+                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
+                if (this.setTypings(cachedTypings)) {
+                    hasChanges = this.updateGraphWorker() || hasChanges;
+                }
+                if (this.builder) {
                     this.builder.onProgramUpdateGraph(this.program, this.hasInvalidatedResolution);
                 }
-                else {
+            }
+            else {
+                this.lastCachedUnresolvedImportsList = undefined;
+                if (this.builder) {
                     this.builder.clear();
                 }
             }
@@ -1345,6 +1348,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
+        excludedFiles: ReadonlyArray<NormalizedPath> = [];
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -1355,6 +1359,10 @@ namespace ts.server {
             private readonly projectFilePath?: string) {
             super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, projectService.host);
             this.resolutionCache.setRootDirectory(this.getProjectRootPath());
+        }
+
+        getExcludedFiles() {
+            return this.excludedFiles;
         }
 
         getProjectRootPath() {

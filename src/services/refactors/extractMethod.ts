@@ -40,7 +40,7 @@ namespace ts.refactor.extractMethod {
             // Don't issue refactorings with duplicated names.
             // Scopes come back in "innermost first" order, so extractions will
             // preferentially go into nearer scopes
-            const description = formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [extr.scopeDescription]);
+            const description = formatStringFromArgs(Diagnostics.Extract_to_0.message, [extr.scopeDescription]);
             if (!usedNames.has(description)) {
                 usedNames.set(description, true);
                 actions.push({
@@ -95,7 +95,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
         export const TypeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
         export const FunctionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
-        export const InsufficientSelection = createMessage("Select more than a single identifier.");
+        export const InsufficientSelection = createMessage("Select more than a single token.");
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
         export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
         export const CannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
@@ -231,18 +231,7 @@ namespace ts.refactor.extractMethod {
             if (errors) {
                 return { errors };
             }
-
-            // If our selection is the expression in an ExpressionStatement, expand
-            // the selection to include the enclosing Statement (this stops us
-            // from trying to care about the return value of the extracted function
-            // and eliminates double semicolon insertion in certain scenarios)
-            const range = isStatement(start)
-                ? [start]
-                : start.parent && start.parent.kind === SyntaxKind.ExpressionStatement
-                    ? [start.parent as Statement]
-                    : start as Expression;
-
-            return { targetRange: { range, facts: rangeFacts, declarations } };
+            return { targetRange: { range: getStatementOrExpressionRange(start), facts: rangeFacts, declarations } };
         }
 
         function createErrorResult(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage): RangeToExtract {
@@ -250,7 +239,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
-            if (isIdentifier(node)) {
+            if (isToken(node)) {
                 return [createDiagnosticForNode(node, Messages.InsufficientSelection)];
             }
             return undefined;
@@ -289,7 +278,7 @@ namespace ts.refactor.extractMethod {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
-            if (!isStatement(nodeToCheck) && !(isExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isPartOfExpression(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.StatementOrExpressionExpected)];
             }
 
@@ -363,45 +352,31 @@ namespace ts.refactor.extractMethod {
                     return false;
                 }
                 const savedPermittedJumps = permittedJumps;
-                if (node.parent) {
-                    switch (node.parent.kind) {
-                        case SyntaxKind.IfStatement:
-                            if ((<IfStatement>node.parent).thenStatement === node || (<IfStatement>node.parent).elseStatement === node) {
-                                // forbid all jumps inside thenStatement or elseStatement
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            break;
-                        case SyntaxKind.TryStatement:
-                            if ((<TryStatement>node.parent).tryBlock === node) {
-                                // forbid all jumps inside try blocks
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            else if ((<TryStatement>node.parent).finallyBlock === node) {
-                                // allow unconditional returns from finally blocks
-                                permittedJumps = PermittedJumps.Return;
-                            }
-                            break;
-                        case SyntaxKind.CatchClause:
-                            if ((<CatchClause>node.parent).block === node) {
-                                // forbid all jumps inside the block of catch clause
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            break;
-                        case SyntaxKind.CaseClause:
-                            if ((<CaseClause>node).expression !== node) {
-                                // allow unlabeled break inside case clauses
-                                permittedJumps |= PermittedJumps.Break;
-                            }
-                            break;
-                        default:
-                            if (isIterationStatement(node.parent, /*lookInLabeledStatements*/ false)) {
-                                if ((<IterationStatement>node.parent).statement === node) {
-                                    // allow unlabeled break/continue inside loops
-                                    permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
-                                }
-                            }
-                            break;
-                    }
+
+                switch (node.kind) {
+                    case SyntaxKind.IfStatement:
+                        permittedJumps = PermittedJumps.None;
+                        break;
+                    case SyntaxKind.TryStatement:
+                        // forbid all jumps inside try blocks
+                        permittedJumps = PermittedJumps.None;
+                        break;
+                    case SyntaxKind.Block:
+                        if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (<TryStatement>node).finallyBlock === node) {
+                            // allow unconditional returns from finally blocks
+                            permittedJumps = PermittedJumps.Return;
+                        }
+                        break;
+                    case SyntaxKind.CaseClause:
+                        // allow unlabeled break inside case clauses
+                        permittedJumps |= PermittedJumps.Break;
+                        break;
+                    default:
+                        if (isIterationStatement(node, /*lookInLabeledStatements*/ false)) {
+                            // allow unlabeled break/continue inside loops
+                            permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
+                        }
+                        break;
                 }
 
                 switch (node.kind) {
@@ -428,7 +403,7 @@ namespace ts.refactor.extractMethod {
                                 }
                             }
                             else {
-                                if (!(permittedJumps & (SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                                if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
                                     // attempt to break or continue in a forbidden context
                                     (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements));
                                 }
@@ -457,6 +432,20 @@ namespace ts.refactor.extractMethod {
                 permittedJumps = savedPermittedJumps;
             }
         }
+    }
+
+    function getStatementOrExpressionRange(node: Node): Statement[] | Expression {
+        if (isStatement(node)) {
+            return [node];
+        }
+        else if (isPartOfExpression(node)) {
+            // If our selection is the expression in an ExpressionStatement, expand
+            // the selection to include the enclosing Statement (this stops us
+            // from trying to care about the return value of the extracted function
+            // and eliminates double semicolon insertion in certain scenarios)
+            return isExpressionStatement(node.parent) ? [node.parent] : node as Expression;
+        }
+        return undefined;
     }
 
     function isValidExtractionTarget(node: Node): node is Scope {
@@ -528,7 +517,8 @@ namespace ts.refactor.extractMethod {
             scopes,
             enclosingTextRange,
             sourceFile,
-            context.program.getTypeChecker());
+            context.program.getTypeChecker(),
+            context.cancellationToken);
 
         context.cancellationToken.throwIfCancellationRequested();
 
@@ -553,43 +543,44 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function getDescriptionForScope(scope: Scope) {
-        if (isFunctionLike(scope)) {
-            switch (scope.kind) {
-                case SyntaxKind.Constructor:
-                    return "constructor";
-                case SyntaxKind.FunctionExpression:
-                    return scope.name
-                        ? `function expression ${scope.name.getText()}`
-                        : "anonymous function expression";
-                case SyntaxKind.FunctionDeclaration:
-                    return `function ${scope.name.getText()}`;
-                case SyntaxKind.ArrowFunction:
-                    return "arrow function";
-                case SyntaxKind.MethodDeclaration:
-                    return `method ${scope.name.getText()}`;
-                case SyntaxKind.GetAccessor:
-                    return `get ${scope.name.getText()}`;
-                case SyntaxKind.SetAccessor:
-                    return `set ${scope.name.getText()}`;
-            }
+    function getDescriptionForScope(scope: Scope): string {
+        return isFunctionLikeDeclaration(scope)
+            ? `inner function in ${getDescriptionForFunctionLikeDeclaration(scope)}`
+            : isClassLike(scope)
+                ? `method in ${getDescriptionForClassLikeDeclaration(scope)}`
+                : `function in ${getDescriptionForModuleLikeDeclaration(scope)}`;
+    }
+    function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration): string {
+        switch (scope.kind) {
+            case SyntaxKind.Constructor:
+                return "constructor";
+            case SyntaxKind.FunctionExpression:
+                return scope.name
+                    ? `function expression '${scope.name.text}'`
+                    : "anonymous function expression";
+            case SyntaxKind.FunctionDeclaration:
+                return `function '${scope.name.text}'`;
+            case SyntaxKind.ArrowFunction:
+                return "arrow function";
+            case SyntaxKind.MethodDeclaration:
+                return `method '${scope.name.getText()}`;
+            case SyntaxKind.GetAccessor:
+                return `'get ${scope.name.getText()}'`;
+            case SyntaxKind.SetAccessor:
+                return `'set ${scope.name.getText()}'`;
+            default:
+                Debug.assertNever(scope);
         }
-        else if (isModuleBlock(scope)) {
-            return `namespace ${scope.parent.name.getText()}`;
-        }
-        else if (isClassLike(scope)) {
-            return scope.kind === SyntaxKind.ClassDeclaration
-                ? `class ${scope.name.text}`
-                : scope.name.text
-                    ? `class expression ${scope.name.text}`
-                    : "anonymous class expression";
-        }
-        else if (isSourceFile(scope)) {
-            return `file '${scope.fileName}'`;
-        }
-        else {
-            return "unknown";
-        }
+    }
+    function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
+        return scope.kind === SyntaxKind.ClassDeclaration
+            ? `class '${scope.name.text}'`
+            : scope.name ? `class expression '${scope.name.text}'` : "anonymous class expression";
+    }
+    function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string {
+        return scope.kind === SyntaxKind.ModuleBlock
+            ? `namespace '${scope.parent.name.getText()}'`
+            : scope.externalModuleIndicator ? "module scope" : "global scope";
     }
 
     function getUniqueName(isNameOkay: (name: string) => boolean) {
@@ -607,7 +598,7 @@ namespace ts.refactor.extractMethod {
     export function extractFunctionInScope(
         node: Statement | Expression | Block,
         scope: Scope,
-        { usages: usagesInScope, substitutions }: ScopeUsages,
+        { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages,
         range: TargetRange,
         context: RefactorContext): ExtractResultForScope {
 
@@ -649,7 +640,20 @@ namespace ts.refactor.extractMethod {
             callArguments.push(createIdentifier(name));
         });
 
-        // Provide explicit return types for contexutally-typed functions
+        const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
+        const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
+
+        const typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined = sortedTypeParametersAndDeclarations.length === 0
+            ? undefined
+            : sortedTypeParametersAndDeclarations.map(t => t.declaration as TypeParameterDeclaration);
+
+        // Strictly speaking, we should check whether each name actually binds to the appropriate type
+        // parameter.  In cases of shadowing, they may not.
+        const callTypeArguments: ReadonlyArray<TypeNode> | undefined = typeParameters !== undefined
+            ? typeParameters.map(decl => createTypeReferenceNode(decl.name, /*typeArguments*/ undefined))
+            : undefined;
+
+        // Provide explicit return types for contextually-typed functions
         // to avoid problems when there are literal types present
         if (isExpression(node) && !isJS) {
             const contextualType = checker.getContextualType(node);
@@ -674,7 +678,7 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
                 /*questionToken*/ undefined,
-                /*typeParameters*/[],
+                typeParameters,
                 parameters,
                 returnType,
                 body
@@ -686,14 +690,14 @@ namespace ts.refactor.extractMethod {
                 range.facts & RangeFacts.IsAsyncFunction ? [createToken(SyntaxKind.AsyncKeyword)] : undefined,
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
-                /*typeParameters*/[],
+                typeParameters,
                 parameters,
                 returnType,
                 body
             );
         }
 
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
         // insert function at the end of the scope
         changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
 
@@ -701,7 +705,7 @@ namespace ts.refactor.extractMethod {
         // replace range with function call
         let call: Expression = createCall(
             isClassLike(scope) ? createPropertyAccess(range.facts & RangeFacts.InStaticRegion ? createIdentifier(scope.name.getText()) : createThis(), functionReference) : functionReference,
-            /*typeArguments*/ undefined,
+            callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
             call = createYield(createToken(SyntaxKind.AsteriskToken), call);
@@ -731,6 +735,10 @@ namespace ts.refactor.extractMethod {
                 }
                 else {
                     newNodes.push(createStatement(createBinary(assignments[0].name, SyntaxKind.EqualsToken, call)));
+
+                    if (range.facts & RangeFacts.HasReturn) {
+                        newNodes.push(createReturn());
+                    }
                 }
             }
             else {
@@ -770,6 +778,51 @@ namespace ts.refactor.extractMethod {
             scopeDescription: getDescriptionForScope(scope),
             changes: changeTracker.getChanges()
         };
+
+        function getFirstDeclaration(type: Type): Declaration | undefined {
+            let firstDeclaration = undefined;
+
+            const symbol = type.symbol;
+            if (symbol && symbol.declarations) {
+                for (const declaration of symbol.declarations) {
+                    if (firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) {
+                        firstDeclaration = declaration;
+                    }
+                }
+            }
+
+            return firstDeclaration;
+        }
+
+        function compareTypesByDeclarationOrder(
+            {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
+            {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
+
+            if (declaration1) {
+                if (declaration2) {
+                    const positionDiff = declaration1.pos - declaration2.pos;
+                    if (positionDiff !== 0) {
+                        return positionDiff;
+                    }
+                }
+                else {
+                    return 1; // Sort undeclared type parameters to the front.
+                }
+            }
+            else if (declaration2) {
+                return -1; // Sort undeclared type parameters to the front.
+            }
+
+            const name1 = type1.symbol ? type1.symbol.getName() : "";
+            const name2 = type2.symbol ? type2.symbol.getName() : "";
+            const nameDiff = compareStrings(name1, name2);
+            if (nameDiff !== 0) {
+                return nameDiff;
+            }
+
+            // IDs are guaranteed to be unique, so this ensures a total ordering.
+            return type1.id - type2.id;
+        }
 
         function getPropertyAssignmentsForWrites(writes: UsageEntry[]) {
             return writes.map(w => createShorthandPropertyAssignment(w.symbol.name));
@@ -856,7 +909,7 @@ namespace ts.refactor.extractMethod {
         Write = 2
     }
 
-    interface UsageEntry {
+    export interface UsageEntry {
         readonly usage: Usage;
         readonly symbol: Symbol;
         readonly node: Node;
@@ -864,6 +917,7 @@ namespace ts.refactor.extractMethod {
 
     export interface ScopeUsages {
         usages: Map<UsageEntry>;
+        typeParameterUsages: Map<TypeParameter>; // Key is type ID
         substitutions: Map<Node>;
     }
 
@@ -872,8 +926,10 @@ namespace ts.refactor.extractMethod {
         scopes: Scope[],
         enclosingTextRange: TextRange,
         sourceFile: SourceFile,
-        checker: TypeChecker) {
+        checker: TypeChecker,
+        cancellationToken: CancellationToken) {
 
+        const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
         const substitutionsPerScope: Map<Node>[] = [];
         const errorsPerScope: Diagnostic[][] = [];
@@ -881,15 +937,58 @@ namespace ts.refactor.extractMethod {
 
         // initialize results
         for (const _ of scopes) {
-            usagesPerScope.push({ usages: createMap<UsageEntry>(), substitutions: createMap<Expression>() });
+            usagesPerScope.push({ usages: createMap<UsageEntry>(), typeParameterUsages: createMap<TypeParameter>(), substitutions: createMap<Expression>() });
             substitutionsPerScope.push(createMap<Expression>());
             errorsPerScope.push([]);
         }
+
         const seenUsages = createMap<Usage>();
         const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
         const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent) ? scopes[0] : getEnclosingBlockScopeContainer(scopes[0]);
 
+        const unmodifiedNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
+        const inGenericContext = isInGenericContext(unmodifiedNode);
+
         collectUsages(target);
+
+        // Unfortunately, this code takes advantage of the knowledge that the generated method
+        // will use the contextual type of an expression as the return type of the extracted
+        // method (and will therefore "use" all the types involved).
+        if (inGenericContext && !isReadonlyArray(targetRange.range)) {
+            const contextualType = checker.getContextualType(targetRange.range);
+            recordTypeParameterUsages(contextualType);
+        }
+
+        if (allTypeParameterUsages.size > 0) {
+            const seenTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
+
+            let i = 0;
+            for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
+                if (curr === scopes[i]) {
+                    // Copy current contents of seenTypeParameterUsages into scope.
+                    seenTypeParameterUsages.forEach((typeParameter, id) => {
+                        usagesPerScope[i].typeParameterUsages.set(id, typeParameter);
+                    });
+
+                    i++;
+                }
+
+                // Note that we add the current node's type parameters *after* updating the corresponding scope.
+                if (isDeclarationWithTypeParameters(curr) && curr.typeParameters) {
+                    for (const typeParameterDecl of curr.typeParameters) {
+                        const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as TypeParameter;
+                        if (allTypeParameterUsages.has(typeParameter.id.toString())) {
+                            seenTypeParameterUsages.set(typeParameter.id.toString(), typeParameter);
+                        }
+                    }
+                }
+            }
+
+            // If we didn't get through all the scopes, then there were some that weren't in our
+            // parent chain (impossible at time of writing).  A conservative solution would be to
+            // copy allTypeParameterUsages into all remaining scopes.
+            Debug.assert(i === scopes.length);
+        }
 
         for (let i = 0; i < scopes.length; i++) {
             let hasWrite = false;
@@ -909,7 +1008,7 @@ namespace ts.refactor.extractMethod {
                 errorsPerScope[i].push(createDiagnosticForNode(targetRange.range, Messages.CannotCombineWritesAndReturns));
             }
             else if (readonlyClassPropertyWrite && i > 0) {
-                errorsPerScope[i].push(createDiagnosticForNode(readonlyClassPropertyWrite, Messages.CannotCombineWritesAndReturns));
+                errorsPerScope[i].push(createDiagnosticForNode(readonlyClassPropertyWrite, Messages.CannotExtractReadonlyPropertyInitializerOutsideConstructor));
             }
         }
 
@@ -921,7 +1020,42 @@ namespace ts.refactor.extractMethod {
 
         return { target, usagesPerScope, errorsPerScope };
 
+        function hasTypeParameters(node: Node) {
+            return isDeclarationWithTypeParameters(node) &&
+                node.typeParameters !== undefined &&
+                node.typeParameters.length > 0;
+        }
+
+        function isInGenericContext(node: Node) {
+            for (; node; node = node.parent) {
+                if (hasTypeParameters(node)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function recordTypeParameterUsages(type: Type) {
+            // PERF: This is potentially very expensive.  `type` could be a library type with
+            // a lot of properties, each of which the walker will visit.  Unfortunately, the
+            // solution isn't as trivial as filtering to user types because of (e.g.) Array.
+            const symbolWalker = checker.getSymbolWalker(() => (cancellationToken.throwIfCancellationRequested(), true));
+            const {visitedTypes} = symbolWalker.walkType(type);
+
+            for (const visitedType of visitedTypes) {
+                if (visitedType.flags & TypeFlags.TypeParameter) {
+                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
+                }
+            }
+        }
+
         function collectUsages(node: Node, valueUsage = Usage.Read) {
+            if (inGenericContext) {
+                const type = checker.getTypeAtLocation(node);
+                recordTypeParameterUsages(type);
+            }
+
             if (isDeclaration(node) && node.symbol) {
                 visibleDeclarationsInExtractedRange.push(node.symbol);
             }

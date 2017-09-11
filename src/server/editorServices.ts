@@ -108,6 +108,11 @@ namespace ts.server {
         "smart": IndentStyle.Smart
     });
 
+    export interface TypesMapFile {
+        typesMap: SafeList;
+        simpleMap: string[];
+    }
+
     /**
      * How to understand this block:
      *  * The 'match' property is a regexp that matches a filename.
@@ -228,7 +233,7 @@ namespace ts.server {
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
         getFileName: x => x.fileName,
         getScriptKind: x => tryConvertScriptKindName(x.scriptKind),
-        hasMixedContent: x => x.hasMixedContent
+        hasMixedContent: x => x.hasMixedContent,
     };
 
     function findProjectByName<T extends Project>(projectName: string, projects: T[]): T {
@@ -297,6 +302,7 @@ namespace ts.server {
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
+        typesMapLocation?: string;
     }
 
     type WatchFile = (host: ServerHost, file: string, cb: FileWatcherCallback, watchType: WatchType, project?: Project) => FileWatcher;
@@ -373,6 +379,7 @@ namespace ts.server {
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
+        public readonly typesMapLocation: string | undefined;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
@@ -396,12 +403,17 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.host.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
+
+            if (opts.typesMapLocation) {
+                this.loadTypesMap();
+            }
 
             this.typingsInstaller.attach(this);
 
@@ -460,6 +472,27 @@ namespace ts.server {
                 data: { project, languageServiceEnabled }
             };
             this.eventHandler(event);
+        }
+
+        private loadTypesMap() {
+            try {
+                const fileContent = this.host.readFile(this.typesMapLocation);
+                if (fileContent === undefined) {
+                    this.logger.info(`Provided types map file "${this.typesMapLocation}" doesn't exist`);
+                    return;
+                }
+                const raw: TypesMapFile = JSON.parse(fileContent);
+                // Parse the regexps
+                for (const k of Object.keys(raw.typesMap)) {
+                    raw.typesMap[k].match = new RegExp(raw.typesMap[k].match as {} as string, "i");
+                }
+                // raw is now fixed and ready
+                this.safelist = raw.typesMap;
+            }
+            catch (e) {
+                this.logger.info(`Error loading types map: ${e}`);
+                this.safelist = defaultTypeSafeList;
+            }
         }
 
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
@@ -1442,10 +1475,11 @@ namespace ts.server {
             for (const f of files) {
                 const newRootFile = propertyReader.getFileName(f);
                 const normalizedPath = toNormalizedPath(newRootFile);
+                const isDynamic = isDynamicFileName(normalizedPath);
                 let scriptInfo: ScriptInfo | NormalizedPath;
                 let path: Path;
                 // Use the project's fileExists so that it can use caching instead of reaching to disk for the query
-                if (!project.fileExists(newRootFile)) {
+                if (!isDynamic && !project.fileExists(newRootFile)) {
                     path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path);
                     if (isScriptInfo(existingValue)) {
@@ -1620,7 +1654,7 @@ namespace ts.server {
         private watchClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.fileWatcher);
             // do not watch files with mixed content - server doesn't know how to interpret it
-            if (!info.hasMixedContent) {
+            if (!info.isDynamicOrHasMixedContent()) {
                 const { fileName } = info;
                 info.fileWatcher = this.watchFile(
                     this.host,
@@ -1651,8 +1685,9 @@ namespace ts.server {
             const path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
+                const isDynamic = isDynamicFileName(fileName);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
-                if (!openedByClient && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
+                if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
                 }
                 info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent, path);
@@ -1940,7 +1975,7 @@ namespace ts.server {
             if (openFiles) {
                 for (const file of openFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
-                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen());
+                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
                     this.openClientFileWithNormalizedPath(normalizedPath, file.content, tryConvertScriptKindName(file.scriptKind), file.hasMixedContent);
                 }
@@ -1981,12 +2016,13 @@ namespace ts.server {
             }
         }
 
-        private closeConfiguredProject(configFile: NormalizedPath) {
+        private closeConfiguredProject(configFile: NormalizedPath): boolean {
             const configuredProject = this.findConfiguredProjectByProjectName(configFile);
             if (configuredProject && configuredProject.deleteOpenRef() === 0) {
                 this.removeProject(configuredProject);
+                return true;
             }
-            return configuredProject;
+            return false;
         }
 
         closeExternalProject(uncheckedFileName: string, suppressRefresh = false): void {
@@ -2047,23 +2083,14 @@ namespace ts.server {
             this.safelist = defaultTypeSafeList;
         }
 
-        loadSafeList(fileName: string): void {
-            const raw: SafeList = JSON.parse(this.host.readFile(fileName, "utf-8"));
-            // Parse the regexps
-            for (const k of Object.keys(raw)) {
-                raw[k].match = new RegExp(raw[k].match as {} as string, "i");
-            }
-            // raw is now fixed and ready
-            this.safelist = raw;
-        }
-
-        applySafeList(proj: protocol.ExternalProject): void {
+        applySafeList(proj: protocol.ExternalProject): NormalizedPath[] {
             const { rootFiles, typeAcquisition } = proj;
             const types = (typeAcquisition && typeAcquisition.include) || [];
 
             const excludeRules: string[] = [];
 
-            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
+            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName)) as NormalizedPath[];
+            const excludedFiles: NormalizedPath[] = [];
 
             for (const name of Object.keys(this.safelist)) {
                 const rule = this.safelist[name];
@@ -2122,7 +2149,17 @@ namespace ts.server {
             }
 
             const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
-            proj.rootFiles = proj.rootFiles.filter((_file, index) => !excludeRegexes.some(re => re.test(normalizedNames[index])));
+            const filesToKeep: ts.server.protocol.ExternalFile[] = [];
+            for (let i = 0; i < proj.rootFiles.length; i++) {
+                if (excludeRegexes.some(re => re.test(normalizedNames[i]))) {
+                    excludedFiles.push(normalizedNames[i]);
+                }
+                else {
+                    filesToKeep.push(proj.rootFiles[i]);
+                }
+            }
+            proj.rootFiles = filesToKeep;
+            return excludedFiles;
         }
 
         openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects = false): void {
@@ -2133,7 +2170,7 @@ namespace ts.server {
                 proj.typeAcquisition = typeAcquisition;
             }
 
-            this.applySafeList(proj);
+            const excludedFiles = this.applySafeList(proj);
 
             let tsConfigFiles: NormalizedPath[];
             const rootFiles: protocol.ExternalFile[] = [];
@@ -2157,6 +2194,7 @@ namespace ts.server {
             const externalProject = this.findExternalProjectByProjectName(proj.projectFileName);
             let exisingConfigFiles: string[];
             if (externalProject) {
+                externalProject.excludedFiles = excludedFiles;
                 if (!tsConfigFiles) {
                     const compilerOptions = convertCompilerOptions(proj.options);
                     if (this.exceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader)) {
@@ -2225,7 +2263,8 @@ namespace ts.server {
             else {
                 // no config files - remove the item from the collection
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
-                this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
+                const newProj = this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
+                newProj.excludedFiles = excludedFiles;
             }
             if (!suppressRefreshOfInferredProjects) {
                 this.ensureProjectStructuresUptoDate(/*refreshInferredProjects*/ true);

@@ -10,8 +10,11 @@
 ////     }
 //// }
 goTo.select('start', 'end')
-verify.refactorAvailable('Extract Method');
-edit.applyRefactor('Extract Method', "scope_2");
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_2",
+    actionDescription: "Extract to function in global scope",
+});
 verify.currentFileContentIs(
 `namespace NS {
     class Q {

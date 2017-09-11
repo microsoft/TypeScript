@@ -16,14 +16,28 @@ namespace ts.projectSystem {
     import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
     import safeList = ts.TestFSWithWatch.safeList;
 
-    const customSafeList = {
-        path: <Path>"/typeMapList.json",
-        content: JSON.stringify({
-            "quack": {
-                "match": "/duckquack-(\\d+)\\.min\\.js",
-                "types": ["duck-types"]
+    export const customTypesMap = {
+        path: <Path>"/typesMap.json",
+        content: `{
+            "typesMap": {
+                "jquery": {
+                    "match": "jquery(-(\\\\.?\\\\d+)+)?(\\\\.intellisense)?(\\\\.min)?\\\\.js$",
+                    "types": ["jquery"]
+                },
+                "quack": {
+                    "match": "/duckquack-(\\\\d+)\\\\.min\\\\.js",
+                    "types": ["duck-types"]
+                }
             },
-        })
+            "simpleMap": {
+                "Bacon": "baconjs",
+                "bliss": "blissfuljs",
+                "commander": "commander",
+                "cordova": "cordova",
+                "react": "react",
+                "lodash": "lodash"
+            }
+        }`
     };
 
     export interface PostExecAction {
@@ -51,7 +65,7 @@ namespace ts.projectSystem {
             installTypingHost: server.ServerHost,
             readonly typesRegistry = createMap<void>(),
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, customTypesMap.path, throttleLimit, log);
         }
 
         protected postExecActions: PostExecAction[] = [];
@@ -196,6 +210,7 @@ namespace ts.projectSystem {
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller,
+                typesMapLocation: customTypesMap.path,
                 eventHandler,
                 ...opts
             });
@@ -319,7 +334,11 @@ namespace ts.projectSystem {
         }
     }
 
-    type ErrorInformation = { diagnosticMessage: DiagnosticMessage, errorTextArguments?: string[] };
+    interface ErrorInformation {
+        diagnosticMessage: DiagnosticMessage;
+        errorTextArguments?: string[];
+    }
+
     function getProtocolDiagnosticMessage({ diagnosticMessage, errorTextArguments = [] }: ErrorInformation) {
         return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
     }
@@ -1346,9 +1365,8 @@ namespace ts.projectSystem {
                 path: "/lib/duckquack-3.min.js",
                 content: "whoa do @@ not parse me ok thanks!!!"
             };
-            const host = createServerHost([customSafeList, file1, office]);
+            const host = createServerHost([file1, office, customTypesMap]);
             const projectService = createProjectService(host);
-            projectService.loadSafeList(customSafeList.path);
             try {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
                 const proj = projectService.externalProjects[0];
@@ -1612,6 +1630,28 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path, file3.path]);
         });
 
+        it("regression test for crash in acquireOrUpdateDocument", () => {
+            const tsFile = {
+                fileName: "/a/b/file1.ts",
+                path: "/a/b/file1.ts",
+                content: ""
+            };
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "var x = 10;",
+                fileName: "/a/b/file1.js",
+                scriptKind: "JS" as "JS"
+            };
+
+            const host = createServerHost([]);
+            const projectService = createProjectService(host);
+            projectService.applyChangesInOpenFiles([tsFile], [], []);
+            const projs = projectService.synchronizeProjectList([]);
+            projectService.findProject(projs[0].info.projectName).getLanguageService().getNavigationBarItems(tsFile.fileName);
+            projectService.synchronizeProjectList([projs[0].info]);
+            projectService.applyChangesInOpenFiles([jsFile], [], []);
+        });
+
         it("config file is deleted", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1714,7 +1754,7 @@ namespace ts.projectSystem {
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
-                /*openFiles*/ [{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
+                /*openFiles*/[{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
                 /*changedFiles*/ undefined,
                 /*closedFiles*/ undefined);
 
@@ -1731,7 +1771,7 @@ namespace ts.projectSystem {
             projectService.applyChangesInOpenFiles(
                 /*openFiles*/ undefined,
                 /*changedFiles*/ undefined,
-                /*closedFiles*/ [file2.path]);
+                /*closedFiles*/[file2.path]);
 
             // HTML file is still included in project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -2439,8 +2479,8 @@ namespace ts.projectSystem {
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
                 "File '/a/cache/node_modules/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
+                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
             ]);
             checkProjectActualFiles(proj, [file1.path, lib.path]);
@@ -3272,7 +3312,7 @@ namespace ts.projectSystem {
             const error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
             assert.isTrue(error1Result.length === 0);
 
-             const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+            const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile2.path }
             );
@@ -4173,17 +4213,24 @@ namespace ts.projectSystem {
     });
 
     describe("CachingFileSystemInformation", () => {
-        type CalledMaps = {
+        interface CalledMaps {
             fileExists: MultiMap<true>;
             directoryExists: MultiMap<true>;
             getDirectories: MultiMap<true>;
             readFile: MultiMap<true>;
             readDirectory: MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>;
-        };
+        }
 
         function createCallsTrackingHost(host: TestServerHost) {
             const keys: Array<keyof CalledMaps> = ["fileExists", "directoryExists", "getDirectories", "readFile", "readDirectory"];
-            const calledMaps = getCallsTrackingMap();
+            const calledMaps: CalledMaps = {
+                fileExists: setCallsTrackingWithSingleArgFn("fileExists"),
+                directoryExists: setCallsTrackingWithSingleArgFn("directoryExists"),
+                getDirectories: setCallsTrackingWithSingleArgFn("getDirectories"),
+                readFile: setCallsTrackingWithSingleArgFn("readFile"),
+                readDirectory: setCallsTrackingWithFiveArgFn("readDirectory")
+            };
+
             return {
                 verifyNoCall,
                 verifyCalledOnEachEntryNTimes,
@@ -4194,33 +4241,24 @@ namespace ts.projectSystem {
                 clear
             };
 
-            function getCallsTrackingMap() {
-                const calledMaps: { [s: string]: Map<any> } = {};
-                for (let i = 0; i < keys.length - 1; i++) {
-                    setCallsTrackingWithSingleArgFn(keys[i]);
-                }
-                setCallsTrackingWithFiveArgFn(keys[keys.length - 1]);
-                return calledMaps as CalledMaps;
+            function setCallsTrackingWithSingleArgFn(prop: keyof CalledMaps) {
+                const calledMap = createMultiMap<true>();
+                const cb = (<any>host)[prop].bind(host);
+                (<any>host)[prop] = (f: string) => {
+                    calledMap.add(f, /*value*/ true);
+                    return cb(f);
+                };
+                return calledMap;
+            }
 
-                function setCallsTrackingWithSingleArgFn(prop: keyof CalledMaps) {
-                    const calledMap = createMultiMap<true>();
-                    const cb = (<any>host)[prop].bind(host);
-                    (<any>host)[prop] = (f: string) => {
-                        calledMap.add(f, /*value*/ true);
-                        return cb(f);
-                    };
-                    calledMaps[prop] = calledMap;
-                }
-
-                function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: keyof CalledMaps) {
-                    const calledMap = createMultiMap<[U, V, W, X]>();
-                    const cb = (<any>host)[prop].bind(host);
-                    (<any>host)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
-                        calledMap.add(f, [arg1, arg2, arg3, arg4]);
-                        return cb(f, arg1, arg2, arg3, arg4);
-                    };
-                    calledMaps[prop] = calledMap;
-                }
+            function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: keyof CalledMaps) {
+                const calledMap = createMultiMap<[U, V, W, X]>();
+                const cb = (<any>host)[prop].bind(host);
+                (<any>host)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
+                    calledMap.add(f, [arg1, arg2, arg3, arg4]);
+                    return cb(f, arg1, arg2, arg3, arg4);
+                };
+                return calledMap;
             }
 
             function verifyCalledOn(callback: keyof CalledMaps, name: string) {
@@ -4929,7 +4967,7 @@ namespace ts.projectSystem {
                 const file1Consumer1Path = "/a/b/file1Consumer1.ts";
                 const moduleFile1Path = "/a/b/moduleFile1.ts";
                 const configFilePath = "/a/b/tsconfig.json";
-                type InitialStateParams = {
+                interface InitialStateParams {
                     /** custom config file options */
                     configObj?: any;
                     /** list of files emitted/changed on first update graph */
@@ -4938,7 +4976,7 @@ namespace ts.projectSystem {
                     getAdditionalFileOrFolder?(): FileOrFolder[];
                     /** initial list of files to reload in fs and first file in this list being the file to open */
                     firstReloadFileList?: string[];
-                };
+                }
                 function getInitialState({ configObj = {}, getAdditionalFileOrFolder, firstReloadFileList, firstCompilationEmitFiles }: InitialStateParams = {}) {
                     const moduleFile1: FileOrFolder = {
                         path: moduleFile1Path,

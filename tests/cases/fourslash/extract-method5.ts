@@ -5,16 +5,21 @@
 // annotation in the extracted function
 
 //// function f() {
-////     var x: 1 | 2 | 3 = /*start*/2/*end*/;
+////     var x: 1 | 2 | 3 = /*start*/1 + 1 === 2 ? 1 : 2/*end*/;
 //// }
 
 goTo.select('start', 'end');
-edit.applyRefactor('Extract Method', 'scope_0');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to inner function in function 'f'",
+});
+// TODO: GH#18091 (fix formatting to use `2 ? 1 :` and not `2?1:`)
 verify.currentFileContentIs(
 `function f() {
     var x: 1 | 2 | 3 = newFunction();
 
     function newFunction(): 1 | 2 | 3 {
-        return 2;
+        return 1 + 1 === 2 ? 1 : 2;
     }
 }`);

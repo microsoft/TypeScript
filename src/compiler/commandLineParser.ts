@@ -1057,7 +1057,7 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
                 }
                 const value = convertPropertyValueToJson(element.initializer, option);
-                if (typeof keyText !== "undefined" && typeof value !== "undefined") {
+                if (typeof keyText !== "undefined") {
                     result[keyText] = value;
                     // Notify key value set, if user asked for it
                     if (jsonConversionNotifier &&
@@ -1104,7 +1104,7 @@ namespace ts {
                     return false;
 
                 case SyntaxKind.NullKeyword:
-                    reportInvalidOptionValue(!!option);
+                    reportInvalidOptionValue(option && option.name === "extends"); // "extends" is the only option we don't allow null/undefined for
                     return null; // tslint:disable-line:no-null-keyword
 
                 case SyntaxKind.StringLiteral:
@@ -1189,6 +1189,7 @@ namespace ts {
 
     function isCompilerOptionsValue(option: CommandLineOption, value: any): value is CompilerOptionsValue {
         if (option) {
+            if (isNullOrUndefined(value)) return true; // All options are undefinable/nullable
             if (option.type === "list") {
                 return isArray(value);
             }
@@ -1379,6 +1380,17 @@ namespace ts {
         }
     }
 
+    function isNullOrUndefined(x: any): x is null | undefined {
+        // tslint:disable-next-line:no-null-keyword
+        return x === undefined || x === null;
+    }
+
+    function directoryOfCombinedPath(fileName: string, basePath: string) {
+        // Use the `identity` function to avoid canonicalizing the path, as it must remain noncanonical
+        // until consistient casing errors are reported
+        return getDirectoryPath(toPath(fileName, basePath, identity));
+    }
+
     /**
      * Parse the contents of a config file from json or json source file (tsconfig.json).
      * @param json The contents of the config file to parse
@@ -1421,7 +1433,7 @@ namespace ts {
 
         function getFileNames(): ExpandResult {
             let filesSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "files")) {
+            if (hasProperty(raw, "files") && !isNullOrUndefined(raw["files"])) {
                 if (isArray(raw["files"])) {
                     filesSpecs = <ReadonlyArray<string>>raw["files"];
                     if (filesSpecs.length === 0) {
@@ -1434,7 +1446,7 @@ namespace ts {
             }
 
             let includeSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "include")) {
+            if (hasProperty(raw, "include") && !isNullOrUndefined(raw["include"])) {
                 if (isArray(raw["include"])) {
                     includeSpecs = <ReadonlyArray<string>>raw["include"];
                 }
@@ -1444,7 +1456,7 @@ namespace ts {
             }
 
             let excludeSpecs: ReadonlyArray<string>;
-            if (hasProperty(raw, "exclude")) {
+            if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw["exclude"])) {
                 if (isArray(raw["exclude"])) {
                     excludeSpecs = <ReadonlyArray<string>>raw["exclude"];
                 }
@@ -1463,8 +1475,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, basePath, options, host, errors, extraFileExtensions, sourceFile);
-
+            const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
             if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
@@ -1563,7 +1574,7 @@ namespace ts {
         host: ParseConfigHost,
         basePath: string,
         getCanonicalFileName: (fileName: string) => string,
-        configFileName: string,
+        configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
         if (hasProperty(json, "excludes")) {
@@ -1582,7 +1593,8 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
             }
             else {
-                extendedConfigPath = getExtendsConfigPath(json.extends, host, basePath, getCanonicalFileName, errors, createCompilerDiagnostic);
+                const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
+                extendedConfigPath = getExtendsConfigPath(json.extends, host, newBase, getCanonicalFileName, errors, createCompilerDiagnostic);
             }
         }
         return { raw: json, options, typeAcquisition, extendedConfigPath };
@@ -1593,7 +1605,7 @@ namespace ts {
         host: ParseConfigHost,
         basePath: string,
         getCanonicalFileName: (fileName: string) => string,
-        configFileName: string,
+        configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
         const options = getDefaultCompilerOptions(configFileName);
@@ -1614,10 +1626,11 @@ namespace ts {
             onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
                 switch (key) {
                     case "extends":
+                        const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
                         extendedConfigPath = getExtendsConfigPath(
                             <string>value,
                             host,
-                            basePath,
+                            newBase,
                             getCanonicalFileName,
                             errors,
                             (message, arg0) =>
@@ -1814,6 +1827,7 @@ namespace ts {
     }
 
     function normalizeOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
+        if (isNullOrUndefined(value)) return undefined;
         if (option.type === "list") {
             const listOption = <CommandLineOptionOfListType>option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
@@ -1838,6 +1852,7 @@ namespace ts {
     }
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Push<Diagnostic>) {
+        if (isNullOrUndefined(value)) return undefined;
         const key = value.toLowerCase();
         const val = opt.type.get(key);
         if (val !== undefined) {
@@ -2009,7 +2024,7 @@ namespace ts {
         // remove a literal file.
         if (filesSpecs) {
             for (const fileName of filesSpecs) {
-                const file = combinePaths(basePath, fileName);
+                const file = getNormalizedAbsolutePath(fileName, basePath);
                 literalFileMap.set(keyMapper(file), file);
             }
         }

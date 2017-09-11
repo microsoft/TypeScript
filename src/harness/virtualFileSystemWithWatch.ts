@@ -30,7 +30,7 @@ namespace ts.TestFSWithWatch {
         newLine?: string;
     }
 
-    export function createWatchedSystem(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
+    export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolder>, params?: TestServerHostCreationParameters): TestServerHost {
         if (!params) {
             params = {};
         }
@@ -43,7 +43,7 @@ namespace ts.TestFSWithWatch {
         return host;
     }
 
-    export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
+    export function createServerHost(fileOrFolderList: ReadonlyArray<FileOrFolder>, params?: TestServerHostCreationParameters): TestServerHost {
         if (!params) {
             params = {};
         }
@@ -95,7 +95,7 @@ namespace ts.TestFSWithWatch {
         }
     }
 
-    function getDiffInKeys(map: Map<any>, expectedKeys: string[]) {
+    function getDiffInKeys(map: Map<any>, expectedKeys: ReadonlyArray<string>) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -122,14 +122,14 @@ namespace ts.TestFSWithWatch {
         return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
     }
 
-    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
-    export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
+    export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
         assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${expectedFileNames}, got ${actualFileNames}`);
         for (const f of expectedFileNames) {
             assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
@@ -202,8 +202,16 @@ namespace ts.TestFSWithWatch {
 
     type TimeOutCallback = () => any;
 
-    export type TestFileWatcher = { cb: FileWatcherCallback; fileName: string; };
-    export type TestDirectoryWatcher = { cb: DirectoryWatcherCallback; directoryName: string; };
+    export interface TestFileWatcher {
+        cb: FileWatcherCallback;
+        fileName: string;
+    }
+
+    export interface TestDirectoryWatcher {
+        cb: DirectoryWatcherCallback;
+        directoryName: string;
+    }
+
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
 
@@ -219,7 +227,7 @@ namespace ts.TestFSWithWatch {
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
 
-        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[], public readonly newLine = "\n") {
+        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n") {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
 
@@ -234,7 +242,7 @@ namespace ts.TestFSWithWatch {
             return this.toPath(this.toNormalizedAbsolutePath(s));
         }
 
-        reloadFS(fileOrFolderList: FileOrFolder[]) {
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             // always inject safelist file in the list of files

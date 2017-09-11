@@ -56,7 +56,11 @@ namespace ts {
         refCount: number;
     }
 
-    /*@internal*/
+    interface DirectoryOfFailedLookupWatch {
+        dir: string;
+        dirPath: Path;
+    }
+
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
     interface GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> {
@@ -221,7 +225,8 @@ namespace ts {
             for (const name of names) {
                 let resolution = resolutionsInFile.get(name);
                 // Resolution is valid if it is present and not invalidated
-                if (allFilesHaveInvalidatedResolution || !resolution || resolution.isInvalidated) {
+                if (!seenNamesInFile.has(name) &&
+                    allFilesHaveInvalidatedResolution || !resolution || resolution.isInvalidated) {
                     const existingResolution = resolution;
                     const resolutionInDirectory = perDirectoryResolution.get(name);
                     if (resolutionInDirectory) {
@@ -297,7 +302,6 @@ namespace ts {
             return endsWith(dirPath, "/node_modules");
         }
 
-        type DirectoryOfFailedLookupWatch = { dir: string; dirPath: Path; };
         function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch {
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
                 return { dir: rootDir, dirPath: rootPath };
@@ -398,7 +402,8 @@ namespace ts {
 
                 // If the files are added to project root or node_modules directory, always run through the invalidation process
                 // Otherwise run through invalidation only if adding to the immediate directory
-                if (dirPath === rootPath || isNodeModulesDirectory(dirPath) || getDirectoryPath(fileOrFolderPath) === dirPath) {
+                if (!allFilesHaveInvalidatedResolution &&
+                    dirPath === rootPath || isNodeModulesDirectory(dirPath) || getDirectoryPath(fileOrFolderPath) === dirPath) {
                     if (invalidateResolutionOfFailedLookupLocation(fileOrFolderPath, dirPath === fileOrFolderPath)) {
                         resolutionHost.onInvalidatedResolution();
                     }

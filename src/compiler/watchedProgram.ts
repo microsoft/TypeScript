@@ -143,7 +143,7 @@ namespace ts {
 
         function compileWatchedProgram(host: PartialSystem, program: Program, builder: Builder) {
             // First get and report any syntactic errors.
-            let diagnostics = program.getSyntacticDiagnostics();
+            let diagnostics = program.getSyntacticDiagnostics().slice();
             let reportSemanticDiagnostics = false;
 
             // If we didn't have any syntactic errors, then also try getting the global and

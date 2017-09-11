@@ -178,7 +178,7 @@ namespace ts {
         let diagnostics: Diagnostic[];
 
         // First get and report any syntactic errors.
-        diagnostics = program.getSyntacticDiagnostics();
+        diagnostics = program.getSyntacticDiagnostics().slice();
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
@@ -186,13 +186,13 @@ namespace ts {
             diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
 
             if (diagnostics.length === 0) {
-                diagnostics = program.getSemanticDiagnostics();
+                diagnostics = program.getSemanticDiagnostics().slice();
             }
         }
 
         // Emit and report any errors we ran into.
         const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit();
-        diagnostics = diagnostics.concat(emitDiagnostics);
+        addRange(diagnostics, emitDiagnostics);
 
         return handleEmitOutputAndReportErrors(sys, program, emittedFiles, emitSkipped, diagnostics, reportDiagnostic);
     }

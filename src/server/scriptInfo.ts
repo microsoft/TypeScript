@@ -173,6 +173,11 @@ namespace ts.server {
         }
     }
 
+    /*@internal*/
+    export function isDynamicFileName(fileName: NormalizedPath) {
+        return getBaseFileName(fileName)[0] === "^";
+    }
+
     export class ScriptInfo {
         /**
          * All projects that include this file
@@ -184,20 +189,29 @@ namespace ts.server {
         fileWatcher: FileWatcher;
         private textStorage: TextStorage;
 
+        /*@internal*/
+        readonly isDynamic: boolean;
+
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
-            public hasMixedContent: boolean,
+            public readonly hasMixedContent: boolean,
             readonly path: Path) {
+            this.isDynamic = isDynamicFileName(fileName);
 
             this.textStorage = new TextStorage(host, fileName);
-            if (hasMixedContent) {
+            if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
             }
             this.scriptKind = scriptKind
                 ? scriptKind
                 : getScriptKindFromFileName(fileName);
+        }
+
+        /*@internal*/
+        public isDynamicOrHasMixedContent() {
+            return this.hasMixedContent || this.isDynamic;
         }
 
         public isScriptOpen() {
@@ -215,7 +229,7 @@ namespace ts.server {
 
         public close() {
             this.textStorage.isOpen = false;
-            if (this.hasMixedContent) {
+            if (this.isDynamicOrHasMixedContent()) {
                 if (this.textStorage.reload("")) {
                     this.markContainingProjectsAsDirty();
                 }
@@ -341,13 +355,13 @@ namespace ts.server {
 
         /*@internal*/
         delayReloadNonMixedContentFile() {
-            Debug.assert(!this.hasMixedContent);
+            Debug.assert(!this.isDynamicOrHasMixedContent());
             this.textStorage.delayReloadFromFileIntoText();
             this.markContainingProjectsAsDirty();
         }
 
         reloadFromFile(tempFileName?: NormalizedPath) {
-            if (this.hasMixedContent) {
+            if (this.isDynamicOrHasMixedContent()) {
                 this.textStorage.reload("");
                 this.markContainingProjectsAsDirty();
             }
