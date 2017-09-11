@@ -334,7 +334,8 @@ namespace ts {
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
-        let visitedFlowCount = 0;
+        let sharedFlowCount = 0;
+        let flowAnalysisDisabled = false;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -352,8 +353,8 @@ namespace ts {
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
-        const visitedFlowNodes: FlowNode[] = [];
-        const visitedFlowTypes: FlowType[] = [];
+        const sharedFlowNodes: FlowNode[] = [];
+        const sharedFlowTypes: FlowType[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
@@ -11459,14 +11460,25 @@ namespace ts {
             return false;
         }
 
+        function reportFlowControlError(node: Node) {
+            const block = <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
+            const sourceFile = getSourceFileOfNode(node);
+            const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
+            diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
+            let flowDepth = 0;
+            if (flowAnalysisDisabled) {
+                return unknownType;
+            }
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const visitedFlowStart = visitedFlowCount;
+            const sharedFlowStart = sharedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
-            visitedFlowCount = visitedFlowStart;
+            sharedFlowCount = sharedFlowStart;
             // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
@@ -11478,60 +11490,70 @@ namespace ts {
             return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
+                if (flowDepth === 2500) {
+                    // We have made 2500 recursive invocations. To avoid overflowing the call stack we report an error
+                    // and disable further control flow analysis in the containing function or module body.
+                    flowAnalysisDisabled = true;
+                    reportFlowControlError(reference);
+                    return unknownType;
+                }
+                flowDepth++;
                 while (true) {
-                    if (flow.flags & FlowFlags.Shared) {
+                    const flags = flow.flags;
+                    if (flags & FlowFlags.Shared) {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
                         // antecedent of more than one node.
-                        for (let i = visitedFlowStart; i < visitedFlowCount; i++) {
-                            if (visitedFlowNodes[i] === flow) {
-                                return visitedFlowTypes[i];
+                        for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
+                            if (sharedFlowNodes[i] === flow) {
+                                flowDepth--;
+                                return sharedFlowTypes[i];
                             }
                         }
                     }
                     let type: FlowType;
-                    if (flow.flags & FlowFlags.AfterFinally) {
+                    if (flags & FlowFlags.AfterFinally) {
                         // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement
                         (<AfterFinallyFlow>flow).locked = true;
                         type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
                         (<AfterFinallyFlow>flow).locked = false;
                     }
-                    else if (flow.flags & FlowFlags.PreFinally) {
+                    else if (flags & FlowFlags.PreFinally) {
                         // locked pre-finally flows are filtered out in getTypeAtFlowBranchLabel
                         // so here just redirect to antecedent
                         flow = (<PreFinallyFlow>flow).antecedent;
                         continue;
                     }
-                    else if (flow.flags & FlowFlags.Assignment) {
+                    else if (flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
                         }
                     }
-                    else if (flow.flags & FlowFlags.Condition) {
+                    else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
-                    else if (flow.flags & FlowFlags.SwitchClause) {
+                    else if (flags & FlowFlags.SwitchClause) {
                         type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
                     }
-                    else if (flow.flags & FlowFlags.Label) {
+                    else if (flags & FlowFlags.Label) {
                         if ((<FlowLabel>flow).antecedents.length === 1) {
                             flow = (<FlowLabel>flow).antecedents[0];
                             continue;
                         }
-                        type = flow.flags & FlowFlags.BranchLabel ?
+                        type = flags & FlowFlags.BranchLabel ?
                             getTypeAtFlowBranchLabel(<FlowLabel>flow) :
                             getTypeAtFlowLoopLabel(<FlowLabel>flow);
                     }
-                    else if (flow.flags & FlowFlags.ArrayMutation) {
+                    else if (flags & FlowFlags.ArrayMutation) {
                         type = getTypeAtFlowArrayMutation(<FlowArrayMutation>flow);
                         if (!type) {
                             flow = (<FlowArrayMutation>flow).antecedent;
                             continue;
                         }
                     }
-                    else if (flow.flags & FlowFlags.Start) {
+                    else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
                         if (container && container !== flowContainer && reference.kind !== SyntaxKind.PropertyAccessExpression && reference.kind !== SyntaxKind.ThisKeyword) {
@@ -11546,12 +11568,13 @@ namespace ts {
                         // simply return the non-auto declared type to reduce follow-on errors.
                         type = convertAutoToAny(declaredType);
                     }
-                    if (flow.flags & FlowFlags.Shared) {
+                    if (flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
-                        visitedFlowNodes[visitedFlowCount] = flow;
-                        visitedFlowTypes[visitedFlowCount] = type;
-                        visitedFlowCount++;
+                        sharedFlowNodes[sharedFlowCount] = flow;
+                        sharedFlowTypes[sharedFlowCount] = type;
+                        sharedFlowCount++;
                     }
+                    flowDepth--;
                     return type;
                 }
             }
@@ -11589,29 +11612,31 @@ namespace ts {
             }
 
             function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType {
-                const node = flow.node;
-                const expr = node.kind === SyntaxKind.CallExpression ?
-                    (<PropertyAccessExpression>(<CallExpression>node).expression).expression :
-                    (<ElementAccessExpression>(<BinaryExpression>node).left).expression;
-                if (isMatchingReference(reference, getReferenceCandidate(expr))) {
-                    const flowType = getTypeAtFlowNode(flow.antecedent);
-                    const type = getTypeFromFlowType(flowType);
-                    if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
-                        let evolvedType = <EvolvingArrayType>type;
-                        if (node.kind === SyntaxKind.CallExpression) {
-                            for (const arg of (<CallExpression>node).arguments) {
-                                evolvedType = addEvolvingArrayElementType(evolvedType, arg);
+                if (declaredType === autoType || declaredType === autoArrayType) {
+                    const node = flow.node;
+                    const expr = node.kind === SyntaxKind.CallExpression ?
+                        (<PropertyAccessExpression>(<CallExpression>node).expression).expression :
+                        (<ElementAccessExpression>(<BinaryExpression>node).left).expression;
+                    if (isMatchingReference(reference, getReferenceCandidate(expr))) {
+                        const flowType = getTypeAtFlowNode(flow.antecedent);
+                        const type = getTypeFromFlowType(flowType);
+                        if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
+                            let evolvedType = <EvolvingArrayType>type;
+                            if (node.kind === SyntaxKind.CallExpression) {
+                                for (const arg of (<CallExpression>node).arguments) {
+                                    evolvedType = addEvolvingArrayElementType(evolvedType, arg);
+                                }
                             }
-                        }
-                        else {
-                            const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
-                            if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
-                                evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
+                            else {
+                                const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
+                                if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
+                                    evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
+                                }
                             }
+                            return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
                         }
-                        return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
+                        return flowType;
                     }
-                    return flowType;
                 }
                 return undefined;
             }
@@ -19935,7 +19960,14 @@ namespace ts {
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
-            forEach(node.statements, checkSourceElement);
+            if (isFunctionOrModuleBlock(node)) {
+                const saveFlowAnalysisDisabled = flowAnalysisDisabled;
+                forEach(node.statements, checkSourceElement);
+                flowAnalysisDisabled = saveFlowAnalysisDisabled;
+            }
+            else {
+                forEach(node.statements, checkSourceElement);
+            }
             if (node.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
@@ -22525,6 +22557,7 @@ namespace ts {
 
                 deferredNodes = [];
                 deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
+                flowAnalysisDisabled = false;
 
                 forEach(node.statements, checkSourceElement);
 
