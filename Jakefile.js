@@ -769,15 +769,16 @@ function exec(cmd, completeHandler, errorHandler) {
     ex.run();
 }
 
+const del = require("del");
 function cleanTestDirs() {
     // Clean the local baselines directory
     if (fs.existsSync(localBaseline)) {
-        jake.rmRf(localBaseline);
+        del.sync(localBaseline);
     }
 
     // Clean the local Rwc baselines directory
     if (fs.existsSync(localRwcBaseline)) {
-        jake.rmRf(localRwcBaseline);
+        del.sync(localRwcBaseline);
     }
 
     jake.mkdirP(localRwcBaseline);
@@ -1042,6 +1043,7 @@ function acceptBaseline(sourceFolder, targetFolder) {
                     if (fs.existsSync(target)) {
                         fs.unlinkSync(target);
                     }
+                    jake.mkdirP(path.dirname(target));
                     fs.renameSync(path.join(sourceFolder, filename), target);
                 }
             }
