@@ -10386,7 +10386,7 @@ namespace ts {
         // results for union and intersection types for performance reasons.
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
-            return !!(type.flags & TypeFlags.TypeVariable ||
+            return !!(type.flags & (TypeFlags.TypeVariable | TypeFlags.Index) ||
                 objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
                 objectFlags & ObjectFlags.Mapped ||
@@ -10554,6 +10554,13 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
+                else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
+                    inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
+                }
+                else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
+                    inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
+                    inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
@@ -10627,6 +10634,12 @@ namespace ts {
             }
 
             function inferFromObjectTypes(source: Type, target: Type) {
+                if (isGenericMappedType(source) && isGenericMappedType(target)) {
+                    // The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
+                    // from S to T and from X to Y.
+                    inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), getConstraintTypeFromMappedType(<MappedType>target));
+                    inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
+                }
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
                     if (constraintType.flags & TypeFlags.Index) {
