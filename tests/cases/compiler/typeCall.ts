@@ -109,14 +109,11 @@ type Fn2 = <T2>(v2: { [k: string]: T2 }) => ReadonlyArray<T2>;
 let fn1 = null! as Fn1;
 let fn2 = null! as Fn2;
 type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
-// type Fn4 = Fn3(1); // errors, ok
 let ones = null! as 1[];
 type Fn4b = Fn3(typeof ones);
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
 type Fn4c = Fn3(1[]);
 // FAILS, wanted `ReadonlyArray<1>`, got `ReadonlyArray<{}>`.
-// let x = fn2(fn1(1)); // errors with not assignable, ok
-// type X = Fn2(Fn1(1)); // errors with not assignable, ok
 let y = fn2(fn1(ones));
 type Y = Fn2(Fn1(1[]));
 
@@ -232,12 +229,6 @@ infer4(5, () => 5);
 function assignability<T>(x: T, y: () => T) {
     const a: T = x;
     const b: T = y();
-}
-
-function comparability<T>(x: T, y: () => T) {
-    x === x;
-    y === y;
-    // x === y; // rightfully errors
 }
 
 // function mappedAssignability<T>(x: T, y: CallMember<T>) {
