@@ -1,0 +1,26 @@
+tests/cases/compiler/destructureGenericsErrors.ts(2,9): error TS2554: Expected 2 arguments, but got 1.
+tests/cases/compiler/destructureGenericsErrors.ts(3,9): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/compiler/destructureGenericsErrors.ts(4,48): error TS2563: A rest parameter in a function with optional parameters must be of an array type.
+tests/cases/compiler/destructureGenericsErrors.ts(4,55): error TS1047: A rest parameter cannot be optional.
+tests/cases/compiler/destructureGenericsErrors.ts(6,60): error TS2563: A rest parameter in a function with optional parameters must be of an array type.
+
+
+==== tests/cases/compiler/destructureGenericsErrors.ts (5 errors) ====
+    declare function g<T extends [number, number]>(...args: T): T;
+    var y = g(1); // error
+            ~~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+    var a = g(1,2,3); // error
+            ~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 3.
+    declare function k<T extends [number, number]>(...args?: T): T;
+                                                   ~~~~~~~~~~~
+!!! error TS2563: A rest parameter in a function with optional parameters must be of an array type.
+                                                          ~
+!!! error TS1047: A rest parameter cannot be optional.
+    var u = k(1,2); // error
+    declare function m<T extends [number, number]>(a?: string, ...args: T): T;
+                                                               ~~~~~~~~~~
+!!! error TS2563: A rest parameter in a function with optional parameters must be of an array type.
+    var v = m('a',1,2); // error
+    

@@ -1,0 +1,21 @@
+=== tests/cases/compiler/destructureGenericsErrors.ts ===
+declare function g<T extends [number, number]>(...args: T): T;
+>g : <T extends [number, number]>(...args: T) => T
+>T : T
+>args : T
+>T : T
+>T : T
+
+// var y = g(1); // error
+// var y: [1];
+var a = g(1,2,3); // error
+>a : [1, 2, 3]
+>g(1,2,3) : [1, 2, 3]
+>g : <T extends [number, number]>(...args: T) => T
+>1 : 1
+>2 : 2
+>3 : 3
+
+var a: [1,2,3];
+>a : [1, 2, 3]
+

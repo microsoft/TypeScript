@@ -1,0 +1,30 @@
+=== tests/cases/compiler/promiseSpread.ts ===
+interface Promise<T> {
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 0))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 18))
+
+    spread<U>(fulfilledHandler: (...values: T & any[]) => U | Promise<U>): Promise<U>;
+>spread : Symbol(Promise.spread, Decl(promiseSpread.ts, 0, 22), Decl(promiseSpread.ts, 1, 86))
+>U : Symbol(U, Decl(promiseSpread.ts, 1, 11))
+>fulfilledHandler : Symbol(fulfilledHandler, Decl(promiseSpread.ts, 1, 14))
+>values : Symbol(values, Decl(promiseSpread.ts, 1, 33))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 18))
+>U : Symbol(U, Decl(promiseSpread.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 0))
+>U : Symbol(U, Decl(promiseSpread.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 0))
+>U : Symbol(U, Decl(promiseSpread.ts, 1, 11))
+
+    spread<U>(fulfilledHandler: (...values: [T]) => U | Promise<U>): Promise<U>;
+>spread : Symbol(Promise.spread, Decl(promiseSpread.ts, 0, 22), Decl(promiseSpread.ts, 1, 86))
+>U : Symbol(U, Decl(promiseSpread.ts, 2, 11))
+>fulfilledHandler : Symbol(fulfilledHandler, Decl(promiseSpread.ts, 2, 14))
+>values : Symbol(values, Decl(promiseSpread.ts, 2, 33))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 18))
+>U : Symbol(U, Decl(promiseSpread.ts, 2, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 0))
+>U : Symbol(U, Decl(promiseSpread.ts, 2, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseSpread.ts, 0, 0))
+>U : Symbol(U, Decl(promiseSpread.ts, 2, 11))
+}
+

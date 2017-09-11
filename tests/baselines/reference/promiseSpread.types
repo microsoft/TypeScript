@@ -1,0 +1,30 @@
+=== tests/cases/compiler/promiseSpread.ts ===
+interface Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    spread<U>(fulfilledHandler: (...values: T & any[]) => U | Promise<U>): Promise<U>;
+>spread : { <U>(fulfilledHandler: (...values: T & any[]) => U | Promise<U>): Promise<U>; <U>(fulfilledHandler: (...values: [T]) => U | Promise<U>): Promise<U>; }
+>U : U
+>fulfilledHandler : (...values: T & any[]) => U | Promise<U>
+>values : T & any[]
+>T : T
+>U : U
+>Promise : Promise<T>
+>U : U
+>Promise : Promise<T>
+>U : U
+
+    spread<U>(fulfilledHandler: (...values: [T]) => U | Promise<U>): Promise<U>;
+>spread : { <U>(fulfilledHandler: (...values: T & any[]) => U | Promise<U>): Promise<U>; <U>(fulfilledHandler: (...values: [T]) => U | Promise<U>): Promise<U>; }
+>U : U
+>fulfilledHandler : (...values: [T]) => U | Promise<U>
+>values : [T]
+>T : T
+>U : U
+>Promise : Promise<T>
+>U : U
+>Promise : Promise<T>
+>U : U
+}
+

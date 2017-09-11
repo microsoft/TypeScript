@@ -4871,7 +4871,7 @@ namespace ts {
             const signatures = getSignaturesOfType(type, SignatureKind.Construct);
             if (signatures.length === 1) {
                 const s = signatures[0];
-                return !s.typeParameters && s.parameters.length === 1 && s.hasRestParameter && getTypeOfParameter(s.parameters[0]) === anyArrayType;
+                return !s.typeParameters && s.parameters.length === 1 && hasRealRestParameter(s) && getTypeOfParameter(s.parameters[0]) === anyArrayType;
             }
             return false;
         }
@@ -6296,6 +6296,10 @@ namespace ts {
             return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
 
+        function hasRealRestParameter(signature: Signature): boolean {
+            return signature.hasRestParameter && isArrayType(getRestConstraintOfSignature(signature));
+        }
+
         function isOptionalParameter(node: ParameterDeclaration) {
             if (hasQuestionToken(node) || isJSDocOptionalParameter(node)) {
                 return true;
@@ -6386,6 +6390,15 @@ namespace ts {
             return typeArguments;
         }
 
+        function getTupleLikeLength(type: Type): number {
+            Debug.assert(isTupleLikeType(type));
+            let length = 0;
+            while (getPropertyOfObjectType(type, length + "" as __String)) {
+                length++;
+            }
+            return length;
+        }
+
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
@@ -6430,6 +6443,17 @@ namespace ts {
                     if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;
                     }
+
+                    // adjust minimum argument count for tuple-bound rest parameters. could use `length` property given #17765.
+                    if (param.dotDotDotToken) {
+                        // clone symbol as getTypeOfSymbol mutates
+                        const symbol = clone(paramSymbol);
+                        const type = getApparentType(getTypeOfSymbol(symbol));
+                        if (isTupleLikeType(type)) {
+                            minArgumentCount += getTupleLikeLength(type);
+                        }
+                    }
+
                 }
 
                 // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
@@ -6612,11 +6636,24 @@ namespace ts {
             return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
         }
 
-        function getRestTypeOfSignature(signature: Signature): Type {
+        function getRestConstraintOfSignature(signature: Signature): Type {
+            Debug.assert(signature.hasRestParameter);
+            return getTypeOfSymbol(lastOrUndefined(signature.parameters));
+        }
+
+        function getRestTypeOfSignature(signature: Signature, pos?: number): Type {
+            const arrIdx = pos - (signature.parameters.length - 1);
             if (signature.hasRestParameter) {
-                const type = getTypeOfSymbol(lastOrUndefined(signature.parameters));
-                if (getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalArrayType) {
+                const type = getRestConstraintOfSignature(signature);
+                if (isArrayType(type)) {
                     return (<TypeReference>type).typeArguments[0];
+                }
+                else if (isTupleLikeType(type)) {
+                    const symbol = getPropertyOfObjectType(getApparentType(type), arrIdx + "" as __String);
+                    return symbol ? getIndexedAccessType(type, pos !== undefined ? getLiteralType(arrIdx) : globalNumberType) : neverType;
+                }
+                else if (isArrayLikeType(type)) {
+                    return getIndexedAccessType(type, pos !== undefined ? getLiteralType(arrIdx) : globalNumberType);
                 }
             }
             return anyType;
@@ -8530,8 +8567,8 @@ namespace ts {
             const sourceParams = source.parameters;
             const targetParams = target.parameters;
             for (let i = 0; i < checkCount; i++) {
-                const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
-                const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
+                const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source, i);
+                const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target, i);
                 const sourceSig = getSingleCallSignature(getNonNullableType(sourceType));
                 const targetSig = getSingleCallSignature(getNonNullableType(targetType));
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
@@ -8652,8 +8689,8 @@ namespace ts {
         }
 
         function getNumParametersToCheckForSignatureRelatability(source: Signature, sourceNonRestParamCount: number, target: Signature, targetNonRestParamCount: number) {
-            if (source.hasRestParameter === target.hasRestParameter) {
-                if (source.hasRestParameter) {
+            if (hasRealRestParameter(source) === hasRealRestParameter(target)) {
+                if (hasRealRestParameter(source)) {
                     // If both have rest parameters, get the max and add 1 to
                     // compensate for the rest parameter.
                     return Math.max(sourceNonRestParamCount, targetNonRestParamCount) + 1;
@@ -8664,7 +8701,7 @@ namespace ts {
             }
             else {
                 // Return the count for whichever signature doesn't have rest parameters.
-                return source.hasRestParameter ?
+                return hasRealRestParameter(source) ?
                     targetNonRestParamCount :
                     sourceNonRestParamCount;
             }
@@ -9916,14 +9953,14 @@ namespace ts {
             // optional, and rest parameters.
             if (source.parameters.length === target.parameters.length &&
                 source.minArgumentCount === target.minArgumentCount &&
-                source.hasRestParameter === target.hasRestParameter) {
+                hasRealRestParameter(source) === hasRealRestParameter(target)) {
                 return true;
             }
             // A source signature partially matches a target signature if the target signature has no fewer required
             // parameters and no more overall parameters than the source signature (where a signature with a rest
             // parameter is always considered to have more overall parameters than one without).
-            const sourceRestCount = source.hasRestParameter ? 1 : 0;
-            const targetRestCount = target.hasRestParameter ? 1 : 0;
+            const sourceRestCount = hasRealRestParameter(source) ? 1 : 0;
+            const targetRestCount = hasRealRestParameter(target) ? 1 : 0;
             if (partialMatch && source.minArgumentCount <= target.minArgumentCount && (
                 sourceRestCount > targetRestCount ||
                 sourceRestCount === targetRestCount && source.parameters.length >= target.parameters.length)) {
@@ -9973,8 +10010,8 @@ namespace ts {
 
             const targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
-                const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfParameter(source.parameters[i]);
-                const t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfParameter(target.parameters[i]);
+                const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source, i) : getTypeOfParameter(source.parameters[i]);
+                const t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target, i) : getTypeOfParameter(target.parameters[i]);
                 const related = compareTypes(s, t);
                 if (!related) {
                     return Ternary.False;
@@ -9988,7 +10025,7 @@ namespace ts {
         }
 
         function isRestParameterIndex(signature: Signature, parameterIndex: number) {
-            return signature.hasRestParameter && parameterIndex >= signature.parameters.length - 1;
+            return hasRealRestParameter(signature) && parameterIndex >= signature.parameters.length - 1;
         }
 
         function literalTypesWithSameBaseType(types: Type[]): boolean {
@@ -10322,13 +10359,13 @@ namespace ts {
             const sourceMax = source.parameters.length;
             const targetMax = target.parameters.length;
             let count: number;
-            if (source.hasRestParameter && target.hasRestParameter) {
+            if (hasRealRestParameter(source) && hasRealRestParameter(target)) {
                 count = Math.max(sourceMax, targetMax);
             }
-            else if (source.hasRestParameter) {
+            else if (hasRealRestParameter(source)) {
                 count = targetMax;
             }
-            else if (target.hasRestParameter) {
+            else if (hasRealRestParameter(target)) {
                 count = sourceMax;
             }
             else {
@@ -10621,6 +10658,10 @@ namespace ts {
                         if (type === inference.typeParameter) {
                             return inference;
                         }
+                        else if ((type as IndexedAccessType).objectType === inference.typeParameter &&
+                            isTypeInstanceOf((type as IndexedAccessType).indexType, globalNumberType)) {
+                            return inference;
+                        }
                     }
                 }
                 return undefined;
@@ -10761,8 +10802,10 @@ namespace ts {
                     const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
                     // Infer widened union or supertype, or the unknown type for no common supertype. We infer union types
                     // for inferences coming from return types in order to avoid common supertype failures.
+                    const candidates = (inference.typeParameter === (signature.hasRestParameter ? getRestConstraintOfSignature(signature) : undefined)) ?
+                        [createTupleType(baseCandidates)] : baseCandidates;
                     const unionOrSuperType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
-                        getUnionType(baseCandidates, /*subtypeReduction*/ true) : getCommonSupertype(baseCandidates);
+                        getUnionType(candidates, /*subtypeReduction*/ true) : getCommonSupertype(candidates);
                     inferredType = getWidenedType(unionOrSuperType);
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
@@ -13276,7 +13319,7 @@ namespace ts {
             if (target.parameters.length && parameterIsThisKeyword(target.parameters[0])) {
                 targetParameterCount--;
             }
-            const sourceLength = signature.hasRestParameter ? Number.MAX_VALUE : signature.parameters.length;
+            const sourceLength = hasRealRestParameter(signature) ? Number.MAX_VALUE : signature.parameters.length;
             return sourceLength < targetParameterCount;
         }
 
@@ -15184,11 +15227,17 @@ namespace ts {
             // If spread arguments are present, check that they correspond to a rest parameter. If so, no
             // further checking is necessary.
             if (spreadArgIndex >= 0) {
-                return isRestParameterIndex(signature, spreadArgIndex) || spreadArgIndex >= signature.minArgumentCount;
+                return hasRealRestParameter(signature) && isRestParameterIndex(signature, spreadArgIndex) || spreadArgIndex >= signature.minArgumentCount;
             }
 
             // Too many arguments implies incorrect arity.
-            if (!signature.hasRestParameter && argCount > signature.parameters.length) {
+            if (signature.hasRestParameter) {
+                const type = getApparentType(getRestConstraintOfSignature(signature));
+                if (isTupleLikeType(type) && argCount !== signature.parameters.length - 1 + getTupleLikeLength(type)) {
+                    return false;
+                }
+            }
+            else if (argCount > signature.parameters.length) {
                 return false;
             }
 
@@ -15890,7 +15939,7 @@ namespace ts {
                     min = Math.min(min, sig.minArgumentCount);
                     max = Math.max(max, sig.parameters.length);
                 }
-                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
+                const hasRestParameter = some(signatures, sig => hasRealRestParameter(sig));
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
                 const paramCount = hasRestParameter ? min :
                     min < max ? min + "-" + max :
@@ -16010,7 +16059,7 @@ namespace ts {
 
             for (let i = 0; i < candidates.length; i++) {
                 const candidate = candidates[i];
-                if (candidate.hasRestParameter || candidate.parameters.length >= argsCount) {
+                if (hasRealRestParameter(candidate) || candidate.parameters.length >= argsCount) {
                     return i;
                 }
                 if (candidate.parameters.length > maxParams) {
@@ -16624,7 +16673,7 @@ namespace ts {
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
             return signature.hasRestParameter ?
-                pos < signature.parameters.length - 1 ? getTypeOfParameter(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                pos < signature.parameters.length - 1 ? getTypeOfParameter(signature.parameters[pos]) : getRestTypeOfSignature(signature, pos) :
                 pos < signature.parameters.length ? getTypeOfParameter(signature.parameters[pos]) : anyType;
         }
 
@@ -16633,7 +16682,7 @@ namespace ts {
         }
 
         function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
-            const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
+            const len = signature.parameters.length - (hasRealRestParameter(signature) ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                 if (declaration.type) {
@@ -16656,7 +16705,7 @@ namespace ts {
                     assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter));
                 }
             }
-            const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
+            const len = signature.parameters.length - (hasRealRestParameter(signature) ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const parameter = signature.parameters[i];
                 if (!getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
@@ -18157,7 +18206,7 @@ namespace ts {
             }
         }
 
-        function checkParameter(node: ParameterDeclaration) {
+        function checkParameter(node: ParameterDeclaration, hasOptionals = false) {
             // Grammar checking
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code
@@ -18188,8 +18237,14 @@ namespace ts {
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
             // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
-            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isArrayType(getTypeOfSymbol(node.symbol))) {
-                error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+            const type = getTypeOfSymbol(node.symbol);
+            if (node.dotDotDotToken && !isBindingPattern(node.name)) {
+                if (!isArrayLikeType(type) || type === anyType) {
+                    error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+                }
+                else if (hasOptionals && !isArrayType(getTypeOfSymbol(node.symbol))) {
+                    error(node, Diagnostics.A_rest_parameter_in_a_function_with_optional_parameters_must_be_of_an_array_type);
+                }
             }
         }
 
@@ -18331,7 +18386,8 @@ namespace ts {
 
             checkTypeParameters(node.typeParameters);
 
-            forEach(node.parameters, checkParameter);
+            const hasOptionals = node.parameters.some((par: ParameterDeclaration) => !!par.questionToken);
+            forEach(node.parameters, (par: ParameterDeclaration) => checkParameter(par, hasOptionals));
 
             // TODO(rbuckton): Should we start checking JSDoc types?
             if (node.type) {

@@ -1920,6 +1920,10 @@
         "category": "Error",
         "code": 2562
     },
+    "A rest parameter in a function with optional parameters must be of an array type.": {
+        "category": "Error",
+        "code": 2563
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
