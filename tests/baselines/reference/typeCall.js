@@ -69,7 +69,7 @@ type strAny = BoolToString(any); // fails, want the fallback, but yields 'false'
 
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
-declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): map(Fn, O);
+declare function map<Fn extends <T>(v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): { [P in keyof O]: Fn(O[P]) };
 let z = map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 });
 
 type Inc = { [k: string]: string; 0:'1', 1:'2', 2:'3', 3:'4', 4:'5', 5:'6', 6:'7', 7:'8', 8:'9' };

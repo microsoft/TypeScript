@@ -229,9 +229,10 @@ type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 >b : 2
 >c : 3
 
-declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): map(Fn, O);
->map : <Fn extends (v: T) => any, O extends { [k: string]: T; }, T>(fn: Fn, obj: O) => map(Fn, O)
+declare function map<Fn extends <T>(v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): { [P in keyof O]: Fn(O[P]) };
+>map : <Fn extends <T>(v: T) => any, O extends { [k: string]: T; }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]); }
 >Fn : Fn
+>T : T
 >v : T
 >T : T
 >O : O
@@ -242,14 +243,16 @@ declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(
 >Fn : Fn
 >obj : O
 >O : O
->map : map
+>P : P
+>O : O
 >Fn : Fn
 >O : O
+>P : P
 
 let z = map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 });
->z : { a: [{}]; b: [{}]; c: [{}]; }
->map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 }) : { a: [{}]; b: [{}]; c: [{}]; }
->map : <Fn extends (v: T) => any, O extends { [k: string]: T; }, T>(fn: Fn, obj: O) => map(Fn, O)
+>z : { a: [1]; b: [2]; c: [3]; }
+>map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 }) : { a: [1]; b: [2]; c: [3]; }
+>map : <Fn extends <T>(v: T) => any, O extends { [k: string]: T; }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]); }
 ><T>(v: T) => [v] as [T] : <T>(v: T) => [T]
 >T : T
 >v : T
