@@ -41,6 +41,29 @@ type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
 type stringIsPrimitive3 = genericIsPrimitive3(string);
 type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
 
+declare function angularFactory<G extends (...args: any[]) => R, R extends <T>(foo: T) => T[]>(g: G): R(123);
+angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T])
+
+interface BoolToString {
+    (v: false): 'false';
+    (v: true): 'true';
+}
+type strTrue = BoolToString(true);
+type strFalse = BoolToString(false);
+type strEither = BoolToString(true | false);
+type strBool = BoolToString(boolean);
+type strAny = BoolToString(any);
+
+declare function safeDivide<
+  B extends number,
+  NotZero = ((v: '1') => 'whatever')({
+    (v: 0): '0';
+    (v: number): '1';
+  }(B))
+>(a: number, b: B): number;
+safeDivide(3, 1);
+safeDivide(3, 0); // fails, should error but doesn't
+
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
 declare function map<Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): map(Fn, O);
@@ -136,8 +159,7 @@ interface Promise<T> {
         onrejected?: ((reason: any) => TResult2) | undefined | null
     ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
 }
-// error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter
-// of type '(value: number) => string | PromiseLike<string>';
+// prevents error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter of type '(value: number) => string | PromiseLike<string>';
 const tryProm = pr.then((x: number) => { 
     if (x < 0) return f(x);
     return x;
@@ -241,6 +263,16 @@ function comparability<T>(x: T, y: () => T) {
 
 //// [typeCall.js]
 var a = 'foo';
+angularFactory(function () {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return function (foo) { return [foo]; };
+});
+safeDivide(3, 1);
+safeDivide(3, 0); // fails, should error but doesn't
+var z = map(function (v) { return [v]; }, { a: 1, b: 2, c: 3 });
 var obj = null;
 var keys = null;
 var pathTest = path(obj, keys);
@@ -261,8 +293,7 @@ var assert; // string
 var noNumbers; // string
 ;
 var testThen = myThen(pr, f, g);
-// error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter
-// of type '(value: number) => string | PromiseLike<string>';
+// prevents error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter of type '(value: number) => string | PromiseLike<string>';
 var tryProm = pr.then(function (x) {
     if (x < 0)
         return f(x);

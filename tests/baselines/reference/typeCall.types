@@ -117,6 +117,105 @@ type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
 >genericIsPrimitive3 : genericIsPrimitive3
 >RegExp : RegExp
 
+declare function angularFactory<G extends (...args: any[]) => R, R extends <T>(foo: T) => T[]>(g: G): R(123);
+>angularFactory : <G extends (...args: any[]) => R, R extends <T>(foo: T) => T[]>(g: G) => R(123)
+>G : G
+>args : any[]
+>R : R
+>R : R
+>T : T
+>foo : T
+>T : T
+>T : T
+>g : G
+>G : G
+>R : R
+
+angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T])
+>angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T]) : 123[]
+>angularFactory : <G extends (...args: any[]) => R, R extends <T>(foo: T) => T[]>(g: G) => R(123)
+>(...args: any[]) => <T>(foo: T) => [foo] as [T] : (...args: any[]) => <T>(foo: T) => [T]
+>args : any[]
+><T>(foo: T) => [foo] as [T] : <T>(foo: T) => [T]
+>T : T
+>foo : T
+>T : T
+>[foo] as [T] : [T]
+>[foo] : [T]
+>foo : T
+>T : T
+
+interface BoolToString {
+>BoolToString : BoolToString
+
+    (v: false): 'false';
+>v : false
+>false : false
+
+    (v: true): 'true';
+>v : true
+>true : true
+}
+type strTrue = BoolToString(true);
+>strTrue : "true"
+>BoolToString : BoolToString
+>true : true
+
+type strFalse = BoolToString(false);
+>strFalse : "false"
+>BoolToString : BoolToString
+>false : false
+
+type strEither = BoolToString(true | false);
+>strEither : any
+>BoolToString : BoolToString
+>true : true
+>false : false
+
+type strBool = BoolToString(boolean);
+>strBool : any
+>BoolToString : BoolToString
+
+type strAny = BoolToString(any);
+>strAny : any
+>BoolToString : BoolToString
+
+declare function safeDivide<
+>safeDivide : <B extends number, NotZero = ((v: "1") => "whatever")({ (v: 0): "0"; (v: number): "1"; }(B))>(a: number, b: B) => number
+
+  B extends number,
+>B : B
+
+  NotZero = ((v: '1') => 'whatever')({
+>NotZero : NotZero
+>v : "1"
+
+    (v: 0): '0';
+>v : 0
+
+    (v: number): '1';
+>v : number
+
+  }(B))
+>B : B
+
+>(a: number, b: B): number;
+>a : number
+>b : B
+>B : B
+
+safeDivide(3, 1);
+>safeDivide(3, 1) : number
+>safeDivide : <B extends number, NotZero = ((v: "1") => "whatever")({ (v: 0): "0"; (v: number): "1"; }(B))>(a: number, b: B) => number
+>3 : 3
+>1 : 1
+
+safeDivide(3, 0); // fails, should error but doesn't
+>safeDivide(3, 0) : number
+>safeDivide : <B extends number, NotZero = ((v: "1") => "whatever")({ (v: 0): "0"; (v: number): "1"; }(B))>(a: number, b: B) => number
+>3 : 3
+>0 : 0
+
 type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
 >map : map
 >Fn : Fn
