@@ -7588,28 +7588,8 @@ namespace ts {
             const args = type.arguments;
             const calls = getSignaturesOfType(fn, SignatureKind.Call);
             const sig = resolveCall(node, calls, []);
-            if (!sig.typeParameters || !sig.typeParameters.length) {
-                return getReturnTypeOfSignature(sig);
-            }
-            const inferenceContext = createInferenceContext(sig, InferenceFlags.InferUnionTypes);
-            const types = inferTypeArgumentsForTypeCall(sig, args, inferenceContext); // TODO: add Fn(this: A, B, C) syntax
-            const signature = getSignatureInstantiation(sig, types);
-            return getReturnTypeOfSignature(signature);
-        }
-
-        function inferTypeArgumentsForTypeCall(signature: Signature, args: Type[], context: InferenceContext, thisArgumentType?: Type): Type[] {
-            const thisType = getThisTypeOfSignature(signature);
-            if (thisType) {
-                inferTypes(context.inferences || [], thisArgumentType, thisType);
-            }
-            const argCount = args.length;
-            for (let i = 0; i < argCount; i++) {
-                const paramType = getTypeAtPosition(signature, i);
-                const argType = args[i];
-                inferTypes(context.inferences || [], argType, paramType);
-            }
-            return getInferredTypes(context);
-        }
+            return sig ? getReturnTypeOfSignature(sig) : unknownType;
+         }
 
         function getTypeFromTypeCallNode(node: TypeCallTypeNode): Type {
             const links = getNodeLinks(node);
