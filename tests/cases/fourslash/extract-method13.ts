@@ -37,12 +37,12 @@ edit.applyRefactor({
     constructor(q: string = C.newFunction()) {
     }
 
-    private static newFunction(): string {
-        return "a" + "b";
-    }
-
     private static newFunction_1() {
         return 1 + 1;
+    }
+
+    private static newFunction(): string {
+        return "a" + "b";
     }
 }`
 });
