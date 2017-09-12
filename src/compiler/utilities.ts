@@ -5021,6 +5021,11 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function isFunctionOrModuleBlock(node: Node): boolean {
+        return isSourceFile(node) || isModuleBlock(node) || isBlock(node) && isFunctionLike(node.parent);
+    }
+
     // Classes
     export function isClassElement(node: Node): node is ClassElement {
         const kind = node.kind;
