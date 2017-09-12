@@ -1351,6 +1351,8 @@ namespace Harness {
 
             // 'merge' the lines of each input file with any errors associated with it
             const filtered = inputFiles.filter(f => f.content !== undefined);
+            const dupeMap = ts.createMap<true>();
+            let dupeCount = 0;
             for (const inputFile of filtered) {
                 // Filter down to the errors in the file
                 const fileErrors = diagnostics.filter(e => {
@@ -1417,7 +1419,16 @@ namespace Harness {
 
                 // Verify we didn't miss any errors in this file
                 assert.equal(markedErrorCount, fileErrors.length, "count of errors in " + inputFile.unitName);
-                yield [sanitizeTestFilePath(inputFile.unitName), outputLines, errorsReported];
+                let resultName = sanitizeTestFilePath(inputFile.unitName);
+                if (dupeMap.has(resultName)) {
+                    // A different baseline filename should be manufactured if the names differ only in case, for windows compat
+                    dupeCount++;
+                    resultName = `${resultName}.dupe${dupeCount}`;
+                }
+                else {
+                    dupeMap.set(resultName, true);
+                }
+                yield [resultName, outputLines, errorsReported];
                 outputLines = "";
                 errorsReported = 0;
             }
@@ -1539,17 +1550,11 @@ namespace Harness {
                 let typeLines = "";
                 const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
                 let dupeCount = 0;
+                const dupeMap = ts.createMap<true>();
 
                 for (const file of allFiles) {
                     const codeLines = file.content.split("\n");
-                    let key = file.unitName.toLowerCase();
-                    let resultName = sanitizeTestFilePath(file.unitName);
-                    if (typeMap[key]) {
-                        // A different baseline filename should be manufactured if the names differ only in case, for windows compat
-                        dupeCount++;
-                        resultName = `${sanitizeTestFilePath(key)}.dupe${dupeCount}`;
-                        key = file.unitName;
-                    }
+                    const key = file.unitName;
                     typeWriterResults.get(file.unitName).forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
@@ -1589,6 +1594,15 @@ namespace Harness {
                         else {
                             typeLines += "No type information for this code.";
                         }
+                    }
+                    let resultName = sanitizeTestFilePath(file.unitName);
+                    if (dupeMap.has(resultName)) {
+                        // A different baseline filename should be manufactured if the names differ only in case, for windows compat
+                        dupeCount++;
+                        resultName = `${resultName}.dupe${dupeCount}`;
+                    }
+                    else {
+                        dupeMap.set(resultName, true);
                     }
                     yield [resultName, typeLines];
                     typeLines = "";
@@ -1710,16 +1724,14 @@ namespace Harness {
             const dupeMap = ts.createMap<true>();
             // Yield them
             for (const outputFile of outputFiles) {
-                let resultName: string;
-                const key = outputFile.fileName.toLowerCase();
-                if (dupeMap.has(key)) {
+                let resultName = sanitizeTestFilePath(outputFile.fileName);
+                if (dupeMap.has(resultName)) {
                     // A different baseline filename should be manufactured if the names differ only in case, for windows compat
                     dupeCount++;
-                    resultName = `${sanitizeTestFilePath(key)}.dupe${dupeCount}`;
+                    resultName = `${resultName}.dupe${dupeCount}`;
                 }
                 else {
-                    resultName = sanitizeTestFilePath(outputFile.fileName);
-                    dupeMap.set(key, true);
+                    dupeMap.set(resultName, true);
                 }
                 yield [resultName, "/*====== " + outputFile.fileName + " ======*/\r\n" + outputFile.code];
             }
@@ -1731,7 +1743,7 @@ namespace Harness {
         }
 
         function sanitizeTestFilePath(name: string) {
-            return ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/");
+            return ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/").toLowerCase();
         }
 
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
@@ -2084,7 +2096,7 @@ namespace Harness {
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
                     const relativeFileName = ts.combinePaths(relativeFileBase, name) + extension;
                     const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
-                    const actual = generateActual(() => content);
+                    const actual = content;
                     const comparison = compareToBaseline(actual, relativeFileName, opts);
                     try {
                         writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
