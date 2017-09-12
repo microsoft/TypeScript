@@ -2782,6 +2782,7 @@ namespace ts {
         getNumberLiteralType(num: number): LiteralType;
         getFalseType(): Type;
         getTrueType(): Type;
+        getNonPrimitiveType(): Type;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];

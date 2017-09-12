@@ -86,6 +86,10 @@ namespace ts {
             assert(checker.getFalseType() !== checker.getTrueType());
         });
 
+        it("can get the non-primitive type", () => {
+            assert(checker.getNonPrimitiveType().flags & TypeFlags.NonPrimitive);
+        });
+
         it("can get string literal types", () => {
             assert(checker.getStringLiteralType("foobar").value === "foobar");
         });

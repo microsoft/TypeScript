@@ -286,6 +286,7 @@ namespace ts {
             },
             getFalseType: () => falseType,
             getTrueType: () => trueType,
+            getNonPrimitiveType: () => nonPrimitiveType,
         };
 
         const tupleTypes: GenericType[] = [];
