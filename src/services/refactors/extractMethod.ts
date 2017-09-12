@@ -698,8 +698,14 @@ namespace ts.refactor.extractMethod {
         }
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        // insert function at the end of the scope
-        changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+        const minInsertionPos = (isReadonlyArray(range.range) ? lastOrUndefined(range.range) : range.range).end;
+        const nodeToInsertBefore = getNodeToInsertBefore(minInsertionPos, scope);
+        if (nodeToInsertBefore) {
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
+        }
+        else {
+            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+        }
 
         const newNodes: Node[] = [];
         // replace range with function call
@@ -830,6 +836,39 @@ namespace ts.refactor.extractMethod {
 
         function generateReturnValueProperty() {
             return "__return";
+        }
+
+        function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement> | ReadonlyArray<ClassElement> {
+            if (isFunctionLike(scope)) {
+                const body = scope.body;
+                if (isBlock(body)) {
+                    return body.statements;
+                }
+            }
+            else if (isModuleBlock(scope) || isSourceFile(scope)) {
+                return scope.statements;
+            }
+            else if (isClassLike(scope)) {
+                return scope.members;
+            }
+            else {
+                assertTypeIsNever(scope);
+            }
+
+            return emptyArray;
+        }
+
+        /**
+         * If `scope` contains a function after `minPos`, then return the first such function.
+         * Otherwise, return `undefined`.
+         */
+        function getNodeToInsertBefore(minPos: number, scope: Scope): Node | undefined {
+            const children = getStatementsOrClassElements(scope);
+            for (const child of children) {
+                if (child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child)) {
+                    return child;
+                }
+            }
         }
 
         function transformFunctionBody(body: Node) {

@@ -16,6 +16,16 @@ edit.applyRefactor({
     actionDescription: "Extract to method in class 'C'",
 });
 
+verify.currentFileContentIs(`class C {
+    static j = 1 + 1;
+    constructor(q: string = C.newFunction()) {
+    }
+
+    private static newFunction(): string {
+        return "a" + "b";
+    }
+}`);
+
 goTo.select('c', 'd');
 edit.applyRefactor({
     refactorName: "Extract Method",
@@ -28,11 +38,11 @@ verify.currentFileContentIs(`class C {
     constructor(q: string = C.newFunction()) {
     }
 
-    private static newFunction(): string {
-        return "a" + "b";
-    }
-
     private static newFunction_1() {
         return 1 + 1;
+    }
+
+    private static newFunction(): string {
+        return "a" + "b";
     }
 }`);
