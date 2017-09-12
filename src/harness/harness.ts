@@ -1538,9 +1538,18 @@ namespace Harness {
             function *iterateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): IterableIterator<[string, string]> {
                 let typeLines = "";
                 const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+                let dupeCount = 0;
 
                 for (const file of allFiles) {
                     const codeLines = file.content.split("\n");
+                    let key = file.unitName.toLowerCase();
+                    let resultName = sanitizeTestFilePath(file.unitName);
+                    if (typeMap[key]) {
+                        // A different baseline filename should be manufactured if the names differ only in case, for windows compat
+                        dupeCount++;
+                        resultName = `${sanitizeTestFilePath(key)}.dupe${dupeCount}`;
+                        key = file.unitName;
+                    }
                     typeWriterResults.get(file.unitName).forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
@@ -1548,24 +1557,24 @@ namespace Harness {
 
                         const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                         const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                        if (!typeMap[file.unitName]) {
-                            typeMap[file.unitName] = {};
+                        if (!typeMap[key]) {
+                            typeMap[key] = {};
                         }
 
                         let typeInfo = [formattedLine];
-                        const existingTypeInfo = typeMap[file.unitName][result.line];
+                        const existingTypeInfo = typeMap[key][result.line];
                         if (existingTypeInfo) {
                             typeInfo = existingTypeInfo.concat(typeInfo);
                         }
-                        typeMap[file.unitName][result.line] = typeInfo;
+                        typeMap[key][result.line] = typeInfo;
                     });
 
                     typeLines += "=== " + file.unitName + " ===\r\n";
                     for (let i = 0; i < codeLines.length; i++) {
                         const currentCodeLine = codeLines[i];
                         typeLines += currentCodeLine + "\r\n";
-                        if (typeMap[file.unitName]) {
-                            const typeInfo = typeMap[file.unitName][i];
+                        if (typeMap[key]) {
+                            const typeInfo = typeMap[key][i];
                             if (typeInfo) {
                                 typeInfo.forEach(ty => {
                                     typeLines += ">" + ty + "\r\n";
@@ -1581,7 +1590,7 @@ namespace Harness {
                             typeLines += "No type information for this code.";
                         }
                     }
-                    yield [sanitizeTestFilePath(file.unitName), typeLines];
+                    yield [resultName, typeLines];
                     typeLines = "";
                 }
             }
@@ -1679,38 +1688,40 @@ namespace Harness {
         }
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
-            // Collect, test, and sort the fileNames
-            outputFiles.sort((a, b) => ts.compareStrings(cleanName(a.fileName), cleanName(b.fileName)));
-
+            const gen = iterateOutputs(outputFiles);
             // Emit them
             let result = "";
-            for (const outputFile of outputFiles) {
+            for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                 // Some extra spacing if this isn't the first file
                 if (result.length) {
                     result += "\r\n\r\n";
                 }
-
                 // FileName header + content
-                result += "/*====== " + outputFile.fileName + " ======*/\r\n";
-
-                result += outputFile.code;
+                const [, content] = value;
+                result += content;
             }
-
             return result;
-
-            function cleanName(fn: string) {
-                const lastSlash = ts.normalizeSlashes(fn).lastIndexOf("/");
-                return fn.substr(lastSlash + 1).toLowerCase();
-            }
         }
 
         export function *iterateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): IterableIterator<[string, string]> {
             // Collect, test, and sort the fileNames
             outputFiles.sort((a, b) => ts.compareStrings(cleanName(a.fileName), cleanName(b.fileName)));
-
+            let dupeCount = 0;
+            const dupeMap = ts.createMap<true>();
             // Yield them
             for (const outputFile of outputFiles) {
-                yield [sanitizeTestFilePath(outputFile.fileName), outputFile.code];
+                let resultName: string;
+                const key = outputFile.fileName.toLowerCase();
+                if (dupeMap.has(key)) {
+                    // A different baseline filename should be manufactured if the names differ only in case, for windows compat
+                    dupeCount++;
+                    resultName = `${sanitizeTestFilePath(key)}.dupe${dupeCount}`;
+                }
+                else {
+                    resultName = sanitizeTestFilePath(outputFile.fileName);
+                    dupeMap.set(key, true);
+                }
+                yield [resultName, "/*====== " + outputFile.fileName + " ======*/\r\n" + outputFile.code];
             }
 
             function cleanName(fn: string) {
