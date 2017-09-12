@@ -325,8 +325,8 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.partialSystem.fileExists(file);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[] {
-            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ true);
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[] {
+            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ true);
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {

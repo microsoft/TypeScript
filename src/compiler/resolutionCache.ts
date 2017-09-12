@@ -8,7 +8,7 @@ namespace ts {
         startRecordingFilesWithChangedResolutions(): void;
         finishRecordingFilesWithChangedResolutions(): Path[];
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, logChanges: boolean): ResolvedModuleFull[];
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, logChanges: boolean): ResolvedModuleFull[];
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
         invalidateResolutionOfFile(filePath: Path): void;
@@ -207,6 +207,7 @@ namespace ts {
             perDirectoryCache: Map<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+            reusedNames: string[] | undefined,
             logChanges: boolean): R[] {
 
             const path = resolutionHost.toPath(containingFile);
@@ -253,7 +254,7 @@ namespace ts {
 
             // Stop watching and remove the unused name
             resolutionsInFile.forEach((resolution, name) => {
-                if (!seenNamesInFile.has(name)) {
+                if (!seenNamesInFile.has(name) && !contains(reusedNames, name)) {
                     stopWatchFailedLookupLocationOfResolution(resolution);
                     resolutionsInFile.delete(name);
                 }
@@ -285,16 +286,16 @@ namespace ts {
                 typeDirectiveNames, containingFile,
                 resolvedTypeReferenceDirectives, perDirectoryResolvedTypeReferenceDirectives,
                 resolveTypeReferenceDirective, getResolvedTypeReferenceDirective,
-                /*logChanges*/ false
+                /*reusedNames*/ undefined, /*logChanges*/ false
             );
         }
 
-        function resolveModuleNames(moduleNames: string[], containingFile: string, logChanges: boolean): ResolvedModuleFull[] {
+        function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, logChanges: boolean): ResolvedModuleFull[] {
             return resolveNamesWithLocalCache(
                 moduleNames, containingFile,
                 resolvedModuleNames, perDirectoryResolvedModuleNames,
                 resolveModuleName, getResolvedModule,
-                logChanges
+                reusedNames, logChanges
             );
         }
 

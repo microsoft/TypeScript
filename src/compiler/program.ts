@@ -595,11 +595,11 @@ namespace ts {
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression;
 
         let moduleResolutionCache: ModuleResolutionCache;
-        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
+        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         const hasChangedAutomaticTypeDirectiveNames = host.hasChangedAutomaticTypeDirectiveNames && host.hasChangedAutomaticTypeDirectiveNames.bind(host) || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile, reusedNames).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -820,6 +820,7 @@ namespace ts {
              * * ResolvedModuleFull instance: can be reused.
              */
             let result: ResolvedModuleFull[];
+            let reusedNames: string[];
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
 
@@ -835,6 +836,7 @@ namespace ts {
                             trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
                         }
                         (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
+                        (reusedNames || (reusedNames = [])).push(moduleName);
                         continue;
                     }
                 }
@@ -863,7 +865,7 @@ namespace ts {
             }
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
-                ? resolveModuleNamesWorker(unknownModuleNames, containingFile)
+                ? resolveModuleNamesWorker(unknownModuleNames, containingFile, reusedNames)
                 : emptyArray;
 
             // Combine results of resolutions and predicted results

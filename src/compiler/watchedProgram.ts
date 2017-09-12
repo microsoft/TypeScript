@@ -396,8 +396,8 @@ namespace ts {
             return partialSystem.getDirectories(path);
         }
 
-        function resolveModuleNames(moduleNames: string[], containingFile: string) {
-            return resolutionCache.resolveModuleNames(moduleNames, containingFile, /*logChanges*/ false);
+        function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]) {
+            return resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ false);
         }
 
         function resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string) {
