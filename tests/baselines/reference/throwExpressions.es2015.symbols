@@ -1,0 +1,31 @@
+=== tests/cases/conformance/expressions/throwExpressions/throwExpressions.es2015.ts ===
+declare const condition: boolean;
+>condition : Symbol(condition, Decl(throwExpressions.es2015.ts, 0, 13))
+
+const a = condition ? 1 : throw new Error();
+>a : Symbol(a, Decl(throwExpressions.es2015.ts, 1, 5))
+>condition : Symbol(condition, Decl(throwExpressions.es2015.ts, 0, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const b = condition || throw new Error();
+>b : Symbol(b, Decl(throwExpressions.es2015.ts, 2, 5))
+>condition : Symbol(condition, Decl(throwExpressions.es2015.ts, 0, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function c(d = throw new TypeError()) { }
+>c : Symbol(c, Decl(throwExpressions.es2015.ts, 2, 41))
+>d : Symbol(d, Decl(throwExpressions.es2015.ts, 3, 11))
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const x = "x", y = "y", z = "z";
+>x : Symbol(x, Decl(throwExpressions.es2015.ts, 5, 5))
+>y : Symbol(y, Decl(throwExpressions.es2015.ts, 5, 14))
+>z : Symbol(z, Decl(throwExpressions.es2015.ts, 5, 23))
+
+const w = condition ? throw true ? x : y : z;
+>w : Symbol(w, Decl(throwExpressions.es2015.ts, 6, 5))
+>condition : Symbol(condition, Decl(throwExpressions.es2015.ts, 0, 13))
+>x : Symbol(x, Decl(throwExpressions.es2015.ts, 5, 5))
+>y : Symbol(y, Decl(throwExpressions.es2015.ts, 5, 14))
+>z : Symbol(z, Decl(throwExpressions.es2015.ts, 5, 23))
+

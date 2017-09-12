@@ -535,12 +535,13 @@ namespace ts {
             case SyntaxKind.TypeQuery:
                 return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
 
+            case SyntaxKind.ThrowExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.SpreadElement:
-                const unaryWordExpression = n as (TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElement);
+                const unaryWordExpression = n as (ThrowExpression | TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElement);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:

@@ -17178,6 +17178,11 @@ namespace ts {
             return booleanType;
         }
 
+        function checkThrowExpression(node: ThrowExpression): Type {
+            checkExpression(node.expression);
+            return neverType;
+        }
+
         function checkTypeOfExpression(node: TypeOfExpression): Type {
             checkExpression(node.expression);
             return typeofType;
@@ -18140,6 +18145,8 @@ namespace ts {
                     return checkMetaProperty(<MetaProperty>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(<DeleteExpression>node);
+                case SyntaxKind.ThrowExpression:
+                    return checkThrowExpression(<ThrowExpression>node);
                 case SyntaxKind.VoidExpression:
                     return checkVoidExpression(<VoidExpression>node);
                 case SyntaxKind.AwaitExpression:

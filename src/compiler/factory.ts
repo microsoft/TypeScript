@@ -1074,6 +1074,18 @@ namespace ts {
             : node;
     }
 
+    export function createThrowExpression(expression: Expression) {
+        const node = <ThrowExpression>createSynthesizedNode(SyntaxKind.ThrowExpression);
+        node.expression = parenthesizePrefixOperand(expression);
+        return node;
+    }
+
+    export function updateThrowExpression(node: ThrowExpression, expression: Expression) {
+        return node.expression !== expression
+            ? updateNode(createThrowExpression(expression), node)
+            : node;
+    }
+
     export function createTypeOf(expression: Expression) {
         const node = <TypeOfExpression>createSynthesizedNode(SyntaxKind.TypeOfExpression);
         node.expression = parenthesizePrefixOperand(expression);

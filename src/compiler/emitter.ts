@@ -784,6 +784,8 @@ namespace ts {
                     return emitArrowFunction(<ArrowFunction>node);
                 case SyntaxKind.DeleteExpression:
                     return emitDeleteExpression(<DeleteExpression>node);
+                case SyntaxKind.ThrowExpression:
+                    return emitThrowExpression(<ThrowExpression>node);
                 case SyntaxKind.TypeOfExpression:
                     return emitTypeOfExpression(<TypeOfExpression>node);
                 case SyntaxKind.VoidExpression:
@@ -1297,6 +1299,11 @@ namespace ts {
 
         function emitDeleteExpression(node: DeleteExpression) {
             write("delete ");
+            emitExpression(node.expression);
+        }
+
+        function emitThrowExpression(node: ThrowExpression) {
+            write("throw ");
             emitExpression(node.expression);
         }
 
