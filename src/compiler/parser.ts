@@ -3026,9 +3026,8 @@ namespace ts {
                     return undefined;
                 }
                 if (inParameter && requireEqualsToken) {
-                    // this occurs with speculative parsing of lambdas, so try to consume the initializer,
-                    // but signal that the parameter was missing the equals sign so it can abort if it wants
-                    parseAssignmentExpressionOrHigher();
+                    // = is required when speculatively parsing arrow function parameters,
+                    // so return a fake initializer as a signal that the equals token was missing
                     const result = createNode(SyntaxKind.Identifier, scanner.getStartPos()) as Identifier;
                     result.escapedText = "= not found" as __String;
                     return result;
