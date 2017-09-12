@@ -1222,7 +1222,11 @@ namespace ts.refactor.extractMethod {
                         substitutionsPerScope[i].set(symbolId, substitution);
                     }
                     else if (isTypeName) {
-                        errorsPerScope[i].push(createDiagnosticForNode(identifier, Messages.TypeWillNotBeVisibleInTheNewScope));
+                        // If the symbol is a type parameter that won't be in scope, we'll pass it as a type argument
+                        // so there's no problem.
+                        if (!(symbol.flags & SymbolFlags.TypeParameter)) {
+                            errorsPerScope[i].push(createDiagnosticForNode(identifier, Messages.TypeWillNotBeVisibleInTheNewScope));
+                        }
                     }
                     else {
                         usagesPerScope[i].usages.set(identifier.text as string, { usage, symbol, node: identifier });
