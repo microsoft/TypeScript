@@ -9,14 +9,14 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
-    export const ProjectChangedEvent = "projectChanged";
+    export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
 
-    export interface ProjectChangedEvent {
-        eventName: typeof ProjectChangedEvent;
-        data: { project: Project; filesToEmit: string[]; changedFiles: string[] };
+    export interface ProjectsUpdatedInBackgroundEvent {
+        eventName: typeof ProjectsUpdatedInBackgroundEvent;
+        data: { openFiles: string[]; };
     }
 
     export interface ConfigFileDiagEvent {
@@ -76,7 +76,7 @@ namespace ts.server {
         readonly dts: number;
     }
 
-    export type ProjectServiceEvent = ProjectChangedEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
+    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -517,9 +517,14 @@ namespace ts.server {
                 if (this.pendingProjectUpdates.size !== 0) {
                     this.delayInferredProjectsRefresh();
                 }
-                else if (this.pendingInferredProjectUpdate) {
-                    this.pendingInferredProjectUpdate = false;
-                    this.refreshInferredProjects();
+                else {
+                    if (this.pendingInferredProjectUpdate) {
+                        this.pendingInferredProjectUpdate = false;
+                        this.refreshInferredProjects();
+                    }
+                    // Send the event to notify that there were background project updates
+                    // send current list of open files
+                    this.sendProjectsUpdatedInBackgroundEvent();
                 }
             });
         }
@@ -531,27 +536,18 @@ namespace ts.server {
                 if (this.pendingProjectUpdates.delete(projectName)) {
                     project.updateGraph();
                 }
-                // Send the update event to notify about the project changes
-                this.sendProjectChangedEvent(project);
             });
         }
 
-        private sendProjectChangedEvent(project: Project) {
-            if (project.isClosed() || !this.eventHandler || !project.languageServiceEnabled) {
+        private sendProjectsUpdatedInBackgroundEvent() {
+            if (!this.eventHandler) {
                 return;
             }
 
-            const { filesToEmit, changedFiles } = project.getChangedFiles();
-            if (changedFiles.length === 0) {
-                return;
-            }
-
-            const event: ProjectChangedEvent = {
-                eventName: ProjectChangedEvent,
+            const event: ProjectsUpdatedInBackgroundEvent = {
+                eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
-                    project,
-                    filesToEmit: filesToEmit as string[],
-                    changedFiles: changedFiles as string[]
+                    openFiles: this.openFiles.map(f => f.fileName)
                 }
             };
             this.eventHandler(event);

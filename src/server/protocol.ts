@@ -2040,27 +2040,17 @@ namespace ts.server.protocol {
         languageServiceEnabled: boolean;
     }
 
-    export type ProjectChangedEventName = "projectChanged";
-    export interface ProjectStructureChangedEvent extends Event {
-        event: ProjectChangedEventName;
-        body: ProjectChangedEventBody;
+    export type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
+    export interface ProjectsUpdatedInBackgroundEvent extends Event {
+        event: ProjectsUpdatedInBackgroundEventName;
+        body: ProjectsUpdatedInBackgroundEventBody;
     }
 
-    export interface ProjectChangedEventBody {
+    export interface ProjectsUpdatedInBackgroundEventBody {
         /**
-         * Project name that has changes
+         * Current set of open files
          */
-        projectName: string;
-
-        /**
-         * Minimum set of file names to emit
-         */
-        fileNamesToEmit: string[];
-
-        /**
-         * List of files that have changed/added/removed or could have been affected by the changed files
-         */
-        changedFiles: string[];
+        openFiles: string[];
     }
 
     /**

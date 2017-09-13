@@ -332,9 +332,9 @@ namespace ts.server {
 
         private defaultEventHandler(event: ProjectServiceEvent) {
             switch (event.eventName) {
-                case ProjectChangedEvent:
-                    const { project, filesToEmit, changedFiles } = event.data;
-                    this.projectChangedEvent(project, filesToEmit, changedFiles);
+                case ProjectsUpdatedInBackgroundEvent:
+                    const { openFiles } = event.data;
+                    this.projectsUpdatedInBackgroundEvent(openFiles);
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName: configFile, diagnostics } = event.data;
@@ -364,21 +364,19 @@ namespace ts.server {
             }
         }
 
-        private projectChangedEvent(project: Project, fileNamesToEmit: string[], changedFiles: string[]): void {
-            this.projectService.logger.info(`got project changed event, updating diagnostics for ${changedFiles}`);
-            if (changedFiles.length) {
-                const checkList = this.createCheckList(changedFiles, project);
+        private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
+            this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
+            if (openFiles.length) {
+                const checkList = this.createCheckList(openFiles);
 
                 // For now only queue error checking for open files. We can change this to include non open files as well
                 this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
 
 
                 // Send project changed event
-                this.event<protocol.ProjectChangedEventBody>({
-                    projectName: project.getProjectName(),
-                    changedFiles,
-                    fileNamesToEmit
-                }, "projectChanged");
+                this.event<protocol.ProjectsUpdatedInBackgroundEventBody>({
+                    openFiles
+                }, "projectsUpdatedInBackground");
             }
         }
 

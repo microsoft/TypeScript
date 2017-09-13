@@ -457,12 +457,6 @@ namespace ts.server {
             return !emitSkipped;
         }
 
-        getChangedFiles() {
-            Debug.assert(this.languageServiceEnabled);
-            this.ensureBuilder();
-            return this.builder.getChangedProgramFiles(this.program);
-        }
-
         enableLanguageService() {
             if (this.languageServiceEnabled) {
                 return;

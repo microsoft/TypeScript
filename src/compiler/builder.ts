@@ -35,8 +35,6 @@ namespace ts {
 
         /** Emit the changed files and clear the cache of the changed files */
         emitChangedFiles(program: Program): EmitOutputDetailed[];
-        /** Get the changed files since last query and then clear the cache of changed files */
-        getChangedProgramFiles(program: Program): ChangedProgramFiles;
         /** When called gets the semantic diagnostics for the program. It also caches the diagnostics and manage them */
         getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): Diagnostic[];
 
@@ -103,7 +101,6 @@ namespace ts {
             getFilesAffectedBy,
             emitFile,
             emitChangedFiles,
-            getChangedProgramFiles,
             getSemanticDiagnostics,
             clear
         };
@@ -271,30 +268,6 @@ namespace ts {
                 }
             }
             return diagnostics || emptyArray;
-        }
-
-        function getChangedProgramFiles(program: Program): ChangedProgramFiles {
-            ensureProgramGraph(program);
-
-            let filesToEmit: string[];
-            const changedFiles = createMap<string>();
-            enumerateChangedFilesEmitOutput(program, /*emitOnlyDtsFiles*/ true,
-                // All the changed files are required to get diagnostics
-                (changedFileName, changedFilePath) => addFileForDiagnostics(changedFileName, changedFilePath),
-                // Emitted file is for emit as well as diagnostic
-                (_emitOutput, sourceFile) => {
-                    (filesToEmit || (filesToEmit = [])).push(sourceFile.fileName);
-                    addFileForDiagnostics(sourceFile.fileName, sourceFile.path);
-                });
-            changedFileNames.clear();
-            return {
-                filesToEmit: filesToEmit || emptyArray,
-                changedFiles: arrayFrom(changedFiles.values())
-            };
-
-            function addFileForDiagnostics(fileName: string, path: Path) {
-                changedFiles.set(path, fileName);
-            }
         }
 
         function clear() {
