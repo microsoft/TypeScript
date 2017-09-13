@@ -3027,7 +3027,7 @@ namespace ts {
                 if (inParameter && requireEqualsToken) {
                     // = is required when speculatively parsing arrow function parameters,
                     // so return a fake initializer as a signal that the equals token was missing
-                    const result = createNode(SyntaxKind.Identifier, scanner.getStartPos()) as Identifier;
+                    const result = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics._0_expected, "=") as Identifier;
                     result.escapedText = "= not found" as __String;
                     return result;
                 }
