@@ -7850,7 +7850,7 @@ namespace ts {
                     return mapType(right, t => getSpreadType(left, t));
                 }
             }
-            if (right.flags & (TypeFlags.NonPrimitive | TypeFlags.BooleanLike)) {
+            if (right.flags & (TypeFlags.NonPrimitive | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike)) {
                 return emptyObjectType;
             }
 
@@ -7923,7 +7923,11 @@ namespace ts {
 
         function getPartialTypeFromFalseUnion(type: UnionType): Type | undefined {
             if (type.types.length === 2) {
-                const i = type.types.indexOf(falseType);
+                // getFalsyFlagsOfTypes
+                // getTypeFacts
+                const i = Math.max(type.types.indexOf(falseType),
+                         type.types.indexOf(zeroType),
+                         type.types.indexOf(emptyStringType));
                 if (i > -1) {
                     const members = createSymbolTable();
                     const other = type.types[i === 0 ? 1 : 0];
@@ -13785,7 +13789,7 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.Nullable | TypeFlags.NonPrimitive | TypeFlags.BooleanLike) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.PossiblyFalsy | TypeFlags.NonPrimitive) ||
                 type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }

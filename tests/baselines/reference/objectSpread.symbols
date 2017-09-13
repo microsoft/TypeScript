@@ -170,81 +170,143 @@ let spreadFunc = { ...(function () { }) };
 >spreadFunc : Symbol(spreadFunc, Decl(objectSpread.ts, 37, 3))
 
 // boolean && T results in Partial<T>
-function conditionalSpread(b: boolean) : { x?: number | undefined, y?: number | undefined } {
->conditionalSpread : Symbol(conditionalSpread, Decl(objectSpread.ts, 37, 42))
->b : Symbol(b, Decl(objectSpread.ts, 40, 27))
->x : Symbol(x, Decl(objectSpread.ts, 40, 42))
->y : Symbol(y, Decl(objectSpread.ts, 40, 66))
+function conditionalSpreadBoolean(b: boolean) : { x?: number | undefined, y?: number | undefined } {
+>conditionalSpreadBoolean : Symbol(conditionalSpreadBoolean, Decl(objectSpread.ts, 37, 42))
+>b : Symbol(b, Decl(objectSpread.ts, 40, 34))
+>x : Symbol(x, Decl(objectSpread.ts, 40, 49))
+>y : Symbol(y, Decl(objectSpread.ts, 40, 73))
 
     return { ...b && { x: 1, y: 2 } };
->b : Symbol(b, Decl(objectSpread.ts, 40, 27))
+>b : Symbol(b, Decl(objectSpread.ts, 40, 34))
 >x : Symbol(x, Decl(objectSpread.ts, 41, 22))
 >y : Symbol(y, Decl(objectSpread.ts, 41, 28))
 }
+function conditionalSpreadNumber(nt: number): { x?: number | undefined, y: number } {
+>conditionalSpreadNumber : Symbol(conditionalSpreadNumber, Decl(objectSpread.ts, 42, 1))
+>nt : Symbol(nt, Decl(objectSpread.ts, 43, 33))
+>x : Symbol(x, Decl(objectSpread.ts, 43, 47))
+>y : Symbol(y, Decl(objectSpread.ts, 43, 71))
+
+    let o = { x: 12, y: 13 }
+>o : Symbol(o, Decl(objectSpread.ts, 44, 7))
+>x : Symbol(x, Decl(objectSpread.ts, 44, 13))
+>y : Symbol(y, Decl(objectSpread.ts, 44, 20))
+
+    o = {
+>o : Symbol(o, Decl(objectSpread.ts, 44, 7))
+
+        ...o,
+>o : Symbol(o, Decl(objectSpread.ts, 44, 7))
+
+        ...nt && { x: nt }
+>nt : Symbol(nt, Decl(objectSpread.ts, 43, 33))
+>x : Symbol(x, Decl(objectSpread.ts, 47, 18))
+>nt : Symbol(nt, Decl(objectSpread.ts, 43, 33))
+    }
+    let o2 = { ...nt && { x: nt }}
+>o2 : Symbol(o2, Decl(objectSpread.ts, 49, 7))
+>nt : Symbol(nt, Decl(objectSpread.ts, 43, 33))
+>x : Symbol(x, Decl(objectSpread.ts, 49, 25))
+>nt : Symbol(nt, Decl(objectSpread.ts, 43, 33))
+
+    return o;
+>o : Symbol(o, Decl(objectSpread.ts, 44, 7))
+}
+function conditionalSpreadString(st: string): { x?: string | undefined, y: number } {
+>conditionalSpreadString : Symbol(conditionalSpreadString, Decl(objectSpread.ts, 51, 1))
+>st : Symbol(st, Decl(objectSpread.ts, 52, 33))
+>x : Symbol(x, Decl(objectSpread.ts, 52, 47))
+>y : Symbol(y, Decl(objectSpread.ts, 52, 71))
+
+    let o = { x: 'hi', y: 13 }
+>o : Symbol(o, Decl(objectSpread.ts, 53, 7))
+>x : Symbol(x, Decl(objectSpread.ts, 53, 13))
+>y : Symbol(y, Decl(objectSpread.ts, 53, 22))
+
+    o = {
+>o : Symbol(o, Decl(objectSpread.ts, 53, 7))
+
+        ...o,
+>o : Symbol(o, Decl(objectSpread.ts, 53, 7))
+
+        ...st && { x: st }
+>st : Symbol(st, Decl(objectSpread.ts, 52, 33))
+>x : Symbol(x, Decl(objectSpread.ts, 56, 18))
+>st : Symbol(st, Decl(objectSpread.ts, 52, 33))
+    }
+    let o2 = { ...st && { x: st }}
+>o2 : Symbol(o2, Decl(objectSpread.ts, 58, 7))
+>st : Symbol(st, Decl(objectSpread.ts, 52, 33))
+>x : Symbol(x, Decl(objectSpread.ts, 58, 25))
+>st : Symbol(st, Decl(objectSpread.ts, 52, 33))
+
+    return o;
+>o : Symbol(o, Decl(objectSpread.ts, 53, 7))
+}
 // other booleans result in { }
 let spreadBool = { ... true }
->spreadBool : Symbol(spreadBool, Decl(objectSpread.ts, 44, 3))
+>spreadBool : Symbol(spreadBool, Decl(objectSpread.ts, 62, 3))
 
 // any results in any
 let anything: any;
->anything : Symbol(anything, Decl(objectSpread.ts, 47, 3))
+>anything : Symbol(anything, Decl(objectSpread.ts, 65, 3))
 
 let spreadAny = { ...anything };
->spreadAny : Symbol(spreadAny, Decl(objectSpread.ts, 48, 3))
->anything : Symbol(anything, Decl(objectSpread.ts, 47, 3))
+>spreadAny : Symbol(spreadAny, Decl(objectSpread.ts, 66, 3))
+>anything : Symbol(anything, Decl(objectSpread.ts, 65, 3))
 
 // methods are not enumerable
 class C { p = 1; m() { } }
->C : Symbol(C, Decl(objectSpread.ts, 48, 32))
->p : Symbol(C.p, Decl(objectSpread.ts, 51, 9))
->m : Symbol(C.m, Decl(objectSpread.ts, 51, 16))
+>C : Symbol(C, Decl(objectSpread.ts, 66, 32))
+>p : Symbol(C.p, Decl(objectSpread.ts, 69, 9))
+>m : Symbol(C.m, Decl(objectSpread.ts, 69, 16))
 
 let c: C = new C()
->c : Symbol(c, Decl(objectSpread.ts, 52, 3))
->C : Symbol(C, Decl(objectSpread.ts, 48, 32))
->C : Symbol(C, Decl(objectSpread.ts, 48, 32))
+>c : Symbol(c, Decl(objectSpread.ts, 70, 3))
+>C : Symbol(C, Decl(objectSpread.ts, 66, 32))
+>C : Symbol(C, Decl(objectSpread.ts, 66, 32))
 
 let spreadC: { p: number } = { ...c }
->spreadC : Symbol(spreadC, Decl(objectSpread.ts, 53, 3))
->p : Symbol(p, Decl(objectSpread.ts, 53, 14))
->c : Symbol(c, Decl(objectSpread.ts, 52, 3))
+>spreadC : Symbol(spreadC, Decl(objectSpread.ts, 71, 3))
+>p : Symbol(p, Decl(objectSpread.ts, 71, 14))
+>c : Symbol(c, Decl(objectSpread.ts, 70, 3))
 
 // own methods are enumerable
 let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
->cplus : Symbol(cplus, Decl(objectSpread.ts, 56, 3))
->p : Symbol(p, Decl(objectSpread.ts, 56, 12))
->plus : Symbol(plus, Decl(objectSpread.ts, 56, 23))
->c : Symbol(c, Decl(objectSpread.ts, 52, 3))
->plus : Symbol(plus, Decl(objectSpread.ts, 56, 48))
+>cplus : Symbol(cplus, Decl(objectSpread.ts, 74, 3))
+>p : Symbol(p, Decl(objectSpread.ts, 74, 12))
+>plus : Symbol(plus, Decl(objectSpread.ts, 74, 23))
+>c : Symbol(c, Decl(objectSpread.ts, 70, 3))
+>plus : Symbol(plus, Decl(objectSpread.ts, 74, 48))
 
 cplus.plus();
->cplus.plus : Symbol(plus, Decl(objectSpread.ts, 56, 23))
->cplus : Symbol(cplus, Decl(objectSpread.ts, 56, 3))
->plus : Symbol(plus, Decl(objectSpread.ts, 56, 23))
+>cplus.plus : Symbol(plus, Decl(objectSpread.ts, 74, 23))
+>cplus : Symbol(cplus, Decl(objectSpread.ts, 74, 3))
+>plus : Symbol(plus, Decl(objectSpread.ts, 74, 23))
 
 // new field's type conflicting with existing field is OK
 let changeTypeAfter: { a: string, b: string } =
->changeTypeAfter : Symbol(changeTypeAfter, Decl(objectSpread.ts, 60, 3))
->a : Symbol(a, Decl(objectSpread.ts, 60, 22))
->b : Symbol(b, Decl(objectSpread.ts, 60, 33))
+>changeTypeAfter : Symbol(changeTypeAfter, Decl(objectSpread.ts, 78, 3))
+>a : Symbol(a, Decl(objectSpread.ts, 78, 22))
+>b : Symbol(b, Decl(objectSpread.ts, 78, 33))
 
     { ...o, a: 'wrong type?' }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
->a : Symbol(a, Decl(objectSpread.ts, 61, 11))
+>a : Symbol(a, Decl(objectSpread.ts, 79, 11))
 
 let changeTypeBefore: { a: number, b: string } =
->changeTypeBefore : Symbol(changeTypeBefore, Decl(objectSpread.ts, 62, 3))
->a : Symbol(a, Decl(objectSpread.ts, 62, 23))
->b : Symbol(b, Decl(objectSpread.ts, 62, 34))
+>changeTypeBefore : Symbol(changeTypeBefore, Decl(objectSpread.ts, 80, 3))
+>a : Symbol(a, Decl(objectSpread.ts, 80, 23))
+>b : Symbol(b, Decl(objectSpread.ts, 80, 34))
 
     { a: 'wrong type?', ...o };
->a : Symbol(a, Decl(objectSpread.ts, 63, 5))
+>a : Symbol(a, Decl(objectSpread.ts, 81, 5))
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
 
 let changeTypeBoth: { a: string, b: number } =
->changeTypeBoth : Symbol(changeTypeBoth, Decl(objectSpread.ts, 64, 3))
->a : Symbol(a, Decl(objectSpread.ts, 64, 21))
->b : Symbol(b, Decl(objectSpread.ts, 64, 32))
+>changeTypeBoth : Symbol(changeTypeBoth, Decl(objectSpread.ts, 82, 3))
+>a : Symbol(a, Decl(objectSpread.ts, 82, 21))
+>b : Symbol(b, Decl(objectSpread.ts, 82, 32))
 
     { ...o, ...swap };
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
@@ -252,90 +314,90 @@ let changeTypeBoth: { a: string, b: number } =
 
 // optional
 function container(
->container : Symbol(container, Decl(objectSpread.ts, 65, 22))
+>container : Symbol(container, Decl(objectSpread.ts, 83, 22))
 
     definiteBoolean: { sn: boolean },
->definiteBoolean : Symbol(definiteBoolean, Decl(objectSpread.ts, 68, 19))
->sn : Symbol(sn, Decl(objectSpread.ts, 69, 22))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpread.ts, 86, 19))
+>sn : Symbol(sn, Decl(objectSpread.ts, 87, 22))
 
     definiteString: { sn: string },
->definiteString : Symbol(definiteString, Decl(objectSpread.ts, 69, 37))
->sn : Symbol(sn, Decl(objectSpread.ts, 70, 21))
+>definiteString : Symbol(definiteString, Decl(objectSpread.ts, 87, 37))
+>sn : Symbol(sn, Decl(objectSpread.ts, 88, 21))
 
     optionalString: { sn?: string },
->optionalString : Symbol(optionalString, Decl(objectSpread.ts, 70, 35))
->sn : Symbol(sn, Decl(objectSpread.ts, 71, 21))
+>optionalString : Symbol(optionalString, Decl(objectSpread.ts, 88, 35))
+>sn : Symbol(sn, Decl(objectSpread.ts, 89, 21))
 
     optionalNumber: { sn?: number }) {
->optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 71, 36))
->sn : Symbol(sn, Decl(objectSpread.ts, 72, 21))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 89, 36))
+>sn : Symbol(sn, Decl(objectSpread.ts, 90, 21))
 
     let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
->optionalUnionStops : Symbol(optionalUnionStops, Decl(objectSpread.ts, 73, 7))
->sn : Symbol(sn, Decl(objectSpread.ts, 73, 29))
->definiteBoolean : Symbol(definiteBoolean, Decl(objectSpread.ts, 68, 19))
->definiteString : Symbol(definiteString, Decl(objectSpread.ts, 69, 37))
->optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 71, 36))
+>optionalUnionStops : Symbol(optionalUnionStops, Decl(objectSpread.ts, 91, 7))
+>sn : Symbol(sn, Decl(objectSpread.ts, 91, 29))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpread.ts, 86, 19))
+>definiteString : Symbol(definiteString, Decl(objectSpread.ts, 87, 37))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 89, 36))
 
     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
->optionalUnionDuplicates : Symbol(optionalUnionDuplicates, Decl(objectSpread.ts, 74, 7))
->sn : Symbol(sn, Decl(objectSpread.ts, 74, 34))
->definiteBoolean : Symbol(definiteBoolean, Decl(objectSpread.ts, 68, 19))
->definiteString : Symbol(definiteString, Decl(objectSpread.ts, 69, 37))
->optionalString : Symbol(optionalString, Decl(objectSpread.ts, 70, 35))
->optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 71, 36))
+>optionalUnionDuplicates : Symbol(optionalUnionDuplicates, Decl(objectSpread.ts, 92, 7))
+>sn : Symbol(sn, Decl(objectSpread.ts, 92, 34))
+>definiteBoolean : Symbol(definiteBoolean, Decl(objectSpread.ts, 86, 19))
+>definiteString : Symbol(definiteString, Decl(objectSpread.ts, 87, 37))
+>optionalString : Symbol(optionalString, Decl(objectSpread.ts, 88, 35))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 89, 36))
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
->allOptional : Symbol(allOptional, Decl(objectSpread.ts, 75, 7))
->sn : Symbol(sn, Decl(objectSpread.ts, 75, 22))
->optionalString : Symbol(optionalString, Decl(objectSpread.ts, 70, 35))
->optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 71, 36))
+>allOptional : Symbol(allOptional, Decl(objectSpread.ts, 93, 7))
+>sn : Symbol(sn, Decl(objectSpread.ts, 93, 22))
+>optionalString : Symbol(optionalString, Decl(objectSpread.ts, 88, 35))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpread.ts, 89, 36))
 
     // computed property
     let computedFirst: { a: number, b: string, "before everything": number } =
->computedFirst : Symbol(computedFirst, Decl(objectSpread.ts, 78, 7))
->a : Symbol(a, Decl(objectSpread.ts, 78, 24))
->b : Symbol(b, Decl(objectSpread.ts, 78, 35))
+>computedFirst : Symbol(computedFirst, Decl(objectSpread.ts, 96, 7))
+>a : Symbol(a, Decl(objectSpread.ts, 96, 24))
+>b : Symbol(b, Decl(objectSpread.ts, 96, 35))
 
         { ['before everything']: 12, ...o, b: 'yes' }
->'before everything' : Symbol(['before everything'], Decl(objectSpread.ts, 79, 9))
+>'before everything' : Symbol(['before everything'], Decl(objectSpread.ts, 97, 9))
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
->b : Symbol(b, Decl(objectSpread.ts, 79, 42))
+>b : Symbol(b, Decl(objectSpread.ts, 97, 42))
 
     let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
->computedMiddle : Symbol(computedMiddle, Decl(objectSpread.ts, 80, 7))
->a : Symbol(a, Decl(objectSpread.ts, 80, 25))
->b : Symbol(b, Decl(objectSpread.ts, 80, 36))
->c : Symbol(c, Decl(objectSpread.ts, 80, 47))
+>computedMiddle : Symbol(computedMiddle, Decl(objectSpread.ts, 98, 7))
+>a : Symbol(a, Decl(objectSpread.ts, 98, 25))
+>b : Symbol(b, Decl(objectSpread.ts, 98, 36))
+>c : Symbol(c, Decl(objectSpread.ts, 98, 47))
 
         { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
->'in the middle' : Symbol(['in the middle'], Decl(objectSpread.ts, 81, 15))
->b : Symbol(b, Decl(objectSpread.ts, 81, 38))
+>'in the middle' : Symbol(['in the middle'], Decl(objectSpread.ts, 99, 15))
+>b : Symbol(b, Decl(objectSpread.ts, 99, 38))
 >o2 : Symbol(o2, Decl(objectSpread.ts, 1, 3))
 
     let computedAfter: { a: number, b: string, "at the end": number } =
->computedAfter : Symbol(computedAfter, Decl(objectSpread.ts, 82, 7))
->a : Symbol(a, Decl(objectSpread.ts, 82, 24))
->b : Symbol(b, Decl(objectSpread.ts, 82, 35))
+>computedAfter : Symbol(computedAfter, Decl(objectSpread.ts, 100, 7))
+>a : Symbol(a, Decl(objectSpread.ts, 100, 24))
+>b : Symbol(b, Decl(objectSpread.ts, 100, 35))
 
         { ...o, b: 'yeah', ['at the end']: 14 }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
->b : Symbol(b, Decl(objectSpread.ts, 83, 15))
->'at the end' : Symbol(['at the end'], Decl(objectSpread.ts, 83, 26))
+>b : Symbol(b, Decl(objectSpread.ts, 101, 15))
+>'at the end' : Symbol(['at the end'], Decl(objectSpread.ts, 101, 26))
 }
 // shortcut syntax
 let a = 12;
->a : Symbol(a, Decl(objectSpread.ts, 86, 3))
+>a : Symbol(a, Decl(objectSpread.ts, 104, 3))
 
 let shortCutted: { a: number, b: string } = { ...o, a }
->shortCutted : Symbol(shortCutted, Decl(objectSpread.ts, 87, 3))
->a : Symbol(a, Decl(objectSpread.ts, 87, 18))
->b : Symbol(b, Decl(objectSpread.ts, 87, 29))
+>shortCutted : Symbol(shortCutted, Decl(objectSpread.ts, 105, 3))
+>a : Symbol(a, Decl(objectSpread.ts, 105, 18))
+>b : Symbol(b, Decl(objectSpread.ts, 105, 29))
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
->a : Symbol(a, Decl(objectSpread.ts, 87, 51))
+>a : Symbol(a, Decl(objectSpread.ts, 105, 51))
 
 // non primitive
 let spreadNonPrimitive = { ...<object>{}};
->spreadNonPrimitive : Symbol(spreadNonPrimitive, Decl(objectSpread.ts, 89, 3))
+>spreadNonPrimitive : Symbol(spreadNonPrimitive, Decl(objectSpread.ts, 107, 3))
 

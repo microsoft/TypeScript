@@ -7,9 +7,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2322
   Property 's' is missing in type '{ b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(33,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(34,19): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(35,11): error TS2339: Property 'length' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,11): error TS2339: Property 'charAt' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(39,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,12): error TS2339: Property 'b' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
@@ -24,7 +23,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(80,7): error TS2322
   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (18 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (17 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -72,16 +71,14 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(80,7): error TS2322
     
     // primitives are not allowed
     let spreadNum = { ...12 };
-                      ~~~~~
-!!! error TS2698: Spread types may only be created from object types.
     let spreadSum = { ...1 + 1 };
-                      ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
     let spreadStr = { ...'foo' };
-                      ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
     spreadStr.length; // error, no 'length'
+              ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type '{}'.
     spreadStr.charAt(1); // error, no methods either
+              ~~~~~~
+!!! error TS2339: Property 'charAt' does not exist on type '{}'.
     // functions are skipped
     let spreadFunc = { ...function () { } }
     spreadFunc(); // error, no call signature

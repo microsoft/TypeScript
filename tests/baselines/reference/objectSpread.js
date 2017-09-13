@@ -39,8 +39,26 @@ getter.a = 12;
 let spreadFunc = { ...(function () { }) };
 
 // boolean && T results in Partial<T>
-function conditionalSpread(b: boolean) : { x?: number | undefined, y?: number | undefined } {
+function conditionalSpreadBoolean(b: boolean) : { x?: number | undefined, y?: number | undefined } {
     return { ...b && { x: 1, y: 2 } };
+}
+function conditionalSpreadNumber(nt: number): { x?: number | undefined, y: number } {
+    let o = { x: 12, y: 13 }
+    o = {
+        ...o,
+        ...nt && { x: nt }
+    }
+    let o2 = { ...nt && { x: nt }}
+    return o;
+}
+function conditionalSpreadString(st: string): { x?: string | undefined, y: number } {
+    let o = { x: 'hi', y: 13 }
+    o = {
+        ...o,
+        ...st && { x: st }
+    }
+    let o2 = { ...st && { x: st }}
+    return o;
 }
 // other booleans result in { }
 let spreadBool = { ... true }
@@ -124,8 +142,20 @@ getter.a = 12;
 // functions result in { }
 var spreadFunc = __assign({}, (function () { }));
 // boolean && T results in Partial<T>
-function conditionalSpread(b) {
+function conditionalSpreadBoolean(b) {
     return __assign({}, b && { x: 1, y: 2 });
+}
+function conditionalSpreadNumber(nt) {
+    var o = { x: 12, y: 13 };
+    o = __assign({}, o, nt && { x: nt });
+    var o2 = __assign({}, nt && { x: nt });
+    return o;
+}
+function conditionalSpreadString(st) {
+    var o = { x: 'hi', y: 13 };
+    o = __assign({}, o, st && { x: st });
+    var o2 = __assign({}, st && { x: st });
+    return o;
 }
 // other booleans result in { }
 var spreadBool = __assign({}, true);

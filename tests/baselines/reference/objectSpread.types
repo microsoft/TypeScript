@@ -231,8 +231,8 @@ let spreadFunc = { ...(function () { }) };
 >function () { } : () => void
 
 // boolean && T results in Partial<T>
-function conditionalSpread(b: boolean) : { x?: number | undefined, y?: number | undefined } {
->conditionalSpread : (b: boolean) => { x?: number | undefined; y?: number | undefined; }
+function conditionalSpreadBoolean(b: boolean) : { x?: number | undefined, y?: number | undefined } {
+>conditionalSpreadBoolean : (b: boolean) => { x?: number | undefined; y?: number | undefined; }
 >b : boolean
 >x : number | undefined
 >y : number | undefined
@@ -246,6 +246,88 @@ function conditionalSpread(b: boolean) : { x?: number | undefined, y?: number | 
 >1 : 1
 >y : number
 >2 : 2
+}
+function conditionalSpreadNumber(nt: number): { x?: number | undefined, y: number } {
+>conditionalSpreadNumber : (nt: number) => { x?: number | undefined; y: number; }
+>nt : number
+>x : number | undefined
+>y : number
+
+    let o = { x: 12, y: 13 }
+>o : { x: number; y: number; }
+>{ x: 12, y: 13 } : { x: number; y: number; }
+>x : number
+>12 : 12
+>y : number
+>13 : 13
+
+    o = {
+>o = {        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
+>o : { x: number; y: number; }
+>{        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
+
+        ...o,
+>o : { x: number; y: number; }
+
+        ...nt && { x: nt }
+>nt && { x: nt } : 0 | { x: number; }
+>nt : number
+>{ x: nt } : { x: number; }
+>x : number
+>nt : number
+    }
+    let o2 = { ...nt && { x: nt }}
+>o2 : { x?: number | undefined; }
+>{ ...nt && { x: nt }} : { x?: number | undefined; }
+>nt && { x: nt } : 0 | { x: number; }
+>nt : number
+>{ x: nt } : { x: number; }
+>x : number
+>nt : number
+
+    return o;
+>o : { x: number; y: number; }
+}
+function conditionalSpreadString(st: string): { x?: string | undefined, y: number } {
+>conditionalSpreadString : (st: string) => { x?: string | undefined; y: number; }
+>st : string
+>x : string | undefined
+>y : number
+
+    let o = { x: 'hi', y: 13 }
+>o : { x: string; y: number; }
+>{ x: 'hi', y: 13 } : { x: string; y: number; }
+>x : string
+>'hi' : "hi"
+>y : number
+>13 : 13
+
+    o = {
+>o = {        ...o,        ...st && { x: st }    } : { x: string; y: number; }
+>o : { x: string; y: number; }
+>{        ...o,        ...st && { x: st }    } : { x: string; y: number; }
+
+        ...o,
+>o : { x: string; y: number; }
+
+        ...st && { x: st }
+>st && { x: st } : "" | { x: string; }
+>st : string
+>{ x: st } : { x: string; }
+>x : string
+>st : string
+    }
+    let o2 = { ...st && { x: st }}
+>o2 : { x?: string | undefined; }
+>{ ...st && { x: st }} : { x?: string | undefined; }
+>st && { x: st } : "" | { x: string; }
+>st : string
+>{ x: st } : { x: string; }
+>x : string
+>st : string
+
+    return o;
+>o : { x: string; y: number; }
 }
 // other booleans result in { }
 let spreadBool = { ... true }
