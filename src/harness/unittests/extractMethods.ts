@@ -224,7 +224,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         if (x) {
                             return;
                         } |]
@@ -234,7 +234,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         [$|if (x) {
                         }
                         return;|]
@@ -656,6 +656,60 @@ function test(x: number) {
         [#|return 1;|]
     }
 }`);
+        // Extraction position - namespace
+        testExtractMethod("extractMethod23",
+            `namespace NS {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - function
+        testExtractMethod("extractMethod24",
+            `function Outer() {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - file
+        testExtractMethod("extractMethod25",
+            `function M1() { }
+function M2() {
+    [#|return 1;|]
+}
+function M3() { }`);
+        // Extraction position - class without ctor
+        testExtractMethod("extractMethod26",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+}`);
+        // Extraction position - class with ctor in middle
+        testExtractMethod("extractMethod27",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    constructor() { }
+    M3() { }
+}`);
+        // Extraction position - class with ctor at end
+        testExtractMethod("extractMethod28",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+    constructor() { }
+}`);
     });
 
 
@@ -691,9 +745,12 @@ function test(x: number) {
                 data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
-                    const changes = refactor.extractMethod.getPossibleExtractions(result.targetRange, context, results.indexOf(r))[0].changes;
+                    const { renameLocation, edits } = refactor.extractMethod.getExtractionAtIndex(result.targetRange, context, results.indexOf(r));
+                    assert.lengthOf(edits, 1);
                     data.push(`// ==SCOPE::${r.scopeDescription}==`);
-                    data.push(textChanges.applyChanges(sourceFile.text, changes[0].textChanges));
+                    const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
+                    const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
+                    data.push(newTextWithRename);
                 }
                 return data.join(newLineCharacter);
             });

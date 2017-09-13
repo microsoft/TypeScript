@@ -585,7 +585,6 @@ namespace ts.server {
     function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
         const watchedFiles: WatchedFile[] = [];
         let nextFileToCheck = 0;
-        let watchTimer: any;
         return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
@@ -622,7 +621,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
-            watchTimer = setInterval(() => {
+            setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
                 let firstCheck = -1;

@@ -500,12 +500,10 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
                 return true;
             default:
-                staticAssertNever(node);
+                assertTypeIsNever(node);
                 return false;
         }
     }
-
-    function staticAssertNever(_: never): void {}
 
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
@@ -3503,6 +3501,46 @@ namespace ts {
     /** See comment on `declareModuleMember` in `binder.ts`. */
     export function getCombinedLocalAndExportSymbolFlags(symbol: Symbol): SymbolFlags {
         return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
+    }
+
+    export function isWriteOnlyAccess(node: Node) {
+        return accessKind(node) === AccessKind.Write;
+    }
+
+    export function isWriteAccess(node: Node) {
+        return accessKind(node) !== AccessKind.Read;
+    }
+
+    const enum AccessKind {
+        /** Only reads from a variable. */
+        Read,
+        /** Only writes to a variable without using the result. E.g.: `x++;`. */
+        Write,
+        /** Writes to a variable and uses the result as an expression. E.g.: `f(x++);`. */
+        ReadWrite
+    }
+    function accessKind(node: Node): AccessKind {
+        const { parent } = node;
+        if (!parent) return AccessKind.Read;
+
+        switch (parent.kind) {
+            case SyntaxKind.PostfixUnaryExpression:
+            case SyntaxKind.PrefixUnaryExpression:
+                const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
+                return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
+            case SyntaxKind.BinaryExpression:
+                const { left, operatorToken } = parent as BinaryExpression;
+                return left === node && isAssignmentOperator(operatorToken.kind) ? writeOrReadWrite() : AccessKind.Read;
+            case SyntaxKind.PropertyAccessExpression:
+                return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
+            default:
+                return AccessKind.Read;
+        }
+
+        function writeOrReadWrite(): AccessKind {
+            // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
+            return parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+        }
     }
 }
 

@@ -18,7 +18,7 @@ namespace A {
     namespace B {
         function* a(z: number) {
         
-            return yield* newFunction();
+            return yield* /*RENAME*/newFunction();
 
             function* newFunction() {
                 let y = 5;
@@ -35,7 +35,7 @@ namespace A {
     namespace B {
         function* a(z: number) {
         
-            return yield* newFunction(z);
+            return yield* /*RENAME*/newFunction(z);
         }
 
         function* newFunction(z: number) {
@@ -52,7 +52,7 @@ namespace A {
     namespace B {
         function* a(z: number) {
         
-            return yield* newFunction(z);
+            return yield* /*RENAME*/newFunction(z);
         }
     }
 
@@ -69,7 +69,7 @@ namespace A {
     namespace B {
         function* a(z: number) {
         
-            return yield* newFunction(z, foo);
+            return yield* /*RENAME*/newFunction(z, foo);
         }
     }
 }

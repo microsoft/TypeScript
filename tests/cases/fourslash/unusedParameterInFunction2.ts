@@ -2,7 +2,7 @@
 
 // @noUnusedParameters: true
 ////function [|greeter(x,y)|] {
-////    x++;
+////    use(x);
 ////}
 
 verify.rangeAfterCodeFix("greeter(x)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
