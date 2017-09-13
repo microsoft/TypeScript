@@ -184,16 +184,12 @@ namespace ts.textChanges {
         return s;
     }
 
-    function getNewlineKind(context: { newLineCharacter: string }) {
-        return context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-    }
-
     export class ChangeTracker {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
         public static fromContext(context: RefactorContext | CodeFixContext) {
-            return new ChangeTracker(getNewlineKind(context), context.rulesProvider);
+            return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
         }
 
         constructor(

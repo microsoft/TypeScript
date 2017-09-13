@@ -2019,7 +2019,7 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram(),
-                newLineCharacter: host.getNewLine(),
+                newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
                 rulesProvider: getRuleProvider(formatOptions),
                 cancellationToken
             };
