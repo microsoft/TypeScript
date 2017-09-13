@@ -729,6 +729,11 @@ function parseUnaryExpression(operator: string): UnaryExpression {
 function parsePrimaryExpression(): any {
     throw "Not implemented";
 }`);
+        // Type parameter as declared type
+        testExtractMethod("extractMethod30",
+            `function F<T>() {
+    [#|let t: T;|]
+}`);
     });
 
 
