@@ -29,9 +29,7 @@ spread = b; // error, missing 's'
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
 
-// primitives are not allowed
-let spreadNum = { ...12 };
-let spreadSum = { ...1 + 1 };
+// primitives are skipped
 let spreadStr = { ...'foo' };
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either

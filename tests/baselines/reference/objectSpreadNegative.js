@@ -29,9 +29,7 @@ spread = b; // error, missing 's'
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
 
-// primitives are not allowed
-let spreadNum = { ...12 };
-let spreadSum = { ...1 + 1 };
+// primitives are skipped
 let spreadStr = { ...'foo' };
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
@@ -118,9 +116,7 @@ spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
 var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
 var duplicatedSpread = __assign({}, o, o);
-// primitives are not allowed
-var spreadNum = __assign({}, 12);
-var spreadSum = __assign({}, 1 + 1);
+// primitives are skipped
 var spreadStr = __assign({}, 'foo');
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either

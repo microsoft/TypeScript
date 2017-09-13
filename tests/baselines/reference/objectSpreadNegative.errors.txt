@@ -7,19 +7,19 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2322
   Property 's' is missing in type '{ b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(35,11): error TS2339: Property 'length' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,11): error TS2339: Property 'charAt' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(39,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,12): error TS2339: Property 'b' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(54,11): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,14): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(61,14): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(75,37): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(33,11): error TS2339: Property 'length' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(34,11): error TS2339: Property 'charAt' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(41,12): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(52,11): error TS2339: Property 'a' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(56,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(73,37): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
+  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(76,7): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(78,7): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
-  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(80,7): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
 
 
@@ -69,9 +69,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(80,7): error TS2322
 !!! error TS2300: Duplicate identifier 'b'.
     let duplicatedSpread = { ...o, ...o }
     
-    // primitives are not allowed
-    let spreadNum = { ...12 };
-    let spreadSum = { ...1 + 1 };
+    // primitives are skipped
     let spreadStr = { ...'foo' };
     spreadStr.length; // error, no 'length'
               ~~~~~~
