@@ -2212,6 +2212,10 @@
         "category": "Error",
         "code": 2713
     },
+    "The expression of an export assignment must be an identifier or qualified name in an ambient context.": {
+        "category": "Error",
+        "code": 2714
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
