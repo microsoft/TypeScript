@@ -1190,9 +1190,9 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
-            this.addFilesToProjectAndUpdateGraph(project, project.getExternalFiles(), fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
-            
+            const filesToAdd = projectOptions.files.concat(project.getExternalFiles());
+            this.addFilesToProjectAndUpdateGraph(project, filesToAdd, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
+
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
             if (!sizeLimitExceeded) {
                 this.watchConfigDirectoryForProject(project, projectOptions);
