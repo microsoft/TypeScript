@@ -1161,7 +1161,11 @@ namespace ts.refactor.extractMethod {
         }
 
         function recordUsagebySymbol(identifier: Identifier, usage: Usage, isTypeName: boolean) {
-            const symbol = checker.getSymbolAtLocation(identifier);
+            // If the identifier is both a property name and its value, we're only interested in its value
+            // (since the name is a declaration and will be included in the extracted range).
+            const symbol = identifier.parent && isShorthandPropertyAssignment(identifier.parent) && identifier.parent.name === identifier
+                ? checker.getShorthandAssignmentValueSymbol(identifier.parent)
+                : checker.getSymbolAtLocation(identifier);
             if (!symbol) {
                 // cannot find symbol - do nothing
                 return undefined;
