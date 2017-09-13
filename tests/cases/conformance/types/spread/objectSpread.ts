@@ -1,3 +1,4 @@
+// @strictNullChecks: true
 // @target: es5
 let o = { a: 1, b: 'no' }
 let o2 = { b: 'yes', c: true }
@@ -38,6 +39,13 @@ getter.a = 12;
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
 
+// boolean && T results in Partial<T>
+function conditionalSpread(b: boolean) : { x?: number | undefined, y?: number | undefined } {
+    return { ...b && { x: 1, y: 2 } };
+}
+// other booleans result in { }
+let spreadBool = { ... true }
+
 // any results in any
 let anything: any;
 let spreadAny = { ...anything };
@@ -60,21 +68,23 @@ let changeTypeBoth: { a: string, b: number } =
     { ...o, ...swap };
 
 // optional
-let definiteBoolean: { sn: boolean };
-let definiteString: { sn: string };
-let optionalString: { sn?: string };
-let optionalNumber: { sn?: number };
-let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
-let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
-let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+function container(
+    definiteBoolean: { sn: boolean },
+    definiteString: { sn: string },
+    optionalString: { sn?: string },
+    optionalNumber: { sn?: number }) {
+    let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
+    let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+    let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 
-// computed property
-let computedFirst: { a: number, b: string, "before everything": number } =
-    { ['before everything']: 12, ...o, b: 'yes' }
-let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
-    { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
-let computedAfter: { a: number, b: string, "at the end": number } =
-    { ...o, b: 'yeah', ['at the end']: 14 }
+    // computed property
+    let computedFirst: { a: number, b: string, "before everything": number } =
+        { ['before everything']: 12, ...o, b: 'yes' }
+    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+        { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
+    let computedAfter: { a: number, b: string, "at the end": number } =
+        { ...o, b: 'yeah', ['at the end']: 14 }
+}
 // shortcut syntax
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }

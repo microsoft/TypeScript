@@ -38,6 +38,13 @@ getter.a = 12;
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
 
+// boolean && T results in Partial<T>
+function conditionalSpread(b: boolean) : { x?: number | undefined, y?: number | undefined } {
+    return { ...b && { x: 1, y: 2 } };
+}
+// other booleans result in { }
+let spreadBool = { ... true }
+
 // any results in any
 let anything: any;
 let spreadAny = { ...anything };
@@ -60,21 +67,23 @@ let changeTypeBoth: { a: string, b: number } =
     { ...o, ...swap };
 
 // optional
-let definiteBoolean: { sn: boolean };
-let definiteString: { sn: string };
-let optionalString: { sn?: string };
-let optionalNumber: { sn?: number };
-let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
-let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
-let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+function container(
+    definiteBoolean: { sn: boolean },
+    definiteString: { sn: string },
+    optionalString: { sn?: string },
+    optionalNumber: { sn?: number }) {
+    let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
+    let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+    let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 
-// computed property
-let computedFirst: { a: number, b: string, "before everything": number } =
-    { ['before everything']: 12, ...o, b: 'yes' }
-let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
-    { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
-let computedAfter: { a: number, b: string, "at the end": number } =
-    { ...o, b: 'yeah', ['at the end']: 14 }
+    // computed property
+    let computedFirst: { a: number, b: string, "before everything": number } =
+        { ['before everything']: 12, ...o, b: 'yes' }
+    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+        { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
+    let computedAfter: { a: number, b: string, "at the end": number } =
+        { ...o, b: 'yeah', ['at the end']: 14 }
+}
 // shortcut syntax
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
@@ -114,6 +123,12 @@ var getter = __assign({}, op, { c: 7 });
 getter.a = 12;
 // functions result in { }
 var spreadFunc = __assign({}, (function () { }));
+// boolean && T results in Partial<T>
+function conditionalSpread(b) {
+    return __assign({}, b && { x: 1, y: 2 });
+}
+// other booleans result in { }
+var spreadBool = __assign({}, true);
 // any results in any
 var anything;
 var spreadAny = __assign({}, anything);
@@ -135,20 +150,18 @@ var changeTypeAfter = __assign({}, o, { a: 'wrong type?' });
 var changeTypeBefore = __assign({ a: 'wrong type?' }, o);
 var changeTypeBoth = __assign({}, o, swap);
 // optional
-var definiteBoolean;
-var definiteString;
-var optionalString;
-var optionalNumber;
-var optionalUnionStops = __assign({}, definiteBoolean, definiteString, optionalNumber);
-var optionalUnionDuplicates = __assign({}, definiteBoolean, definiteString, optionalString, optionalNumber);
-var allOptional = __assign({}, optionalString, optionalNumber);
-// computed property
-var computedFirst = __assign((_a = {}, _a['before everything'] = 12, _a), o, { b: 'yes' });
-var computedMiddle = __assign({}, o, (_b = {}, _b['in the middle'] = 13, _b.b = 'maybe?', _b), o2);
-var computedAfter = __assign({}, o, (_c = { b: 'yeah' }, _c['at the end'] = 14, _c));
+function container(definiteBoolean, definiteString, optionalString, optionalNumber) {
+    var optionalUnionStops = __assign({}, definiteBoolean, definiteString, optionalNumber);
+    var optionalUnionDuplicates = __assign({}, definiteBoolean, definiteString, optionalString, optionalNumber);
+    var allOptional = __assign({}, optionalString, optionalNumber);
+    // computed property
+    var computedFirst = __assign((_a = {}, _a['before everything'] = 12, _a), o, { b: 'yes' });
+    var computedMiddle = __assign({}, o, (_b = {}, _b['in the middle'] = 13, _b.b = 'maybe?', _b), o2);
+    var computedAfter = __assign({}, o, (_c = { b: 'yeah' }, _c['at the end'] = 14, _c));
+    var _a, _b, _c;
+}
 // shortcut syntax
 var a = 12;
 var shortCutted = __assign({}, o, { a: a });
 // non primitive
 var spreadNonPrimitive = __assign({}, {});
-var _a, _b, _c;

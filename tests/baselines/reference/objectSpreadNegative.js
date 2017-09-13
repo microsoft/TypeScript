@@ -32,9 +32,6 @@ let duplicatedSpread = { ...o, ...o }
 // primitives are not allowed
 let spreadNum = { ...12 };
 let spreadSum = { ...1 + 1 };
-spreadSum.toFixed(); // error, no methods from number
-let spreadBool = { ...false };
-spreadBool.valueOf(); // error, what were you thinking?
 let spreadStr = { ...'foo' };
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
@@ -124,9 +121,6 @@ var duplicatedSpread = __assign({}, o, o);
 // primitives are not allowed
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);
-spreadSum.toFixed(); // error, no methods from number
-var spreadBool = __assign({}, false);
-spreadBool.valueOf(); // error, what were you thinking?
 var spreadStr = __assign({}, 'foo');
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either

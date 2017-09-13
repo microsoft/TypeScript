@@ -32,9 +32,6 @@ let duplicatedSpread = { ...o, ...o }
 // primitives are not allowed
 let spreadNum = { ...12 };
 let spreadSum = { ...1 + 1 };
-spreadSum.toFixed(); // error, no methods from number
-let spreadBool = { ...false };
-spreadBool.valueOf(); // error, what were you thinking?
 let spreadStr = { ...'foo' };
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
