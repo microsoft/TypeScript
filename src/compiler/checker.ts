@@ -14753,7 +14753,7 @@ namespace ts {
                 return;
             }
 
-            if (findAncestor(node, node => node.kind === SyntaxKind.PropertyDeclaration ? true : isExpression(node) ? false : "quit") &&
+            if (isInPropertyInitializer(node) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && !isPropertyDeclaredInAncestorClass(prop)) {
                 error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
@@ -14764,6 +14764,20 @@ namespace ts {
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)) {
                 error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
             }
+        }
+
+        function isInPropertyInitializer(node: Node): boolean {
+            return !!findAncestor(node, node => {
+                switch (node.kind) {
+                    case SyntaxKind.PropertyDeclaration:
+                        return true;
+                    case SyntaxKind.PropertyAssignment:
+                        // We might be in `a = { b: this.b }`, so keep looking. See `tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts`.
+                        return false;
+                    default:
+                        return isPartOfExpression(node) ? false : "quit";
+                }
+            });
         }
 
         /**
