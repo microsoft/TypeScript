@@ -7289,6 +7289,22 @@ namespace ts {
             return binarySearchTypes(types, type) >= 0;
         }
 
+        // Return true if the given intersection type contains (a) more than one unit type or (b) an object
+        // type and a nullable type (null or undefined).
+        function isEmptyIntersectionType(type: IntersectionType) {
+            let combined: TypeFlags = 0;
+            for (const t of type.types) {
+                if (t.flags & TypeFlags.Unit && combined & TypeFlags.Unit) {
+                    return true;
+                }
+                combined |= t.flags;
+                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function addTypeToUnion(typeSet: TypeSet, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
@@ -7302,7 +7318,7 @@ namespace ts {
                 if (flags & TypeFlags.Null) typeSet.containsNull = true;
                 if (!(flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
-            else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && every((<IntersectionType>type).types, isUnitType))) {
+            else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
                 // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
                 // another form of 'never' (in that they have an empty value domain). We could in theory turn
                 // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
@@ -10041,7 +10057,7 @@ namespace ts {
         }
 
         function isUnitType(type: Type): boolean {
-            return (type.flags & (TypeFlags.Literal | TypeFlags.Undefined | TypeFlags.Null)) !== 0;
+            return !!(type.flags & TypeFlags.Unit);
         }
 
         function isLiteralType(type: Type): boolean {
