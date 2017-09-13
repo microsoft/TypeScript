@@ -263,7 +263,7 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
         for (let i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }

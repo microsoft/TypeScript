@@ -216,8 +216,8 @@ if (taskConfigsFolder) {
 
     for (let i = 0; i < workerCount; i++) {
         const config = workerConfigs[i];
-        // use last worker to run unit tests
-        config.runUnitTests = i === workerCount - 1;
+        // use last worker to run unit tests if we're not just running a single specific runner
+        config.runUnitTests = runners.length !== 1 && i === workerCount - 1;
         Harness.IO.writeFile(ts.combinePaths(taskConfigsFolder, `task-config${i}.json`), JSON.stringify(workerConfigs[i]));
     }
 }
