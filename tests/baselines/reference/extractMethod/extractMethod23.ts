@@ -10,7 +10,7 @@ namespace NS {
 namespace NS {
     function M1() { }
     function M2() {
-        return newFunction();
+        return /*RENAME*/newFunction();
 
         function newFunction() {
             return 1;
@@ -22,7 +22,7 @@ namespace NS {
 namespace NS {
     function M1() { }
     function M2() {
-        return newFunction();
+        return /*RENAME*/newFunction();
     }
     function newFunction() {
         return 1;
@@ -34,7 +34,7 @@ namespace NS {
 namespace NS {
     function M1() { }
     function M2() {
-        return newFunction();
+        return /*RENAME*/newFunction();
     }
     function M3() { }
 }

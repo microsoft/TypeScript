@@ -11,7 +11,7 @@ class C {
 class C {
     M1() { }
     M2() {
-        return this.newFunction();
+        return this./*RENAME*/newFunction();
     }
     private newFunction() {
         return 1;
@@ -24,7 +24,7 @@ class C {
 class C {
     M1() { }
     M2() {
-        return newFunction();
+        return /*RENAME*/newFunction();
     }
     M3() { }
     constructor() { }

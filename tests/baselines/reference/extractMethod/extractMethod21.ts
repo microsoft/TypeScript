@@ -7,7 +7,7 @@ function foo() {
 // ==SCOPE::inner function in function 'foo'==
 function foo() {
     let x = 10;
-    return newFunction();
+    return /*RENAME*/newFunction();
 
     function newFunction() {
         x++;
@@ -17,7 +17,7 @@ function foo() {
 // ==SCOPE::function in global scope==
 function foo() {
     let x = 10;
-    x = newFunction(x);
+    x = /*RENAME*/newFunction(x);
     return;
 }
 function newFunction(x: number) {

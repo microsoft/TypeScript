@@ -8,7 +8,7 @@ const _ = class {
 // ==SCOPE::method in anonymous class expression==
 const _ = class {
     a() {
-        return this.newFunction();
+        return this./*RENAME*/newFunction();
     }
 
     private newFunction() {
@@ -19,7 +19,7 @@ const _ = class {
 // ==SCOPE::function in global scope==
 const _ = class {
     a() {
-        return newFunction();
+        return /*RENAME*/newFunction();
     }
 }
 function newFunction() {
