@@ -404,6 +404,12 @@ function test(x: number) {
             "Cannot extract range containing conditional break or continue statements."
         ]);
 
+        testExtractRangeFailed("extractRangeFailed9",
+        `var x = ([#||]1 + 2);`,
+        [
+            "Statement or expression expected."
+        ]);
+
         testExtractMethod("extractMethod1",
             `namespace A {
     let x = 1;
