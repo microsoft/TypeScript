@@ -4902,7 +4902,7 @@ namespace ts {
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode>, location: Node): Signature[] {
             const signatures = getConstructorsForTypeArguments(type, typeArgumentNodes, location);
             const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
-            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments) : sig);
+            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments, isInJavaScriptFile(location)) : sig);
         }
 
         /**
@@ -5498,7 +5498,7 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
                 if ((isJavaScript || typeArgCount >= minTypeArgumentCount) && typeArgCount <= typeParamCount) {
-                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, baseTypeNode)) : cloneSignature(baseSig);
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -6361,11 +6361,10 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, location?: Node) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScript?: boolean) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
-                const isJavaScript = isInJavaScriptFile(location);
                 if ((isJavaScript || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
                     if (!typeArguments) {
                         typeArguments = [];
@@ -6623,8 +6622,8 @@ namespace ts {
             return anyType;
         }
 
-        function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters));
+        function getSignatureInstantiation(signature: Signature, typeArguments: Type[], isJavascript?: boolean): Signature {
+            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript);
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
             let instantiation = instantiations.get(id);
@@ -6813,7 +6812,8 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (!isInJavaScriptFile(node) && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                const isJavascript = isInJavaScriptFile(node);
+                if (!isJavascript && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
                             ? Diagnostics.Generic_type_0_requires_1_type_argument_s
@@ -6826,7 +6826,7 @@ namespace ts {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJavascript));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
