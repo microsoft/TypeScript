@@ -404,6 +404,8 @@ function test(x: number) {
             "Cannot extract range containing conditional break or continue statements."
         ]);
 
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single token."]);
+
         testExtractMethod("extractMethod1",
             `namespace A {
     let x = 1;
