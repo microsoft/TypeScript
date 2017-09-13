@@ -2621,16 +2621,9 @@ namespace ts {
                 unaryMinusExpression.operator = SyntaxKind.MinusToken;
                 nextToken();
             }
-            let expression: UnaryExpression;
-            switch (token()) {
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    expression = parseLiteralLikeNode(token()) as LiteralExpression;
-                    break;
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.FalseKeyword:
-                    expression = parseTokenNode();
-            }
+            let expression: BooleanLiteral | LiteralExpression | PrefixUnaryExpression = token() === SyntaxKind.TrueKeyword || token() === SyntaxKind.FalseKeyword
+                ? parseTokenNode<BooleanLiteral>()
+                : parseLiteralLikeNode(token()) as LiteralExpression;
             if (negative) {
                 unaryMinusExpression.operand = expression;
                 finishNode(unaryMinusExpression);
@@ -2666,6 +2659,7 @@ namespace ts {
                     return parseJSDocNodeWithType(SyntaxKind.JSDocVariadicType);
                 case SyntaxKind.ExclamationToken:
                     return parseJSDocNodeWithType(SyntaxKind.JSDocNonNullableType);
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.TrueKeyword:
