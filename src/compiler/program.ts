@@ -1158,9 +1158,7 @@ namespace ts {
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
-                return isSourceFileJavaScript(sourceFile)
-                    ? filter(diagnostics, shouldReportDiagnostic)
-                    : diagnostics;
+                return filter(diagnostics, shouldReportDiagnostic);
             });
         }
 
