@@ -2,8 +2,8 @@
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
-            Diagnostics._0_is_declared_but_never_used.code,
-            Diagnostics.Property_0_is_declared_but_never_used.code
+            Diagnostics._0_is_declared_but_its_value_is_never_read.code,
+            Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code
         ],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
