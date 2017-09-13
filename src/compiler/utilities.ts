@@ -3506,41 +3506,44 @@ namespace ts {
     }
 
     export function isWriteOnlyAccess(node: Node) {
-        return writeKind(node) === WriteKind.Write;
+        return accessKind(node) === AccessKind.Write;
     }
 
     export function isWriteAccess(node: Node) {
-        return writeKind(node) !== WriteKind.Read;
+        return accessKind(node) !== AccessKind.Read;
     }
 
-    /**
-     * @param writeOnly If set, return true for `x++;` but not for `f(x++);`, which uses `x` in addition to writing to it.
-     */
-    const enum WriteKind { Read, Write, ReadWrite }
-    function writeKind(node: Node): WriteKind {
+    const enum AccessKind {
+        /** Only reads from a variable. */
+        Read,
+        /** Only writes to a variable without using the result. E.g.: `x++;`. */
+        Write,
+        /** Writes to a variable and uses the result as an expression. E.g.: `f(x++);`. */
+        ReadWrite
+    }
+    function accessKind(node: Node): AccessKind {
         const { parent } = node;
-        if (!parent) return WriteKind.Read;
+        if (!parent) return AccessKind.Read;
 
         switch (parent.kind) {
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.PrefixUnaryExpression:
                 const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
-                return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : WriteKind.Read;
+                return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
             case SyntaxKind.BinaryExpression:
                 const { left, operatorToken } = parent as BinaryExpression;
-                return left === node && isAssignmentOperator(operatorToken.kind) ? writeOrReadWrite() : WriteKind.Read;
+                return left === node && isAssignmentOperator(operatorToken.kind) ? writeOrReadWrite() : AccessKind.Read;
             case SyntaxKind.PropertyAccessExpression:
-                return (parent as PropertyAccessExpression).name !== node ? WriteKind.Read : writeKind(parent);
+                return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
             default:
-                return WriteKind.Read;
+                return AccessKind.Read;
         }
 
-        function writeOrReadWrite(): WriteKind {
+        function writeOrReadWrite(): AccessKind {
             // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-            return parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement ? WriteKind.Write : WriteKind.ReadWrite;
+            return parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
         }
     }
-
 }
 
 namespace ts {
