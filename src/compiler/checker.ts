@@ -7832,12 +7832,25 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right));
+                // if the union is `false | T` make all the properties of T optional
+                const wl = getPartialTypeFromFalseUnion(left as UnionType);
+                if (wl) {
+                    left = wl;
+                }
+                else {
+                    return mapType(left, t => getSpreadType(t, right));
+                }
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t));
+                const wr = getPartialTypeFromFalseUnion(right as UnionType);
+                if (wr) {
+                    right = wr;
+                }
+                else {
+                    return mapType(right, t => getSpreadType(left, t));
+                }
             }
-            if (right.flags & TypeFlags.NonPrimitive) {
+            if (right.flags & (TypeFlags.NonPrimitive | TypeFlags.BooleanLike)) {
                 return emptyObjectType;
             }
 
@@ -7906,6 +7919,29 @@ namespace ts {
 
         function isClassMethod(prop: Symbol) {
             return prop.flags & SymbolFlags.Method && find(prop.declarations, decl => isClassLike(decl.parent));
+        }
+
+        function getPartialTypeFromFalseUnion(type: UnionType): Type | undefined {
+            if (type.types.length === 2) {
+                const i = type.types.indexOf(falseType);
+                if (i > -1) {
+                    const members = createSymbolTable();
+                    const other = type.types[i === 0 ? 1 : 0];
+                    for (const prop of getPropertiesOfType(other)) {
+                        if (prop.flags & SymbolFlags.Optional) {
+                            members.set(prop.escapedName, prop);
+                        }
+                        else {
+                            const result = createSymbol(prop.flags | SymbolFlags.Optional, prop.escapedName);
+                            result.type = getUnionType([getTypeOfSymbol(prop), undefinedType]);
+                            result.declarations = prop.declarations;
+                            result.syntheticOrigin = prop;
+                            members.set(prop.escapedName, result);
+                        }
+                    }
+                    return createAnonymousType(undefined, members, emptyArray, emptyArray, getIndexInfoOfType(other, IndexKind.String), getIndexInfoOfType(other, IndexKind.Number));
+                }
+            }
         }
 
         function createLiteralType(flags: TypeFlags, value: string | number, symbol: Symbol) {
@@ -13749,7 +13785,7 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined | TypeFlags.NonPrimitive) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.Nullable | TypeFlags.NonPrimitive | TypeFlags.BooleanLike) ||
                 type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
