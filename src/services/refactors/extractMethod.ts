@@ -830,6 +830,7 @@ namespace ts.refactor.extractMethod {
             return { body: createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
         }
         let returnValueProperty: string;
+        let ignoreReturns = false;
         const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : createReturn(<Expression>body)]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (writes || substitutions.size) {
@@ -852,7 +853,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.kind === SyntaxKind.ReturnStatement && writes) {
+            if (!ignoreReturns && node.kind === SyntaxKind.ReturnStatement && writes) {
                 const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWrites(writes);
                 if ((<ReturnStatement>node).expression) {
                     if (!returnValueProperty) {
@@ -868,8 +869,12 @@ namespace ts.refactor.extractMethod {
                 }
             }
             else {
+                const oldIgnoreReturns = ignoreReturns;
+                ignoreReturns = ignoreReturns || isFunctionLike(node) || isClassLike(node);
                 const substitution = substitutions.get(getNodeId(node).toString());
-                return substitution || visitEachChild(node, visitor, nullTransformationContext);
+                const result = substitution || visitEachChild(node, visitor, nullTransformationContext);
+                ignoreReturns = oldIgnoreReturns;
+                return result;
             }
         }
     }

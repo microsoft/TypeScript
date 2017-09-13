@@ -668,6 +668,33 @@ function parseUnaryExpression(operator: string): UnaryExpression {
 function parsePrimaryExpression(): any {
     throw "Not implemented";
 }`);
+        // Return in nested function
+        testExtractMethod("extractMethod31",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        var f: () => number;
+        [#|f = function (): number {
+            return value;
+        }|]
+    }
+}`);
+        // Return in nested class
+        testExtractMethod("extractMethod32",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        [#|var c = class {
+            M() {
+                return value;
+            }
+        }|]
+    }
+}`);
     });
 
 
