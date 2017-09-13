@@ -7833,7 +7833,7 @@ namespace ts {
             }
             if (left.flags & TypeFlags.Union) {
                 // if the union is `false | T` make all the properties of T optional
-                const wl = getPartialTypeFromFalseUnion(left as UnionType);
+                const wl = getPartialTypeFromFalsyUnion(left as UnionType);
                 if (wl) {
                     left = wl;
                 }
@@ -7842,7 +7842,7 @@ namespace ts {
                 }
             }
             if (right.flags & TypeFlags.Union) {
-                const wr = getPartialTypeFromFalseUnion(right as UnionType);
+                const wr = getPartialTypeFromFalsyUnion(right as UnionType);
                 if (wr) {
                     right = wr;
                 }
@@ -7921,7 +7921,7 @@ namespace ts {
             return prop.flags & SymbolFlags.Method && find(prop.declarations, decl => isClassLike(decl.parent));
         }
 
-        function getPartialTypeFromFalseUnion(type: UnionType): Type | undefined {
+        function getPartialTypeFromFalsyUnion(type: UnionType): Type | undefined {
             if (type.types.length === 2) {
                 // getFalsyFlagsOfTypes
                 // getTypeFacts
