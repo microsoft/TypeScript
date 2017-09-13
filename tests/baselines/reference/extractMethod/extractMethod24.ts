@@ -6,7 +6,7 @@ function Outer() {
     }
     function M3() { }
 }
-// ==SCOPE::function 'M2'==
+// ==SCOPE::inner function in function 'M2'==
 function Outer() {
     function M1() { }
     function M2() {
@@ -18,7 +18,7 @@ function Outer() {
     }
     function M3() { }
 }
-// ==SCOPE::function 'Outer'==
+// ==SCOPE::inner function in function 'Outer'==
 function Outer() {
     function M1() { }
     function M2() {
@@ -30,7 +30,7 @@ function Outer() {
 
     function M3() { }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 function Outer() {
     function M1() { }
     function M2() {

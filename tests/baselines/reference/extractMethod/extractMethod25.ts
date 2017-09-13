@@ -4,7 +4,7 @@ function M2() {
     return 1;
 }
 function M3() { }
-// ==SCOPE::function 'M2'==
+// ==SCOPE::inner function in function 'M2'==
 function M1() { }
 function M2() {
     return newFunction();
@@ -14,7 +14,7 @@ function M2() {
     }
 }
 function M3() { }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 function M1() { }
 function M2() {
     return newFunction();

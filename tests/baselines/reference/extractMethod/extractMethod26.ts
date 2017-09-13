@@ -6,7 +6,7 @@ class C {
     }
     M3() { }
 }
-// ==SCOPE::class 'C'==
+// ==SCOPE::method in class 'C'==
 class C {
     M1() { }
     M2() {
@@ -18,7 +18,7 @@ class C {
 
     M3() { }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 class C {
     M1() { }
     M2() {
