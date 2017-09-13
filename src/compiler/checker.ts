@@ -334,7 +334,8 @@ namespace ts {
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
-        let visitedFlowCount = 0;
+        let sharedFlowCount = 0;
+        let flowAnalysisDisabled = false;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -352,8 +353,8 @@ namespace ts {
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
-        const visitedFlowNodes: FlowNode[] = [];
-        const visitedFlowTypes: FlowType[] = [];
+        const sharedFlowNodes: FlowNode[] = [];
+        const sharedFlowTypes: FlowType[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
@@ -1687,7 +1688,7 @@ namespace ts {
                     undefined;
             }
             else {
-                Debug.fail("Unknown entity name kind.");
+                Debug.assertNever(name, "Unknown entity name kind.");
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
@@ -2062,7 +2063,7 @@ namespace ts {
             return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
         }
 
-        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined {
+        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined {
             if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
                 return undefined;
             }
@@ -2111,7 +2112,7 @@ namespace ts {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
                         && symbolFromSymbolTable.escapedName !== "export="
                         && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)
-                        && !(isUMDExportSymbol(symbolFromSymbolTable) && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
+                        && !(isUMDExportSymbol(symbolFromSymbolTable) && enclosingDeclaration && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
 
@@ -2131,7 +2132,7 @@ namespace ts {
             }
         }
 
-        function needsQualification(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) {
+        function needsQualification(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags) {
             let qualify = false;
             forEachSymbolTableInScope(enclosingDeclaration, symbolTable => {
                 // If symbol of this name is not available in the symbol table we are ok
@@ -10386,7 +10387,7 @@ namespace ts {
         // results for union and intersection types for performance reasons.
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
-            return !!(type.flags & TypeFlags.TypeVariable ||
+            return !!(type.flags & (TypeFlags.TypeVariable | TypeFlags.Index) ||
                 objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
                 objectFlags & ObjectFlags.Mapped ||
@@ -10554,6 +10555,13 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
+                else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
+                    inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
+                }
+                else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
+                    inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
+                    inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
@@ -10578,7 +10586,7 @@ namespace ts {
                         priority = savePriority;
                     }
                 }
-                else if (source.flags & TypeFlags.UnionOrIntersection) {
+                else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
                     const sourceTypes = (<UnionOrIntersectionType>source).types;
                     for (const sourceType of sourceTypes) {
@@ -10587,7 +10595,7 @@ namespace ts {
                 }
                 else {
                     source = getApparentType(source);
-                    if (source.flags & TypeFlags.Object) {
+                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
                         if (visited && visited.get(key)) {
                             return;
@@ -10627,6 +10635,12 @@ namespace ts {
             }
 
             function inferFromObjectTypes(source: Type, target: Type) {
+                if (isGenericMappedType(source) && isGenericMappedType(target)) {
+                    // The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
+                    // from S to T and from X to Y.
+                    inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), getConstraintTypeFromMappedType(<MappedType>target));
+                    inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
+                }
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
                     if (constraintType.flags & TypeFlags.Index) {
@@ -10667,7 +10681,7 @@ namespace ts {
             function inferFromProperties(source: Type, target: Type) {
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
-                    const sourceProp = getPropertyOfObjectType(source, targetProp.escapedName);
+                    const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                     if (sourceProp) {
                         inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
                     }
@@ -11459,14 +11473,25 @@ namespace ts {
             return false;
         }
 
+        function reportFlowControlError(node: Node) {
+            const block = <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
+            const sourceFile = getSourceFileOfNode(node);
+            const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
+            diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
+            let flowDepth = 0;
+            if (flowAnalysisDisabled) {
+                return unknownType;
+            }
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const visitedFlowStart = visitedFlowCount;
+            const sharedFlowStart = sharedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
-            visitedFlowCount = visitedFlowStart;
+            sharedFlowCount = sharedFlowStart;
             // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
@@ -11478,60 +11503,70 @@ namespace ts {
             return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
+                if (flowDepth === 2500) {
+                    // We have made 2500 recursive invocations. To avoid overflowing the call stack we report an error
+                    // and disable further control flow analysis in the containing function or module body.
+                    flowAnalysisDisabled = true;
+                    reportFlowControlError(reference);
+                    return unknownType;
+                }
+                flowDepth++;
                 while (true) {
-                    if (flow.flags & FlowFlags.Shared) {
+                    const flags = flow.flags;
+                    if (flags & FlowFlags.Shared) {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
                         // antecedent of more than one node.
-                        for (let i = visitedFlowStart; i < visitedFlowCount; i++) {
-                            if (visitedFlowNodes[i] === flow) {
-                                return visitedFlowTypes[i];
+                        for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
+                            if (sharedFlowNodes[i] === flow) {
+                                flowDepth--;
+                                return sharedFlowTypes[i];
                             }
                         }
                     }
                     let type: FlowType;
-                    if (flow.flags & FlowFlags.AfterFinally) {
+                    if (flags & FlowFlags.AfterFinally) {
                         // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement
                         (<AfterFinallyFlow>flow).locked = true;
                         type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
                         (<AfterFinallyFlow>flow).locked = false;
                     }
-                    else if (flow.flags & FlowFlags.PreFinally) {
+                    else if (flags & FlowFlags.PreFinally) {
                         // locked pre-finally flows are filtered out in getTypeAtFlowBranchLabel
                         // so here just redirect to antecedent
                         flow = (<PreFinallyFlow>flow).antecedent;
                         continue;
                     }
-                    else if (flow.flags & FlowFlags.Assignment) {
+                    else if (flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
                         }
                     }
-                    else if (flow.flags & FlowFlags.Condition) {
+                    else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
-                    else if (flow.flags & FlowFlags.SwitchClause) {
+                    else if (flags & FlowFlags.SwitchClause) {
                         type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
                     }
-                    else if (flow.flags & FlowFlags.Label) {
+                    else if (flags & FlowFlags.Label) {
                         if ((<FlowLabel>flow).antecedents.length === 1) {
                             flow = (<FlowLabel>flow).antecedents[0];
                             continue;
                         }
-                        type = flow.flags & FlowFlags.BranchLabel ?
+                        type = flags & FlowFlags.BranchLabel ?
                             getTypeAtFlowBranchLabel(<FlowLabel>flow) :
                             getTypeAtFlowLoopLabel(<FlowLabel>flow);
                     }
-                    else if (flow.flags & FlowFlags.ArrayMutation) {
+                    else if (flags & FlowFlags.ArrayMutation) {
                         type = getTypeAtFlowArrayMutation(<FlowArrayMutation>flow);
                         if (!type) {
                             flow = (<FlowArrayMutation>flow).antecedent;
                             continue;
                         }
                     }
-                    else if (flow.flags & FlowFlags.Start) {
+                    else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
                         if (container && container !== flowContainer && reference.kind !== SyntaxKind.PropertyAccessExpression && reference.kind !== SyntaxKind.ThisKeyword) {
@@ -11546,12 +11581,13 @@ namespace ts {
                         // simply return the non-auto declared type to reduce follow-on errors.
                         type = convertAutoToAny(declaredType);
                     }
-                    if (flow.flags & FlowFlags.Shared) {
+                    if (flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
-                        visitedFlowNodes[visitedFlowCount] = flow;
-                        visitedFlowTypes[visitedFlowCount] = type;
-                        visitedFlowCount++;
+                        sharedFlowNodes[sharedFlowCount] = flow;
+                        sharedFlowTypes[sharedFlowCount] = type;
+                        sharedFlowCount++;
                     }
+                    flowDepth--;
                     return type;
                 }
             }
@@ -11589,29 +11625,31 @@ namespace ts {
             }
 
             function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType {
-                const node = flow.node;
-                const expr = node.kind === SyntaxKind.CallExpression ?
-                    (<PropertyAccessExpression>(<CallExpression>node).expression).expression :
-                    (<ElementAccessExpression>(<BinaryExpression>node).left).expression;
-                if (isMatchingReference(reference, getReferenceCandidate(expr))) {
-                    const flowType = getTypeAtFlowNode(flow.antecedent);
-                    const type = getTypeFromFlowType(flowType);
-                    if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
-                        let evolvedType = <EvolvingArrayType>type;
-                        if (node.kind === SyntaxKind.CallExpression) {
-                            for (const arg of (<CallExpression>node).arguments) {
-                                evolvedType = addEvolvingArrayElementType(evolvedType, arg);
+                if (declaredType === autoType || declaredType === autoArrayType) {
+                    const node = flow.node;
+                    const expr = node.kind === SyntaxKind.CallExpression ?
+                        (<PropertyAccessExpression>(<CallExpression>node).expression).expression :
+                        (<ElementAccessExpression>(<BinaryExpression>node).left).expression;
+                    if (isMatchingReference(reference, getReferenceCandidate(expr))) {
+                        const flowType = getTypeAtFlowNode(flow.antecedent);
+                        const type = getTypeFromFlowType(flowType);
+                        if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
+                            let evolvedType = <EvolvingArrayType>type;
+                            if (node.kind === SyntaxKind.CallExpression) {
+                                for (const arg of (<CallExpression>node).arguments) {
+                                    evolvedType = addEvolvingArrayElementType(evolvedType, arg);
+                                }
                             }
-                        }
-                        else {
-                            const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
-                            if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
-                                evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
+                            else {
+                                const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
+                                if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
+                                    evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
+                                }
                             }
+                            return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
                         }
-                        return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
+                        return flowType;
                     }
-                    return flowType;
                 }
                 return undefined;
             }
@@ -16128,16 +16166,6 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            // If the expression is a class of abstract type, then it cannot be instantiated.
-            // Note, only class declarations can be declared abstract.
-            // In the case of a merged class-module or class-interface declaration,
-            // only the class declaration node will have the Abstract flag set.
-            const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
-            if (valueDecl && hasModifier(valueDecl, ModifierFlags.Abstract)) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(getNameOfDeclaration(valueDecl)));
-                return resolveErrorCall(node);
-            }
-
             // TS 1.0 spec: 4.11
             // If expressionType is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
@@ -16157,6 +16185,16 @@ namespace ts {
                 if (!isConstructorAccessible(node, constructSignatures[0])) {
                     return resolveErrorCall(node);
                 }
+                // If the expression is a class of abstract type, then it cannot be instantiated.
+                // Note, only class declarations can be declared abstract.
+                // In the case of a merged class-module or class-interface declaration,
+                // only the class declaration node will have the Abstract flag set.
+                const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
+                if (valueDecl && hasModifier(valueDecl, ModifierFlags.Abstract)) {
+                    error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(getNameOfDeclaration(valueDecl)));
+                    return resolveErrorCall(node);
+                }
+
                 return resolveCall(node, constructSignatures, candidatesOutArray);
             }
 
@@ -16357,7 +16395,7 @@ namespace ts {
                     // This code-path is called by language service
                     return resolveStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
             }
-            Debug.fail("Branch in 'resolveSignature' should be unreachable.");
+            Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
         }
 
         /**
@@ -16665,8 +16703,9 @@ namespace ts {
                 }
             }
             if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
+                // parameter might be a transient symbol generated by use of `arguments` in the function body.
                 const parameter = lastOrUndefined(signature.parameters);
-                if (!getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
+                if (isTransientSymbol(parameter) || !getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
                     const contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
                     assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
@@ -19935,7 +19974,14 @@ namespace ts {
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
-            forEach(node.statements, checkSourceElement);
+            if (isFunctionOrModuleBlock(node)) {
+                const saveFlowAnalysisDisabled = flowAnalysisDisabled;
+                forEach(node.statements, checkSourceElement);
+                flowAnalysisDisabled = saveFlowAnalysisDisabled;
+            }
+            else {
+                forEach(node.statements, checkSourceElement);
+            }
             if (node.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
@@ -22149,9 +22195,9 @@ namespace ts {
                     }
                 }
                 else {
-                    if (modulekind === ModuleKind.ES2015 && !isInAmbientContext(node)) {
+                    if (modulekind >= ModuleKind.ES2015 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
-                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
                 }
             }
@@ -22187,7 +22233,7 @@ namespace ts {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
 
-                    if (modulekind !== ModuleKind.System && modulekind !== ModuleKind.ES2015) {
+                    if (modulekind !== ModuleKind.System && modulekind !== ModuleKind.ES2015 && modulekind !== ModuleKind.ESNext) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
                     }
                 }
@@ -22249,9 +22295,9 @@ namespace ts {
             checkExternalModuleExports(container);
 
             if (node.isExportEquals && !isInAmbientContext(node)) {
-                if (modulekind === ModuleKind.ES2015) {
+                if (modulekind >= ModuleKind.ES2015) {
                     // export assignment is not supported in es6 modules
-                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_export_default_or_another_module_format_instead);
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
                 else if (modulekind === ModuleKind.System) {
                     // system modules does not support export assignment
@@ -22525,6 +22571,7 @@ namespace ts {
 
                 deferredNodes = [];
                 deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
+                flowAnalysisDisabled = false;
 
                 forEach(node.statements, checkSourceElement);
 
@@ -24535,7 +24582,7 @@ namespace ts {
                     currentKind = SetAccessor;
                 }
                 else {
-                    Debug.fail("Unexpected syntax kind:" + (<Node>prop).kind);
+                    Debug.assertNever(prop, "Unexpected syntax kind:" + (<Node>prop).kind);
                 }
 
                 const effectiveName = getPropertyNameForPropertyNameNode(name);
@@ -24851,7 +24898,7 @@ namespace ts {
                 }
             }
 
-            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
+            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.ESNext && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
                 !isInAmbientContext(node.parent.parent) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
             }

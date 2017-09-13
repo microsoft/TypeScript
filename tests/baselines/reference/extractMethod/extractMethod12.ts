@@ -13,7 +13,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::class 'C'==
+// ==SCOPE::method in class 'C'==
 namespace A {
     let y = 1;
     class C {

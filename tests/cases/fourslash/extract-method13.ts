@@ -13,7 +13,7 @@ goTo.select('a', 'b');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into class 'C'",
+    actionDescription: "Extract to method in class 'C'",
     newContent:
 `class C {
     static j = 1 + 1;
@@ -26,23 +26,33 @@ edit.applyRefactor({
 }`
 });
 
-goTo.select('c', 'd');
-edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
-    actionDescription: "Extract function into class 'C'",
-    newContent:
-`class C {
-    static j = C./*RENAME*/newFunction_1();
+verify.currentFileContentIs(`class C {
+    static j = 1 + 1;
     constructor(q: string = C.newFunction()) {
     }
 
     private static newFunction(): string {
         return "a" + "b";
     }
+}`);
+
+goTo.select('c', 'd');
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to method in class 'C'",
+    newContent:
+`class C {
+    static j = C./*RENAME*/newFunction_1();
+    constructor(q: string = C.newFunction()) {
+    }
 
     private static newFunction_1() {
         return 1 + 1;
+    }
+
+    private static newFunction(): string {
+        return "a" + "b";
     }
 }`
 });

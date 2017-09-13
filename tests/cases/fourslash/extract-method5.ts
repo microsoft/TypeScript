@@ -12,7 +12,7 @@ goTo.select('start', 'end');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into function 'f'",
+    actionDescription: "Extract to inner function in function 'f'",
     newContent:
 `function f() {
     var x: 1 | 2 | 3 = /*RENAME*/newFunction();

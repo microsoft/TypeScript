@@ -9,7 +9,7 @@ goTo.select('start', 'end')
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_1",
-    actionDescription: "Extract function into global scope",
+    actionDescription: "Extract to function in global scope",
     newContent: `function f(x: number): number {
     return /*RENAME*/newFunction(x);
 }

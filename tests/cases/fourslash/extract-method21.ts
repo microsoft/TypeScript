@@ -15,7 +15,7 @@ verify.refactorAvailable('Extract Method');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into class 'Foo'",
+    actionDescription: "Extract to method in class 'Foo'",
     newContent:
 `class Foo {
     static method() {

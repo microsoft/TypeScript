@@ -40,7 +40,7 @@ namespace ts.refactor.extractMethod {
             // Don't issue refactorings with duplicated names.
             // Scopes come back in "innermost first" order, so extractions will
             // preferentially go into nearer scopes
-            const description = formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [scopeDescription]);
+            const description = formatStringFromArgs(Diagnostics.Extract_to_0.message, [scopeDescription]);
             if (!usedNames.has(description)) {
                 usedNames.set(description, true);
                 actions.push({
@@ -529,43 +529,44 @@ namespace ts.refactor.extractMethod {
         return { scopes, readsAndWrites };
     }
 
-    function getDescriptionForScope(scope: Scope) {
-        if (isFunctionLike(scope)) {
-            switch (scope.kind) {
-                case SyntaxKind.Constructor:
-                    return "constructor";
-                case SyntaxKind.FunctionExpression:
-                    return scope.name
-                        ? `function expression ${scope.name.text}`
-                        : "anonymous function expression";
-                case SyntaxKind.FunctionDeclaration:
-                    return `function '${scope.name.text}'`;
-                case SyntaxKind.ArrowFunction:
-                    return "arrow function";
-                case SyntaxKind.MethodDeclaration:
-                    return `method '${scope.name.getText()}`;
-                case SyntaxKind.GetAccessor:
-                    return `'get ${scope.name.getText()}'`;
-                case SyntaxKind.SetAccessor:
-                    return `'set ${scope.name.getText()}'`;
-            }
+    function getDescriptionForScope(scope: Scope): string {
+        return isFunctionLikeDeclaration(scope)
+            ? `inner function in ${getDescriptionForFunctionLikeDeclaration(scope)}`
+            : isClassLike(scope)
+                ? `method in ${getDescriptionForClassLikeDeclaration(scope)}`
+                : `function in ${getDescriptionForModuleLikeDeclaration(scope)}`;
+    }
+    function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration): string {
+        switch (scope.kind) {
+            case SyntaxKind.Constructor:
+                return "constructor";
+            case SyntaxKind.FunctionExpression:
+                return scope.name
+                    ? `function expression '${scope.name.text}'`
+                    : "anonymous function expression";
+            case SyntaxKind.FunctionDeclaration:
+                return `function '${scope.name.text}'`;
+            case SyntaxKind.ArrowFunction:
+                return "arrow function";
+            case SyntaxKind.MethodDeclaration:
+                return `method '${scope.name.getText()}`;
+            case SyntaxKind.GetAccessor:
+                return `'get ${scope.name.getText()}'`;
+            case SyntaxKind.SetAccessor:
+                return `'set ${scope.name.getText()}'`;
+            default:
+                Debug.assertNever(scope);
         }
-        else if (isModuleBlock(scope)) {
-            return `namespace '${scope.parent.name.getText()}'`;
-        }
-        else if (isClassLike(scope)) {
-            return scope.kind === SyntaxKind.ClassDeclaration
-                ? `class '${scope.name.text}'`
-                : scope.name && scope.name.text
-                    ? `class expression '${scope.name.text}'`
-                    : "anonymous class expression";
-        }
-        else if (isSourceFile(scope)) {
-            return scope.externalModuleIndicator ? "module scope" : "global scope";
-        }
-        else {
-            return "unknown";
-        }
+    }
+    function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
+        return scope.kind === SyntaxKind.ClassDeclaration
+            ? `class '${scope.name.text}'`
+            : scope.name ? `class expression '${scope.name.text}'` : "anonymous class expression";
+    }
+    function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string {
+        return scope.kind === SyntaxKind.ModuleBlock
+            ? `namespace '${scope.parent.name.getText()}'`
+            : scope.externalModuleIndicator ? "module scope" : "global scope";
     }
 
     function getUniqueName(fileText: string): string {
@@ -682,8 +683,14 @@ namespace ts.refactor.extractMethod {
         }
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        // insert function at the end of the scope
-        changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+        const minInsertionPos = (isReadonlyArray(range.range) ? lastOrUndefined(range.range) : range.range).end;
+        const nodeToInsertBefore = getNodeToInsertBefore(minInsertionPos, scope);
+        if (nodeToInsertBefore) {
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
+        }
+        else {
+            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+        }
 
         const newNodes: Node[] = [];
         // replace range with function call
@@ -888,6 +895,39 @@ namespace ts.refactor.extractMethod {
             else {
                 const substitution = substitutions.get(getNodeId(node).toString());
                 return substitution || visitEachChild(node, visitor, nullTransformationContext);
+            }
+        }
+    }
+
+    function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement> | ReadonlyArray<ClassElement> {
+        if (isFunctionLike(scope)) {
+            const body = scope.body;
+            if (isBlock(body)) {
+                return body.statements;
+            }
+        }
+        else if (isModuleBlock(scope) || isSourceFile(scope)) {
+            return scope.statements;
+        }
+        else if (isClassLike(scope)) {
+            return scope.members;
+        }
+        else {
+            assertTypeIsNever(scope);
+        }
+
+        return emptyArray;
+    }
+
+    /**
+     * If `scope` contains a function after `minPos`, then return the first such function.
+     * Otherwise, return `undefined`.
+     */
+    function getNodeToInsertBefore(minPos: number, scope: Scope): Node | undefined {
+        const children = getStatementsOrClassElements(scope);
+        for (const child of children) {
+            if (child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child)) {
+                return child;
             }
         }
     }
