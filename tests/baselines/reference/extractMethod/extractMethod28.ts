@@ -7,7 +7,7 @@ class C {
     M3() { }
     constructor() { }
 }
-// ==SCOPE::class 'C'==
+// ==SCOPE::method in class 'C'==
 class C {
     M1() { }
     M2() {
@@ -20,7 +20,7 @@ class C {
     M3() { }
     constructor() { }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 class C {
     M1() { }
     M2() {

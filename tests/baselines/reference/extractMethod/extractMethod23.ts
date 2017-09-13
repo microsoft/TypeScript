@@ -6,7 +6,7 @@ namespace NS {
     }
     function M3() { }
 }
-// ==SCOPE::function 'M2'==
+// ==SCOPE::inner function in function 'M2'==
 namespace NS {
     function M1() { }
     function M2() {
@@ -18,7 +18,7 @@ namespace NS {
     }
     function M3() { }
 }
-// ==SCOPE::namespace 'NS'==
+// ==SCOPE::function in namespace 'NS'==
 namespace NS {
     function M1() { }
     function M2() {
@@ -30,7 +30,7 @@ namespace NS {
 
     function M3() { }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 namespace NS {
     function M1() { }
     function M2() {
