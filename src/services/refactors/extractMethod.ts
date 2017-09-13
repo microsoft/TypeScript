@@ -162,6 +162,11 @@ namespace ts.refactor.extractMethod {
      */
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
         const length = span.length || 0;
+
+        if (length === 0) {
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.StatementOrExpressionExpected)] };
+        }
+
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
         let start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
