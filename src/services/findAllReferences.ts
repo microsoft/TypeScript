@@ -245,7 +245,7 @@ namespace ts.FindAllReferences {
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
     function isWriteAccessForReference(node: Node): boolean {
-        return node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node) || !isReadOnlyAccess(node);
+        return node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node) || isWriteAccess(node);
     }
 }
 
