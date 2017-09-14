@@ -225,7 +225,8 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
-            getAllPossiblePropertiesOfType,
+            isArrayLikeType,
+            getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => unescapeLeadingUnderscores(getSuggestionForNonexistentProperty(node, type)),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => unescapeLeadingUnderscores(getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning)),
             getBaseConstraintOfType,
@@ -5925,25 +5926,21 @@ namespace ts {
                 getPropertiesOfObjectType(type);
         }
 
-        function getAllPossiblePropertiesOfType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.Union) {
-                const props = createSymbolTable();
-                for (const memberType of (type as UnionType).types) {
-                    if (memberType.flags & TypeFlags.Primitive) {
-                        continue;
-                    }
+        function getAllPossiblePropertiesOfTypes(types: Type[]): Symbol[] {
+            const unionType = getUnionType(types);
+            if (!(unionType.flags & TypeFlags.Union)) {
+                return getPropertiesOfType(unionType);
+            }
 
-                    for (const { escapedName } of getPropertiesOfType(memberType)) {
-                        if (!props.has(escapedName)) {
-                            props.set(escapedName, createUnionOrIntersectionProperty(type as UnionType, escapedName));
-                        }
+            const props = createSymbolTable();
+            for (const memberType of types) {
+                for (const { escapedName } of getPropertiesOfType(memberType)) {
+                    if (!props.has(escapedName)) {
+                        props.set(escapedName, createUnionOrIntersectionProperty(unionType as UnionType, escapedName));
                     }
                 }
-                return arrayFrom(props.values());
             }
-            else {
-                return getPropertiesOfType(type);
-            }
+            return arrayFrom(props.values());
         }
 
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
