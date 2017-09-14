@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
-            const token = getTokenAtPosition(sourceFile, start);
+            const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
             const classDeclNode = getContainingClass(token);
             if (!(token.kind === SyntaxKind.Identifier && isClassLike(classDeclNode))) {
                 return undefined;
@@ -21,7 +21,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
             changeTracker.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword));
 
             // We replace existing keywords with commas.

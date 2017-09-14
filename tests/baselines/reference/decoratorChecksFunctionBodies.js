@@ -24,17 +24,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 // from #2971
 function func(s) {
 }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.m = function () {
     };
+    __decorate([
+        (function (x, p) {
+            var a = 3;
+            func(a);
+            return x;
+        })
+    ], A.prototype, "m", null);
     return A;
 }());
-__decorate([
-    (function (x, p) {
-        var a = 3;
-        func(a);
-        return x;
-    })
-], A.prototype, "m", null);

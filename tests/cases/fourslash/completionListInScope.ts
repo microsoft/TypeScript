@@ -85,11 +85,11 @@ verify.completionListContains("exportedInterface");
 verify.completionListContains("localClass");
 verify.completionListContains("exportedClass");
 
-verify.completionListContains("localModule");
-verify.completionListContains("exportedModule");
+verify.not.completionListContains("localModule");
+verify.not.completionListContains("exportedModule");
 
 verify.completionListContains("exportedClass2");
-verify.completionListContains("exportedModule2");
+verify.not.completionListContains("exportedModule2");
 
 goTo.marker("insideMethod");
 verify.not.completionListContains("property");

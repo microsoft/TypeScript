@@ -40,19 +40,14 @@ namespace ts.Completions.PathCompletions {
         rootDirs = map(rootDirs, rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
 
         // Determine the path to the directory containing the script relative to the root directory it is contained within
-        let relativeDirectory: string;
-        for (const rootDirectory of rootDirs) {
-            if (containsPath(rootDirectory, scriptPath, basePath, ignoreCase)) {
-                relativeDirectory = scriptPath.substr(rootDirectory.length);
-                break;
-            }
-        }
+        const relativeDirectory = forEach(rootDirs, rootDirectory =>
+            containsPath(rootDirectory, scriptPath, basePath, ignoreCase) ? scriptPath.substr(rootDirectory.length) : undefined);
 
         // Now find a path for each potential directory that is to be merged with the one containing the script
         return deduplicate(map(rootDirs, rootDirectory => combinePaths(rootDirectory, relativeDirectory)));
     }
 
-    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): CompletionEntry[] {
+    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, span: TextSpan, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): CompletionEntry[] {
         const basePath = compilerOptions.project || host.getCurrentDirectory();
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
         const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptPath, ignoreCase);
@@ -69,7 +64,7 @@ namespace ts.Completions.PathCompletions {
     /**
      * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
      */
-    function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, host: LanguageServiceHost, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
+    function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, span: TextSpan, host: LanguageServiceHost, exclude?: string, result: CompletionEntry[] = []): CompletionEntry[] {
         if (fragment === undefined) {
             fragment = "";
         }
@@ -190,7 +185,7 @@ namespace ts.Completions.PathCompletions {
         return result;
     }
 
-    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: string[], host: LanguageServiceHost): string[] {
+    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost): string[] {
         if (host.readDirectory) {
             const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
             if (parsed) {
@@ -245,18 +240,15 @@ namespace ts.Completions.PathCompletions {
 
         // Get modules that the type checker picked up
         const ambientModules = map(typeChecker.getAmbientModules(), sym => stripQuotes(sym.name));
-        let nonRelativeModules = filter(ambientModules, moduleName => startsWith(moduleName, fragment));
+        let nonRelativeModuleNames = filter(ambientModules, moduleName => startsWith(moduleName, fragment));
 
         // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
         // after the last '/' that appears in the fragment because that's where the replacement span
         // starts
         if (isNestedModule) {
             const moduleNameWithSeperator = ensureTrailingDirectorySeparator(moduleNameFragment);
-            nonRelativeModules = map(nonRelativeModules, moduleName => {
-                if (startsWith(fragment, moduleNameWithSeperator)) {
-                    return moduleName.substr(moduleNameWithSeperator.length);
-                }
-                return moduleName;
+            nonRelativeModuleNames = map(nonRelativeModuleNames, nonRelativeModuleName => {
+                return removePrefix(nonRelativeModuleName, moduleNameWithSeperator);
             });
         }
 
@@ -264,7 +256,7 @@ namespace ts.Completions.PathCompletions {
         if (!options.moduleResolution || options.moduleResolution === ModuleResolutionKind.NodeJs) {
             for (const visibleModule of enumerateNodeModulesVisibleToScript(host, scriptPath)) {
                 if (!isNestedModule) {
-                    nonRelativeModules.push(visibleModule.moduleName);
+                    nonRelativeModuleNames.push(visibleModule.moduleName);
                 }
                 else if (startsWith(visibleModule.moduleName, moduleNameFragment)) {
                     const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/ undefined, /*include*/ ["./*"]);
@@ -272,18 +264,18 @@ namespace ts.Completions.PathCompletions {
                         for (let f of nestedFiles) {
                             f = normalizePath(f);
                             const nestedModule = removeFileExtension(getBaseFileName(f));
-                            nonRelativeModules.push(nestedModule);
+                            nonRelativeModuleNames.push(nestedModule);
                         }
                     }
                 }
             }
         }
 
-        return deduplicate(nonRelativeModules);
+        return deduplicate(nonRelativeModuleNames);
     }
 
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): CompletionInfo {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         if (!token) {
             return undefined;
         }
@@ -458,7 +450,7 @@ namespace ts.Completions.PathCompletions {
         }
     }
 
-    function createCompletionEntryForModule(name: string, kind: string, replacementSpan: TextSpan): CompletionEntry {
+    function createCompletionEntryForModule(name: string, kind: ScriptElementKind, replacementSpan: TextSpan): CompletionEntry {
         return { name, kind, kindModifiers: ScriptElementKindModifier.none, sortText: name, replacementSpan };
     }
 
@@ -508,7 +500,7 @@ namespace ts.Completions.PathCompletions {
         return tryIOAndConsumeErrors(host, host.getDirectories, directoryName);
     }
 
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): string[] {
         return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include);
     }
 

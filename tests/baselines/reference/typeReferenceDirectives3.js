@@ -16,6 +16,7 @@ interface A {
 }
 
 //// [app.js]
+/// <reference types="lib"/>
 /// <reference path="ref.d.ts" />
 
 

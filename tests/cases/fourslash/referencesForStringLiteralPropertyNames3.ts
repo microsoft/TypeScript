@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo2 {
-////    get "[|{| "isDefinition": true |}42|]"() { return 0; }
-////    set [|{| "isDefinition": true |}42|](n) { }
+////    get "[|{| "isWriteAccess": true, "isDefinition": true |}42|]"() { return 0; }
+////    set [|{| "isWriteAccess": true, "isDefinition": true |}42|](n) { }
 ////}
 ////
 ////var y: Foo2;

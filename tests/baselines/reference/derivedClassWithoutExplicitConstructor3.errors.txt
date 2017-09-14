@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(21,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(22,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(44,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(45,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(21,9): error TS2554: Expected 2 arguments, but got 0.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(22,10): error TS2554: Expected 2 arguments, but got 1.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(44,9): error TS2554: Expected 2 arguments, but got 0.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts(45,10): error TS2554: Expected 2 arguments, but got 1.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts (4 errors) ====
@@ -27,10 +27,10 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     
     var r = new Derived(); // error
             ~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 0.
     var r2 = new Derived2(1); // error
              ~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 1.
     var r3 = new Derived('', '');
     
     class Base2<T> {
@@ -54,8 +54,8 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     
     var d = new D2(); // error
             ~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 0.
     var d2 = new D2(new Date()); // error
              ~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 1.
     var d3 = new D2(new Date(), new Date()); // ok

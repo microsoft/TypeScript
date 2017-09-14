@@ -4,7 +4,7 @@ namespace ts.codefix {
     export function newNodesToChanges(newNodes: Node[], insertAfter: Node, context: CodeFixContext) {
         const sourceFile = context.sourceFile;
 
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         for (const newNode of newNodes) {
             changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
@@ -35,7 +35,7 @@ namespace ts.codefix {
      */
     export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker): Node[] {
         const classMembers = classDeclaration.symbol.members;
-        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.getName()));
+        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.escapedName));
 
         let newNodes: Node[] = [];
         for (const symbol of missingMembers) {
@@ -130,7 +130,7 @@ namespace ts.codefix {
         }
 
         function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
-            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
+            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
             if (signatureDeclaration) {
                 signatureDeclaration.decorators = undefined;
                 signatureDeclaration.modifiers = modifiers;
@@ -142,7 +142,51 @@ namespace ts.codefix {
         }
     }
 
-    function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
+    export function createMethodFromCallExpression(callExpression: CallExpression, methodName: string, includeTypeScriptSyntax: boolean, makeStatic: boolean): MethodDeclaration {
+        const parameters = createDummyParameters(callExpression.arguments.length, /*names*/ undefined, /*minArgumentCount*/ undefined, includeTypeScriptSyntax);
+
+        let typeParameters: TypeParameterDeclaration[];
+        if (includeTypeScriptSyntax) {
+            const typeArgCount = length(callExpression.typeArguments);
+            for (let i = 0; i < typeArgCount; i++) {
+                const name = typeArgCount < 8 ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`;
+                const typeParameter = createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined);
+                (typeParameters ? typeParameters : typeParameters = []).push(typeParameter);
+            }
+        }
+
+        const newMethod = createMethod(
+            /*decorators*/ undefined,
+            /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+            /*asteriskToken*/ undefined,
+            methodName,
+            /*questionToken*/ undefined,
+            typeParameters,
+            parameters,
+            /*type*/ includeTypeScriptSyntax ? createKeywordTypeNode(SyntaxKind.AnyKeyword) : undefined,
+            createStubbedMethodBody()
+        );
+        return newMethod;
+    }
+
+    function createDummyParameters(argCount: number,  names: string[] | undefined, minArgumentCount: number | undefined, addAnyType: boolean) {
+        const parameters: ParameterDeclaration[] = [];
+        for (let i = 0; i < argCount; i++) {
+            const newParameter = createParameter(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                /*name*/ names && names[i] || `arg${i}`,
+                /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
+                /*type*/ addAnyType ? createKeywordTypeNode(SyntaxKind.AnyKeyword) : undefined,
+                /*initializer*/ undefined);
+            parameters.push(newParameter);
+        }
+
+        return parameters;
+    }
+
+    function createMethodImplementingSignatures(signatures: ReadonlyArray<Signature>, name: PropertyName, optional: boolean, modifiers: ReadonlyArray<Modifier> | undefined): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
          * this is one of them.
@@ -161,21 +205,9 @@ namespace ts.codefix {
             }
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
-        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.getName());
+        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
-        const parameters: ParameterDeclaration[] = [];
-        for (let i = 0; i < maxNonRestArgs; i++) {
-            const anyType = createKeywordTypeNode(SyntaxKind.AnyKeyword);
-            const newParameter = createParameter(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*dotDotDotToken*/ undefined,
-                maxArgsParameterSymbolNames[i],
-                /*questionToken*/ i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
-                anyType,
-                /*initializer*/ undefined);
-            parameters.push(newParameter);
-        }
+        const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*addAnyType*/ true);
 
         if (someSigHasRestParameter) {
             const anyArrayType = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.AnyKeyword));
@@ -199,7 +231,13 @@ namespace ts.codefix {
             /*returnType*/ undefined);
     }
 
-    export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
+    export function createStubbedMethod(
+        modifiers: ReadonlyArray<Modifier>,
+        name: PropertyName,
+        optional: boolean,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        returnType: TypeNode | undefined) {
         return createMethod(
             /*decorators*/ undefined,
             modifiers,

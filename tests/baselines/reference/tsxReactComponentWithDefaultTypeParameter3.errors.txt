@@ -1,5 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(16,17): error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
-tests/cases/conformance/jsx/file.tsx(17,18): error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(16,17): error TS2559: Type '{ a: 10; b: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(17,18): error TS2559: Type '{ a: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -19,8 +19,8 @@ tests/cases/conformance/jsx/file.tsx(17,18): error TS2339: Property 'a' does not
     
     // Error
     let x = <MyComp a={10} b="hi" />
-                    ~~~~~~
-!!! error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+                    ~~~~~~~~~~~~~
+!!! error TS2559: Type '{ a: 10; b: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
     let x2 = <MyComp a="hi"/>
                      ~~~~~~
-!!! error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+!!! error TS2559: Type '{ a: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.

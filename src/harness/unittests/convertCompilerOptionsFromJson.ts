@@ -34,11 +34,11 @@ namespace ts {
             const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
             const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             expectedResult.compilerOptions["configFilePath"] = configFileName;
-            expectedResult.compilerOptions.configFile = result;
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
             const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
+            assert.equal(actualCompilerOptions.configFile, result);
 
             const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
             const expectedErrors = expectedResult.errors;
@@ -67,14 +67,14 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -92,7 +92,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -100,7 +100,7 @@ namespace ts {
                         allowJs: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -117,7 +117,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -146,7 +146,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
@@ -155,7 +155,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'.",
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -174,7 +174,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
@@ -201,7 +201,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         noImplicitAny: false,
                         sourceMap: false,
                     },
@@ -227,7 +227,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         noImplicitAny: false,
                         sourceMap: false,
                     },
@@ -255,7 +255,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -266,7 +266,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'esnext.asynciterable'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'esnext.asynciterable'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -286,7 +286,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -297,7 +297,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'esnext.asynciterable'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'esnext.asynciterable'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -317,7 +317,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -328,7 +328,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'esnext.asynciterable'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'esnext.asynciterable'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -348,7 +348,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -359,7 +359,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'esnext.asynciterable'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'esnext.asynciterable'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -379,7 +379,7 @@ namespace ts {
                     }
                 }, "tsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -415,8 +415,8 @@ namespace ts {
         it("Convert default tsconfig.json to compiler-options ", () => {
             assertCompilerOptions({}, "tsconfig.json",
                 {
-                    compilerOptions: {} as CompilerOptions,
-                    errors: <Diagnostic[]>[]
+                    compilerOptions: {},
+                    errors: []
                 }
             );
         });
@@ -434,7 +434,7 @@ namespace ts {
                     }
                 }, "jsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         allowJs: true,
                         maxNodeModuleJsDepth: 2,
                         allowSyntheticDefaultImports: true,
@@ -445,7 +445,7 @@ namespace ts {
                         sourceMap: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -463,7 +463,7 @@ namespace ts {
                     }
                 }, "jsconfig.json",
                 {
-                    compilerOptions: <CompilerOptions>{
+                    compilerOptions: {
                         allowJs: false,
                         maxNodeModuleJsDepth: 2,
                         allowSyntheticDefaultImports: true,
@@ -474,7 +474,7 @@ namespace ts {
                         sourceMap: false,
                         lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });
@@ -516,7 +516,7 @@ namespace ts {
                         allowSyntheticDefaultImports: true,
                         skipLibCheck: true
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: []
                 }
             );
         });

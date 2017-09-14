@@ -25,17 +25,6 @@ namespace ts {
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
-        if (externalHelpersImportDeclaration) {
-            externalImports.push(externalHelpersImportDeclaration);
-        }
-
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
@@ -69,9 +58,9 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports.get(specifier.name.text)) {
+                            if (!uniqueExports.get(unescapeLeadingUnderscores(specifier.name.escapedText))) {
                                 const name = specifier.propertyName || specifier.name;
-                                exportSpecifiers.add(name.text, specifier);
+                                exportSpecifiers.add(unescapeLeadingUnderscores(name.escapedText), specifier);
 
                                 const decl = resolver.getReferencedImportDeclaration(name)
                                     || resolver.getReferencedValueDeclaration(name);
@@ -80,7 +69,7 @@ namespace ts {
                                     multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports.set(specifier.name.text, true);
+                                uniqueExports.set(unescapeLeadingUnderscores(specifier.name.escapedText), true);
                                 exportedNames = append(exportedNames, specifier.name);
                             }
                         }
@@ -114,9 +103,9 @@ namespace ts {
                         else {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports.get(name.text)) {
+                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.escapedText))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(name.text, true);
+                                uniqueExports.set(unescapeLeadingUnderscores(name.escapedText), true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -135,15 +124,26 @@ namespace ts {
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports.get(name.text)) {
+                            if (name && !uniqueExports.get(unescapeLeadingUnderscores(name.escapedText))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(name.text, true);
+                                uniqueExports.set(unescapeLeadingUnderscores(name.escapedText), true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
                     }
                     break;
             }
+        }
+
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues);
+        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+            createLiteral(externalHelpersModuleNameText));
+
+        if (externalHelpersImportDeclaration) {
+            externalImports.unshift(externalHelpersImportDeclaration);
         }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
@@ -158,8 +158,8 @@ namespace ts {
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports.get(decl.name.text)) {
-                uniqueExports.set(decl.name.text, true);
+            if (!uniqueExports.get(unescapeLeadingUnderscores(decl.name.escapedText))) {
+                uniqueExports.set(unescapeLeadingUnderscores(decl.name.escapedText), true);
                 exportedNames = append(exportedNames, decl.name);
             }
         }

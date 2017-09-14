@@ -235,7 +235,7 @@ function isEmpty(string) {
 function isConvertiblePixelValue(value) {
     return /^\d+px$/.test(value);
 }
-var HTMLtoJSX = (function () {
+var HTMLtoJSX = /** @class */ (function () {
     function HTMLtoJSX() {
         var _this = this;
         /**
@@ -276,7 +276,7 @@ exports.HTMLtoJSX = HTMLtoJSX;
 /**
  * Handles parsing of inline styles
  */
-var StyleParser = (function () {
+var StyleParser = /** @class */ (function () {
     function StyleParser() {
         var _this = this;
         this.styles = {};

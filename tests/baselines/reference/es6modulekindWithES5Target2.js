@@ -7,12 +7,12 @@ export default class C {
 
 
 //// [es6modulekindWithES5Target2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }
     C.prototype.method = function () { };
+    C.s = 0;
     return C;
 }());
 export default C;
-C.s = 0;

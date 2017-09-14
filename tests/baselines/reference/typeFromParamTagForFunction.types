@@ -1,0 +1,223 @@
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(id: string): any;
+>require : (id: string) => any
+>id : string
+
+declare var module: any, exports: any;
+>module : any
+>exports : any
+
+=== tests/cases/conformance/salsa/a-ext.js ===
+exports.A = function () {
+>exports.A = function () {    this.x = 1;} : () => void
+>exports.A : any
+>exports : any
+>A : any
+>function () {    this.x = 1;} : () => void
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+
+};
+
+=== tests/cases/conformance/salsa/a.js ===
+const { A } = require("./a-ext");
+>A : () => void
+>require("./a-ext") : typeof "tests/cases/conformance/salsa/a-ext"
+>require : (id: string) => any
+>"./a-ext" : "./a-ext"
+
+/** @param {A} p */
+function a(p) { p.x; }
+>a : (p: { x: number; }) => void
+>p : { x: number; }
+>p.x : number
+>p : { x: number; }
+>x : number
+
+=== tests/cases/conformance/salsa/b-ext.js ===
+exports.B = class {
+>exports.B = class {    constructor() {        this.x = 1;    }} : typeof (Anonymous class)
+>exports.B : any
+>exports : any
+>B : any
+>class {    constructor() {        this.x = 1;    }} : typeof (Anonymous class)
+
+    constructor() {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : number
+>this : this
+>x : number
+>1 : 1
+    }
+};
+
+=== tests/cases/conformance/salsa/b.js ===
+const { B } = require("./b-ext");
+>B : typeof (Anonymous class)
+>require("./b-ext") : typeof "tests/cases/conformance/salsa/b-ext"
+>require : (id: string) => any
+>"./b-ext" : "./b-ext"
+
+/** @param {B} p */
+function b(p) { p.x; }
+>b : (p: (Anonymous class)) => void
+>p : (Anonymous class)
+>p.x : number
+>p : (Anonymous class)
+>x : number
+
+=== tests/cases/conformance/salsa/c-ext.js ===
+export function C() {
+>C : () => void
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+}
+
+=== tests/cases/conformance/salsa/c.js ===
+const { C } = require("./c-ext");
+>C : () => void
+>require("./c-ext") : typeof "tests/cases/conformance/salsa/c-ext"
+>require : (id: string) => any
+>"./c-ext" : "./c-ext"
+
+/** @param {C} p */
+function c(p) { p.x; }
+>c : (p: { x: number; }) => void
+>p : { x: number; }
+>p.x : number
+>p : { x: number; }
+>x : number
+
+=== tests/cases/conformance/salsa/d-ext.js ===
+export var D = function() {
+>D : () => void
+>function() {    this.x = 1;} : () => void
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+
+};
+
+=== tests/cases/conformance/salsa/d.js ===
+const { D } = require("./d-ext");
+>D : () => void
+>require("./d-ext") : typeof "tests/cases/conformance/salsa/d-ext"
+>require : (id: string) => any
+>"./d-ext" : "./d-ext"
+
+/** @param {D} p */
+function d(p) { p.x; }
+>d : (p: { x: number; }) => void
+>p : { x: number; }
+>p.x : number
+>p : { x: number; }
+>x : number
+
+=== tests/cases/conformance/salsa/e-ext.js ===
+export class E {
+>E : E
+
+    constructor() {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : number
+>this : this
+>x : number
+>1 : 1
+    }
+}
+
+=== tests/cases/conformance/salsa/e.js ===
+const { E } = require("./e-ext");
+>E : typeof E
+>require("./e-ext") : typeof "tests/cases/conformance/salsa/e-ext"
+>require : (id: string) => any
+>"./e-ext" : "./e-ext"
+
+/** @param {E} p */
+function e(p) { p.x; }
+>e : (p: E) => void
+>p : E
+>p.x : number
+>p : E
+>x : number
+
+=== tests/cases/conformance/salsa/f.js ===
+var F = function () {
+>F : () => void
+>function () {    this.x = 1;} : () => void
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+
+};
+
+/** @param {F} p */
+function f(p) { p.x; }
+>f : (p: { x: number; }) => void
+>p : { x: number; }
+>p.x : number
+>p : { x: number; }
+>x : number
+
+=== tests/cases/conformance/salsa/g.js ===
+function G() {
+>G : () => void
+
+    this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+}
+
+/** @param {G} p */
+function g(p) { p.x; }
+>g : (p: { x: number; }) => void
+>p : { x: number; }
+>p.x : number
+>p : { x: number; }
+>x : number
+
+=== tests/cases/conformance/salsa/h.js ===
+class H {
+>H : H
+
+    constructor() {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : number
+>this : this
+>x : number
+>1 : 1
+    }
+}
+
+/** @param {H} p */
+function h(p) { p.x; }
+>h : (p: H) => void
+>p : H
+>p.x : number
+>p : H
+>x : number
+

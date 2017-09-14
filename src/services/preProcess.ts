@@ -41,13 +41,9 @@ namespace ts {
         }
 
         function getFileReference() {
-            const file = scanner.getTokenValue();
+            const fileName = scanner.getTokenValue();
             const pos = scanner.getTokenPos();
-            return {
-                fileName: file,
-                pos: pos,
-                end: pos + file.length
-            };
+            return { fileName, pos, end: pos + fileName.length };
         }
 
         function recordAmbientExternalModule(): void {
@@ -95,9 +91,16 @@ namespace ts {
         function tryConsumeImport(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.ImportKeyword) {
-
                 token = nextToken();
-                if (token === SyntaxKind.StringLiteral) {
+                if (token === SyntaxKind.OpenParenToken) {
+                    token = nextToken();
+                    if (token === SyntaxKind.StringLiteral) {
+                        // import("mod");
+                        recordModuleName();
+                        return true;
+                    }
+                }
+                else if (token === SyntaxKind.StringLiteral) {
                     // import "mod";
                     recordModuleName();
                     return true;
@@ -270,13 +273,11 @@ namespace ts {
 
                 // skip open bracket
                 token = nextToken();
-                let i = 0;
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
                     // record string literals as module names
                     if (token === SyntaxKind.StringLiteral) {
                         recordModuleName();
-                        i++;
                     }
 
                     token = nextToken();
@@ -297,7 +298,8 @@ namespace ts {
             //    import * as NS  from "mod"
             //    import d, {a, b as B} from "mod"
             //    import i = require("mod");
-            //
+            //    import("mod");
+
             //    export * from "mod"
             //    export {a as b} from "mod"
             //    export import i = require("mod")

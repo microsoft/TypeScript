@@ -3,13 +3,17 @@ tests/cases/conformance/enums/enumErrors.ts(3,6): error TS2431: Enum name cannot
 tests/cases/conformance/enums/enumErrors.ts(4,6): error TS2431: Enum name cannot be 'string'.
 tests/cases/conformance/enums/enumErrors.ts(5,6): error TS2431: Enum name cannot be 'boolean'.
 tests/cases/conformance/enums/enumErrors.ts(9,9): error TS2322: Type 'Number' is not assignable to type 'E5'.
-tests/cases/conformance/enums/enumErrors.ts(26,9): error TS2322: Type '""' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(26,9): error TS2322: Type 'true' is not assignable to type 'E11'.
 tests/cases/conformance/enums/enumErrors.ts(27,9): error TS2322: Type 'Date' is not assignable to type 'E11'.
 tests/cases/conformance/enums/enumErrors.ts(28,9): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2322: Type '{}' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(35,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(36,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(37,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values are not permitted in an enum with string valued members.
 
 
-==== tests/cases/conformance/enums/enumErrors.ts (9 errors) ====
+==== tests/cases/conformance/enums/enumErrors.ts (13 errors) ====
     // Enum named with PredefinedTypes
     enum any { }
          ~~~
@@ -45,9 +49,9 @@ tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2322: Type '{}' is no
     
     // Enum with computed member intializer of other types
     enum E11 {
-        A = '',
-            ~~
-!!! error TS2322: Type '""' is not assignable to type 'E11'.
+        A = true,
+            ~~~~
+!!! error TS2322: Type 'true' is not assignable to type 'E11'.
         B = new Date(),
             ~~~~~~~~~~
 !!! error TS2322: Type 'Date' is not assignable to type 'E11'.
@@ -57,5 +61,22 @@ tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2322: Type '{}' is no
         D = {}
             ~~
 !!! error TS2322: Type '{}' is not assignable to type 'E11'.
+    }
+    
+    // Enum with string valued member and computed member initializers
+    enum E12 {
+        A = '',
+        B = new Date(),
+            ~~~~~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        C = window,
+            ~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        D = {},
+            ~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        E = 1 + 1,
+            ~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
     }
     

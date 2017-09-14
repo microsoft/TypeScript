@@ -1,6 +1,5 @@
-tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,1): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'Giraffe' is not a valid type argument because it is not a supertype of candidate 'Elephant'.
-    Property 'y' is missing in type 'Elephant'.
+tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,6): error TS2345: Argument of type 'Elephant' is not assignable to parameter of type 'Giraffe'.
+  Property 'y' is missing in type 'Elephant'.
 
 
 ==== tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts (1 errors) ====
@@ -11,7 +10,6 @@ tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,1): er
     var g: Giraffe;
     var e: Elephant;
     f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
-    ~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'Giraffe' is not a valid type argument because it is not a supertype of candidate 'Elephant'.
-!!! error TS2453:     Property 'y' is missing in type 'Elephant'.
+         ~
+!!! error TS2345: Argument of type 'Elephant' is not assignable to parameter of type 'Giraffe'.
+!!! error TS2345:   Property 'y' is missing in type 'Elephant'.

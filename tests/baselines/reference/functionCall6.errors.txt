@@ -1,6 +1,6 @@
 tests/cases/compiler/functionCall6.ts(3,5): error TS2345: Argument of type '2' is not assignable to parameter of type 'string'.
-tests/cases/compiler/functionCall6.ts(4,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/functionCall6.ts(5,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/functionCall6.ts(4,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/functionCall6.ts(5,1): error TS2554: Expected 1 arguments, but got 0.
 
 
 ==== tests/cases/compiler/functionCall6.ts (3 errors) ====
@@ -11,8 +11,8 @@ tests/cases/compiler/functionCall6.ts(5,1): error TS2346: Supplied parameters do
 !!! error TS2345: Argument of type '2' is not assignable to parameter of type 'string'.
     foo('foo', 'bar');
     ~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     foo();
     ~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     

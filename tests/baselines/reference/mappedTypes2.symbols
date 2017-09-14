@@ -313,16 +313,16 @@ function f5(shape: Shape) {
     let name = p.name.get();
 >name : Symbol(name, Decl(mappedTypes2.ts, 84, 7))
 >p.name.get : Symbol(get, Decl(mappedTypes2.ts, 11, 17))
->p.name : Symbol(name)
+>p.name : Symbol(name, Decl(mappedTypes2.ts, 35, 17))
 >p : Symbol(p, Decl(mappedTypes2.ts, 83, 9))
->name : Symbol(name)
+>name : Symbol(name, Decl(mappedTypes2.ts, 35, 17))
 >get : Symbol(get, Decl(mappedTypes2.ts, 11, 17))
 
     p.width.set(42);
 >p.width.set : Symbol(set, Decl(mappedTypes2.ts, 12, 13))
->p.width : Symbol(width)
+>p.width : Symbol(width, Decl(mappedTypes2.ts, 36, 17))
 >p : Symbol(p, Decl(mappedTypes2.ts, 83, 9))
->width : Symbol(width)
+>width : Symbol(width, Decl(mappedTypes2.ts, 36, 17))
 >set : Symbol(set, Decl(mappedTypes2.ts, 12, 13))
 }
 
@@ -334,19 +334,19 @@ function f6(shape: DeepReadonly<Shape>) {
 
     let name = shape.name;  // string
 >name : Symbol(name, Decl(mappedTypes2.ts, 89, 7))
->shape.name : Symbol(name)
+>shape.name : Symbol(name, Decl(mappedTypes2.ts, 35, 17))
 >shape : Symbol(shape, Decl(mappedTypes2.ts, 88, 12))
->name : Symbol(name)
+>name : Symbol(name, Decl(mappedTypes2.ts, 35, 17))
 
     let location = shape.location;  // DeepReadonly<Point>
 >location : Symbol(location, Decl(mappedTypes2.ts, 90, 7))
->shape.location : Symbol(location)
+>shape.location : Symbol(location, Decl(mappedTypes2.ts, 38, 19))
 >shape : Symbol(shape, Decl(mappedTypes2.ts, 88, 12))
->location : Symbol(location)
+>location : Symbol(location, Decl(mappedTypes2.ts, 38, 19))
 
     let x = location.x;  // number
 >x : Symbol(x, Decl(mappedTypes2.ts, 91, 7))
->location.x : Symbol(x)
+>location.x : Symbol(x, Decl(mappedTypes2.ts, 30, 17))
 >location : Symbol(location, Decl(mappedTypes2.ts, 90, 7))
->x : Symbol(x)
+>x : Symbol(x, Decl(mappedTypes2.ts, 30, 17))
 }

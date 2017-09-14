@@ -98,6 +98,11 @@ export declare function __assign(t: any, ...sources: any[]): any;
 >t : Symbol(t, Decl(tslib.d.ts, --, --))
 >sources : Symbol(sources, Decl(tslib.d.ts, --, --))
 
+export declare function __rest(t: any, propertyNames: string[]): any;
+>__rest : Symbol(__rest, Decl(tslib.d.ts, --, --))
+>t : Symbol(t, Decl(tslib.d.ts, --, --))
+>propertyNames : Symbol(propertyNames, Decl(tslib.d.ts, --, --))
+
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
 >__decorate : Symbol(__decorate, Decl(tslib.d.ts, --, --))
 >decorators : Symbol(decorators, Decl(tslib.d.ts, --, --))
@@ -127,4 +132,15 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >generator : Symbol(generator, Decl(tslib.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+export declare function __generator(thisArg: any, body: Function): any;
+>__generator : Symbol(__generator, Decl(tslib.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(tslib.d.ts, --, --))
+>body : Symbol(body, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+export declare function __exportStar(m: any, exports: any): void;
+>__exportStar : Symbol(__exportStar, Decl(tslib.d.ts, --, --))
+>m : Symbol(m, Decl(tslib.d.ts, --, --))
+>exports : Symbol(exports, Decl(tslib.d.ts, --, --))
 

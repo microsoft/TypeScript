@@ -77,7 +77,7 @@ var f2 = function () {
         y[_i - 1] = arguments[_i];
     }
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function () {
@@ -127,7 +127,7 @@ var f4 = function () {
         y[_i - 1] = arguments[_i];
     }
 };
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.foo = function () {

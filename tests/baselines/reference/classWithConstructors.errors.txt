@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(6,13): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(15,14): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(21,13): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(31,13): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(40,14): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(46,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(6,13): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(15,14): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(21,13): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(31,13): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(40,14): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(46,13): error TS2554: Expected 1-2 arguments, but got 0.
 
 
 ==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts (6 errors) ====
@@ -14,7 +14,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var c = new C(); // error
                 ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
         var c2 = new C(''); // ok
     
         class C2 {
@@ -25,7 +25,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var c3 = new C2(); // error
                  ~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
         var c4 = new C2(''); // ok
         var c5 = new C2(1); // ok
     
@@ -33,7 +33,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var d = new D(); // error
                 ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
         var d2 = new D(1); // ok
         var d3 = new D(''); // ok
     }
@@ -45,7 +45,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var c = new C(); // error
                 ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
         var c2 = new C(''); // ok
     
         class C2<T,U> {
@@ -56,7 +56,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var c3 = new C2(); // error
                  ~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
         var c4 = new C2(''); // ok
         var c5 = new C2(1, 2); // ok
     
@@ -64,7 +64,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var d = new D(); // error
                 ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
         var d2 = new D(1); // ok
         var d3 = new D(''); // ok
     }

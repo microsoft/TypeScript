@@ -20,19 +20,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var A = (function () {
+var A = /** @class */ (function () {
     function A(hi) {
     }
     A.prototype.method = function (there) { };
+    __decorate([
+        MyMethodDecorator,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], A.prototype, "method", null);
+    A = __decorate([
+        MyClassDecorator,
+        __metadata("design:paramtypes", [Object])
+    ], A);
     return A;
 }());
-__decorate([
-    MyMethodDecorator,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], A.prototype, "method", null);
-A = __decorate([
-    MyClassDecorator,
-    __metadata("design:paramtypes", [Object])
-], A);

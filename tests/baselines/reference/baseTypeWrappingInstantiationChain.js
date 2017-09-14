@@ -38,30 +38,30 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var CBaseBase = (function () {
+var CBaseBase = /** @class */ (function () {
     function CBaseBase(x) {
     }
     return CBaseBase;
 }());
-var CBase = (function (_super) {
+var CBase = /** @class */ (function (_super) {
     __extends(CBase, _super);
     function CBase() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return CBase;
 }(CBaseBase));
-var Parameter = (function () {
+var Parameter = /** @class */ (function () {
     function Parameter() {
     }
     Parameter.prototype.method = function (t) { };
     return Parameter;
 }());
-var Wrapper = (function () {
+var Wrapper = /** @class */ (function () {
     function Wrapper() {
     }
     return Wrapper;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;

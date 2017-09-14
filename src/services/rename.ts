@@ -53,7 +53,7 @@ namespace ts.Rename {
         }
     }
 
-    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
+    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
         return {
             canRename: true,
             kind,
@@ -89,9 +89,15 @@ namespace ts.Rename {
     }
 
     function nodeIsEligibleForRename(node: Node): boolean {
-        return node.kind === ts.SyntaxKind.Identifier ||
-            node.kind === SyntaxKind.StringLiteral ||
-            isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
-            isThis(node);
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.ThisKeyword:
+                return true;
+            case SyntaxKind.NumericLiteral:
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral);
+            default:
+                return false;
+        }
     }
 }

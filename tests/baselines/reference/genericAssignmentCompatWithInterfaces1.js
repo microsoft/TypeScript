@@ -20,7 +20,7 @@ var a4: I<string> = <K<number>>z;
 
 
 //// [genericAssignmentCompatWithInterfaces1.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.compareTo = function (other) { return 1; };

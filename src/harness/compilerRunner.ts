@@ -11,19 +11,13 @@ const enum CompilerTestType {
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = "tests/cases";
     private testSuiteName: TestRunnerKind;
-    private errors: boolean;
     private emit: boolean;
-    private decl: boolean;
-    private output: boolean;
 
     public options: string;
 
     constructor(public testType: CompilerTestType) {
         super();
-        this.errors = true;
         this.emit = true;
-        this.decl = true;
-        this.output = true;
         if (testType === CompilerTestType.Conformance) {
             this.testSuiteName = "conformance";
         }
@@ -82,7 +76,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (testCaseContent.tsConfig) {
                     assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
 
-                    tsConfigOptions = ts.clone(testCaseContent.tsConfig.options);
+                    tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
                     tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
                 }
                 else {
@@ -93,7 +87,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 lastUnit = units[units.length - 1];
-                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ".d.ts"));
+                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
@@ -141,7 +135,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // check errors
             it("Correct errors for " + fileName, () => {
-                Harness.Compiler.doErrorBaseline(justName, tsConfigFiles.concat(toBeCompiled, otherFiles), result.errors);
+                Harness.Compiler.doErrorBaseline(justName, tsConfigFiles.concat(toBeCompiled, otherFiles), result.errors, !!options.pretty);
             });
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
@@ -214,25 +208,13 @@ class CompilerBaselineRunner extends RunnerBase {
 
     private parseOptions() {
         if (this.options && this.options.length > 0) {
-            this.errors = false;
             this.emit = false;
-            this.decl = false;
-            this.output = false;
 
             const opts = this.options.split(",");
             for (let i = 0; i < opts.length; i++) {
                 switch (opts[i]) {
-                    case "error":
-                        this.errors = true;
-                        break;
                     case "emit":
                         this.emit = true;
-                        break;
-                    case "decl":
-                        this.decl = true;
-                        break;
-                    case "output":
-                        this.output = true;
                         break;
                     default:
                         throw new Error("unsupported flag");

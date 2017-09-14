@@ -1,7 +1,7 @@
 === tests/cases/compiler/declarationEmitBindingPatterns.ts ===
 const k = ({x: z = 'y'}) => { }
->k : ({x: z}: { x?: string; }) => void
->({x: z = 'y'}) => { } : ({x: z}: { x?: string; }) => void
+>k : ({ x: z }: { x?: string; }) => void
+>({x: z = 'y'}) => { } : ({ x: z }: { x?: string; }) => void
 >x : any
 >z : string
 >'y' : "y"
@@ -10,7 +10,7 @@ var a;
 >a : any
 
 function f({} = a, [] = a, { p: {} = a} = a) {
->f : ({}?: any, []?: any, {p: {}}?: any) => void
+>f : ({}?: any, []?: any, { p: {} }?: any) => void
 >a : any
 >a : any
 >p : any

@@ -34,30 +34,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
+    A = __decorate([
+        dec
+    ], A);
     return A;
 }());
-A = __decorate([
-    dec
-], A);
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x) {
     }
+    B = __decorate([
+        dec,
+        __metadata("design:paramtypes", [Number])
+    ], B);
     return B;
 }());
-B = __decorate([
-    dec,
-    __metadata("design:paramtypes", [Number])
-], B);
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    C = __decorate([
+        dec
+    ], C);
     return C;
 }(A));
-C = __decorate([
-    dec
-], C);

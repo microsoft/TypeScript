@@ -1,6 +1,6 @@
-tests/cases/compiler/bar.ts(1,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/bar.ts(2,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/bar.ts(3,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/bar.ts(1,1): error TS2554: Expected 3 arguments, but got 0.
+tests/cases/compiler/bar.ts(2,1): error TS2554: Expected 3 arguments, but got 1.
+tests/cases/compiler/bar.ts(3,1): error TS2554: Expected 3 arguments, but got 2.
 
 
 ==== tests/cases/compiler/foo.js (0 errors) ====
@@ -15,13 +15,13 @@ tests/cases/compiler/bar.ts(3,1): error TS2346: Supplied parameters do not match
 ==== tests/cases/compiler/bar.ts (3 errors) ====
     f(); // Error
     ~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 3 arguments, but got 0.
     f(1); // Error
     ~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 3 arguments, but got 1.
     f(1, 2); // Error
     ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 3 arguments, but got 2.
     
     f(1, 2, 3); // OK
     

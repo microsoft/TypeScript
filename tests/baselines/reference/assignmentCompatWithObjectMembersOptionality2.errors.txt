@@ -1,3 +1,12 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(33,5): error TS2559: Type 'D' has no properties in common with type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(34,5): error TS2559: Type 'E' has no properties in common with type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(35,5): error TS2559: Type 'F' has no properties in common with type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(36,5): error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(37,5): error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(38,5): error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(39,5): error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(40,5): error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(41,5): error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(74,5): error TS2322: Type 'D' is not assignable to type 'C'.
   Property 'opt' is missing in type 'D'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(75,5): error TS2322: Type 'E' is not assignable to type 'C'.
@@ -18,7 +27,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
   Property 'opt' is missing in type 'F'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts (9 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts (18 errors) ====
     // M is optional and S contains no property with the same name as M
     // N is optional and T contains no property with the same name as N
     
@@ -50,20 +59,38 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         var e: E;
         var f: F;
     
-        // all ok
+        // disallowed by weak type checking
         c = d;
+        ~
+!!! error TS2559: Type 'D' has no properties in common with type 'C'.
         c = e;
+        ~
+!!! error TS2559: Type 'E' has no properties in common with type 'C'.
         c = f;
-        c = a;
-    
+        ~
+!!! error TS2559: Type 'F' has no properties in common with type 'C'.
         a = d;
+        ~
+!!! error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
         a = e;
+        ~
+!!! error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
         a = f;
-        a = c;
-    
+        ~
+!!! error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
         b = d;
+        ~
+!!! error TS2559: Type 'D' has no properties in common with type '{ opt?: Base; }'.
         b = e;
+        ~
+!!! error TS2559: Type 'E' has no properties in common with type '{ opt?: Base; }'.
         b = f;
+        ~
+!!! error TS2559: Type 'F' has no properties in common with type '{ opt?: Base; }'.
+    
+        // ok
+        c = a;
+        a = c;
         b = a;
         b = c;
     }
@@ -135,3 +162,4 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         b = a; // ok
         b = c; // ok
     }
+    

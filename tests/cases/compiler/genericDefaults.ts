@@ -458,6 +458,15 @@ const Derived02c01 = new Derived02(1);
 const Derived02c02 = new Derived02<number>();
 const Derived02c03 = new Derived02<number>(1);
 
+// https://github.com/Microsoft/TypeScript/issues/16211
+interface Base02 {}
+interface Base02Constructor { new <T = A>(a: T): Base02 & T; }
+declare const Base02: Base02Constructor;
+declare class Derived03 extends Base02 {}
+const Derived03c00 = new Derived03(ab);
+const Derived03c01 = Derived03c00.a;
+type DerivedProps = keyof Derived03;
+
 type t00<T = number> = { a: T; }
 const t00c00 = (<t00>x).a;
 const t00c01 = (<t00<number>>x).a;

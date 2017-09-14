@@ -35,11 +35,11 @@ g<U>();
 g<InvalidReference>(); // Should get error for type argument
 
 //// [super.ts]
-import { C } from "unknown";
+import { A, B } from "unknown";
 
 type T = number;
 
-export class D extends C {
+export class C extends A<B> {
     m() {
         super.m<T>(1);
         super.m<InvalidReference>(); // Should get error for type argument
@@ -64,13 +64,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 // This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -108,15 +108,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var unknown_1 = require("unknown");
-var D = (function (_super) {
-    __extends(D, _super);
-    function D() {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.m = function () {
+    C.prototype.m = function () {
         _super.prototype.m.call(this, 1);
         _super.prototype.m.call(this); // Should get error for type argument
     };
-    return D;
-}(unknown_1.C));
-exports.D = D;
+    return C;
+}(unknown_1.A));
+exports.C = C;

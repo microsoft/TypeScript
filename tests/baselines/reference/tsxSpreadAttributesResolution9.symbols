@@ -14,17 +14,17 @@ interface OptionProp {
 
 class Opt extends React.Component<OptionProp, {}> {
 >Opt : Symbol(Opt, Decl(file.tsx, 5, 1))
->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >OptionProp : Symbol(OptionProp, Decl(file.tsx, 0, 32))
 
     render() {
 >render : Symbol(Opt.render, Decl(file.tsx, 7, 51))
 
         return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
     }
 }
 

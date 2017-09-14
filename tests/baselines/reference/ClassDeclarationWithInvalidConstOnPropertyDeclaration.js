@@ -4,9 +4,9 @@ class AtomicNumbers {
 }
 
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration.js]
-var AtomicNumbers = (function () {
+var AtomicNumbers = /** @class */ (function () {
     function AtomicNumbers() {
     }
+    AtomicNumbers.H = 1;
     return AtomicNumbers;
 }());
-AtomicNumbers.H = 1;

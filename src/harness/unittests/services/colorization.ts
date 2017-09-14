@@ -30,13 +30,9 @@ describe("Colorization", function () {
     function identifier(text: string, position?: number) { return createClassification(text, ts.TokenClass.Identifier, position); }
     function numberLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.NumberLiteral, position); }
     function stringLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.StringLiteral, position); }
-    function finalEndOfLineState(value: number): ClassificationEntry { return { value: value, classification: undefined, position: 0 }; }
-    function createClassification(text: string, tokenClass: ts.TokenClass, position?: number): ClassificationEntry {
-        return {
-            value: text,
-            classification: tokenClass,
-            position: position,
-        };
+    function finalEndOfLineState(value: number): ClassificationEntry { return { value, classification: undefined, position: 0 }; }
+    function createClassification(value: string, classification: ts.TokenClass, position?: number): ClassificationEntry {
+        return { value, classification, position };
     }
 
     function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
@@ -421,6 +417,50 @@ class D { }\r\n\
                 identifier("C"),
                 punctuation("{"),
                 punctuation("}"),
+                comment("=======\r\nclass D { }\r\n"),
+                comment(">>>>>>> Branch - a"),
+                finalEndOfLineState(ts.EndOfLineState.None));
+
+            testLexicalClassification(
+"class C {\r\n\
+<<<<<<< HEAD\r\n\
+    v = 1;\r\n\
+||||||| merged common ancestors\r\n\
+    v = 3;\r\n\
+=======\r\n\
+    v = 2;\r\n\
+>>>>>>> Branch - a\r\n\
+}",
+                ts.EndOfLineState.None,
+                keyword("class"),
+                identifier("C"),
+                punctuation("{"),
+                comment("<<<<<<< HEAD"),
+                identifier("v"),
+                operator("="),
+                numberLiteral("1"),
+                punctuation(";"),
+                comment("||||||| merged common ancestors\r\n    v = 3;\r\n"),
+                comment("=======\r\n    v = 2;\r\n"),
+                comment(">>>>>>> Branch - a"),
+                punctuation("}"),
+                finalEndOfLineState(ts.EndOfLineState.None));
+
+            testLexicalClassification(
+"<<<<<<< HEAD\r\n\
+class C { }\r\n\
+||||||| merged common ancestors\r\n\
+class E { }\r\n\
+=======\r\n\
+class D { }\r\n\
+>>>>>>> Branch - a\r\n",
+                ts.EndOfLineState.None,
+                comment("<<<<<<< HEAD"),
+                keyword("class"),
+                identifier("C"),
+                punctuation("{"),
+                punctuation("}"),
+                comment("||||||| merged common ancestors\r\nclass E { }\r\n"),
                 comment("=======\r\nclass D { }\r\n"),
                 comment(">>>>>>> Branch - a"),
                 finalEndOfLineState(ts.EndOfLineState.None));

@@ -5,7 +5,7 @@
 /classReference.ts(4,24): error TS2315: Type 'C' is not generic.
 /interface.ts(1,21): error TS2307: Cannot find module 'unknown'.
 /new.ts(1,21): error TS2307: Cannot find module 'unkown'.
-/super.ts(1,19): error TS2307: Cannot find module 'unknown'.
+/super.ts(1,22): error TS2307: Cannot find module 'unknown'.
 /super.ts(8,17): error TS2304: Cannot find name 'InvalidReference'.
 /typeReference.ts(6,17): error TS2315: Type 'U' is not generic.
 
@@ -61,13 +61,13 @@
 !!! error TS2304: Cannot find name 'InvalidReference'.
     
 ==== /super.ts (2 errors) ====
-    import { C } from "unknown";
-                      ~~~~~~~~~
+    import { A, B } from "unknown";
+                         ~~~~~~~~~
 !!! error TS2307: Cannot find module 'unknown'.
     
     type T = number;
     
-    export class D extends C {
+    export class C extends A<B> {
         m() {
             super.m<T>(1);
             super.m<InvalidReference>(); // Should get error for type argument

@@ -49,7 +49,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var RC1 = (function (_super) {
+var RC1 = /** @class */ (function (_super) {
     __extends(RC1, _super);
     function RC1() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -59,7 +59,7 @@ var RC1 = (function (_super) {
     };
     return RC1;
 }(React.Component));
-var RC2 = (function (_super) {
+var RC2 = /** @class */ (function (_super) {
     __extends(RC2, _super);
     function RC2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -70,7 +70,7 @@ var RC2 = (function (_super) {
     RC2.prototype.method = function () { };
     return RC2;
 }(React.Component));
-var RC3 = (function (_super) {
+var RC3 = /** @class */ (function (_super) {
     __extends(RC3, _super);
     function RC3() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -80,7 +80,7 @@ var RC3 = (function (_super) {
     };
     return RC3;
 }(React.Component));
-var RC4 = (function (_super) {
+var RC4 = /** @class */ (function (_super) {
     __extends(RC4, _super);
     function RC4() {
         return _super !== null && _super.apply(this, arguments) || this;

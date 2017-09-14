@@ -4,9 +4,9 @@ class Test1 {
 }
 
 //// [quotedPropertyName2.js]
-var Test1 = (function () {
+var Test1 = /** @class */ (function () {
     function Test1() {
     }
+    Test1["prop1"] = 0;
     return Test1;
 }());
-Test1["prop1"] = 0;

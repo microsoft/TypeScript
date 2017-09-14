@@ -78,6 +78,23 @@ namespace ts {
             },
             include: ["../supplemental.*"]
         },
+        "/dev/configs/third.json": {
+            extends: "./second",
+            compilerOptions: {
+                // tslint:disable-next-line:no-null-keyword
+                module: null
+            },
+            include: ["../supplemental.*"]
+        },
+        "/dev/configs/fourth.json": {
+            extends: "./third",
+            compilerOptions: {
+                module: "system"
+            },
+            // tslint:disable-next-line:no-null-keyword
+            include: null,
+            files: ["../main.ts"]
+        },
         "/dev/extends.json": { extends: 42 },
         "/dev/extends2.json": { extends: "configs/base" },
         "/dev/main.ts": "",
@@ -106,7 +123,7 @@ namespace ts {
         }
     }
 
-    describe("Configuration Extension", () => {
+    describe("configurationExtension", () => {
         forEach<[string, string, Utils.MockParseConfigHost], void>([
             ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
             ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
@@ -131,14 +148,15 @@ namespace ts {
                 it(name, () => {
                     const parsed = getParseCommandLine(entry);
                     assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
-                    assert.deepEqual(parsed.options, ts.extend(expected, <CompilerOptions>{ configFile: undefined }));
+                    assert.deepEqual(parsed.options, expected);
                     assert.deepEqual(parsed.fileNames, expectedFiles);
                 });
 
                 it(name + " with jsonSourceFile", () => {
                     const { parsed, jsonSourceFile } = getParseCommandLineJsonSourceFile(entry);
                     assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
-                    assert.deepEqual(parsed.options, ts.extend(expected, <CompilerOptions>{ configFile: jsonSourceFile }));
+                    assert.deepEqual(parsed.options, expected);
+                    assert.equal(parsed.options.configFile, jsonSourceFile);
                     assert.deepEqual(parsed.fileNames, expectedFiles);
                 });
             }
@@ -205,6 +223,24 @@ namespace ts {
                     category: DiagnosticCategory.Error,
                     messageText: `A path in an 'extends' option must be relative or rooted, but 'configs/base' is not.`
                 }]);
+
+                testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {
+                    allowJs: true,
+                    noImplicitAny: true,
+                    strictNullChecks: true,
+                    module: undefined // Technically, this is distinct from the key never being set; but within the compiler we don't make the distinction
+                }, [
+                    combinePaths(basePath, "supplemental.ts")
+                ]);
+
+                testSuccess("can overwrite top-level options using extended 'null'", "configs/fourth.json", {
+                    allowJs: true,
+                    noImplicitAny: true,
+                    strictNullChecks: true,
+                    module: ModuleKind.System
+                }, [
+                    combinePaths(basePath, "main.ts")
+                ]);
             });
         });
     });

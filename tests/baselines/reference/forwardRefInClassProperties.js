@@ -16,7 +16,7 @@ class Test
 
 
 //// [forwardRefInClassProperties.js]
-var Test = (function () {
+var Test = /** @class */ (function () {
     function Test() {
         this._b = this._a; // undefined, no error/warning
         this._a = 3;
@@ -25,7 +25,7 @@ var Test = (function () {
         var a = b; // Block-scoped variable 'b' used before its declaration
         var b = 3;
     };
+    Test._B = Test._A; // undefined, no error/warning
+    Test._A = 3;
     return Test;
 }());
-Test._B = Test._A; // undefined, no error/warning
-Test._A = 3;

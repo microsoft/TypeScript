@@ -11,7 +11,7 @@ namespace ts {
             return find(n);
 
             function find(node: Node): Node {
-                if (isDeclaration(node) && node.name && isIdentifier(node.name) && node.name.text === name) {
+                if (isDeclaration(node) && node.name && isIdentifier(node.name) && node.name.escapedText === name) {
                     return node;
                 }
                 else {
@@ -67,12 +67,12 @@ namespace ts {
             }
 
             function flattenNodes(n: Node) {
-                const data: (Node | NodeArray<any>)[] = [];
+                const data: (Node | NodeArray<Node>)[] = [];
                 walk(n);
                 return data;
 
-                function walk(n: Node | Node[]): void {
-                    data.push(<any>n);
+                function walk(n: Node | NodeArray<Node>): void {
+                    data.push(n);
                     return isArray(n) ? forEach(n, walk) : forEachChild(n, walk, walk);
                 }
             }
@@ -367,20 +367,22 @@ namespace M {
                 changeTracker.insertNodeAfter(sourceFile, findChild("M", sourceFile), createTestClass(), { prefix: newLineCharacter });
             });
         }
-        {
-            function findOpenBraceForConstructor(sourceFile: SourceFile) {
-                const classDecl = <ClassDeclaration>sourceFile.statements[0];
-                const constructorDecl = forEach(classDecl.members, m => m.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>m).body && <ConstructorDeclaration>m);
-                return constructorDecl.body.getFirstToken();
-            }
-            function createTestSuperCall() {
-                const superCall = createCall(
-                    createSuper(),
+
+        function findOpenBraceForConstructor(sourceFile: SourceFile) {
+            const classDecl = <ClassDeclaration>sourceFile.statements[0];
+            const constructorDecl = forEach(classDecl.members, m => m.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>m).body && <ConstructorDeclaration>m);
+            return constructorDecl.body.getFirstToken();
+        }
+        function createTestSuperCall() {
+            const superCall = createCall(
+                createSuper(),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ emptyArray
-                );
-                return createStatement(superCall);
-            }
+            );
+            return createStatement(superCall);
+        }
+
+        {
             const text1 = `
 class A {
     constructor() {

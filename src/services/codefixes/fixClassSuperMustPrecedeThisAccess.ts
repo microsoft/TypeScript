@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
 
-            const token = getTokenAtPosition(sourceFile, context.span.start);
+            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
             if (token.kind !== SyntaxKind.ThisKeyword) {
                 return undefined;
             }
@@ -19,14 +19,14 @@ namespace ts.codefix {
             // figure out if the `this` access is actually inside the supercall
             // i.e. super(this.a), since in that case we won't suggest a fix
             if (superCall.expression && superCall.expression.kind === SyntaxKind.CallExpression) {
-                const arguments = (<CallExpression>superCall.expression).arguments;
-                for (let i = 0; i < arguments.length; i++) {
-                    if ((<PropertyAccessExpression>arguments[i]).expression === token) {
+                const expressionArguments = (<CallExpression>superCall.expression).arguments;
+                for (let i = 0; i < expressionArguments.length; i++) {
+                    if ((<PropertyAccessExpression>expressionArguments[i]).expression === token) {
                         return undefined;
                     }
                 }
             }
-            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
             changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>constructor, sourceFile), superCall, { suffix: context.newLineCharacter });
             changeTracker.deleteNode(sourceFile, superCall);
 

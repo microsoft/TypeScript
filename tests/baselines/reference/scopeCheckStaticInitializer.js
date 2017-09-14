@@ -16,22 +16,22 @@ class After {
 
 
 //// [scopeCheckStaticInitializer.js]
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     X.method = function () { };
+    X.illegalBeforeProperty = X.data;
+    X.okBeforeMethod = X.method;
+    X.illegal2 = After.data;
+    X.illegal3 = After.method;
+    X.data = 13;
     return X;
 }());
-X.illegalBeforeProperty = X.data;
-X.okBeforeMethod = X.method;
-X.illegal2 = After.data;
-X.illegal3 = After.method;
-X.data = 13;
-var After = (function () {
+var After = /** @class */ (function () {
     function After() {
     }
     After.method = function () { };
     ;
+    After.data = 12;
     return After;
 }());
-After.data = 12;

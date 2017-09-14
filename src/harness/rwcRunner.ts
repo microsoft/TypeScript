@@ -22,8 +22,7 @@ namespace RWC {
     }
 
     function isTsConfigFile(file: { path: string }): boolean {
-        const tsConfigFileName = "tsconfig.json";
-        return file.path.substr(file.path.length - tsConfigFileName.length).toLowerCase() === tsConfigFileName;
+        return file.path.indexOf("tsconfig") !== -1 && file.path.indexOf("json") !== -1;
     }
 
     export function runRWCTest(jsonPath: string) {
@@ -55,7 +54,8 @@ namespace RWC {
                 useCustomLibraryFile = undefined;
             });
 
-            it("can compile", () => {
+            it("can compile", function(this: Mocha.ITestCallbackContext) {
+                this.timeout(800000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
                 const ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
@@ -87,11 +87,19 @@ namespace RWC {
                         const configParseResult = ts.parseJsonSourceFileConfigFileContent(parsedTsconfigFileContents, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
                         opts.options = ts.extend(opts.options, configParseResult.options);
+                        ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
-                    // Load the files
+                    // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
+                    const uniqueNames = ts.createMap<true>();
                     for (const fileName of fileNames) {
-                        inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        // Must maintain order, build result list while checking map
+                        const normalized = ts.normalizeSlashes(fileName);
+                        if (!uniqueNames.has(normalized)) {
+                            uniqueNames.set(normalized, true);
+                            // Load the file
+                            inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        }
                     }
 
                     // Add files to compilation
@@ -207,25 +215,6 @@ namespace RWC {
                 }, baselineOpts);
             });
 
-            // Ideally, a generated declaration file will have no errors. But we allow generated
-            // declaration file errors as part of the baseline.
-            it("has the expected errors in generated declaration files", () => {
-                if (compilerOptions.declaration && !compilerResult.errors.length) {
-                    Harness.Baseline.runBaseline(`${baseName}.dts.errors.txt`, () => {
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
-
-                        if (declFileCompilationResult.declResult.errors.length === 0) {
-                            return null;
-                        }
-
-                        return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
-                            Harness.IO.newLine() + Harness.IO.newLine() +
-                            Harness.Compiler.getErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
-                    }, baselineOpts);
-                }
-            });
-
             it("has the expected types", () => {
                 // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
                 Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
@@ -233,15 +222,36 @@ namespace RWC {
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
                     .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);
             });
+
+            // Ideally, a generated declaration file will have no errors. But we allow generated
+            // declaration file errors as part of the baseline.
+            it("has the expected errors in generated declaration files", () => {
+                if (compilerOptions.declaration && !compilerResult.errors.length) {
+                    Harness.Baseline.runBaseline(`${baseName}.dts.errors.txt`, () => {
+                        if (compilerResult.errors.length === 0) {
+                            return null;
+                        }
+
+                        const declContext = Harness.Compiler.prepareDeclarationCompilationContext(
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory
+                        );
+                        // Reset compilerResult before calling into `compileDeclarationFiles` so the memory from the original compilation can be freed
+                        compilerResult = undefined;
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext);
+
+                        return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
+                            Harness.IO.newLine() + Harness.IO.newLine() +
+                            Harness.Compiler.getErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                    }, baselineOpts);
+                }
+            });
         });
     }
 }
 
 class RWCRunner extends RunnerBase {
-    private static sourcePath = "internal/cases/rwc/";
-
     public enumerateTestFiles() {
-        return Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
+        return Harness.IO.listFiles("internal/cases/rwc/", /.+\.json$/);
     }
 
     public kind(): TestRunnerKind {
@@ -253,7 +263,7 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
         for (let i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }

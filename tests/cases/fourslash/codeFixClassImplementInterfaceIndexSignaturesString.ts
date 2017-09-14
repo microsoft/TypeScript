@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
 //// interface I<X> {
-////     [x: string]: X;
+////     [Ƚ: string]: X;
 //// }
 ////
 //// class C implements I<number> {[| |]}
 
 verify.rangeAfterCodeFix(`
-    [x: string]: number;
+    [Ƚ: string]: number;
 `);

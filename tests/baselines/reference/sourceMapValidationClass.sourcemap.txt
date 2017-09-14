@@ -8,7 +8,7 @@ sources: sourceMapValidationClass.ts
 emittedFile:tests/cases/compiler/sourceMapValidationClass.js
 sourceFile:sourceMapValidationClass.ts
 -------------------------------------------------------------------
->>>var Greeter = (function () {
+>>>var Greeter = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >

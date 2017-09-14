@@ -28,7 +28,6 @@ import minimist = require("minimist");
 import browserify = require("browserify");
 import through2 = require("through2");
 import merge2 = require("merge2");
-import intoStream = require("into-stream");
 import * as os from "os";
 import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
@@ -39,25 +38,25 @@ Error.stackTraceLimit = 1000;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
-    string: ["browser", "tests", "host", "reporter", "stackTraceLimit"],
+    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         b: "browser",
-        d: "debug",
-        t: "tests",
-        test: "tests",
+        d: "debug", "debug-brk": "debug",
+        i: "inspect", "inspect-brk": "inspect",
+        t: "tests", test: "tests",
         r: "reporter",
-        color: "colors",
-        f: "files",
-        file: "files",
+        c: "colors", color: "colors",
+        f: "files", file: "files",
         w: "workers",
     },
     default: {
         soft: false,
         colors: process.env.colors || process.env.color || true,
-        debug: process.env.debug || process.env.d,
-        inspect: process.env.inspect,
+        debug: process.env.debug || process.env["debug-brk"] || process.env.d,
+        inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || "IE",
+        timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
         reporter: process.env.reporter || process.env.r,
@@ -131,6 +130,7 @@ const es2017LibrarySource = [
     "es2017.object.d.ts",
     "es2017.sharedmemory.d.ts",
     "es2017.string.d.ts",
+    "es2017.intl.d.ts",
 ];
 
 const es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
@@ -255,14 +255,8 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
     return true;
 }
 
-// Doing tsconfig inheritance manually. https://github.com/ivogabe/gulp-typescript/issues/459
-const tsconfigBase = JSON.parse(fs.readFileSync("src/tsconfig-base.json", "utf-8")).compilerOptions;
-
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
-    for (const key in tsconfigBase) {
-        copy[key] = tsconfigBase[key];
-    }
     for (const key in base) {
         copy[key] = base[key];
     }
@@ -299,7 +293,7 @@ gulp.task("configure-nightly", "Runs scripts/configureNightly.ts to prepare a bu
     exec(host, [configureNightlyJs, packageJson, versionFile], done, done);
 });
 gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
-    return runSequence("clean", "useDebugMode", "runtests", (done) => {
+    return runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
         exec("npm", ["publish", "--tag", "next"], done, done);
     });
 });
@@ -469,10 +463,11 @@ gulp.task(serverFile, /*help*/ false, [servicesFile, typingsInstallerJs, cancell
         .pipe(gulp.dest("src/server"));
 });
 
+const typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
-gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile], (done) => {
+gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (done) => {
     const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     const {js, dts}: { js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream } = serverLibraryProject.src()
         .pipe(sourcemaps.init())
@@ -489,6 +484,15 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile], (done) => {
             }))
             .pipe(gulp.dest("src/server"))
     ]);
+});
+
+gulp.task(typesMapJson, /*help*/ false, [], () => {
+    return gulp.src("src/server/typesMap.json")
+        .pipe(insert.transform((contents, file) => {
+            JSON.parse(contents);
+            return contents;
+        }))
+        .pipe(gulp.dest(builtLocalDirectory));
 });
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
@@ -560,7 +564,7 @@ gulp.task(run, /*help*/ false, [servicesFile], () => {
         .pipe(newer(run))
         .pipe(sourcemaps.init())
         .pipe(testProject())
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "." }))
         .pipe(gulp.dest("src/harness"));
 });
 
@@ -593,11 +597,11 @@ function restoreSavedNodeEnv() {
     process.env.NODE_ENV = savedNodeEnv;
 }
 
-let testTimeout = 40000;
 function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
     const lintFlag = cmdLineOptions["lint"];
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
+        let testTimeout = cmdLineOptions["timeout"];
         const debug = cmdLineOptions["debug"];
         const inspect = cmdLineOptions["inspect"];
         const tests = cmdLineOptions["tests"];
@@ -636,12 +640,6 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            if (inspect) {
-                args.push("--inspect");
-            }
-            if (inspect || debug) {
-                args.push("--debug-brk");
-            }
             args.push("-R", reporter);
             if (tests) {
                 args.push("-g", `"${tests}"`);
@@ -652,7 +650,15 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             else {
                 args.push("--no-colors");
             }
-            args.push("-t", testTimeout);
+            if (inspect) {
+                args.unshift("--inspect-brk");
+            }
+            else if (debug) {
+                args.unshift("--debug-brk");
+            }
+            else {
+                args.push("-t", testTimeout);
+            }
             args.push(run);
             setNodeEnvToDevelopment();
             exec(mocha, args, lintThenFinish, function(e, status) {
@@ -672,7 +678,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function(err) {
+            runTestsInParallel(taskConfigsFolder, run, { testTimeout, noColors: colors === " --no-colors " }, function(err) {
                 // last worker clean everything and runs linter in case if there were no errors
                 del(taskConfigsFolder).then(() => {
                     if (!err) {
@@ -740,50 +746,75 @@ gulp.task(nodeServerOutFile, /*help*/ false, [servicesFile], () => {
 
 import convertMap = require("convert-source-map");
 import sorcery = require("sorcery");
-declare module "convert-source-map" {
-    export function fromSource(source: string, largeSource?: boolean): SourceMapConverter;
-}
+import Vinyl = require("vinyl");
+
+const bundlePath = path.resolve("built/local/bundle.js");
 
 gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [servicesFile], (done) => {
-    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({ outFile: "../../built/local/bundle.js" }, /*useBuiltCompiler*/ true));
-    return testProject.src()
-        .pipe(newer("built/local/bundle.js"))
+    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({ outFile: bundlePath, inlineSourceMap: true }, /*useBuiltCompiler*/ true));
+    let originalMap: any;
+    let prebundledContent: string;
+    browserify(testProject.src()
+        .pipe(newer(bundlePath))
         .pipe(sourcemaps.init())
         .pipe(testProject())
         .pipe(through2.obj((file, enc, next) => {
-            const originalMap = file.sourceMap;
-            const prebundledContent = file.contents.toString();
+            if (originalMap) {
+                throw new Error("Should only recieve one file!");
+            }
+            console.log(`Saving sourcemaps for ${file.path}`);
+            originalMap = file.sourceMap;
+            prebundledContent = file.contents.toString();
             // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
             originalMap.sources = originalMap.sources.map(s => path.resolve(path.join("src/harness", s)));
-            // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
+            // browserify names input files this when they are streamed in, so this is what it puts in the sourcemap
             originalMap.file = "built/local/_stream_0.js";
 
-            browserify(intoStream(file.contents), { debug: true })
-                .bundle((err, res) => {
-                    // assumes file.contents is a Buffer
-                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/ true).toJSON());
-                    delete maps.sourceRoot;
-                    maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
-                    // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
-                    file.contents = new Buffer(convertMap.removeComments(res.toString()));
-                    const chain = sorcery.loadSync("built/local/bundle.js", {
-                        content: {
-                            "built/local/_stream_0.js": prebundledContent,
-                            "built/local/bundle.js": file.contents.toString()
-                        },
-                        sourcemaps: {
-                            "built/local/_stream_0.js": originalMap,
-                            "built/local/bundle.js": maps,
-                            "node_modules/source-map-support/source-map-support.js": undefined,
-                        }
-                    });
-                    const finalMap = chain.apply();
-                    file.sourceMap = finalMap;
-                    next(/*err*/ undefined, file);
-                });
+            next(/*err*/ undefined, file.contents);
         }))
-        .pipe(sourcemaps.write(".", { includeContent: false }))
-        .pipe(gulp.dest("src/harness"));
+        .on("error", err => {
+            return done(err);
+        }), { debug: true, basedir: __dirname }) // Attach error handler to inner stream
+        .bundle((err, contents) => {
+            if (err) {
+                if (err.message.match(/Cannot find module '.*_stream_0.js'/)) {
+                    return done(); // Browserify errors when we pass in no files when `newer` filters the input, we should count that as a success, though
+                }
+                return done(err);
+            }
+            const stringContent = contents.toString();
+            const file = new Vinyl({ contents, path: bundlePath });
+            console.log(`Fixing sourcemaps for ${file.path}`);
+            // assumes contents is a Buffer, since that's what browserify yields
+            const maps = convertMap.fromSource(stringContent).toObject();
+            delete maps.sourceRoot;
+            maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
+            // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
+            file.contents = new Buffer(convertMap.removeComments(stringContent));
+            const chain = sorcery.loadSync(bundlePath, {
+                content: {
+                    "built/local/_stream_0.js": prebundledContent,
+                    [bundlePath]: stringContent
+                },
+                sourcemaps: {
+                    "built/local/_stream_0.js": originalMap,
+                    [bundlePath]: maps,
+                    "node_modules/source-map-support/source-map-support.js": undefined,
+                }
+            });
+            const finalMap = chain.apply();
+            file.sourceMap = finalMap;
+
+            const stream = through2.obj((file, enc, callback) => {
+                return callback(/*err*/ undefined, file);
+            });
+            stream.pipe(sourcemaps.write(".", { includeContent: false }))
+                .pipe(gulp.dest("."))
+                .on("end", done)
+                .on("error", done);
+            stream.write(file);
+            stream.end();
+        });
 });
 
 
@@ -837,6 +868,7 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
 });
 
 gulp.task("generate-code-coverage", "Generates code coverage data via istanbul", ["tests"], (done) => {
+    const testTimeout = cmdLineOptions["timeout"];
     exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", testTimeout.toString(), run], done, done);
 });
 
@@ -935,7 +967,7 @@ gulp.task(loggedIOJsPath, /*help*/ false, [], (done) => {
     const temp = path.join(builtLocalDirectory, "temp");
     mkdirP(temp, (err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
-        exec(host, [LKGCompiler, "--types --outdir", temp, loggedIOpath], () => {
+        exec(host, [LKGCompiler, "--types", "--target es5", "--lib es5", "--outdir", temp, loggedIOpath], () => {
             fs.renameSync(path.join(temp, "/harness/loggedIO.js"), loggedIOJsPath);
             del(temp).then(() => done(), done);
         }, done);
@@ -946,14 +978,20 @@ const instrumenterPath = path.join(harnessDirectory, "instrumenter.ts");
 const instrumenterJsPath = path.join(builtLocalDirectory, "instrumenter.js");
 gulp.task(instrumenterJsPath, /*help*/ false, [servicesFile], () => {
     const settings: tsc.Settings = getCompilerSettings({
-        outFile: instrumenterJsPath
+        module: "commonjs",
+        target: "es5",
+        lib: [
+            "es6",
+            "dom",
+            "scripthost"
+        ]
     }, /*useBuiltCompiler*/ true);
     return gulp.src(instrumenterPath)
         .pipe(newer(instrumenterJsPath))
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(sourcemaps.write(builtLocalDirectory))
+        .pipe(gulp.dest(builtLocalDirectory));
 });
 
 gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {

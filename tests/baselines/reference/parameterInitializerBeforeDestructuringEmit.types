@@ -10,7 +10,7 @@ interface Foo {
 }
 
 function foobar({ bar = {}, ...opts }: Foo = {}) {
->foobar : ({bar, ...opts}?: Foo) => void
+>foobar : ({ bar, ...opts }?: Foo) => void
 >bar : any
 >{} : {}
 >opts : { baz?: any; }

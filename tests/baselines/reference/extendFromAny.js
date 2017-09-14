@@ -23,16 +23,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.known = 1;
         return _this;
     }
+    C.sknown = 2;
     return C;
 }(Base));
-C.sknown = 2;
 var c = new C();
 c.known.length; // error, 'known' has no 'length' property
 C.sknown.length; // error, 'sknown' has no 'length' property

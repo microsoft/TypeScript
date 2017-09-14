@@ -35,4 +35,14 @@
     declare type T = number;
     export = T;
     
+==== /node_modules/foo/bar.d.ts (0 errors) ====
+    export type T = number;
+    
+==== /node_modules/foo/index.d.ts (0 errors) ====
+    export { T } from "./bar"; // In a declaration file, so not an error.
+    
+==== /node_modules/baz/index.d.ts (0 errors) ====
+    declare module "baz" {
+        export { T } from "foo"; // Also allowed.
+    }
     

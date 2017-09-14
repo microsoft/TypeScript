@@ -15,7 +15,7 @@ namespace ts.codefix {
         const start = context.span.start;
         // This is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
-        const token = getTokenAtPosition(sourceFile, start);
+        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
         if (isClassLike(token.parent)) {

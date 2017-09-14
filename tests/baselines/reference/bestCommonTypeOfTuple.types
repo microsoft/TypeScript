@@ -98,8 +98,8 @@ var e3 = t3[2];  // any
 >2 : 2
 
 var e4 = t4[3];  // number
->e4 : number | E1 | E2
->t4[3] : number | E1 | E2
+>e4 : number
+>t4[3] : number
 >t4 : [E1, E2, number]
 >3 : 3
 

@@ -10,7 +10,7 @@ namespace ts {
 
         function assertParseError(jsonText: string) {
              const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-             assert.isTrue(undefined === parsed.config);
+             assert.deepEqual(parsed.config, {});
              assert.isTrue(undefined !== parsed.error);
         }
 

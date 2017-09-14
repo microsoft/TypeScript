@@ -70,7 +70,7 @@
 ////        w.[|icfoo|]();
 ////
 ////		var z = new Test.BarBlah();
-////		z.[|field|] = "";
+////		z.[|{| "isWriteAccess": true |}field|] = "";
 ////        z.[|method|]();
 ////	}
 ////}

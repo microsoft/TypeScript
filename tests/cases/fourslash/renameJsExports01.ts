@@ -2,7 +2,7 @@
 
 // @allowJs: true
 // @Filename: a.js
-////exports.[|area|] = function (r) { return r * r; }
+////exports.[|{| "isWriteAccess": true, "isDefinition": true |}area|] = function (r) { return r * r; }
 
 // @Filename: b.js
 ////var mod = require('./a');

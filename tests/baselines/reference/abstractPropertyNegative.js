@@ -54,12 +54,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -75,12 +75,12 @@ var C = (function (_super) {
 }(B));
 var c = new C();
 c.ro = "error: lhs of assignment can't be readonly";
-var WrongTypeProperty = (function () {
+var WrongTypeProperty = /** @class */ (function () {
     function WrongTypeProperty() {
     }
     return WrongTypeProperty;
 }());
-var WrongTypePropertyImpl = (function (_super) {
+var WrongTypePropertyImpl = /** @class */ (function (_super) {
     __extends(WrongTypePropertyImpl, _super);
     function WrongTypePropertyImpl() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -89,12 +89,12 @@ var WrongTypePropertyImpl = (function (_super) {
     }
     return WrongTypePropertyImpl;
 }(WrongTypeProperty));
-var WrongTypeAccessor = (function () {
+var WrongTypeAccessor = /** @class */ (function () {
     function WrongTypeAccessor() {
     }
     return WrongTypeAccessor;
 }());
-var WrongTypeAccessorImpl = (function (_super) {
+var WrongTypeAccessorImpl = /** @class */ (function (_super) {
     __extends(WrongTypeAccessorImpl, _super);
     function WrongTypeAccessorImpl() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -106,7 +106,7 @@ var WrongTypeAccessorImpl = (function (_super) {
     });
     return WrongTypeAccessorImpl;
 }(WrongTypeAccessor));
-var WrongTypeAccessorImpl2 = (function (_super) {
+var WrongTypeAccessorImpl2 = /** @class */ (function (_super) {
     __extends(WrongTypeAccessorImpl2, _super);
     function WrongTypeAccessorImpl2() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -115,7 +115,7 @@ var WrongTypeAccessorImpl2 = (function (_super) {
     }
     return WrongTypeAccessorImpl2;
 }(WrongTypeAccessor));
-var AbstractAccessorMismatch = (function () {
+var AbstractAccessorMismatch = /** @class */ (function () {
     function AbstractAccessorMismatch() {
     }
     Object.defineProperty(AbstractAccessorMismatch.prototype, "p1", {

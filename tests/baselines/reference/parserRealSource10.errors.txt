@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(127,33): error TS2449: Class 'TokenInfo' used before its declaration.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(127,42): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(128,36): error TS2693: 'string' only refers to a type, but is being used as a value here.
@@ -348,7 +348,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,40): error 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {

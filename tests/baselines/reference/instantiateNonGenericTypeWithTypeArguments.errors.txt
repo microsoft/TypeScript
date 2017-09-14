@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(8,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(11,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(8,9): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(11,9): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(14,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(11,9): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(14,10): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(14,10): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(18,10): error TS2347: Untyped function calls may not accept type arguments.
 
 
@@ -16,21 +16,21 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGen
     
     var c = new C<number>();
             ~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
     
     function Foo(): void { }
     var r = new Foo<number>();
             ~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
-            ~~~~~~~~~~~~~~~~~
 !!! error TS2350: Only a void function can be called with the 'new' keyword.
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
     
     var f: { (): void };
     var r2 = new f<number>();
              ~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
-             ~~~~~~~~~~~~~~~
 !!! error TS2350: Only a void function can be called with the 'new' keyword.
+             ~~~~~~~~~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
     
     var a: any;
     // BUG 790977

@@ -2,8 +2,8 @@
 
 ////enum E {
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}value1|] = 1,
-////    "[|{| "isDefinition": true |}value2|]" = [|value1|],
-////    [|{| "isDefinition": true |}111|] = 11
+////    "[|{| "isWriteAccess": true, "isDefinition": true |}value2|]" = [|value1|],
+////    [|{| "isWriteAccess": true, "isDefinition": true |}111|] = 11
 ////}
 ////
 ////E.[|value1|];

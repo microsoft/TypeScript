@@ -5,5 +5,5 @@
 >`abc${0}abc` : string
 >0 : 0
 >indexOf : (searchString: string, position?: number) => number
->`abc` : string
+>`abc` : "abc"
 

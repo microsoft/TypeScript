@@ -37,7 +37,7 @@ function f(b: boolean) {
 function f(b) {
     var Foo;
     if (b) {
-        Foo = (_a = (function () {
+        Foo = (_a = /** @class */ (function () {
                 function Foo() {
                 }
                 Foo.x = function () {
@@ -53,7 +53,7 @@ function f(b) {
         new Foo();
     }
     else {
-        var Foo_1 = (function () {
+        var Foo_1 = /** @class */ (function () {
             function Foo() {
             }
             Foo.x = function () {
@@ -62,9 +62,9 @@ function f(b) {
             Foo.prototype.m = function () {
                 new Foo();
             };
+            Foo.y = new Foo();
             return Foo;
         }());
-        Foo_1.y = new Foo_1();
         new Foo_1();
     }
     var _a;

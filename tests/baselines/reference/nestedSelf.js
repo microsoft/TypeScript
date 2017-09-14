@@ -11,7 +11,7 @@ module M {
 //// [nestedSelf.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
             this.n = 42;
         }

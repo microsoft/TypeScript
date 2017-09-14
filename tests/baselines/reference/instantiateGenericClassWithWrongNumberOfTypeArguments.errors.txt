@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts(8,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts(16,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts(8,9): error TS2558: Expected 1 type arguments, but got 2.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts(16,9): error TS2558: Expected 2 type arguments, but got 1.
 
 
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts (2 errors) ====
@@ -12,7 +12,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGeneri
     
     var c = new C<number, number>();
             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 1 type arguments, but got 2.
     
     class D<T, U> {
         x: T
@@ -22,4 +22,4 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGeneri
     // BUG 794238
     var d = new D<number>();
             ~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.

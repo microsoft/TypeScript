@@ -1,5 +1,5 @@
 tests/cases/compiler/baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. Did you mean 'ELoc'?
-tests/cases/compiler/baseCheck.ts(17,53): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/baseCheck.ts(17,53): error TS2554: Expected 2 arguments, but got 1.
 tests/cases/compiler/baseCheck.ts(17,59): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/compiler/baseCheck.ts(18,62): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/compiler/baseCheck.ts(19,59): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
@@ -30,7 +30,7 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
     
     class D extends C { constructor(public z: number) { super(this.z) }  } // too few params
                                                         ~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 1.
                                                               ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
     class E extends C { constructor(public z: number) { super(0, this.z) } }

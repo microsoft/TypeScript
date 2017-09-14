@@ -1,5 +1,4 @@
 tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(4,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
-  Supplied parameters do not match any signature of call target.
 
 
 ==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts (1 errors) ====
@@ -9,5 +8,4 @@ tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(4,5):
         @dec method() {}
         ~~~~
 !!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
-!!! error TS1241:   Supplied parameters do not match any signature of call target.
     }

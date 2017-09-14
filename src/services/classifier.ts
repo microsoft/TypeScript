@@ -260,11 +260,11 @@ namespace ts {
                                     templateStack.pop();
                                 }
                                 else {
-                                    Debug.assert(token === SyntaxKind.TemplateMiddle, "Should have been a template middle. Was " + token);
+                                    Debug.assertEqual(token, SyntaxKind.TemplateMiddle, "Should have been a template middle.");
                                 }
                             }
                             else {
-                                Debug.assert(lastTemplateStackToken === SyntaxKind.OpenBraceToken, "Should have been an open brace. Was: " + token);
+                                Debug.assertEqual(lastTemplateStackToken, SyntaxKind.OpenBraceToken, "Should have been an open brace");
                                 templateStack.pop();
                             }
                         }
@@ -462,7 +462,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: Map<string>, span: TextSpan): ClassifiedSpan[] {
+    export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: UnderscoreEscapedMap<true>, span: TextSpan): ClassifiedSpan[] {
         return convertClassifications(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
     }
 
@@ -487,7 +487,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: Map<string>, span: TextSpan): Classifications {
+    export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: UnderscoreEscapedMap<true>, span: TextSpan): Classifications {
         const result: number[] = [];
         processNode(sourceFile);
 
@@ -557,7 +557,7 @@ namespace ts {
                     // Only bother calling into the typechecker if this is an identifier that
                     // could possibly resolve to a type name.  This makes classification run
                     // in a third of the time it would normally take.
-                    if (classifiableNames.get(identifier.text)) {
+                    if (classifiableNames.has(identifier.escapedText)) {
                         const symbol = typeChecker.getSymbolAtLocation(node);
                         if (symbol) {
                             const type = classifySymbol(symbol, getMeaningFromLocation(node));
@@ -573,7 +573,7 @@ namespace ts {
         }
     }
 
-    function getClassificationTypeName(type: ClassificationType) {
+    function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
         switch (type) {
             case ClassificationType.comment: return ClassificationTypeNames.comment;
             case ClassificationType.identifier: return ClassificationTypeNames.identifier;
@@ -685,9 +685,9 @@ namespace ts {
                         continue;
                     }
 
-                    // for the ======== add a comment for the first line, and then lex all
-                    // subsequent lines up until the end of the conflict marker.
-                    Debug.assert(ch === CharacterCodes.equals);
+                    // for the ||||||| and ======== markers, add a comment for the first line,
+                    // and then lex all subsequent lines up until the end of the conflict marker.
+                    Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
                     classifyDisabledMergeCode(text, start, end);
                 }
             }
@@ -699,7 +699,8 @@ namespace ts {
                 // specially.
                 const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
                 if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDoc) {
-                    docCommentAndDiagnostics.jsDoc.parent = token;
+                    // TODO: This should be predicated on `token["kind"]` being compatible with `HasJSDoc["kind"]`
+                    docCommentAndDiagnostics.jsDoc.parent = token as HasJSDoc;
                     classifyJSDocComment(docCommentAndDiagnostics.jsDoc);
                     return;
                 }
@@ -724,8 +725,8 @@ namespace ts {
                         pushCommentRange(pos, tag.pos - pos);
                     }
 
-                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
-                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
+                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation); // "@"
+                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
 
                     pos = tag.tagName.end;
 
@@ -755,10 +756,10 @@ namespace ts {
             return;
 
             function processJSDocParameterTag(tag: JSDocParameterTag) {
-                if (tag.preParameterName) {
-                    pushCommentRange(pos, tag.preParameterName.pos - pos);
-                    pushClassification(tag.preParameterName.pos, tag.preParameterName.end - tag.preParameterName.pos, ClassificationType.parameterName);
-                    pos = tag.preParameterName.end;
+                if (tag.isNameFirst) {
+                    pushCommentRange(pos, tag.name.pos - pos);
+                    pushClassification(tag.name.pos, tag.name.end - tag.name.pos, ClassificationType.parameterName);
+                    pos = tag.name.end;
                 }
 
                 if (tag.typeExpression) {
@@ -767,10 +768,10 @@ namespace ts {
                     pos = tag.typeExpression.end;
                 }
 
-                if (tag.postParameterName) {
-                    pushCommentRange(pos, tag.postParameterName.pos - pos);
-                    pushClassification(tag.postParameterName.pos, tag.postParameterName.end - tag.postParameterName.pos, ClassificationType.parameterName);
-                    pos = tag.postParameterName.end;
+                if (!tag.isNameFirst) {
+                    pushCommentRange(pos, tag.name.pos - pos);
+                    pushClassification(tag.name.pos, tag.name.end - tag.name.pos, ClassificationType.parameterName);
+                    pos = tag.name.end;
                 }
             }
         }
@@ -782,8 +783,8 @@ namespace ts {
         }
 
         function classifyDisabledMergeCode(text: string, start: number, end: number) {
-            // Classify the line that the ======= marker is on as a comment.  Then just lex
-            // all further tokens and add them to the result.
+            // Classify the line that the ||||||| or ======= marker is on as a comment.
+            // Then just lex all further tokens and add them to the result.
             let i: number;
             for (i = start; i < end; i++) {
                 if (isLineBreak(text.charCodeAt(i))) {
@@ -814,7 +815,7 @@ namespace ts {
          * False will mean that node is not classified and traverse routine should recurse into node contents.
          */
         function tryClassifyNode(node: Node): boolean {
-            if (isJSDocTag(node)) {
+            if (isJSDoc(node)) {
                 return true;
             }
 

@@ -18,12 +18,12 @@ module Test {
 //// [assignToExistingClass.js]
 var Test;
 (function (Test) {
-    var Mocked = (function () {
+    var Mocked = /** @class */ (function () {
         function Mocked() {
         }
         return Mocked;
     }());
-    var Tester = (function () {
+    var Tester = /** @class */ (function () {
         function Tester() {
         }
         Tester.prototype.willThrowError = function () {

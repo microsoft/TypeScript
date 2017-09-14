@@ -23,7 +23,7 @@ function func() {
                     };
                     return [4 /*yield*/, p];
                 case 1:
-                    D = (_a.apply(void 0, [(_b.sent())]));
+                    D = /** @class */ (_a.apply(void 0, [(_b.sent())]));
                     return [2 /*return*/];
             }
         });
