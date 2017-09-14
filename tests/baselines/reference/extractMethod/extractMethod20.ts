@@ -5,18 +5,18 @@ const _ = class {
         return a1.x + 10;
     }
 }
-// ==SCOPE::method in anonymous class expression==
+// ==SCOPE::Extract to method in anonymous class expression==
 const _ = class {
     a() {
-        return this./*RENAME*/newFunction();
+        return this./*RENAME*/newMethod();
     }
 
-    private newFunction() {
+    private newMethod() {
         let a1 = { x: 1 };
         return a1.x + 10;
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 const _ = class {
     a() {
         return /*RENAME*/newFunction();

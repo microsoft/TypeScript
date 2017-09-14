@@ -11,7 +11,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::inner function in function 'a'==
+// ==SCOPE::Extract to inner function in function 'a'==
 namespace A {
     function foo() {
     }
@@ -28,7 +28,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function in namespace 'B'==
+// ==SCOPE::Extract to function in namespace 'B'==
 namespace A {
     function foo() {
     }
@@ -45,7 +45,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function in namespace 'A'==
+// ==SCOPE::Extract to function in namespace 'A'==
 namespace A {
     function foo() {
     }
@@ -62,7 +62,7 @@ namespace A {
         return foo();
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 namespace A {
     function foo() {
     }

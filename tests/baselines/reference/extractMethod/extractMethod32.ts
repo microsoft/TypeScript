@@ -11,7 +11,7 @@ namespace N {
         }
     }
 }
-// ==SCOPE::function in namespace 'N'==
+// ==SCOPE::Extract to function in namespace 'N'==
 namespace N {
 
     export const value = 1;
@@ -28,7 +28,7 @@ namespace N {
         };
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 namespace N {
 
     export const value = 1;

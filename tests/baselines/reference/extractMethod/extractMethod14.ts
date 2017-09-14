@@ -1,13 +1,13 @@
 // ==ORIGINAL==
 function F<T>(t1: T) {
-    function F<T>(t2: T) {
+    function G<T>(t2: T) {
         t1.toString();
         t2.toString();
     }
 }
-// ==SCOPE::inner function in function 'F'==
+// ==SCOPE::Extract to inner function in function 'G'==
 function F<T>(t1: T) {
-    function F<T>(t2: T) {
+    function G<T>(t2: T) {
         /*RENAME*/newFunction();
 
         function newFunction() {
@@ -16,9 +16,9 @@ function F<T>(t1: T) {
         }
     }
 }
-// ==SCOPE::inner function in function 'F'==
+// ==SCOPE::Extract to inner function in function 'F'==
 function F<T>(t1: T) {
-    function F<T>(t2: T) {
+    function G<T>(t2: T) {
         /*RENAME*/newFunction<T>(t2);
     }
 
@@ -27,9 +27,9 @@ function F<T>(t1: T) {
         t2.toString();
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 function F<T>(t1: T) {
-    function F<T>(t2: T) {
+    function G<T>(t2: T) {
         /*RENAME*/newFunction<T, T>(t1, t2);
     }
 }

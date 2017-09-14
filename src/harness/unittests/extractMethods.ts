@@ -105,7 +105,7 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${s} does not specify selection range`);
             }
-            const result = refactor.extractMethod.getRangeToExtract(file, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
             assert(result.targetRange === undefined, "failure expected");
             const sortedErrors = result.errors.map(e => <string>e.messageText).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
@@ -119,7 +119,7 @@ namespace ts {
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
         }
-        const result = refactor.extractMethod.getRangeToExtract(f, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
         const expectedRange = t.ranges.get("extracted");
         if (expectedRange) {
             let start: number, end: number;
@@ -407,7 +407,7 @@ function test(x: number) {
         testExtractRangeFailed("extractRangeFailed9",
         `var x = ([#||]1 + 2);`,
         [
-            "Statement or expression expected."
+            "Cannot extract empty range."
         ]);
 
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single identifier."]);
@@ -604,7 +604,7 @@ function test(x: number) {
         // doesn't handle type parameter shadowing.
         testExtractMethod("extractMethod14",
             `function F<T>(t1: T) {
-    function F<T>(t2: T) {
+    function G<T>(t2: T) {
         [#|t1.toString();
         t2.toString();|]
     }
@@ -612,7 +612,7 @@ function test(x: number) {
         // Confirm that the constraint is preserved.
         testExtractMethod("extractMethod15",
             `function F<T>(t1: T) {
-    function F<U extends T[]>(t2: U) {
+    function G<U extends T[]>(t2: U) {
         [#|t2.toString();|]
     }
 }`);
@@ -799,19 +799,20 @@ function parsePrimaryExpression(): any {
                     newLineCharacter,
                     program,
                     file: sourceFile,
-                    startPosition: -1,
+                    startPosition: selectionRange.start,
+                    endPosition: selectionRange.end,
                     rulesProvider: getRuleProvider()
                 };
-                const result = refactor.extractMethod.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
-                assert.equal(result.errors, undefined, "expect no errors");
-                const results = refactor.extractMethod.getPossibleExtractions(result.targetRange, context);
+                const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+                assert.equal(rangeToExtract.errors, undefined, "expect no errors");
+                const actions = refactor.extractSymbol.getAvailableActions(context)[0].actions; // TODO (acasey): smarter index
                 const data: string[] = [];
                 data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
-                for (const r of results) {
-                    const { renameLocation, edits } = refactor.extractMethod.getExtractionAtIndex(result.targetRange, context, results.indexOf(r));
+                for (const action of actions) {
+                    const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name);
                     assert.lengthOf(edits, 1);
-                    data.push(`// ==SCOPE::${r.scopeDescription}==`);
+                    data.push(`// ==SCOPE::${action.description}==`);
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);

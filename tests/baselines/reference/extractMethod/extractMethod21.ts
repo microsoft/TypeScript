@@ -4,7 +4,7 @@ function foo() {
     x++;
     return;
 }
-// ==SCOPE::inner function in function 'foo'==
+// ==SCOPE::Extract to inner function in function 'foo'==
 function foo() {
     let x = 10;
     return /*RENAME*/newFunction();
@@ -14,7 +14,7 @@ function foo() {
         return;
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 function foo() {
     let x = 10;
     x = /*RENAME*/newFunction(x);

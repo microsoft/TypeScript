@@ -9,22 +9,22 @@ namespace A {
         }
     }
 }
-// ==SCOPE::method in class 'C'==
+// ==SCOPE::Extract to method in class 'C'==
 namespace A {
     export interface I { x: number };
     class C {
         a() {
             let z = 1;
-            return this./*RENAME*/newFunction();
+            return this./*RENAME*/newMethod();
         }
 
-        private newFunction() {
+        private newMethod() {
             let a1: I = { x: 1 };
             return a1.x + 10;
         }
     }
 }
-// ==SCOPE::function in namespace 'A'==
+// ==SCOPE::Extract to function in namespace 'A'==
 namespace A {
     export interface I { x: number };
     class C {
@@ -39,7 +39,7 @@ namespace A {
         return a1.x + 10;
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 namespace A {
     export interface I { x: number };
     class C {

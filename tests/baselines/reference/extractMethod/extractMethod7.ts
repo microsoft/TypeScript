@@ -16,7 +16,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::inner function in function 'a'==
+// ==SCOPE::Extract to inner function in function 'a'==
 namespace A {
     let x = 1;
     export namespace C {
@@ -38,7 +38,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function in namespace 'B'==
+// ==SCOPE::Extract to function in namespace 'B'==
 namespace A {
     let x = 1;
     export namespace C {
@@ -62,7 +62,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function in namespace 'A'==
+// ==SCOPE::Extract to function in namespace 'A'==
 namespace A {
     let x = 1;
     export namespace C {
@@ -86,7 +86,7 @@ namespace A {
         return { __return: C.foo(), a };
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 namespace A {
     let x = 1;
     export namespace C {

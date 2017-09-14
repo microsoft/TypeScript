@@ -3703,7 +3703,7 @@
         "code": 95002
     },
 
-    "Extract function": {
+    "Extract symbol": {
         "category": "Message",
         "code": 95003
     },
@@ -3711,5 +3711,15 @@
     "Extract to {0}": {
         "category": "Message",
         "code": 95004
+    },
+
+    "Extract function": {
+        "category": "Message",
+        "code": 95005
+    },
+
+    "Extract constant": {
+        "category": "Message",
+        "code": 95006
     }
 }

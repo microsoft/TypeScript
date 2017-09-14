@@ -2,7 +2,7 @@
 function F() {
     function G() { }
 }
-// ==SCOPE::inner function in function 'F'==
+// ==SCOPE::Extract to inner function in function 'F'==
 function F() {
     /*RENAME*/newFunction();
 
@@ -10,7 +10,7 @@ function F() {
         function G() { }
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 function F() {
     /*RENAME*/newFunction();
 }
