@@ -2125,9 +2125,7 @@ namespace FourSlash {
         public verifyCurrentFileContent(text: string) {
             const actual = this.getFileContent(this.activeFile.fileName);
             if (actual !== text) {
-                throw new Error("verifyCurrentFileContent\n" +
-                    "\tExpected: \"" + makeWhitespaceVisible(text) + "\"\n" +
-                    "\t  Actual: \"" + makeWhitespaceVisible(actual) + "\"");
+                throw new Error(`verifyCurrentFileContent failed:\n${showTextDiff(text, actual)}`);
             }
         }
 
@@ -2305,7 +2303,7 @@ namespace FourSlash {
                 : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText);
 
             if (!result) {
-                this.raiseError(`Actual range text doesn't match expected text. Actual:\n'${makeWhitespaceVisible(actualText)}'\nExpected:\n'${makeWhitespaceVisible(expectedText)}'`);
+                this.raiseError(`Actual range text doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
             }
         }
 
@@ -2407,10 +2405,11 @@ namespace FourSlash {
             }
             const sortedExpectedArray = expectedTextArray.sort();
             const sortedActualArray = actualTextArray.sort();
-            if (!ts.arrayIsEqualTo(sortedExpectedArray, sortedActualArray)) {
-                this.raiseError(
-                    `Actual text array doesn't match expected text array. \nActual: \n'${sortedActualArray.map(makeWhitespaceVisible).join("\n\n")}'\n---\nExpected: \n'${sortedExpectedArray.map(makeWhitespaceVisible).join("\n\n")}'`);
-            }
+            ts.zipWith(sortedExpectedArray, sortedActualArray, (expected, actual, index) => {
+                if (expected !== actual) {
+                    this.raiseError(`Import fix at index ${index} doesn't match.\n${showTextDiff(expected, actual)}`);
+                }
+            });
         }
 
         public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined) {
@@ -2430,7 +2429,7 @@ namespace FourSlash {
                 }
 
                 if (actual.newText !== expected.newText) {
-                    this.raiseError(`${name} failed - expected insertion:\n"${makeWhitespaceVisible(expected.newText)}"\nactual insertion:\n"${makeWhitespaceVisible(actual.newText)}"`);
+                    this.raiseError(`${name} failed for expected insertion.\n${showTextDiff(expected.newText, actual.newText)}`);
                 }
 
                 if (actual.caretOffset !== expected.caretOffset) {
@@ -2867,7 +2866,7 @@ namespace FourSlash {
             const actualContent = this.getFileContent(this.activeFile.fileName);
 
             if (actualContent !== expectedContent) {
-                this.raiseError(`verifyFileAfterApplyingRefactors failed: expected:\n${makeWhitespaceVisible(expectedContent)}\nactual:\n${makeWhitespaceVisible(actualContent)}`);
+                this.raiseError(`verifyFileAfterApplyingRefactors failed:\n${showTextDiff(expectedContent, actualContent)}`);
             }
         }
 
@@ -3493,6 +3492,23 @@ ${code}
 
     function makeWhitespaceVisible(text: string) {
         return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192\   ");
+    }
+
+    function showTextDiff(expected: string, actual: string): string {
+        // Only show whitespace if the difference is whitespace-only.
+        if (differOnlyByWhitespace(expected, actual)) {
+            expected = makeWhitespaceVisible(expected);
+            actual = makeWhitespaceVisible(actual);
+        }
+        return `Expected:\n${expected}\nActual:${actual}`;
+    }
+
+    function differOnlyByWhitespace(a: string, b: string) {
+        return stripWhitespace(a) === stripWhitespace(b);
+    }
+
+    function stripWhitespace(s: string): string {
+        return s.replace(/\s/g, "");
     }
 }
 
