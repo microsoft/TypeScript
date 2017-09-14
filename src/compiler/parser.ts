@@ -615,12 +615,11 @@ namespace ts {
         let parseErrorBeforeNextFinishedNode = false;
 
         export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
-            const isDeclarationFile = isDeclarationFileName(fileName);
             scriptKind = ensureScriptKind(fileName, scriptKind);
 
-            initializeState(sourceText, languageVersion, syntaxCursor, scriptKind, isDeclarationFile);
+            initializeState(sourceText, languageVersion, syntaxCursor, scriptKind);
 
-            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, scriptKind, isDeclarationFile);
+            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, scriptKind);
 
             clearState();
 
@@ -629,7 +628,7 @@ namespace ts {
 
         export function parseIsolatedEntityName(content: string, languageVersion: ScriptTarget): EntityName {
             // Choice of `isDeclarationFile` should be arbitrary
-            initializeState(content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS, /*isDeclarationFile*/ false);
+            initializeState(content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
             // Prime the scanner.
             nextToken();
             const entityName = parseEntityName(/*allowReservedWords*/ true);
@@ -639,10 +638,9 @@ namespace ts {
         }
 
         export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
-            const isDeclaration = isDeclarationFileName(fileName);
-            initializeState(sourceText, ScriptTarget.ES2015, /*syntaxCursor*/ undefined, ScriptKind.JSON, isDeclaration);
+            initializeState(sourceText, ScriptTarget.ES2015, /*syntaxCursor*/ undefined, ScriptKind.JSON);
             // Set source file so that errors will be reported with this file name
-            sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, isDeclaration);
+            sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false);
             const result = <JsonSourceFile>sourceFile;
 
             // Prime the scanner.
@@ -669,7 +667,7 @@ namespace ts {
             return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS  || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
-        function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind, isDeclarationFile: boolean) {
+        function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
             TokenConstructor = objectAllocator.getTokenConstructor();
             IdentifierConstructor = objectAllocator.getIdentifierConstructor();
@@ -691,7 +689,7 @@ namespace ts {
                     contextFlags = NodeFlags.JavaScriptFile;
                     break;
                 default:
-                    contextFlags = isDeclarationFile ? NodeFlags.Ambient : NodeFlags.None;
+                    contextFlags = NodeFlags.None;
                     break;
             }
             parseErrorBeforeNextFinishedNode = false;
@@ -716,7 +714,12 @@ namespace ts {
             sourceText = undefined;
         }
 
-        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind, isDeclarationFile: boolean): SourceFile {
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
+            const isDeclarationFile = isDeclarationFileName(fileName);
+            if (isDeclarationFile) {
+                contextFlags |= NodeFlags.Ambient;
+            }
+
             sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile);
             sourceFile.flags = contextFlags;
 
@@ -6146,7 +6149,7 @@ namespace ts {
 
         export namespace JSDocParser {
             export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
-                initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS, /*isDeclarationFile*/ false);
+                initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false);
                 scanner.setText(content, start, length);
                 currentToken = scanner.scan();
@@ -6171,7 +6174,7 @@ namespace ts {
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number, length: number): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
-                initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS, /*isDeclarationFile*/ false);
+                initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content }; // tslint:disable-line no-object-literal-type-assertion
                 const jsDoc = parseJSDocCommentWorker(start, length);
                 const diagnostics = parseDiagnostics;
