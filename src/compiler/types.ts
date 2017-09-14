@@ -240,6 +240,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        TypeCall,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -343,6 +344,7 @@ namespace ts {
         PropertyAssignment,
         ShorthandPropertyAssignment,
         SpreadAssignment,
+        TypeSpread,
 
         // Enum
         EnumMember,
@@ -398,7 +400,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = LiteralType,
+        LastTypeNode = TypeCall,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1007,7 +1009,12 @@ namespace ts {
 
     export interface TupleTypeNode extends TypeNode {
         kind: SyntaxKind.TupleType;
-        elementTypes: NodeArray<TypeNode>;
+        elementTypes: NodeArray<TypeNode | TypeSpreadTypeNode>;
+    }
+
+    export interface TypeSpreadTypeNode extends TypeNode {
+        kind: SyntaxKind.TypeSpread;
+        type: TypeNode;
     }
 
     export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
@@ -1550,6 +1557,13 @@ namespace ts {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
+    }
+
+    export interface TypeCallTypeNode extends TypeNode {
+        kind: SyntaxKind.TypeCall;
+        type: TypeNode;
+        typeArguments?: NodeArray<TypeNode>;
+        arguments: NodeArray<TypeNode>;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
@@ -3212,6 +3226,7 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        TypeSpread              = 1 << 26,  // spread in tuple types
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3457,6 +3472,11 @@ namespace ts {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
+    }
+
+    // type spread types (TypeFlags.TypeSpread)
+    export interface TypeSpreadType extends TypeVariable {
+        type: Type;
     }
 
     // keyof T types (TypeFlags.Index)

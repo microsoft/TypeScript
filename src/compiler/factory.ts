@@ -888,6 +888,22 @@ namespace ts {
             : node;
     }
 
+    export function createTypeCall(type: TypeNode, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<TypeNode>) {
+        const node = <TypeCallTypeNode>createSynthesizedNode(SyntaxKind.TypeCall);
+        node.type = parenthesizeElementTypeMember(type);
+        node.typeArguments = asNodeArray(typeArguments);
+        node.arguments = parenthesizeElementTypeMembers(createNodeArray(argumentsArray));
+        return node;
+    }
+
+    export function updateTypeCall(node: TypeCallTypeNode, type: TypeNode, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<TypeNode>) {
+        return node.type !== type
+            || node.typeArguments !== typeArguments
+            || node.arguments !== argumentsArray
+            ? updateNode(createTypeCall(type, typeArguments, argumentsArray), node)
+            : node;
+    }
+
     export function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>) {
         const node = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
         node.expression = parenthesizeForAccess(expression);
@@ -2232,6 +2248,19 @@ namespace ts {
     export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression) {
         return node.expression !== expression
             ? updateNode(createSpreadAssignment(expression), node)
+            : node;
+    }
+
+    export function createTypeSpread(type: TypeNode) {
+        console.log("createTypeSpread");
+        const node = <TypeSpreadTypeNode>createSynthesizedNode(SyntaxKind.TypeSpread);
+        node.type = type !== undefined ? parenthesizeElementTypeMember(type) : undefined;
+        return node;
+    }
+
+    export function updateTypeSpread(node: TypeSpreadTypeNode, type: TypeNode) {
+        return node.type !== type
+            ? updateNode(createTypeSpread(type), node)
             : node;
     }
 

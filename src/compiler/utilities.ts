@@ -4644,6 +4644,10 @@ namespace ts {
         return node.kind === SyntaxKind.SpreadAssignment;
     }
 
+    export function isTypeSpread(node: Node): node is TypeSpreadTypeNode {
+        return node.kind === SyntaxKind.TypeSpread;
+    }
+
     // Enum
 
     export function isEnumMember(node: Node): node is EnumMember {

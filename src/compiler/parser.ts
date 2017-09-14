@@ -85,6 +85,8 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.SpreadAssignment:
                 return visitNode(cbNode, (<SpreadAssignment>node).expression);
+            case SyntaxKind.TypeSpread:
+                return visitNode(cbNode, (<TypeSpreadTypeNode>node).type);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -170,6 +172,10 @@ namespace ts {
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
                     visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
+            case SyntaxKind.TypeCall:
+                return visitNode(cbNode, (<TypeCallTypeNode>node).type) ||
+                    visitNodes(cbNode, cbNodes, (<TypeCallTypeNode>node).typeArguments) ||
+                    visitNodes(cbNode, cbNodes, (<TypeCallTypeNode>node).arguments);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
@@ -1377,8 +1383,9 @@ namespace ts {
                 case ParsingContext.Parameters:
                     return isStartOfParameter();
                 case ParsingContext.TypeArguments:
-                case ParsingContext.TupleElementTypes:
                     return token() === SyntaxKind.CommaToken || isStartOfType();
+                case ParsingContext.TupleElementTypes:
+                    return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
                 case ParsingContext.ImportOrExportSpecifiers:
@@ -2587,7 +2594,7 @@ namespace ts {
 
         function parseTupleType(): TupleTypeNode {
             const node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
-            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElement, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
 
@@ -2743,8 +2750,8 @@ namespace ts {
             return token() === SyntaxKind.CloseParenToken || isStartOfParameter() || isStartOfType();
         }
 
-        function parseJSDocPostfixTypeOrHigher(): TypeNode {
-            const type = parseNonArrayType();
+        function parseJSDocPostfixTypeOrHigher(typeNode?: TypeNode): TypeNode {
+            const type = typeNode || parseNonArrayType();
             const kind = getKind(token());
             if (!kind) return type;
             nextToken();
@@ -2766,8 +2773,8 @@ namespace ts {
             }
         }
 
-        function parseArrayTypeOrHigher(): TypeNode {
-            let type = parseJSDocPostfixTypeOrHigher();
+        function parseArrayTypeOrHigher(typeNode?: TypeNode): TypeNode {
+            let type = parseJSDocPostfixTypeOrHigher(typeNode);
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 if (isStartOfType()) {
                     const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
@@ -2799,7 +2806,7 @@ namespace ts {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
             }
-            return parseArrayTypeOrHigher();
+            return parseTypeCallRest();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
@@ -4242,6 +4249,46 @@ namespace ts {
             }
         }
 
+        // type equivalent of parseCallExpressionRest
+        function parseTypeCallRest(type?: TypeNode): TypeNode {
+            while (true) {
+                type = parseArrayTypeOrHigher(type);
+                if (token() === SyntaxKind.LessThanToken) {
+                    // See if this is the start of a generic invocation.  If so, consume it and
+                    // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
+                    // part of an arithmetic expression.  Break out so we consume it higher in the
+                    // stack.
+                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                    if (!typeArguments) {
+                        return type;
+                    }
+
+                    const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
+                    callExpr.type = type;
+                    callExpr.typeArguments = typeArguments;
+                    callExpr.arguments = parseTypeArgumentList();
+                    type = finishNode(callExpr);
+                    continue;
+                }
+                else if (token() === SyntaxKind.OpenParenToken) {
+                    const callExpr = <TypeCallTypeNode>createNode(SyntaxKind.TypeCall, type.pos);
+                    callExpr.type = type;
+                    callExpr.arguments = parseTypeArgumentList();
+                    type = finishNode(callExpr);
+                    continue;
+                }
+
+                return type;
+            }
+        }
+
+        function parseTypeArgumentList() {
+            parseExpected(SyntaxKind.OpenParenToken);
+            const result = parseDelimitedList(ParsingContext.TypeArguments, parseTupleElement);
+            parseExpected(SyntaxKind.CloseParenToken);
+            return result;
+        }
+
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
@@ -5159,6 +5206,19 @@ namespace ts {
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             node.name = parseIdentifierOrPattern();
             node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
+            return finishNode(node);
+        }
+
+        function parseTupleElement(): TypeSpreadTypeNode | TypeNode {
+            return (token() === SyntaxKind.DotDotDotToken) ?
+                parseTypeSpread() :
+                parseType();
+        }
+
+        function parseTypeSpread(): TypeSpreadTypeNode {
+            const node = <TypeSpreadTypeNode>createNode(SyntaxKind.TypeSpread);
+            parseExpected(SyntaxKind.DotDotDotToken);
+            node.type = parseTypeOperatorOrHigher();
             return finishNode(node);
         }
 
