@@ -378,6 +378,8 @@ namespace A {
             "Cannot extract range containing conditional return statement."
         ]);
 
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single token."]);
+
         testExtractMethod("extractMethod1",
             `namespace A {
     let x = 1;
