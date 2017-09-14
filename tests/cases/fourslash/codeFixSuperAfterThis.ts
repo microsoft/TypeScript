@@ -9,7 +9,8 @@
 ////        super();
 ////    |]}
 ////}
+// TODO: GH#18445
 verify.rangeAfterCodeFix(`
-        super();
+        super();\r
         this.a = 12;
     `, /*includeWhiteSpace*/ true);

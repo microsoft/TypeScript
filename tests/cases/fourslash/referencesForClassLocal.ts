@@ -8,11 +8,11 @@
 ////    private [|{| "isWriteAccess": true, "isDefinition": true |}n|] = 0;
 ////
 ////    public bar() {
-////        this.[|n|] = 9;
+////        this.[|{| "isWriteAccess": true |}n|] = 9;
 ////    }
 ////
 ////    constructor() {
-////        this.[|n|] = 4;
+////        this.[|{| "isWriteAccess": true |}n|] = 4;
 ////    }
 ////
 ////    public bar2() {

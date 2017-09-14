@@ -100,7 +100,6 @@ namespace ts {
         const commandLine = parseCommandLine(args);
         let configFileName: string;                                 // Configuration file name (if any)
         let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
-        let configFileWatcher: FileWatcher;                         // Configuration file watcher
         let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
         let cachedProgram: Program;                                 // Program cached from last compilation
         let rootFileNames: string[];                                // Root fileNames for compilation
@@ -189,7 +188,7 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+                sys.watchFile(configFileName, configFileChanged);
             }
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);
@@ -469,7 +468,7 @@ namespace ts {
             let diagnostics: Diagnostic[];
 
             // First get and report any syntactic errors.
-            diagnostics = program.getSyntacticDiagnostics();
+            diagnostics = program.getSyntacticDiagnostics().slice();
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
@@ -477,13 +476,13 @@ namespace ts {
                 diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
-                    diagnostics = program.getSemanticDiagnostics();
+                    diagnostics = program.getSemanticDiagnostics().slice();
                 }
             }
 
             // Otherwise, emit and report any errors we ran into.
             const emitOutput = program.emit();
-            diagnostics = diagnostics.concat(emitOutput.diagnostics);
+            addRange(diagnostics, emitOutput.diagnostics);
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 

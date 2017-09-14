@@ -244,7 +244,6 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Identifier[];
 
@@ -300,12 +299,9 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFile = node;
 
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 
@@ -1639,8 +1635,13 @@ namespace ts {
 
         function transformAndEmitContinueStatement(node: ContinueStatement): void {
             const label = findContinueTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
-            Debug.assert(label > 0, "Expected continue statment to point to a valid Label.");
-            emitBreak(label, /*location*/ node);
+            if (label > 0) {
+                emitBreak(label, /*location*/ node);
+            }
+            else {
+                // invalid continue without a containing loop. Leave the node as is, per #17875.
+                emitStatement(node);
+            }
         }
 
         function visitContinueStatement(node: ContinueStatement): Statement {
@@ -1656,8 +1657,13 @@ namespace ts {
 
         function transformAndEmitBreakStatement(node: BreakStatement): void {
             const label = findBreakTarget(node.label ? unescapeLeadingUnderscores(node.label.escapedText) : undefined);
-            Debug.assert(label > 0, "Expected break statment to point to a valid Label.");
-            emitBreak(label, /*location*/ node);
+            if (label > 0) {
+                emitBreak(label, /*location*/ node);
+            }
+            else {
+                // invalid break without a containing loop, switch, or labeled statement. Leave the node as is, per #17875.
+                emitStatement(node);
+            }
         }
 
         function visitBreakStatement(node: BreakStatement): Statement {
@@ -2351,27 +2357,27 @@ namespace ts {
          * @param labelText An optional name of a containing labeled statement.
          */
         function findBreakTarget(labelText?: string): Label {
-            Debug.assert(blocks !== undefined);
-            if (labelText) {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsLabeledBreakOrContinue(block) && block.labelText === labelText) {
-                        return block.breakLabel;
+            if (blockStack) {
+                if (labelText) {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsLabeledBreakOrContinue(block) && block.labelText === labelText) {
+                            return block.breakLabel;
+                        }
+                        else if (supportsUnlabeledBreak(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
+                            return block.breakLabel;
+                        }
                     }
-                    else if (supportsUnlabeledBreak(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
-                        return block.breakLabel;
+                }
+                else {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledBreak(block)) {
+                            return block.breakLabel;
+                        }
                     }
                 }
             }
-            else {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledBreak(block)) {
-                        return block.breakLabel;
-                    }
-                }
-            }
-
             return 0;
         }
 
@@ -2381,24 +2387,24 @@ namespace ts {
          * @param labelText An optional name of a containing labeled statement.
          */
         function findContinueTarget(labelText?: string): Label {
-            Debug.assert(blocks !== undefined);
-            if (labelText) {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledContinue(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
-                        return block.continueLabel;
+            if (blockStack) {
+                if (labelText) {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledContinue(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
+                            return block.continueLabel;
+                        }
+                    }
+                }
+                else {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledContinue(block)) {
+                            return block.continueLabel;
+                        }
                     }
                 }
             }
-            else {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledContinue(block)) {
-                        return block.continueLabel;
-                    }
-                }
-            }
-
             return 0;
         }
 

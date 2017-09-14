@@ -15,7 +15,7 @@ namespace ts.codefix {
             const replacement = createIndexedAccessTypeNode(
                 createTypeReferenceNode(qualifiedName.left, /*typeArguments*/ undefined),
                 createLiteralTypeNode(createLiteral(rightText)));
-            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
             changeTracker.replaceNode(sourceFile, qualifiedName, replacement);
 
             return [{

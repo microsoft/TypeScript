@@ -107,12 +107,14 @@ namespace ts {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
-                Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
+                if (token === SyntaxKind.EndOfFileToken) {
+                    break;
+                }
             }
             return pos;
         }
@@ -493,7 +495,7 @@ namespace ts {
         public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
-        public lineMap: number[];
+        public lineMap: ReadonlyArray<number>;
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
@@ -543,7 +545,7 @@ namespace ts {
             return ts.getLineAndCharacterOfPosition(this, position);
         }
 
-        public getLineStarts(): number[] {
+        public getLineStarts(): ReadonlyArray<number> {
             return getLineStarts(this);
         }
 
@@ -719,6 +721,12 @@ namespace ts {
                             }
                         }
                         break;
+
+                    case SyntaxKind.BinaryExpression:
+                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                           addDeclaration(node as BinaryExpression);
+                        }
+                        // falls through
 
                     default:
                         forEachChild(node, visit);
@@ -1130,14 +1138,14 @@ namespace ts {
             const newSettings = hostCache.compilationSettings();
             const shouldCreateNewSourceFiles = oldSettings &&
                 (oldSettings.target !== newSettings.target ||
-                    oldSettings.module !== newSettings.module ||
-                    oldSettings.moduleResolution !== newSettings.moduleResolution ||
-                    oldSettings.noResolve !== newSettings.noResolve ||
-                    oldSettings.jsx !== newSettings.jsx ||
-                    oldSettings.allowJs !== newSettings.allowJs ||
-                    oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
-                    oldSettings.baseUrl !== newSettings.baseUrl ||
-                    !equalOwnProperties(oldSettings.paths, newSettings.paths));
+                 oldSettings.module !== newSettings.module ||
+                 oldSettings.moduleResolution !== newSettings.moduleResolution ||
+                 oldSettings.noResolve !== newSettings.noResolve ||
+                 oldSettings.jsx !== newSettings.jsx ||
+                 oldSettings.allowJs !== newSettings.allowJs ||
+                 oldSettings.disableSizeLimit !== newSettings.disableSizeLimit ||
+                 oldSettings.baseUrl !== newSettings.baseUrl ||
+                 !equalOwnProperties(oldSettings.paths, newSettings.paths));
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -1334,10 +1342,10 @@ namespace ts {
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(fileName: string) {
+        function getSyntacticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
-            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
+            return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
         }
 
         /**
@@ -1354,18 +1362,17 @@ namespace ts {
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
-                return semanticDiagnostics;
+                return semanticDiagnostics.slice();
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-            return concatenate(semanticDiagnostics, declarationDiagnostics);
+            return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
-            return program.getOptionsDiagnostics(cancellationToken).concat(
-                program.getGlobalDiagnostics(cancellationToken));
+            return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
@@ -1397,7 +1404,7 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
                 // Try getting just type at this position and show
@@ -1434,6 +1441,21 @@ namespace ts {
                 documentation: displayPartsDocumentationsAndKind.documentation,
                 tags: displayPartsDocumentationsAndKind.tags
             };
+        }
+
+        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+            if ((isIdentifier(node) || isStringLiteral(node))
+                && isPropertyAssignment(node.parent)
+                && node.parent.name === node) {
+                const type = checker.getContextualType(node.parent.parent);
+                if (type) {
+                    const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
+                    if (property) {
+                        return property;
+                    }
+                }
+            }
+            return checker.getSymbolAtLocation(node);
         }
 
         /// Goto definition
@@ -1771,17 +1793,20 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-            if (key === "{") {
-                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
-            }
-            else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+
+            if (!isInComment(sourceFile, position)) {
+                if (key === "{") {
+                    return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "}") {
+                    return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === ";") {
+                    return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
+                }
+                else if (key === "\n") {
+                    return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
+                }
             }
 
             return [];
@@ -1838,6 +1863,12 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean) {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const range = ts.formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
+            return range && createTextSpanFromRange(range);
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -2002,7 +2033,7 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram(),
-                newLineCharacter: host.getNewLine(),
+                newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
                 rulesProvider: getRuleProvider(formatOptions),
                 cancellationToken
             };
@@ -2064,6 +2095,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
@@ -2093,7 +2125,7 @@ namespace ts {
             }
 
             forEachChild(node, walk);
-            if (node.jsDoc) {
+            if (hasJSDocNodes(node)) {
                 for (const jsDoc of node.jsDoc) {
                     forEachChild(jsDoc, walk);
                 }

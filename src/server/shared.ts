@@ -12,6 +12,7 @@ namespace ts.server {
         export const LogFile = "--logFile";
         export const EnableTelemetry = "--enableTelemetry";
         export const TypingSafeListLocation = "--typingSafeListLocation";
+        export const TypesMapLocation = "--typesMapLocation";
         /**
          * This argument specifies the location of the NPM executable.
          * typingsInstaller will run the command with `${npmLocation} install ...`.
