@@ -1543,7 +1543,7 @@ namespace ts {
                 }
             }
             else {
-                sourceFiles = program.getSourceFiles();
+                sourceFiles = program.getSourceFiles().slice();
             }
 
             return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
