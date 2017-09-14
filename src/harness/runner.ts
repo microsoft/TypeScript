@@ -59,6 +59,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
         case "test262":
             return new Test262BaselineRunner();
     }
+    ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
 
 if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
@@ -102,9 +103,6 @@ interface TaskSet {
 function handleTestConfig() {
     if (testConfigContent !== "") {
         const testConfig = <TestConfig>JSON.parse(testConfigContent);
-        if (testConfig.listenForWork) {
-            return true;
-        }
         if (testConfig.light) {
             Harness.lightMode = true;
         }
@@ -112,7 +110,7 @@ function handleTestConfig() {
             runUnitTests = testConfig.runUnitTests;
         }
         if (testConfig.workerCount) {
-            workerCount = testConfig.workerCount;
+            workerCount = +testConfig.workerCount;
         }
         if (testConfig.taskConfigsFolder) {
             taskConfigsFolder = testConfig.taskConfigsFolder;
@@ -126,6 +124,9 @@ function handleTestConfig() {
         }
         else if ((+testConfig.stackTraceLimit | 0) > 0) {
             (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
+        }
+        if (testConfig.listenForWork) {
+            return true;
         }
 
         if (testConfig.test && testConfig.test.length > 0) {
@@ -205,13 +206,15 @@ function beginTests() {
 }
 
 type ParallelTestMessage = { type: "test", payload: { runner: TestRunnerKind, file: string } } | never;
+type ParallelBatchMessage = { type: "batch", payload: ParallelTestMessage["payload"][] } | never;
 type ParallelCloseMessage = { type: "close" } | never;
-type ParallelHostMessage = ParallelTestMessage | ParallelCloseMessage;
+type ParallelHostMessage = ParallelTestMessage | ParallelCloseMessage | ParallelBatchMessage;
 
 type ParallelErrorMessage = { type: "error", payload: { error: string, stack: string } } | never;
 type ErrorInfo = ParallelErrorMessage["payload"] & { name: string };
 type ParallelResultMessage = { type: "result", payload: { passing: number, errors: ErrorInfo[] } } | never;
-type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage;
+type ParallelBatchProgressMessage = { type: "progress", payload: ParallelResultMessage["payload"] } | never;
+type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage;
 
 let errors: ErrorInfo[] = [];
 let passing = 0;
@@ -272,31 +275,67 @@ function shimMochaHarness() {
 }
 
 function beginWorkListener() {
-    shimMochaHarness();
+    let initialized = false;
     const runners = ts.createMap<RunnerBase>();
     process.on("message", (data: ParallelHostMessage) => {
+        if (!initialized) {
+            initialized = true;
+            shimMochaHarness();
+        }
         switch (data.type) {
             case "test":
                 const { runner, file } = data.payload;
-                if (!runners.has(runner)) {
-                    runners.set(runner, createRunner(runner));
+                if (!runner) {
+                    console.error(data);
                 }
-                const instance = runners.get(runner);
-                instance.tests = [];
-                instance.addTest(file);
-                const payload = resetShimHarnessAndExecute(instance);
-                const message: ParallelResultMessage = { type: "result", payload };
+                const message: ParallelResultMessage = { type: "result", payload: handleTest(runner, file) };
                 process.send(message);
                 break;
             case "close":
                 process.exit(0);
                 break;
+            case "batch": {
+                const items = data.payload;
+                for (let i = 0; i < items.length; i++) {
+                    const { runner, file } = items[i];
+                    if (!runner) {
+                        console.error(data);
+                    }
+                    let message: ParallelBatchProgressMessage | ParallelResultMessage;
+                    const payload = handleTest(runner, file);
+                    if (i === (items.length - 1)) {
+                        message = { type: "result", payload };
+                    }
+                    else {
+                        message = { type: "progress", payload };
+                    }
+                    process.send(message);
+                }
+                break;
+            }
         }
     });
     process.on("uncaughtException", error => {
         const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack } };
         process.send(message);
     });
+    if (!runUnitTests) {
+        // ensure unit tests do not get run
+        describe = ts.noop as any;
+    }
+    else {
+        initialized = true;
+        shimMochaHarness();
+    }
+
+    function handleTest(runner: TestRunnerKind, file: string) {
+        if (!runners.has(runner)) {
+            runners.set(runner, createRunner(runner));
+        }
+        const instance = runners.get(runner);
+        instance.tests = [file];
+        return resetShimHarnessAndExecute(instance);
+    }
 }
 
 interface ChildProcessPartial {
@@ -451,13 +490,17 @@ function beginTestHost() {
     const discoverStart = +(new Date());
     const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
     const tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
+    let totalSize = 0;
     for (const runner of runners) {
         const files = runner.enumerateTestFiles();
         for (const file of files) {
-            tasks.push({ runner: runner.kind(), file, size: statSync(file).size });
+            const size = statSync(file).size;
+            tasks.push({ runner: runner.kind(), file, size });
+            totalSize += size;
         }
     }
     tasks.sort((a, b) => a.size - b.size);
+    const batchSize = (totalSize / workerCount) * 0.9;
     console.log(`Discovered ${tasks.length} test files in ${+(new Date()) - discoverStart}ms.`);
     console.log(`Starting to run tests using ${workerCount} threads...`);
     const { fork }: { fork(modulePath: string, args?: string[], options?: {}): ChildProcessPartial; } = require("child_process");
@@ -470,13 +513,13 @@ function beginTestHost() {
     const startTime = Date.now();
 
     const progressBars = new ProgressBars({ noColors });
-    progressBars.enable();
-    updateProgress(0);
     const progressUpdateInterval = 1 / progressBars._options.width;
     let nextProgress = progressUpdateInterval;
+
+    const workers: ChildProcessPartial[] = [];
     for (let i = 0; i < workerCount; i++) {
         // TODO: Just send the config over the IPC channel or in the command line arguments
-        const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests: runners.length !== 1 && i === workerCount - 1 };
+        const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests: runners.length === 1 ? false : i === workerCount - 1 };
         const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
         Harness.IO.writeFile(configPath, JSON.stringify(config));
         const child = fork(__filename, [`--config="${configPath}"`]);
@@ -501,6 +544,7 @@ function beginTestHost() {
     Stack: ${data.payload.stack}`);
                     return process.exit(2);
                 }
+                case "progress":
                 case "result": {
                     totalPassing += data.payload.passing;
                     if (data.payload.errors.length) {
@@ -531,13 +575,63 @@ function beginTestHost() {
                         child.disconnect();
                         return;
                     }
-                    child.send({ type: "test", payload: tasks.pop() });
+                    if (data.type === "result") {
+                        child.send({ type: "test", payload: tasks.pop() });
+                    }
                 }
             }
         });
-        child.send({ type: "test", payload: tasks.pop() });
+        workers.push(child);
     }
 
+    // It's only really worth doing an initial batching if there are a ton of files to go through
+    if (totalFiles > 1000) {
+        console.log("Batching initial test lists...");
+        const batches: { runner: TestRunnerKind, file: string, size: number }[][] = new Array(workerCount);
+        const doneBatching = new Array(workerCount);
+        batcher: while (true) {
+            for (let i = 0; i < workerCount; i++) {
+                if (tasks.length === 0) {
+                    // TODO: This indicates a particularly suboptimal packing
+                    break batcher;
+                }
+                if (doneBatching[i]) {
+                    continue;
+                }
+                if (!batches[i]) {
+                    batches[i] = [];
+                }
+                const total = batches[i].reduce((p, c) => p + c.size, 0);
+                if (total >= batchSize && !doneBatching[i]) {
+                    doneBatching[i] = true;
+                    continue;
+                }
+                batches[i].push(tasks.pop());
+            }
+            for (let j = 0; j < workerCount; j++) {
+                if (!doneBatching[j]) {
+                    continue;
+                }
+            }
+            break;
+        }
+        console.log(`Batched into ${workerCount} groups with approximate total file sizes of ${Math.floor(batchSize)} bytes in each group.`);
+        for (const worker of workers) {
+            const action: ParallelBatchMessage = { type: "batch", payload: batches.pop() };
+            if (!action.payload[0]) {
+                throw new Error(`Tried to send invalid message ${action}`);
+            }
+            worker.send(action);
+        }
+    }
+    else {
+        for (let i = 0; i < workerCount; i++) {
+            workers[i].send({ type: "test", payload: tasks.pop() });
+        }
+    }
+
+    progressBars.enable();
+    updateProgress(0);
     let duration: number;
 
     const ms = require("mocha/lib/ms");
