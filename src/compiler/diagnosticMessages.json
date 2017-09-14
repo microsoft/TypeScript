@@ -3146,10 +3146,6 @@
         "category": "Error",
         "code": 6142
     },
-    "Module '{0}' was resolved to '{1}', but '--allowJs' is not set.": {
-        "category": "Error",
-        "code": 6143
-    },
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
         "code": 6144
