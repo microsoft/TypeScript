@@ -205,6 +205,7 @@ namespace ts.server {
                 CommandNames.Rename,
                 CommandNames.RenameInfoFull,
                 CommandNames.RenameLocationsFull,
+                CommandNames.ValidateIdentifierName,
                 CommandNames.Saveto,
                 CommandNames.SignatureHelp,
                 CommandNames.SignatureHelpFull,
