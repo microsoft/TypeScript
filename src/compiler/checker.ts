@@ -7923,15 +7923,10 @@ namespace ts {
 
         function getPartialTypeFromFalsyUnion(type: UnionType): Type | undefined {
             if (type.types.length === 2) {
-                // getFalsyFlagsOfTypes
-                // getTypeFacts
-                const i = Math.max(type.types.indexOf(falseType),
-                         type.types.indexOf(zeroType),
-                         type.types.indexOf(emptyStringType));
-                if (i > -1) {
+                const truthy = removeDefinitelyFalsyTypes(type);
+                if (truthy !== type) {
                     const members = createSymbolTable();
-                    const other = type.types[i === 0 ? 1 : 0];
-                    for (const prop of getPropertiesOfType(other)) {
+                    for (const prop of getPropertiesOfType(truthy)) {
                         if (prop.flags & SymbolFlags.Optional) {
                             members.set(prop.escapedName, prop);
                         }
@@ -7943,7 +7938,7 @@ namespace ts {
                             members.set(prop.escapedName, result);
                         }
                     }
-                    return createAnonymousType(undefined, members, emptyArray, emptyArray, getIndexInfoOfType(other, IndexKind.String), getIndexInfoOfType(other, IndexKind.Number));
+                    return createAnonymousType(undefined, members, emptyArray, emptyArray, getIndexInfoOfType(truthy, IndexKind.String), getIndexInfoOfType(truthy, IndexKind.Number));
                 }
             }
         }

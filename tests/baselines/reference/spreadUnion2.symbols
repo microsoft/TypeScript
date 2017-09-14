@@ -10,28 +10,26 @@ declare const nullUnion: { b: number } | null;
 declare const nullAndUndefinedUnion: null | undefined;
 >nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(spreadUnion2.ts, 2, 13))
 
-var o1: {} | { a: number };
+var o1: { a?: number | undefined };
 >o1 : Symbol(o1, Decl(spreadUnion2.ts, 4, 3), Decl(spreadUnion2.ts, 5, 3))
->a : Symbol(a, Decl(spreadUnion2.ts, 4, 14))
+>a : Symbol(a, Decl(spreadUnion2.ts, 4, 9))
 
 var o1 = { ...undefinedUnion };
 >o1 : Symbol(o1, Decl(spreadUnion2.ts, 4, 3), Decl(spreadUnion2.ts, 5, 3))
 >undefinedUnion : Symbol(undefinedUnion, Decl(spreadUnion2.ts, 0, 13))
 
-var o2: {} | { b: number };
+var o2: { b?: number | undefined };
 >o2 : Symbol(o2, Decl(spreadUnion2.ts, 7, 3), Decl(spreadUnion2.ts, 8, 3))
->b : Symbol(b, Decl(spreadUnion2.ts, 7, 14))
+>b : Symbol(b, Decl(spreadUnion2.ts, 7, 9))
 
 var o2 = { ...nullUnion };
 >o2 : Symbol(o2, Decl(spreadUnion2.ts, 7, 3), Decl(spreadUnion2.ts, 8, 3))
 >nullUnion : Symbol(nullUnion, Decl(spreadUnion2.ts, 1, 13))
 
-var o3: {} | { b: number } | { a: number } | { a: number, b: number };
+var o3: { a?: number | undefined, b?: number | undefined };
 >o3 : Symbol(o3, Decl(spreadUnion2.ts, 10, 3), Decl(spreadUnion2.ts, 11, 3), Decl(spreadUnion2.ts, 12, 3))
->b : Symbol(b, Decl(spreadUnion2.ts, 10, 14))
->a : Symbol(a, Decl(spreadUnion2.ts, 10, 30))
->a : Symbol(a, Decl(spreadUnion2.ts, 10, 46))
->b : Symbol(b, Decl(spreadUnion2.ts, 10, 57))
+>a : Symbol(a, Decl(spreadUnion2.ts, 10, 9))
+>b : Symbol(b, Decl(spreadUnion2.ts, 10, 33))
 
 var o3 = { ...undefinedUnion, ...nullUnion };
 >o3 : Symbol(o3, Decl(spreadUnion2.ts, 10, 3), Decl(spreadUnion2.ts, 11, 3), Decl(spreadUnion2.ts, 12, 3))
@@ -43,18 +41,18 @@ var o3 = { ...nullUnion, ...undefinedUnion };
 >nullUnion : Symbol(nullUnion, Decl(spreadUnion2.ts, 1, 13))
 >undefinedUnion : Symbol(undefinedUnion, Decl(spreadUnion2.ts, 0, 13))
 
-var o4: {} | { a: number };
+var o4: { a?: number | undefined };
 >o4 : Symbol(o4, Decl(spreadUnion2.ts, 14, 3), Decl(spreadUnion2.ts, 15, 3))
->a : Symbol(a, Decl(spreadUnion2.ts, 14, 14))
+>a : Symbol(a, Decl(spreadUnion2.ts, 14, 9))
 
 var o4 = { ...undefinedUnion, ...undefinedUnion };
 >o4 : Symbol(o4, Decl(spreadUnion2.ts, 14, 3), Decl(spreadUnion2.ts, 15, 3))
 >undefinedUnion : Symbol(undefinedUnion, Decl(spreadUnion2.ts, 0, 13))
 >undefinedUnion : Symbol(undefinedUnion, Decl(spreadUnion2.ts, 0, 13))
 
-var o5: {} | { b: number };
+var o5: { b?: number | undefined };
 >o5 : Symbol(o5, Decl(spreadUnion2.ts, 17, 3), Decl(spreadUnion2.ts, 18, 3))
->b : Symbol(b, Decl(spreadUnion2.ts, 17, 14))
+>b : Symbol(b, Decl(spreadUnion2.ts, 17, 9))
 
 var o5 = { ...nullUnion, ...nullUnion };
 >o5 : Symbol(o5, Decl(spreadUnion2.ts, 17, 3), Decl(spreadUnion2.ts, 18, 3))
