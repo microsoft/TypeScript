@@ -81,6 +81,7 @@ let testConfigContent =
 let taskConfigsFolder: string;
 let workerCount: number;
 let runUnitTests = true;
+let noColors = false;
 
 interface TestConfig {
     light?: boolean;
@@ -90,6 +91,7 @@ interface TestConfig {
     stackTraceLimit?: number | "full";
     test?: string[];
     runUnitTests?: boolean;
+    noColors?: boolean;
 }
 
 interface TaskSet {
@@ -114,6 +116,9 @@ function handleTestConfig() {
         }
         if (testConfig.taskConfigsFolder) {
             taskConfigsFolder = testConfig.taskConfigsFolder;
+        }
+        if (testConfig.noColors !== undefined) {
+            noColors = testConfig.noColors;
         }
 
         if (testConfig.stackTraceLimit === "full") {
@@ -172,7 +177,7 @@ function handleTestConfig() {
         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
         runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
 
-        // TODO: project tests don't work in the browser yet
+        // TODO: project tests don"t work in the browser yet
         if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
             runners.push(new ProjectRunner());
         }
@@ -218,6 +223,9 @@ function resetShimHarnessAndExecute(runner: RunnerBase) {
 }
 
 function shimMochaHarness() {
+    (global as any).before = undefined;
+    (global as any).after = undefined;
+    (global as any).beforeEach = undefined;
     let beforeEachFunc: Function;
     describe = ((_name, callback) => {
         const fakeContext: Mocha.ISuiteCallbackContext = {
@@ -299,24 +307,172 @@ interface ChildProcessPartial {
     disconnect(): void;
 }
 
+// tslint:disable-next-line
+var describe: Mocha.IContextDefinition; // If launched without mocha for parallel mode, we still need a global describe visible to satisfy the parsing of the unit tests
+// tslint:disable-next-line
+var it: Mocha.ITestDefinition;
 function beginTestHost() {
+    const Mocha = require("mocha");
+    const Base = Mocha.reporters.Base;
+    const color = Base.color;
+    const cursor = Base.cursor;
+    const readline = require("readline");
+    const os = require("os");
+    interface ProgressBarsOptions {
+        open: string;
+        close: string;
+        complete: string;
+        incomplete: string;
+        width: number;
+        noColors: boolean;
+    }
+    interface ProgressBar {
+        lastN?: number;
+        title?: string;
+        progressColor?: string;
+        text?: string;
+    }
+    const tty: { isatty(x: number): boolean } = require("tty");
+    const isatty = tty.isatty(1) && tty.isatty(2);
+
+    class ProgressBars {
+        private _options: ProgressBarsOptions;
+        private _enabled: boolean;
+        private _lineCount: number;
+        private _progressBars: ProgressBar[];
+        constructor(options?: Partial<ProgressBarsOptions>) {
+            if (!options) options = {};
+            const open = options.open || "[";
+            const close = options.close || "]";
+            const complete = options.complete || "▬";
+            const incomplete = options.incomplete || Base.symbols.dot;
+            const maxWidth = Base.window.width - open.length - close.length - 30;
+            const width = minMax(options.width || maxWidth, 10, maxWidth);
+            this._options = {
+                open,
+                complete,
+                incomplete,
+                close,
+                width,
+                noColors: options.noColors || false
+            };
+
+            this._progressBars = [];
+            this._lineCount = 0;
+            this._enabled = false;
+        }
+        enable() {
+            if (!this._enabled) {
+                process.stdout.write(os.EOL);
+                this._enabled = true;
+            }
+        }
+        disable() {
+            if (this._enabled) {
+                process.stdout.write(os.EOL);
+                this._enabled = false;
+            }
+        }
+        update(index: number, percentComplete: number, color: string, title: string) {
+            percentComplete = minMax(percentComplete, 0, 1);
+
+            const progressBar = this._progressBars[index] || (this._progressBars[index] = { });
+            const width = this._options.width;
+            const n = Math.floor(width * percentComplete);
+            const i = width - n;
+            if (n === progressBar.lastN && title === progressBar.title && color === progressBar.progressColor) {
+                return;
+            }
+
+            progressBar.lastN = n;
+            progressBar.title = title;
+            progressBar.progressColor = color;
+
+            let progress = "  ";
+            progress += this._color("progress", this._options.open);
+            progress += this._color(color, fill(this._options.complete, n));
+            progress += this._color("progress", fill(this._options.incomplete, i));
+            progress += this._color("progress", this._options.close);
+
+            if (title) {
+                progress += this._color("progress", " " + title);
+            }
+
+            if (progressBar.text !== progress) {
+                progressBar.text = progress;
+                this._render(index);
+            }
+        }
+        private _render(index: number) {
+            if (!this._enabled || !isatty) {
+                return;
+            }
+
+            cursor.hide();
+            readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
+            let lineCount = 0;
+            const numProgressBars = this._progressBars.length;
+            for (let i = 0; i < numProgressBars; i++) {
+                if (i === index) {
+                    readline.clearLine(process.stdout, 1);
+                    process.stdout.write(this._progressBars[i].text + os.EOL);
+                }
+                else {
+                    readline.moveCursor(process.stdout, -process.stdout.columns, +1);
+                }
+
+                lineCount++;
+            }
+
+            this._lineCount = lineCount;
+            cursor.show();
+        }
+        private _color(type: string, text: string) {
+            return type && !this._options.noColors ? color(type, text) : text;
+        }
+    }
+
+    function fill(ch: string, size: number) {
+        let s = "";
+        while (s.length < size) {
+            s += ch;
+        }
+
+        return s.length > size ? s.substr(0, size) : s;
+    }
+
+    function minMax(value: number, min: number, max: number) {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
+    }
+
+    console.log("Discovering tests...");
+    const discoverStart = +(new Date());
     const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
     const tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
     for (const runner of runners) {
         const files = runner.enumerateTestFiles();
-        for (const file in files) {
+        for (const file of files) {
             tasks.push({ runner: runner.kind(), file, size: statSync(file).size });
         }
     }
     tasks.sort((a, b) => a.size - b.size);
+    console.log(`Discovered ${tasks.length} test files in ${+(new Date()) - discoverStart}ms.`);
+    console.log(`Starting to run tests using ${workerCount} threads...`);
     const { fork }: { fork(modulePath: string, args?: string[], options?: {}): ChildProcessPartial; } = require("child_process");
 
     const totalFiles = tasks.length;
-    console.log(`1..${totalFiles}`);
     let passingFiles = 0;
     let failingFiles = 0;
     let errorResults: ErrorInfo[] = [];
     let totalPassing = 0;
+    const startTime = Date.now();
+
+    const progressBars = new ProgressBars({ noColors });
+    progressBars.enable();
+    updateProgress(0);
+
     for (let i = 0; i < workerCount; i++) {
         // TODO: Just send the config over the IPC channel or in the command line arguments
         const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests: runners.length !== 1 && i === workerCount - 1 };
@@ -325,50 +481,133 @@ function beginTestHost() {
         const child = fork(__filename, [`--config="${configPath}"`]);
         child.on("error", err => {
             child.disconnect();
+            console.error("Unexpected error in child process:");
             console.error(err);
+            return process.exit(2);
         });
         child.on("exit", (code, _signal) => {
-            child.disconnect();
             if (code !== 0) {
                 console.error("Test worker process exited with nonzero exit code!");
+                return process.exit(2);
             }
         });
         child.on("message", (data: ParallelClientMessage) => {
             switch (data.type) {
-                case "error":
-                child.disconnect();
-                console.error(`Test worker encounted unexpected error and was forced to close:
-Message: ${data.payload.error}
-Stack: ${data.payload.stack}`);
-                return;
-                case "result":
-                totalPassing += data.payload.passing;
-                if (data.payload.errors.length) {
-                    errorResults = errorResults.concat(data.payload.errors);
-                    failingFiles++;
-                    console.log(`not ok ${passingFiles + failingFiles} - ${data.payload.errors.map(e => `test ${e.name} failed! Error: ${e.error.replace(/\r?\n/g, " ")} Stack: ${e.stack.replace(/\r?\n/g, " ")}`).join(" | ")}`);
-                }
-                else {
-                    passingFiles++;
-                    console.log(`ok ${passingFiles + failingFiles}`);
-                }
-                if (failingFiles + passingFiles === totalFiles) {
-                    // Done. Finished every task and collected results.
-                    child.send({ type: "close" });
+                case "error": {
                     child.disconnect();
-                    return process.exit(errorResults.length);
+                    console.error(`Test worker encounted unexpected error and was forced to close:
+    Message: ${data.payload.error}
+    Stack: ${data.payload.stack}`);
+                    return process.exit(2);
                 }
-                if (tasks.length === 0) {
-                    // No more tasks to distribute
-                    child.send({ type: "close" });
-                    child.disconnect();
-                    return;
+                case "result": {
+                    totalPassing += data.payload.passing;
+                    if (data.payload.errors.length) {
+                        errorResults = errorResults.concat(data.payload.errors);
+                        failingFiles++;
+                    }
+                    else {
+                        passingFiles++;
+                    }
+
+                    updateProgress((failingFiles + passingFiles) / totalFiles, errorResults.length ? `${totalPassing}/${totalPassing + errorResults.length} passing` : `${totalPassing} passing`);
+
+                    if (failingFiles + passingFiles === totalFiles) {
+                        // Done. Finished every task and collected results.
+                        child.send({ type: "close" });
+                        child.disconnect();
+                        return outputFinalResult();
+                    }
+                    if (tasks.length === 0) {
+                        // No more tasks to distribute
+                        child.send({ type: "close" });
+                        child.disconnect();
+                        return;
+                    }
+                    child.send({ type: "test", payload: tasks.pop() });
                 }
-                child.send({ type: "test", payload: tasks.pop() });
             }
         });
         child.send({ type: "test", payload: tasks.pop() });
     }
+
+    let duration: number;
+
+    const ms = require("mocha/lib/ms");
+    function completeBar() {
+        const isPartitionFail = failingFiles !== 0;
+        const summaryColor = isPartitionFail ? "fail" : "green";
+        const summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
+
+        const summaryTests = (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) + " passing";
+        const summaryDuration = "(" + ms(duration) + ")";
+        const savedUseColors = Base.useColors;
+        Base.useColors = !noColors;
+
+        const summary = color(summaryColor, summarySymbol + " " + summaryTests) + " " + color("light", summaryDuration);
+        Base.useColors = savedUseColors;
+
+        updateProgress(1, summary);
+    }
+
+    function updateProgress(percentComplete: number, title?: string) {
+        let progressColor = "pending";
+        if (failingFiles) {
+            progressColor = "fail";
+        }
+
+        progressBars.update(
+            0,
+            percentComplete,
+            progressColor,
+            title
+        );
+    }
+
+    function outputFinalResult() {
+        duration = Date.now() - startTime;
+        completeBar();
+        progressBars.disable();
+
+        const reporter = new Base();
+        const stats = reporter.stats;
+        const failures = reporter.failures;
+        stats.passes = totalPassing;
+        stats.failures = errorResults.length;
+        stats.tests = totalPassing + errorResults.length;
+        stats.duration = duration;
+        for (let j = 0; j < errorResults.length; j++) {
+            const failure = errorResults[j];
+            failures.push(makeMochaTest(failure));
+        }
+        if (noColors) {
+            const savedUseColors = Base.useColors;
+            Base.useColors = false;
+            reporter.epilogue();
+            Base.useColors = savedUseColors;
+        }
+        else {
+            reporter.epilogue();
+        }
+
+        process.exit(errorResults.length);
+    }
+
+    function makeMochaTest(test: ErrorInfo) {
+        return {
+            fullTitle: () => {
+                return test.name;
+            },
+            err: {
+                message: test.error,
+                stack: test.stack
+            }
+        };
+    }
+
+    describe = ts.noop as any; // Disable unit tests
+
+    return;
 }
 
 function startTestEnvironment() {
@@ -385,4 +624,3 @@ function startTestEnvironment() {
 }
 
 startTestEnvironment();
-
