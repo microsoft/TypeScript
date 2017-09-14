@@ -1350,10 +1350,8 @@ namespace Harness {
             errorsReported = 0;
 
             // 'merge' the lines of each input file with any errors associated with it
-            const filtered = inputFiles.filter(f => f.content !== undefined);
-            const dupeMap = ts.createMap<true>();
-            let dupeCount = 0;
-            for (const inputFile of filtered) {
+            const dupeCase = ts.createMap<number>();
+            for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
                 // Filter down to the errors in the file
                 const fileErrors = diagnostics.filter(e => {
                     const errFn = e.file;
@@ -1419,16 +1417,7 @@ namespace Harness {
 
                 // Verify we didn't miss any errors in this file
                 assert.equal(markedErrorCount, fileErrors.length, "count of errors in " + inputFile.unitName);
-                let resultName = sanitizeTestFilePath(inputFile.unitName);
-                if (dupeMap.has(resultName)) {
-                    // A different baseline filename should be manufactured if the names differ only in case, for windows compat
-                    dupeCount++;
-                    resultName = `${resultName}.dupe${dupeCount}`;
-                }
-                else {
-                    dupeMap.set(resultName, true);
-                }
-                yield [resultName, outputLines, errorsReported];
+                yield [checkDuplicatedFileName(inputFile.unitName, dupeCase), outputLines, errorsReported];
                 outputLines = "";
                 errorsReported = 0;
             }
@@ -1549,8 +1538,7 @@ namespace Harness {
             function *iterateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): IterableIterator<[string, string]> {
                 let typeLines = "";
                 const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
-                let dupeCount = 0;
-                const dupeMap = ts.createMap<true>();
+                const dupeCase = ts.createMap<number>();
 
                 for (const file of allFiles) {
                     const codeLines = file.content.split("\n");
@@ -1595,16 +1583,7 @@ namespace Harness {
                             typeLines += "No type information for this code.";
                         }
                     }
-                    let resultName = sanitizeTestFilePath(file.unitName);
-                    if (dupeMap.has(resultName)) {
-                        // A different baseline filename should be manufactured if the names differ only in case, for windows compat
-                        dupeCount++;
-                        resultName = `${resultName}.dupe${dupeCount}`;
-                    }
-                    else {
-                        dupeMap.set(resultName, true);
-                    }
-                    yield [resultName, typeLines];
+                    yield [checkDuplicatedFileName(file.unitName, dupeCase), typeLines];
                     typeLines = "";
                 }
             }
@@ -1720,26 +1699,30 @@ namespace Harness {
         export function *iterateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): IterableIterator<[string, string]> {
             // Collect, test, and sort the fileNames
             outputFiles.sort((a, b) => ts.compareStrings(cleanName(a.fileName), cleanName(b.fileName)));
-            let dupeCount = 0;
-            const dupeMap = ts.createMap<true>();
+            const dupeCase = ts.createMap<number>();
             // Yield them
             for (const outputFile of outputFiles) {
-                let resultName = sanitizeTestFilePath(outputFile.fileName);
-                if (dupeMap.has(resultName)) {
-                    // A different baseline filename should be manufactured if the names differ only in case, for windows compat
-                    dupeCount++;
-                    resultName = `${resultName}.dupe${dupeCount}`;
-                }
-                else {
-                    dupeMap.set(resultName, true);
-                }
-                yield [resultName, "/*====== " + outputFile.fileName + " ======*/\r\n" + outputFile.code];
+                yield [checkDuplicatedFileName(outputFile.fileName, dupeCase), "/*====== " + outputFile.fileName + " ======*/\r\n" + outputFile.code];
             }
 
             function cleanName(fn: string) {
                 const lastSlash = ts.normalizeSlashes(fn).lastIndexOf("/");
                 return fn.substr(lastSlash + 1).toLowerCase();
             }
+        }
+
+        function checkDuplicatedFileName(resultName: string, dupeCase: ts.Map<number>): string {
+            resultName = sanitizeTestFilePath(resultName);
+            if (dupeCase.has(resultName)) {
+                // A different baseline filename should be manufactured if the names differ only in case, for windows compat
+                const count = 1 + dupeCase.get(resultName);
+                dupeCase.set(resultName, count);
+                resultName = `${resultName}.dupe${count}`;
+            }
+            else {
+                dupeCase.set(resultName, 0);
+            }
+            return resultName;
         }
 
         function sanitizeTestFilePath(name: string) {
