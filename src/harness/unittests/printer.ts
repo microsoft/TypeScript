@@ -110,6 +110,19 @@ namespace ts {
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
 
+            printsCorrectly("newExpressionWithPropertyAccessOnCallExpression", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createNew(
+                    createPropertyAccess(
+                        createCall(
+                            createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                            "x"),
+                    /*typeArguments*/ undefined,
+                    /*argumentsArray*/ undefined
+                ),
+                createSourceFile("source.ts", "", ScriptTarget.ESNext))
+            );
+
             // https://github.com/Microsoft/TypeScript/issues/15971
             printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
