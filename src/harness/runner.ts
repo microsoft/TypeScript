@@ -336,7 +336,7 @@ function beginTestHost() {
     const isatty = tty.isatty(1) && tty.isatty(2);
 
     class ProgressBars {
-        private _options: ProgressBarsOptions;
+        public readonly _options: Readonly<ProgressBarsOptions>;
         private _enabled: boolean;
         private _lineCount: number;
         private _progressBars: ProgressBar[];
@@ -373,7 +373,7 @@ function beginTestHost() {
                 this._enabled = false;
             }
         }
-        update(index: number, percentComplete: number, color: string, title: string) {
+        update(index: number, percentComplete: number, color: string, title: string, titleColor?: string) {
             percentComplete = minMax(percentComplete, 0, 1);
 
             const progressBar = this._progressBars[index] || (this._progressBars[index] = { });
@@ -395,7 +395,7 @@ function beginTestHost() {
             progress += this._color("progress", this._options.close);
 
             if (title) {
-                progress += this._color("progress", " " + title);
+                progress += this._color(titleColor || "progress", " " + title);
             }
 
             if (progressBar.text !== progress) {
@@ -472,7 +472,8 @@ function beginTestHost() {
     const progressBars = new ProgressBars({ noColors });
     progressBars.enable();
     updateProgress(0);
-
+    const progressUpdateInterval = 1 / progressBars._options.width;
+    let nextProgress = progressUpdateInterval;
     for (let i = 0; i < workerCount; i++) {
         // TODO: Just send the config over the IPC channel or in the command line arguments
         const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests: runners.length !== 1 && i === workerCount - 1 };
@@ -510,7 +511,13 @@ function beginTestHost() {
                         passingFiles++;
                     }
 
-                    updateProgress((failingFiles + passingFiles) / totalFiles, errorResults.length ? `${totalPassing}/${totalPassing + errorResults.length} passing` : `${totalPassing} passing`);
+                    const progress = (failingFiles + passingFiles) / totalFiles;
+                    if (progress >= nextProgress) {
+                        while (nextProgress < progress) {
+                            nextProgress += progressUpdateInterval;
+                        }
+                        updateProgress(progress, errorResults.length ? `${errorResults.length} failing` : `${totalPassing} passing`, errorResults.length ? "fail" : undefined);
+                    }
 
                     if (failingFiles + passingFiles === totalFiles) {
                         // Done. Finished every task and collected results.
@@ -550,7 +557,7 @@ function beginTestHost() {
         updateProgress(1, summary);
     }
 
-    function updateProgress(percentComplete: number, title?: string) {
+    function updateProgress(percentComplete: number, title?: string, titleColor?: string) {
         let progressColor = "pending";
         if (failingFiles) {
             progressColor = "fail";
@@ -560,7 +567,8 @@ function beginTestHost() {
             0,
             percentComplete,
             progressColor,
-            title
+            title,
+            titleColor
         );
     }
 
