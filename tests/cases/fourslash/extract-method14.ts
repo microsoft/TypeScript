@@ -19,7 +19,7 @@ edit.applyRefactor({
 `function foo() {
     var i = 10;
     var __return: any;
-    ({ __return, i } = n/*RENAME*/ewFunction(i));
+    ({ __return, i } = /*RENAME*/newFunction(i));
     return __return;
 }
 function newFunction(i) {
