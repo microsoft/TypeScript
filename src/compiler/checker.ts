@@ -22345,6 +22345,10 @@ namespace ts {
 
             checkExternalModuleExports(container);
 
+            if (isInAmbientContext(node) && !isEntityNameExpression(node.expression)) {
+                grammarErrorOnNode(node.expression, Diagnostics.The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context);
+            }
+
             if (node.isExportEquals && !isInAmbientContext(node)) {
                 if (modulekind >= ModuleKind.ES2015) {
                     // export assignment is not supported in es6 modules
