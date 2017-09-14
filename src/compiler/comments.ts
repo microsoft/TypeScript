@@ -21,7 +21,7 @@ namespace ts {
         let declarationListContainerEnd = -1;
         let currentSourceFile: SourceFile;
         let currentText: string;
-        let currentLineMap: number[];
+        let currentLineMap: ReadonlyArray<number>;
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
         let disabled: boolean = printerOptions.removeComments;

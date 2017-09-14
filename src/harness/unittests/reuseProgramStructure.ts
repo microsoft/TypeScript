@@ -21,7 +21,7 @@ namespace ts {
     }
 
     interface ProgramWithSourceTexts extends Program {
-        sourceTexts?: NamedSourceText[];
+        sourceTexts?: ReadonlyArray<NamedSourceText>;
         host: TestCompilerHost;
     }
 
@@ -106,7 +106,7 @@ namespace ts {
         return file;
     }
 
-    function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
+    function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
@@ -162,7 +162,7 @@ namespace ts {
         return program;
     }
 
-    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
+    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
         if (!newTexts) {
             newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
         }
@@ -441,20 +441,20 @@ namespace ts {
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.ts' does not exist.",
                         "File 'node_modules/a.tsx' does not exist.",
                         "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.ts' does not exist.",
                         "File 'node_modules/a/index.tsx' does not exist.",
                         "File 'node_modules/a/index.d.ts' does not exist.",
-                        "File 'node_modules/@types/a.d.ts' does not exist.",
                         "File 'node_modules/@types/a/package.json' does not exist.",
+                        "File 'node_modules/@types/a.d.ts' does not exist.",
                         "File 'node_modules/@types/a/index.d.ts' does not exist.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.js' does not exist.",
                         "File 'node_modules/a.jsx' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.js' does not exist.",
                         "File 'node_modules/a/index.jsx' does not exist.",
                         "======== Module name 'a' was not resolved. ========"
@@ -474,10 +474,10 @@ namespace ts {
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.ts' does not exist.",
                         "File 'node_modules/a.tsx' does not exist.",
                         "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.ts' does not exist.",
                         "File 'node_modules/a/index.tsx' does not exist.",
                         "File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.",
@@ -510,14 +510,14 @@ namespace ts {
                     "File '/fs.ts' does not exist.",
                     "File '/fs.tsx' does not exist.",
                     "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",
@@ -552,14 +552,14 @@ namespace ts {
                     "File '/fs.ts' does not exist.",
                     "File '/fs.tsx' does not exist.",
                     "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",

@@ -13,12 +13,14 @@
 //// }
 
 goTo.select('start', 'end')
-verify.refactorAvailable('Extract Method');
-edit.applyRefactor('Extract Method', "scope_0");
-verify.currentFileContentIs(
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to method in class 'Foo'",
+    newContent:
 `class Foo {
     someMethod(m: number) {
-        this.newFunction(m);
+        this./*RENAME*/newFunction(m);
         var q = 10;
         return q;
     }
@@ -30,4 +32,5 @@ verify.currentFileContentIs(
         var z = y + x;
         console.log(z);
     }
-}`);
+}`
+});

@@ -1,6 +1,6 @@
 === tests/cases/compiler/v1/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof Alpha
+>Alpha : typeof "tests/cases/compiler/v1/index"
 
 export var x: string;
 >x : string

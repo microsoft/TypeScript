@@ -56,6 +56,9 @@ namespace ts {
 
             // github #14948
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
+
+            // github #18071
+            printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let regex = /abc/;", ScriptTarget.ES2017)));
         });
 
         describe("printBundle", () => {

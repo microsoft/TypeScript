@@ -1,0 +1,20 @@
+=== /index.ts ===
+import Foo from "foo/Foo";
+>Foo : typeof Foo
+
+import { x } from "foo/Bar";
+>x : number
+
+=== /node_modules/foo/Foo.d.ts ===
+export default class Foo {
+>Foo : Foo
+
+    protected source: boolean;
+>source : boolean
+}
+
+=== /node_modules/foo/Bar.d.ts ===
+// This is *not* the same!
+export const x: number;
+>x : number
+

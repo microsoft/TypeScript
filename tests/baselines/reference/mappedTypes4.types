@@ -45,7 +45,7 @@ function boxify<T>(obj: T): Boxified<T> {
 
             result[k] = { value: obj[k] };
 >result[k] = { value: obj[k] } : { value: T[keyof T]; }
->result[k] : Box<T[keyof T]>
+>result[k] : Boxified<T>[keyof T]
 >result : Boxified<T>
 >k : keyof T
 >{ value: obj[k] } : { value: T[keyof T]; }

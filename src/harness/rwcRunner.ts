@@ -90,9 +90,16 @@ namespace RWC {
                         ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
-                    // Load the files
+                    // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
+                    const uniqueNames = ts.createMap<true>();
                     for (const fileName of fileNames) {
-                        inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        // Must maintain order, build result list while checking map
+                        const normalized = ts.normalizeSlashes(fileName);
+                        if (!uniqueNames.has(normalized)) {
+                            uniqueNames.set(normalized, true);
+                            // Load the file
+                            inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        }
                     }
 
                     // Add files to compilation
@@ -256,7 +263,7 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
         for (let i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }

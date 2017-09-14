@@ -368,7 +368,7 @@ namespace ts.server {
                     msg += "\n" + (<StackTraceError>err).stack;
                 }
             }
-            this.logger.err(msg);
+            this.logger.msg(msg, Msg.Err);
         }
 
         public send(msg: protocol.Message) {
@@ -425,7 +425,7 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
-                let diags: Diagnostic[] = [];
+                let diags: ReadonlyArray<Diagnostic> = emptyArray;
                 if (!isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                     diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
@@ -1025,6 +1025,14 @@ namespace ts.server {
             return project.getLanguageService(/*ensureSynchronized*/ false).getDocCommentTemplateAtPosition(file, position);
         }
 
+        private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const onlyMultiLine = args.onlyMultiLine;
+            const position = this.getPosition(args, scriptInfo);
+            return project.getLanguageService(/*ensureSynchronized*/ false).getSpanOfEnclosingComment(file, position, onlyMultiLine);
+        }
+
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
@@ -1480,7 +1488,7 @@ namespace ts.server {
 
             const result = project.getLanguageService().getEditsForRefactor(
                 file,
-                this.projectService.getFormatCodeOptions(),
+                convertFormatOptions(args.formatOptions),
                 position || textRange,
                 args.refactor,
                 args.action
@@ -1601,7 +1609,10 @@ namespace ts.server {
             }
 
             // No need to analyze lib.d.ts
-            let fileNamesInProject = fileNames.filter(value => value.indexOf("lib.d.ts") < 0);
+            const fileNamesInProject = fileNames.filter(value => value.indexOf("lib.d.ts") < 0);
+            if (fileNamesInProject.length === 0) {
+                return;
+            }
 
             // Sort the file name list to make the recently touched files come first
             const highPriorityFiles: NormalizedPath[] = [];
@@ -1617,7 +1628,7 @@ namespace ts.server {
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
                     if (!info.isScriptOpen()) {
-                        if (fileNameInProject.indexOf(Extension.Dts) > 0) {
+                        if (fileExtensionIs(fileNameInProject, Extension.Dts)) {
                             veryLowPriorityFiles.push(fileNameInProject);
                         }
                         else {
@@ -1630,14 +1641,11 @@ namespace ts.server {
                 }
             }
 
-            fileNamesInProject = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
-
-            if (fileNamesInProject.length > 0) {
-                const checkList = fileNamesInProject.map(fileName => ({ fileName, project }));
-                // Project level error analysis runs on background files too, therefore
-                // doesn't require the file to be opened
-                this.updateErrorCheck(next, checkList, delay, /*requireOpen*/ false);
-            }
+            const sortedFiles = [...highPriorityFiles, ...mediumPriorityFiles, ...lowPriorityFiles, ...veryLowPriorityFiles];
+            const checkList = sortedFiles.map(fileName => ({ fileName, project }));
+            // Project level error analysis runs on background files too, therefore
+            // doesn't require the file to be opened
+            this.updateErrorCheck(next, checkList, delay, /*requireOpen*/ false);
         }
 
         getCanonicalFileName(fileName: string) {
@@ -1764,6 +1772,9 @@ namespace ts.server {
             },
             [CommandNames.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
                 return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
+            },
+            [CommandNames.GetSpanOfEnclosingComment]: (request: protocol.SpanOfEnclosingCommentRequest) => {
+                return this.requiredResponse(this.getSpanOfEnclosingComment(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRange(request.arguments));
@@ -1947,7 +1958,7 @@ namespace ts.server {
                 return this.executeWithRequestId(request.seq, () => handler(request));
             }
             else {
-                this.logger.err(`Unrecognized JSON command: ${JSON.stringify(request)}`);
+                this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
                 this.output(undefined, CommandNames.Unknown, request.seq, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }

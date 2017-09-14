@@ -8,12 +8,17 @@
 //// }
 
 goTo.select('a', 'b')
-edit.applyRefactor('Extract Method', 'scope_0');
-verify.currentFileContentIs(`function fn() {
-    var q = newFunction()
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to inner function in function 'fn'",
+    newContent:
+`function fn() {
+    var q = /*RENAME*/newFunction()
     q[0]++
 
     function newFunction() {
         return [0];
     }
-}`);
+}`
+});
