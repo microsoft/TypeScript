@@ -1049,7 +1049,7 @@ namespace ts {
 
     export interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
-        literal: Expression;
+        literal: BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     }
 
     export interface StringLiteral extends LiteralExpression {
