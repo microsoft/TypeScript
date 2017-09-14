@@ -2126,10 +2126,10 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host, { useSingleInferredProject: true });
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES5, allowJs: false });
             projectService.openClientFile(file1.path);
-            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
+            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path, 9);
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES5, allowJs: true });
             projectService.getScriptInfo(file1.path).editContent(0, 0, " ");
-            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
+            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path, 10);
             projectService.closeClientFile(file1.path);
         });
 

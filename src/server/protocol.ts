@@ -203,6 +203,13 @@ namespace ts.server.protocol {
         projectFileName?: string;
     }
 
+    export interface FileAndSizeRequestArgs extends FileRequestArgs {
+        /**
+         * The size of the requested file
+         */
+        size: number;
+    }
+
     /**
      * Requests a JS Doc comment template for a given position
      */
@@ -394,6 +401,13 @@ namespace ts.server.protocol {
      */
     export interface FileRequest extends Request {
         arguments: FileRequestArgs;
+    }
+
+    /**
+     * Request containing a file name and the size of that file (in bytes).
+     */
+    export interface FileAndSizeRequest extends Request {
+        arguments: FileAndSizeRequestArgs;
     }
 
     /**

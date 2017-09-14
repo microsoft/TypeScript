@@ -460,8 +460,8 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.getNavigationTree(fileName));
         }
 
-        getOutliningSpans(fileName: string): ts.OutliningSpan[] {
-            return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
+        getOutliningSpans(fileName: string, fileSize: number): ts.OutliningSpan[] {
+            return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName, fileSize));
         }
         getTodoComments(fileName: string, descriptors: ts.TodoCommentDescriptor[]): ts.TodoComment[] {
             return unwrapJSONCallResult(this.shim.getTodoComments(fileName, JSON.stringify(descriptors)));

@@ -1,11 +1,11 @@
 /* @internal */
 namespace ts.OutliningElementsCollector {
     const collapseText = "...";
-    const maxDepth = 20;
 
-    export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
+    export function collectElements(sourceFile: SourceFile, fileSize: number, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         let depth = 0;
+        const maxDepth = fileSize > 100000 ? 50 : 20;
 
         walk(sourceFile);
         return elements;
