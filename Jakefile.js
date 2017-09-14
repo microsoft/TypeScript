@@ -1,11 +1,11 @@
 // This file contains the build logic for the public repo
+// @ts-check
 
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var fold = require("travis-fold");
-var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 var ts = require("./lib/typescript");
 
 
@@ -38,7 +38,7 @@ else if (process.env.PATH !== undefined) {
 
 function filesFromConfig(configPath) {
     var configText = fs.readFileSync(configPath).toString();
-    var config = ts.parseConfigFileTextToJson(configPath, configText, /*stripComments*/ true);
+    var config = ts.parseConfigFileTextToJson(configPath, configText);
     if (config.error) {
         throw new Error(diagnosticsToString([config.error]));
     }
@@ -104,6 +104,9 @@ var harnessCoreSources = [
     "loggedIO.ts",
     "rwcRunner.ts",
     "test262Runner.ts",
+    "./parallel/shared.ts",
+    "./parallel/host.ts",
+    "./parallel/worker.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
@@ -596,7 +599,7 @@ file(typesMapOutputPath, function() {
     var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
     // Validate that it's valid JSON
     try {
-        JSON.parse(content);
+        JSON.parse(content.toString());
     } catch (e) {
         console.log("Parse error in typesMap.json: " + e);
     }
@@ -740,7 +743,7 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler, errorHandler) {
-    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true });
+    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true, interactive: true });
     // Add listeners for output and error
     ex.addListener("stdout", function (output) {
         process.stdout.write(output);
@@ -783,13 +786,14 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit) {
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
     var testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,
         taskConfigsFolder: taskConfigsFolder,
-        stackTraceLimit: stackTraceLimit
+        stackTraceLimit: stackTraceLimit,
+        noColor: !colors
     });
     fs.writeFileSync('test.config', testConfigContents);
 }
@@ -831,7 +835,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -894,19 +898,15 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
         var startTime = mark();
-        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors }, function (err) {
+        exec(host + " " + run, function () {
             process.env.NODE_ENV = savedNodeEnv;
             measure(startTime);
-            // last worker clean everything and runs linter in case if there were no errors
-            deleteTemporaryProjectOutput();
-            jake.rmRf(taskConfigsFolder);
-            if (err) {
-                fail(err);
-            }
-            else {
-                runLinter();
-                complete();
-            }
+            runLinter();
+            finish();
+        }, function (e, status) {
+            process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
+            finish(status);
         });
     }
 
@@ -969,8 +969,8 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
-    browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
-    tests = process.env.test || process.env.tests || process.env.t;
+    var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
