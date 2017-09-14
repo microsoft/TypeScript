@@ -231,7 +231,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
-            if (isToken(node)) {
+            if (isToken(isExpressionStatement(node) ? node.expression : node)) {
                 return [createDiagnosticForNode(node, Messages.InsufficientSelection)];
             }
             return undefined;
