@@ -7996,7 +7996,7 @@ namespace ts {
             return unknownType;
         }
 
-        function getTypeFromThisTypeNode(node: TypeNode): Type {
+        function getTypeFromThisTypeNode(node: ThisExpression | ThisTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getThisType(node);
@@ -8030,7 +8030,7 @@ namespace ts {
                     return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
-                    return getTypeFromThisTypeNode(node);
+                    return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
                 case SyntaxKind.TypeReference:
@@ -23065,14 +23065,16 @@ namespace ts {
                             return sig.thisParameter;
                         }
                     }
+                    if (isInExpressionContext(node)) {
+                        return checkExpression(node as Expression).symbol;
+                    }
                     // falls through
 
-                case SyntaxKind.SuperKeyword:
-                    const type = isPartOfExpression(node) ? getTypeOfExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
-                    return type.symbol;
-
                 case SyntaxKind.ThisType:
-                    return getTypeFromTypeNode(<TypeNode>node).symbol;
+                    return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode).symbol;
+
+                case SyntaxKind.SuperKeyword:
+                    return checkExpression(node as Expression).symbol;
 
                 case SyntaxKind.ConstructorKeyword:
                     // constructor keyword for an overload, should take us to the definition if it exist
