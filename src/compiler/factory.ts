@@ -3958,6 +3958,7 @@ namespace ts {
                     if (stopAtCallExpressions) {
                         return node;
                     }
+                    // falls through
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
