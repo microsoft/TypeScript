@@ -578,7 +578,7 @@ namespace ts {
 
         function cloneSymbol(symbol: Symbol): Symbol {
             const result = createSymbol(symbol.flags, symbol.escapedName);
-            result.declarations = symbol.declarations.slice(0);
+            result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
             if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
