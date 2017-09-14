@@ -3096,7 +3096,7 @@ ${code}
         let currentFileSize = getFileSize();
 
         function getFileSize() {
-            const stats = _fs.statSync(fileName);
+            const stats = _fs.statSync("." + fileName);
             return stats.size;
         }
 
