@@ -104,6 +104,9 @@ var harnessCoreSources = [
     "loggedIO.ts",
     "rwcRunner.ts",
     "test262Runner.ts",
+    "./parallel/shared.ts",
+    "./parallel/host.ts",
+    "./parallel/worker.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
