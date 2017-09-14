@@ -444,7 +444,7 @@ namespace ts {
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-        return isExternalModule(node) || compilerOptions.isolatedModules;
+        return isExternalModule(node) || compilerOptions.isolatedModules || !!node.commonJsModuleIndicator;
     }
 
     /* @internal */

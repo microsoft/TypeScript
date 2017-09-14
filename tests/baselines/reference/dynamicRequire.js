@@ -4,6 +4,9 @@ function foo(name) {
 }
 
 //// [a_out.js]
-function foo(name) {
-    var s = require("t/" + name);
-}
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    function foo(name) {
+        var s = require("t/" + name);
+    }
+});
