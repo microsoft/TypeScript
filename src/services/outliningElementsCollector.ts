@@ -5,7 +5,7 @@ namespace ts.OutliningElementsCollector {
     export function collectElements(sourceFile: SourceFile, fileSize: number, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         let depth = 0;
-        const maxDepth = fileSize > 100000 ? 50 : 20;
+        const maxDepth = fileSize < 100000 ? 50 : 20;
 
         walk(sourceFile);
         return elements;
