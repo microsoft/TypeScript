@@ -588,57 +588,67 @@ namespace ts {
             return result;
         }
 
-        function mergeSymbol(target: Symbol, source: Symbol) {
+        function cloneIfNotMerged(symbol: Symbol): Symbol | undefined {
+            // if module symbol has already been merged - it is safe to use it.
+            // otherwise clone it
+            return symbol.flags & SymbolFlags.Transient ? undefined : cloneSymbol(symbol);
+        }
+
+        function shouldMergeSymbol(target: Symbol, source: Symbol): boolean {
             if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
-                if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
-                    // reset flag when merging instantiated module into value module that has only const enums
-                    target.constEnumOnlyModule = false;
-                }
-                target.flags |= source.flags;
-                if (source.valueDeclaration &&
-                    (!target.valueDeclaration ||
-                        (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
-                    // other kinds of value declarations take precedence over modules
-                    target.valueDeclaration = source.valueDeclaration;
-                }
-                addRange(target.declarations, source.declarations);
-                if (source.members) {
-                    if (!target.members) target.members = createSymbolTable();
-                    mergeSymbolTable(target.members, source.members);
-                }
-                if (source.exports) {
-                    if (!target.exports) target.exports = createSymbolTable();
-                    mergeSymbolTable(target.exports, source.exports);
-                }
-                recordMergedSymbol(target, source);
+                return true;
             }
-            else if (target.flags & SymbolFlags.NamespaceModule) {
+
+            if (target.flags & SymbolFlags.NamespaceModule) {
                 error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
+                return false;
             }
-            else {
-                const message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
-                    ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
-                forEach(source.declarations, node => {
-                    error(getNameOfDeclaration(node) || node, message, symbolToString(source));
-                });
-                forEach(target.declarations, node => {
-                    error(getNameOfDeclaration(node) || node, message, symbolToString(source));
-                });
+
+            const message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
+                ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
+            forEach(source.declarations, node => {
+                error(getNameOfDeclaration(node) || node, message, symbolToString(source));
+            });
+            forEach(target.declarations, node => {
+                error(getNameOfDeclaration(node) || node, message, symbolToString(source));
+            });
+            return false;
+        }
+
+        function mergeSymbol(target: Symbol, source: Symbol): void {
+            if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
+                // reset flag when merging instantiated module into value module that has only const enums
+                target.constEnumOnlyModule = false;
             }
+            target.flags |= source.flags;
+            if (source.valueDeclaration &&
+                (!target.valueDeclaration ||
+                    (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
+                // other kinds of value declarations take precedence over modules
+                target.valueDeclaration = source.valueDeclaration;
+            }
+            addRange(target.declarations, source.declarations);
+            if (source.members) {
+                if (!target.members) target.members = createSymbolTable();
+                mergeSymbolTable(target.members, source.members);
+            }
+            if (source.exports) {
+                if (!target.exports) target.exports = createSymbolTable();
+                mergeSymbolTable(target.exports, source.exports);
+            }
+            recordMergedSymbol(target, source);
         }
 
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             source.forEach((sourceSymbol, id) => {
-                let targetSymbol = target.get(id);
+                const targetSymbol = target.get(id);
                 if (!targetSymbol) {
                     target.set(id, sourceSymbol);
                 }
-                else {
-                    if (!(targetSymbol.flags & SymbolFlags.Transient)) {
-                        targetSymbol = cloneSymbol(targetSymbol);
-                        target.set(id, targetSymbol);
-                    }
-                    mergeSymbol(targetSymbol, sourceSymbol);
+                else if (shouldMergeSymbol(targetSymbol, sourceSymbol)) {
+                    const clonedTarget = cloneIfNotMerged(targetSymbol);
+                    if (clonedTarget) target.set(id, clonedTarget);
+                    mergeSymbol(clonedTarget || targetSymbol, sourceSymbol);
                 }
             });
         }
@@ -669,10 +679,9 @@ namespace ts {
                 // obtain item referenced by 'export='
                 mainModule = resolveExternalModuleSymbol(mainModule);
                 if (mainModule.flags & SymbolFlags.Namespace) {
-                    // if module symbol has already been merged - it is safe to use it.
-                    // otherwise clone it
-                    mainModule = mainModule.flags & SymbolFlags.Transient ? mainModule : cloneSymbol(mainModule);
-                    mergeSymbol(mainModule, moduleAugmentation.symbol);
+                    if (shouldMergeSymbol(mainModule, moduleAugmentation.symbol)) {
+                        mergeSymbol(cloneIfNotMerged(mainModule) || mainModule, moduleAugmentation.symbol);
+                    }
                 }
                 else {
                     // moduleName will be a StringLiteral since this is not `declare global`.
