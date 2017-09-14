@@ -4,7 +4,7 @@ function F<T>() {
 }
 // ==SCOPE::inner function in function 'F'==
 function F<T>() {
-    const array: T[] = newFunction();
+    const array: T[] = /*RENAME*/newFunction();
 
     function newFunction(): T[] {
         return [];
@@ -12,7 +12,7 @@ function F<T>() {
 }
 // ==SCOPE::function in global scope==
 function F<T>() {
-    const array: T[] = newFunction<T>();
+    const array: T[] = /*RENAME*/newFunction<T>();
 }
 function newFunction<T>(): T[] {
     return [];

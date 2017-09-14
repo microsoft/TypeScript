@@ -239,8 +239,7 @@ namespace ts {
         let program: Program;
         let needsReload: boolean;                                           // true if the config file changed and needs to reload it from the disk
         let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
-        let configFileWatcher: FileWatcher;                                 // watcher for the config file
-        let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;     // map of watchers for the wild card directories in the config file
+        let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;      // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
@@ -259,7 +258,7 @@ namespace ts {
 
         const partialSystem = configFileName ? createCachedPartialSystem(system) : system;
         if (configFileName) {
-            configFileWatcher = watchFile(system, configFileName, scheduleProgramReload, writeLog);
+            watchFile(system, configFileName, scheduleProgramReload, writeLog);
         }
 
         const getCurrentDirectory = memoize(() => partialSystem.getCurrentDirectory());

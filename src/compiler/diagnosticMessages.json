@@ -3098,7 +3098,7 @@
         "category": "Message",
         "code": 6132
     },
-    "'{0}' is declared but never used.": {
+    "'{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6133
     },
@@ -3118,7 +3118,7 @@
         "category": "Error",
         "code": 6137
     },
-    "Property '{0}' is declared but never used.": {
+    "Property '{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6138
     },

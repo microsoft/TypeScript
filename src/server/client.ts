@@ -586,9 +586,7 @@ namespace ts.server {
             const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
 
             if (!response.body) {
-                return {
-                    edits: []
-                };
+                return { edits: [], renameFilename: undefined, renameLocation: undefined };
             }
 
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);

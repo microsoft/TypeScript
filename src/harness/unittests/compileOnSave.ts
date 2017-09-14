@@ -55,7 +55,6 @@ namespace ts.projectSystem {
             let configFile: FileOrFolder;
             let changeModuleFile1ShapeRequest1: server.protocol.Request;
             let changeModuleFile1InternalRequest1: server.protocol.Request;
-            let changeModuleFile1ShapeRequest2: server.protocol.Request;
             // A compile on save affected file request using file1
             let moduleFile1FileListRequest: server.protocol.Request;
 
@@ -110,16 +109,6 @@ namespace ts.projectSystem {
                     endLine: 1,
                     endOffset: 1,
                     insertString: `var T1: number;`
-                });
-
-                // Change the content of file1 to `export var T: number;export function Foo() { };`
-                changeModuleFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
-                    file: moduleFile1.path,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    insertString: `export var T2: number;`
                 });
 
                 moduleFile1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
