@@ -3500,7 +3500,7 @@ ${code}
             expected = makeWhitespaceVisible(expected);
             actual = makeWhitespaceVisible(actual);
         }
-        return `Expected:\n${expected}\nActual:${actual}`;
+        return `Expected:\n${expected}\nActual:\n${actual}`;
     }
 
     function differOnlyByWhitespace(a: string, b: string) {

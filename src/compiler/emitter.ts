@@ -2417,6 +2417,12 @@ namespace ts {
 
             const isEmpty = isUndefined || start >= children.length || count === 0;
             if (isEmpty && format & ListFormat.OptionalIfEmpty) {
+                if (onBeforeEmitNodeArray) {
+                    onBeforeEmitNodeArray(children);
+                }
+                if (onAfterEmitNodeArray) {
+                    onAfterEmitNodeArray(children);
+                }
                 return;
             }
 
