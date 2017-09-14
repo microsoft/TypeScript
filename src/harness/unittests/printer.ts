@@ -123,6 +123,19 @@ namespace ts {
                 createSourceFile("source.ts", "", ScriptTarget.ESNext))
             );
 
+            printsCorrectly("newExpressionOnConditionalExpression", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createNew(
+                    createConditional(
+                        createIdentifier("x"), createToken(SyntaxKind.QuestionToken),
+                        createIdentifier("y"), createToken(SyntaxKind.ColonToken),
+                        createIdentifier("z")),
+                    /*typeArguments*/ undefined,
+                    /*argumentsArray*/ undefined
+                ),
+                createSourceFile("source.ts", "", ScriptTarget.ESNext))
+            );
+
             // https://github.com/Microsoft/TypeScript/issues/15971
             printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
