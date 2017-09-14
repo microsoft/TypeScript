@@ -24,5 +24,5 @@ var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked
     return cooked;
 };
 var f;
-var x = new new new f(_a || (_a = __getTemplateObject(["abc", "def"], ["abc", "def"])), 0).member("hello")(42) === true;
+var x = new new new (f(_a || (_a = __getTemplateObject(["abc", "def"], ["abc", "def"])), 0).member)("hello")(42) === true;
 var _a;

@@ -1,1 +1,1 @@
-new f().x
+new (f().x)
