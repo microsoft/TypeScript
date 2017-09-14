@@ -149,6 +149,11 @@ namespace ts.refactor.extractMethod {
     // exported only for tests
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
         const length = span.length || 0;
+
+        if (length === 0) {
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.StatementOrExpressionExpected)] };
+        }
+
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
         let start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
@@ -855,6 +860,7 @@ namespace ts.refactor.extractMethod {
             return { body: createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
         }
         let returnValueProperty: string;
+        let ignoreReturns = false;
         const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : createReturn(<Expression>body)]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (writes || substitutions.size) {
@@ -877,7 +883,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.kind === SyntaxKind.ReturnStatement && writes) {
+            if (!ignoreReturns && node.kind === SyntaxKind.ReturnStatement && writes) {
                 const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWrites(writes);
                 if ((<ReturnStatement>node).expression) {
                     if (!returnValueProperty) {
@@ -893,8 +899,12 @@ namespace ts.refactor.extractMethod {
                 }
             }
             else {
+                const oldIgnoreReturns = ignoreReturns;
+                ignoreReturns = ignoreReturns || isFunctionLike(node) || isClassLike(node);
                 const substitution = substitutions.get(getNodeId(node).toString());
-                return substitution || visitEachChild(node, visitor, nullTransformationContext);
+                const result = substitution || visitEachChild(node, visitor, nullTransformationContext);
+                ignoreReturns = oldIgnoreReturns;
+                return result;
             }
         }
     }
@@ -1161,7 +1171,11 @@ namespace ts.refactor.extractMethod {
         }
 
         function recordUsagebySymbol(identifier: Identifier, usage: Usage, isTypeName: boolean) {
-            const symbol = checker.getSymbolAtLocation(identifier);
+            // If the identifier is both a property name and its value, we're only interested in its value
+            // (since the name is a declaration and will be included in the extracted range).
+            const symbol = identifier.parent && isShorthandPropertyAssignment(identifier.parent) && identifier.parent.name === identifier
+                ? checker.getShorthandAssignmentValueSymbol(identifier.parent)
+                : checker.getSymbolAtLocation(identifier);
             if (!symbol) {
                 // cannot find symbol - do nothing
                 return undefined;
@@ -1218,7 +1232,11 @@ namespace ts.refactor.extractMethod {
                         substitutionsPerScope[i].set(symbolId, substitution);
                     }
                     else if (isTypeName) {
-                        errorsPerScope[i].push(createDiagnosticForNode(identifier, Messages.TypeWillNotBeVisibleInTheNewScope));
+                        // If the symbol is a type parameter that won't be in scope, we'll pass it as a type argument
+                        // so there's no problem.
+                        if (!(symbol.flags & SymbolFlags.TypeParameter)) {
+                            errorsPerScope[i].push(createDiagnosticForNode(identifier, Messages.TypeWillNotBeVisibleInTheNewScope));
+                        }
                     }
                     else {
                         usagesPerScope[i].usages.set(identifier.text as string, { usage, symbol, node: identifier });

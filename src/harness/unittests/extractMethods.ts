@@ -404,6 +404,12 @@ function test(x: number) {
             "Cannot extract range containing conditional break or continue statements."
         ]);
 
+        testExtractRangeFailed("extractRangeFailed9",
+        `var x = ([#||]1 + 2);`,
+        [
+            "Statement or expression expected."
+        ]);
+
         testExtractMethod("extractMethod1",
             `namespace A {
     let x = 1;
@@ -709,6 +715,57 @@ function M3() { }`);
     }
     M3() { }
     constructor() { }
+}`);
+        // Shorthand property names
+        testExtractMethod("extractMethod29",
+            `interface UnaryExpression {
+    kind: "Unary";
+    operator: string;
+    operand: any;
+}
+
+function parseUnaryExpression(operator: string): UnaryExpression {
+    [#|return {
+        kind: "Unary",
+        operator,
+        operand: parsePrimaryExpression(),
+    };|]
+}
+
+function parsePrimaryExpression(): any {
+    throw "Not implemented";
+}`);
+        // Type parameter as declared type
+        testExtractMethod("extractMethod30",
+            `function F<T>() {
+    [#|let t: T;|]
+}`);
+        // Return in nested function
+        testExtractMethod("extractMethod31",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        var f: () => number;
+        [#|f = function (): number {
+            return value;
+        }|]
+    }
+}`);
+        // Return in nested class
+        testExtractMethod("extractMethod32",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        [#|var c = class {
+            M() {
+                return value;
+            }
+        }|]
+    }
 }`);
     });
 
