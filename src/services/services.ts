@@ -672,7 +672,7 @@ namespace ts {
                         if (!hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                             break;
                         }
-                        // falls through
+                    // falls through
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
                         const decl = <VariableDeclaration>node;
@@ -684,7 +684,7 @@ namespace ts {
                             visit(decl.initializer);
                         }
                     }
-                        // falls through
+                    // falls through
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -737,7 +737,7 @@ namespace ts {
 
     class SourceMapSourceObject implements SourceMapSource {
         lineMap: number[];
-        constructor (public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
+        constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
 
         public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
             return ts.getLineAndCharacterOfPosition(this, pos);
@@ -1532,7 +1532,21 @@ namespace ts {
 
         function getReferences(fileName: string, position: number, options?: FindAllReferences.Options) {
             synchronizeHostData();
-            return FindAllReferences.findReferencedEntries(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, options);
+
+            // Exclude default library when renaming as commonly user don't want to change that file.
+            let sourceFiles: SourceFile[] = [];
+            if (options && options.isForRename) {
+                for (const sourceFile of program.getSourceFiles()) {
+                    if (!program.isSourceFileDefaultLibrary(sourceFile)) {
+                        sourceFiles.push(sourceFile);
+                    }
+                }
+            }
+            else {
+                sourceFiles = program.getSourceFiles().slice();
+            }
+
+            return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] {
@@ -2132,7 +2146,7 @@ namespace ts {
             isLiteralComputedPropertyDeclarationName(node);
     }
 
-    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {
+    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
         switch (node.kind) {
             case SyntaxKind.JsxAttribute:
             case SyntaxKind.JsxSpreadAttribute:
@@ -2157,7 +2171,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
                     return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
-                // falls through
+            // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
