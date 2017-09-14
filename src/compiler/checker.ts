@@ -17998,9 +17998,17 @@ namespace ts {
             return false;
         }
 
+        function isDiscriminantPropertyAssignment(node: Node) {
+            if (node && node.kind === SyntaxKind.PropertyAssignment) {
+                const assignment = node as PropertyAssignment;
+                return isIdentifier(assignment.name) && isDiscriminantProperty(getContextualType(node.parent as ObjectLiteralExpression), assignment.name.escapedText);
+            }
+        }
+
         function checkExpressionForMutableLocation(node: Expression, checkMode?: CheckMode): Type {
             const type = checkExpression(node, checkMode);
-            return isTypeAssertion(node) || isLiteralContextualType(getContextualType(node)) ? type : getWidenedLiteralType(type);
+            return isTypeAssertion(node) || isLiteralContextualType(getContextualType(node) ) || isDiscriminantPropertyAssignment(node.parent) ?
+                type : getWidenedLiteralType(type);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
