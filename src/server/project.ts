@@ -543,33 +543,32 @@ namespace ts.server {
                 this.cachedUnresolvedImportsPerFile.remove(file);
             }
 
-            // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
-            // (can reuse cached imports for files that were not changed)
-            // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
-            // (can reuse cached imports for files that were not changed)
-            // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            let unresolvedImports: SortedReadonlyArray<string>;
-            if (hasChanges || changedFiles.length) {
-                const result: string[] = [];
-                for (const sourceFile of this.program.getSourceFiles()) {
-                    this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
-                }
-                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
-            }
-            unresolvedImports = this.lastCachedUnresolvedImportsList;
-
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, unresolvedImports, hasChanges);
-            if (this.setTypings(cachedTypings)) {
-                hasChanges = this.updateGraphWorker() || hasChanges;
-            }
-
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
             if (this.languageServiceEnabled) {
+                // 1. no changes in structure, no changes in unresolved imports - do nothing
+                // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
+                // (can reuse cached imports for files that were not changed)
+                // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
+                // (can reuse cached imports for files that were not changed)
+                // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
+                if (hasChanges || changedFiles.length) {
+                    const result: string[] = [];
+                    for (const sourceFile of this.program.getSourceFiles()) {
+                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                    }
+                    this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
+                }
+
+                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
+                if (this.setTypings(cachedTypings)) {
+                    hasChanges = this.updateGraphWorker() || hasChanges;
+                }
+
                 this.builder.onProjectUpdateGraph();
             }
             else {
+                this.lastCachedUnresolvedImportsList = undefined;
                 this.builder.clear();
             }
 
