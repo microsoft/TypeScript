@@ -1202,7 +1202,7 @@ namespace ts {
         return false;
     }
 
-    export function isPartOfExpression(node: Node): boolean {
+    export function isExpressionNode(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
@@ -1298,7 +1298,7 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     default:
-                        if (isPartOfExpression(parent)) {
+                        if (isExpressionNode(parent)) {
                             return true;
                         }
                 }
@@ -5176,7 +5176,7 @@ namespace ts {
     /* @internal */
     /**
      * Determines whether a node is an expression based only on its kind.
-     * Use `isPartOfExpression` if not in transforms.
+     * Use `isExpressionNode` if not in transforms.
      */
     export function isExpression(node: Node): node is Expression {
         return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);

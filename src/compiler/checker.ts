@@ -6514,7 +6514,7 @@ namespace ts {
                 if (!node) return false;
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        return (<Identifier>node).escapedText === "arguments" && isPartOfExpression(node);
+                        return (<Identifier>node).escapedText === "arguments" && isExpressionNode(node);
 
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.MethodDeclaration:
@@ -12128,7 +12128,7 @@ namespace ts {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
-                if (isPartOfExpression(location) && !isAssignmentTarget(location)) {
+                if (isExpressionNode(location) && !isAssignmentTarget(location)) {
                     const type = getTypeOfExpression(<Expression>location);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                         return type;
@@ -14775,7 +14775,7 @@ namespace ts {
                         // We might be in `a = { b: this.b }`, so keep looking. See `tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts`.
                         return false;
                     default:
-                        return isPartOfExpression(node) ? false : "quit";
+                        return isExpressionNode(node) ? false : "quit";
                 }
             });
         }
@@ -22949,7 +22949,7 @@ namespace ts {
                 return typeParameter && typeParameter.symbol;
             }
 
-            if (isPartOfExpression(entityName)) {
+            if (isExpressionNode(entityName)) {
                 if (nodeIsMissing(entityName)) {
                     // Missing entity name.
                     return undefined;
@@ -23044,7 +23044,7 @@ namespace ts {
                     // falls through
 
                 case SyntaxKind.SuperKeyword:
-                    const type = isPartOfExpression(node) ? getTypeOfExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
+                    const type = isExpressionNode(node) ? getTypeOfExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
                     return type.symbol;
 
                 case SyntaxKind.ThisType:
@@ -23121,7 +23121,7 @@ namespace ts {
                 return typeFromTypeNode;
             }
 
-            if (isPartOfExpression(node)) {
+            if (isExpressionNode(node)) {
                 return getRegularTypeOfExpression(<Expression>node);
             }
 

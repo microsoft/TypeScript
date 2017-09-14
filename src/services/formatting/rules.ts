@@ -850,7 +850,7 @@ namespace ts.formatting {
         }
 
         static NodeIsInDecoratorContext(node: Node): boolean {
-            while (isPartOfExpression(node)) {
+            while (isExpressionNode(node)) {
                 node = node.parent;
             }
             return node.kind === SyntaxKind.Decorator;
