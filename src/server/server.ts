@@ -433,23 +433,25 @@ namespace ts.server {
                 return;
             }
 
-            if (this.activeRequestCount > 0) {
-                this.activeRequestCount--;
-            }
-            else {
-                Debug.fail("Received too many responses");
-            }
-
-            while (this.requestQueue.length > 0) {
-                const queuedRequest = this.requestQueue.shift();
-                if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
-                    this.requestMap.delete(queuedRequest.operationId);
-                    this.scheduleRequest(queuedRequest);
-                    break;
+            if (response.kind === ActionSet) {
+                if (this.activeRequestCount > 0) {
+                    this.activeRequestCount--;
+                }
+                else {
+                    Debug.fail("Received too many responses");
                 }
 
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                while (this.requestQueue.length > 0) {
+                    const queuedRequest = this.requestQueue.shift();
+                    if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
+                        this.requestMap.delete(queuedRequest.operationId);
+                        this.scheduleRequest(queuedRequest);
+                        break;
+                    }
+
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                    }
                 }
             }
 
