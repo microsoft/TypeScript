@@ -1,0 +1,47 @@
+=== tests/cases/compiler/narrowContextualTypeOfObjectLiteral.ts ===
+interface X {
+>X : X
+
+    type: 'x';
+>type : "x"
+
+    value: 1 | 2 | 3;
+>value : 1 | 2 | 3
+
+    xtra: number;
+>xtra : number
+}
+
+interface Y {
+>Y : Y
+
+    type: 'y';
+>type : "y"
+
+    value: 11 | 12 | 13;
+>value : 11 | 12 | 13
+
+    ytra: number;
+>ytra : number
+}
+
+let resa: X | Y = {
+>resa : X | Y
+>X : X
+>Y : Y
+>{    type: 'y',    value: 11,    ytra: 12} : { type: "y"; value: 11; ytra: number; }
+
+    type: 'y',
+>type : string
+>'y' : "y"
+
+    value: 11,
+>value : number
+>11 : 11
+
+    ytra: 12
+>ytra : number
+>12 : 12
+
+};
+
