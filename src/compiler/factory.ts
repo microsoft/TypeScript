@@ -3803,15 +3803,15 @@ namespace ts {
      * @param expression The Expression node.
      */
     export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        switch (emittedExpression.kind) {
+        const leftmostExpr = getLeftmostExpression(expression, /*stopAtCallExpressions*/ true);
+        switch (leftmostExpr.kind) {
             case SyntaxKind.CallExpression:
                 return createParen(expression);
 
             case SyntaxKind.NewExpression:
-                return (<NewExpression>emittedExpression).arguments
-                    ? <LeftHandSideExpression>expression
-                    : createParen(expression);
+                return !(leftmostExpr as NewExpression).arguments
+                    ? createParen(expression)
+                    : <LeftHandSideExpression>expression;
         }
 
         return parenthesizeForAccess(expression);
@@ -3892,7 +3892,7 @@ namespace ts {
             }
         }
         else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
+            const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
             if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
                 return setTextRange(createParen(expression), expression);
             }
@@ -3939,7 +3939,7 @@ namespace ts {
         }
     }
 
-    function getLeftmostExpression(node: Expression): Expression {
+    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
@@ -3955,6 +3955,9 @@ namespace ts {
                     continue;
 
                 case SyntaxKind.CallExpression:
+                    if (stopAtCallExpressions) {
+                        return node;
+                    }
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
@@ -3967,10 +3970,11 @@ namespace ts {
 
             return node;
         }
+
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && getLeftmostExpression(body).kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
             return setTextRange(createParen(<Expression>body), body);
         }
 
