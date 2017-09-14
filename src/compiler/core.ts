@@ -2245,10 +2245,6 @@ namespace ts {
         return deduplicate([...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)]);
     }
 
-    export function hasJsonFileExtension(fileName: string) {
-        return fileExtensionIs(fileName, Extension.Json);
-    }
-
     export function hasJavaScriptFileExtension(fileName: string) {
         return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
