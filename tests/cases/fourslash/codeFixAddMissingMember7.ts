@@ -13,5 +13,4 @@ verify.getAndApplyCodeFix(/*errorCode*/ undefined, /*index*/ 2)
 verify.currentFileContentIs(`class C {
     static p = ()=>{ this.foo === 10 };
 }
-C.foo = undefined;
-`);
+C.foo = undefined;` + "\r\n"); // TODO: GH#18445

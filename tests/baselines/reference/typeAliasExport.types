@@ -2,7 +2,9 @@
 declare module "a" {
 >"a" : typeof "a"
 
-  export default 0
+  export default undefined
+>undefined : undefined
+
   export var a;
 >a : any
 

@@ -1049,7 +1049,7 @@ namespace ts {
 
     export interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
-        literal: Expression;
+        literal: BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     }
 
     export interface StringLiteral extends LiteralExpression {
@@ -2513,6 +2513,8 @@ namespace ts {
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        /* @internal */ isSourceFileDefaultLibrary(file: SourceFile): boolean;
+
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
 
@@ -2703,7 +2705,8 @@ namespace ts {
          * So for `{ a } | { b }`, this will include both `a` and `b`.
          * Does not include properties of primitive types.
          */
-        /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
+        /* @internal */ isArrayLikeType(type: Type): boolean;
+        /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
     }
@@ -3216,6 +3219,7 @@ namespace ts {
         /* @internal */
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral,
+        Unit = Literal | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,

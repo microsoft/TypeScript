@@ -978,7 +978,7 @@ namespace ts.Completions {
                 isNewIdentifierLocation = true;
                 const typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
                 if (!typeForObject) return false;
-                typeMembers = typeChecker.getAllPossiblePropertiesOfType(typeForObject);
+                typeMembers = getPropertiesForCompletion(typeForObject, typeChecker);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
             }
             else {
@@ -1765,5 +1765,21 @@ namespace ts.Completions {
             default:
                 return node.parent;
         }
+    }
+
+    /**
+     * Gets all properties on a type, but if that type is a union of several types,
+     * tries to only include those types which declare properties, not methods.
+     * This ensures that we don't try providing completions for all the methods on e.g. Array.
+     */
+    function getPropertiesForCompletion(type: Type, checker: TypeChecker): Symbol[] {
+        if (!(type.flags & TypeFlags.Union)) {
+            return checker.getPropertiesOfType(type);
+        }
+
+        const { types } = type as UnionType;
+        const filteredTypes = types.filter(memberType => !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType)));
+        // If there are no property-only types, just provide completions for every type as usual.
+        return checker.getAllPossiblePropertiesOfTypes(filteredTypes);
     }
 }

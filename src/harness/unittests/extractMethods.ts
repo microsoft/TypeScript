@@ -410,6 +410,8 @@ function test(x: number) {
             "Statement or expression expected."
         ]);
 
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single token."]);
+
         testExtractMethod("extractMethod1",
             `namespace A {
     let x = 1;

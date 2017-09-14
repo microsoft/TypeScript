@@ -500,7 +500,8 @@ namespace Harness {
     export let IO: IO;
 
     // harness always uses one kind of new line
-    const harnessNewLine = "\r\n";
+    // But note that `parseTestData` in `fourslash.ts` uses "\n"
+    export const harnessNewLine = "\r\n";
 
     // Root for file paths that are stored in a virtual file system
     export const virtualFileSystemRoot = "/";
