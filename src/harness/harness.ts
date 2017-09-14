@@ -2072,8 +2072,8 @@ namespace Harness {
             const writtenFiles = ts.createMap<true>();
             const canonicalize = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
             /* tslint:disable-next-line:no-null-keyword */
+            const errors: Error[] = [];
             if (gen !== null) {
-                const errors: Error[] = [];
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
@@ -2089,10 +2089,6 @@ namespace Harness {
                     }
                     const path = ts.toPath(relativeFileName, "", canonicalize);
                     writtenFiles.set(path, true);
-                }
-
-                if (errors.length) {
-                    throw new Error(`The baseline for ${relativeFileBase} has changed:${"\n    " + errors.map(e => e.message).join("\n    ")}`);
                 }
             }
 
@@ -2114,7 +2110,20 @@ namespace Harness {
                 for (const file of missing) {
                     IO.writeFile(localPath(file + ".delete", opts && opts.Baselinefolder, opts && opts.Subfolder), "");
                 }
-                throw new Error(`Baseline missing files:${"\n    " + missing.join("\n    ") + "\n"}Written:${"\n    " + ts.arrayFrom(writtenFiles.keys()).join("\n    ")}`);
+            }
+
+            if (errors.length || missing.length) {
+                let errorMsg = "";
+                if (errors.length) {
+                    errorMsg += `The baseline for ${relativeFileBase} has changed:${"\n    " + errors.map(e => e.message).join("\n    ")}`;
+                }
+                if (errors.length && missing.length) {
+                    errorMsg += "\n";
+                }
+                if (missing.length) {
+                    errorMsg += `Baseline missing files:${"\n    " + missing.join("\n    ") + "\n"}Written:${"\n    " + ts.arrayFrom(writtenFiles.keys()).join("\n    ")}`;
+                }
+                throw new Error(errorMsg);
             }
         }
     }
