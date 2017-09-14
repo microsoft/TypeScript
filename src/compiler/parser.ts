@@ -5097,6 +5097,9 @@ namespace ts {
             const decorators = parseDecorators();
             const modifiers = parseModifiers();
             if (modifiers && modifiers.some(m => m.kind === SyntaxKind.DeclareKeyword)) {
+                for (const m of modifiers) {
+                    m.flags |= NodeFlags.Ambient;
+                }
                 return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(fullStart, decorators, modifiers));
             }
             else {

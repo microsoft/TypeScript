@@ -41,6 +41,7 @@ namespace ts {
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
         node.parent = parent;
+        node.flags = parent.flags & NodeFlags.ContextFlags;
         return node;
     }
 
