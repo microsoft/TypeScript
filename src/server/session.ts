@@ -1010,7 +1010,8 @@ namespace ts.server {
 
         private getOutliningSpans(args: protocol.FileAndSizeRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            return project.getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file, args.size);
+            const size = args.size || 200000; // check due to protocol change
+            return project.getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file, size);
         }
 
         private getTodoComments(args: protocol.TodoCommentRequestArgs) {
