@@ -432,9 +432,6 @@ namespace ts.server {
                 if (this.activeRequestCount > 0) {
                     this.activeRequestCount--;
                 }
-                else {
-                    Debug.fail("Received too many responses");
-                }
 
                 while (this.requestQueue.length > 0) {
                     const queuedRequest = this.requestQueue.shift();
