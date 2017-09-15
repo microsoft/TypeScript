@@ -7846,7 +7846,6 @@ namespace ts {
          * and right = the new element to be spread.
          */
         function getSpreadType(left: Type, right: Type): Type {
-            let truthyRight: Type;
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -7860,16 +7859,13 @@ namespace ts {
                 return mapType(left, t => getSpreadType(t, right));
             }
             if (right.flags & TypeFlags.Union) {
-                truthyRight = getTruthyTypeFromFalsyUnion(right as UnionType);
-                if (!truthyRight || truthyRight.flags & TypeFlags.Union) {
-                    return mapType(right, t => getSpreadType(left, t));
-                }
-                else {
-                    right = truthyRight;
-                }
+                return mapType(right, t => getSpreadType(left, t));
             }
-            if (right.flags & (TypeFlags.NonPrimitive | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike)) {
-                return emptyObjectType;
+            if (right.flags & TypeFlags.NonPrimitive) {
+                return nonPrimitiveType;
+            }
+            if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike)) {
+                return left;
             }
 
             const members = createSymbolTable();
@@ -7893,7 +7889,7 @@ namespace ts {
                     skippedPrivateMembers.set(rightProp.escapedName, true);
                 }
                 else if (!isClassMethod(rightProp) && !isSetterWithoutGetter) {
-                    members.set(rightProp.escapedName, getSymbolOfSpreadProperty(rightProp, !!truthyRight));
+                    members.set(rightProp.escapedName, getNonReadonlySymbol(rightProp));
                 }
             }
 
@@ -7918,22 +7914,19 @@ namespace ts {
                     }
                 }
                 else {
-                    members.set(leftProp.escapedName, getSymbolOfSpreadProperty(leftProp, /*makeOptional*/ false));
+                    members.set(leftProp.escapedName, getNonReadonlySymbol(leftProp));
                 }
             }
             return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
-        function getSymbolOfSpreadProperty(prop: Symbol, makeOptional: boolean) {
-            if (!isReadonlySymbol(prop) && (!makeOptional || prop.flags & SymbolFlags.Optional)) {
+        function getNonReadonlySymbol(prop: Symbol) {
+            if (!isReadonlySymbol(prop)) {
                 return prop;
             }
-            const flags = SymbolFlags.Property | (makeOptional ? SymbolFlags.Optional : prop.flags & SymbolFlags.Optional);
+            const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
             const result = createSymbol(flags, prop.escapedName);
             result.type = getTypeOfSymbol(prop);
-            if (makeOptional) {
-                result.type = getUnionType([result.type, undefinedType]);
-            }
             result.declarations = prop.declarations;
             result.syntheticOrigin = prop;
             return result;
@@ -7941,13 +7934,6 @@ namespace ts {
 
         function isClassMethod(prop: Symbol) {
             return prop.flags & SymbolFlags.Method && find(prop.declarations, decl => isClassLike(decl.parent));
-        }
-
-        function getTruthyTypeFromFalsyUnion(type: UnionType): Type | undefined {
-            const truthy = removeDefinitelyFalsyTypes(type);
-            if (truthy !== type) {
-                return truthy;
-            }
         }
 
         function createLiteralType(flags: TypeFlags, value: string | number, symbol: Symbol) {
