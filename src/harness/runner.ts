@@ -19,6 +19,7 @@
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
 /// <reference path="harness.ts" />
+/// <reference path="./parallel/shared.ts" />
 
 let runners: RunnerBase[] = [];
 let iterations = 1;
@@ -59,6 +60,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
         case "test262":
             return new Test262BaselineRunner();
     }
+    ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
 
 if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
@@ -81,15 +83,17 @@ let testConfigContent =
 let taskConfigsFolder: string;
 let workerCount: number;
 let runUnitTests = true;
+let noColors = false;
 
 interface TestConfig {
     light?: boolean;
     taskConfigsFolder?: string;
+    listenForWork?: boolean;
     workerCount?: number;
     stackTraceLimit?: number | "full";
-    tasks?: TaskSet[];
     test?: string[];
     runUnitTests?: boolean;
+    noColors?: boolean;
 }
 
 interface TaskSet {
@@ -97,138 +101,122 @@ interface TaskSet {
     files: string[];
 }
 
-if (testConfigContent !== "") {
-    const testConfig = <TestConfig>JSON.parse(testConfigContent);
-    if (testConfig.light) {
-        Harness.lightMode = true;
-    }
-    if (testConfig.taskConfigsFolder) {
-        taskConfigsFolder = testConfig.taskConfigsFolder;
-    }
-    if (testConfig.runUnitTests !== undefined) {
-        runUnitTests = testConfig.runUnitTests;
-    }
-    if (testConfig.workerCount) {
-        workerCount = testConfig.workerCount;
-    }
-    if (testConfig.tasks) {
-        for (const taskSet of testConfig.tasks) {
-            const runner = createRunner(taskSet.runner);
-            for (const file of taskSet.files) {
-                runner.addTest(file);
-            }
-            runners.push(runner);
+function handleTestConfig() {
+    if (testConfigContent !== "") {
+        const testConfig = <TestConfig>JSON.parse(testConfigContent);
+        if (testConfig.light) {
+            Harness.lightMode = true;
         }
-    }
-
-    if (testConfig.stackTraceLimit === "full") {
-        (<any>Error).stackTraceLimit = Infinity;
-    }
-    else if ((+testConfig.stackTraceLimit | 0) > 0) {
-        (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
-    }
-
-    if (testConfig.test && testConfig.test.length > 0) {
-        for (const option of testConfig.test) {
-            if (!option) {
-                continue;
-            }
-
-            switch (option) {
-                case "compiler":
-                    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
-                    runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
-                    runners.push(new ProjectRunner());
-                    break;
-                case "conformance":
-                    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
-                    break;
-                case "project":
-                    runners.push(new ProjectRunner());
-                    break;
-                case "fourslash":
-                    runners.push(new FourSlashRunner(FourSlashTestType.Native));
-                    break;
-                case "fourslash-shims":
-                    runners.push(new FourSlashRunner(FourSlashTestType.Shims));
-                    break;
-                case "fourslash-shims-pp":
-                    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
-                    break;
-                case "fourslash-server":
-                    runners.push(new FourSlashRunner(FourSlashTestType.Server));
-                    break;
-                case "fourslash-generated":
-                    runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
-                    break;
-                case "rwc":
-                    runners.push(new RWCRunner());
-                    break;
-                case "test262":
-                    runners.push(new Test262BaselineRunner());
-                    break;
-            }
+        if (testConfig.runUnitTests !== undefined) {
+            runUnitTests = testConfig.runUnitTests;
         }
-    }
-}
+        if (testConfig.workerCount) {
+            workerCount = +testConfig.workerCount;
+        }
+        if (testConfig.taskConfigsFolder) {
+            taskConfigsFolder = testConfig.taskConfigsFolder;
+        }
+        if (testConfig.noColors !== undefined) {
+            noColors = testConfig.noColors;
+        }
 
-if (runners.length === 0) {
-    // compiler
-    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
-    runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
+        if (testConfig.stackTraceLimit === "full") {
+            (<any>Error).stackTraceLimit = Infinity;
+        }
+        else if ((+testConfig.stackTraceLimit | 0) > 0) {
+            (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
+        }
+        if (testConfig.listenForWork) {
+            return true;
+        }
 
-    // TODO: project tests don't work in the browser yet
-    if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
-        runners.push(new ProjectRunner());
-    }
+        if (testConfig.test && testConfig.test.length > 0) {
+            for (const option of testConfig.test) {
+                if (!option) {
+                    continue;
+                }
 
-    // language services
-    runners.push(new FourSlashRunner(FourSlashTestType.Native));
-    runners.push(new FourSlashRunner(FourSlashTestType.Shims));
-    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
-    runners.push(new FourSlashRunner(FourSlashTestType.Server));
-    // runners.push(new GeneratedFourslashRunner());
-}
-
-if (taskConfigsFolder) {
-    // this instance of mocha should only partition work but not run actual tests
-    runUnitTests = false;
-    const workerConfigs: TestConfig[] = [];
-    for (let i = 0; i < workerCount; i++) {
-        // pass light mode settings to workers
-        workerConfigs.push({ light: Harness.lightMode, tasks: [] });
-    }
-
-    for (const runner of runners) {
-        const files = runner.enumerateTestFiles();
-        const chunkSize = Math.floor(files.length / workerCount) + 1; // add extra 1 to prevent missing tests due to rounding
-        for (let i = 0; i < workerCount; i++) {
-            const startPos = i * chunkSize;
-            const len = Math.min(chunkSize, files.length - startPos);
-            if (len > 0) {
-                workerConfigs[i].tasks.push({
-                    runner: runner.kind(),
-                    files: files.slice(startPos, startPos + len)
-                });
+                switch (option) {
+                    case "compiler":
+                        runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+                        runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
+                        runners.push(new ProjectRunner());
+                        break;
+                    case "conformance":
+                        runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+                        break;
+                    case "project":
+                        runners.push(new ProjectRunner());
+                        break;
+                    case "fourslash":
+                        runners.push(new FourSlashRunner(FourSlashTestType.Native));
+                        break;
+                    case "fourslash-shims":
+                        runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+                        break;
+                    case "fourslash-shims-pp":
+                        runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
+                        break;
+                    case "fourslash-server":
+                        runners.push(new FourSlashRunner(FourSlashTestType.Server));
+                        break;
+                    case "fourslash-generated":
+                        runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
+                        break;
+                    case "rwc":
+                        runners.push(new RWCRunner());
+                        break;
+                    case "test262":
+                        runners.push(new Test262BaselineRunner());
+                        break;
+                }
             }
         }
     }
 
-    for (let i = 0; i < workerCount; i++) {
-        const config = workerConfigs[i];
-        // use last worker to run unit tests if we're not just running a single specific runner
-        config.runUnitTests = runners.length !== 1 && i === workerCount - 1;
-        Harness.IO.writeFile(ts.combinePaths(taskConfigsFolder, `task-config${i}.json`), JSON.stringify(workerConfigs[i]));
+    if (runners.length === 0) {
+        // compiler
+        runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+        runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
+
+        // TODO: project tests don"t work in the browser yet
+        if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
+            runners.push(new ProjectRunner());
+        }
+
+        // language services
+        runners.push(new FourSlashRunner(FourSlashTestType.Native));
+        runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+        runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
+        runners.push(new FourSlashRunner(FourSlashTestType.Server));
+        // runners.push(new GeneratedFourslashRunner());
     }
 }
-else {
+
+function beginTests() {
     if (ts.Debug.isDebugging) {
         ts.Debug.enableDebugInfo();
     }
 
     runTests(runners);
+
+    if (!runUnitTests) {
+        // patch `describe` to skip unit tests
+        describe = ts.noop as any;
+    }
 }
-if (!runUnitTests) {
-    // patch `describe` to skip unit tests
-    describe = ts.noop as any;
+
+function startTestEnvironment() {
+    const isWorker = handleTestConfig();
+    if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
+        if (isWorker) {
+            return Harness.Parallel.Worker.start();
+        }
+        else if (taskConfigsFolder && workerCount && workerCount > 1) {
+            return Harness.Parallel.Host.start();
+        }
+    }
+    beginTests();
 }
+
+startTestEnvironment();

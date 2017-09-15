@@ -1253,57 +1253,60 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
-                const parent = node.parent;
-                switch (parent.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.BindingElement:
-                        return (<VariableLikeDeclaration>parent).initializer === node;
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.ThrowStatement:
-                        return (<ExpressionStatement>parent).expression === node;
-                    case SyntaxKind.ForStatement:
-                        const forStatement = <ForStatement>parent;
-                        return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forStatement.condition === node ||
-                            forStatement.incrementor === node;
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                        const forInStatement = <ForInStatement | ForOfStatement>parent;
-                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                            forInStatement.expression === node;
-                    case SyntaxKind.TypeAssertionExpression:
-                    case SyntaxKind.AsExpression:
-                        return node === (<AssertionExpression>parent).expression;
-                    case SyntaxKind.TemplateSpan:
-                        return node === (<TemplateSpan>parent).expression;
-                    case SyntaxKind.ComputedPropertyName:
-                        return node === (<ComputedPropertyName>parent).expression;
-                    case SyntaxKind.Decorator:
-                    case SyntaxKind.JsxExpression:
-                    case SyntaxKind.JsxSpreadAttribute:
-                    case SyntaxKind.SpreadAssignment:
-                        return true;
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
-                    default:
-                        if (isPartOfExpression(parent)) {
-                            return true;
-                        }
-                }
+                return isInExpressionContext(node);
+            default:
+                return false;
         }
-        return false;
+    }
+
+    export function isInExpressionContext(node: Node): boolean {
+        const parent = node.parent;
+        switch (parent.kind) {
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.BindingElement:
+                return (<VariableLikeDeclaration>parent).initializer === node;
+            case SyntaxKind.ExpressionStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ReturnStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.ThrowStatement:
+                return (<ExpressionStatement>parent).expression === node;
+            case SyntaxKind.ForStatement:
+                const forStatement = <ForStatement>parent;
+                return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                    forStatement.condition === node ||
+                    forStatement.incrementor === node;
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+                const forInStatement = <ForInStatement | ForOfStatement>parent;
+                return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                    forInStatement.expression === node;
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+                return node === (<AssertionExpression>parent).expression;
+            case SyntaxKind.TemplateSpan:
+                return node === (<TemplateSpan>parent).expression;
+            case SyntaxKind.ComputedPropertyName:
+                return node === (<ComputedPropertyName>parent).expression;
+            case SyntaxKind.Decorator:
+            case SyntaxKind.JsxExpression:
+            case SyntaxKind.JsxSpreadAttribute:
+            case SyntaxKind.SpreadAssignment:
+                return true;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+            default:
+                return isPartOfExpression(parent);
+        }
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node) {
