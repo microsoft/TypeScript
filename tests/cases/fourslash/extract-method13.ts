@@ -5,7 +5,7 @@
 
 //// class C {
 ////     static j = /*c*/1 + 1/*d*/;
-////     constructor(q: string = /*a*/"a" + "b"/*b*/) {
+////     constructor(q: string = /*a*/"hello"/*b*/) {
 ////     }
 //// }
 
@@ -21,7 +21,7 @@ edit.applyRefactor({
     }
 
     private static newFunction(): string {
-        return "a" + "b";
+        return "hello";
     }
 }`
 });
@@ -42,7 +42,7 @@ edit.applyRefactor({
     }
 
     private static newFunction(): string {
-        return "a" + "b";
+        return "hello";
     }
 }`
 });
