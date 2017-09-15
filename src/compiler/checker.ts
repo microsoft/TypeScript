@@ -7822,6 +7822,7 @@ namespace ts {
          * and right = the new element to be spread.
          */
         function getSpreadType(left: Type, right: Type): Type {
+            let truthyRight: Type;
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -7832,25 +7833,18 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                // if the union is `false | T` make all the properties of T optional
-                const wl = getPartialTypeFromFalsyUnion(left as UnionType);
-                if (wl) {
-                    left = wl;
-                }
-                else {
-                    return mapType(left, t => getSpreadType(t, right));
-                }
+                return mapType(left, t => getSpreadType(t, right));
             }
             if (right.flags & TypeFlags.Union) {
-                const wr = getPartialTypeFromFalsyUnion(right as UnionType);
-                if (wr) {
-                    right = wr;
-                }
-                else {
+                truthyRight = getTruthyTypeFromFalsyUnion(right as UnionType);
+                if (!truthyRight || truthyRight.flags & TypeFlags.Union) {
                     return mapType(right, t => getSpreadType(left, t));
                 }
+                else {
+                    right = truthyRight;
+                }
             }
-            if (right.flags & (TypeFlags.NonPrimitive | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike)) {
+            if (right.flags & (TypeFlags.NonPrimitive | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike)) {
                 return emptyObjectType;
             }
 
@@ -7875,9 +7869,10 @@ namespace ts {
                     skippedPrivateMembers.set(rightProp.escapedName, true);
                 }
                 else if (!isClassMethod(rightProp) && !isSetterWithoutGetter) {
-                    members.set(rightProp.escapedName, getNonReadonlySymbol(rightProp));
+                    members.set(rightProp.escapedName, getSymbolOfSpreadProperty(rightProp, !!truthyRight));
                 }
             }
+
             for (const leftProp of getPropertiesOfType(left)) {
                 if (leftProp.flags & SymbolFlags.SetAccessor && !(leftProp.flags & SymbolFlags.GetAccessor)
                     || skippedPrivateMembers.has(leftProp.escapedName)
@@ -7899,19 +7894,22 @@ namespace ts {
                     }
                 }
                 else {
-                    members.set(leftProp.escapedName, getNonReadonlySymbol(leftProp));
+                    members.set(leftProp.escapedName, getSymbolOfSpreadProperty(leftProp, /*makeOptional*/ false));
                 }
             }
             return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
-        function getNonReadonlySymbol(prop: Symbol) {
-            if (!isReadonlySymbol(prop)) {
+        function getSymbolOfSpreadProperty(prop: Symbol, makeOptional: boolean) {
+            if (!isReadonlySymbol(prop) && (!makeOptional || prop.flags & SymbolFlags.Optional)) {
                 return prop;
             }
-            const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
+            const flags = SymbolFlags.Property | (makeOptional ? SymbolFlags.Optional : prop.flags & SymbolFlags.Optional);
             const result = createSymbol(flags, prop.escapedName);
             result.type = getTypeOfSymbol(prop);
+            if (makeOptional) {
+                result.type = getUnionType([result.type, undefinedType]);
+            }
             result.declarations = prop.declarations;
             result.syntheticOrigin = prop;
             return result;
@@ -7921,25 +7919,10 @@ namespace ts {
             return prop.flags & SymbolFlags.Method && find(prop.declarations, decl => isClassLike(decl.parent));
         }
 
-        function getPartialTypeFromFalsyUnion(type: UnionType): Type | undefined {
-            if (type.types.length === 2) {
-                const truthy = removeDefinitelyFalsyTypes(type);
-                if (truthy !== type) {
-                    const members = createSymbolTable();
-                    for (const prop of getPropertiesOfType(truthy)) {
-                        if (prop.flags & SymbolFlags.Optional) {
-                            members.set(prop.escapedName, prop);
-                        }
-                        else {
-                            const result = createSymbol(prop.flags | SymbolFlags.Optional, prop.escapedName);
-                            result.type = getUnionType([getTypeOfSymbol(prop), undefinedType]);
-                            result.declarations = prop.declarations;
-                            result.syntheticOrigin = prop;
-                            members.set(prop.escapedName, result);
-                        }
-                    }
-                    return createAnonymousType(undefined, members, emptyArray, emptyArray, getIndexInfoOfType(truthy, IndexKind.String), getIndexInfoOfType(truthy, IndexKind.Number));
-                }
+        function getTruthyTypeFromFalsyUnion(type: UnionType): Type | undefined {
+            const truthy = removeDefinitelyFalsyTypes(type);
+            if (truthy !== type) {
+                return truthy;
             }
         }
 
@@ -13784,7 +13767,8 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.PossiblyFalsy | TypeFlags.NonPrimitive) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive) ||
+                getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
                 type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
