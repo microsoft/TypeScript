@@ -540,7 +540,7 @@ namespace ts.refactor.extractMethod {
             enclosingTextRange,
             sourceFile,
             context.program.getTypeChecker(),
-	    context.cancellationToken);
+            context.cancellationToken);
         return { scopes, readsAndWrites };
     }
 
@@ -954,7 +954,7 @@ namespace ts.refactor.extractMethod {
         enclosingTextRange: TextRange,
         sourceFile: SourceFile,
         checker: TypeChecker,
-	cancellationToken: CancellationToken): ReadsAndWrites {
+        cancellationToken: CancellationToken): ReadsAndWrites {
 
         const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
