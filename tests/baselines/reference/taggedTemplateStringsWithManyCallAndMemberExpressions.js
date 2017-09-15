@@ -17,8 +17,8 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 
 //// [taggedTemplateStringsWithManyCallAndMemberExpressions.js]
 var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
-    if (Object.freeze && Object.defineProperty) {
-        return Object.freeze(Object.defineProperty(cooked, "raw", { value: Object.freeze(raw) }));
+    if (Object.defineProperty) {
+        return Object.defineProperty(cooked, "raw", { value: raw });
     }
     cooked.raw = raw;
     return cooked;
