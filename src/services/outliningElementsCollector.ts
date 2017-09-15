@@ -3,8 +3,7 @@ namespace ts.OutliningElementsCollector {
     const collapseText = "...";
     const maxDepth = 20;
     const defaultLabel = "#region";
-    const regionStart = new RegExp("^//\\s*#region(\\s+.*)?$");
-    const regionEnd = new RegExp("^//\\s*#endregion(\\s|$)");
+    const regionMatch = new RegExp("^\\s*//\\s*(#region|#endregion)(?:\\s+(.*))?$");
 
     interface RegionRange extends TextRange {
         name?: string;
@@ -111,55 +110,31 @@ namespace ts.OutliningElementsCollector {
             return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
         }
 
-        function getRegionName(start: number, end: number) {
-            if (!isInComment(sourceFile, start)) {
-                const comment = sourceFile.text.substring(start, end).trim();
-                const result = comment.match(regionStart);
-
-                if (result && result.length > 0) {
-                    const label = result.pop();
-                    if (label) {
-                        return label.trim();
-                    }
-                    else {
-                        return defaultLabel;
-                    }
-                }
-            }
-            return "";
-        }
-
-        function isRegionEnd(start: number, end: number) {
-            if (!isInComment(sourceFile, start)) {
-                const comment = sourceFile.text.substring(start, end).trim();
-                return !!comment.match(regionEnd);
-            }
-            return false;
-        }
-
         function gatherRegions(): void {
             const lineStarts = sourceFile.getLineStarts();
 
             for (let i = 0; i < lineStarts.length; i++) {
                 const currentLineStart = lineStarts[i];
                 const lineEnd = lineStarts[i + 1] - 1 || sourceFile.getEnd();
+                const comment = sourceFile.text.substring(currentLineStart, lineEnd);
+                const result = comment.match(regionMatch);
 
-                const name = getRegionName(currentLineStart, lineEnd);
-                if (name) {
-                    const start = sourceFile.getFullText().indexOf("//", currentLineStart);
-                    const region: RegionRange = {
-                        pos: start,
-                        end: lineEnd,
-                        name,
-                    };
-                    regions.push(region);
-                }
-                else if (isRegionEnd(currentLineStart, lineEnd)) {
-                    const region = regions.pop();
-
-                    if (region) {
-                        region.end = lineEnd;
-                        addOutliningSpanRegions(region);
+                if (result && !isInComment(sourceFile, currentLineStart)) {
+                    if (result[1] === "#region") {
+                        const start = sourceFile.getFullText().indexOf("//", currentLineStart);
+                        const region: RegionRange = {
+                            pos: start,
+                            end: lineEnd,
+                            name: result[2] || defaultLabel,
+                        };
+                        regions.push(region);
+                    }
+                    else {
+                        const region = regions.pop();
+                        if (region) {
+                            region.end = lineEnd;
+                            addOutliningSpanRegions(region);
+                        }
                     }
                 }
             }

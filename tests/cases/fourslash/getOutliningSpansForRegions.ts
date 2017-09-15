@@ -5,6 +5,11 @@
 ////
 ////// #endregion|]
 ////
+////// region without label with trailing spaces
+////[|// #region  
+////
+////// #endregion|]
+////
 ////// region with label
 ////[|// #region label1
 ////
