@@ -39,12 +39,26 @@ getter.a = 12;
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
 
-// boolean && T results in Partial<T>
-function conditionalSpreadBoolean(b: boolean) : { x?: number | undefined, y?: number | undefined } {
-    return { ...b && { x: 1, y: 2 } };
+type Header = { head: string, body: string, authToken: string }
+function from16326(this: { header: Header }, header: Header, authToken: string): Header {
+    return {
+        ...this.header,
+        ...header,
+        ...authToken && { authToken }
+    }
 }
-function conditionalSpreadNumber(nt: number): { x?: number | undefined, y: number } {
+// boolean && T results in Partial<T>
+function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
     let o = { x: 12, y: 13 }
+    o = {
+        ...o,
+        ...b && { x: 14 }
+    }
+    let o2 = { ...b && { x: 21 }}
+    return o;
+}
+function conditionalSpreadNumber(nt: number): { x: number, y: number } {
+    let o = { x: 15, y: 16 }
     o = {
         ...o,
         ...nt && { x: nt }
@@ -52,8 +66,8 @@ function conditionalSpreadNumber(nt: number): { x?: number | undefined, y: numbe
     let o2 = { ...nt && { x: nt }}
     return o;
 }
-function conditionalSpreadString(st: string): { x?: string | undefined, y: number } {
-    let o = { x: 'hi', y: 13 }
+function conditionalSpreadString(st: string): { x: string, y: number } {
+    let o = { x: 'hi', y: 17 }
     o = {
         ...o,
         ...st && { x: st }
@@ -61,8 +75,6 @@ function conditionalSpreadString(st: string): { x?: string | undefined, y: numbe
     let o2 = { ...st && { x: st }}
     return o;
 }
-// other booleans result in { }
-let spreadBool = { ... true }
 
 // any results in any
 let anything: any;

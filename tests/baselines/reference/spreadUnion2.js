@@ -1,7 +1,6 @@
 //// [spreadUnion2.ts]
 declare const undefinedUnion: { a: number } | undefined;
 declare const nullUnion: { b: number } | null;
-declare const nullAndUndefinedUnion: null | undefined;
 
 var o1: { a?: number | undefined };
 var o1 = { ...undefinedUnion };
@@ -19,8 +18,6 @@ var o4 = { ...undefinedUnion, ...undefinedUnion };
 var o5: { b?: number | undefined };
 var o5 = { ...nullUnion, ...nullUnion };
 
-var o6 = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
-var o7 = { ...nullAndUndefinedUnion };
 
 
 //// [spreadUnion2.js]
@@ -43,5 +40,3 @@ var o4;
 var o4 = __assign({}, undefinedUnion, undefinedUnion);
 var o5;
 var o5 = __assign({}, nullUnion, nullUnion);
-var o6 = __assign({}, nullAndUndefinedUnion, nullAndUndefinedUnion);
-var o7 = __assign({}, nullAndUndefinedUnion);
