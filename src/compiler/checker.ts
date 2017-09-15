@@ -225,7 +225,8 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
-            getAllPossiblePropertiesOfType,
+            isArrayLikeType,
+            getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => unescapeLeadingUnderscores(getSuggestionForNonexistentProperty(node, type)),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => unescapeLeadingUnderscores(getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning)),
             getBaseConstraintOfType,
@@ -577,7 +578,7 @@ namespace ts {
 
         function cloneSymbol(symbol: Symbol): Symbol {
             const result = createSymbol(symbol.flags, symbol.escapedName);
-            result.declarations = symbol.declarations.slice(0);
+            result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
             if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
@@ -1125,6 +1126,13 @@ namespace ts {
             }
 
             if (!result) {
+                if (lastLocation) {
+                    Debug.assert(lastLocation.kind === SyntaxKind.SourceFile);
+                    if ((lastLocation as SourceFile).commonJsModuleIndicator && name === "exports") {
+                        return lastLocation.symbol;
+                    }
+                }
+
                 result = lookup(globals, name, meaning);
             }
 
@@ -5918,25 +5926,21 @@ namespace ts {
                 getPropertiesOfObjectType(type);
         }
 
-        function getAllPossiblePropertiesOfType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.Union) {
-                const props = createSymbolTable();
-                for (const memberType of (type as UnionType).types) {
-                    if (memberType.flags & TypeFlags.Primitive) {
-                        continue;
-                    }
+        function getAllPossiblePropertiesOfTypes(types: Type[]): Symbol[] {
+            const unionType = getUnionType(types);
+            if (!(unionType.flags & TypeFlags.Union)) {
+                return getPropertiesOfType(unionType);
+            }
 
-                    for (const { escapedName } of getPropertiesOfType(memberType)) {
-                        if (!props.has(escapedName)) {
-                            props.set(escapedName, createUnionOrIntersectionProperty(type as UnionType, escapedName));
-                        }
+            const props = createSymbolTable();
+            for (const memberType of types) {
+                for (const { escapedName } of getPropertiesOfType(memberType)) {
+                    if (!props.has(escapedName)) {
+                        props.set(escapedName, createUnionOrIntersectionProperty(unionType as UnionType, escapedName));
                     }
                 }
-                return arrayFrom(props.values());
             }
-            else {
-                return getPropertiesOfType(type);
-            }
+            return arrayFrom(props.values());
         }
 
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
@@ -7298,6 +7302,22 @@ namespace ts {
             return binarySearchTypes(types, type) >= 0;
         }
 
+        // Return true if the given intersection type contains (a) more than one unit type or (b) an object
+        // type and a nullable type (null or undefined).
+        function isEmptyIntersectionType(type: IntersectionType) {
+            let combined: TypeFlags = 0;
+            for (const t of type.types) {
+                if (t.flags & TypeFlags.Unit && combined & TypeFlags.Unit) {
+                    return true;
+                }
+                combined |= t.flags;
+                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function addTypeToUnion(typeSet: TypeSet, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
@@ -7311,7 +7331,11 @@ namespace ts {
                 if (flags & TypeFlags.Null) typeSet.containsNull = true;
                 if (!(flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
-            else if (!(flags & TypeFlags.Never)) {
+            else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
+                // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
+                // another form of 'never' (in that they have an empty value domain). We could in theory turn
+                // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
+                // easier to reason about their origin.
                 if (flags & TypeFlags.String) typeSet.containsString = true;
                 if (flags & TypeFlags.Number) typeSet.containsNumber = true;
                 if (flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
@@ -7994,7 +8018,7 @@ namespace ts {
             return unknownType;
         }
 
-        function getTypeFromThisTypeNode(node: TypeNode): Type {
+        function getTypeFromThisTypeNode(node: ThisExpression | ThisTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getThisType(node);
@@ -8028,7 +8052,7 @@ namespace ts {
                     return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
-                    return getTypeFromThisTypeNode(node);
+                    return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
                 case SyntaxKind.TypeReference:
@@ -10066,7 +10090,7 @@ namespace ts {
         }
 
         function isUnitType(type: Type): boolean {
-            return (type.flags & (TypeFlags.Literal | TypeFlags.Undefined | TypeFlags.Null)) !== 0;
+            return !!(type.flags & TypeFlags.Unit);
         }
 
         function isLiteralType(type: Type): boolean {
@@ -12883,7 +12907,8 @@ namespace ts {
                     }
                 }
             }
-            if (noImplicitThis || isInJavaScriptFile(func)) {
+            const inJs = isInJavaScriptFile(func);
+            if (noImplicitThis || inJs) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
                     // We have an object literal method. Check if the containing object literal has a contextual type
@@ -12910,10 +12935,20 @@ namespace ts {
                 }
                 // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
                 // contextual type for 'this' is 'obj'.
-                if (func.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>func.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    const target = (<BinaryExpression>func.parent).left;
+                const { parent } = func;
+                if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    const target = (<BinaryExpression>parent).left;
                     if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
-                        return checkExpressionCached((<PropertyAccessExpression | ElementAccessExpression>target).expression);
+                        const { expression } = target as PropertyAccessExpression | ElementAccessExpression;
+                        // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
+                        if (inJs && isIdentifier(expression)) {
+                            const sourceFile = getSourceFileOfNode(parent);
+                            if (sourceFile.commonJsModuleIndicator && getResolvedSymbol(expression) === sourceFile.symbol) {
+                                return undefined;
+                            }
+                        }
+
+                        return checkExpressionCached(expression);
                     }
                 }
             }
@@ -22344,6 +22379,10 @@ namespace ts {
 
             checkExternalModuleExports(container);
 
+            if (isInAmbientContext(node) && !isEntityNameExpression(node.expression)) {
+                grammarErrorOnNode(node.expression, Diagnostics.The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context);
+            }
+
             if (node.isExportEquals && !isInAmbientContext(node)) {
                 if (modulekind >= ModuleKind.ES2015) {
                     // export assignment is not supported in es6 modules
@@ -23060,14 +23099,16 @@ namespace ts {
                             return sig.thisParameter;
                         }
                     }
+                    if (isInExpressionContext(node)) {
+                        return checkExpression(node as Expression).symbol;
+                    }
                     // falls through
 
-                case SyntaxKind.SuperKeyword:
-                    const type = isPartOfExpression(node) ? getTypeOfExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
-                    return type.symbol;
-
                 case SyntaxKind.ThisType:
-                    return getTypeFromTypeNode(<TypeNode>node).symbol;
+                    return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode).symbol;
+
+                case SyntaxKind.SuperKeyword:
+                    return checkExpression(node as Expression).symbol;
 
                 case SyntaxKind.ConstructorKeyword:
                     // constructor keyword for an overload, should take us to the definition if it exist

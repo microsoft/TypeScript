@@ -9,7 +9,7 @@ tests/cases/compiler/restUnion3.ts(7,9): error TS2700: Rest types may only be cr
             ~~~~~
 !!! error TS2700: Rest types may only be created from object types.
     
-    declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined | null;
+    declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined;
     var rest5: { n: number, s: string };
     var {...rest5 } = unionWithIntersection;
             ~~~~~

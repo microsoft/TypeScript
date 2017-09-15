@@ -438,6 +438,8 @@ namespace ts {
         host = host || createCompilerHost(options);
 
         let skipDefaultLib = options.noLib;
+        const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
+        const defaultLibraryPath = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(getDefaultLibraryFileName());
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
@@ -513,12 +515,11 @@ namespace ts {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
                 if (!options.lib) {
-                    processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+                    processRootFile(getDefaultLibraryFileName(), /*isDefaultLib*/ true);
                 }
                 else {
-                    const libDirectory = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
                     forEach(options.lib, libFileName => {
-                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true);
+                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true);
                     });
                 }
             }
@@ -557,6 +558,7 @@ namespace ts {
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             isSourceFileFromExternalLibrary,
+            isSourceFileDefaultLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
@@ -977,6 +979,18 @@ namespace ts {
             return sourceFilesFoundSearchingNodeModules.get(file.path);
         }
 
+        function isSourceFileDefaultLibrary(file: SourceFile): boolean {
+            if (file.hasNoDefaultLib) {
+                return true;
+            }
+
+            if (defaultLibraryPath && defaultLibraryPath.length !== 0) {
+                return containsPath(defaultLibraryPath, file.path, currentDirectory, /*ignoreCase*/ !host.useCaseSensitiveFileNames());
+            }
+
+            return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+        }
+
         function getDiagnosticsProducingTypeChecker() {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
         }
@@ -1208,7 +1222,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                                 return;
                             }
-                            // falls through
+                        // falls through
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
@@ -1290,7 +1304,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
-                            // falls through
+                        // falls through
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
@@ -1338,8 +1352,8 @@ namespace ts {
                                 if (isConstValid) {
                                     continue;
                                 }
-                                // to report error,
-                                // falls through
+                            // to report error,
+                            // falls through
                             case SyntaxKind.PublicKeyword:
                             case SyntaxKind.PrivateKeyword:
                             case SyntaxKind.ProtectedKeyword:
@@ -1553,10 +1567,10 @@ namespace ts {
         }
 
         function getSourceFileFromReferenceWorker(
-                fileName: string,
-                getSourceFile: (fileName: string) => SourceFile | undefined,
-                fail?: (diagnostic: DiagnosticMessage, ...argument: string[]) => void,
-                refFile?: SourceFile): SourceFile | undefined {
+            fileName: string,
+            getSourceFile: (fileName: string) => SourceFile | undefined,
+            fail?: (diagnostic: DiagnosticMessage, ...argument: string[]) => void,
+            refFile?: SourceFile): SourceFile | undefined {
 
             if (hasExtension(fileName)) {
                 if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {

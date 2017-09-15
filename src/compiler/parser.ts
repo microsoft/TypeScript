@@ -2240,7 +2240,7 @@ namespace ts {
                 isStartOfType(/*inStartOfParameter*/ true);
         }
 
-        function parseParameter(): ParameterDeclaration {
+        function parseParameter(requireEqualsToken?: boolean): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
                 node.name = createIdentifier(/*isIdentifier*/ true);
@@ -2269,17 +2269,9 @@ namespace ts {
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
-            node.initializer = parseBindingElementInitializer(/*inParameter*/ true);
+            node.initializer = parseInitializer(/*inParameter*/ true, requireEqualsToken);
 
             return addJSDocComment(finishNode(node));
-        }
-
-        function parseBindingElementInitializer(inParameter: boolean) {
-            return inParameter ? parseParameterInitializer() : parseNonParameterInitializer();
-        }
-
-        function parseParameterInitializer() {
-            return parseInitializer(/*inParameter*/ true);
         }
 
         function fillSignature(
@@ -2334,7 +2326,8 @@ namespace ts {
                 setYieldContext(!!(flags & SignatureFlags.Yield));
                 setAwaitContext(!!(flags & SignatureFlags.Await));
 
-                const result = parseDelimitedList(ParsingContext.Parameters, flags & SignatureFlags.JSDoc ? parseJSDocParameter : parseParameter);
+                const result = parseDelimitedList(ParsingContext.Parameters,
+                                                  flags & SignatureFlags.JSDoc ? parseJSDocParameter : () => parseParameter(!!(flags & SignatureFlags.RequireCompleteParameterList)));
 
                 setYieldContext(savedYieldContext);
                 setAwaitContext(savedAwaitContext);
@@ -2621,16 +2614,9 @@ namespace ts {
                 unaryMinusExpression.operator = SyntaxKind.MinusToken;
                 nextToken();
             }
-            let expression: UnaryExpression;
-            switch (token()) {
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    expression = parseLiteralLikeNode(token()) as LiteralExpression;
-                    break;
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.FalseKeyword:
-                    expression = parseTokenNode();
-            }
+            let expression: BooleanLiteral | LiteralExpression | PrefixUnaryExpression = token() === SyntaxKind.TrueKeyword || token() === SyntaxKind.FalseKeyword
+                ? parseTokenNode<BooleanLiteral>()
+                : parseLiteralLikeNode(token()) as LiteralExpression;
             if (negative) {
                 unaryMinusExpression.operand = expression;
                 finishNode(unaryMinusExpression);
@@ -2666,6 +2652,7 @@ namespace ts {
                     return parseJSDocNodeWithType(SyntaxKind.JSDocVariadicType);
                 case SyntaxKind.ExclamationToken:
                     return parseJSDocNodeWithType(SyntaxKind.JSDocNonNullableType);
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.TrueKeyword:
@@ -3017,7 +3004,7 @@ namespace ts {
             return expr;
         }
 
-        function parseInitializer(inParameter: boolean): Expression {
+        function parseInitializer(inParameter: boolean, requireEqualsToken?: boolean): Expression {
             if (token() !== SyntaxKind.EqualsToken) {
                 // It's not uncommon during typing for the user to miss writing the '=' token.  Check if
                 // there is no newline after the last token and if we're on an expression.  If so, parse
@@ -3032,11 +3019,17 @@ namespace ts {
                     // do not try to parse initializer
                     return undefined;
                 }
+                if (inParameter && requireEqualsToken) {
+                    // = is required when speculatively parsing arrow function parameters,
+                    // so return a fake initializer as a signal that the equals token was missing
+                    const result = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics._0_expected, "=") as Identifier;
+                    result.escapedText = "= not found" as __String;
+                    return result;
+                }
             }
 
             // Initializer[In, Yield] :
             //     = AssignmentExpression[?In, ?Yield]
-
             parseExpected(SyntaxKind.EqualsToken);
             return parseAssignmentExpressionOrHigher();
         }
@@ -3351,8 +3344,7 @@ namespace ts {
         function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction | undefined {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token() === SyntaxKind.AsyncKeyword) {
-                const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
-                if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
+                if (lookAhead(isUnParenthesizedAsyncArrowFunctionWorker) === Tristate.True) {
                     const asyncModifier = parseModifiersForArrowFunction();
                     const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
                     return parseSimpleArrowFunctionExpression(<Identifier>expr, asyncModifier);
@@ -3386,7 +3378,6 @@ namespace ts {
             const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             node.modifiers = parseModifiersForArrowFunction();
             const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
-
             // Arrow functions are never generators.
             //
             // If we're speculatively parsing a signature for a parenthesized arrow function, then
@@ -3409,7 +3400,8 @@ namespace ts {
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) {
+            if (!allowAmbiguity && ((token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) ||
+                                    find(node.parameters, p => p.initializer && ts.isIdentifier(p.initializer) && p.initializer.escapedText === "= not found"))) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
@@ -5158,7 +5150,7 @@ namespace ts {
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             node.name = parseIdentifierOrPattern();
-            node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
+            node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
@@ -5175,7 +5167,7 @@ namespace ts {
                 node.propertyName = propertyName;
                 node.name = parseIdentifierOrPattern();
             }
-            node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
+            node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
@@ -5214,7 +5206,7 @@ namespace ts {
             node.name = parseIdentifierOrPattern();
             node.type = parseTypeAnnotation();
             if (!isInOrOfKeyword(token())) {
-                node.initializer = parseInitializer(/*inParameter*/ false);
+                node.initializer = parseNonParameterInitializer();
             }
             return finishNode(node);
         }
