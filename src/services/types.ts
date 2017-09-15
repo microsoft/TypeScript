@@ -257,7 +257,7 @@ namespace ts {
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
 
-        getOutliningSpans(fileName: string): OutliningSpan[];
+        getOutliningSpans(fileName: string, fileSize: number): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
         getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;

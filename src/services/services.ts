@@ -1707,10 +1707,10 @@ namespace ts {
             return ts.getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
         }
 
-        function getOutliningSpans(fileName: string): OutliningSpan[] {
+        function getOutliningSpans(fileName: string, fileSize: number): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
+            return OutliningElementsCollector.collectElements(sourceFile, fileSize, cancellationToken);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {

@@ -20,6 +20,8 @@
 /// <reference path="fourslashRunner.ts" />
 
 namespace FourSlash {
+    const _fs = require("fs");
+
     ts.disableIncrementalParsing = false;
 
     // Represents a parsed source file with metadata
@@ -27,6 +29,7 @@ namespace FourSlash {
         // The contents of the file (with markers, etc stripped out)
         content: string;
         fileName: string;
+        fileSize: number;
         version: number;
         // File-specific options (name/value pairs)
         fileOptions: Harness.TestCaseParser.CompilerSettings;
@@ -2249,7 +2252,7 @@ namespace FourSlash {
         }
 
         public verifyOutliningSpans(spans: TextSpan[]) {
-            const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
+            const actual = this.languageService.getOutliningSpans(this.activeFile.fileName, this.activeFile.fileSize);
 
             if (actual.length !== spans.length) {
                 this.raiseError(`verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
@@ -3090,11 +3093,18 @@ ${code}
         let currentFileContent: string = undefined;
         let currentFileName = fileName;
         let currentFileOptions: { [s: string]: string } = {};
+        let currentFileSize = getFileSize();
+
+        function getFileSize() {
+            const stats = _fs.statSync("." + fileName);
+            return stats.size;
+        }
 
         function resetLocalData() {
             currentFileContent = undefined;
             currentFileOptions = {};
             currentFileName = fileName;
+            currentFileSize = getFileSize();
         }
 
         for (let line of lines) {
@@ -3135,7 +3145,7 @@ ${code}
                         if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
                             // Found an @FileName directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
-                                const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
+                                const file = parseFileContent(currentFileContent, currentFileName, currentFileSize, markerPositions, markers, ranges);
                                 file.fileOptions = currentFileOptions;
 
                                 // Store result file
@@ -3161,7 +3171,7 @@ ${code}
             else {
                 // Empty line or code line, terminate current subfile if there is one
                 if (currentFileContent) {
-                    const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
+                    const file = parseFileContent(currentFileContent, currentFileName, currentFileSize, markerPositions, markers, ranges);
                     file.fileOptions = currentFileOptions;
 
                     // Store result file
@@ -3270,7 +3280,7 @@ ${code}
         }
     }
 
-    function parseFileContent(content: string, fileName: string, markerMap: ts.Map<Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
+    function parseFileContent(content: string, fileName: string, fileSize: number, markerMap: ts.Map<Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
         content = chompLeadingSpace(content);
 
         // Any slash-star comment with a character not in this string is not a marker.
@@ -3461,6 +3471,7 @@ ${code}
             fileOptions: {},
             version: 0,
             fileName,
+            fileSize
         };
     }
 

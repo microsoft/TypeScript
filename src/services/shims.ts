@@ -231,7 +231,7 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { textSpan: { start: number, length: number }; hintSpan: { start: number, length: number }; bannerText: string; autoCollapse: boolean } [] = [];
          */
-        getOutliningSpans(fileName: string): string;
+        getOutliningSpans(fileName: string, fileSize: number): string;
 
         getTodoComments(fileName: string, todoCommentDescriptors: string): string;
 
@@ -951,10 +951,10 @@ namespace ts {
             );
         }
 
-        public getOutliningSpans(fileName: string): string {
+        public getOutliningSpans(fileName: string, fileSize: number): string {
             return this.forwardJSONCall(
-                `getOutliningSpans('${fileName}')`,
-                () => this.languageService.getOutliningSpans(fileName)
+                `getOutliningSpans('${fileName}', ${fileSize})`,
+                () => this.languageService.getOutliningSpans(fileName, fileSize)
             );
         }
 

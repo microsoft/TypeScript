@@ -89,12 +89,12 @@
 ////                            module m8[| {
 ////                                module m9[| {
 ////                                    module m10[| {
-////                                        module m11 {
-////                                            module m12 {
-////                                                export interface IFoo {
-////                                                }
-////                                            }
-////                                        }
+////                                        module m11[| {
+////                                            module m12[| {
+////                                                export interface IFoo[| {
+////                                                }|]
+////                                            }|]
+////                                        }|]
 ////                                    }|]
 ////                                }|]
 ////                            }|]
