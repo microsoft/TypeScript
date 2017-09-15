@@ -13,6 +13,7 @@ function foo() {
 
     return { 0: 2 };
 >{ 0: 2 } : { 0: number; }
+>0 : number
 >2 : 2
 }
 foo()[0] **= foo()[0];

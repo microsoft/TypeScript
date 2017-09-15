@@ -29,6 +29,7 @@ class C {
 >Object : Object
 
     0: number;
+>0 : number
 }
 
 interface I {
@@ -53,6 +54,7 @@ interface I {
 >Object : Object
 
     0: number;
+>0 : number
 }
 
 var c: C;

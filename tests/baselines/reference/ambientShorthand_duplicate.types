@@ -6,5 +6,5 @@ import foo from "foo";
 
 === tests/cases/conformance/ambient/declarations1.d.ts ===
 declare module "foo";
-No type information for this code.
-No type information for this code.
+>"foo" : any
+

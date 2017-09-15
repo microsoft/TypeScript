@@ -3,6 +3,7 @@
 
 interface Y { 'i am a very certain type': Y }
 >Y : Y
+>'i am a very certain type' : Y
 >Y : Y
 
 var y: Y = <Y>undefined;

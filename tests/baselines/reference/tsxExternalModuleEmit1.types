@@ -1,5 +1,7 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module 'react' {
+>'react' : typeof 'react'
+
 	class Component<T, U> { }
 >Component : Component<T, U>
 >T : T

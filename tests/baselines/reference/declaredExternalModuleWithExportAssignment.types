@@ -1,5 +1,7 @@
 === tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts ===
 declare module 'connect' {
+>'connect' : typeof 'connect'
+
     interface connectModule {
 >connectModule : connectModule
 

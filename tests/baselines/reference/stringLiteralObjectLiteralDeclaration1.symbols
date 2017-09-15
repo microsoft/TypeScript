@@ -4,5 +4,6 @@ module m1 {
 
   export var n = { 'foo bar': 4 };
 >n : Symbol(n, Decl(stringLiteralObjectLiteralDeclaration1.ts, 1, 12))
+>'foo bar' : Symbol('foo bar', Decl(stringLiteralObjectLiteralDeclaration1.ts, 1, 18))
 }
 

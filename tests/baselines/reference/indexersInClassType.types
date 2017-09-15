@@ -11,9 +11,11 @@ class C {
 >Object : Object
 
     1: Date;
+>1 : Date
 >Date : Date
 
     'a': {}
+>'a' : {}
 
     fn() {
 >fn : () => this

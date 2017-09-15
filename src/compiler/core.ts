@@ -2221,7 +2221,7 @@ namespace ts {
                 return ScriptKind.TS;
             case Extension.Tsx:
                 return ScriptKind.TSX;
-            case ".json":
+            case Extension.Json:
                 return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
@@ -2316,9 +2316,9 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx];
+    export const allSupportedExtensionForExtraction: ReadonlyArray<Extension> = [...supportedTypescriptExtensionsForExtractExtension, , ...supportedJavascriptExtensions, Extension.Json];
     export function removeFileExtension(path: string): string {
-        for (const ext of extensionsToRemove) {
+        for (const ext of allSupportedExtensionForExtraction) {
             const extensionless = tryRemoveExtension(path, ext);
             if (extensionless !== undefined) {
                 return extensionless;
@@ -2614,7 +2614,7 @@ namespace ts {
     }
 
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
+        return find(allSupportedExtensionForExtraction, e => fileExtensionIs(path, e));
     }
 
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {

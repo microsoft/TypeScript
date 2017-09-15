@@ -62,6 +62,9 @@ namespace ts {
                 return Extension.Jsx;
             }
         }
+        if (isJsonSourceFile(sourceFile)) {
+            return Extension.Json;
+        }
         return Extension.Js;
     }
 
@@ -2236,6 +2239,9 @@ namespace ts {
             const index = findIndex(statements, statement => !isPrologueDirective(statement));
             emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
             popNameGenerationScope();
+            if (isJsonSourceFile(node) && node.jsonObject) {
+                emitObjectLiteralExpression(node.jsonObject);
+            }
         }
 
         // Transformation nodes

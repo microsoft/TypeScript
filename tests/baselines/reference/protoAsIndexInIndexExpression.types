@@ -25,6 +25,7 @@ var o = {
 >{    "__proto__": 0} : { "__proto__": number; }
 
     "__proto__": 0
+>"__proto__" : number
 >0 : 0
 
 };
@@ -32,6 +33,7 @@ class C {
 >C : C
 
     "__proto__" = 0;
+>"__proto__" : number
 >0 : 0
 }
 === tests/cases/compiler/protoAsIndexInIndexExpression_0.ts ===

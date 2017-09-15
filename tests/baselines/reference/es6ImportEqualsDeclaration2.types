@@ -1,10 +1,14 @@
 === tests/cases/compiler/server.d.ts ===
 declare module "other" {
+>"other" : typeof "other"
+
     export class C { }
 >C : C
 }
 
 declare module "server" {
+>"server" : typeof "server"
+
     import events = require("other"); // Ambient declaration, no error expected.
 >events : typeof events
 

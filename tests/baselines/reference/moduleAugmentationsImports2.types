@@ -9,6 +9,8 @@ export class B {x: number;}
 
 === tests/cases/compiler/c.d.ts ===
 declare module "C" {
+>"C" : typeof "C"
+
     class Cls {y: string; }
 >Cls : Cls
 >y : string
@@ -34,6 +36,8 @@ A.prototype.getB = function () { return undefined; }
 >undefined : undefined
 
 declare module "./a" {
+>"./a" : typeof "tests/cases/compiler/a"
+
     interface A {
 >A : A
 
@@ -61,6 +65,8 @@ A.prototype.getCls = function () { return undefined; }
 >undefined : undefined
 
 declare module "./a" {
+>"./a" : typeof "tests/cases/compiler/a"
+
     interface A {
 >A : A
 

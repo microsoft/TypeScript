@@ -4,9 +4,11 @@ var x = {
 >{    "greeting": "hello, world",    "default": 42} : { "greeting": string; "default": number; }
 
     "greeting": "hello, world",
+>"greeting" : string
 >"hello, world" : "hello, world"
 
     "default": 42
+>"default" : number
 >42 : 42
 
 };

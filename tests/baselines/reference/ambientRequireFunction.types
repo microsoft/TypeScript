@@ -21,6 +21,8 @@ declare function require(moduleName: string): any;
 >moduleName : string
 
 declare module "fs" {
+>"fs" : typeof "fs"
+
     export function readFileSync(s: string): string;
 >readFileSync : (s: string) => string
 >s : string

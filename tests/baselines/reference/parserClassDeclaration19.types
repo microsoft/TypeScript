@@ -6,4 +6,5 @@ class C {
 >foo : () => any
 
     "foo"() { }
+>"foo" : () => any
 }

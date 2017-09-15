@@ -277,6 +277,7 @@ let computedFirst: { a: number, b: string, "before everything": number } =
 >computedFirst : Symbol(computedFirst, Decl(objectSpread.ts, 70, 3))
 >a : Symbol(a, Decl(objectSpread.ts, 70, 20))
 >b : Symbol(b, Decl(objectSpread.ts, 70, 31))
+>"before everything" : Symbol("before everything", Decl(objectSpread.ts, 70, 42))
 
     { ['before everything']: 12, ...o, b: 'yes' }
 >'before everything' : Symbol(['before everything'], Decl(objectSpread.ts, 71, 5))
@@ -288,6 +289,7 @@ let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number 
 >a : Symbol(a, Decl(objectSpread.ts, 72, 21))
 >b : Symbol(b, Decl(objectSpread.ts, 72, 32))
 >c : Symbol(c, Decl(objectSpread.ts, 72, 43))
+>"in the middle" : Symbol("in the middle", Decl(objectSpread.ts, 72, 55))
 
     { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
@@ -299,6 +301,7 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 >computedAfter : Symbol(computedAfter, Decl(objectSpread.ts, 74, 3))
 >a : Symbol(a, Decl(objectSpread.ts, 74, 20))
 >b : Symbol(b, Decl(objectSpread.ts, 74, 31))
+>"at the end" : Symbol("at the end", Decl(objectSpread.ts, 74, 42))
 
     { ...o, b: 'yeah', ['at the end']: 14 }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))

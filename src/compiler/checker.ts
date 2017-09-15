@@ -4552,6 +4552,11 @@ namespace ts {
                     return links.type = anyType;
                 }
                 // Handle export default expressions
+                if (declaration.kind === SyntaxKind.SourceFile) {
+                    // JSON file
+                    const jsonSourceFile = <JsonSourceFile>declaration;
+                    return links.type = jsonSourceFile.jsonObject ? checkObjectLiteral(jsonSourceFile.jsonObject) : emptyObjectType;
+                }
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
@@ -13606,7 +13611,8 @@ namespace ts {
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
-            const isJSObjectLiteral = !contextualType && isInJavaScriptFile(node);
+            const isJSObjectLiteral = !contextualType && isInJavaScriptFile(node) &&
+                !(isSourceFile(node.parent) && isJsonSourceFile(node.parent) && node.parent.jsonObject === node);
             let typeFlags: TypeFlags = 0;
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
@@ -22644,6 +22650,9 @@ namespace ts {
                 flowAnalysisDisabled = false;
 
                 forEach(node.statements, checkSourceElement);
+                if (isJsonSourceFile(node) && node.jsonObject) {
+                    checkObjectLiteral(node.jsonObject);
+                }
 
                 checkDeferredNodes();
 

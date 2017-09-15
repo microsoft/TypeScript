@@ -53,6 +53,8 @@ Cls.prototype.foo = function() { return undefined; }
 >undefined : undefined
 
 declare module "./main" {
+>"./main" : typeof "/main"
+
     interface Cls {
 >Cls : Cls
 

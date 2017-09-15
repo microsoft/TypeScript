@@ -30,6 +30,8 @@ x.B.b = 1;
 
 // OK - './file1' is a namespace
 declare module "./file1" {
+>"./file1" : typeof x
+
     interface A { a: number }
 >A : A
 >a : number

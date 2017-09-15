@@ -37,6 +37,7 @@ interface C {
 >C : Symbol(C, Decl(newWithSpreadES6.ts, 14, 1))
 
     "a-b": typeof B;
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 16, 13))
 >B : Symbol(B, Decl(newWithSpreadES6.ts, 10, 1))
 }
 
@@ -44,6 +45,7 @@ interface D {
 >D : Symbol(D, Decl(newWithSpreadES6.ts, 18, 1))
 
     1: typeof B;
+>1 : Symbol(D[1], Decl(newWithSpreadES6.ts, 20, 13))
 >B : Symbol(B, Decl(newWithSpreadES6.ts, 10, 1))
 }
 

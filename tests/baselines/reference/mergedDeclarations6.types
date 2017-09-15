@@ -23,6 +23,8 @@ import {A} from './a';
 >A : typeof A
 
 declare module "./a" {
+>"./a" : typeof "tests/cases/compiler/a"
+
     interface A { }
 >A : A
 }

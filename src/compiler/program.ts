@@ -2222,6 +2222,7 @@ namespace ts {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
+            case Extension.Json:
                 // These are always allowed.
                 return undefined;
             case Extension.Tsx:

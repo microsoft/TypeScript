@@ -35,6 +35,8 @@ declare module React {
 >U : U
 }
 declare module "BaseComponent" {
+>"BaseComponent" : typeof "BaseComponent"
+
     export default class extends React.Component<any, {}> {
 >React.Component : React.Component<any, {}>
 >React : typeof React

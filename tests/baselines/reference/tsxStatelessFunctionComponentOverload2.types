@@ -46,6 +46,7 @@ let obj2 = {
 >500 : 500
 
     "ignore-prop": "hello"
+>"ignore-prop" : string
 >"hello" : "hello"
 }
 
@@ -119,6 +120,7 @@ const c9 = <OneThing {...{ "ignore-prop":200 }} />;
 ><OneThing {...{ "ignore-prop":200 }} /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >{ "ignore-prop":200 } : { "ignore-prop": number; }
+>"ignore-prop" : number
 >200 : 200
 
 const c10 = <OneThing {...obj2} yy1="boo" />;

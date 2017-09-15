@@ -263,6 +263,10 @@ namespace ts {
                     return InternalSymbolName.ExportStar;
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+                case SyntaxKind.SourceFile:
+                    // json file should behave as
+                    // module.exports = ...
+                    return InternalSymbolName.ExportEquals;
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
@@ -2183,6 +2187,13 @@ namespace ts {
             setExportContextFlag(file);
             if (isExternalModule(file)) {
                 bindSourceFileAsExternalModule();
+            }
+            else if (isJsonSourceFile(file)) {
+                bindSourceFileAsExternalModule();
+                // Create symbol equivalent for the module.exports = {}
+                const originalFileSymbol = file.symbol;
+                declareSymbol(file.symbol.exports, file.symbol, file, SymbolFlags.Property, SymbolFlags.Property | SymbolFlags.AliasExcludes | SymbolFlags.Class | SymbolFlags.Function);
+                file.symbol = originalFileSymbol;
             }
         }
 

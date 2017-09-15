@@ -13,6 +13,8 @@ export var x: SubModule.m.m3.c;
 
 === tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===
 declare module "SubModule" {
+>"SubModule" : Symbol("SubModule", Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 0, 0))
+
     export module m {
 >m : Symbol(m, Decl(declFileAmbientExternalModuleWithSingleExportedModule_0.ts, 0, 28))
 

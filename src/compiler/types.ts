@@ -4072,7 +4072,8 @@ namespace ts {
         Tsx = ".tsx",
         Dts = ".d.ts",
         Js = ".js",
-        Jsx = ".jsx"
+        Jsx = ".jsx",
+        Json = ".json"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {

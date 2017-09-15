@@ -29,6 +29,7 @@ class C {
 >Object : Object
 
     0: number;
+>0 : number
 
     public static foo: string; // doesn't effect equivalence
 >foo : string
@@ -56,6 +57,7 @@ interface I {
 >Object : Object
 
     0: number;
+>0 : number
 }
 
 var c: C;

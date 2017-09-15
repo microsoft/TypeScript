@@ -165,13 +165,17 @@ function f4() {
     const o1 = { 0: "0", 1: "1", count: 2 };
 >o1 : { 0: string; 1: string; count: number; }
 >{ 0: "0", 1: "1", count: 2 } : { 0: string; 1: string; count: number; }
+>0 : string
 >"0" : "0"
+>1 : string
 >"1" : "1"
 >count : number
 >2 : 2
 
     let o2: { 0: string, 1: string, count: number };    
 >o2 : { 0: string; 1: string; count: number; }
+>0 : string
+>1 : string
 >count : number
 
     const v1 = getStringIndexValue(o1);

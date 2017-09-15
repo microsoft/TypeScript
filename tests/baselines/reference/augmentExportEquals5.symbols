@@ -13,6 +13,8 @@ declare module Express {
 }
 
 declare module "express" {
+>"express" : Symbol("express", Decl(express.d.ts, 4, 1))
+
     function e(): e.Express;
 >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28))
@@ -167,6 +169,8 @@ import * as e from "express";
 >e : Symbol(e, Decl(augmentation.ts, 1, 6))
 
 declare module "express" {
+>"express" : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+
     interface Request {
 >Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
 

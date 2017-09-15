@@ -349,7 +349,7 @@ namespace FourSlash {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 this.inputFiles.forEach((file, fileName) => {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
+                        this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ !ts.fileExtensionIs(fileName, ts.Extension.Json));
                     }
                 });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,

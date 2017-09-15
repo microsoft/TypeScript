@@ -31,6 +31,7 @@ interface T2 {
 >T2 : Symbol(T2, Decl(subtypingWithObjectMembersOptionality3.ts, 11, 1))
 
     1?: Base;
+>1 : Symbol(T2[1], Decl(subtypingWithObjectMembersOptionality3.ts, 13, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
 }
 
@@ -39,6 +40,7 @@ interface S2 extends T2 {
 >T2 : Symbol(T2, Decl(subtypingWithObjectMembersOptionality3.ts, 11, 1))
 
     2: Derived; // ok
+>2 : Symbol(S2[2], Decl(subtypingWithObjectMembersOptionality3.ts, 17, 25))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
 }
 
@@ -46,6 +48,7 @@ interface T3 {
 >T3 : Symbol(T3, Decl(subtypingWithObjectMembersOptionality3.ts, 19, 1))
 
     '1'?: Base;
+>'1' : Symbol(T3['1'], Decl(subtypingWithObjectMembersOptionality3.ts, 21, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
 }
 
@@ -54,6 +57,7 @@ interface S3 extends T3 {
 >T3 : Symbol(T3, Decl(subtypingWithObjectMembersOptionality3.ts, 19, 1))
 
     '1.0': Derived; // ok
+>'1.0' : Symbol(S3['1.0'], Decl(subtypingWithObjectMembersOptionality3.ts, 25, 25))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
 }
 

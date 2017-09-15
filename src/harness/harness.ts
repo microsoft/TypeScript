@@ -1170,7 +1170,7 @@ namespace Harness {
             }
 
 
-            const programFileNames = programFiles.map(file => file.unitName);
+            const programFileNames = programFiles.map(file => file.unitName).filter(fileName => !ts.fileExtensionIs(fileName, ts.Extension.Json));
 
             const compilerHost = createCompilerHost(
                 programFiles.concat(otherFiles),
@@ -1780,7 +1780,7 @@ namespace Harness {
                         // .d.ts file, add to declFiles emit
                         this.declFilesCode.push(emittedFile);
                     }
-                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName)) {
+                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName) || ts.fileExtensionIs(emittedFile.fileName, ts.Extension.Json)) {
                         // .js file, add to files
                         this.files.push(emittedFile);
                     }

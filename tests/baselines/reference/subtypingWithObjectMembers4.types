@@ -37,6 +37,7 @@ class A2 {
 >A2 : A2
 
     1: Base; 
+>1 : Base
 >Base : Base
 }
 
@@ -45,6 +46,7 @@ class B2 extends A2 {
 >A2 : A2
 
     1.1: Derived; // ok, inherits 1
+>1.1 : Derived
 >Derived : Derived
 }
 
@@ -52,6 +54,7 @@ class A3 {
 >A3 : A3
 
     '1': Base;
+>'1' : Base
 >Base : Base
 }
 
@@ -60,5 +63,6 @@ class B3 extends A3 {
 >A3 : A3
 
     '1.1': Derived; // ok, inherits '1'
+>'1.1' : Derived
 >Derived : Derived
 }

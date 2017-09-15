@@ -38,6 +38,8 @@ async function a(): Bluebird<void> {
 
 === tests/cases/compiler/bluebird.d.ts ===
 declare module "bluebird" {
+>"bluebird" : typeof "bluebird"
+
     type Bluebird<T> = Promise<T>;
 >Bluebird : Promise<T>
 >T : T

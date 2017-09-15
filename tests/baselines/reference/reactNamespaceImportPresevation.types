@@ -1,5 +1,7 @@
 === tests/cases/compiler/modules.d.ts ===
 declare module "my-React-Lib" {
+>"my-React-Lib" : typeof "my-React-Lib"
+
     var a: any;
 >a : any
 

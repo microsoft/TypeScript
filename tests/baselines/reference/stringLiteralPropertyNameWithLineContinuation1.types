@@ -4,6 +4,7 @@ var x = {'text\
 ': string; }
 >{'text\':'hello'} : { 'text\
 ': string; }
+>'text\' : string
 
 ':'hello'}
 >'hello' : "hello"
