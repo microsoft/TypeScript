@@ -1,7 +1,7 @@
-// tslint:disable-next-line
-var describe: Mocha.IContextDefinition; // If launched without mocha for parallel mode, we still need a global describe visible to satisfy the parsing of the unit tests
-// tslint:disable-next-line
-var it: Mocha.ITestDefinition;
+if (typeof describe === "undefined") {
+    (global as any).describe = undefined; // If launched without mocha for parallel mode, we still need a global describe visible to satisfy the parsing of the unit tests
+    (global as any).it = undefined;
+}
 namespace Harness.Parallel.Host {
 
     interface ChildProcessPartial {
