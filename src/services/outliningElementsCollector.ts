@@ -6,6 +6,10 @@ namespace ts.OutliningElementsCollector {
     const regionStart = new RegExp("^//\\s*#region(\\s+.*)?$");
     const regionEnd = new RegExp("^//\\s*#endregion(\\s|$)");
 
+    interface RegionRange extends TextRange {
+        name?: string;
+    }
+
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         let depth = 0;
