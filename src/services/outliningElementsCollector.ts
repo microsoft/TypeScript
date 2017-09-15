@@ -3,7 +3,7 @@ namespace ts.OutliningElementsCollector {
     const collapseText = "...";
     const maxDepth = 20;
     const defaultLabel = "#region";
-    const regionMatch = new RegExp("^\\s*//\\s*(#region|#endregion)(?:\\s+(.*))?$");
+    const regionMatch = new RegExp("^\\s*//\\s*#(end)?region(?:\\s+(.*))?$");
 
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
@@ -103,7 +103,7 @@ namespace ts.OutliningElementsCollector {
                 const result = comment.match(regionMatch);
 
                 if (result && !isInComment(sourceFile, currentLineStart)) {
-                    if (result[1] === "#region") {
+                    if (!result[1]) {
                         const start = sourceFile.getFullText().indexOf("//", currentLineStart);
                         const textSpan = createTextSpanFromBounds(start, lineEnd);
                         const region: OutliningSpan = {
@@ -117,9 +117,8 @@ namespace ts.OutliningElementsCollector {
                     else {
                         const region = regions.pop();
                         if (region) {
-                            const newTextSpan = createTextSpanFromBounds(region.textSpan.start, lineEnd);
-                            region.textSpan = newTextSpan;
-                            region.hintSpan = newTextSpan;
+                            region.textSpan.length = lineEnd - region.textSpan.start;
+                            region.hintSpan.length = lineEnd - region.textSpan.start;
                             elements.push(region);
                         }
                     }
