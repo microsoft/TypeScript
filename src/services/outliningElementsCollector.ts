@@ -5,14 +5,10 @@ namespace ts.OutliningElementsCollector {
     const defaultLabel = "#region";
     const regionMatch = new RegExp("^\\s*//\\s*(#region|#endregion)(?:\\s+(.*))?$");
 
-    interface RegionRange extends TextRange {
-        name?: string;
-    }
-
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         let depth = 0;
-        const regions: RegionRange[] = [];
+        const regions: OutliningSpan[] = [];
 
         walk(sourceFile);
         gatherRegions();
@@ -38,19 +34,6 @@ namespace ts.OutliningElementsCollector {
                     hintSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
                     bannerText: collapseText,
                     autoCollapse,
-                };
-                elements.push(span);
-            }
-        }
-
-        function addOutliningSpanRegions(regionSpan: RegionRange) {
-            if (regionSpan) {
-                const textSpan = createTextSpanFromRange(regionSpan);
-                const span: OutliningSpan = {
-                    textSpan,
-                    hintSpan: textSpan,
-                    bannerText: regionSpan.name,
-                    autoCollapse: false,
                 };
                 elements.push(span);
             }
@@ -122,18 +105,22 @@ namespace ts.OutliningElementsCollector {
                 if (result && !isInComment(sourceFile, currentLineStart)) {
                     if (result[1] === "#region") {
                         const start = sourceFile.getFullText().indexOf("//", currentLineStart);
-                        const region: RegionRange = {
-                            pos: start,
-                            end: lineEnd,
-                            name: result[2] || defaultLabel,
+                        const textSpan = createTextSpanFromBounds(start, lineEnd);
+                        const region: OutliningSpan = {
+                            textSpan,
+                            hintSpan: textSpan,
+                            bannerText: result[2] || defaultLabel,
+                            autoCollapse: false
                         };
                         regions.push(region);
                     }
                     else {
                         const region = regions.pop();
                         if (region) {
-                            region.end = lineEnd;
-                            addOutliningSpanRegions(region);
+                            const newTextSpan = createTextSpanFromBounds(region.textSpan.start, lineEnd);
+                            region.textSpan = newTextSpan;
+                            region.hintSpan = newTextSpan;
+                            elements.push(region);
                         }
                     }
                 }
