@@ -1488,7 +1488,7 @@ namespace ts.server {
 
             const result = project.getLanguageService().getEditsForRefactor(
                 file,
-                convertFormatOptions(args.formatOptions),
+                args.formatOptions ? convertFormatOptions(args.formatOptions) : this.projectService.getFormatCodeOptions(),
                 position || textRange,
                 args.refactor,
                 args.action

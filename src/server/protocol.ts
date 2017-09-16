@@ -494,7 +494,7 @@ namespace ts.server.protocol {
         refactor: string;
         /* The 'name' property from the refactoring action */
         action: string;
-        formatOptions: FormatCodeSettings,
+        formatOptions?: FormatCodeSettings,
     };
 
 
