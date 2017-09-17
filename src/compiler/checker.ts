@@ -17630,6 +17630,12 @@ namespace ts {
                     if (checkForDisallowedESSymbolOperand(operator)) {
                         leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
                         rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
+                        if (leftType.flags & TypeFlags.TypeVariable  || leftType.flags & TypeFlags.Intersection) {
+                            leftType = getApparentType(leftType);
+                        }
+                        if (rightType.flags & TypeFlags.TypeVariable  || rightType.flags & TypeFlags.Intersection) {
+                            rightType = getApparentType(rightType);
+                        }
                         if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
                             reportOperatorError();
                         }
@@ -17644,6 +17650,12 @@ namespace ts {
                     if (!leftIsLiteral || !rightIsLiteral) {
                         leftType = leftIsLiteral ? getBaseTypeOfLiteralType(leftType) : leftType;
                         rightType = rightIsLiteral ? getBaseTypeOfLiteralType(rightType) : rightType;
+                    }
+                    if (leftType.flags & TypeFlags.TypeVariable  || leftType.flags & TypeFlags.Intersection) {
+                        leftType = getApparentType(leftType);
+                    }
+                    if (rightType.flags & TypeFlags.TypeVariable  || rightType.flags & TypeFlags.Intersection) {
+                        rightType = getApparentType(rightType);
                     }
                     if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
                         reportOperatorError();
