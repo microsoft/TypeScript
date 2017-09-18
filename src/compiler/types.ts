@@ -3215,6 +3215,7 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        MarkerType              = 1 << 26,  // Marker type used for variance probing
 
         /* @internal */
         Nullable = Undefined | Null,

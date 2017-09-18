@@ -282,6 +282,10 @@ namespace ts {
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const circularConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
+        const markerSuperType = createType(TypeFlags.MarkerType);
+        const markerSubType = createType(TypeFlags.MarkerType);
+        const markerOtherType = createType(TypeFlags.MarkerType);
+
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
@@ -8944,6 +8948,10 @@ namespace ts {
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
+                if (source.flags & TypeFlags.MarkerType && target.flags & TypeFlags.MarkerType) {
+                    return source === markerSubType && target === markerSuperType ? Ternary.True : Ternary.False;
+                }
+
                 if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
@@ -9367,8 +9375,6 @@ namespace ts {
                             if (!constraint || constraint.flags & TypeFlags.Any) {
                                 constraint = emptyObjectType;
                             }
-                            // The constraint may need to be further instantiated with its 'this' type.
-                            constraint = getTypeWithThisArgument(constraint, source);
                             // Report constraint errors only if the constraint is not the empty object type
                             const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
                             if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
@@ -9828,11 +9834,11 @@ namespace ts {
             if (!variances) {
                 variances = type.variances = [];
                 for (const tp of typeParameters) {
-                    const superType = getVarianceType(type, tp, stringType);
-                    const subType = getVarianceType(type, tp, emptyStringType);
+                    const superType = getVarianceType(type, tp, markerSuperType);
+                    const subType = getVarianceType(type, tp, markerSubType);
                     let variance = (isTypeAssignableTo(subType, superType) ? Variance.Covariant : 0) |
                         (isTypeAssignableTo(superType, subType) ? Variance.Contravariant : 0);
-                    if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, numberType), superType)) {
+                    if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, markerOtherType), superType)) {
                         variance = Variance.Omnivariant;
                     }
                     variances.push(variance);
