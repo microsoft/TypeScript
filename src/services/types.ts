@@ -363,6 +363,7 @@ namespace ts {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
+        //TODO: need ability to have side effects
     }
 
     /**

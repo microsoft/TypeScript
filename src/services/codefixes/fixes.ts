@@ -2,6 +2,7 @@
 /// <reference path="fixClassIncorrectlyImplementsInterface.ts" />
 /// <reference path="fixAddMissingMember.ts" />
 /// <reference path="fixSpelling.ts" />
+/// <reference path="fixCannotFindModule.ts" />
 /// <reference path="fixClassDoesntImplementInheritedAbstractMember.ts" />
 /// <reference path="fixClassSuperMustPrecedeThisAccess.ts" />
 /// <reference path="fixConstructorForDerivedNeedSuperCall.ts" />

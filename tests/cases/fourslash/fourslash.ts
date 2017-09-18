@@ -249,6 +249,7 @@ declare namespace FourSlashInterface {
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
+        getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
