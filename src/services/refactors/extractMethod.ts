@@ -909,7 +909,7 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement> | ReadonlyArray<ClassElement> {
+    function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement | ClassElement> {
         if (isFunctionLike(scope)) {
             const body = scope.body;
             if (isBlock(body)) {
@@ -934,12 +934,8 @@ namespace ts.refactor.extractMethod {
      * Otherwise, return `undefined`.
      */
     function getNodeToInsertBefore(minPos: number, scope: Scope): Node | undefined {
-        const children = getStatementsOrClassElements(scope);
-        for (const child of children) {
-            if (child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child)) {
-                return child;
-            }
-        }
+        return find(getStatementsOrClassElements(scope), child =>
+            child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child));
     }
 
     function getPropertyAssignmentsForWrites(writes: ReadonlyArray<UsageEntry>): ShorthandPropertyAssignment[] {
