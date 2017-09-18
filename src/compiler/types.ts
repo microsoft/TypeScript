@@ -651,6 +651,20 @@ namespace ts {
     }
 
     export interface SignatureDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.CallSignature
+            | SyntaxKind.ConstructSignature
+            | SyntaxKind.MethodSignature
+            | SyntaxKind.IndexSignature
+            | SyntaxKind.FunctionType
+            | SyntaxKind.ConstructorType
+            | SyntaxKind.JSDocFunctionType
+            | SyntaxKind.FunctionDeclaration
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.Constructor
+            | SyntaxKind.GetAccessor
+            | SyntaxKind.SetAccessor
+            | SyntaxKind.FunctionExpression
+            | SyntaxKind.ArrowFunction;
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
@@ -1816,6 +1830,7 @@ namespace ts {
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
     export interface ClassLikeDeclaration extends NamedDeclaration {
+        kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -2615,6 +2630,8 @@ namespace ts {
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
+        /* @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
+
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
@@ -2657,6 +2674,14 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 20,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+    }
+
+    /* @internal */
+    export interface SymbolWalker {
+        /** Note: Return values are not ordered. */
+        walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
+        /** Note: Return values are not ordered. */
+        walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
     }
 
     export interface SymbolDisplayBuilder {
@@ -3357,6 +3382,7 @@ namespace ts {
 
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
+        /** Retrieve using getConstraintFromTypeParameter */
         constraint: Type;        // Constraint
         default?: Type;
         /* @internal */

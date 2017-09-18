@@ -547,12 +547,73 @@ namespace A {
         }
     }
 }`);
+        // The "b" type parameters aren't used and shouldn't be passed to the extracted function.
+        // Type parameters should be in syntactic order (i.e. in order or character offset from BOF).
+        // In all cases, we could use type inference, rather than passing explicit type arguments.
+        // Note the inclusion of arrow functions to ensure that some type parameters are not from
+        //   targetable scopes.
+        testExtractMethod("extractMethod13",
+            `<U1a, U1b>(u1a: U1a, u1b: U1b) => {
+    function F1<T1a, T1b>(t1a: T1a, t1b: T1b) {
+        <U2a, U2b>(u2a: U2a, u2b: U2b) => {
+            function F2<T2a, T2b>(t2a: T2a, t2b: T2b) {
+                <U3a, U3b>(u3a: U3a, u3b: U3b) => {
+                        [#|t1a.toString();
+                        t2a.toString();
+                        u1a.toString();
+                        u2a.toString();
+                        u3a.toString();|]
+                }
+            }
+        }
+    }
+}`);
+        // This test is descriptive, rather than normative.  The current implementation
+        // doesn't handle type parameter shadowing.
+        testExtractMethod("extractMethod14",
+            `function F<T>(t1: T) {
+    function F<T>(t2: T) {
+        [#|t1.toString();
+        t2.toString();|]
+    }
+}`);
+        // Confirm that the constraint is preserved.
+        testExtractMethod("extractMethod15",
+            `function F<T>(t1: T) {
+    function F<U extends T[]>(t2: U) {
+        [#|t2.toString();|]
+    }
+}`);
+        // Confirm that the contextual type of an extracted expression counts as a use.
+        testExtractMethod("extractMethod16",
+            `function F<T>() {
+    const array: T[] = [#|[]|];
+}`);
+        // Class type parameter
+        testExtractMethod("extractMethod17",
+            `class C<T1, T2> {
+    M(t1: T1, t2: T2) {
+        [#|t1.toString()|];
+    }
+}`);
+        // Method type parameter
+        testExtractMethod("extractMethod18",
+            `class C {
+    M<T1, T2>(t1: T1, t2: T2) {
+        [#|t1.toString()|];
+    }
+}`);
+        // Coupled constraints
+        testExtractMethod("extractMethod19",
+            `function F<T, U extends T[], V extends U[]>(v: V) {
+    [#|v.toString()|];
+}`);
     });
 
 
     function testExtractMethod(caption: string, text: string) {
         it(caption, () => {
-            Harness.Baseline.runBaseline(`extractMethod/${caption}.js`, () => {
+            Harness.Baseline.runBaseline(`extractMethod/${caption}.ts`, () => {
                 const t = extractTest(text);
                 const selectionRange = t.ranges.get("selection");
                 if (!selectionRange) {
@@ -562,7 +623,7 @@ namespace A {
                     path: "/a.ts",
                     content: t.source
                 };
-                const host = projectSystem.createServerHost([f]);
+                const host = projectSystem.createServerHost([f, projectSystem.libFile]);
                 const projectService = projectSystem.createProjectService(host);
                 projectService.openClientFile(f.path);
                 const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -579,12 +640,12 @@ namespace A {
                 assert.equal(result.errors, undefined, "expect no errors");
                 const results = refactor.extractMethod.getPossibleExtractions(result.targetRange, context);
                 const data: string[] = [];
-                data.push(`==ORIGINAL==`);
+                data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
                     const { renameLocation, edits } = refactor.extractMethod.getExtractionAtIndex(result.targetRange, context, results.indexOf(r));
                     assert.lengthOf(edits, 1);
-                    data.push(`==SCOPE::${r.scopeDescription}==`);
+                    data.push(`// ==SCOPE::${r.scopeDescription}==`);
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
