@@ -32,50 +32,11 @@ namespace ts.server.typingsInstaller {
         }
     }
 
-    export enum PackageNameValidationResult {
-        Ok,
-        ScopedPackagesNotSupported,
-        EmptyName,
-        NameTooLong,
-        NameStartsWithDot,
-        NameStartsWithUnderscore,
-        NameContainsNonURISafeCharacters
-    }
-
-
-    export const MaxPackageNameLength = 214;
-    /**
-     * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
-     */
-    export function validatePackageName(packageName: string): PackageNameValidationResult {
-        if (!packageName) {
-            return PackageNameValidationResult.EmptyName;
-        }
-        if (packageName.length > MaxPackageNameLength) {
-            return PackageNameValidationResult.NameTooLong;
-        }
-        if (packageName.charCodeAt(0) === CharacterCodes.dot) {
-            return PackageNameValidationResult.NameStartsWithDot;
-        }
-        if (packageName.charCodeAt(0) === CharacterCodes._) {
-            return PackageNameValidationResult.NameStartsWithUnderscore;
-        }
-        // check if name is scope package like: starts with @ and has one '/' in the middle
-        // scoped packages are not currently supported
-        // TODO: when support will be added we'll need to split and check both scope and package name
-        if (/^@[^/]+\/[^/]+$/.test(packageName)) {
-            return PackageNameValidationResult.ScopedPackagesNotSupported;
-        }
-        if (encodeURIComponent(packageName) !== packageName) {
-            return PackageNameValidationResult.NameContainsNonURISafeCharacters;
-        }
-        return PackageNameValidationResult.Ok;
-    }
 
     export type RequestCompletedAction = (success: boolean) => void;
     interface PendingRequest {
         requestId: number;
-        args: string[];
+        packageNames: string[];
         cwd: string;
         onRequestCompleted: RequestCompletedAction;
     }
@@ -270,26 +231,7 @@ namespace ts.server.typingsInstaller {
                     // add typing name to missing set so we won't process it again
                     this.missingTypingsSet.set(typing, true);
                     if (this.log.isEnabled()) {
-                        switch (validationResult) {
-                            case PackageNameValidationResult.EmptyName:
-                                this.log.writeLine(`Package name '${typing}' cannot be empty`);
-                                break;
-                            case PackageNameValidationResult.NameTooLong:
-                                this.log.writeLine(`Package name '${typing}' should be less than ${MaxPackageNameLength} characters`);
-                                break;
-                            case PackageNameValidationResult.NameStartsWithDot:
-                                this.log.writeLine(`Package name '${typing}' cannot start with '.'`);
-                                break;
-                            case PackageNameValidationResult.NameStartsWithUnderscore:
-                                this.log.writeLine(`Package name '${typing}' cannot start with '_'`);
-                                break;
-                            case PackageNameValidationResult.ScopedPackagesNotSupported:
-                                this.log.writeLine(`Package '${typing}' is scoped and currently is not supported`);
-                                break;
-                            case PackageNameValidationResult.NameContainsNonURISafeCharacters:
-                                this.log.writeLine(`Package name '${typing}' contains non URI safe characters`);
-                                break;
-                        }
+                        this.log.writeLine(renderPackageNameValidationFailure(validationResult, typing));
                     }
                 }
             }
@@ -430,8 +372,8 @@ namespace ts.server.typingsInstaller {
             };
         }
 
-        private installTypingsAsync(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
-            this.pendingRunRequests.unshift({ requestId, args, cwd, onRequestCompleted });
+        private installTypingsAsync(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+            this.pendingRunRequests.unshift({ requestId, packageNames, cwd, onRequestCompleted });
             this.executeWithThrottling();
         }
 
@@ -439,7 +381,7 @@ namespace ts.server.typingsInstaller {
             while (this.inFlightRequestCount < this.throttleLimit && this.pendingRunRequests.length) {
                 this.inFlightRequestCount++;
                 const request = this.pendingRunRequests.pop();
-                this.installWorker(request.requestId, request.args, request.cwd, ok => {
+                this.installWorker(request.requestId, request.packageNames, request.cwd, ok => {
                     this.inFlightRequestCount--;
                     request.onRequestCompleted(ok);
                     this.executeWithThrottling();
@@ -447,7 +389,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected abstract installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
+        protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
     }
 

@@ -1086,6 +1086,98 @@ namespace ts {
             return !seen[id] && (seen[id] = true);
         };
     }
+
+
+    const enum PromiseState { Unresolved, Success, Failure }
+    /**
+     * Cheap PromiseLike implementation.
+     */
+    export class PromiseImpl<T> implements PromiseLike<T> {
+        private constructor(
+            private state: PromiseState,
+            private result: T | undefined,
+            private error: {} | undefined,
+            // Only supports one callback
+            private callback: {
+                onfulfilled?: (value: T) => void,
+                onrejected?: (value: {}) => void,
+            } | undefined) {}
+
+        static deferred<T>(): PromiseImpl<T> {
+            return new PromiseImpl(PromiseState.Unresolved, undefined, undefined, undefined);
+        }
+
+        static resolved<T>(value: T): PromiseImpl<T> {
+            return new PromiseImpl<T>(PromiseState.Success, value, undefined, undefined);
+        }
+
+        resolve(value: T): void {
+            Debug.assert(this.state === PromiseState.Unresolved);
+            this.state = PromiseState.Success;
+            this.result = value;
+            if (this.callback) {
+                this.callback.onfulfilled(value);
+                this.callback = undefined;
+            }
+        }
+
+        reject(value: {}): void {
+            this.state = PromiseState.Failure;
+            this.error = value;
+            if (this.callback) {
+                this.callback.onrejected(value);
+                this.callback = undefined;
+            }
+        }
+
+        then<TResult1 = T, TResult2 = never>(
+            onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+            onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+        ): PromiseLike<TResult1 | TResult2> {
+            if (!onfulfilled) {
+                return this as PromiseLike<{}> as PromiseLike<TResult1 | TResult2>;
+            }
+
+            switch (this.state) {
+                case PromiseState.Unresolved: {
+                    const res = PromiseImpl.deferred<TResult1 | TResult2>();
+                    const handle = (value: TResult1 | TResult2 | PromiseLike<TResult1 | TResult2>): void => {
+                        if (isPromiseLike(value)) {
+                            value.then(v => res.resolve(v), e => res.reject(e));
+                        }
+                        else {
+                            res.resolve(value);
+                        }
+                    };
+                    Debug.assert(!this.callback);
+                    this.callback = {
+                        onfulfilled: value => handle(onfulfilled(value)),
+                        onrejected: err => {
+                            if (onrejected) {
+                                handle(onrejected(err));
+                            }
+                            else {
+                                res.reject(err);
+                            }
+                        },
+                    };
+                    return res;
+                }
+                case PromiseState.Success:
+                    return toPromiseLike(onfulfilled(this.result));
+                case PromiseState.Failure:
+                    return toPromiseLike(onrejected(this.error));
+            }
+        }
+    }
+
+    function isPromiseLike<T>(x: T | PromiseLike<T>): x is PromiseLike<T> {
+        return !!(x as any).then;
+    }
+
+    function toPromiseLike<T>(x: T | PromiseLike<T>): PromiseLike<T> {
+        return isPromiseLike(x) ? x as PromiseLike<T> : PromiseImpl.resolved(x as T);
+    }
 }
 
 // Display-part writer helpers

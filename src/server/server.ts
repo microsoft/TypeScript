@@ -250,6 +250,7 @@ namespace ts.server {
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        private typesRegistryCache: Map<void> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -258,7 +259,7 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-
+        private packageInstalledPromise: PromiseImpl<ApplyCodeActionCommandResult>;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -276,6 +277,23 @@ namespace ts.server {
                     this.reportInstallerProcessId();
                 });
             }
+        }
+
+        tryGetTypesRegistry(): Map<void> | undefined {
+            if (this.typesRegistryCache) {
+                return this.typesRegistryCache;
+            }
+
+            this.send({ kind: "typesRegistry" });
+            return undefined;
+        }
+
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult> {
+            const rq: InstallPackageRequest = { kind: "installPackage", ...options };
+            this.send(rq);
+            Debug.assert(this.packageInstalledPromise === undefined);
+            this.packageInstalledPromise = PromiseImpl.deferred();
+            return this.packageInstalledPromise;
         }
 
         private reportInstallerProcessId() {
@@ -343,7 +361,11 @@ namespace ts.server {
         }
 
         onProjectClosed(p: Project): void {
-            this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
+            this.send({ projectName: p.getProjectName(), kind: "closeProject" });
+        }
+
+        private send(rq: TypingInstallerRequestUnion): void {
+            this.installer.send(rq);
         }
 
         enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
@@ -359,7 +381,7 @@ namespace ts.server {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Sending request: ${JSON.stringify(request)}`);
                 }
-                this.installer.send(request);
+                this.send(request);
             };
             const queuedRequest: QueuedOperation = { operationId, operation };
 
@@ -375,12 +397,26 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
 
             switch (response.kind) {
+                case EventTypesRegistry:
+                    this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
+                    break;
+                case EventPackageInstalled: {
+                    const { success, message } = response;
+                    if (success) {
+                        this.packageInstalledPromise.resolve({ successMessage: message });
+                    }
+                    else {
+                        this.packageInstalledPromise.reject(message);
+                    }
+                    this.packageInstalledPromise = undefined;
+                    break;
+                }
                 case EventInitializationFailed:
                 {
                     if (!this.eventSender) {

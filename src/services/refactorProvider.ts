@@ -20,6 +20,7 @@ namespace ts {
         endPosition?: number;
         program: Program;
         newLineCharacter: string;
+        host: LanguageServiceHost;
         rulesProvider?: formatting.RulesProvider;
         cancellationToken?: CancellationToken;
     }

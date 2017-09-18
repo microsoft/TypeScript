@@ -70,6 +70,9 @@ namespace ts.projectSystem {
 
         protected postExecActions: PostExecAction[] = [];
 
+        tryGetTypesRegistry = notImplemented;
+        installPackage = notImplemented;
+
         executePendingCommands() {
             const actionsToRun = this.postExecActions;
             this.postExecActions = [];
@@ -761,7 +764,7 @@ namespace ts.projectSystem {
             );
 
             // Two errors: CommonFile2 not found and cannot find name y
-            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
                 { diagnosticMessage: Diagnostics.Cannot_find_name_0, errorTextArguments: ["y"] },
                 { diagnosticMessage: Diagnostics.File_0_not_found, errorTextArguments: [commonFile2.path] }
@@ -773,7 +776,7 @@ namespace ts.projectSystem {
             assert.strictEqual(projectService.inferredProjects[0], project, "Inferred project should be same");
             checkProjectRootFiles(project, [file1.path]);
             checkProjectActualFiles(project, [file1.path, libFile.path, commonFile2.path]);
-            diags = session.executeCommand(getErrRequest).response;
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
 
@@ -2603,11 +2606,11 @@ namespace ts.projectSystem {
 
             // Try to find some interface type defined in lib.d.ts
             const libTypeNavToRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
-            const items: protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
+            const items = session.executeCommand(libTypeNavToRequest).response as protocol.NavtoItem[];
             assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found lib.d.ts symbol in JavaScript project nav to request result.`);
 
             const localFunctionNavToRequst = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
-            const items2: protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
+            const items2 = session.executeCommand(localFunctionNavToRequst).response as protocol.NavtoItem[];
             assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });
     });
@@ -3062,7 +3065,7 @@ namespace ts.projectSystem {
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
 
             const moduleFileOldPath = moduleFile.path;
@@ -3070,7 +3073,7 @@ namespace ts.projectSystem {
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1]);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response;
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
                 { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
             ]);
@@ -3088,7 +3091,7 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.runQueuedTimeoutCallbacks();
 
-            diags = session.executeCommand(getErrRequest).response;
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
 
@@ -3113,7 +3116,7 @@ namespace ts.projectSystem {
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
 
             const moduleFileOldPath = moduleFile.path;
@@ -3121,7 +3124,7 @@ namespace ts.projectSystem {
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1, configFile]);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response;
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
                 { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
             ]);
@@ -3129,7 +3132,7 @@ namespace ts.projectSystem {
             moduleFile.path = moduleFileOldPath;
             host.reloadFS([moduleFile, file1, configFile]);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response;
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
 
@@ -3196,7 +3199,7 @@ namespace ts.projectSystem {
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags: server.protocol.Diagnostic[] = session.executeCommand(getErrRequest).response;
+            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
                 { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
             ]);
@@ -3212,7 +3215,7 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
 
             // Recheck
-            diags = session.executeCommand(getErrRequest).response;
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
         });
     });
@@ -3805,7 +3808,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName: projectName }
-            }).response;
+            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
@@ -3819,7 +3822,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName: projectName }
-            }).response;
+            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
 
@@ -3846,7 +3849,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName }
-            }).response;
+            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
@@ -3864,7 +3867,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName }
-            }).response;
+            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
@@ -4345,7 +4348,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 2);
 
             configFile.content = configFileContentWithoutCommentLine;
@@ -4356,7 +4359,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterEdit.length === 2);
 
             verifyDiagnostic(diags[0], diagsAfterEdit[0]);
@@ -4748,7 +4751,7 @@ namespace ts.projectSystem {
                 line: undefined,
                 offset: undefined
             });
-            const { response } = session.executeCommand(getDefinitionRequest);
+            const response = session.executeCommand(getDefinitionRequest).response as server.protocol.FileSpan[];
             assert.equal(response[0].file, moduleFile.path, "Should go to definition of vessel: response: " + JSON.stringify(response));
             callsTrackingHost.verifyNoHostCalls();
 

@@ -21,6 +21,8 @@ export function Component(x: Config): any;`
         //  to write an alias to a module's default export was referrenced across files and had no default export
         it("should be able to create a language service which can respond to deinition requests without throwing", () => {
             const languageService = ts.createLanguageService({
+                tryGetTypesRegistry: notImplemented,
+                installPackage: notImplemented,
                 getCompilationSettings() {
                     return {};
                 },

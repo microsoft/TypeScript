@@ -14,7 +14,7 @@ namespace ts.server {
     }
 
     /* @internal */
-    export function extractMessage(message: string) {
+    export function extractMessage(message: string): string {
         // Read the content length
         const contentLengthPrefix = "Content-Length: ";
         const lines = message.split(/\r?\n/);
@@ -538,6 +538,16 @@ namespace ts.server {
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
             return response.body.map(entry => this.convertCodeActions(entry, file));
+        }
+
+        applyCodeActionCommand(file: string, command: CodeActionCommand): PromiseLike<ApplyCodeActionCommandResult> {
+            const args: protocol.ApplyCodeActionCommandRequestArgs = { file, command };
+
+            const request = this.processRequest<protocol.ApplyCodeActionCommandRequest>(CommandNames.ApplyCodeActionCommand, args);
+            // TODO: how can we possibly get it synchronously here? But is SessionClient test-only?
+            const response = this.processResponse<protocol.ApplyCodeActionCommandResponse>(request);
+
+            return PromiseImpl.resolved({ successMessage: response.message });
         }
 
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {

@@ -1,7 +1,13 @@
 /// <reference path="project.ts"/>
 
 namespace ts.server {
+    export interface InstallPackageOptionsWithProjectRootPath extends InstallPackageOptions {
+        projectRootPath: Path;
+    }
+
     export interface ITypingsInstaller {
+        tryGetTypesRegistry(): Map<void> | undefined;
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -9,6 +15,9 @@ namespace ts.server {
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
+        tryGetTypesRegistry: () => undefined,
+        // Should never be called because we never provide a types registry.
+        installPackage: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -75,6 +84,14 @@ namespace ts.server {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
+        }
+
+        tryGetTypesRegistry(): Map<void> | undefined {
+            return this.installer.tryGetTypesRegistry();
+        }
+
+        installPackage(options: InstallPackageOptionsWithProjectRootPath): PromiseLike<ApplyCodeActionCommandResult> {
+            return this.installer.installPackage(options);
         }
 
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {

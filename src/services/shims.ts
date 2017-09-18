@@ -347,6 +347,16 @@ namespace ts {
             }
         }
 
+        public tryGetTypesRegistry(): Map<void> | undefined {
+            throw new Error("TODO");
+        }
+        public installPackage(_options: InstallPackageOptions): PromiseLike<ApplyCodeActionCommandResult> {
+            throw new Error("TODO");
+        }
+        public getTsconfigLocation(): Path | undefined {
+            throw new Error("TODO");
+        }
+
         public log(s: string): void {
             if (this.loggingEnabled) {
                 this.shimHost.log(s);

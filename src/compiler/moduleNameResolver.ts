@@ -124,7 +124,11 @@ namespace ts {
         }
     }
 
-    export function getEffectiveTypeRoots(options: CompilerOptions, host: { directoryExists?: (directoryName: string) => boolean, getCurrentDirectory?: () => string }): string[] | undefined {
+    export interface GetEffectiveTypeRootsHost {
+        directoryExists?: (directoryName: string) => boolean;
+        getCurrentDirectory?: () => string;
+    }
+    export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined {
         if (options.typeRoots) {
             return options.typeRoots;
         }
@@ -985,7 +989,8 @@ namespace ts {
         return withPackageId(packageId, pathAndExtension);
     }
 
-    function getPackageName(moduleName: string): { packageName: string, rest: string } {
+    /* @internal */
+    export function getPackageName(moduleName: string): { packageName: string, rest: string } {
         let idx = moduleName.indexOf(directorySeparator);
         if (moduleName[0] === "@") {
             idx = moduleName.indexOf(directorySeparator, idx + 1);
@@ -1152,5 +1157,69 @@ namespace ts {
      */
     function toSearchResult<T>(value: T | undefined): SearchResult<T> {
         return value !== undefined ? { value } : undefined;
+    }
+
+    /* @internal */
+    export const enum PackageNameValidationResult {
+        Ok,
+        ScopedPackagesNotSupported,
+        EmptyName,
+        NameTooLong,
+        NameStartsWithDot,
+        NameStartsWithUnderscore,
+        NameContainsNonURISafeCharacters
+    }
+
+    const MaxPackageNameLength = 214;
+
+    /**
+     * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
+     */
+    /* @internal */
+    export function validatePackageName(packageName: string): PackageNameValidationResult {
+        if (!packageName) {
+            return PackageNameValidationResult.EmptyName;
+        }
+        if (packageName.length > MaxPackageNameLength) {
+            return PackageNameValidationResult.NameTooLong;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes.dot) {
+            return PackageNameValidationResult.NameStartsWithDot;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes._) {
+            return PackageNameValidationResult.NameStartsWithUnderscore;
+        }
+        // check if name is scope package like: starts with @ and has one '/' in the middle
+        // scoped packages are not currently supported
+        // TODO: when support will be added we'll need to split and check both scope and package name
+        if (/^@[^/]+\/[^/]+$/.test(packageName)) {
+            return PackageNameValidationResult.ScopedPackagesNotSupported;
+        }
+        if (encodeURIComponent(packageName) !== packageName) {
+            return PackageNameValidationResult.NameContainsNonURISafeCharacters;
+        }
+        return PackageNameValidationResult.Ok;
+    }
+
+    /* @internal */
+    export function renderPackageNameValidationFailure(result: PackageNameValidationResult, typing: string): string {
+        switch (result) {
+            case PackageNameValidationResult.EmptyName:
+                return `Package name '${typing}' cannot be empty`;
+            case PackageNameValidationResult.NameTooLong:
+                return `Package name '${typing}' should be less than ${MaxPackageNameLength} characters`;
+            case PackageNameValidationResult.NameStartsWithDot:
+                return `Package name '${typing}' cannot start with '.'`;
+            case PackageNameValidationResult.NameStartsWithUnderscore:
+                return `Package name '${typing}' cannot start with '_'`;
+            case PackageNameValidationResult.ScopedPackagesNotSupported:
+                return `Package '${typing}' is scoped and currently is not supported`;
+            case PackageNameValidationResult.NameContainsNonURISafeCharacters:
+                return `Package name '${typing}' contains non URI safe characters`;
+            case PackageNameValidationResult.Ok:
+                throw Debug.fail(); // Shouldn't have called this.
+            default:
+                Debug.assertNever(result);
+        }
     }
 }
