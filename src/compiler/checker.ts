@@ -9832,19 +9832,26 @@ namespace ts {
             const typeParameters = type.typeParameters || emptyArray;
             let variances = type.variances;
             if (!variances) {
-                variances = type.variances = [];
-                for (const tp of typeParameters) {
-                    const superType = getVarianceType(type, tp, markerSuperType);
-                    const subType = getVarianceType(type, tp, markerSubType);
-                    let variance = (isTypeAssignableTo(subType, superType) ? Variance.Covariant : 0) |
-                        (isTypeAssignableTo(superType, subType) ? Variance.Contravariant : 0);
-                    if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, markerOtherType), superType)) {
-                        variance = Variance.Omnivariant;
-                    }
-                    variances.push(variance);
+                if (type === globalArrayType || type === globalReadonlyArrayType) {
+                    variances = [Variance.Covariant];
                 }
+                else {
+                    type.variances = emptyArray;
+                    variances = [];
+                    for (const tp of typeParameters) {
+                        const superType = getVarianceType(type, tp, markerSuperType);
+                        const subType = getVarianceType(type, tp, markerSubType);
+                        let variance = (isTypeAssignableTo(subType, superType) ? Variance.Covariant : 0) |
+                            (isTypeAssignableTo(superType, subType) ? Variance.Contravariant : 0);
+                        if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, markerOtherType), superType)) {
+                            variance = Variance.Omnivariant;
+                        }
+                        variances.push(variance);
+                    }
+                }
+                type.variances = variances;
             }
-            return variances.length === typeParameters.length ? variances : emptyArray;
+            return variances;
         }
 
         function isUnconstrainedTypeParameter(type: Type) {
