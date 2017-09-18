@@ -4055,7 +4055,7 @@ namespace ts {
     function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
         context.requestEmitHelper(templateObjectHelper);
         return createCall(
-            getHelperName("__getTemplateObject"),
+            getHelperName("__makeTemplateObject"),
             /*typeArguments*/ undefined,
             [
                 cooked,
@@ -4082,11 +4082,11 @@ namespace ts {
     };
 
     const templateObjectHelper: EmitHelper = {
-        name: "typescript:getTemplateObject",
+        name: "typescript:makeTemplateObject",
         scoped: false,
         priority: 0,
         text: `
-            var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+            var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
                 if (Object.defineProperty) {
                     return Object.defineProperty(cooked, "raw", { value: raw });
                 }
