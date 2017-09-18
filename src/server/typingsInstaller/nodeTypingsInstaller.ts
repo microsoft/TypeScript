@@ -49,17 +49,17 @@ namespace ts.server.typingsInstaller {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
             }
-            return createMap<void>();
+            return ts.createMap<void>();
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath));
-            return createMapFromTemplate<void>(content.entries);
+            return ts.createMapFromTemplate(content.entries);
         }
         catch (e) {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
-            return createMap<void>();
+            return ts.createMap<void>();
         }
     }
 
@@ -99,6 +99,7 @@ namespace ts.server.typingsInstaller {
 
             this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
 
+            //And here's where we install it -- upon creating the process basically.
             try {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
@@ -123,7 +124,7 @@ namespace ts.server.typingsInstaller {
         }
 
         listen() {
-            process.on("message", (req: DiscoverTypings | CloseProject) => {
+            process.on("message", (req: TypingInstallerRequestUnion) => {
                 if (this.delayedInitializationError) {
                     // report initializationFailed error
                     this.sendResponse(this.delayedInitializationError);
@@ -135,11 +136,23 @@ namespace ts.server.typingsInstaller {
                         break;
                     case "closeProject":
                         this.closeProject(req);
+                        break;
+                    case "typesRegistry": {
+                        const typesRegistry: { [key: string]: void } = {};
+                        this.typesRegistry.forEach((value, key) => {
+                            typesRegistry[key] = value;
+                        });
+                        const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
+                        this.sendResponse(response);
+                        break;
+                    }
+                    default:
+                        Debug.assertNever(req);
                 }
             });
         }
 
-        protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        protected sendResponse(response: TypingInstallerResponseUnion) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
             }

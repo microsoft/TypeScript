@@ -953,6 +953,10 @@ namespace FourSlash {
             return this.getChecker().getSymbolsInScope(node, ts.SymbolFlags.Value | ts.SymbolFlags.Type | ts.SymbolFlags.Namespace);
         }
 
+        public setTypesRegistry(map: ts.MapLike<void>): void {
+            this.languageServiceAdapterHost.typesRegistry = ts.createMapFromTemplate(map);
+        }
+
         public verifyTypeOfSymbolAtLocation(range: Range, symbol: ts.Symbol, expected: string): void {
             const node = this.goToAndGetNode(range);
             const checker = this.getChecker();
@@ -2718,7 +2722,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, info?: Array<{ description: string, actions: Array<{ type: string, data: {} }> }>) {
+        public verifyCodeFixAvailable(negative: boolean, info?: Array<{ description: string, actions: Array<ts.CodeActionAction> }>) {
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName);
 
             if (negative) {
@@ -3554,6 +3558,10 @@ namespace FourSlashInterface {
 
         public symbolsInScope(range: FourSlash.Range): ts.Symbol[] {
             return this.state.symbolsInScope(range);
+        }
+
+        public setTypesRegistry(map: ts.MapLike<void>): void {
+            this.state.setTypesRegistry(map);
         }
     }
 

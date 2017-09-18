@@ -241,6 +241,7 @@ namespace ts.server {
         operation: () => void;
     }
 
+    //We don't always create this, do we?
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
         private installerPidReported = false;
@@ -250,6 +251,7 @@ namespace ts.server {
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        private typesRegistryCache: Map<void> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -258,7 +260,6 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -276,6 +277,14 @@ namespace ts.server {
                     this.reportInstallerProcessId();
                 });
             }
+        }
+
+        tryGetRegistry(): Map<void> | undefined {
+            if (this.typesRegistryCache) {
+                return this.typesRegistryCache;
+            }
+
+            this.installer.send({ kind: "getRegistry" });
         }
 
         private reportInstallerProcessId() {
@@ -375,12 +384,19 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
 
             switch (response.kind) {
+                case EventTypesRegistry: {
+                    this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
+                    //TODO: better logging
+                    console.log("Got back the types registry!");
+                    console.log(response.typesRegistry);
+                    break;
+                }
                 case EventInitializationFailed:
                 {
                     if (!this.eventSender) {

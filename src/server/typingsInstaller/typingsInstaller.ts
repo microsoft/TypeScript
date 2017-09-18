@@ -257,7 +257,7 @@ namespace ts.server.typingsInstaller {
                 }
                 const validationResult = validatePackageName(typing);
                 if (validationResult === PackageNameValidationResult.Ok) {
-                    if (this.typesRegistry.has(typing)) {
+                    if (hasProperty(this.typesRegistry, typing)) {
                         result.push(typing);
                     }
                     else {

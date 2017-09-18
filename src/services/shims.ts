@@ -347,6 +347,13 @@ namespace ts {
             }
         }
 
+        public tryGetRegistry(): Map<void> | undefined {
+            throw new Error("TODO");
+        }
+        public installPackage(_fileName: string, _packageName: string): void {
+            throw new Error("TODO");
+        }
+
         public log(s: string): void {
             if (this.loggingEnabled) {
                 this.shimHost.log(s);

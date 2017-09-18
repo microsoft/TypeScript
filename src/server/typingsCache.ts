@@ -2,6 +2,7 @@
 
 namespace ts.server {
     export interface ITypingsInstaller {
+        tryGetRegistry(): Map<void> | undefined; //Great, now how do we call this?
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -9,6 +10,7 @@ namespace ts.server {
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
+        tryGetRegistry: () => undefined,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -71,10 +73,14 @@ namespace ts.server {
         return !arrayIsEqualTo(imports1, imports2);
     }
 
-    export class TypingsCache {
+    export class TypingsCache { //useful? probably not
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
+        }
+
+        tryGetRegistry(): Map<void> | undefined {
+            return this.installer.tryGetRegistry();
         }
 
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {

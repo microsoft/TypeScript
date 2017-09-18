@@ -1825,6 +1825,16 @@ namespace ts {
             });
         }
 
+        function applyCodeFixAction(fileName: string, action: CodeActionAction): void {
+            switch (action.type) {
+                case "install package":
+                    host.installPackage(fileName, action.packageName);
+                    break;
+                default:
+                    Debug.assertNever(action.type);
+            }
+        }
+
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
@@ -2097,6 +2107,7 @@ namespace ts {
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
+            applyCodeFixAction,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

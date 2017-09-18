@@ -20,27 +20,25 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const registry = createMapFromTemplate<true>({ abs: true }); //TODO
+            const registry = context.host.tryGetRegistry();
+            if (!registry) {
+                // Registry not available, can't do anything.
+                return undefined;
+            }
+
             if (!registry.has(text)) {
                 return undefined;
             }
 
-            //If it's in the registry, then use it.
-            //TODO: communicate with the typings registry process???
-
-            const c: CodeAction = {
+            const action: CodeAction = {
                 description: `Install typings for ${text}`,
                 changes: [],
                 actions: [{
-                    type: "Install package",
-                    data: {
-                        name: `@types/${text}`,
-                    },
+                    type: "install package",
+                    packageName: `@types/${text}`,
                 }],
-                //TODO: need something saying there will be an action...
             };
-
-            return [c];
+            return [action];
         },
     });
 }

@@ -78,6 +78,10 @@ namespace ts.projectSystem {
 
         protected postExecActions: PostExecAction[] = [];
 
+        tryGetRegistry(): Map<void> | undefined {
+            throw new Error("TODO");
+        }
+
         executePendingCommands() {
             const actionsToRun = this.postExecActions;
             this.postExecActions = [];

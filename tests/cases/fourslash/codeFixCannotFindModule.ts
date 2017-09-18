@@ -2,6 +2,10 @@
 
 ////import * as abs from "abs";
 
+test.setTypesRegistry({
+    "abs": undefined,
+});
+
 verify.codeFixAvailable([{
     description: "!",
     actions: [{
@@ -10,5 +14,3 @@ verify.codeFixAvailable([{
     }],
 }]);
 
-//verify.getAndApplyCodeFix();
-//verify.currentFileContentIs('import * as abs from "abs"');

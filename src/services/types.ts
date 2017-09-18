@@ -197,6 +197,11 @@ namespace ts {
          * Gets a set of custom transformers to use during emit.
          */
         getCustomTransformers?(): CustomTransformers | undefined;
+
+        /* @internal */
+        //TODO: optional
+        tryGetRegistry(): Map<void> | undefined;
+        installPackage(fileName: string, packageName: string): void;
     }
 
     //
@@ -273,6 +278,8 @@ namespace ts {
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        //TODO: this will be public, so think about api
+        applyCodeFixAction(fileName: string, action: CodeActionAction): void;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
 
@@ -367,8 +374,17 @@ namespace ts {
          * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
          * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
          */
-        actions?: Array<{ type: string, data: {} }>;
+        //TODO: publicly, `data` should be `{}`.
+        actions?: Array<InstallPackageAction>;
     }
+
+    export type CodeActionAction = InstallPackageAction;
+
+    export interface InstallPackageAction {
+        type: "install package",
+        packageName: string,
+    }
+
 
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.

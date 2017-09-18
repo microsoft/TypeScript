@@ -123,6 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
+        public typesRegistry: ts.Map<void> | undefined;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
@@ -182,6 +183,16 @@ namespace Harness.LanguageService {
 
     /// Native adapter
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
+        tryGetRegistry(): ts.Map<void> | undefined {
+            if (this.typesRegistry === undefined) {
+                ts.Debug.fail("fourslash test should set types registry.");
+            }
+            return this.typesRegistry;
+        }
+        installPackage(_fileName: string, _packageName: string): void {
+            throw new Error("TODO");
+        }
+
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
         getDirectories(path: string): string[] {
@@ -491,6 +502,9 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
         }
         getCodeFixesAtPosition(): ts.CodeAction[] {
+            throw new Error("Not supported on the shim.");
+        }
+        applyCodeFixAction(): void {
             throw new Error("Not supported on the shim.");
         }
         getCodeFixDiagnostics(): ts.Diagnostic[] {

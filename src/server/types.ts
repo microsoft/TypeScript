@@ -30,8 +30,12 @@ declare namespace ts.server {
 
     export interface TypingInstallerRequest {
         readonly projectName: string;
-        readonly kind: "discover" | "closeProject";
+        readonly kind: "discover" | "closeProject" | "typesRegistry";
     }
+
+    /* @internal */
+    //already internal?
+    export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | TypesRegistryRequest;
 
     export interface DiscoverTypings extends TypingInstallerRequest {
         readonly fileNames: string[];
@@ -47,14 +51,29 @@ declare namespace ts.server {
         readonly kind: "closeProject";
     }
 
+    export interface TypesRegistryRequest extends TypingInstallerRequest {
+        readonly kind: "typesRegistry";
+    }
+
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";
+    export type EventTypesRegistry = "event::typesRegistry";
     export type EventBeginInstallTypes = "event::beginInstallTypes";
     export type EventEndInstallTypes = "event::endInstallTypes";
     export type EventInitializationFailed = "event::initializationFailed";
 
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+    }
+    //already internal?
+    /* @internal */
+    export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | InstallTypes | InitializationFailedResponse;
+
+    //TODO:are these all internal?
+    /* @internal */
+    export interface TypesRegistryResponse extends TypingInstallerResponse {
+        readonly kind: EventTypesRegistry;
+        readonly typesRegistry: MapLike<void>;
     }
 
     export interface InitializationFailedResponse extends TypingInstallerResponse {

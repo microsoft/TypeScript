@@ -94,6 +94,7 @@ namespace ts.server.protocol {
         BreakpointStatement = "breakpointStatement",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
+        ApplyCodeFixAction = "applyCodeFixAction",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
@@ -521,6 +522,12 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
+    //!
+    export interface ApplyCodeFixActionRequest extends Request {
+        command: CommandTypes.ApplyCodeFixAction;
+        arguments: ApplyCodeFixActionRequestArgs;
+    }
+
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
          * The line number for the request (1-based).
@@ -563,6 +570,10 @@ namespace ts.server.protocol {
          * Errorcodes we want to get the fixes for.
          */
         errorCodes?: number[];
+    }
+
+    export interface ApplyCodeFixActionRequestArgs extends FileRequestArgs {
+        action: CodeActionAction;
     }
 
     /**

@@ -265,7 +265,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1]);
             let enqueueIsCalled = false;
-            const installer = new (class extends Installer {
+            const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }

@@ -3,6 +3,7 @@
 namespace ts.server {
     export const ActionSet: ActionSet = "action::set";
     export const ActionInvalidate: ActionInvalidate = "action::invalidate";
+    export const EventTypesRegistry: EventTypesRegistry = "event::typesRegistry";
     export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInstallTypes";
     export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
     export const EventInitializationFailed: EventInitializationFailed = "event::initializationFailed";

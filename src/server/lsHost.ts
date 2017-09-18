@@ -15,6 +15,7 @@ namespace ts.server {
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
 
+        //TODO: can't make breaking changes to this...
         constructor(private readonly host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
             this.getCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
@@ -50,6 +51,14 @@ namespace ts.server {
         dispose() {
             this.project = undefined;
             this.resolveModuleName = undefined;
+        }
+
+        public tryGetRegistry(): Map<void> | undefined {
+            //...reaching through so many layers...
+            return this.project.projectService.typingsCache.tryGetRegistry();
+        }
+        public installPackage(_fileName: string, _packageName: string) {
+            throw new Error("TODO");
         }
 
         public startRecordingFilesWithChangedResolutions() {

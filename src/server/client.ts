@@ -540,6 +540,13 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
 
+        applyCodeFixAction(file: string, action: CodeActionAction): void {
+            const args: protocol.ApplyCodeFixActionRequestArgs = { file, action };
+
+            this.processRequest<protocol.ApplyCodeFixActionRequest>(CommandNames.ApplyCodeFixAction, args);
+            //TODO: there should probably be a response to indicate if there was an error?
+        }
+
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"
                 ? this.createFileLocationRequestArgs(fileName, positionOrRange)
