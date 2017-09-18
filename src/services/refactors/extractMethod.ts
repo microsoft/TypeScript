@@ -148,7 +148,7 @@ namespace ts.refactor.extractMethod {
      */
     // exported only for tests
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
-        const length = span.length || 0;
+        const { length } = span;
 
         if (length === 0) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.StatementOrExpressionExpected)] };
