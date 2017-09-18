@@ -31,6 +31,12 @@ namespace ts.codefix {
             const c: CodeAction = {
                 description: `Install typings for ${text}`,
                 changes: [],
+                actions: [{
+                    type: "Install package",
+                    data: {
+                        name: `@types/${text}`,
+                    },
+                }],
                 //TODO: need something saying there will be an action...
             };
 
