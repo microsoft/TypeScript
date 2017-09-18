@@ -14,21 +14,29 @@ namespace ts {
         return getSymbolWalker;
 
         function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
-            const visitedTypes = createMap<Type>(); // Key is id as string
-            const visitedSymbols = createMap<Symbol>(); // Key is id as string
+            const visitedTypes: Type[] = []; // Sparse array from id to type
+            const visitedSymbols: Symbol[] = []; // Sparse array from id to symbol
 
             return {
                 walkType: type => {
-                    visitedTypes.clear();
-                    visitedSymbols.clear();
-                    visitType(type);
-                    return { visitedTypes: arrayFrom(visitedTypes.values()), visitedSymbols: arrayFrom(visitedSymbols.values()) };
+                    try {
+                        visitType(type);
+                        return { visitedTypes: getOwnValues(visitedTypes), visitedSymbols: getOwnValues(visitedSymbols) };
+                    }
+                    finally {
+                        clear(visitedTypes);
+                        clear(visitedSymbols);
+                    }
                 },
                 walkSymbol: symbol => {
-                    visitedTypes.clear();
-                    visitedSymbols.clear();
-                    visitSymbol(symbol);
-                    return { visitedTypes: arrayFrom(visitedTypes.values()), visitedSymbols: arrayFrom(visitedSymbols.values()) };
+                    try {
+                        visitSymbol(symbol);
+                        return { visitedTypes: getOwnValues(visitedTypes), visitedSymbols: getOwnValues(visitedSymbols) };
+                    }
+                    finally {
+                        clear(visitedTypes);
+                        clear(visitedSymbols);
+                    }
                 },
             };
 
@@ -37,11 +45,10 @@ namespace ts {
                     return;
                 }
 
-                const typeIdString = type.id.toString();
-                if (visitedTypes.has(typeIdString)) {
+                if (visitedTypes[type.id]) {
                     return;
                 }
-                visitedTypes.set(typeIdString, type);
+                visitedTypes[type.id] = type;
 
                 // Reuse visitSymbol to visit the type's symbol,
                 //  but be sure to bail on recuring into the type if accept declines the symbol.
@@ -66,43 +73,22 @@ namespace ts {
                     }
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
-                    visitTypeParameter(type as TypeParameter);
+                    visitType(getConstraintFromTypeParameter(type as TypeParameter));
                 }
                 if (type.flags & TypeFlags.UnionOrIntersection) {
-                    visitUnionOrIntersectionType(type as UnionOrIntersectionType);
+                    forEach((type as UnionOrIntersectionType).types, visitType);
                 }
                 if (type.flags & TypeFlags.Index) {
-                    visitIndexType(type as IndexType);
+                    visitType((type as IndexType).type);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     visitIndexedAccessType(type as IndexedAccessType);
                 }
             }
 
-            function visitTypeList(types: Type[]): void {
-                if (!types) {
-                    return;
-                }
-                for (let i = 0; i < types.length; i++) {
-                    visitType(types[i]);
-                }
-            }
-
             function visitTypeReference(type: TypeReference): void {
                 visitType(type.target);
-                visitTypeList(type.typeArguments);
-            }
-
-            function visitTypeParameter(type: TypeParameter): void {
-                visitType(getConstraintFromTypeParameter(type));
-            }
-
-            function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
-                visitTypeList(type.types);
-            }
-
-            function visitIndexType(type: IndexType): void {
-                visitType(type.type);
+                forEach(type.typeArguments, visitType);
             }
 
             function visitIndexedAccessType(type: IndexedAccessType): void {
@@ -122,7 +108,7 @@ namespace ts {
                 if (signature.typePredicate) {
                     visitType(signature.typePredicate.type);
                 }
-                visitTypeList(signature.typeParameters);
+                forEach(signature.typeParameters, visitType);
 
                 for (const parameter of signature.parameters){
                     visitSymbol(parameter);
@@ -133,8 +119,8 @@ namespace ts {
 
             function visitInterfaceType(interfaceT: InterfaceType): void {
                 visitObjectType(interfaceT);
-                visitTypeList(interfaceT.typeParameters);
-                visitTypeList(getBaseTypes(interfaceT));
+                forEach(interfaceT.typeParameters, visitType);
+                forEach(getBaseTypes(interfaceT), visitType);
                 visitType(interfaceT.thisType);
             }
 
@@ -161,11 +147,11 @@ namespace ts {
                 if (!symbol) {
                     return;
                 }
-                const symbolIdString = getSymbolId(symbol).toString();
-                if (visitedSymbols.has(symbolIdString)) {
+                const symbolId = getSymbolId(symbol);
+                if (visitedSymbols[symbolId]) {
                     return;
                 }
-                visitedSymbols.set(symbolIdString, symbol);
+                visitedSymbols[symbolId] = symbol;
                 if (!accept(symbol)) {
                     return true;
                 }
