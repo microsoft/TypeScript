@@ -5762,18 +5762,12 @@ namespace ts {
                 // Finally, iterate over the constituents of the resulting iteration type.
                 const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentType(constraintType) : constraintType;
                 const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
-                forEachType(iterationType, addMemberForKeyType);
+                // Note: The arrow function is needed to avoid passing forEach's second-arg (index) to the second-param (propertySymbol). The compiler doesn't catch this.
+                forEachType(iterationType, t => addMemberForKeyType(t));
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
 
-            function addMemberForKeyType(t: Type, propertySymbolOrIndex?: Symbol | number) {
-                let propertySymbol: Symbol;
-                // forEachType delegates to forEach, which calls with a numeric second argument
-                //  the type system currently doesn't catch this incompatibility, so we annotate
-                //  the function ourselves to indicate the runtime behavior and deal with it here
-                if (typeof propertySymbolOrIndex === "object") {
-                    propertySymbol = propertySymbolOrIndex;
-                }
+            function addMemberForKeyType(t: Type, propertySymbol?: Symbol) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
