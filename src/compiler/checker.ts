@@ -66,6 +66,7 @@ namespace ts {
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
         const strictNullChecks = compilerOptions.strictNullChecks === undefined ? compilerOptions.strict : compilerOptions.strictNullChecks;
+        const strictFunctionTypes = compilerOptions.strictFunctionTypes === undefined ? compilerOptions.strict : compilerOptions.strictFunctionTypes;
         const noImplicitAny = compilerOptions.noImplicitAny === undefined ? compilerOptions.strict : compilerOptions.noImplicitAny;
         const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
 
@@ -2517,7 +2518,7 @@ namespace ts {
                     return typeReferenceToTypeNode(<TypeReference>type);
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
-                    const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
+                    const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
@@ -6729,7 +6730,7 @@ namespace ts {
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
-            return getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter).constraint;
+            return type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter).constraint;
         }
 
         function getConstraintFromTypeParameter(typeParameter: TypeParameter): Type {
@@ -8541,6 +8542,9 @@ namespace ts {
                 source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
             }
 
+            const targetKind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
+            const strictVariance = strictFunctionTypes && targetKind !== SyntaxKind.MethodDeclaration && targetKind !== SyntaxKind.MethodSignature;
+
             let result = Ternary.True;
 
             const sourceThisType = getThisTypeOfSignature(source);
@@ -8548,7 +8552,7 @@ namespace ts {
                 const targetThisType = getThisTypeOfSignature(target);
                 if (targetThisType) {
                     // void sources are assignable to anything.
-                    const related = compareTypes(sourceThisType, targetThisType, /*reportErrors*/ false)
+                    const related = !strictVariance && compareTypes(sourceThisType, targetThisType, /*reportErrors*/ false)
                         || compareTypes(targetThisType, sourceThisType, reportErrors);
                     if (!related) {
                         if (reportErrors) {
@@ -8582,7 +8586,7 @@ namespace ts {
                     (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                 const related = callbacks ?
                     compareSignaturesRelated(targetSig, sourceSig, /*checkAsCallback*/ true, /*ignoreReturnTypes*/ false, reportErrors, errorReporter, compareTypes) :
-                    !checkAsCallback && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
+                    !checkAsCallback && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
                 if (!related) {
                     if (reportErrors) {
                         errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
@@ -9194,7 +9198,7 @@ namespace ts {
                 return result;
             }
 
-            function typeArgumentsRelatedTo(source: TypeReference, target: TypeReference, reportErrors: boolean): Ternary {
+            function typeArgumentsRelatedTo(source: TypeReference, target: TypeReference, variances: Variance[], reportErrors: boolean): Ternary {
                 const sources = source.typeArguments || emptyArray;
                 const targets = target.typeArguments || emptyArray;
                 if (sources.length !== targets.length && relation === identityRelation) {
@@ -9203,11 +9207,34 @@ namespace ts {
                 const length = sources.length <= targets.length ? sources.length : targets.length;
                 let result = Ternary.True;
                 for (let i = 0; i < length; i++) {
-                    const related = isRelatedTo(sources[i], targets[i], reportErrors);
-                    if (!related) {
-                        return Ternary.False;
+                    const variance = i < variances.length ? variances[i] : Variance.Covariant;
+                    if (variance !== Variance.Omnivariant) {
+                        const s = sources[i];
+                        const t = targets[i];
+                        let related = Ternary.True;
+                        if (variance === Variance.Covariant) {
+                            related = isRelatedTo(s, t, reportErrors);
+                        }
+                        else if (variance === Variance.Contravariant) {
+                            related = isRelatedTo(t, s, reportErrors);
+                        }
+                        else if (variance === Variance.Bivariant) {
+                            related = isRelatedTo(t, s, /*reportErrors*/ false);
+                            if (!related) {
+                                related = isRelatedTo(s, t, reportErrors);
+                            }
+                        }
+                        else {
+                            related = isRelatedTo(s, t, reportErrors);
+                            if (related) {
+                                related &= isRelatedTo(t, s, reportErrors);
+                            }
+                        }
+                        if (!related) {
+                            return Ternary.False;
+                        }
+                        result &= related;
                     }
-                    result &= related;
                 }
                 return result;
             }
@@ -9371,9 +9398,15 @@ namespace ts {
                 }
                 else {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
-                        // We have type references to same target type, see if relationship holds for all type arguments
-                        if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, reportErrors)) {
-                            return result;
+                        const variances = getVariances((<TypeReference>source).target);
+                        if (variances) {
+                            // We have type references to same target type, see if relationship holds for all type arguments
+                            if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, variances, reportErrors)) {
+                                return result;
+                            }
+                            if (variances !== emptyArray) {
+                                return Ternary.False;
+                            }
                         }
                     }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
@@ -9783,6 +9816,29 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function getVarianceType(type: GenericType, source: TypeParameter, target: Type) {
+            return createTypeReference(type, map(type.typeParameters, t => t === source ? target: t));
+        }
+
+        function getVariances(type: GenericType) {
+            const typeParameters = type.typeParameters || emptyArray;
+            let variances = type.variances;
+            if (!variances) {
+                variances = type.variances = [];
+                for (const tp of typeParameters) {
+                    const superType = getVarianceType(type, tp, stringType);
+                    const subType = getVarianceType(type, tp, emptyStringType);
+                    let variance = (isTypeAssignableTo(subType, superType) ? Variance.Covariant : 0) |
+                        (isTypeAssignableTo(superType, subType) ? Variance.Contravariant : 0);
+                    if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, numberType), superType)) {
+                        variance = Variance.Omnivariant;
+                    }
+                    variances.push(variance);
+                }
+            }
+            return variances.length === typeParameters.length ? variances : emptyArray;
         }
 
         function isUnconstrainedTypeParameter(type: Type) {
@@ -18856,7 +18912,7 @@ namespace ts {
                     const typeArgument = typeArguments[i];
                     result = result && checkTypeAssignableTo(
                         typeArgument,
-                        getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
+                        instantiateType(constraint, mapper),
                         typeArgumentNodes[i],
                         Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }

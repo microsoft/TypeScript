@@ -3347,6 +3347,7 @@ namespace ts {
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
         instantiations: Map<TypeReference>;   // Generic instantiation cache
+        variances?: Variance[];
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -3438,6 +3439,14 @@ namespace ts {
         resolvedBaseConstraint: Type;
         /* @internal */
         resolvedIndexType: IndexType;
+    }
+
+    export const enum Variance {
+        Invariant     = 0,
+        Covariant     = 1,
+        Contravariant = 2,
+        Bivariant     = Covariant | Contravariant,
+        Omnivariant   = 4
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3707,6 +3716,7 @@ namespace ts {
         sourceMap?: boolean;
         sourceRoot?: string;
         strict?: boolean;
+        strictFunctionTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
