@@ -73,13 +73,13 @@ namespace ts {
                     }
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
-                    visitType(getConstraintFromTypeParameter(type as TypeParameter));
+                    visitTypeParameter(type as TypeParameter);
                 }
                 if (type.flags & TypeFlags.UnionOrIntersection) {
-                    forEach((type as UnionOrIntersectionType).types, visitType);
+                    visitUnionOrIntersectionType(type as UnionOrIntersectionType);
                 }
                 if (type.flags & TypeFlags.Index) {
-                    visitType((type as IndexType).type);
+                    visitIndexType(type as IndexType);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     visitIndexedAccessType(type as IndexedAccessType);
@@ -89,6 +89,18 @@ namespace ts {
             function visitTypeReference(type: TypeReference): void {
                 visitType(type.target);
                 forEach(type.typeArguments, visitType);
+            }
+
+            function visitTypeParameter(type: TypeParameter): void {
+                visitType(getConstraintFromTypeParameter(type));
+            }
+
+            function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
+                forEach(type.types, visitType);
+            }
+
+            function visitIndexType(type: IndexType): void {
+                visitType(type.type);
             }
 
             function visitIndexedAccessType(type: IndexedAccessType): void {
