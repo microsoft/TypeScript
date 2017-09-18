@@ -1440,29 +1440,18 @@ namespace ts {
         //
 
         function emitBlock(node: Block) {
-            if (isSingleLineEmptyBlock(node)) {
-                writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
-                write(" ");
-                writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
-            }
-            else {
-                writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
-                emitBlockStatements(node);
-                // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
-                increaseIndent();
-                emitLeadingCommentsOfPosition(node.statements.end);
-                decreaseIndent();
-                writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
-            }
+            writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
+            emitBlockStatements(node, /*forceSingleLine*/ !node.multiLine && isEmptyBlock(node));
+            // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
+            increaseIndent();
+            emitLeadingCommentsOfPosition(node.statements.end);
+            decreaseIndent();
+            writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
         }
 
-        function emitBlockStatements(node: BlockLike) {
-            if (getEmitFlags(node) & EmitFlags.SingleLine) {
-                emitList(node, node.statements, ListFormat.SingleLineBlockStatements);
-            }
-            else {
-                emitList(node, node.statements, ListFormat.MultiLineBlockStatements);
-            }
+        function emitBlockStatements(node: BlockLike, forceSingleLine: boolean) {
+            const format = forceSingleLine || getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineBlockStatements : ListFormat.MultiLineBlockStatements;
+            emitList(node, node.statements, format);
         }
 
         function emitVariableStatement(node: VariableStatement) {
@@ -1889,16 +1878,11 @@ namespace ts {
         }
 
         function emitModuleBlock(node: ModuleBlock) {
-            if (isEmptyBlock(node)) {
-                write("{ }");
-            }
-            else {
-                pushNameGenerationScope();
-                write("{");
-                emitBlockStatements(node);
-                write("}");
-                popNameGenerationScope();
-            }
+            pushNameGenerationScope();
+            write("{");
+            emitBlockStatements(node, /*forceSingleLine*/ isEmptyBlock(node));
+            write("}");
+            popNameGenerationScope();
         }
 
         function emitCaseBlock(node: CaseBlock) {
@@ -2760,11 +2744,6 @@ namespace ts {
                 && !nodeIsSynthesized(node1)
                 && !nodeIsSynthesized(node2)
                 && !rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile);
-        }
-
-        function isSingleLineEmptyBlock(block: Block) {
-            return !block.multiLine
-                && isEmptyBlock(block);
         }
 
         function isEmptyBlock(block: BlockLike) {
