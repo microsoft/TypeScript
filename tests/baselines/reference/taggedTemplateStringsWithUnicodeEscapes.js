@@ -5,7 +5,7 @@ function f(...args: any[]) {
 f `'\u{1f4a9}'${ " should be converted to " }'\uD83D\uDCA9'`;
 
 //// [taggedTemplateStringsWithUnicodeEscapes.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -18,5 +18,5 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(_a || (_a = __getTemplateObject(["'\uD83D\uDCA9'", "'\uD83D\uDCA9'"], ["'\\u{1f4a9}'", "'\\uD83D\\uDCA9'"])), " should be converted to ");
+f(_a || (_a = __makeTemplateObject(["'\uD83D\uDCA9'", "'\uD83D\uDCA9'"], ["'\\u{1f4a9}'", "'\\uD83D\\uDCA9'"])), " should be converted to ");
 var _a;

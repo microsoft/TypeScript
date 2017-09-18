@@ -4,7 +4,7 @@ class CtorTag { }
 CtorTag `Hello world!`;
 
 //// [taggedTemplateWithConstructableTag01.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -16,5 +16,5 @@ var CtorTag = /** @class */ (function () {
     }
     return CtorTag;
 }());
-CtorTag(_a || (_a = __getTemplateObject(["Hello world!"], ["Hello world!"])));
+CtorTag(_a || (_a = __makeTemplateObject(["Hello world!"], ["Hello world!"])));
 var _a;

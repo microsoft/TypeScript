@@ -16,7 +16,7 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 
 
 //// [taggedTemplateStringsWithManyCallAndMemberExpressions.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -24,5 +24,5 @@ var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked
     return cooked;
 };
 var f;
-var x = new new new (f(_a || (_a = __getTemplateObject(["abc", "def"], ["abc", "def"])), 0).member)("hello")(42) === true;
+var x = new new new (f(_a || (_a = __makeTemplateObject(["abc", "def"], ["abc", "def"])), 0).member)("hello")(42) === true;
 var _a;

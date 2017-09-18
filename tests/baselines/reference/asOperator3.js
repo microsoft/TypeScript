@@ -11,7 +11,7 @@ var g = tag `Hello ${123} World` as string;
 var h = tag `Hello` as string;
 
 //// [asOperator3.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -24,6 +24,6 @@ var c = 123 + 456 + " trailing";
 var d = "Hello " + 123 + " World";
 var e = "Hello";
 var f = 1 + (1 + " end of string");
-var g = tag(_a || (_a = __getTemplateObject(["Hello ", " World"], ["Hello ", " World"])), 123);
-var h = tag(_b || (_b = __getTemplateObject(["Hello"], ["Hello"])));
+var g = tag(_a || (_a = __makeTemplateObject(["Hello ", " World"], ["Hello ", " World"])), 123);
+var h = tag(_b || (_b = __makeTemplateObject(["Hello"], ["Hello"])));
 var _a, _b;

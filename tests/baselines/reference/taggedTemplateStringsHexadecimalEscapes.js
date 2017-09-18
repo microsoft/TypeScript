@@ -5,7 +5,7 @@ function f(...args: any[]) {
 f `\x0D${ "Interrupted CRLF" }\x0A`;
 
 //// [taggedTemplateStringsHexadecimalEscapes.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -18,5 +18,5 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(_a || (_a = __getTemplateObject(["\r", "\n"], ["\\x0D", "\\x0A"])), "Interrupted CRLF");
+f(_a || (_a = __makeTemplateObject(["\r", "\n"], ["\\x0D", "\\x0A"])), "Interrupted CRLF");
 var _a;

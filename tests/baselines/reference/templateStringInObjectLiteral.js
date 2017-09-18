@@ -5,7 +5,7 @@ var x = {
 }
 
 //// [templateStringInObjectLiteral.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -14,6 +14,6 @@ var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked
 };
 var x = {
     a: "abc" + 123 + "def"
-}(_a || (_a = __getTemplateObject(["b"], ["b"])));
+}(_a || (_a = __makeTemplateObject(["b"], ["b"])));
 321;
 var _a;

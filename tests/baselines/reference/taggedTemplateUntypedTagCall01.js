@@ -3,7 +3,7 @@ var tag: Function;
 tag `Hello world!`;
 
 //// [taggedTemplateUntypedTagCall01.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -11,5 +11,5 @@ var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked
     return cooked;
 };
 var tag;
-tag(_a || (_a = __getTemplateObject(["Hello world!"], ["Hello world!"])));
+tag(_a || (_a = __makeTemplateObject(["Hello world!"], ["Hello world!"])));
 var _a;

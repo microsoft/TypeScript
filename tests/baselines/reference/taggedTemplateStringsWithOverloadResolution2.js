@@ -18,7 +18,7 @@ var c = foo2 `${1}`;
 var d = foo2([], 1);
 
 //// [taggedTemplateStringsWithOverloadResolution2.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -32,7 +32,7 @@ function foo1() {
     }
     return undefined;
 }
-var a = foo1(_a || (_a = __getTemplateObject(["", ""], ["", ""])), 1);
+var a = foo1(_a || (_a = __makeTemplateObject(["", ""], ["", ""])), 1);
 var b = foo1([], 1);
 function foo2() {
     var stuff = [];
@@ -41,6 +41,6 @@ function foo2() {
     }
     return undefined;
 }
-var c = foo2(_b || (_b = __getTemplateObject(["", ""], ["", ""])), 1);
+var c = foo2(_b || (_b = __makeTemplateObject(["", ""], ["", ""])), 1);
 var d = foo2([], 1);
 var _a, _b;

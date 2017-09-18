@@ -6,7 +6,7 @@ declare module `M${2}` {
 }
 
 //// [templateStringInModuleName.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -14,11 +14,11 @@ var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked
     return cooked;
 };
 declare;
-module(_a || (_a = __getTemplateObject(["M1"], ["M1"])));
+module(_a || (_a = __makeTemplateObject(["M1"], ["M1"])));
 {
 }
 declare;
-module(_b || (_b = __getTemplateObject(["M", ""], ["M", ""])), 2);
+module(_b || (_b = __makeTemplateObject(["M", ""], ["M", ""])), 2);
 {
 }
 var _a, _b;

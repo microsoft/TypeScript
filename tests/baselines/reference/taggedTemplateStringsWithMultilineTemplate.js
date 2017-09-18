@@ -8,7 +8,7 @@ f `
 `;
 
 //// [taggedTemplateStringsWithMultilineTemplate.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -21,5 +21,5 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(_a || (_a = __getTemplateObject(["\n\n"], ["\n\\\n\n"])));
+f(_a || (_a = __makeTemplateObject(["\n\n"], ["\n\\\n\n"])));
 var _a;

@@ -5,7 +5,7 @@ function foo(...rest: any[]) {
 foo `${function (x: number) { x = "bad"; } }`;
 
 //// [taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -18,5 +18,5 @@ function foo() {
         rest[_i] = arguments[_i];
     }
 }
-foo(_a || (_a = __getTemplateObject(["", ""], ["", ""])), function (x) { x = "bad"; });
+foo(_a || (_a = __makeTemplateObject(["", ""], ["", ""])), function (x) { x = "bad"; });
 var _a;

@@ -23,7 +23,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 
 
 //// [taggedTemplateStringsWithOverloadResolution1.js]
-var __getTemplateObject = (this && this.__getTemplateObject) || function (cooked, raw) {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
         return Object.defineProperty(cooked, "raw", { value: raw });
     }
@@ -43,10 +43,10 @@ var c = foo([], 1, 2); // boolean
 var d = foo([], 1, true); // boolean (with error)
 var e = foo([], 1, "2"); // {}
 var f = foo([], 1, 2, 3); // any (with error)
-var u = foo(_a || (_a = __getTemplateObject([""], [""]))); // number
-var v = foo(_b || (_b = __getTemplateObject(["", ""], ["", ""])), 1); // string
-var w = foo(_c || (_c = __getTemplateObject(["", "", ""], ["", "", ""])), 1, 2); // boolean
-var x = foo(_d || (_d = __getTemplateObject(["", "", ""], ["", "", ""])), 1, true); // boolean (with error)
-var y = foo(_e || (_e = __getTemplateObject(["", "", ""], ["", "", ""])), 1, "2"); // {}
-var z = foo(_f || (_f = __getTemplateObject(["", "", "", ""], ["", "", "", ""])), 1, 2, 3); // any (with error)
+var u = foo(_a || (_a = __makeTemplateObject([""], [""]))); // number
+var v = foo(_b || (_b = __makeTemplateObject(["", ""], ["", ""])), 1); // string
+var w = foo(_c || (_c = __makeTemplateObject(["", "", ""], ["", "", ""])), 1, 2); // boolean
+var x = foo(_d || (_d = __makeTemplateObject(["", "", ""], ["", "", ""])), 1, true); // boolean (with error)
+var y = foo(_e || (_e = __makeTemplateObject(["", "", ""], ["", "", ""])), 1, "2"); // {}
+var z = foo(_f || (_f = __makeTemplateObject(["", "", "", ""], ["", "", "", ""])), 1, 2, 3); // any (with error)
 var _a, _b, _c, _d, _e, _f;
