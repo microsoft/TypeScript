@@ -28,6 +28,7 @@ namespace Harness.Parallel.Host {
     }
 
     export function start() {
+        initializeProgressBarsDependencies();
         console.log("Discovering tests...");
         const discoverStart = +(new Date());
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
@@ -254,14 +255,26 @@ namespace Harness.Parallel.Host {
         return;
     }
 
-    const Mocha = require("mocha");
-    const Base = Mocha.reporters.Base;
-    const color = Base.color;
-    const cursor = Base.cursor;
-    const readline = require("readline");
-    const os = require("os");
-    const tty: { isatty(x: number): boolean } = require("tty");
-    const isatty = tty.isatty(1) && tty.isatty(2);
+    let Mocha: any;
+    let Base: any;
+    let color: any;
+    let cursor: any;
+    let readline: any;
+    let os: any;
+    let tty: { isatty(x: number): boolean };
+    let isatty: boolean;
+
+    function initializeProgressBarsDependencies() {
+        Mocha = require("mocha");
+        Base = Mocha.reporters.Base;
+        color = Base.color;
+        cursor = Base.cursor;
+        readline = require("readline");
+        os = require("os");
+        tty = require("tty");
+        isatty = tty.isatty(1) && tty.isatty(2);
+    }
+
     class ProgressBars {
         public readonly _options: Readonly<ProgressBarsOptions>;
         private _enabled: boolean;
