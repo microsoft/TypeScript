@@ -1,4 +1,4 @@
-==ORIGINAL==
+// ==ORIGINAL==
 namespace A {
     function foo() {
     }
@@ -13,14 +13,14 @@ namespace A {
         }
     }
 }
-==SCOPE::function a==
+// ==SCOPE::function 'a'==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction();
+            return await /*RENAME*/newFunction();
 
             async function newFunction() {
                 let y = 5;
@@ -32,17 +32,17 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace B==
+// ==SCOPE::namespace 'B'==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1);
+            return await /*RENAME*/newFunction(z, z1);
         }
 
-        async function newFunction(z: any, z1: any) {
+        async function newFunction(z: number, z1: any) {
             let y = 5;
             if (z) {
                 await z1;
@@ -51,18 +51,18 @@ namespace A {
         }
     }
 }
-==SCOPE::namespace A==
+// ==SCOPE::namespace 'A'==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1);
+            return await /*RENAME*/newFunction(z, z1);
         }
     }
 
-    async function newFunction(z: any, z1: any) {
+    async function newFunction(z: number, z1: any) {
         let y = 5;
         if (z) {
             await z1;
@@ -70,18 +70,18 @@ namespace A {
         return foo();
     }
 }
-==SCOPE::file '/a.ts'==
+// ==SCOPE::global scope==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1, foo);
+            return await /*RENAME*/newFunction(z, z1, foo);
         }
     }
 }
-async function newFunction(z: any, z1: any, foo: any) {
+async function newFunction(z: number, z1: any, foo: () => void) {
     let y = 5;
     if (z) {
         await z1;

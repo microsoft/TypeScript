@@ -1,35 +1,46 @@
-==ORIGINAL==
+// ==ORIGINAL==
 namespace A {
     export interface I { x: number };
-    class C {
-        a() {
-            let z = 1;
+    namespace B {
+        function a() {
             let a1: I = { x: 1 };
             return a1.x + 10;
         }
     }
 }
-==SCOPE::class 'C'==
+// ==SCOPE::function 'a'==
 namespace A {
     export interface I { x: number };
-    class C {
-        a() {
-            let z = 1;
-            return this./*RENAME*/newFunction();
+    namespace B {
+        function a() {
+            return /*RENAME*/newFunction();
+
+            function newFunction() {
+                let a1: I = { x: 1 };
+                return a1.x + 10;
+            }
+        }
+    }
+}
+// ==SCOPE::namespace 'B'==
+namespace A {
+    export interface I { x: number };
+    namespace B {
+        function a() {
+            return /*RENAME*/newFunction();
         }
 
-        private newFunction() {
+        function newFunction() {
             let a1: I = { x: 1 };
             return a1.x + 10;
         }
     }
 }
-==SCOPE::namespace 'A'==
+// ==SCOPE::namespace 'A'==
 namespace A {
     export interface I { x: number };
-    class C {
-        a() {
-            let z = 1;
+    namespace B {
+        function a() {
             return /*RENAME*/newFunction();
         }
     }
@@ -39,12 +50,11 @@ namespace A {
         return a1.x + 10;
     }
 }
-==SCOPE::global scope==
+// ==SCOPE::global scope==
 namespace A {
     export interface I { x: number };
-    class C {
-        a() {
-            let z = 1;
+    namespace B {
+        function a() {
             return /*RENAME*/newFunction();
         }
     }

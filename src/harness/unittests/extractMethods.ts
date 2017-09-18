@@ -552,7 +552,7 @@ namespace A {
 
     function testExtractMethod(caption: string, text: string) {
         it(caption, () => {
-            Harness.Baseline.runBaseline(`extractMethod/${caption}.js`, () => {
+            Harness.Baseline.runBaseline(`extractMethod/${caption}.ts`, () => {
                 const t = extractTest(text);
                 const selectionRange = t.ranges.get("selection");
                 if (!selectionRange) {
@@ -562,7 +562,7 @@ namespace A {
                     path: "/a.ts",
                     content: t.source
                 };
-                const host = projectSystem.createServerHost([f]);
+                const host = projectSystem.createServerHost([f, projectSystem.libFile]);
                 const projectService = projectSystem.createProjectService(host);
                 projectService.openClientFile(f.path);
                 const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -579,12 +579,12 @@ namespace A {
                 assert.equal(result.errors, undefined, "expect no errors");
                 const results = refactor.extractMethod.getPossibleExtractions(result.targetRange, context);
                 const data: string[] = [];
-                data.push(`==ORIGINAL==`);
+                data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
                     const { renameLocation, edits } = refactor.extractMethod.getExtractionAtIndex(result.targetRange, context, results.indexOf(r));
                     assert.lengthOf(edits, 1);
-                    data.push(`==SCOPE::${r.scopeDescription}==`);
+                    data.push(`// ==SCOPE::${r.scopeDescription}==`);
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
