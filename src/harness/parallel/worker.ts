@@ -43,7 +43,8 @@ namespace Harness.Parallel.Worker {
             timeout() { return this; },
         };
         namestack.push(name);
-        (before as any) = (cb: Function) => cb();
+        let beforeFunc: Function;
+        (before as any) = (cb: Function) => beforeFunc = cb;
         let afterFunc: Function;
         (after as any) = (cb: Function) => afterFunc = cb;
         const savedBeforeEach = beforeEachFunc;
@@ -52,6 +53,8 @@ namespace Harness.Parallel.Worker {
 
         testList = [];
         callback.call(fakeContext);
+        beforeFunc && beforeFunc();
+        beforeFunc = undefined;
         testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
         testList.length = 0;
         testList = savedTestList;
