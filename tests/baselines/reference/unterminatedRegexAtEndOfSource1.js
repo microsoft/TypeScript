@@ -2,4 +2,4 @@
 var a = /
 
 //// [unterminatedRegexAtEndOfSource1.js]
-var a = /;
+var a =  / ;

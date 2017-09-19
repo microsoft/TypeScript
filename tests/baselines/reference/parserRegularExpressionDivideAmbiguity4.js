@@ -2,4 +2,4 @@
 foo(/notregexp);
 
 //// [parserRegularExpressionDivideAmbiguity4.js]
-foo(/notregexp););
+foo( / notregexp);
