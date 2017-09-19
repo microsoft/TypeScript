@@ -55,10 +55,13 @@ namespace ts.server {
 
         public tryGetRegistry(): Map<void> | undefined {
             //...reaching through so many layers...
-            return this.project.projectService.typingsCache.tryGetRegistry();
+            return this.typingsCache.tryGetRegistry();
         }
         public installPackage(fileName: string, packageName: string): void {
-            this.project.projectService.typingsCache.installPackage(fileName, packageName);
+            this.typingsCache.installPackage(fileName, packageName);
+        }
+        private get typingsCache(): TypingsCache {
+            return this.project.projectService.typingsCache;
         }
 
         public startRecordingFilesWithChangedResolutions() {

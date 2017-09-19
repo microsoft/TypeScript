@@ -241,7 +241,6 @@ namespace ts.server {
         operation: () => void;
     }
 
-    //We don't always create this, do we?
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
         private installerPidReported = false;
@@ -285,6 +284,7 @@ namespace ts.server {
             }
 
             this.send({ kind: "typesRegistry" });
+            return undefined;
         }
 
         installPackage(fileName: string, packageName: string): void {
@@ -359,8 +359,6 @@ namespace ts.server {
             this.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        //mv
-        //todo: own PR
         private send(rq: TypingInstallerRequestUnion) {
             this.installer.send(rq);
         }

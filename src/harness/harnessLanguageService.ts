@@ -189,9 +189,7 @@ namespace Harness.LanguageService {
             }
             return this.typesRegistry;
         }
-        installPackage(_fileName: string, _packageName: string): void {
-            throw new Error("TODO");
-        }
+        installPackage = ts.notImplemented;
 
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }

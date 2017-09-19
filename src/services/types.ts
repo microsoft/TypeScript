@@ -199,7 +199,7 @@ namespace ts {
         getCustomTransformers?(): CustomTransformers | undefined;
 
         /* @internal */
-        //TODO: optional
+        //TODO: optional (for back-compat)
         tryGetRegistry(): Map<void> | undefined;
         installPackage(fileName: string, packageName: string): void;
     }
@@ -374,17 +374,16 @@ namespace ts {
          * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
          * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
          */
-        //TODO: publicly, `data` should be `{}`.
-        actions?: Array<InstallPackageAction>;
+        actions?: Array<CodeActionAction>;
     }
 
+    //Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
     export type CodeActionAction = InstallPackageAction;
 
     export interface InstallPackageAction {
-        type: "install package",
-        packageName: string,
+        /* @internal */ type: "install package",
+        /* @internal */ packageName: string,
     }
-
 
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.

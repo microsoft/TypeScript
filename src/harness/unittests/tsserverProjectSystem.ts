@@ -78,6 +78,7 @@ namespace ts.projectSystem {
 
         protected postExecActions: PostExecAction[] = [];
 
+        //TODO: have unit tests for these?
         tryGetRegistry(): Map<void> | undefined {
             throw new Error("TODO");
         }

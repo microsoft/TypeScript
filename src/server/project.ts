@@ -199,7 +199,6 @@ namespace ts.server {
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
 
-            this.projectService;
             this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(this.compilerOptions);
 
