@@ -4916,7 +4916,7 @@ namespace ts {
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode>, location: Node): Signature[] {
             const signatures = getConstructorsForTypeArguments(type, typeArgumentNodes, location);
             const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
-            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments) : sig);
+            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments, isInJavaScriptFile(location)) : sig);
         }
 
         /**
@@ -5512,7 +5512,7 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
                 if ((isJavaScript || typeArgCount >= minTypeArgumentCount) && typeArgCount <= typeParamCount) {
-                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, baseTypeNode)) : cloneSignature(baseSig);
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -6371,11 +6371,10 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, location?: Node) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScript: boolean) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
-                const isJavaScript = isInJavaScriptFile(location);
                 if ((isJavaScript || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
                     if (!typeArguments) {
                         typeArguments = [];
@@ -6633,8 +6632,8 @@ namespace ts {
             return anyType;
         }
 
-        function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters));
+        function getSignatureInstantiation(signature: Signature, typeArguments: Type[], isJavascript: boolean): Signature {
+            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript);
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
             let instantiation = instantiations.get(id);
@@ -6672,7 +6671,10 @@ namespace ts {
             // where different generations of the same type parameter are in scope). This leads to a lot of new type
             // identities, and potentially a lot of work comparing those identities, so here we create an instantiation
             // that uses the original type identities for all unconstrained type parameters.
-            return getSignatureInstantiation(signature, map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp));
+            return getSignatureInstantiation(
+                signature,
+                map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp),
+                isInJavaScriptFile(signature.declaration));
         }
 
         function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
@@ -6823,7 +6825,8 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (!isInJavaScriptFile(node) && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                const isJavascript = isInJavaScriptFile(node);
+                if (!isJavascript && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
                             ? Diagnostics.Generic_type_0_requires_1_type_argument_s
@@ -6836,7 +6839,7 @@ namespace ts {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJavascript));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
@@ -6853,7 +6856,7 @@ namespace ts {
             const id = getTypeListId(typeArguments);
             let instantiation = links.instantiations.get(id);
             if (!instantiation) {
-                links.instantiations.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters)))));
+                links.instantiations.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJavaScriptFile(symbol.valueDeclaration)))));
             }
             return instantiation;
         }
@@ -14054,8 +14057,9 @@ namespace ts {
             const instantiatedSignatures = [];
             for (const signature of signatures) {
                 if (signature.typeParameters) {
-                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0);
-                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments));
+                    const isJavascript = isInJavaScriptFile(node);
+                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0, isJavascript);
+                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
                 }
                 else {
                     instantiatedSignatures.push(signature);
@@ -15325,7 +15329,7 @@ namespace ts {
             if (!contextualMapper) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
             }
-            return getSignatureInstantiation(signature, getInferredTypes(context));
+            return getSignatureInstantiation(signature, getInferredTypes(context), isInJavaScriptFile(contextualSignature.declaration));
         }
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[], context: InferenceContext): Type[] {
@@ -15360,7 +15364,7 @@ namespace ts {
                     // Above, the type of the 'value' parameter is inferred to be 'A'.
                     const contextualSignature = getSingleCallSignature(instantiatedType);
                     const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
-                        getOrCreateTypeFromSignature(getSignatureInstantiation(contextualSignature, contextualSignature.typeParameters)) :
+                        getOrCreateTypeFromSignature(getSignatureInstantiation(contextualSignature, contextualSignature.typeParameters, isInJavaScriptFile(node))) :
                         instantiatedType;
                     const inferenceTargetType = getReturnTypeOfSignature(signature);
                      // Inferences made from return types have lower priority than all other inferences.
@@ -16076,8 +16080,9 @@ namespace ts {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
+                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             if (typeArguments) {
-                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
+                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters), isJavascript);
                                 if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
                                     candidateForTypeArgumentError = originalCandidate;
                                     break;
@@ -16086,7 +16091,7 @@ namespace ts {
                             else {
                                 typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
-                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
+                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             candidateForArgumentError = candidate;
@@ -18850,7 +18855,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount);
+                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, isInJavaScriptFile(typeArgumentNodes[i]));
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     const typeArgument = typeArguments[i];

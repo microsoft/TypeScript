@@ -1326,11 +1326,11 @@ namespace ts {
         return isInJavaScriptFile(file);
     }
 
-    export function isInJavaScriptFile(node: Node): boolean {
+    export function isInJavaScriptFile(node: Node | undefined): boolean {
         return node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
-    export function isInJSDoc(node: Node): boolean {
+    export function isInJSDoc(node: Node | undefined): boolean {
         return node && !!(node.flags & NodeFlags.JSDoc);
     }
 
