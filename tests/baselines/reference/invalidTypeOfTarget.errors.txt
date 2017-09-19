@@ -1,6 +1,9 @@
 tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(1,16): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,9): error TS2346: Call target does not contain any signatures.
 tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,16): error TS1003: Identifier expected.
-tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,24): error TS1005: '=>' expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,18): error TS1005: ',' expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,20): error TS1134: Variable declaration expected.
+tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(2,24): error TS1109: Expression expected.
 tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(3,16): error TS1003: Identifier expected.
 tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(4,16): error TS1003: Identifier expected.
 tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(5,16): error TS1003: Identifier expected.
@@ -12,15 +15,21 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts
 tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts(8,16): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts (12 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts (15 errors) ====
     var x1: typeof {};
                    ~
 !!! error TS1003: Identifier expected.
     var x2: typeof (): void;
+            ~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
                    ~
 !!! error TS1003: Identifier expected.
+                     ~
+!!! error TS1005: ',' expected.
+                       ~~~~
+!!! error TS1134: Variable declaration expected.
                            ~
-!!! error TS1005: '=>' expected.
+!!! error TS1109: Expression expected.
     var x3: typeof 1;
                    ~
 !!! error TS1003: Identifier expected.

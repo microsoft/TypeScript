@@ -446,6 +446,11 @@ namespace ts {
                     visitNode((<ElementAccessExpression>node).expression, visitor, isExpression),
                     visitNode((<ElementAccessExpression>node).argumentExpression, visitor, isExpression));
 
+            case SyntaxKind.TypeCall:
+                return updateTypeCall(<TypeCallTypeNode>node,
+                    visitNode((<TypeCallTypeNode>node).function, visitor, isTypeNode),
+                    nodesVisitor((<TypeCallTypeNode>node).arguments, visitor, isTypeNode));
+
             case SyntaxKind.CallExpression:
                 return updateCall(<CallExpression>node,
                     visitNode((<CallExpression>node).expression, visitor, isExpression),
@@ -1392,6 +1397,10 @@ namespace ts {
 
             case SyntaxKind.SpreadAssignment:
                 result = reduceNode((<SpreadAssignment>node).expression, cbNode, result);
+                break;
+
+            case SyntaxKind.TypeCall:
+                result = reduceNode((<TypeCallTypeNode>node).function, cbNode, result);
                 break;
 
             // Enum

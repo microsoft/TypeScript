@@ -1,0 +1,993 @@
+=== tests/cases/compiler/typeCall.ts ===
+type F1 = () => 1;
+>F1 : F1
+
+type a = F1();
+>a : 1
+>F1 : F1
+
+type F2 = (a: string) => 1;
+>F2 : F2
+>a : string
+
+type b = F2('foo');
+>b : 1
+>F2 : F2
+
+interface F3 {
+>F3 : F3
+
+    (): 1;
+    (a: number): 2;
+>a : number
+
+    (a: string): 3;
+>a : string
+}
+type c = F3();
+>c : 1
+>F3 : F3
+
+type d = F3(123);
+>d : 2
+>F3 : F3
+
+type e = F3('foo');
+>e : 3
+>F3 : F3
+
+declare function f4(a: string): 1;
+>f4 : (a: string) => 1
+>a : string
+
+let a = 'foo';
+>a : string
+>'foo' : "foo"
+
+type f = typeof f4(typeof a);
+>f : 1
+>f4 : (a: string) => 1
+>a : string
+
+type g = (() => 1)();
+>g : 1
+
+type Id = <T>(v: T) => T;
+>Id : Id
+>T : T
+>v : T
+>T : T
+>T : T
+
+type h = Id(123);
+>h : 123
+>Id : Id
+
+type Wrap<T> = Id(T);
+>Wrap : Id(T)
+>T : T
+>Id : Id
+>T : T
+
+type i = Wrap<123>;
+>i : 123
+>Wrap : Id(T)
+
+type F5 = () => () => { a: () => 1; };
+>F5 : F5
+>a : () => 1
+
+type j = F5()()['a']();
+>j : 1
+>F5 : F5
+
+interface IsPrimitive {
+>IsPrimitive : IsPrimitive
+
+  (o: object): '0';
+>o : object
+
+  (o: any): '1';
+>o : any
+}
+type stringIsPrimitive = IsPrimitive(string);
+>stringIsPrimitive : "1"
+>IsPrimitive : IsPrimitive
+
+type regexpIsPrimitive = IsPrimitive(RegExp);
+>regexpIsPrimitive : "0"
+>IsPrimitive : IsPrimitive
+>RegExp : RegExp
+
+// alternative, pass as parameters
+type genericIsPrimitive3 = <T>(v: T) => IsPrimitive(T);
+>genericIsPrimitive3 : genericIsPrimitive3
+>T : T
+>v : T
+>T : T
+>IsPrimitive : IsPrimitive
+>T : T
+
+type stringIsPrimitive3 = genericIsPrimitive3(string);
+>stringIsPrimitive3 : "1"
+>genericIsPrimitive3 : genericIsPrimitive3
+
+type regexpIsPrimitive3 = genericIsPrimitive3(RegExp)
+>regexpIsPrimitive3 : "0"
+>genericIsPrimitive3 : genericIsPrimitive3
+>RegExp : RegExp
+
+declare function angularFactory<G extends (...args: any[]) => R, R extends <T>(foo: T) => T[]>(g: G): R(123);
+>angularFactory : <G extends (...args: any[]) => R, R extends <T>(foo: T) => T[]>(g: G) => R(123)
+>G : G
+>args : any[]
+>R : R
+>R : R
+>T : T
+>foo : T
+>T : T
+>T : T
+>g : G
+>G : G
+>R : R
+
+angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T])
+>angularFactory((...args: any[]) => <T>(foo: T) => [foo] as [T]) : 123[]
+>angularFactory : <G extends (...args: any[]) => R, R extends <T>(foo: T) => T[]>(g: G) => R(123)
+>(...args: any[]) => <T>(foo: T) => [foo] as [T] : (...args: any[]) => <T>(foo: T) => [T]
+>args : any[]
+><T>(foo: T) => [foo] as [T] : <T>(foo: T) => [T]
+>T : T
+>foo : T
+>T : T
+>[foo] as [T] : [T]
+>[foo] : [T]
+>foo : T
+>T : T
+
+interface BoolToString {
+>BoolToString : BoolToString
+
+    (v: false & true): never;
+>v : false & true
+>false : false
+>true : true
+
+    (v: false): 'false';
+>v : false
+>false : false
+
+    (v: true): 'true';
+>v : true
+>true : true
+
+    (v: boolean): 'true' | 'false';
+>v : boolean
+}
+type strTrue = BoolToString(true);
+>strTrue : "true"
+>BoolToString : BoolToString
+>true : true
+
+type strFalse = BoolToString(false);
+>strFalse : "false"
+>BoolToString : BoolToString
+>false : false
+
+type strEither = BoolToString(true | false);
+>strEither : "false" | "true"
+>BoolToString : BoolToString
+>true : true
+>false : false
+
+type strBool = BoolToString(boolean);
+>strBool : "false" | "true"
+>BoolToString : BoolToString
+
+type strAny = BoolToString(any); // fails, want the fallback, but yields 'false'
+>strAny : "false"
+>BoolToString : BoolToString
+
+// declare function safeDivide<
+//   B extends number,
+//   NotZero = ((v: '1') => 'whatever')({
+//     (v: 0): '0';
+//     (v: number): '1';
+//   }(B))
+// >(a: number, b: B): number;
+// // Argument of type '"0"' is not assignable to parameter of type '"1"'
+// safeDivide(3, 1);
+// safeDivide(3, 0); // should error
+
+type map = <Fn extends (v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]) };
+>map : map
+>Fn : Fn
+>v : T
+>T : T
+>O : O
+>k : string
+>T : T
+>T : T
+>fn : Fn
+>Fn : Fn
+>obj : O
+>O : O
+>P : P
+>O : O
+>Fn : Fn
+>O : O
+>P : P
+
+type z = map(<T>(v: T) => [T], { a: 1, b: 2, c: 3 });
+>z : { a: [1]; b: [2]; c: [3]; }
+>map : map
+>T : T
+>v : T
+>T : T
+>T : T
+>a : 1
+>b : 2
+>c : 3
+
+declare function map<Fn extends <T>(v: T) => any, O extends { [k: string]: T }, T>(fn: Fn, obj: O): { [P in keyof O]: Fn(O[P]) };
+>map : <Fn extends <T>(v: T) => any, O extends { [k: string]: T; }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]); }
+>Fn : Fn
+>T : T
+>v : T
+>T : T
+>O : O
+>k : string
+>T : T
+>T : T
+>fn : Fn
+>Fn : Fn
+>obj : O
+>O : O
+>P : P
+>O : O
+>Fn : Fn
+>O : O
+>P : P
+
+let z = map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 });
+>z : { a: [1]; b: [2]; c: [3]; }
+>map(<T>(v: T) => [v] as [T], { a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 }) : { a: [1]; b: [2]; c: [3]; }
+>map : <Fn extends <T>(v: T) => any, O extends { [k: string]: T; }, T>(fn: Fn, obj: O) => { [P in keyof O]: Fn(O[P]); }
+><T>(v: T) => [v] as [T] : <T>(v: T) => [T]
+>T : T
+>v : T
+>T : T
+>[v] as [T] : [T]
+>[v] : [T]
+>v : T
+>T : T
+>{ a: 1, b: 2, c: 3 } as { a: 1, b: 2, c: 3 } : { a: 1; b: 2; c: 3; }
+>{ a: 1, b: 2, c: 3 } : { a: 1; b: 2; c: 3; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+>a : 1
+>b : 2
+>c : 3
+
+type Inc = { [k: string]: string; 0:'1', 1:'2', 2:'3', 3:'4', 4:'5', 5:'6', 6:'7', 7:'8', 8:'9' };
+>Inc : Inc
+>k : string
+
+type StringToNumber = { [k: string]: number; 0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8};
+>StringToNumber : StringToNumber
+>k : string
+
+type TupleHasIndex<Arr extends any[], I extends string> = ({[K in keyof Arr]: '1' } & { [k: string]: '0' })[I];
+>TupleHasIndex : ({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[I]
+>Arr : Arr
+>I : I
+>K : K
+>Arr : Arr
+>k : string
+>I : I
+
+type PathFn<T extends { [k: string]: any }, R extends Array<string>, I extends string = '0'> =
+>PathFn : { 1: any[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[Inc[I]]]; 0: T; }[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[I]]
+>T : T
+>k : string
+>R : R
+>Array : T[]
+>I : I
+
+    { 1: PathFn<T[R[StringToNumber[I]]], R, Inc[I]>, 0: T }[TupleHasIndex<R, I>];
+>PathFn : { 1: any[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[Inc[I]]]; 0: T; }[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[I]]
+>T : T
+>R : R
+>StringToNumber : StringToNumber
+>I : I
+>R : R
+>Inc : Inc
+>I : I
+>T : T
+>TupleHasIndex : ({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[I]
+>R : R
+>I : I
+
+type PathTest = PathFn<{ a: { b: ['c', { d: 'e' }] } }, ['a', 'b', '1', 'd']>;
+>PathTest : "e"
+>PathFn : { 1: any[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[Inc[I]]]; 0: T; }[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[I]]
+>a : { b: ["c", { d: "e"; }]; }
+>b : ["c", { d: "e"; }]
+>d : "e"
+
+declare function path<T extends { [k: string]: any }, R extends Array<string>>(obj: T, path: R): PathFn<T, R>;
+>path : <T extends { [k: string]: any; }, R extends string[]>(obj: T, path: R) => { 1: any[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })["1"]]; 0: T; }[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })["0"]]
+>T : T
+>k : string
+>R : R
+>Array : T[]
+>obj : T
+>T : T
+>path : R
+>R : R
+>PathFn : { 1: any[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[Inc[I]]]; 0: T; }[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })[I]]
+>T : T
+>R : R
+
+const obj = null! as { a: { b: ['c', { d: 'e' }] } };
+>obj : { a: { b: ["c", { d: "e"; }]; }; }
+>null! as { a: { b: ['c', { d: 'e' }] } } : { a: { b: ["c", { d: "e"; }]; }; }
+>null! : never
+>null : null
+>a : { b: ["c", { d: "e"; }]; }
+>b : ["c", { d: "e"; }]
+>d : "e"
+
+const keys = null! as ['a', 'b', '1', 'd'];
+>keys : ["a", "b", "1", "d"]
+>null! as ['a', 'b', '1', 'd'] : ["a", "b", "1", "d"]
+>null! : never
+>null : null
+
+const pathTest = path(obj, keys);
+>pathTest : "e"
+>path(obj, keys) : "e"
+>path : <T extends { [k: string]: any; }, R extends string[]>(obj: T, path: R) => { 1: any[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })["1"]]; 0: T; }[({ [K in keyof Arr]: "1"; } & { [k: string]: "0"; })["0"]]
+>obj : { a: { b: ["c", { d: "e"; }]; }; }
+>keys : ["a", "b", "1", "d"]
+
+// "e"
+
+// type Reduce<
+//     Fn extends (previousValue: T, currentValue: R[number], currentIndex?: number, array?: R) => any,
+//     T,
+//     R extends any[],
+//     I extends string = '0'
+// > = { 1: Reduce<Fn(T, R[StringToNumber[I]], I, R), R, Inc[I]>, 0: T }[TupleHasIndex<R, I>];
+// // fails with error: Cannot read property 'flags' of undefined
+// declare function reduce<
+//     Fn extends (previousValue: any, currentValue: R[number], currentIndex?: number, array?: R) => any,
+//     R extends any[],
+//     U,
+//     I extends string = '0'
+// >(callbackfn: Fn, initialValue: U, array: R): Reduce<Fn, U, R>;
+// declare function path2<T extends { [k: string]: any }, R extends Array<string>>(obj: T, path: R):
+//     Reduce<<Prev, Curr>(previousValue: Prev, currentValue: Curr, currentIndex?: number, array?: any[]) => Prev[Curr], T, R>;
+// const pathTest2 = path2(obj, keys);
+// // "e"
+
+// binary function composition
+type Fn1 = <T1 extends number>(v1: T1[]) => { [k: string]: T1 };
+>Fn1 : Fn1
+>T1 : T1
+>v1 : T1[]
+>T1 : T1
+>k : string
+>T1 : T1
+
+type Fn2 = <T2>(v2: { [k: string]: T2 }) => ReadonlyArray<T2>;
+>Fn2 : Fn2
+>T2 : T2
+>v2 : { [k: string]: T2; }
+>k : string
+>T2 : T2
+>ReadonlyArray : ReadonlyArray<T>
+>T2 : T2
+
+let fn1 = null! as Fn1;
+>fn1 : Fn1
+>null! as Fn1 : Fn1
+>null! : never
+>null : null
+>Fn1 : Fn1
+
+let fn2 = null! as Fn2;
+>fn2 : Fn2
+>null! as Fn2 : Fn2
+>null! : never
+>null : null
+>Fn2 : Fn2
+
+type Fn3 = <T3 extends number[]>(v3: T3) => Fn2(Fn1(T3));
+>Fn3 : Fn3
+>T3 : T3
+>v3 : T3
+>T3 : T3
+>Fn2 : Fn2
+>Fn1 : Fn1
+>T3 : T3
+
+declare function fn3<Fun1 extends (/*...args: any[]*/ p1: P1) => T, Fun2 extends (v: T) => any, P1, T>(fun1: Fun1, fun2: Fun2): (...args: any[] /* todo: specify*/) => Fn2(Fn1(P1));
+>fn3 : <Fun1 extends (p1: P1) => T, Fun2 extends (v: T) => any, P1, T>(fun1: Fun1, fun2: Fun2) => (...args: any[]) => Fn2(Fn1(P1))
+>Fun1 : Fun1
+>p1 : P1
+>P1 : P1
+>T : T
+>Fun2 : Fun2
+>v : T
+>T : T
+>P1 : P1
+>T : T
+>fun1 : Fun1
+>Fun1 : Fun1
+>fun2 : Fun2
+>Fun2 : Fun2
+>args : any[]
+>Fn2 : Fn2
+>Fn1 : Fn1
+>P1 : P1
+
+let ones = null! as 1[];
+>ones : 1[]
+>null! as 1[] : 1[]
+>null! : never
+>null : null
+
+type Fn4b = Fn3(typeof ones);
+>Fn4b : ReadonlyArray<1>
+>Fn3 : Fn3
+>ones : 1[]
+
+type Fn4c = Fn3(1[]);
+>Fn4c : ReadonlyArray<1>
+>Fn3 : Fn3
+
+let y = fn2(fn1(ones));
+>y : ReadonlyArray<1>
+>fn2(fn1(ones)) : ReadonlyArray<1>
+>fn2 : Fn2
+>fn1(ones) : { [k: string]: 1; }
+>fn1 : Fn1
+>ones : 1[]
+
+type Y = Fn2(Fn1(1[]));
+>Y : ReadonlyArray<1>
+>Fn2 : Fn2
+>Fn1 : Fn1
+
+// let z2 = fn3(fn1, fn2)(ones); // Cannot read property 'parent' of undefined
+
+interface isT<T> {
+>isT : isT<T>
+>T : T
+
+  (v: never): '0';
+>v : never
+
+  (v: T): '1';
+>v : T
+>T : T
+
+  (v: any): '0';
+>v : any
+}
+type Matches<V, T> = isT<T>(V);
+>Matches : isT<T>(V)
+>V : V
+>T : T
+>isT : isT<T>
+>T : T
+>V : V
+
+type isBool = isT<boolean>;
+>isBool : isT<boolean>
+>isT : isT<T>
+
+let falseBool: isBool(false); // 1
+>falseBool : "1"
+>isBool : isT<boolean>
+>false : false
+
+let trueBool: isBool(true); // 1
+>trueBool : "1"
+>isBool : isT<boolean>
+>true : true
+
+let strBool: isBool(string); // 0
+>strBool : "0"
+>isBool : isT<boolean>
+
+let anyBool: isBool(any); // 0
+>anyBool : "0"
+>isBool : isT<boolean>
+
+let neverBool: isBool(never); // 0
+>neverBool : "0"
+>isBool : isT<boolean>
+
+type Assert<T> = {
+>Assert : { (v: null | undefined): never; <U>(v: U): U; }(T)
+>T : T
+
+  (v: null | undefined): never;
+>v : null | undefined
+>null : null
+
+  <U>(v: U): U;
+>U : U
+>v : U
+>U : U
+>U : U
+
+}(T);
+>T : T
+
+let assert: Assert<string | undefined>; // string
+>assert : string
+>Assert : { (v: null | undefined): never; <U>(v: U): U; }(T)
+
+type Minus<A, B> = {
+>Minus : { (v: B): never; <U>(v: U): U; }(A)
+>A : A
+>B : B
+
+  (v: B): never;
+>v : B
+>B : B
+
+  <U>(v: U): U;
+>U : U
+>v : U
+>U : U
+>U : U
+
+}(A);
+>A : A
+
+let noNumbers: Minus<string | number, number>; // string
+>noNumbers : string
+>Minus : { (v: B): never; <U>(v: U): U; }(A)
+
+interface UnwrapPromise {
+>UnwrapPromise : UnwrapPromise
+
+  <U>(v: PromiseLike<U>): UnwrapPromise(U);
+>U : U
+>v : PromiseLike<U>
+>PromiseLike : PromiseLike<T>
+>U : U
+>UnwrapPromise : UnwrapPromise
+>U : U
+
+  <U>(v: U): U;
+>U : U
+>v : U
+>U : U
+>U : U
+
+};
+declare const testUnwrap1: UnwrapPromise(string);
+>testUnwrap1 : string
+>UnwrapPromise : UnwrapPromise
+
+declare const testUnwrap2: UnwrapPromise(Promise<string>);
+>testUnwrap2 : string
+>UnwrapPromise : UnwrapPromise
+>Promise : Promise<T>
+
+declare const testUnwrap3: UnwrapPromise(boolean | Promise<string>);
+>testUnwrap3 : string | boolean
+>UnwrapPromise : UnwrapPromise
+>Promise : Promise<T>
+
+declare function myThen<T, TResult1 = T, TResult2 = never>(
+>myThen : <T, TResult1 = T, TResult2 = never>(prom: Promise<T>, onfulfilled?: ((value: T) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>
+>T : T
+>TResult1 : TResult1
+>T : T
+>TResult2 : TResult2
+
+        prom: Promise<T>,
+>prom : Promise<T>
+>Promise : Promise<T>
+>T : T
+
+        onfulfilled?: ((value: T) => TResult1) | undefined | null, 
+>onfulfilled : ((value: T) => TResult1) | null | undefined
+>value : T
+>T : T
+>TResult1 : TResult1
+>null : null
+
+        onrejected?: ((reason: any) => TResult2) | undefined | null
+>onrejected : ((reason: any) => TResult2) | null | undefined
+>reason : any
+>TResult2 : TResult2
+>null : null
+
+    ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
+>Promise : Promise<T>
+>UnwrapPromise : UnwrapPromise
+>TResult1 : TResult1
+>UnwrapPromise : UnwrapPromise
+>TResult2 : TResult2
+
+declare const pr: Promise<number>;
+>pr : Promise<number>
+>Promise : Promise<T>
+
+declare function f(x: number): Promise<string>;
+>f : (x: number) => Promise<string>
+>x : number
+>Promise : Promise<T>
+
+declare function g(x: number): number | Promise<boolean>;
+>g : (x: number) => number | Promise<boolean>
+>x : number
+>Promise : Promise<T>
+
+const testThen = myThen(pr, f, g);
+>testThen : Promise<string | number | boolean>
+>myThen(pr, f, g) : Promise<string | number | boolean>
+>myThen : <T, TResult1 = T, TResult2 = never>(prom: Promise<T>, onfulfilled?: ((value: T) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined) => Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>
+>pr : Promise<number>
+>f : (x: number) => Promise<string>
+>g : (x: number) => number | Promise<boolean>
+
+interface Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    then<TResult1 = T, TResult2 = never>(
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }
+>TResult1 : TResult1
+>T : T
+>TResult2 : TResult2
+
+        onfulfilled?: ((value: T) => TResult1) | undefined | null, 
+>onfulfilled : ((value: T) => TResult1) | null | undefined
+>value : T
+>T : T
+>TResult1 : TResult1
+>null : null
+
+        onrejected?: ((reason: any) => TResult2) | undefined | null
+>onrejected : ((reason: any) => TResult2) | null | undefined
+>reason : any
+>TResult2 : TResult2
+>null : null
+
+    ): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>;
+>Promise : Promise<T>
+>UnwrapPromise : UnwrapPromise
+>TResult1 : TResult1
+>UnwrapPromise : UnwrapPromise
+>TResult2 : TResult2
+}
+// prevents error: Argument of type '(x: number) => number | Promise<string>' is not assignable to parameter of type '(value: number) => string | PromiseLike<string>';
+const tryProm = pr.then((x: number) => { 
+>tryProm : Promise<string | number | {}>
+>pr.then((x: number) => {     if (x < 0) return f(x);    return x;}) : Promise<string | number | {}>
+>pr.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }
+>pr : Promise<number>
+>then : { <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1) | null | undefined, onrejected?: ((reason: any) => TResult2) | null | undefined): Promise<UnwrapPromise(TResult1) | UnwrapPromise(TResult2)>; }
+>(x: number) => {     if (x < 0) return f(x);    return x;} : (x: number) => number | Promise<string>
+>x : number
+
+    if (x < 0) return f(x);
+>x < 0 : boolean
+>x : number
+>0 : 0
+>f(x) : Promise<string>
+>f : (x: number) => Promise<string>
+>x : number
+
+    return x;
+>x : number
+
+});
+
+interface ObjectHasStringIndex {
+>ObjectHasStringIndex : ObjectHasStringIndex
+
+  // <T extends { [k: string]: any }>(o: T): T[string];
+  (o: { [k: string]: any }): '1';
+>o : { [k: string]: any; }
+>k : string
+
+  (o: {}): '0';
+>o : {}
+}
+let ObjectHasStringIndexTestT: ObjectHasStringIndex({ [k: string]: 123 }); // '1'
+>ObjectHasStringIndexTestT : "1"
+>ObjectHasStringIndex : ObjectHasStringIndex
+>k : string
+
+let ObjectHasStringIndexTestF: ObjectHasStringIndex({ a: 123 }); // wanted '0', got '1'... so can't match for index, and erroring RHS yields `any`. ouch.
+>ObjectHasStringIndexTestF : "1"
+>ObjectHasStringIndex : ObjectHasStringIndex
+>a : 123
+
+type IndexCall<T extends () => { [k: string]: any }, K extends keyof (T())> = T()[K];
+>IndexCall : T()[K]
+>T : T
+>k : string
+>K : K
+>T : T
+>T : T
+>K : K
+
+type CallMember<T extends { [k: string]: () => any }, K extends keyof T> = T[K]();
+>CallMember : T[K]()
+>T : T
+>k : string
+>K : K
+>T : T
+>T : T
+>K : K
+
+type MappedMemberCall<T extends { [k: string]: () => any }> = { [K in keyof T]: T[K]() };
+>MappedMemberCall : MappedMemberCall<T>
+>T : T
+>k : string
+>K : K
+>T : T
+>T : T
+>K : K
+
+type HasKey<T, Key extends string> = (
+>HasKey : ({ [K in keyof T]: "true"; } & { [key: string]: "false"; })[Key]
+>T : T
+>Key : Key
+
+  { [K in keyof T]: 'true' } &
+>K : K
+>T : T
+
+  { [key: string]: 'false' }
+>key : string
+
+)[Key];
+>Key : Key
+
+type HasKindKey<T extends () => any> = HasKey<T(), 'kind'>;
+>HasKindKey : ({ [K in keyof T]: "true"; } & { [key: string]: "false"; })["kind"]
+>T : T
+>HasKey : ({ [K in keyof T]: "true"; } & { [key: string]: "false"; })[Key]
+>T : T
+
+type MapHasKey<T extends { [k: string]: () => any }, Key extends string> = {
+>MapHasKey : MapHasKey<T, Key>
+>T : T
+>k : string
+>Key : Key
+
+    [K in keyof T]: HasKey<T[K](), Key>
+>K : K
+>T : T
+>HasKey : ({ [K in keyof T]: "true"; } & { [key: string]: "false"; })[Key]
+>T : T
+>K : K
+>Key : Key
+
+};
+
+type KeyOfCall<T extends () => any> = keyof (T());
+>KeyOfCall : keyof T()
+>T : T
+>T : T
+
+type Strip1<T extends () => any> = { [K in keyof (T())]: T()[K] };
+>Strip1 : Strip1<T>
+>T : T
+>K : K
+>T : T
+>T : T
+>K : K
+
+type Strip2<T extends () => { [k: string]: () => any }> = { [K in keyof (T())]: T()[K]() };
+>Strip2 : Strip2<T>
+>T : T
+>k : string
+>K : K
+>T : T
+>T : T
+>K : K
+
+type Obj = {
+>Obj : Obj
+
+    x: () => number,
+>x : () => number
+
+    z: () => { kind: 'Just', value: string }
+>z : () => { kind: "Just"; value: string; }
+>kind : "Just"
+>value : string
+}
+
+type T1 = (() => number)();
+>T1 : number
+
+type T7 = CallMember<Obj, 'x'>;
+>T7 : number
+>CallMember : T[K]()
+>Obj : Obj
+
+type T8 = IndexCall<() => Obj, 'x'>;
+>T8 : () => number
+>IndexCall : T()[K]
+>Obj : Obj
+
+type T9 = MappedMemberCall<Obj>; // fails, unresolved, want { x: number, z: { kind: 'Just', value: string } }
+>T9 : MappedMemberCall<Obj>
+>MappedMemberCall : MappedMemberCall<T>
+>Obj : Obj
+
+type T13 = keyof (() => Obj)();
+>T13 : "x" | "z"
+>Obj : Obj
+
+type T14 = KeyOfCall<() => Obj>;
+>T14 : "x" | "z"
+>KeyOfCall : keyof T()
+>Obj : Obj
+
+type T15 = Obj['z']()['kind'];
+>T15 : "Just"
+>Obj : Obj
+
+type T16 = MapHasKey<Obj, 'kind'>; // fails, unresolved, want { x: 'false', z: 'true' }
+>T16 : MapHasKey<Obj, "kind">
+>MapHasKey : MapHasKey<T, Key>
+>Obj : Obj
+
+type T17 = Strip1<() => Obj>; // fails, unresolved, want { x: () => number, z: () => { kind: 'Just', value: string } }
+>T17 : Strip1<() => Obj>
+>Strip1 : Strip1<T>
+>Obj : Obj
+
+type T19 = Strip2<() => Obj>; // fails, unresolved, want { x: number, z: { kind: 'Just', value: string } }
+>T19 : Strip2<() => Obj>
+>Strip2 : Strip2<T>
+>Obj : Obj
+
+let a1: () => string;
+>a1 : () => string
+
+let b1: typeof a1();
+>b1 : string
+>a1 : () => string
+
+type Abc<T extends () => any> = T();
+>Abc : T()
+>T : T
+>T : T
+
+let c1: Abc<typeof a1>;
+>c1 : string
+>Abc : T()
+>a1 : () => string
+
+declare function infer1<T extends () => any>(x: T): T();
+>infer1 : <T extends () => any>(x: T) => T()
+>T : T
+>x : T
+>T : T
+>T : T
+
+infer1(null! as () => number);
+>infer1(null! as () => number) : number
+>infer1 : <T extends () => any>(x: T) => T()
+>null! as () => number : () => number
+>null! : never
+>null : null
+
+declare function infer2<T extends () => any>(x: { a: T }): T();
+>infer2 : <T extends () => any>(x: { a: T; }) => T()
+>T : T
+>x : { a: T; }
+>a : T
+>T : T
+>T : T
+
+infer2(null! as { a: () => number });
+>infer2(null! as { a: () => number }) : number
+>infer2 : <T extends () => any>(x: { a: T; }) => T()
+>null! as { a: () => number } : { a: () => number; }
+>null! : never
+>null : null
+>a : () => number
+
+declare function infer3<T>(x: { a: () => T }): T;
+>infer3 : <T>(x: { a: () => T; }) => T
+>T : T
+>x : { a: () => T; }
+>a : () => T
+>T : T
+>T : T
+
+infer3(null! as { a: () => number });
+>infer3(null! as { a: () => number }) : number
+>infer3 : <T>(x: { a: () => T; }) => T
+>null! as { a: () => number } : { a: () => number; }
+>null! : never
+>null : null
+>a : () => number
+
+const res3: number = infer3(null! as { a: () => number });
+>res3 : number
+>infer3(null! as { a: () => number }) : number
+>infer3 : <T>(x: { a: () => T; }) => T
+>null! as { a: () => number } : { a: () => number; }
+>null! : never
+>null : null
+>a : () => number
+
+declare function infer4<T>(x: T, y: () => T): void;
+>infer4 : <T>(x: T, y: () => T) => void
+>T : T
+>x : T
+>T : T
+>y : () => T
+>T : T
+
+infer4(5, () => 5);
+>infer4(5, () => 5) : void
+>infer4 : <T>(x: T, y: () => T) => void
+>5 : 5
+>() => 5 : () => number
+>5 : 5
+
+function assignability<T>(x: T, y: () => T) {
+>assignability : <T>(x: T, y: () => T) => void
+>T : T
+>x : T
+>T : T
+>y : () => T
+>T : T
+
+    const a: T = x;
+>a : T
+>T : T
+>x : T
+
+    const b: T = y();
+>b : T
+>T : T
+>y() : T
+>y : () => T
+}
+
+// function mappedAssignability<T>(x: T, y: CallMember<T>) {
+//     const d: T() = y;
+// }
+
+// function mappedComparability<T>(x: T, y: CallMember<T>) {
+//     x === x;
+//     y === y;
+//     x === y;
+// }
+
+// type IdMapped<T> = { [K in keyof T]: T[K] }
+
+// function mappedRelations<T>(x: IdMapped<T>, y: Partial<T>, z: CallMember<T>) {
+//     x === z;
+//     y === z;
+
+//     const a: IdMapped<T> = z;
+//     const b: Partial<T> = z;
+// }
+
+// mappedRelations(null! as Obj, null! as Partial<Obj>, null! as CallMember<Obj>);
+// mappedRelations(null! as CallMember<Obj>, null! as CallMember<Obj>, null! as CallMember<Obj>);
+

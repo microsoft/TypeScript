@@ -304,6 +304,9 @@ namespace ts {
         if (nodeIsMissing(node)) {
             return "";
         }
+        if (!sourceFile) {
+            sourceFile = getSourceFileOfNode(node);
+        }
 
         const text = sourceFile.text;
         return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
@@ -558,7 +561,12 @@ namespace ts {
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
-        return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
+        if (!sourceFile || node.pos < 0) {
+            return createDiagnosticForNode(node.parent, message, arg0, arg1, arg2);
+        }
+        else {
+            return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
+        }
     }
 
     export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
@@ -568,6 +576,7 @@ namespace ts {
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
+        if (!sourceFile) return createDiagnosticForNodeFromMessageChain(node.parent, messageChain);
         const span = getErrorSpanForNode(sourceFile, node);
         return {
             file: sourceFile,
@@ -601,7 +610,13 @@ namespace ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        if (node && node.parent !== node && (!sourceFile || node.pos < 0)) {
+            return getErrorSpanForNode(sourceFile, node.parent);
+        }
         let errorNode = node;
+        if (node.pos < 0) {
+            return getErrorSpanForNode(sourceFile, node.parent);
+        }
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 const pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
@@ -4251,6 +4266,10 @@ namespace ts {
 
     export function isIndexedAccessTypeNode(node: Node): node is IndexedAccessTypeNode {
         return node.kind === SyntaxKind.IndexedAccessType;
+    }
+
+    export function isTypeCallTypeNode(node: Node): node is TypeCallTypeNode {
+        return node.kind === SyntaxKind.TypeCall;
     }
 
     export function isMappedTypeNode(node: Node): node is MappedTypeNode {

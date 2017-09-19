@@ -1,0 +1,23 @@
+=== tests/cases/compiler/overloadSelection.ts ===
+interface Match {
+>Match : Match
+
+  (o: object): 0;
+>o : object
+
+  (o: any): 1;
+>o : any
+}
+type Wrap = <T>(v: T) => Match(T);
+>Wrap : Wrap
+>T : T
+>v : T
+>T : T
+>Match : Match
+>T : T
+
+type A = Wrap(RegExp);
+>A : 0
+>Wrap : Wrap
+>RegExp : RegExp
+

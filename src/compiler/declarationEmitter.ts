@@ -445,6 +445,8 @@ namespace ts {
                     return emitTypeOperator(<TypeOperatorNode>type);
                 case SyntaxKind.IndexedAccessType:
                     return emitIndexedAccessType(<IndexedAccessTypeNode>type);
+                case SyntaxKind.TypeCall:
+                    return emitTypeCall(<TypeCallTypeNode>type);
                 case SyntaxKind.MappedType:
                     return emitMappedType(<MappedTypeNode>type);
                 case SyntaxKind.FunctionType:
@@ -551,6 +553,13 @@ namespace ts {
                 write("[");
                 emitType(node.indexType);
                 write("]");
+            }
+
+            function emitTypeCall(node: TypeCallTypeNode) {
+                emitType(node.function);
+                write("(");
+                emitCommaList(node.arguments, emitType);
+                write(")");
             }
 
             function emitMappedType(node: MappedTypeNode) {

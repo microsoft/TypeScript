@@ -574,6 +574,8 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
+                case SyntaxKind.TypeCall:
+                    return emitTypeCall(<TypeCallTypeNode>node);
 
                 // Binding patterns
                 case SyntaxKind.ObjectBindingPattern:
@@ -1243,6 +1245,11 @@ namespace ts {
             write("[");
             emitExpression(node.argumentExpression);
             write("]");
+        }
+
+        function emitTypeCall(node: TypeCallTypeNode) {
+            emit(node.function);
+            emitList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
 
         function emitCallExpression(node: CallExpression) {

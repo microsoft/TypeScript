@@ -4,7 +4,7 @@
 var f2: {
 >f2 : Symbol(f2, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 2, 3))
 
-    (x: string, y: number): string;
+    (x: string, y: number): string
 >x : Symbol(x, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 3, 5))
 >y : Symbol(y, Decl(contextualTypingWithGenericAndNonGenericSignature.ts, 3, 15))
 
