@@ -701,6 +701,11 @@ function parsePrimaryExpression(): any {
         }|]
     }
 }`);
+        // Selection excludes leading trivia of declaration
+        testExtractMethod("extractMethod33",
+            `function F() {
+    [#|function G() { }|]
+}`);
     });
 
 

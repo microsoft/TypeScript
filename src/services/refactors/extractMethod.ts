@@ -1070,7 +1070,7 @@ namespace ts.refactor.extractMethod {
             if (!declInFile) {
                 return undefined;
             }
-            if (rangeContainsRange(enclosingTextRange, declInFile)) {
+            if (rangeContainsStartEnd(enclosingTextRange, declInFile.getStart(), declInFile.end)) {
                 // declaration is located in range to be extracted - do nothing
                 return undefined;
             }
