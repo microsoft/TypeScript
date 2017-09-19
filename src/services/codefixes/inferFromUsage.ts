@@ -160,7 +160,7 @@ namespace ts.codefix {
 
         function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>) {
             const references = FindAllReferences.findReferencedSymbols(
-                checker,
+                program,
                 cancellationToken,
                 program.getSourceFiles(),
                 token.getSourceFile(),
@@ -176,7 +176,8 @@ namespace ts.codefix {
             return InferFromReference.inferTypeFromReferences(getReferences(token), checker, cancellationToken);
         }
 
-        function inferTypeForParameterFromUsage(containingFunction: FunctionLikeDeclaration, parameterIndex: number, isRestParameter: boolean) {
+        function inferTypeForParameterFromUsage(containingFunction: FunctionLike, parameterIndex: number, isRestParameter: boolean) {
+            // TODO: Handle other function-like syntax.
             switch (containingFunction.kind) {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionExpression:
@@ -196,23 +197,22 @@ namespace ts.codefix {
         function typeToString(type: Type, enclosingDeclaration: Declaration) {
             let typeIsAccessible = true;
 
-            const writer = getSingleLineStringWriter();
-            writer.trackSymbol = (symbol, declaration, meaning) => {
-                if (checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+            const result = usingSingleLineStringWriter(writer => {
+                writer.trackSymbol = (symbol, declaration, meaning) => {
+                    if (checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                        typeIsAccessible = false;
+                    }
+                };
+
+                writer.reportPrivateInBaseOfClassExpression = writer.reportInaccessibleThisError = () => {
                     typeIsAccessible = false;
-                }
-            };
-            writer.reportIllegalExtends = writer.reportInaccessibleThisError = () => {
-                typeIsAccessible = false;
-            };
+                };
 
-            checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration);
-            const typeString = typeIsAccessible ? writer.string() : undefined;
+                checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration);
+                writer.trackSymbol = writer.reportPrivateInBaseOfClassExpression = writer.reportInaccessibleThisError = noop;
+            });
 
-            releaseStringWriter(writer);
-            writer.trackSymbol = writer.reportIllegalExtends = writer.reportInaccessibleThisError = noop;
-
-            return typeString;
+            return typeIsAccessible ? result : undefined;
         }
 
         function getParameterIndexInList(parameter: ParameterDeclaration, list: NodeArray<ParameterDeclaration>) {
