@@ -81,7 +81,6 @@ namespace Harness.Parallel.Worker {
             retries() { return this; },
             slow() { return this; },
         };
-        // TODO: If we ever start using async test completions, polyfill the `done` parameter/promise return handling
         name = [...namestack, name].join(" ");
         if (beforeEachFunc) {
             try {
@@ -92,14 +91,42 @@ namespace Harness.Parallel.Worker {
                 return;
             }
         }
-        try {
-            callback.call(fakeContext);
+        if (callback.length === 0) {
+            try {
+                // TODO: If we ever start using async test completions, polyfill promise return handling
+                callback.call(fakeContext);
+            }
+            catch (error) {
+                errors.push({ error: error.message, stack: error.stack, name });
+                return;
+            }
+            passing++;
         }
-        catch (error) {
-            errors.push({ error: error.message, stack: error.stack, name });
-            return;
+        else {
+            // Uses `done` callback
+            let completed = false;
+            try {
+                callback.call(fakeContext, (err: any) => {
+                    if (completed) {
+                        throw new Error(`done() callback called multiple times; ensure it is only called once.`);
+                    }
+                    if (err) {
+                        errors.push({ error: err.toString(), stack: "", name });
+                    }
+                    else {
+                        passing++;
+                    }
+                    completed = true;
+                });
+            }
+            catch (error) {
+                errors.push({ error: error.message, stack: error.stack, name });
+                return;
+            }
+            if (!completed) {
+                errors.push({ error: "Test completes asynchronously, which is unsupported by the parallel harness", stack: "", name });
+            }
         }
-        passing++;
     }
 
     export function start() {
