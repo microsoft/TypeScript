@@ -505,6 +505,8 @@ namespace ts.formatting {
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.ExportSpecifier:
                 case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
                     return true;
             }
             return false;

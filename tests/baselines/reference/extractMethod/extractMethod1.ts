@@ -14,7 +14,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function 'a'==
+// ==SCOPE::inner function in function 'a'==
 namespace A {
     let x = 1;
     function foo() {
@@ -23,7 +23,7 @@ namespace A {
         function a() {
             let a = 1;
         
-            newFunction();
+            /*RENAME*/newFunction();
 
             function newFunction() {
                 let y = 5;
@@ -34,7 +34,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::namespace 'B'==
+// ==SCOPE::function in namespace 'B'==
 namespace A {
     let x = 1;
     function foo() {
@@ -43,7 +43,7 @@ namespace A {
         function a() {
             let a = 1;
         
-            a = newFunction(a);
+            a = /*RENAME*/newFunction(a);
         }
 
         function newFunction(a: number) {
@@ -55,7 +55,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::namespace 'A'==
+// ==SCOPE::function in namespace 'A'==
 namespace A {
     let x = 1;
     function foo() {
@@ -64,7 +64,7 @@ namespace A {
         function a() {
             let a = 1;
         
-            a = newFunction(a);
+            a = /*RENAME*/newFunction(a);
         }
     }
 
@@ -76,7 +76,7 @@ namespace A {
         return a;
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 namespace A {
     let x = 1;
     function foo() {
@@ -85,7 +85,7 @@ namespace A {
         function a() {
             let a = 1;
         
-            a = newFunction(x, a, foo);
+            a = /*RENAME*/newFunction(x, a, foo);
         }
     }
 }

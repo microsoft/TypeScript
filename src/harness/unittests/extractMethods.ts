@@ -224,7 +224,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         if (x) {
                             return;
                         } |]
@@ -234,7 +234,7 @@ namespace ts {
             testExtractRange(`
                 function f() {
                     while (true) {
-                [#| 
+                [#|
                         [$|if (x) {
                         }
                         return;|]
@@ -377,6 +377,40 @@ namespace A {
         [
             "Cannot extract range containing conditional return statement."
         ]);
+
+        testExtractRangeFailed("extractRangeFailed7",
+        `
+function test(x: number) {
+    while (x) {
+        x--;
+        [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed8",
+        `
+function test(x: number) {
+    switch (x) {
+        case 1:
+            [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed9",
+        `var x = ([#||]1 + 2);`,
+        [
+            "Statement or expression expected."
+        ]);
+
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single identifier."]);
 
         testExtractMethod("extractMethod1",
             `namespace A {
@@ -614,6 +648,132 @@ namespace A {
         return a1.x + 10;|]
     }
 }`);
+        // Write + void return
+        testExtractMethod("extractMethod21",
+            `function foo() {
+    let x = 10;
+    [#|x++;
+    return;|]
+}`);
+        // Return in finally block
+        testExtractMethod("extractMethod22",
+            `function test() {
+    try {
+    }
+    finally {
+        [#|return 1;|]
+    }
+}`);
+        // Extraction position - namespace
+        testExtractMethod("extractMethod23",
+            `namespace NS {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - function
+        testExtractMethod("extractMethod24",
+            `function Outer() {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - file
+        testExtractMethod("extractMethod25",
+            `function M1() { }
+function M2() {
+    [#|return 1;|]
+}
+function M3() { }`);
+        // Extraction position - class without ctor
+        testExtractMethod("extractMethod26",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+}`);
+        // Extraction position - class with ctor in middle
+        testExtractMethod("extractMethod27",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    constructor() { }
+    M3() { }
+}`);
+        // Extraction position - class with ctor at end
+        testExtractMethod("extractMethod28",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+    constructor() { }
+}`);
+        // Shorthand property names
+        testExtractMethod("extractMethod29",
+            `interface UnaryExpression {
+    kind: "Unary";
+    operator: string;
+    operand: any;
+}
+
+function parseUnaryExpression(operator: string): UnaryExpression {
+    [#|return {
+        kind: "Unary",
+        operator,
+        operand: parsePrimaryExpression(),
+    };|]
+}
+
+function parsePrimaryExpression(): any {
+    throw "Not implemented";
+}`);
+        // Type parameter as declared type
+        testExtractMethod("extractMethod30",
+            `function F<T>() {
+    [#|let t: T;|]
+}`);
+        // Return in nested function
+        testExtractMethod("extractMethod31",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        var f: () => number;
+        [#|f = function (): number {
+            return value;
+        }|]
+    }
+}`);
+        // Return in nested class
+        testExtractMethod("extractMethod32",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        [#|var c = class {
+            M() {
+                return value;
+            }
+        }|]
+    }
+}`);
+        // Selection excludes leading trivia of declaration
+        testExtractMethod("extractMethod33",
+            `function F() {
+    [#|function G() { }|]
+}`);
     });
 
 
@@ -649,9 +809,12 @@ namespace A {
                 data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
-                    const changes = refactor.extractMethod.getPossibleExtractions(result.targetRange, context, results.indexOf(r))[0].changes;
+                    const { renameLocation, edits } = refactor.extractMethod.getExtractionAtIndex(result.targetRange, context, results.indexOf(r));
+                    assert.lengthOf(edits, 1);
                     data.push(`// ==SCOPE::${r.scopeDescription}==`);
-                    data.push(textChanges.applyChanges(sourceFile.text, changes[0].textChanges));
+                    const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
+                    const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
+                    data.push(newTextWithRename);
                 }
                 return data.join(newLineCharacter);
             });

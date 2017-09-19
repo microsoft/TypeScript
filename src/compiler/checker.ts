@@ -58,6 +58,7 @@ namespace ts {
         let symbolInstantiationDepth = 0;
 
         const emptySymbols = createSymbolTable();
+        const identityMapper: (type: Type) => Type = identity;
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -224,12 +225,13 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
-            getAllPossiblePropertiesOfType,
+            isArrayLikeType,
+            getAllPossiblePropertiesOfTypes,
             getSuggestionForNonexistentProperty: (node, type) => unescapeLeadingUnderscores(getSuggestionForNonexistentProperty(node, type)),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => unescapeLeadingUnderscores(getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning)),
             getBaseConstraintOfType,
             resolveName(name, location, meaning) {
-                return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
         };
@@ -333,7 +335,8 @@ namespace ts {
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
-        let visitedFlowCount = 0;
+        let sharedFlowCount = 0;
+        let flowAnalysisDisabled = false;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -351,8 +354,8 @@ namespace ts {
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
-        const visitedFlowNodes: FlowNode[] = [];
-        const visitedFlowTypes: FlowType[] = [];
+        const sharedFlowNodes: FlowNode[] = [];
+        const sharedFlowTypes: FlowType[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
@@ -575,7 +578,7 @@ namespace ts {
 
         function cloneSymbol(symbol: Symbol): Symbol {
             const result = createSymbol(symbol.flags, symbol.escapedName);
-            result.declarations = symbol.declarations.slice(0);
+            result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
             if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
@@ -863,17 +866,22 @@ namespace ts {
             }
         }
 
-        // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
-        // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
-        // the given name can be found.
+        /**
+         * Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
+         * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
+         * the given name can be found.
+         *
+         * @param isUse If true, this will count towards --noUnusedLocals / --noUnusedParameters.
+         */
         function resolveName(
             location: Node | undefined,
             name: __String,
             meaning: SymbolFlags,
             nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: __String | Identifier,
+            isUse: boolean,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, getSymbol, suggestedNameNotFoundMessage);
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, getSymbol, suggestedNameNotFoundMessage);
         }
 
         function resolveNameHelper(
@@ -882,6 +890,7 @@ namespace ts {
             meaning: SymbolFlags,
             nameNotFoundMessage: DiagnosticMessage,
             nameArg: __String | Identifier,
+            isUse: boolean,
             lookup: typeof getSymbol,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
@@ -1112,11 +1121,18 @@ namespace ts {
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
             // If `result === lastLocation.symbol`, that means that we are somewhere inside `lastLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-            if (result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastLocation.symbol) {
+            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastLocation.symbol) {
                 result.isReferenced = true;
             }
 
             if (!result) {
+                if (lastLocation) {
+                    Debug.assert(lastLocation.kind === SyntaxKind.SourceFile);
+                    if ((lastLocation as SourceFile).commonJsModuleIndicator && name === "exports") {
+                        return lastLocation.symbol;
+                    }
+                }
+
                 result = lookup(globals, name, meaning);
             }
 
@@ -1265,7 +1281,7 @@ namespace ts {
 
         function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning === SymbolFlags.Namespace) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 const parent = errorLocation.parent;
                 if (symbol) {
                     if (isQualifiedName(parent)) {
@@ -1296,7 +1312,7 @@ namespace ts {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
                     return true;
@@ -1307,14 +1323,14 @@ namespace ts {
 
         function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
                     error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
             else if (meaning & (SymbolFlags.Type & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Value)) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
                     error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeLeadingUnderscores(name));
                     return true;
@@ -1638,7 +1654,7 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
 
-                symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors ? undefined : message, name);
+                symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
                     return undefined;
                 }
@@ -1686,7 +1702,7 @@ namespace ts {
                     undefined;
             }
             else {
-                Debug.fail("Unknown entity name kind.");
+                Debug.assertNever(name, "Unknown entity name kind.");
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
@@ -2061,7 +2077,7 @@ namespace ts {
             return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
         }
 
-        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined {
+        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined {
             if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
                 return undefined;
             }
@@ -2095,6 +2111,10 @@ namespace ts {
                     canQualifySymbol(symbolFromSymbolTable, meaning);
             }
 
+            function isUMDExportSymbol(symbol: Symbol) {
+                return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
+            }
+
             function trySymbolTable(symbols: SymbolTable) {
                 // If symbol is directly available by its name in the symbol table
                 if (isAccessible(symbols.get(symbol.escapedName))) {
@@ -2106,6 +2126,7 @@ namespace ts {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
                         && symbolFromSymbolTable.escapedName !== "export="
                         && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)
+                        && !(isUMDExportSymbol(symbolFromSymbolTable) && enclosingDeclaration && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
 
@@ -2125,7 +2146,7 @@ namespace ts {
             }
         }
 
-        function needsQualification(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) {
+        function needsQualification(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags) {
             let qualify = false;
             forEachSymbolTableInScope(enclosingDeclaration, symbolTable => {
                 // If symbol of this name is not available in the symbol table we are ok
@@ -2307,7 +2328,7 @@ namespace ts {
             }
 
             const firstIdentifier = getFirstIdentifier(entityName);
-            const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+            const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
 
             // Verify if the symbol is accessible
             return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMakeVisible*/ true)) || {
@@ -3964,7 +3985,7 @@ namespace ts {
         function collectLinkedAliases(node: Identifier): Node[] {
             let exportSymbol: Symbol;
             if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-                exportSymbol = resolveName(node.parent, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node);
+                exportSymbol = resolveName(node.parent, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node, /*isUse*/ false);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
                 exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
@@ -3986,7 +4007,7 @@ namespace ts {
                         const internalModuleReference = <Identifier | QualifiedName>(<ImportEqualsDeclaration>declaration).moduleReference;
                         const firstIdentifier = getFirstIdentifier(internalModuleReference);
                         const importSymbol = resolveName(declaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
-                            undefined, undefined);
+                            undefined, undefined, /*isUse*/ false);
                         if (importSymbol) {
                             buildVisibleNodeList(importSymbol.declarations);
                         }
@@ -4895,7 +4916,7 @@ namespace ts {
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode>, location: Node): Signature[] {
             const signatures = getConstructorsForTypeArguments(type, typeArgumentNodes, location);
             const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
-            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments) : sig);
+            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments, isInJavaScriptFile(location)) : sig);
         }
 
         /**
@@ -5491,7 +5512,7 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
                 if ((isJavaScript || typeArgCount >= minTypeArgumentCount) && typeArgCount <= typeParamCount) {
-                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, baseTypeNode)) : cloneSignature(baseSig);
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -5905,25 +5926,21 @@ namespace ts {
                 getPropertiesOfObjectType(type);
         }
 
-        function getAllPossiblePropertiesOfType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.Union) {
-                const props = createSymbolTable();
-                for (const memberType of (type as UnionType).types) {
-                    if (memberType.flags & TypeFlags.Primitive) {
-                        continue;
-                    }
+        function getAllPossiblePropertiesOfTypes(types: Type[]): Symbol[] {
+            const unionType = getUnionType(types);
+            if (!(unionType.flags & TypeFlags.Union)) {
+                return getPropertiesOfType(unionType);
+            }
 
-                    for (const { escapedName } of getPropertiesOfType(memberType)) {
-                        if (!props.has(escapedName)) {
-                            props.set(escapedName, createUnionOrIntersectionProperty(type as UnionType, escapedName));
-                        }
+            const props = createSymbolTable();
+            for (const memberType of types) {
+                for (const { escapedName } of getPropertiesOfType(memberType)) {
+                    if (!props.has(escapedName)) {
+                        props.set(escapedName, createUnionOrIntersectionProperty(unionType as UnionType, escapedName));
                     }
                 }
-                return arrayFrom(props.values());
             }
-            else {
-                return getPropertiesOfType(type);
-            }
+            return arrayFrom(props.values());
         }
 
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
@@ -6354,11 +6371,10 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, location?: Node) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScript: boolean) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
-                const isJavaScript = isInJavaScriptFile(location);
                 if ((isJavaScript || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
                     if (!typeArguments) {
                         typeArguments = [];
@@ -6401,7 +6417,7 @@ namespace ts {
                     let paramSymbol = param.symbol;
                     // Include parameter symbol instead of property symbol in the signature
                     if (paramSymbol && !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
-                        const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, undefined, undefined);
+                        const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, undefined, undefined, /*isUse*/ false);
                         paramSymbol = resolvedSymbol;
                     }
                     if (i === 0 && paramSymbol.escapedName === "this") {
@@ -6616,8 +6632,8 @@ namespace ts {
             return anyType;
         }
 
-        function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters));
+        function getSignatureInstantiation(signature: Signature, typeArguments: Type[], isJavascript: boolean): Signature {
+            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript);
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
             let instantiation = instantiations.get(id);
@@ -6632,11 +6648,33 @@ namespace ts {
         }
 
         function getErasedSignature(signature: Signature): Signature {
-            if (!signature.typeParameters) return signature;
-            if (!signature.erasedSignatureCache) {
-                signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), /*eraseTypeParameters*/ true);
-            }
-            return signature.erasedSignatureCache;
+            return signature.typeParameters ?
+                signature.erasedSignatureCache || (signature.erasedSignatureCache = createErasedSignature(signature)) :
+                signature;
+        }
+
+        function createErasedSignature(signature: Signature) {
+            // Create an instantiation of the signature where all type arguments are the any type.
+            return instantiateSignature(signature, createTypeEraser(signature.typeParameters), /*eraseTypeParameters*/ true);
+        }
+
+        function getCanonicalSignature(signature: Signature): Signature {
+            return signature.typeParameters ?
+                signature.canonicalSignatureCache || (signature.canonicalSignatureCache = createCanonicalSignature(signature)) :
+                signature;
+        }
+
+        function createCanonicalSignature(signature: Signature) {
+            // Create an instantiation of the signature where each unconstrained type parameter is replaced with
+            // its original. When a generic class or interface is instantiated, each generic method in the class or
+            // interface is instantiated with a fresh set of cloned type parameters (which we need to handle scenarios
+            // where different generations of the same type parameter are in scope). This leads to a lot of new type
+            // identities, and potentially a lot of work comparing those identities, so here we create an instantiation
+            // that uses the original type identities for all unconstrained type parameters.
+            return getSignatureInstantiation(
+                signature,
+                map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp),
+                isInJavaScriptFile(signature.declaration));
         }
 
         function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
@@ -6787,7 +6825,8 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (!isInJavaScriptFile(node) && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                const isJavascript = isInJavaScriptFile(node);
+                if (!isJavascript && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
                             ? Diagnostics.Generic_type_0_requires_1_type_argument_s
@@ -6800,7 +6839,7 @@ namespace ts {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJavascript));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
@@ -6817,7 +6856,7 @@ namespace ts {
             const id = getTypeListId(typeArguments);
             let instantiation = links.instantiations.get(id);
             if (!instantiation) {
-                links.instantiations.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters)))));
+                links.instantiations.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJavaScriptFile(symbol.valueDeclaration)))));
             }
             return instantiation;
         }
@@ -7059,7 +7098,8 @@ namespace ts {
         }
 
         function getGlobalSymbol(name: __String, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
-            return resolveName(undefined, name, meaning, diagnostic, name);
+            // Don't track references for global symbols anyway, so value if `isReference` is arbitrary
+            return resolveName(undefined, name, meaning, diagnostic, name, /*isUse*/ false);
         }
 
         function getGlobalType(name: __String, arity: 0, reportErrors: boolean): ObjectType;
@@ -7265,6 +7305,22 @@ namespace ts {
             return binarySearchTypes(types, type) >= 0;
         }
 
+        // Return true if the given intersection type contains (a) more than one unit type or (b) an object
+        // type and a nullable type (null or undefined).
+        function isEmptyIntersectionType(type: IntersectionType) {
+            let combined: TypeFlags = 0;
+            for (const t of type.types) {
+                if (t.flags & TypeFlags.Unit && combined & TypeFlags.Unit) {
+                    return true;
+                }
+                combined |= t.flags;
+                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function addTypeToUnion(typeSet: TypeSet, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
@@ -7278,7 +7334,11 @@ namespace ts {
                 if (flags & TypeFlags.Null) typeSet.containsNull = true;
                 if (!(flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
-            else if (!(flags & TypeFlags.Never)) {
+            else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
+                // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
+                // another form of 'never' (in that they have an empty value domain). We could in theory turn
+                // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
+                // easier to reason about their origin.
                 if (flags & TypeFlags.String) typeSet.containsString = true;
                 if (flags & TypeFlags.Number) typeSet.containsNumber = true;
                 if (flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
@@ -7411,6 +7471,12 @@ namespace ts {
                 type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
                 unionTypes.set(id, type);
                 type.types = types;
+                /*
+                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
+                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
+                (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
+                It's important that we create equivalent union types only once, so that's an unfortunate side effect.
+                */
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
             }
@@ -7504,7 +7570,7 @@ namespace ts {
                 type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
                 intersectionTypes.set(id, type);
                 type.types = typeSet;
-                type.aliasSymbol = aliasSymbol;
+                type.aliasSymbol = aliasSymbol; // See comment in `getUnionTypeFromSortedList`.
                 type.aliasTypeArguments = aliasTypeArguments;
             }
             return type;
@@ -7799,7 +7865,10 @@ namespace ts {
                 return mapType(right, t => getSpreadType(left, t));
             }
             if (right.flags & TypeFlags.NonPrimitive) {
-                return emptyObjectType;
+                return nonPrimitiveType;
+            }
+            if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike)) {
+                return left;
             }
 
             const members = createSymbolTable();
@@ -7826,6 +7895,7 @@ namespace ts {
                     members.set(rightProp.escapedName, getNonReadonlySymbol(rightProp));
                 }
             }
+
             for (const leftProp of getPropertiesOfType(left)) {
                 if (leftProp.flags & SymbolFlags.SetAccessor && !(leftProp.flags & SymbolFlags.GetAccessor)
                     || skippedPrivateMembers.has(leftProp.escapedName)
@@ -7937,7 +8007,7 @@ namespace ts {
             return unknownType;
         }
 
-        function getTypeFromThisTypeNode(node: TypeNode): Type {
+        function getTypeFromThisTypeNode(node: ThisExpression | ThisTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getThisType(node);
@@ -7971,7 +8041,7 @@ namespace ts {
                     return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
-                    return getTypeFromThisTypeNode(node);
+                    return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
                 case SyntaxKind.TypeReference:
@@ -8087,10 +8157,6 @@ namespace ts {
             return mapper && isInferenceContext(mapper) ?
                 createInferenceContext(mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.compareTypes, mapper.inferences) :
                 mapper;
-        }
-
-        function identityMapper(type: Type): Type {
-            return type;
         }
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
@@ -8473,7 +8539,8 @@ namespace ts {
                 return Ternary.False;
             }
 
-            if (source.typeParameters) {
+            if (source.typeParameters && source.typeParameters !== target.typeParameters) {
+                target = getCanonicalSignature(target);
                 source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
             }
 
@@ -10012,7 +10079,7 @@ namespace ts {
         }
 
         function isUnitType(type: Type): boolean {
-            return (type.flags & (TypeFlags.Literal | TypeFlags.Undefined | TypeFlags.Null)) !== 0;
+            return !!(type.flags & TypeFlags.Unit);
         }
 
         function isLiteralType(type: Type): boolean {
@@ -10358,7 +10425,7 @@ namespace ts {
         // results for union and intersection types for performance reasons.
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
-            return !!(type.flags & TypeFlags.TypeVariable ||
+            return !!(type.flags & (TypeFlags.TypeVariable | TypeFlags.Index) ||
                 objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
                 objectFlags & ObjectFlags.Mapped ||
@@ -10526,6 +10593,13 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
+                else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
+                    inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
+                }
+                else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
+                    inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
+                    inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
@@ -10550,7 +10624,7 @@ namespace ts {
                         priority = savePriority;
                     }
                 }
-                else if (source.flags & TypeFlags.UnionOrIntersection) {
+                else if (source.flags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
                     const sourceTypes = (<UnionOrIntersectionType>source).types;
                     for (const sourceType of sourceTypes) {
@@ -10559,7 +10633,7 @@ namespace ts {
                 }
                 else {
                     source = getApparentType(source);
-                    if (source.flags & TypeFlags.Object) {
+                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
                         if (visited && visited.get(key)) {
                             return;
@@ -10599,6 +10673,12 @@ namespace ts {
             }
 
             function inferFromObjectTypes(source: Type, target: Type) {
+                if (isGenericMappedType(source) && isGenericMappedType(target)) {
+                    // The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
+                    // from S to T and from X to Y.
+                    inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), getConstraintTypeFromMappedType(<MappedType>target));
+                    inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
+                }
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
                     if (constraintType.flags & TypeFlags.Index) {
@@ -10639,7 +10719,7 @@ namespace ts {
             function inferFromProperties(source: Type, target: Type) {
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
-                    const sourceProp = getPropertyOfObjectType(source, targetProp.escapedName);
+                    const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                     if (sourceProp) {
                         inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
                     }
@@ -10790,7 +10870,15 @@ namespace ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node, Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
+                links.resolvedSymbol = !nodeIsMissing(node) &&
+                    resolveName(
+                        node,
+                        node.escapedText,
+                        SymbolFlags.Value | SymbolFlags.ExportValue,
+                        Diagnostics.Cannot_find_name_0,
+                        node,
+                        !isWriteOnlyAccess(node),
+                        Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -11431,14 +11519,25 @@ namespace ts {
             return false;
         }
 
+        function reportFlowControlError(node: Node) {
+            const block = <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
+            const sourceFile = getSourceFileOfNode(node);
+            const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
+            diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
+            let flowDepth = 0;
+            if (flowAnalysisDisabled) {
+                return unknownType;
+            }
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const visitedFlowStart = visitedFlowCount;
+            const sharedFlowStart = sharedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
-            visitedFlowCount = visitedFlowStart;
+            sharedFlowCount = sharedFlowStart;
             // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
@@ -11450,60 +11549,70 @@ namespace ts {
             return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
+                if (flowDepth === 2500) {
+                    // We have made 2500 recursive invocations. To avoid overflowing the call stack we report an error
+                    // and disable further control flow analysis in the containing function or module body.
+                    flowAnalysisDisabled = true;
+                    reportFlowControlError(reference);
+                    return unknownType;
+                }
+                flowDepth++;
                 while (true) {
-                    if (flow.flags & FlowFlags.Shared) {
+                    const flags = flow.flags;
+                    if (flags & FlowFlags.Shared) {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
                         // antecedent of more than one node.
-                        for (let i = visitedFlowStart; i < visitedFlowCount; i++) {
-                            if (visitedFlowNodes[i] === flow) {
-                                return visitedFlowTypes[i];
+                        for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
+                            if (sharedFlowNodes[i] === flow) {
+                                flowDepth--;
+                                return sharedFlowTypes[i];
                             }
                         }
                     }
                     let type: FlowType;
-                    if (flow.flags & FlowFlags.AfterFinally) {
+                    if (flags & FlowFlags.AfterFinally) {
                         // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement
                         (<AfterFinallyFlow>flow).locked = true;
                         type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
                         (<AfterFinallyFlow>flow).locked = false;
                     }
-                    else if (flow.flags & FlowFlags.PreFinally) {
+                    else if (flags & FlowFlags.PreFinally) {
                         // locked pre-finally flows are filtered out in getTypeAtFlowBranchLabel
                         // so here just redirect to antecedent
                         flow = (<PreFinallyFlow>flow).antecedent;
                         continue;
                     }
-                    else if (flow.flags & FlowFlags.Assignment) {
+                    else if (flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
                         }
                     }
-                    else if (flow.flags & FlowFlags.Condition) {
+                    else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
-                    else if (flow.flags & FlowFlags.SwitchClause) {
+                    else if (flags & FlowFlags.SwitchClause) {
                         type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
                     }
-                    else if (flow.flags & FlowFlags.Label) {
+                    else if (flags & FlowFlags.Label) {
                         if ((<FlowLabel>flow).antecedents.length === 1) {
                             flow = (<FlowLabel>flow).antecedents[0];
                             continue;
                         }
-                        type = flow.flags & FlowFlags.BranchLabel ?
+                        type = flags & FlowFlags.BranchLabel ?
                             getTypeAtFlowBranchLabel(<FlowLabel>flow) :
                             getTypeAtFlowLoopLabel(<FlowLabel>flow);
                     }
-                    else if (flow.flags & FlowFlags.ArrayMutation) {
+                    else if (flags & FlowFlags.ArrayMutation) {
                         type = getTypeAtFlowArrayMutation(<FlowArrayMutation>flow);
                         if (!type) {
                             flow = (<FlowArrayMutation>flow).antecedent;
                             continue;
                         }
                     }
-                    else if (flow.flags & FlowFlags.Start) {
+                    else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
                         if (container && container !== flowContainer && reference.kind !== SyntaxKind.PropertyAccessExpression && reference.kind !== SyntaxKind.ThisKeyword) {
@@ -11518,12 +11627,13 @@ namespace ts {
                         // simply return the non-auto declared type to reduce follow-on errors.
                         type = convertAutoToAny(declaredType);
                     }
-                    if (flow.flags & FlowFlags.Shared) {
+                    if (flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
-                        visitedFlowNodes[visitedFlowCount] = flow;
-                        visitedFlowTypes[visitedFlowCount] = type;
-                        visitedFlowCount++;
+                        sharedFlowNodes[sharedFlowCount] = flow;
+                        sharedFlowTypes[sharedFlowCount] = type;
+                        sharedFlowCount++;
                     }
+                    flowDepth--;
                     return type;
                 }
             }
@@ -11561,29 +11671,31 @@ namespace ts {
             }
 
             function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType {
-                const node = flow.node;
-                const expr = node.kind === SyntaxKind.CallExpression ?
-                    (<PropertyAccessExpression>(<CallExpression>node).expression).expression :
-                    (<ElementAccessExpression>(<BinaryExpression>node).left).expression;
-                if (isMatchingReference(reference, getReferenceCandidate(expr))) {
-                    const flowType = getTypeAtFlowNode(flow.antecedent);
-                    const type = getTypeFromFlowType(flowType);
-                    if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
-                        let evolvedType = <EvolvingArrayType>type;
-                        if (node.kind === SyntaxKind.CallExpression) {
-                            for (const arg of (<CallExpression>node).arguments) {
-                                evolvedType = addEvolvingArrayElementType(evolvedType, arg);
+                if (declaredType === autoType || declaredType === autoArrayType) {
+                    const node = flow.node;
+                    const expr = node.kind === SyntaxKind.CallExpression ?
+                        (<PropertyAccessExpression>(<CallExpression>node).expression).expression :
+                        (<ElementAccessExpression>(<BinaryExpression>node).left).expression;
+                    if (isMatchingReference(reference, getReferenceCandidate(expr))) {
+                        const flowType = getTypeAtFlowNode(flow.antecedent);
+                        const type = getTypeFromFlowType(flowType);
+                        if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
+                            let evolvedType = <EvolvingArrayType>type;
+                            if (node.kind === SyntaxKind.CallExpression) {
+                                for (const arg of (<CallExpression>node).arguments) {
+                                    evolvedType = addEvolvingArrayElementType(evolvedType, arg);
+                                }
                             }
-                        }
-                        else {
-                            const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
-                            if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
-                                evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
+                            else {
+                                const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
+                                if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
+                                    evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
+                                }
                             }
+                            return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
                         }
-                        return evolvedType === type ? flowType : createFlowType(evolvedType, isIncomplete(flowType));
+                        return flowType;
                     }
-                    return flowType;
                 }
                 return undefined;
             }
@@ -12784,7 +12896,8 @@ namespace ts {
                     }
                 }
             }
-            if (noImplicitThis || isInJavaScriptFile(func)) {
+            const inJs = isInJavaScriptFile(func);
+            if (noImplicitThis || inJs) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
                     // We have an object literal method. Check if the containing object literal has a contextual type
@@ -12811,10 +12924,20 @@ namespace ts {
                 }
                 // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
                 // contextual type for 'this' is 'obj'.
-                if (func.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>func.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    const target = (<BinaryExpression>func.parent).left;
+                const { parent } = func;
+                if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    const target = (<BinaryExpression>parent).left;
                     if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
-                        return checkExpressionCached((<PropertyAccessExpression | ElementAccessExpression>target).expression);
+                        const { expression } = target as PropertyAccessExpression | ElementAccessExpression;
+                        // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
+                        if (inJs && isIdentifier(expression)) {
+                            const sourceFile = getSourceFileOfNode(parent);
+                            if (sourceFile.commonJsModuleIndicator && getResolvedSymbol(expression) === sourceFile.symbol) {
+                                return undefined;
+                            }
+                        }
+
+                        return checkExpressionCached(expression);
                     }
                 }
             }
@@ -13501,6 +13624,7 @@ namespace ts {
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
                 let member = memberDecl.symbol;
+                let literalName: __String | undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
@@ -13511,6 +13635,12 @@ namespace ts {
 
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                        if (memberDecl.name.kind === SyntaxKind.ComputedPropertyName) {
+                            const t = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
+                            if (t.flags & TypeFlags.Literal) {
+                                literalName = escapeLeadingUnderscores("" + (t as LiteralType).value);
+                            }
+                        }
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
                     }
                     else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
@@ -13527,7 +13657,7 @@ namespace ts {
                     }
 
                     typeFlags |= type.flags;
-                    const prop = createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
+                    const prop = createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
                     if (inDestructuringPattern) {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                         // for the property, make the property optional.
@@ -13537,7 +13667,7 @@ namespace ts {
                         if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
                         }
-                        if (hasDynamicName(memberDecl)) {
+                        if (!literalName && hasDynamicName(memberDecl)) {
                             patternWithComputedProperties = true;
                         }
                     }
@@ -13595,7 +13725,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
-                if (hasDynamicName(memberDecl)) {
+                if (!literalName && hasDynamicName(memberDecl)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
                     }
@@ -13661,7 +13791,8 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined | TypeFlags.NonPrimitive) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive) ||
+                getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
                 type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
@@ -13926,8 +14057,9 @@ namespace ts {
             const instantiatedSignatures = [];
             for (const signature of signatures) {
                 if (signature.typeParameters) {
-                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0);
-                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments));
+                    const isJavascript = isInJavaScriptFile(node);
+                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0, isJavascript);
+                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
                 }
                 else {
                     instantiatedSignatures.push(signature);
@@ -14355,7 +14487,7 @@ namespace ts {
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const reactNamespace = getJsxNamespace();
-            const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
+            const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
             if (reactSym) {
                 // Mark local symbol as referenced here because it might not have been marked
                 // if jsx emit was not react as there wont be error being emitted
@@ -14631,7 +14763,7 @@ namespace ts {
 
             checkPropertyNotUsedBeforeDeclaration(prop, node, right);
 
-            markPropertyAsReferenced(prop);
+            markPropertyAsReferenced(prop, node);
 
             getNodeLinks(node).resolvedSymbol = prop;
 
@@ -14665,7 +14797,7 @@ namespace ts {
                 return;
             }
 
-            if (findAncestor(node, node => node.kind === SyntaxKind.PropertyDeclaration ? true : isExpression(node) ? false : "quit") &&
+            if (isInPropertyInitializer(node) &&
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && !isPropertyDeclaredInAncestorClass(prop)) {
                 error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
@@ -14676,6 +14808,20 @@ namespace ts {
                 !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)) {
                 error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.escapedText));
             }
+        }
+
+        function isInPropertyInitializer(node: Node): boolean {
+            return !!findAncestor(node, node => {
+                switch (node.kind) {
+                    case SyntaxKind.PropertyDeclaration:
+                        return true;
+                    case SyntaxKind.PropertyAssignment:
+                        // We might be in `a = { b: this.b }`, so keep looking. See `tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts`.
+                        return false;
+                    default:
+                        return isPartOfExpression(node) ? false : "quit";
+                }
+            });
         }
 
         /**
@@ -14731,7 +14877,7 @@ namespace ts {
         }
 
         function getSuggestionForNonexistentSymbol(location: Node, name: __String, meaning: SymbolFlags): __String {
-            const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, (symbols, name, meaning) => {
+            const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ false, (symbols, name, meaning) => {
                 const symbol = getSymbol(symbols, name, meaning);
                 if (symbol) {
                     // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
@@ -14811,11 +14957,12 @@ namespace ts {
             return bestCandidate;
         }
 
-        function markPropertyAsReferenced(prop: Symbol) {
+        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined) {
             if (prop &&
                 noUnusedIdentifiers &&
                 (prop.flags & SymbolFlags.ClassMember) &&
-                prop.valueDeclaration && hasModifier(prop.valueDeclaration, ModifierFlags.Private)) {
+                prop.valueDeclaration && hasModifier(prop.valueDeclaration, ModifierFlags.Private)
+                && !(nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly))) {
                 if (getCheckFlags(prop) & CheckFlags.Instantiated) {
                     getSymbolLinks(prop).target.isReferenced = true;
                 }
@@ -15080,7 +15227,6 @@ namespace ts {
             let argCount: number;            // Apparent number of arguments we will have in this call
             let typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
-            let isDecorator: boolean;
             let spreadArgIndex = -1;
 
             if (isJsxOpeningLikeElement(node)) {
@@ -15114,7 +15260,6 @@ namespace ts {
                 }
             }
             else if (node.kind === SyntaxKind.Decorator) {
-                isDecorator = true;
                 typeArguments = undefined;
                 argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
             }
@@ -15184,7 +15329,7 @@ namespace ts {
             if (!contextualMapper) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
             }
-            return getSignatureInstantiation(signature, getInferredTypes(context));
+            return getSignatureInstantiation(signature, getInferredTypes(context), isInJavaScriptFile(contextualSignature.declaration));
         }
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[], context: InferenceContext): Type[] {
@@ -15219,7 +15364,7 @@ namespace ts {
                     // Above, the type of the 'value' parameter is inferred to be 'A'.
                     const contextualSignature = getSingleCallSignature(instantiatedType);
                     const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
-                        getOrCreateTypeFromSignature(getSignatureInstantiation(contextualSignature, contextualSignature.typeParameters)) :
+                        getOrCreateTypeFromSignature(getSignatureInstantiation(contextualSignature, contextualSignature.typeParameters, isInJavaScriptFile(node))) :
                         instantiatedType;
                     const inferenceTargetType = getReturnTypeOfSignature(signature);
                      // Inferences made from return types have lower priority than all other inferences.
@@ -15935,8 +16080,9 @@ namespace ts {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
+                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             if (typeArguments) {
-                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
+                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters), isJavascript);
                                 if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
                                     candidateForTypeArgumentError = originalCandidate;
                                     break;
@@ -15945,7 +16091,7 @@ namespace ts {
                             else {
                                 typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
-                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
+                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             candidateForArgumentError = candidate;
@@ -16093,16 +16239,6 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            // If the expression is a class of abstract type, then it cannot be instantiated.
-            // Note, only class declarations can be declared abstract.
-            // In the case of a merged class-module or class-interface declaration,
-            // only the class declaration node will have the Abstract flag set.
-            const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
-            if (valueDecl && hasModifier(valueDecl, ModifierFlags.Abstract)) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(getNameOfDeclaration(valueDecl)));
-                return resolveErrorCall(node);
-            }
-
             // TS 1.0 spec: 4.11
             // If expressionType is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
@@ -16122,6 +16258,16 @@ namespace ts {
                 if (!isConstructorAccessible(node, constructSignatures[0])) {
                     return resolveErrorCall(node);
                 }
+                // If the expression is a class of abstract type, then it cannot be instantiated.
+                // Note, only class declarations can be declared abstract.
+                // In the case of a merged class-module or class-interface declaration,
+                // only the class declaration node will have the Abstract flag set.
+                const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
+                if (valueDecl && hasModifier(valueDecl, ModifierFlags.Abstract)) {
+                    error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(getNameOfDeclaration(valueDecl)));
+                    return resolveErrorCall(node);
+                }
+
                 return resolveCall(node, constructSignatures, candidatesOutArray);
             }
 
@@ -16322,7 +16468,7 @@ namespace ts {
                     // This code-path is called by language service
                     return resolveStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
             }
-            Debug.fail("Branch in 'resolveSignature' should be unreachable.");
+            Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
         }
 
         /**
@@ -16509,7 +16655,7 @@ namespace ts {
             }
             // Make sure require is not a local function
             if (!isIdentifier(node.expression)) throw Debug.fail();
-            const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
             if (!resolvedRequire) {
                 // project does not contain symbol named 'require' - assume commonjs require
                 return true;
@@ -16630,8 +16776,9 @@ namespace ts {
                 }
             }
             if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
+                // parameter might be a transient symbol generated by use of `arguments` in the function body.
                 const parameter = lastOrUndefined(signature.parameters);
-                if (!getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
+                if (isTransientSymbol(parameter) || !getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
                     const contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
                     assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
@@ -17997,7 +18144,7 @@ namespace ts {
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
             if (isInJavaScriptFile(node) && node.jsDoc) {
-                const typecasts = flatMap(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag));
+                const typecasts = flatMap(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag && !!(tag as JSDocTypeTag).typeExpression && !!(tag as JSDocTypeTag).typeExpression.type));
                 if (typecasts && typecasts.length) {
                     // We should have already issued an error if there were multiple type jsdocs
                     const cast = typecasts[0] as JSDocTypeTag;
@@ -18708,7 +18855,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount);
+                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, isInJavaScriptFile(typeArgumentNodes[i]));
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     const typeArgument = typeArguments[i];
@@ -19133,6 +19280,8 @@ namespace ts {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
+                    // A jsdoc typedef is, by definition, a type alias
+                    case SyntaxKind.JSDocTypedefTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d) || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
@@ -19503,8 +19652,11 @@ namespace ts {
         }
 
         function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression) {
-            const rootName = typeName && getFirstIdentifier(typeName);
-            const rootSymbol = rootName && resolveName(rootName, rootName.escapedText, (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            if (!typeName) return;
+
+            const rootName = getFirstIdentifier(typeName);
+            const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
+            const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isRefernce*/ true);
             if (rootSymbol
                 && rootSymbol.flags & SymbolFlags.Alias
                 && symbolIsValue(rootSymbol)
@@ -19798,11 +19950,11 @@ namespace ts {
                                 !isParameterPropertyDeclaration(parameter) &&
                                 !parameterIsThisKeyword(parameter) &&
                                 !parameterNameStartsWithUnderscore(name)) {
-                                error(name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(local.escapedName));
+                                error(name, Diagnostics._0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(local.escapedName));
                             }
                         }
                         else if (compilerOptions.noUnusedLocals) {
-                            forEach(local.declarations, d => errorUnusedLocal(getNameOfDeclaration(d) || d, unescapeLeadingUnderscores(local.escapedName)));
+                            forEach(local.declarations, d => errorUnusedLocal(d, unescapeLeadingUnderscores(local.escapedName)));
                         }
                     }
                 });
@@ -19817,7 +19969,8 @@ namespace ts {
             return false;
         }
 
-        function errorUnusedLocal(node: Node, name: string) {
+        function errorUnusedLocal(declaration: Declaration, name: string) {
+            const node = getNameOfDeclaration(declaration) || declaration;
             if (isIdentifierThatStartsWithUnderScore(node)) {
                 const declaration = getRootDeclaration(node.parent);
                 if (declaration.kind === SyntaxKind.VariableDeclaration && isForInOrOfStatement(declaration.parent.parent)) {
@@ -19826,7 +19979,7 @@ namespace ts {
             }
 
             if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                error(node, Diagnostics._0_is_declared_but_never_used, name);
+                error(node, Diagnostics._0_is_declared_but_its_value_is_never_read, name);
             }
         }
 
@@ -19844,13 +19997,13 @@ namespace ts {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
                             if (!member.symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                error(member.name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(member.symbol.escapedName));
+                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(member.symbol.escapedName));
                             }
                         }
                         else if (member.kind === SyntaxKind.Constructor) {
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
                                 if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_never_used, unescapeLeadingUnderscores(parameter.symbol.escapedName));
+                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(parameter.symbol.escapedName));
                                 }
                             }
                         }
@@ -19871,7 +20024,7 @@ namespace ts {
                     }
                     for (const typeParameter of node.typeParameters) {
                         if (!getMergedSymbol(typeParameter.symbol).isReferenced) {
-                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(typeParameter.symbol.escapedName));
+                            error(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(typeParameter.symbol.escapedName));
                         }
                     }
                 }
@@ -19884,7 +20037,7 @@ namespace ts {
                     if (!local.isReferenced && !local.exportSymbol) {
                         for (const declaration of local.declarations) {
                             if (!isAmbientModule(declaration)) {
-                                errorUnusedLocal(getNameOfDeclaration(declaration), unescapeLeadingUnderscores(local.escapedName));
+                                errorUnusedLocal(declaration, unescapeLeadingUnderscores(local.escapedName));
                             }
                         }
                     }
@@ -19897,7 +20050,14 @@ namespace ts {
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
-            forEach(node.statements, checkSourceElement);
+            if (isFunctionOrModuleBlock(node)) {
+                const saveFlowAnalysisDisabled = flowAnalysisDisabled;
+                forEach(node.statements, checkSourceElement);
+                flowAnalysisDisabled = saveFlowAnalysisDisabled;
+            }
+            else {
+                forEach(node.statements, checkSourceElement);
+            }
             if (node.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
@@ -20095,7 +20255,7 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
                 if (!isIdentifier(node.name)) throw Debug.fail();
-                const localDeclarationSymbol = resolveName(node, node.name.escapedText, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                const localDeclarationSymbol = resolveName(node, node.name.escapedText, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
                 if (localDeclarationSymbol &&
                     localDeclarationSymbol !== symbol &&
                     localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
@@ -20150,7 +20310,7 @@ namespace ts {
                 else if (n.kind === SyntaxKind.Identifier) {
                     // check FunctionLikeDeclaration.locals (stores parameters\function local variable)
                     // if it contains entry with a specified name
-                    const symbol = resolveName(n, (<Identifier>n).escapedText, SymbolFlags.Value | SymbolFlags.Alias, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined);
+                    const symbol = resolveName(n, (<Identifier>n).escapedText, SymbolFlags.Value | SymbolFlags.Alias, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined, /*isUse*/ false);
                     if (!symbol || symbol === unknownSymbol || !symbol.valueDeclaration) {
                         return;
                     }
@@ -20234,7 +20394,7 @@ namespace ts {
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
-                markPropertyAsReferenced(property);
+                markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined); // A destructuring is never a write-only reference.
                 if (parent.initializer && property) {
                     checkPropertyAccessibility(parent, parent.initializer, parentType, property);
                 }
@@ -21491,7 +21651,7 @@ namespace ts {
                 return true;
             }
 
-            type InheritanceInfoMap = { prop: Symbol; containingType: Type };
+            interface InheritanceInfoMap { prop: Symbol; containingType: Type; }
             const seen = createUnderscoreEscapedMap<InheritanceInfoMap>();
             forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.escapedName, { prop: p, containingType: type }); });
             let ok = true;
@@ -22111,9 +22271,9 @@ namespace ts {
                     }
                 }
                 else {
-                    if (modulekind === ModuleKind.ES2015 && !isInAmbientContext(node)) {
+                    if (modulekind >= ModuleKind.ES2015 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
-                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
                 }
             }
@@ -22149,7 +22309,7 @@ namespace ts {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
 
-                    if (modulekind !== ModuleKind.System && modulekind !== ModuleKind.ES2015) {
+                    if (modulekind !== ModuleKind.System && modulekind !== ModuleKind.ES2015 && modulekind !== ModuleKind.ESNext) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
                     }
                 }
@@ -22170,7 +22330,7 @@ namespace ts {
                 const exportedName = node.propertyName || node.name;
                 // find immediate value referenced by exported name (SymbolFlags.Alias is set so we don't chase down aliases)
                 const symbol = resolveName(exportedName, exportedName.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias,
-                    /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                    /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
                 if (symbol && (symbol === undefinedSymbol || isGlobalSourceFile(getDeclarationContainer(symbol.declarations[0])))) {
                     error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, unescapeLeadingUnderscores(exportedName.escapedText));
                 }
@@ -22210,10 +22370,14 @@ namespace ts {
 
             checkExternalModuleExports(container);
 
+            if (isInAmbientContext(node) && !isEntityNameExpression(node.expression)) {
+                grammarErrorOnNode(node.expression, Diagnostics.The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context);
+            }
+
             if (node.isExportEquals && !isInAmbientContext(node)) {
-                if (modulekind === ModuleKind.ES2015) {
+                if (modulekind >= ModuleKind.ES2015) {
                     // export assignment is not supported in es6 modules
-                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_export_default_or_another_module_format_instead);
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
                 else if (modulekind === ModuleKind.System) {
                     // system modules does not support export assignment
@@ -22487,6 +22651,7 @@ namespace ts {
 
                 deferredNodes = [];
                 deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
+                flowAnalysisDisabled = false;
 
                 forEach(node.statements, checkSourceElement);
 
@@ -22925,14 +23090,16 @@ namespace ts {
                             return sig.thisParameter;
                         }
                     }
+                    if (isInExpressionContext(node)) {
+                        return checkExpression(node as Expression).symbol;
+                    }
                     // falls through
 
-                case SyntaxKind.SuperKeyword:
-                    const type = isPartOfExpression(node) ? getTypeOfExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
-                    return type.symbol;
-
                 case SyntaxKind.ThisType:
-                    return getTypeFromTypeNode(<TypeNode>node).symbol;
+                    return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode).symbol;
+
+                case SyntaxKind.SuperKeyword:
+                    return checkExpression(node as Expression).symbol;
 
                 case SyntaxKind.ConstructorKeyword:
                     // constructor keyword for an overload, should take us to the definition if it exist
@@ -22961,6 +23128,9 @@ namespace ts {
                             ? getTypeFromTypeNode(node.parent.parent.objectType)
                             : undefined;
                     return objectType && getPropertyOfType(objectType, escapeLeadingUnderscores((node as StringLiteral | NumericLiteral).text));
+
+                case SyntaxKind.DefaultKeyword:
+                    return getSymbolOfNode(node.parent);
 
                 default:
                     return undefined;
@@ -23271,7 +23441,7 @@ namespace ts {
                     const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
                     if (isStatementWithLocals(container)) {
                         const nodeLinks = getNodeLinks(symbol.valueDeclaration);
-                        if (!!resolveName(container.parent, symbol.escapedName, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined)) {
+                        if (resolveName(container.parent, symbol.escapedName, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false)) {
                             // redeclaration - always should be renamed
                             links.isDeclarationWithCollidingName = true;
                         }
@@ -23581,7 +23751,7 @@ namespace ts {
                 }
             }
 
-            return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
         }
 
         function getReferencedValueDeclaration(reference: Identifier): Declaration {
@@ -23904,7 +24074,7 @@ namespace ts {
                 return quickResult;
             }
 
-            let lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node, lastAsync: Node, lastReadonly: Node;
+            let lastStatic: Node, lastDeclare: Node, lastAsync: Node, lastReadonly: Node;
             let flags = ModifierFlags.None;
             for (const modifier of node.modifiers) {
                 if (modifier.kind !== SyntaxKind.ReadonlyKeyword) {
@@ -23925,13 +24095,6 @@ namespace ts {
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.PrivateKeyword:
                         const text = visibilityToString(modifierToFlag(modifier.kind));
-
-                        if (modifier.kind === SyntaxKind.ProtectedKeyword) {
-                            lastProtected = modifier;
-                        }
-                        else if (modifier.kind === SyntaxKind.PrivateKeyword) {
-                            lastPrivate = modifier;
-                        }
 
                         if (flags & ModifierFlags.AccessibilityModifier) {
                             return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
@@ -24494,7 +24657,7 @@ namespace ts {
                     currentKind = SetAccessor;
                 }
                 else {
-                    Debug.fail("Unexpected syntax kind:" + (<Node>prop).kind);
+                    Debug.assertNever(prop, "Unexpected syntax kind:" + (<Node>prop).kind);
                 }
 
                 const effectiveName = getPropertyNameForPropertyNameNode(name);
@@ -24810,7 +24973,7 @@ namespace ts {
                 }
             }
 
-            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
+            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.ESNext && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
                 !isInAmbientContext(node.parent.parent) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
             }

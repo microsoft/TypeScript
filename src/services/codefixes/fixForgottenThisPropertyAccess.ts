@@ -8,7 +8,7 @@ namespace ts.codefix {
             if (token.kind !== SyntaxKind.Identifier) {
                 return undefined;
             }
-            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
             changeTracker.replaceNode(sourceFile, token, createPropertyAccess(createThis(), <Identifier>token));
 
             return [{

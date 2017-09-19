@@ -63,7 +63,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context as { newLineCharacter: string, rulesProvider: formatting.RulesProvider });
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         let precedingNode: Node;
         let newClassDeclaration: ClassDeclaration;
@@ -97,7 +97,9 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         return {
-            edits: changeTracker.getChanges()
+            edits: changeTracker.getChanges(),
+            renameFilename: undefined,
+            renameLocation: undefined,
         };
 
         function deleteNode(node: Node, inList = false) {

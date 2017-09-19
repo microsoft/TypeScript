@@ -343,6 +343,28 @@ namespace ts {
                 return ScriptElementKind.alias;
             case SyntaxKind.JSDocTypedefTag:
                 return ScriptElementKind.typeElement;
+            case SyntaxKind.BinaryExpression:
+                const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                const { right } = node as BinaryExpression;
+                switch (kind) {
+                    case SpecialPropertyAssignmentKind.None:
+                        return ScriptElementKind.unknown;
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                        const rightKind = getNodeKind(right);
+                        return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return ScriptElementKind.memberFunctionElement; // instance method
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                        return ScriptElementKind.memberVariableElement; // property
+                    case SpecialPropertyAssignmentKind.Property:
+                        // static method / property
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    default: {
+                        assertTypeIsNever(kind);
+                        return ScriptElementKind.unknown;
+                    }
+                }
             default:
                 return ScriptElementKind.unknown;
         }

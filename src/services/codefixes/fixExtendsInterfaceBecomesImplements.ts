@@ -21,7 +21,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
             changeTracker.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword));
 
             // We replace existing keywords with commas.

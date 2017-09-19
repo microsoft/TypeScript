@@ -573,7 +573,7 @@ namespace ts.server {
 
         getEditsForRefactor(
             fileName: string,
-            _formatOptions: FormatCodeSettings,
+            formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
             refactorName: string,
             actionName: string): RefactorEditInfo {
@@ -581,14 +581,13 @@ namespace ts.server {
             const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
             args.refactor = refactorName;
             args.action = actionName;
+            args.formatOptions = formatOptions;
 
             const request = this.processRequest<protocol.GetEditsForRefactorRequest>(CommandNames.GetEditsForRefactor, args);
             const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
 
             if (!response.body) {
-                return {
-                    edits: []
-                };
+                return { edits: [], renameFilename: undefined, renameLocation: undefined };
             }
 
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
