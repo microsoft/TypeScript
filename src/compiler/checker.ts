@@ -20019,7 +20019,7 @@ namespace ts {
                         return;
                     }
                     for (const typeParameter of node.typeParameters) {
-                        if (!getMergedSymbol(typeParameter.symbol).isReferenced && !parameterNameStartsWithUnderscore(typeParameter.name)) {
+                        if (!getMergedSymbol(typeParameter.symbol).isReferenced && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
                             error(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, unescapeLeadingUnderscores(typeParameter.symbol.escapedName));
                         }
                     }
