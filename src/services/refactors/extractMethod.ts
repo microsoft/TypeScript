@@ -909,7 +909,7 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement | ClassElement> {
+    function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement> | ReadonlyArray<ClassElement> {
         if (isFunctionLike(scope)) {
             const body = scope.body;
             if (isBlock(body)) {
@@ -934,7 +934,7 @@ namespace ts.refactor.extractMethod {
      * Otherwise, return `undefined`.
      */
     function getNodeToInsertBefore(minPos: number, scope: Scope): Node | undefined {
-        return find(getStatementsOrClassElements(scope), child =>
+        return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
             child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child));
     }
 
