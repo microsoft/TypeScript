@@ -1494,15 +1494,6 @@ namespace ts {
             ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
     }
 
-    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
-        return !!getFirstJSDocTag(node, SyntaxKind.JSDocParameterTag);
-    }
-
-    function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag | undefined {
-        const tags = getJSDocTags(node);
-        return find(tags, doc => doc.kind === kind);
-    }
-
     export function getAllJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         if (isJSDocTypedefTag(node)) {
             return [node.parent];
@@ -1510,16 +1501,7 @@ namespace ts {
         return getJSDocCommentsAndTags(node);
     }
 
-    export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
-        let tags = (node as JSDocContainer).jsDocCache;
-        // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
-        if (tags === undefined) {
-            (node as JSDocContainer).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
-        }
-        return tags;
-    }
-
-    function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
         let result: Array<JSDoc | JSDocTag> | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
@@ -1578,15 +1560,6 @@ namespace ts {
         }
     }
 
-    export function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] | undefined {
-        if (param.name && isIdentifier(param.name)) {
-            const name = param.name.escapedText;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name) as JSDocParameterTag[];
-        }
-        // a binding pattern doesn't have a name, so it's not possible to match it a jsdoc parameter, which is identified by name
-        return undefined;
-    }
-
     /** Does the opposite of `getJSDocParameterTags`: given a JSDoc parameter, finds the parameter corresponding to it. */
     export function getParameterSymbolFromJSDoc(node: JSDocParameterTag): Symbol | undefined {
         if (node.symbol) {
@@ -1610,39 +1583,6 @@ namespace ts {
         const name = node.name.escapedText;
         const { typeParameters } = (node.parent.parent.parent as ts.SignatureDeclaration | ts.InterfaceDeclaration | ts.ClassDeclaration);
         return find(typeParameters, p => p.name.escapedText === name);
-    }
-
-    export function getJSDocType(node: Node): TypeNode {
-        let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
-        if (!tag && node.kind === SyntaxKind.Parameter) {
-            const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
-            if (paramTags) {
-                tag = find(paramTags, tag => !!tag.typeExpression);
-            }
-        }
-
-        return tag && tag.typeExpression && tag.typeExpression.type;
-    }
-
-    export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsTag) as JSDocAugmentsTag;
-    }
-
-    export function getJSDocClassTag(node: Node): JSDocClassTag {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocClassTag) as JSDocClassTag;
-    }
-
-    export function getJSDocReturnTag(node: Node): JSDocReturnTag {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
-    }
-
-    export function getJSDocReturnType(node: Node): TypeNode {
-        const returnTag = getJSDocReturnTag(node);
-        return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
-    }
-
-    export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
     }
 
     export function hasRestParameter(s: SignatureDeclaration): boolean {
@@ -4086,6 +4026,114 @@ namespace ts {
             return (declaration as NamedDeclaration).name;
         }
     }
+
+    /**
+     * Gets the JSDoc parameter tags for the node if present.
+     *
+     * @remarks Returns any JSDoc param tag that matches the provided
+     * parameter, whether a param tag on a containing function
+     * expression, or a param tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are returned first, so in the previous example, the param
+     * tag on the containing function expression would be first.
+     *
+     * Does not return tags for binding patterns, because JSDoc matches
+     * parameters by name and binding patterns do not have a name.
+     */
+    export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> | undefined {
+        if (param.name && isIdentifier(param.name)) {
+            const name = param.name.escapedText;
+            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name) as JSDocParameterTag[];
+        }
+        // a binding pattern doesn't have a name, so it's not possible to match it a JSDoc parameter, which is identified by name
+        return undefined;
+    }
+
+    /**
+     * Return true if the node has JSDoc parameter tags.
+     *
+     * @remarks Includes parameter tags that are not directly on the node,
+     * for example on a variable declaration whose initializer is a function expression.
+     */
+    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
+        return !!getFirstJSDocTag(node, SyntaxKind.JSDocParameterTag);
+    }
+
+    /** Gets the JSDoc augments tag for the node if present */
+    export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsTag) as JSDocAugmentsTag;
+    }
+
+    /** Gets the JSDoc class tag for the node if present */
+    export function getJSDocClassTag(node: Node): JSDocClassTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocClassTag) as JSDocClassTag;
+    }
+
+    /** Gets the JSDoc return tag for the node if present */
+    export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
+    }
+
+    /** Gets the JSDoc template tag for the node if present */
+    export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
+    }
+
+    /** Gets the JSDoc type tag for the node if present */
+    export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
+    }
+
+    /**
+     * Gets the type node for the node if provided via JSDoc.
+     *
+     * @remarks The search includes any JSDoc param tag that relates
+     * to the provided parameter, for example a type tag on the
+     * parameter itself, or a param tag on a containing function
+     * expression, or a param tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are examined first, so in the previous example, the type
+     * tag directly on the node would be returned.
+     */
+    export function getJSDocType(node: Node): TypeNode | undefined {
+        let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
+        if (!tag && node.kind === SyntaxKind.Parameter) {
+            const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
+            if (paramTags) {
+                tag = find(paramTags, tag => !!tag.typeExpression);
+            }
+        }
+
+        return tag && tag.typeExpression && tag.typeExpression.type;
+    }
+
+    /**
+     * Gets the return type node for the node if provided via JSDoc's return tag.
+     *
+     * @remarks `getJSDocReturnTag` just gets the whole JSDoc tag. This function
+     * gets the type from inside the braces.
+     */
+    export function getJSDocReturnType(node: Node): TypeNode | undefined {
+        const returnTag = getJSDocReturnTag(node);
+        return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
+    }
+
+    /** Get all JSDoc tags related to a node, including those on parent nodes. */
+    export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
+        let tags = (node as JSDocContainer).jsDocCache;
+        // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
+        if (tags === undefined) {
+            (node as JSDocContainer).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
+        }
+        return tags;
+    }
+
+    /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
+    function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag | undefined {
+        const tags = getJSDocTags(node);
+        return find(tags, doc => doc.kind === kind);
+    }
+
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
