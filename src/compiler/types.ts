@@ -3344,11 +3344,19 @@ namespace ts {
         typeArguments?: Type[];  // Type reference type arguments (undefined if none)
     }
 
+    export const enum Variance {
+        Invariant     = 0,  // Both covariant and contravariant
+        Covariant     = 1,  // Covariant
+        Contravariant = 2,  // Contravariant
+        Bivariant     = 3,  // Either covariant or contravariant
+        Omnivariant   = 4   // Unwitnessed type parameter
+    }
+
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
-        instantiations: Map<TypeReference>;   // Generic instantiation cache
-        variances?: Variance[];
+        instantiations: Map<TypeReference>;  // Generic instantiation cache
+        variances?: Variance[];  // Variance of each type parameter
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -3442,14 +3450,6 @@ namespace ts {
         resolvedIndexType: IndexType;
     }
 
-    export const enum Variance {
-        Invariant     = 0,
-        Covariant     = 1,
-        Contravariant = 2,
-        Bivariant     = Covariant | Contravariant,
-        Omnivariant   = 4
-    }
-
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends TypeVariable {
         /** Retrieve using getConstraintFromTypeParameter */
@@ -3532,7 +3532,7 @@ namespace ts {
     }
 
     export const enum InferencePriority {
-        Contravariant     = 1 << 0,  // Contravariant inference
+        Contravariant     = 1 << 0,  // Inference from contravariant position
         NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
         MappedType        = 1 << 2,  // Reverse inference for mapped type
         ReturnType        = 1 << 3,  // Inference made from return type of generic function

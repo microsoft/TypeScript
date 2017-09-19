@@ -9215,7 +9215,11 @@ namespace ts {
                 const length = sources.length <= targets.length ? sources.length : targets.length;
                 let result = Ternary.True;
                 for (let i = 0; i < length; i++) {
+                    // When variance information isn't available we default to covariance. This happens
+                    // in the process of computing variance information for recursive types and when
+                    // comparing 'this' type arguments.
                     const variance = i < variances.length ? variances[i] : Variance.Covariant;
+                    // We simply ignore omnivariant type arguments (because they're never witnessed).
                     if (variance !== Variance.Omnivariant) {
                         const s = sources[i];
                         const t = targets[i];
@@ -9227,12 +9231,19 @@ namespace ts {
                             related = isRelatedTo(t, s, reportErrors);
                         }
                         else if (variance === Variance.Bivariant) {
+                            // In the bivariant case we first compare contravariantly without reporting
+                            // errors. Then, if that doesn't succeed, we compare covariantly with error
+                            // reporting. Thus, error elaboration will be based on the the covariant check,
+                            // which is generally easier to reason about.
                             related = isRelatedTo(t, s, /*reportErrors*/ false);
                             if (!related) {
                                 related = isRelatedTo(s, t, reportErrors);
                             }
                         }
                         else {
+                            // In the invariant case we first compare covariantly, and only when that
+                            // succeeds do we proceed to compare contravariantly. Thus, error elaboration
+                            // will typically be based on the covariant check.
                             related = isRelatedTo(s, t, reportErrors);
                             if (related) {
                                 related &= isRelatedTo(t, s, reportErrors);
@@ -9404,15 +9415,18 @@ namespace ts {
                 }
                 else {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                        // We have type references to the same generic type. Obtain the variance information for the
+                        // type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
-                        if (variances) {
-                            // We have type references to same target type, see if relationship holds for all type arguments
-                            if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, variances, reportErrors)) {
-                                return result;
-                            }
-                            if (variances !== emptyArray) {
-                                return Ternary.False;
-                            }
+                        if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, variances, reportErrors)) {
+                            return result;
+                        }
+                        // The type arguments did not relate appropriately, but it may be because getVariances was
+                        // invoked recursively and returned emptyArray (in which case typeArgumentsRelatedTo defaults
+                        // to covariance for all type arguments). In that case we need to contine with a structural
+                        // comparison. Otherwise, we know for certain the instantiations aren't related.
+                        if (variances !== emptyArray) {
+                            return Ternary.False;
                         }
                     }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
@@ -9828,22 +9842,37 @@ namespace ts {
             return createTypeReference(type, map(type.typeParameters, t => t === source ? target: t));
         }
 
+        // Return an array containing the variance of each type parameter. The variance is effectively
+        // a digest of the type comparisons that occur for each type argument when instantiations of the
+        // generic type are structurally compared. We infer the variance information by comparing
+        // instantiations of the generic type for type arguments with known relations. Note that the
+        // function returns the emptyArray singleton to signal that it has been invoked recursively for
+        // the given generic type.
         function getVariances(type: GenericType) {
             const typeParameters = type.typeParameters || emptyArray;
             let variances = type.variances;
             if (!variances) {
                 if (type === globalArrayType || type === globalReadonlyArrayType) {
+                    // Arrays are known to be covariant, no need to spend time computing this
                     variances = [Variance.Covariant];
                 }
                 else {
+                    // The emptyArray singleton is used to signal a recursive invocation.
                     type.variances = emptyArray;
                     variances = [];
                     for (const tp of typeParameters) {
-                        const superType = getVarianceType(type, tp, markerSuperType);
-                        const subType = getVarianceType(type, tp, markerSubType);
-                        let variance = (isTypeAssignableTo(subType, superType) ? Variance.Covariant : 0) |
-                            (isTypeAssignableTo(superType, subType) ? Variance.Contravariant : 0);
-                        if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, markerOtherType), superType)) {
+                        // We first compare instantiations where the type parameter is replaced with
+                        // marker types that have a known subtype relationship. From this we can infer
+                        // invariance, covariance, contravariance or bivariance.
+                        const typeWithSuper = getVarianceType(type, tp, markerSuperType);
+                        const typeWithSub = getVarianceType(type, tp, markerSubType);
+                        let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? Variance.Covariant : 0) |
+                            (isTypeAssignableTo(typeWithSuper, typeWithSub) ? Variance.Contravariant : 0);
+                        // If the instantiations appear to be related bivariantly, it may be because the
+                        // type parameter is omnivariant (i.e. it isn't witnessed anywhere in the generic
+                        // type). To determine this we compare instantiations where the type parameter is
+                        // replaced with marker types that are known to be unrelated.
+                        if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, markerOtherType), typeWithSuper)) {
                             variance = Variance.Omnivariant;
                         }
                         variances.push(variance);
@@ -10129,6 +10158,7 @@ namespace ts {
                 getUnionType(types, /*subtypeReduction*/ true);
         }
 
+        // Return the leftmost type for which no type to the right is a subtype.
         function getCommonSubtype(types: Type[]) {
             return reduceLeft(types, (s, t) => isTypeSubtypeOf(t, s) ? t : s);
         }
@@ -10898,12 +10928,13 @@ namespace ts {
                         !hasPrimitiveConstraint(inference.typeParameter) &&
                         (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
                     const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
-                    // Infer widened union or supertype, or the unknown type for no common supertype. We infer union types
-                    // for inferences coming from return types in order to avoid common supertype failures.
-                    const unionOrSuperType = inference.priority & InferencePriority.Contravariant ? getCommonSubtype(baseCandidates) :
+                    // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
+                    // union types were requested or if all inferences were made from the return type position, infer a
+                    // union type. Otherwise, infer a common supertype.
+                    const unwidenedType = inference.priority & InferencePriority.Contravariant ? getCommonSubtype(baseCandidates) :
                         context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ? getUnionType(baseCandidates, /*subtypeReduction*/ true) :
                         getCommonSupertype(baseCandidates);
-                    inferredType = getWidenedType(unionOrSuperType);
+                    inferredType = getWidenedType(unwidenedType);
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
