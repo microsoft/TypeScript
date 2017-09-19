@@ -1980,6 +1980,11 @@
         "category": "Error",
         "code": 2566
     },
+    "Enum declarations can only merge with namespace or other enum declarations.": {
+        "category": "Error",
+        "code": 2567
+    },
+
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
