@@ -1,8 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-// TODO: GH#18546
-// For now this tests that at least we don't crash.
-
 ////function f() {
 ////    /*start*/namespace N {}/*end*/
 ////}
@@ -13,9 +10,9 @@ edit.applyRefactor({
     actionName: "scope_1",
     actionDescription: "Extract to function in global scope",
     newContent: `function f() {
-    /*RENAME*/newFunction(N);
+    /*RENAME*/newFunction();
 }
-function newFunction(N: any) {
+function newFunction() {
     namespace N { }
 }
 `
