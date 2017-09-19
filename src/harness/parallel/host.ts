@@ -43,7 +43,9 @@ namespace Harness.Parallel.Host {
             }
         }
         tasks.sort((a, b) => a.size - b.size);
-        const batchSize = (totalSize / workerCount) * 0.9;
+        // 1 fewer batches than threads to account for unittests running on the final thread
+        const batchCount = runners.length === 1 ? workerCount : workerCount - 1;
+        const batchSize = (totalSize / workerCount) * 0.9; // Keep spare tests for unittest thread in reserve
         console.log(`Discovered ${tasks.length} test files in ${+(new Date()) - discoverStart}ms.`);
         console.log(`Starting to run tests using ${workerCount} threads...`);
         const { fork }: { fork(modulePath: string, args?: string[], options?: {}): ChildProcessPartial; } = require("child_process");
@@ -130,10 +132,10 @@ namespace Harness.Parallel.Host {
         // It's only really worth doing an initial batching if there are a ton of files to go through
         if (totalFiles > 1000) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind, file: string, size: number }[][] = new Array(workerCount);
-            const doneBatching = new Array(workerCount);
+            const batches: { runner: TestRunnerKind, file: string, size: number }[][] = new Array(batchCount);
+            const doneBatching = new Array(batchCount);
             batcher: while (true) {
-                for (let i = 0; i < workerCount; i++) {
+                for (let i = 0; i < batchCount; i++) {
                     if (tasks.length === 0) {
                         // TODO: This indicates a particularly suboptimal packing
                         break batcher;
@@ -151,20 +153,26 @@ namespace Harness.Parallel.Host {
                     }
                     batches[i].push(tasks.pop());
                 }
-                for (let j = 0; j < workerCount; j++) {
+                for (let j = 0; j < batchCount; j++) {
                     if (!doneBatching[j]) {
                         continue;
                     }
                 }
                 break;
             }
-            console.log(`Batched into ${workerCount} groups with approximate total file sizes of ${Math.floor(batchSize)} bytes in each group.`);
+            console.log(`Batched into ${batchCount} groups with approximate total file sizes of ${Math.floor(batchSize)} bytes in each group.`);
             for (const worker of workers) {
-                const action: ParallelBatchMessage = { type: "batch", payload: batches.pop() };
-                if (!action.payload[0]) {
-                    throw new Error(`Tried to send invalid message ${action}`);
+                const payload = batches.pop();
+                if (payload) {
+                    const action: ParallelBatchMessage = { type: "batch", payload };
+                    if (!action.payload[0]) {
+                        throw new Error(`Tried to send invalid message ${action}`);
+                    }
+                    worker.send(action);
                 }
-                worker.send(action);
+                else { // Unittest thread - send off just one test
+                    worker.send({ type: "test", payload: tasks.pop() });
+                }
             }
         }
         else {
