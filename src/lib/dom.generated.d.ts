@@ -4230,25 +4230,25 @@ interface HTMLBodyElement extends HTMLElement {
     bgProperties: string;
     link: any;
     noWrap: boolean;
-    onafterprint: (this: HTMLBodyElement, ev: Event) => any;
-    onbeforeprint: (this: HTMLBodyElement, ev: Event) => any;
-    onbeforeunload: (this: HTMLBodyElement, ev: BeforeUnloadEvent) => any;
-    onblur: (this: HTMLBodyElement, ev: FocusEvent) => any;
-    onerror: (this: HTMLBodyElement, ev: ErrorEvent) => any;
-    onfocus: (this: HTMLBodyElement, ev: FocusEvent) => any;
-    onhashchange: (this: HTMLBodyElement, ev: HashChangeEvent) => any;
-    onload: (this: HTMLBodyElement, ev: Event) => any;
-    onmessage: (this: HTMLBodyElement, ev: MessageEvent) => any;
-    onoffline: (this: HTMLBodyElement, ev: Event) => any;
-    ononline: (this: HTMLBodyElement, ev: Event) => any;
-    onorientationchange: (this: HTMLBodyElement, ev: Event) => any;
-    onpagehide: (this: HTMLBodyElement, ev: PageTransitionEvent) => any;
-    onpageshow: (this: HTMLBodyElement, ev: PageTransitionEvent) => any;
-    onpopstate: (this: HTMLBodyElement, ev: PopStateEvent) => any;
-    onresize: (this: HTMLBodyElement, ev: UIEvent) => any;
-    onscroll: (this: HTMLBodyElement, ev: UIEvent) => any;
-    onstorage: (this: HTMLBodyElement, ev: StorageEvent) => any;
-    onunload: (this: HTMLBodyElement, ev: Event) => any;
+    onafterprint(this: HTMLBodyElement, ev: Event): any;
+    onbeforeprint(this: HTMLBodyElement, ev: Event): any;
+    onbeforeunload(this: HTMLBodyElement, ev: BeforeUnloadEvent): any;
+    onblur(this: HTMLBodyElement, ev: FocusEvent): any;
+    onerror(this: HTMLBodyElement, ev: ErrorEvent): any;
+    onfocus(this: HTMLBodyElement, ev: FocusEvent): any;
+    onhashchange(this: HTMLBodyElement, ev: HashChangeEvent): any;
+    onload(this: HTMLBodyElement, ev: Event): any;
+    onmessage(this: HTMLBodyElement, ev: MessageEvent): any;
+    onoffline(this: HTMLBodyElement, ev: Event): any;
+    ononline(this: HTMLBodyElement, ev: Event): any;
+    onorientationchange(this: HTMLBodyElement, ev: Event): any;
+    onpagehide(this: HTMLBodyElement, ev: PageTransitionEvent): any;
+    onpageshow(this: HTMLBodyElement, ev: PageTransitionEvent): any;
+    onpopstate(this: HTMLBodyElement, ev: PopStateEvent): any;
+    onresize(this: HTMLBodyElement, ev: UIEvent): any;
+    onscroll(this: HTMLBodyElement, ev: UIEvent): any;
+    onstorage(this: HTMLBodyElement, ev: StorageEvent): any;
+    onunload(this: HTMLBodyElement, ev: Event): any;
     text: any;
     vLink: any;
     addEventListener<K extends keyof HTMLBodyElementEventMap>(type: K, listener: (this: HTMLBodyElement, ev: HTMLBodyElementEventMap[K]) => any, useCapture?: boolean): void;
@@ -4565,73 +4565,73 @@ interface HTMLElement extends Element {
     readonly offsetParent: Element;
     readonly offsetTop: number;
     readonly offsetWidth: number;
-    onabort: (this: HTMLElement, ev: UIEvent) => any;
-    onactivate: (this: HTMLElement, ev: UIEvent) => any;
-    onbeforeactivate: (this: HTMLElement, ev: UIEvent) => any;
-    onbeforecopy: (this: HTMLElement, ev: ClipboardEvent) => any;
-    onbeforecut: (this: HTMLElement, ev: ClipboardEvent) => any;
-    onbeforedeactivate: (this: HTMLElement, ev: UIEvent) => any;
-    onbeforepaste: (this: HTMLElement, ev: ClipboardEvent) => any;
-    onblur: (this: HTMLElement, ev: FocusEvent) => any;
-    oncanplay: (this: HTMLElement, ev: Event) => any;
-    oncanplaythrough: (this: HTMLElement, ev: Event) => any;
-    onchange: (this: HTMLElement, ev: Event) => any;
-    onclick: (this: HTMLElement, ev: MouseEvent) => any;
-    oncontextmenu: (this: HTMLElement, ev: PointerEvent) => any;
-    oncopy: (this: HTMLElement, ev: ClipboardEvent) => any;
-    oncuechange: (this: HTMLElement, ev: Event) => any;
-    oncut: (this: HTMLElement, ev: ClipboardEvent) => any;
-    ondblclick: (this: HTMLElement, ev: MouseEvent) => any;
-    ondeactivate: (this: HTMLElement, ev: UIEvent) => any;
-    ondrag: (this: HTMLElement, ev: DragEvent) => any;
-    ondragend: (this: HTMLElement, ev: DragEvent) => any;
-    ondragenter: (this: HTMLElement, ev: DragEvent) => any;
-    ondragleave: (this: HTMLElement, ev: DragEvent) => any;
-    ondragover: (this: HTMLElement, ev: DragEvent) => any;
-    ondragstart: (this: HTMLElement, ev: DragEvent) => any;
-    ondrop: (this: HTMLElement, ev: DragEvent) => any;
-    ondurationchange: (this: HTMLElement, ev: Event) => any;
-    onemptied: (this: HTMLElement, ev: Event) => any;
-    onended: (this: HTMLElement, ev: MediaStreamErrorEvent) => any;
-    onerror: (this: HTMLElement, ev: ErrorEvent) => any;
-    onfocus: (this: HTMLElement, ev: FocusEvent) => any;
-    oninput: (this: HTMLElement, ev: Event) => any;
-    oninvalid: (this: HTMLElement, ev: Event) => any;
-    onkeydown: (this: HTMLElement, ev: KeyboardEvent) => any;
-    onkeypress: (this: HTMLElement, ev: KeyboardEvent) => any;
-    onkeyup: (this: HTMLElement, ev: KeyboardEvent) => any;
-    onload: (this: HTMLElement, ev: Event) => any;
-    onloadeddata: (this: HTMLElement, ev: Event) => any;
-    onloadedmetadata: (this: HTMLElement, ev: Event) => any;
-    onloadstart: (this: HTMLElement, ev: Event) => any;
-    onmousedown: (this: HTMLElement, ev: MouseEvent) => any;
-    onmouseenter: (this: HTMLElement, ev: MouseEvent) => any;
-    onmouseleave: (this: HTMLElement, ev: MouseEvent) => any;
-    onmousemove: (this: HTMLElement, ev: MouseEvent) => any;
-    onmouseout: (this: HTMLElement, ev: MouseEvent) => any;
-    onmouseover: (this: HTMLElement, ev: MouseEvent) => any;
-    onmouseup: (this: HTMLElement, ev: MouseEvent) => any;
-    onmousewheel: (this: HTMLElement, ev: WheelEvent) => any;
-    onmscontentzoom: (this: HTMLElement, ev: UIEvent) => any;
-    onmsmanipulationstatechanged: (this: HTMLElement, ev: MSManipulationEvent) => any;
-    onpaste: (this: HTMLElement, ev: ClipboardEvent) => any;
-    onpause: (this: HTMLElement, ev: Event) => any;
-    onplay: (this: HTMLElement, ev: Event) => any;
-    onplaying: (this: HTMLElement, ev: Event) => any;
-    onprogress: (this: HTMLElement, ev: ProgressEvent) => any;
-    onratechange: (this: HTMLElement, ev: Event) => any;
-    onreset: (this: HTMLElement, ev: Event) => any;
-    onscroll: (this: HTMLElement, ev: UIEvent) => any;
-    onseeked: (this: HTMLElement, ev: Event) => any;
-    onseeking: (this: HTMLElement, ev: Event) => any;
-    onselect: (this: HTMLElement, ev: UIEvent) => any;
-    onselectstart: (this: HTMLElement, ev: Event) => any;
-    onstalled: (this: HTMLElement, ev: Event) => any;
-    onsubmit: (this: HTMLElement, ev: Event) => any;
-    onsuspend: (this: HTMLElement, ev: Event) => any;
-    ontimeupdate: (this: HTMLElement, ev: Event) => any;
-    onvolumechange: (this: HTMLElement, ev: Event) => any;
-    onwaiting: (this: HTMLElement, ev: Event) => any;
+    onabort(this: HTMLElement, ev: UIEvent): any;
+    onactivate(this: HTMLElement, ev: UIEvent): any;
+    onbeforeactivate(this: HTMLElement, ev: UIEvent): any;
+    onbeforecopy(this: HTMLElement, ev: ClipboardEvent): any;
+    onbeforecut(this: HTMLElement, ev: ClipboardEvent): any;
+    onbeforedeactivate(this: HTMLElement, ev: UIEvent): any;
+    onbeforepaste(this: HTMLElement, ev: ClipboardEvent): any;
+    onblur(this: HTMLElement, ev: FocusEvent): any;
+    oncanplay(this: HTMLElement, ev: Event): any;
+    oncanplaythrough(this: HTMLElement, ev: Event): any;
+    onchange(this: HTMLElement, ev: Event): any;
+    onclick(this: HTMLElement, ev: MouseEvent): any;
+    oncontextmenu(this: HTMLElement, ev: PointerEvent): any;
+    oncopy(this: HTMLElement, ev: ClipboardEvent): any;
+    oncuechange(this: HTMLElement, ev: Event): any;
+    oncut(this: HTMLElement, ev: ClipboardEvent): any;
+    ondblclick(this: HTMLElement, ev: MouseEvent): any;
+    ondeactivate(this: HTMLElement, ev: UIEvent): any;
+    ondrag(this: HTMLElement, ev: DragEvent): any;
+    ondragend(this: HTMLElement, ev: DragEvent): any;
+    ondragenter(this: HTMLElement, ev: DragEvent): any;
+    ondragleave(this: HTMLElement, ev: DragEvent): any;
+    ondragover(this: HTMLElement, ev: DragEvent): any;
+    ondragstart(this: HTMLElement, ev: DragEvent): any;
+    ondrop(this: HTMLElement, ev: DragEvent): any;
+    ondurationchange(this: HTMLElement, ev: Event): any;
+    onemptied(this: HTMLElement, ev: Event): any;
+    onended(this: HTMLElement, ev: MediaStreamErrorEvent): any;
+    onerror(this: HTMLElement, ev: ErrorEvent): any;
+    onfocus(this: HTMLElement, ev: FocusEvent): any;
+    oninput(this: HTMLElement, ev: Event): any;
+    oninvalid(this: HTMLElement, ev: Event): any;
+    onkeydown(this: HTMLElement, ev: KeyboardEvent): any;
+    onkeypress(this: HTMLElement, ev: KeyboardEvent): any;
+    onkeyup(this: HTMLElement, ev: KeyboardEvent): any;
+    onload(this: HTMLElement, ev: Event): any;
+    onloadeddata(this: HTMLElement, ev: Event): any;
+    onloadedmetadata(this: HTMLElement, ev: Event): any;
+    onloadstart(this: HTMLElement, ev: Event): any;
+    onmousedown(this: HTMLElement, ev: MouseEvent): any;
+    onmouseenter(this: HTMLElement, ev: MouseEvent): any;
+    onmouseleave(this: HTMLElement, ev: MouseEvent): any;
+    onmousemove(this: HTMLElement, ev: MouseEvent): any;
+    onmouseout(this: HTMLElement, ev: MouseEvent): any;
+    onmouseover(this: HTMLElement, ev: MouseEvent): any;
+    onmouseup(this: HTMLElement, ev: MouseEvent): any;
+    onmousewheel(this: HTMLElement, ev: WheelEvent): any;
+    onmscontentzoom(this: HTMLElement, ev: UIEvent): any;
+    onmsmanipulationstatechanged(this: HTMLElement, ev: MSManipulationEvent): any;
+    onpaste(this: HTMLElement, ev: ClipboardEvent): any;
+    onpause(this: HTMLElement, ev: Event): any;
+    onplay(this: HTMLElement, ev: Event): any;
+    onplaying(this: HTMLElement, ev: Event): any;
+    onprogress(this: HTMLElement, ev: ProgressEvent): any;
+    onratechange(this: HTMLElement, ev: Event): any;
+    onreset(this: HTMLElement, ev: Event): any;
+    onscroll(this: HTMLElement, ev: UIEvent): any;
+    onseeked(this: HTMLElement, ev: Event): any;
+    onseeking(this: HTMLElement, ev: Event): any;
+    onselect(this: HTMLElement, ev: UIEvent): any;
+    onselectstart(this: HTMLElement, ev: Event): any;
+    onstalled(this: HTMLElement, ev: Event): any;
+    onsubmit(this: HTMLElement, ev: Event): any;
+    onsuspend(this: HTMLElement, ev: Event): any;
+    ontimeupdate(this: HTMLElement, ev: Event): any;
+    onvolumechange(this: HTMLElement, ev: Event): any;
+    onwaiting(this: HTMLElement, ev: Event): any;
     outerText: string;
     spellcheck: boolean;
     readonly style: CSSStyleDeclaration;
@@ -4904,7 +4904,7 @@ interface HTMLFrameElement extends HTMLElement, GetSVGDocument {
     /**
      * Raised when the object has been completely received from the server.
      */
-    onload: (this: HTMLFrameElement, ev: Event) => any;
+    onload(this: HTMLFrameElement, ev: Event): any;
     /**
      * Sets or retrieves whether the frame can be scrolled.
      */
@@ -4967,31 +4967,31 @@ interface HTMLFrameSetElement extends HTMLElement {
      */
     frameSpacing: any;
     name: string;
-    onafterprint: (this: HTMLFrameSetElement, ev: Event) => any;
-    onbeforeprint: (this: HTMLFrameSetElement, ev: Event) => any;
-    onbeforeunload: (this: HTMLFrameSetElement, ev: BeforeUnloadEvent) => any;
+    onafterprint(this: HTMLFrameSetElement, ev: Event): any;
+    onbeforeprint(this: HTMLFrameSetElement, ev: Event): any;
+    onbeforeunload(this: HTMLFrameSetElement, ev: BeforeUnloadEvent): any;
     /**
      * Fires when the object loses the input focus.
      */
-    onblur: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
-    onerror: (this: HTMLFrameSetElement, ev: ErrorEvent) => any;
+    onblur(this: HTMLFrameSetElement, ev: FocusEvent): any;
+    onerror(this: HTMLFrameSetElement, ev: ErrorEvent): any;
     /**
      * Fires when the object receives focus.
      */
-    onfocus: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
-    onhashchange: (this: HTMLFrameSetElement, ev: HashChangeEvent) => any;
-    onload: (this: HTMLFrameSetElement, ev: Event) => any;
-    onmessage: (this: HTMLFrameSetElement, ev: MessageEvent) => any;
-    onoffline: (this: HTMLFrameSetElement, ev: Event) => any;
-    ononline: (this: HTMLFrameSetElement, ev: Event) => any;
-    onorientationchange: (this: HTMLFrameSetElement, ev: Event) => any;
-    onpagehide: (this: HTMLFrameSetElement, ev: PageTransitionEvent) => any;
-    onpageshow: (this: HTMLFrameSetElement, ev: PageTransitionEvent) => any;
-    onpopstate: (this: HTMLFrameSetElement, ev: PopStateEvent) => any;
-    onresize: (this: HTMLFrameSetElement, ev: UIEvent) => any;
-    onscroll: (this: HTMLFrameSetElement, ev: UIEvent) => any;
-    onstorage: (this: HTMLFrameSetElement, ev: StorageEvent) => any;
-    onunload: (this: HTMLFrameSetElement, ev: Event) => any;
+    onfocus(this: HTMLFrameSetElement, ev: FocusEvent): any;
+    onhashchange(this: HTMLFrameSetElement, ev: HashChangeEvent): any;
+    onload(this: HTMLFrameSetElement, ev: Event): any;
+    onmessage(this: HTMLFrameSetElement, ev: MessageEvent): any;
+    onoffline(this: HTMLFrameSetElement, ev: Event): any;
+    ononline(this: HTMLFrameSetElement, ev: Event): any;
+    onorientationchange(this: HTMLFrameSetElement, ev: Event): any;
+    onpagehide(this: HTMLFrameSetElement, ev: PageTransitionEvent): any;
+    onpageshow(this: HTMLFrameSetElement, ev: PageTransitionEvent): any;
+    onpopstate(this: HTMLFrameSetElement, ev: PopStateEvent): any;
+    onresize(this: HTMLFrameSetElement, ev: UIEvent): any;
+    onscroll(this: HTMLFrameSetElement, ev: UIEvent): any;
+    onstorage(this: HTMLFrameSetElement, ev: StorageEvent): any;
+    onunload(this: HTMLFrameSetElement, ev: Event): any;
     /**
      * Sets or retrieves the frame heights of the object.
      */
@@ -5128,7 +5128,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
     /**
      * Raised when the object has been completely received from the server.
      */
-    onload: (this: HTMLIFrameElement, ev: Event) => any;
+    onload(this: HTMLIFrameElement, ev: Event): any;
     readonly sandbox: DOMSettableTokenList;
     /**
      * Sets or retrieves whether the frame can be scrolled.
