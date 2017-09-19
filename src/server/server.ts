@@ -287,8 +287,8 @@ namespace ts.server {
             return undefined;
         }
 
-        installPackage(fileName: string, packageName: string): void {
-            this.send({ kind: "installPackage", fileName, packageName });
+        installPackage(options: InstallPackageOptions): void {
+            this.send({ kind: "installPackage", ...options });
         }
 
         private reportInstallerProcessId() {

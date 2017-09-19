@@ -1825,10 +1825,14 @@ namespace ts {
             });
         }
 
-        function applyCodeFixAction(fileName: string, action: CodeActionAction): void {
+        function applyCodeFixAction(fileName: Path, action: CodeActionAction): void {
             switch (action.type) {
                 case "install package":
-                    host.installPackage(fileName, action.packageName);
+                    host.installPackage({
+                        fileName: toPath(fileName, currentDirectory, getCanonicalFileName),
+                        packageName: action.packageName,
+                        tsconfigLocation: action.tsconfigLocation,
+                    });
                     break;
                 default:
                     Debug.assertNever(action.type);

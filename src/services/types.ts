@@ -149,7 +149,7 @@ namespace ts {
     // Public interface of the host of a language service instance.
     //
     export interface LanguageServiceHost {
-        getCompilationSettings(): CompilerOptions;
+        getCompilationSettings(): CompilerOptions; //also want the location...
         getNewLine?(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];
@@ -201,7 +201,8 @@ namespace ts {
         /* @internal */
         //TODO: optional (for back-compat)
         tryGetRegistry(): Map<void> | undefined;
-        installPackage(fileName: string, packageName: string): void;
+        installPackage(options: InstallPackageOptions): void;
+        getTsconfigLocation(): Path | undefined;
     }
 
     //
@@ -380,9 +381,11 @@ namespace ts {
     //Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
     export type CodeActionAction = InstallPackageAction;
 
+    //TODO: installPackageOptions should derive from this
     export interface InstallPackageAction {
         /* @internal */ type: "install package",
         /* @internal */ packageName: string,
+        /* @internal */ tsconfigLocation: Path,
     }
 
     /**

@@ -146,12 +146,10 @@ namespace ts.server.typingsInstaller {
                         this.sendResponse(response);
                         break;
                     }
-                    case "installPackage": {
-                        const { fileName, packageName } = req;
+                    case "installPackage":
                         //TODO: come up with a requestId?
-                        this.installPackage(-1, fileName, packageName);
+                        this.installPackage(-1, req);
                         break;
-                    }
                     default:
                         Debug.assertNever(req);
                 }
@@ -168,14 +166,10 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private installPackage(requestId: number, fileName: string, packageName: string): void {
+        private installPackage(requestId: number, { fileName, packageName, tsconfigLocation }: InstallPackageOptions): void {
+            tsconfigLocation; //todo: use it
             //TODO: maybe we should limit the search to the just up to the parent directory of `tsconfig.json`?
-            const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost);
-            if (!cwd) {
-                //Need to send back an error about 'package.json' not existing
-                throw new Error("TODO");
-            }
-
+            const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || getDirectoryPath(tsconfigLocation);
             this.installWorker(requestId, [packageName], cwd, (success) => {
                 if (!success) {
                     throw new Error("TODO");

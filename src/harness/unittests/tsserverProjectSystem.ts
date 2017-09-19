@@ -82,7 +82,7 @@ namespace ts.projectSystem {
         tryGetRegistry(): Map<void> | undefined {
             throw new Error("TODO");
         }
-        installPackage(_fileName: string, _packageName: string): void {
+        installPackage(_options: InstallPackageOptions): void {
             throw new Error("TODO");
         }
 

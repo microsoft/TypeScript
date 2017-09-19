@@ -55,10 +55,8 @@ declare namespace ts.server {
         readonly kind: "typesRegistry";
     }
 
-    export interface InstallPackageRequest {
+    export interface InstallPackageRequest extends InstallPackageOptions {
         readonly kind: "installPackage",
-        readonly fileName: string,
-        readonly packageName: string,
     }
 
     export type ActionSet = "action::set";

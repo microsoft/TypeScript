@@ -57,12 +57,18 @@ namespace ts.server {
             //...reaching through so many layers...
             return this.typingsCache.tryGetRegistry();
         }
-        public installPackage(fileName: string, packageName: string): void {
-            this.typingsCache.installPackage(fileName, packageName);
+        public installPackage(options: InstallPackageOptions): void {
+            this.typingsCache.installPackage(options);
         }
         private get typingsCache(): TypingsCache {
             return this.project.projectService.typingsCache;
         }
+
+        //misnamed -- change to 'getProjectRootPath'
+        public getTsconfigLocation(): Path | undefined {
+            return this.project.getProjectRootPath() as Path; //TODO: it says path, why doesn't it return Path?
+        }
+
 
         public startRecordingFilesWithChangedResolutions() {
             this.filesWithChangedSetOfUnresolvedImports = [];

@@ -4,7 +4,7 @@ namespace ts.server {
     export interface ITypingsInstaller {
         tryGetRegistry(): Map<void> | undefined;
         //document me
-        installPackage(fileName: string, packageName: string): void;
+        installPackage(options: InstallPackageOptions): void;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -77,7 +77,7 @@ namespace ts.server {
         return !arrayIsEqualTo(imports1, imports2);
     }
 
-    export class TypingsCache { //useful? probably not
+    export class TypingsCache {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
@@ -87,8 +87,8 @@ namespace ts.server {
             return this.installer.tryGetRegistry();
         }
 
-        installPackage(fileName: string, packageName: string): void {
-            this.installer.installPackage(fileName, packageName);
+        installPackage(options: InstallPackageOptions): void {
+            this.installer.installPackage(options);
         }
 
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {
