@@ -3532,9 +3532,10 @@ namespace ts {
     }
 
     export const enum InferencePriority {
-        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
-        MappedType        = 1 << 1,  // Reverse inference for mapped type
-        ReturnType        = 1 << 2,  // Inference made from return type of generic function
+        Contravariant     = 1 << 0,  // Contravariant inference
+        NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
+        MappedType        = 1 << 2,  // Reverse inference for mapped type
+        ReturnType        = 1 << 3,  // Inference made from return type of generic function
     }
 
     export interface InferenceInfo {
