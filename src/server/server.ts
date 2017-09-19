@@ -284,7 +284,11 @@ namespace ts.server {
                 return this.typesRegistryCache;
             }
 
-            this.installer.send({ kind: "getRegistry" });
+            this.send({ kind: "typesRegistry" });
+        }
+
+        installPackage(fileName: string, packageName: string): void {
+            this.send({ kind: "installPackage", fileName, packageName });
         }
 
         private reportInstallerProcessId() {
@@ -352,7 +356,13 @@ namespace ts.server {
         }
 
         onProjectClosed(p: Project): void {
-            this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
+            this.send({ projectName: p.getProjectName(), kind: "closeProject" });
+        }
+
+        //mv
+        //todo: own PR
+        private send(rq: TypingInstallerRequestUnion) {
+            this.installer.send(rq);
         }
 
         enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
@@ -368,7 +378,7 @@ namespace ts.server {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Sending request: ${JSON.stringify(request)}`);
                 }
-                this.installer.send(request);
+                this.send(request);
             };
             const queuedRequest: QueuedOperation = { operationId, operation };
 

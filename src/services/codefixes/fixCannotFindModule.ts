@@ -7,35 +7,41 @@ namespace ts.codefix {
         ],
         getCodeActions: context => {
             const { sourceFile } = context;
-            const start = context.span.start;
+            const { start } = context.span;
 
             const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
             if (!ts.isStringLiteral(token)) {
                 throw Debug.fail(); // These errors should only happen on the module name.
             }
 
-            const text = token.text;
+            const packageName = token.text;
 
-            if (isExternalModuleNameRelative(text)) {
+            //We want to avoid looking this up in the registry as that is expensive.
+            const validationResult = validatePackageName(packageName);
+            if (validationResult !== PackageNameValidationResult.Ok) {
+                //TODO: this is a debug logging
+                if (context.host.log) {
+                    context.host.log(renderPackageNameValidationFailure(validationResult, packageName));
+                }
                 return undefined;
             }
 
             const registry = context.host.tryGetRegistry();
             if (!registry) {
-                // Registry not available, can't do anything.
+                //Registry not available, can't do anything.
                 return undefined;
             }
 
-            if (!registry.has(text)) {
+            if (!registry.has(packageName)) {
                 return undefined;
             }
 
             const action: CodeAction = {
-                description: `Install typings for ${text}`,
+                description: `Install typings for ${packageName}`,
                 changes: [],
                 actions: [{
                     type: "install package",
-                    packageName: `@types/${text}`,
+                    packageName: `@types/${packageName}`,
                 }],
             };
             return [action];

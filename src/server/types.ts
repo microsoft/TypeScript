@@ -28,16 +28,16 @@ declare namespace ts.server {
         " __sortedArrayBrand": any;
     }
 
-    export interface TypingInstallerRequest {
+    //todo: this was public for some reason? Can we kill it?
+    export interface TypingInstallerRequestWithProjectName {
         readonly projectName: string;
-        readonly kind: "discover" | "closeProject" | "typesRegistry";
     }
 
     /* @internal */
     //already internal?
-    export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | TypesRegistryRequest;
+    export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | TypesRegistryRequest | InstallPackageRequest;
 
-    export interface DiscoverTypings extends TypingInstallerRequest {
+    export interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
         readonly fileNames: string[];
         readonly projectRootPath: Path;
         readonly compilerOptions: CompilerOptions;
@@ -47,12 +47,18 @@ declare namespace ts.server {
         readonly kind: "discover";
     }
 
-    export interface CloseProject extends TypingInstallerRequest {
+    export interface CloseProject extends TypingInstallerRequestWithProjectName {
         readonly kind: "closeProject";
     }
 
-    export interface TypesRegistryRequest extends TypingInstallerRequest {
+    export interface TypesRegistryRequest {
         readonly kind: "typesRegistry";
+    }
+
+    export interface InstallPackageRequest {
+        readonly kind: "installPackage",
+        readonly fileName: string,
+        readonly packageName: string,
     }
 
     export type ActionSet = "action::set";

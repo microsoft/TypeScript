@@ -57,8 +57,8 @@ namespace ts.server {
             //...reaching through so many layers...
             return this.project.projectService.typingsCache.tryGetRegistry();
         }
-        public installPackage(_fileName: string, _packageName: string) {
-            throw new Error("TODO");
+        public installPackage(fileName: string, packageName: string): void {
+            this.project.projectService.typingsCache.installPackage(fileName, packageName);
         }
 
         public startRecordingFilesWithChangedResolutions() {

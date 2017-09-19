@@ -2,7 +2,9 @@
 
 namespace ts.server {
     export interface ITypingsInstaller {
-        tryGetRegistry(): Map<void> | undefined; //Great, now how do we call this?
+        tryGetRegistry(): Map<void> | undefined;
+        //document me
+        installPackage(fileName: string, packageName: string): void;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -11,6 +13,8 @@ namespace ts.server {
 
     export const nullTypingsInstaller: ITypingsInstaller = {
         tryGetRegistry: () => undefined,
+        // Should never be called because we never provide a types registry.
+        installPackage: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -81,6 +85,10 @@ namespace ts.server {
 
         tryGetRegistry(): Map<void> | undefined {
             return this.installer.tryGetRegistry();
+        }
+
+        installPackage(fileName: string, packageName: string): void {
+            this.installer.installPackage(fileName, packageName);
         }
 
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {

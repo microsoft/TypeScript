@@ -75,7 +75,7 @@ namespace ts.server.typingsInstaller {
         private readonly npmPath: string;
         readonly typesRegistry: Map<void>;
 
-        private delayedInitializationError: InitializationFailedResponse;
+        private delayedInitializationError: InitializationFailedResponse | undefined;
 
         constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, throttleLimit: number, log: Log) {
             super(
@@ -146,6 +146,12 @@ namespace ts.server.typingsInstaller {
                         this.sendResponse(response);
                         break;
                     }
+                    case "installPackage": {
+                        const { fileName, packageName } = req;
+                        //TODO: come up with a requestId?
+                        this.installPackage(-1, fileName, packageName);
+                        break;
+                    }
                     default:
                         Debug.assertNever(req);
                 }
@@ -162,11 +168,28 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(args)}'.`);
+        private installPackage(requestId: number, fileName: string, packageName: string): void {
+            //TODO: maybe we should limit the search to the just up to the parent directory of `tsconfig.json`?
+            const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost);
+            if (!cwd) {
+                //Need to send back an error about 'package.json' not existing
+                throw new Error("TODO");
             }
-            const command = `${this.npmPath} install --ignore-scripts ${args.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
+
+            this.installWorker(requestId, [packageName], cwd, (success) => {
+                if (!success) {
+                    throw new Error("TODO");
+                }
+                //TODO: what to do with errors?
+                console.log("OK, INSTALLED");
+            });
+        }
+
+        protected installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
+            }
+            const command = `${this.npmPath} install --ignore-scripts ${packageNames.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
             let stdout: Buffer;
             let stderr: Buffer;
@@ -184,6 +207,14 @@ namespace ts.server.typingsInstaller {
             }
             onRequestCompleted(!hasError);
         }
+    }
+
+    function getDirectoryOfPackageJson(fileName: string, host: InstallTypingHost): string | undefined {
+        return forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
+            if (host.fileExists(combinePaths(directory, "package.json"))) {
+                return directory;
+            }
+        });
     }
 
     const logFilePath = findArgument(server.Arguments.LogFile);
