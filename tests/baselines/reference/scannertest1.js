@@ -26,7 +26,7 @@ class CharacterInfo {
 
 //// [scannertest1.js]
 ///<reference path='References.ts' />
-var CharacterInfo = (function () {
+var CharacterInfo = /** @class */ (function () {
     function CharacterInfo() {
     }
     CharacterInfo.isDecimalDigit = function (c) {

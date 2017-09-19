@@ -79,7 +79,9 @@
 /////*62*/                                                        }
 /////*63*/                                                                         protected              bar        (            )  {                 }
 /////*64*/                                                                         protected     static   bar2       (            )  {                 }
-/////*65*/}
+/////*65*/                                                                         private                pv4  :    number =
+/////*66*/                                                                         {};
+/////*END*/}
 format.document();
 goTo.marker("1");
 verify.currentLineContentIs("class a {");
@@ -210,4 +212,8 @@ verify.currentLineContentIs("    protected bar() { }");
 goTo.marker("64");
 verify.currentLineContentIs("    protected static bar2() { }");
 goTo.marker("65");
+verify.currentLineContentIs("    private pv4: number =");
+goTo.marker("66");
+verify.currentLineContentIs("        {};");
+goTo.marker("END");
 verify.currentLineContentIs("}");

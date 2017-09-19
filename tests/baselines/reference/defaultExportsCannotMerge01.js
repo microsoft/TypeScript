@@ -36,7 +36,6 @@ function Decl() {
     return 0;
 }
 exports.default = Decl;
-var Decl;
 (function (Decl) {
     Decl.x = 10;
     Decl.y = 20;

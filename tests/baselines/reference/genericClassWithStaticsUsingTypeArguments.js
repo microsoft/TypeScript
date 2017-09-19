@@ -19,7 +19,7 @@ class Foo<T> {
 
 //// [genericClassWithStaticsUsingTypeArguments.js]
 // Should be error to use 'T' in all declarations within Foo.
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.f = function (xs) {

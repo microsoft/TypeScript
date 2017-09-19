@@ -8,6 +8,7 @@ namespace ts.server.protocol {
         /* @internal */
         BraceFull = "brace-full",
         BraceCompletion = "braceCompletion",
+        GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
         Completions = "completions",
@@ -242,6 +243,21 @@ namespace ts.server.protocol {
     }
 
     /**
+     * A request to determine if the caret is inside a comment.
+     */
+    export interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+        command: CommandTypes.GetSpanOfEnclosingComment;
+        arguments: SpanOfEnclosingCommentRequestArgs;
+    }
+
+    export interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+         */
+        onlyMultiLine: boolean;
+    }
+
+    /**
      * Request to obtain outlining spans in file.
      */
     /* @internal */
@@ -450,7 +466,7 @@ namespace ts.server.protocol {
      * Represents a single refactoring action - for example, the "Extract Method..." refactor might
      * offer several actions, each corresponding to a surround class or closure to extract into.
      */
-    export type RefactorActionInfo = {
+    export interface RefactorActionInfo {
         /**
          * The programmatic name of the refactoring action
          */
@@ -462,7 +478,7 @@ namespace ts.server.protocol {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
-    };
+    }
 
     export interface GetEditsForRefactorRequest extends Request {
         command: CommandTypes.GetEditsForRefactor;
@@ -478,6 +494,7 @@ namespace ts.server.protocol {
         refactor: string;
         /* The 'name' property from the refactoring action */
         action: string;
+        formatOptions?: FormatCodeSettings,
     };
 
 
@@ -485,7 +502,7 @@ namespace ts.server.protocol {
         body?: RefactorEditInfo;
     }
 
-    export type RefactorEditInfo = {
+    export interface RefactorEditInfo {
         edits: FileCodeEdits[];
 
         /**
@@ -494,7 +511,7 @@ namespace ts.server.protocol {
          */
         renameLocation?: Location;
         renameFilename?: string;
-    };
+    }
 
     /**
      * Request for the available codefixes at a specific position.
@@ -914,7 +931,7 @@ namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
 
     /**
@@ -1304,6 +1321,13 @@ namespace ts.server.protocol {
          * Compiler options to be used with inferred projects.
          */
         options: ExternalProjectCompilerOptions;
+
+        /**
+         * Specifies the project root path used to scope compiler options.
+         * It is an error to provide this property if the server has not been started with
+         * `useInferredProjectPerProjectRoot` enabled.
+         */
+        projectRootPath?: string;
     }
 
     /**
@@ -2429,6 +2453,7 @@ namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
@@ -2465,6 +2490,7 @@ namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ESNext = "ESNext"
     }
 
     export const enum ModuleResolutionKind {
@@ -2482,5 +2508,8 @@ namespace ts.server.protocol {
         ES5 = "ES5",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2016 = "ES2016",
+        ES2017 = "ES2017",
+        ESNext = "ESNext"
     }
 }

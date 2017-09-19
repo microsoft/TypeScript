@@ -155,7 +155,7 @@ function f6() {
     Mixed5.p;
     Mixed5.f();
 }
-var C2 = (function (_super) {
+var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
         var _this = _super.call(this, "hello") || this;
@@ -166,7 +166,7 @@ var C2 = (function (_super) {
     }
     return C2;
 }(Mixed1));
-var C3 = (function (_super) {
+var C3 = /** @class */ (function (_super) {
     __extends(C3, _super);
     function C3() {
         var _this = _super.call(this, 42) || this;

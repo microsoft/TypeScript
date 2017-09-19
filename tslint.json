@@ -7,9 +7,11 @@
             "check-space"
         ],
         "curly":[true, "ignore-same-line"],
+        "debug-assert": true,
         "indent": [true,
             "spaces"
         ],
+        "interface-over-type-literal": true,
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
         "next-line": [true,

@@ -9,14 +9,16 @@ namespace ts.server {
         canUseEvents: boolean;
         installerEventPort: number;
         useSingleInferredProject: boolean;
+        useInferredProjectPerProjectRoot: boolean;
         disableAutomaticTypingAcquisition: boolean;
         globalTypingsCacheLocation: string;
         logger: Logger;
         typingSafeListLocation: string;
+        typesMapLocation: string | undefined;
         npmLocation: string | undefined;
         telemetryEnabled: boolean;
-        globalPlugins: string[];
-        pluginProbeLocations: string[];
+        globalPlugins: ReadonlyArray<string>;
+        pluginProbeLocations: ReadonlyArray<string>;
         allowLocalPluginLoads: boolean;
     }
 
@@ -116,8 +118,6 @@ namespace ts.server {
         birthtime: Date;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
-
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
@@ -179,6 +179,10 @@ namespace ts.server {
             this.msg(s, Msg.Info);
         }
 
+        err(s: string) {
+            this.msg(s, Msg.Err);
+        }
+
         startGroup() {
             this.inGroup = true;
             this.firstInGroup = true;
@@ -186,8 +190,6 @@ namespace ts.server {
 
         endGroup() {
             this.inGroup = false;
-            this.seq++;
-            this.firstInGroup = true;
         }
 
         loggingEnabled() {
@@ -199,25 +201,31 @@ namespace ts.server {
         }
 
         msg(s: string, type: Msg.Types = Msg.Err) {
-            if (this.fd >= 0 || this.traceToConsole) {
-                s = `[${nowString()}] ${s}\n`;
+            if (!this.canWrite) return;
+
+            s = `[${nowString()}] ${s}\n`;
+            if (!this.inGroup || this.firstInGroup) {
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
-                if (this.firstInGroup) {
-                    s = prefix + s;
-                    this.firstInGroup = false;
-                }
-                if (!this.inGroup) {
-                    this.seq++;
-                    this.firstInGroup = true;
-                }
-                if (this.fd >= 0) {
-                    const buf = new Buffer(s);
-                    // tslint:disable-next-line no-null-keyword
-                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
-                }
-                if (this.traceToConsole) {
-                    console.warn(s);
-                }
+                s = prefix + s;
+            }
+            this.write(s);
+            if (!this.inGroup) {
+                this.seq++;
+            }
+        }
+
+        private get canWrite() {
+            return this.fd >= 0 || this.traceToConsole;
+        }
+
+        private write(s: string) {
+            if (this.fd >= 0) {
+                const buf = new Buffer(s);
+                // tslint:disable-next-line no-null-keyword
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
+            }
+            if (this.traceToConsole) {
+                console.warn(s);
             }
         }
     }
@@ -228,24 +236,40 @@ namespace ts.server {
         return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 
+    interface QueuedOperation {
+        operationId: string;
+        operation: () => void;
+    }
+
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
         private installerPidReported = false;
         private socket: NodeSocket;
         private projectService: ProjectService;
-        private throttledOperations: ThrottledOperations;
         private eventSender: EventSender;
+        private activeRequestCount = 0;
+        private requestQueue: QueuedOperation[] = [];
+        private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+
+        // This number is essentially arbitrary.  Processing more than one typings request
+        // at a time makes sense, but having too many in the pipe results in a hang
+        // (see https://github.com/nodejs/node/issues/7657).
+        // It would be preferable to base our limit on the amount of space left in the
+        // buffer, but we have yet to find a way to retrieve that value.
+        private static readonly maxActiveRequestCount = 10;
+        private static readonly requestDelayMillis = 100;
+
 
         constructor(
             private readonly telemetryEnabled: boolean,
             private readonly logger: server.Logger,
-            host: ServerHost,
+            private readonly host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
+            readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
             private newLine: string) {
-            this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
                 const s = net.connect({ port: eventPort }, () => {
                     this.socket = s;
@@ -288,6 +312,9 @@ namespace ts.server {
             if (this.typingSafeListLocation) {
                 args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
             }
+            if (this.typesMapLocation) {
+                args.push(Arguments.TypesMapLocation, this.typesMapLocation);
+            }
             if (this.npmLocation) {
                 args.push(Arguments.NpmLocation, this.npmLocation);
             }
@@ -326,12 +353,26 @@ namespace ts.server {
                     this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);
                 }
             }
-            this.throttledOperations.schedule(project.getProjectName(), /*ms*/ 250, () => {
+
+            const operationId = project.getProjectName();
+            const operation = () => {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Sending request: ${JSON.stringify(request)}`);
                 }
                 this.installer.send(request);
-            });
+            };
+            const queuedRequest: QueuedOperation = { operationId, operation };
+
+            if (this.activeRequestCount < NodeTypingsInstaller.maxActiveRequestCount) {
+                this.scheduleRequest(queuedRequest);
+            }
+            else {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Deferring request for: ${operationId}`);
+                }
+                this.requestQueue.push(queuedRequest);
+                this.requestMap.set(operationId, queuedRequest);
+            }
         }
 
         private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
@@ -339,77 +380,120 @@ namespace ts.server {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
 
-            if (response.kind === EventInitializationFailed) {
-                if (!this.eventSender) {
-                    return;
-                }
-                const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                    message: response.message
-                };
-                const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-                this.eventSender.event(body, eventName);
-                return;
-            }
-
-            if (response.kind === EventBeginInstallTypes) {
-                if (!this.eventSender) {
-                    return;
-                }
-                const body: protocol.BeginInstallTypesEventBody = {
-                    eventId: response.eventId,
-                    packages: response.packagesToInstall,
-                };
-                const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                this.eventSender.event(body, eventName);
-
-                return;
-            }
-
-            if (response.kind === EventEndInstallTypes) {
-                if (!this.eventSender) {
-                    return;
-                }
-                if (this.telemetryEnabled) {
-                    const body: protocol.TypingsInstalledTelemetryEventBody = {
-                        telemetryEventName: "typingsInstalled",
-                        payload: {
-                            installedPackages: response.packagesToInstall.join(","),
-                            installSuccess: response.installSuccess,
-                            typingsInstallerVersion: response.typingsInstallerVersion
-                        }
+            switch (response.kind) {
+                case EventInitializationFailed:
+                {
+                    if (!this.eventSender) {
+                        break;
+                    }
+                    const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                        message: response.message
                     };
-                    const eventName: protocol.TelemetryEventName = "telemetry";
+                    const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                     this.eventSender.event(body, eventName);
+                    break;
                 }
+                case EventBeginInstallTypes:
+                {
+                    if (!this.eventSender) {
+                        break;
+                    }
+                    const body: protocol.BeginInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                    };
+                    const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                    this.eventSender.event(body, eventName);
+                    break;
+                }
+                case EventEndInstallTypes:
+                {
+                    if (!this.eventSender) {
+                        break;
+                    }
+                    if (this.telemetryEnabled) {
+                        const body: protocol.TypingsInstalledTelemetryEventBody = {
+                            telemetryEventName: "typingsInstalled",
+                            payload: {
+                                installedPackages: response.packagesToInstall.join(","),
+                                installSuccess: response.installSuccess,
+                                typingsInstallerVersion: response.typingsInstallerVersion
+                            }
+                        };
+                        const eventName: protocol.TelemetryEventName = "telemetry";
+                        this.eventSender.event(body, eventName);
+                    }
 
-                const body: protocol.EndInstallTypesEventBody = {
-                    eventId: response.eventId,
-                    packages: response.packagesToInstall,
-                    success: response.installSuccess,
-                };
-                const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
-                this.eventSender.event(body, eventName);
-                return;
-            }
+                    const body: protocol.EndInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                        success: response.installSuccess,
+                    };
+                    const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                    this.eventSender.event(body, eventName);
+                    break;
+                }
+                case ActionInvalidate:
+                {
+                    this.projectService.updateTypingsForProject(response);
+                    break;
+                }
+                case ActionSet:
+                {
+                    if (this.activeRequestCount > 0) {
+                        this.activeRequestCount--;
+                    }
+                    else {
+                        Debug.fail("Received too many responses");
+                    }
 
-            this.projectService.updateTypingsForProject(response);
-            if (response.kind === ActionSet && this.socket) {
-                this.sendEvent(0, "setTypings", response);
+                    while (this.requestQueue.length > 0) {
+                        const queuedRequest = this.requestQueue.shift();
+                        if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
+                            this.requestMap.delete(queuedRequest.operationId);
+                            this.scheduleRequest(queuedRequest);
+                            break;
+                        }
+
+                        if (this.logger.hasLevel(LogLevel.verbose)) {
+                            this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                        }
+                    }
+
+                    this.projectService.updateTypingsForProject(response);
+
+                    if (this.socket) {
+                        this.sendEvent(0, "setTypings", response);
+                    }
+
+                    break;
+                }
+                default:
+                    assertTypeIsNever(response);
             }
+        }
+
+        private scheduleRequest(request: QueuedOperation) {
+            if (this.logger.hasLevel(LogLevel.verbose)) {
+                this.logger.info(`Scheduling request for: ${request.operationId}`);
+            }
+            this.activeRequestCount++;
+            this.host.setTimeout(request.operation, NodeTypingsInstaller.requestDelayMillis);
         }
     }
 
     class IOSession extends Session {
         constructor(options: IOSessionOptions) {
-            const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, npmLocation, canUseEvents } = options;
+            const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, npmLocation, host.newLine);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, host.newLine);
 
             super({
                 host,
                 cancellationToken,
                 useSingleInferredProject,
+                useInferredProjectPerProjectRoot,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
@@ -515,7 +599,6 @@ namespace ts.server {
     function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
         const watchedFiles: WatchedFile[] = [];
         let nextFileToCheck = 0;
-        let watchTimer: any;
         return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
@@ -552,7 +635,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
-            watchTimer = setInterval(() => {
+            setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
                 let firstCheck = -1;
@@ -757,14 +840,26 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    setStackTraceLimit();
+
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
-    const globalPlugins = (findArgument("--globalPlugins") || "").split(",");
-    const pluginProbeLocations = (findArgument("--pluginProbeLocations") || "").split(",");
+    function parseStringArray(argName: string): ReadonlyArray<string> {
+        const arg = findArgument(argName);
+        if (arg === undefined) {
+            return emptyArray;
+        }
+        return arg.split(",").filter(name => name !== "");
+    }
+
+    const globalPlugins = parseStringArray("--globalPlugins");
+    const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
+    const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
@@ -774,9 +869,11 @@ namespace ts.server {
         installerEventPort: eventPort,
         canUseEvents: eventPort === undefined,
         useSingleInferredProject,
+        useInferredProjectPerProjectRoot,
         disableAutomaticTypingAcquisition,
         globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
         typingSafeListLocation,
+        typesMapLocation,
         npmLocation,
         telemetryEnabled,
         logger,

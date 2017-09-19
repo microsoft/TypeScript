@@ -12,11 +12,6 @@ const noIndentOffset = 8;
 const oneIndentOffset = noIndentOffset + 4;
 const twoIndentOffset = oneIndentOffset + 4;
 
-goTo.marker("0");
-verify.DocCommentTemplate(noIndentEmptyScaffolding, noIndentOffset);
-
-goTo.marker("1");
-verify.DocCommentTemplate(oneIndentEmptyScaffolding, oneIndentOffset);
-
-goTo.marker("2");
-verify.DocCommentTemplate(twoIndentEmptyScaffolding, twoIndentOffset);
+verify.docCommentTemplateAt("0", noIndentOffset, noIndentEmptyScaffolding);
+verify.docCommentTemplateAt("1", oneIndentOffset, oneIndentEmptyScaffolding);
+verify.docCommentTemplateAt("2", twoIndentOffset, twoIndentEmptyScaffolding);

@@ -21,13 +21,13 @@ define("test", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     // Class Doo Comment
-    var Doo = (function () {
+    var Doo = /** @class */ (function () {
         function Doo() {
         }
         return Doo;
     }());
     exports.Doo = Doo;
-    var Scooby = (function (_super) {
+    var Scooby = /** @class */ (function (_super) {
         __extends(Scooby, _super);
         function Scooby() {
             return _super !== null && _super.apply(this, arguments) || this;

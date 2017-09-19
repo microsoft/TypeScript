@@ -3,5 +3,5 @@
 >`abc${0}abc`[`0`] : any
 >`abc${0}abc` : string
 >0 : 0
->`0` : string
+>`0` : "0"
 

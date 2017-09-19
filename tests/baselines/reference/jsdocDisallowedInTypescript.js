@@ -19,6 +19,12 @@ var most: !string = 'definite';
 var postfixdef: number! = 101;
 var postfixopt: number? = undefined;
 
+var nns: Array<?number>;
+var dns: Array<!number>;
+var anys: Array<*>;
+var vars: Array<...number>;
+
+
 
 //// [jsdocDisallowedInTypescript.js]
 "use strict";
@@ -40,3 +46,7 @@ var variadic = [true, false, true];
 var most = 'definite';
 var postfixdef = 101;
 var postfixopt = undefined;
+var nns;
+var dns;
+var anys;
+var vars;

@@ -5,7 +5,7 @@
 namespace ts.server {
 
     export function shouldEmitFile(scriptInfo: ScriptInfo) {
-        return !scriptInfo.hasMixedContent;
+        return !scriptInfo.hasMixedContent && !scriptInfo.isDynamic;
     }
 
     /**
@@ -188,7 +188,7 @@ namespace ts.server {
          */
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             const info = this.getOrCreateFileInfo(scriptInfo.path);
-            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
+            const singleFileResult = scriptInfo.hasMixedContent || scriptInfo.isDynamic ? [] : [scriptInfo.fileName];
             if (info.updateShapeSignature()) {
                 const options = this.project.getCompilerOptions();
                 // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
@@ -303,7 +303,7 @@ namespace ts.server {
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             this.ensureProjectDependencyGraphUpToDate();
 
-            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
+            const singleFileResult = scriptInfo.hasMixedContent || scriptInfo.isDynamic ? [] : [scriptInfo.fileName];
             const fileInfo = this.getFileInfo(scriptInfo.path);
             if (!fileInfo || !fileInfo.updateShapeSignature()) {
                 return singleFileResult;

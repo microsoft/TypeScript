@@ -133,7 +133,7 @@ namespace ts.codefix {
         const symbolIdActionMap = new ImportCodeActionMap();
 
         // this is a module id -> module import declaration map
-        const cachedImportDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[][] = [];
+        const cachedImportDeclarations: AnyImportSyntax[][] = [];
         let lastImportDeclaration: Node;
 
         const currentTokenMeaning = getMeaningFromLocation(token);
@@ -147,7 +147,7 @@ namespace ts.codefix {
             }
             else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-                symbol = checker.getAliasedSymbol(checker.resolveNameAtLocation(token, checker.getJsxNamespace(), SymbolFlags.Value));
+                symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), token.parent.tagName, SymbolFlags.Value));
                 symbolName = symbol.name;
             }
             else {
@@ -199,28 +199,20 @@ namespace ts.codefix {
                 return cached;
             }
 
-            const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
-            for (const importModuleSpecifier of sourceFile.imports) {
-                const importSymbol = checker.getSymbolAtLocation(importModuleSpecifier);
-                if (importSymbol === moduleSymbol) {
-                    existingDeclarations.push(getImportDeclaration(importModuleSpecifier));
-                }
-            }
+            const existingDeclarations = mapDefined(sourceFile.imports, importModuleSpecifier =>
+                checker.getSymbolAtLocation(importModuleSpecifier) === moduleSymbol ? getImportDeclaration(importModuleSpecifier) : undefined);
             cachedImportDeclarations[moduleSymbolId] = existingDeclarations;
             return existingDeclarations;
 
-            function getImportDeclaration(moduleSpecifier: LiteralExpression) {
-                let node: Node = moduleSpecifier;
-                while (node) {
-                    if (node.kind === SyntaxKind.ImportDeclaration) {
-                        return <ImportDeclaration>node;
-                    }
-                    if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                        return <ImportEqualsDeclaration>node;
-                    }
-                    node = node.parent;
+            function getImportDeclaration({ parent }: LiteralExpression): AnyImportSyntax {
+                switch (parent.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                        return parent as ImportDeclaration;
+                    case SyntaxKind.ExternalModuleReference:
+                        return (parent as ExternalModuleReference).parent;
+                    default:
+                        return undefined;
                 }
-                return undefined;
             }
         }
 
@@ -394,9 +386,11 @@ namespace ts.codefix {
                     : isNamespaceImport
                         ? createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(symbolName)))
                         : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
+                const moduleSpecifierLiteral = createLiteral(moduleSpecifierWithoutQuotes);
+                moduleSpecifierLiteral.singleQuote = getSingleQuoteStyleFromExistingImports();
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifierLiteral);
                 if (!lastImportDeclaration) {
-                    changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
+                    changeTracker.insertNodeAt(sourceFile, getSourceFileImportLocation(sourceFile), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
                 }
                 else {
                     changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: context.newLineCharacter });
@@ -412,6 +406,46 @@ namespace ts.codefix {
                     "NewImport",
                     moduleSpecifierWithoutQuotes
                 );
+
+                function getSourceFileImportLocation(node: SourceFile) {
+                    // For a source file, it is possible there are detached comments we should not skip
+                    const text = node.text;
+                    let ranges = getLeadingCommentRanges(text, 0);
+                    if (!ranges) return 0;
+                    let position = 0;
+                    // However we should still skip a pinned comment at the top
+                    if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+                        position = ranges[0].end + 1;
+                        ranges = ranges.slice(1);
+                    }
+                    // As well as any triple slash references
+                    for (const range of ranges) {
+                        if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
+                            position = range.end + 1;
+                            continue;
+                        }
+                        break;
+                    }
+                    return position;
+                }
+
+                function getSingleQuoteStyleFromExistingImports() {
+                    const firstModuleSpecifier = forEach(sourceFile.statements, node => {
+                        if (isImportDeclaration(node) || isExportDeclaration(node)) {
+                            if (node.moduleSpecifier && isStringLiteral(node.moduleSpecifier)) {
+                                return node.moduleSpecifier;
+                            }
+                        }
+                        else if (isImportEqualsDeclaration(node)) {
+                            if (isExternalModuleReference(node.moduleReference) && isStringLiteral(node.moduleReference.expression)) {
+                                return node.moduleReference.expression;
+                            }
+                        }
+                    });
+                    if (firstModuleSpecifier) {
+                        return sourceFile.text.charCodeAt(firstModuleSpecifier.getStart()) === CharacterCodes.singleQuote;
+                    }
+                }
 
                 function getModuleSpecifierForNewImport() {
                     const fileName = sourceFile.fileName;
@@ -650,7 +684,7 @@ namespace ts.codefix {
         }
 
         function createChangeTracker() {
-            return textChanges.ChangeTracker.fromCodeFixContext(context);
+            return textChanges.ChangeTracker.fromContext(context);
         }
 
         function createCodeAction(

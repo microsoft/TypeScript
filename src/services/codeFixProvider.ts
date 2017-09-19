@@ -36,12 +36,19 @@ namespace ts {
 
         export function getFixes(context: CodeFixContext): CodeAction[] {
             const fixes = codeFixes[context.errorCode];
-            let allActions: CodeAction[] = [];
+            const allActions: CodeAction[] = [];
 
             forEach(fixes, f => {
                 const actions = f.getCodeActions(context);
                 if (actions && actions.length > 0) {
-                    allActions = allActions.concat(actions);
+                    for (const action of actions) {
+                        if (action === undefined) {
+                            context.host.log(`Action for error code ${context.errorCode} added an invalid action entry; please log a bug`);
+                        }
+                        else {
+                            allActions.push(action);
+                        }
+                    }
                 }
             });
 

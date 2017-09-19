@@ -28,18 +28,6 @@ namespace ts.server {
         createHash: Harness.LanguageService.mockHash,
     };
 
-    const mockLogger: Logger = {
-        close: noop,
-        hasLevel(): boolean { return false; },
-        loggingEnabled(): boolean { return false; },
-        perftrc: noop,
-        info: noop,
-        startGroup: noop,
-        endGroup: noop,
-        msg: noop,
-        getLogFileName: (): string => undefined
-    };
-
     class TestSession extends Session {
         getProjectService() {
             return this.projectService;
@@ -55,10 +43,11 @@ namespace ts.server {
                 host: mockHost,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
-                logger: mockLogger,
+                logger: projectSystem.nullLogger,
                 canUseEvents: true
             };
             return new TestSession(opts);
@@ -93,14 +82,15 @@ namespace ts.server {
 
                 session.executeCommand(req);
 
-                expect(lastSent).to.deep.equal(<protocol.Response>{
+                const expected: protocol.Response = {
                     command: CommandNames.Unknown,
                     type: "response",
                     seq: 0,
                     message: "Unrecognized JSON command: foobar",
                     request_seq: 0,
                     success: false
-                });
+                };
+                expect(lastSent).to.deep.equal(expected);
             });
             it("should return a tuple containing the response and if a response is required on success", () => {
                 const req: protocol.ConfigureRequest = {
@@ -405,10 +395,11 @@ namespace ts.server {
                     host: mockHost,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: mockLogger,
+                    logger: projectSystem.nullLogger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler(this.customHandler, () => {
@@ -472,10 +463,11 @@ namespace ts.server {
                     host: mockHost,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined,
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: mockLogger,
+                    logger: projectSystem.nullLogger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({

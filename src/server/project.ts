@@ -54,7 +54,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: Diagnostic[];
+        projectErrors: ReadonlyArray<Diagnostic>;
     }
 
     export class UnresolvedImportsMap {
@@ -147,7 +147,7 @@ namespace ts.server {
 
         private typingFiles: SortedReadonlyArray<string>;
 
-        protected projectErrors: Diagnostic[];
+        protected projectErrors: ReadonlyArray<Diagnostic>;
 
         public typesVersion = 0;
 
@@ -170,7 +170,8 @@ namespace ts.server {
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
             if (result.error) {
-                log(`Failed to load module: ${JSON.stringify(result.error)}`);
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                log(`Failed to load module '${moduleName}': ${err}`);
                 return undefined;
             }
             return result.module;
@@ -362,7 +363,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
-                    Debug.assert(false, `scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' is missing.`);
                 }
                 return scriptInfo;
             });
@@ -373,6 +374,10 @@ namespace ts.server {
                 return undefined;
             }
             return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
+        }
+
+        getExcludedFiles(): ReadonlyArray<NormalizedPath> {
+            return emptyArray;
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
@@ -494,7 +499,7 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -542,33 +547,32 @@ namespace ts.server {
                 this.cachedUnresolvedImportsPerFile.remove(file);
             }
 
-            // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
-            // (can reuse cached imports for files that were not changed)
-            // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
-            // (can reuse cached imports for files that were not changed)
-            // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            let unresolvedImports: SortedReadonlyArray<string>;
-            if (hasChanges || changedFiles.length) {
-                const result: string[] = [];
-                for (const sourceFile of this.program.getSourceFiles()) {
-                    this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
-                }
-                this.lastCachedUnresolvedImportsList = toSortedArray(result);
-            }
-            unresolvedImports = this.lastCachedUnresolvedImportsList;
-
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, unresolvedImports, hasChanges);
-            if (this.setTypings(cachedTypings)) {
-                hasChanges = this.updateGraphWorker() || hasChanges;
-            }
-
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
             if (this.languageServiceEnabled) {
+                // 1. no changes in structure, no changes in unresolved imports - do nothing
+                // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
+                // (can reuse cached imports for files that were not changed)
+                // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
+                // (can reuse cached imports for files that were not changed)
+                // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
+                if (hasChanges || changedFiles.length) {
+                    const result: string[] = [];
+                    for (const sourceFile of this.program.getSourceFiles()) {
+                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                    }
+                    this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
+                }
+
+                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
+                if (this.setTypings(cachedTypings)) {
+                    hasChanges = this.updateGraphWorker() || hasChanges;
+                }
+
                 this.builder.onProjectUpdateGraph();
             }
             else {
+                this.lastCachedUnresolvedImportsList = undefined;
                 this.builder.clear();
             }
 
@@ -836,6 +840,7 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
+        public readonly projectRootPath: string | undefined;
 
         private static readonly newName = (() => {
             let nextId = 1;
@@ -875,7 +880,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -884,6 +889,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+            this.projectRootPath = projectRootPath;
         }
 
         addRoot(info: ScriptInfo) {
@@ -936,9 +942,9 @@ namespace ts.server {
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
         private projectFileWatcher: FileWatcher;
-        private directoryWatcher: FileWatcher;
-        private directoriesWatchedForWildcards: Map<FileWatcher>;
-        private typeRootsWatchers: FileWatcher[];
+        private directoryWatcher: FileWatcher | undefined;
+        private directoriesWatchedForWildcards: Map<FileWatcher> | undefined;
+        private typeRootsWatchers: FileWatcher[] | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         private plugins: PluginModule[] = [];
@@ -992,16 +998,22 @@ namespace ts.server {
             if (this.projectService.globalPlugins) {
                 // Enable global plugins with synthetic configuration entries
                 for (const globalPluginName of this.projectService.globalPlugins) {
+                    // Skip empty names from odd commandline parses
+                    if (!globalPluginName) continue;
+
                     // Skip already-locally-loaded plugins
                     if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
 
                     // Provide global: true so plugins can detect why they can't find their config
+                    this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
                     this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
                 }
             }
         }
 
         private enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]) {
+            this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
+
             const log = (message: string) => {
                 this.projectService.logger.info(message);
             };
@@ -1013,7 +1025,7 @@ namespace ts.server {
                     return;
                 }
             }
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name} anywhere in paths: ${searchPaths.join(",")}`);
+            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -1032,7 +1044,15 @@ namespace ts.server {
                 };
 
                 const pluginModule = pluginModuleFactory({ typescript: ts });
-                this.languageService = pluginModule.create(info);
+                const newLS = pluginModule.create(info);
+                for (const k of Object.keys(this.languageService)) {
+                    if (!(k in newLS)) {
+                        this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
+                        (newLS as any)[k] = (this.languageService as any)[k];
+                    }
+                }
+                this.projectService.logger.info(`Plugin validation succeded`);
+                this.languageService = newLS;
                 this.plugins.push(pluginModule);
             }
             catch (e) {
@@ -1044,7 +1064,7 @@ namespace ts.server {
             return getDirectoryPath(this.getConfigFilePath());
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 
@@ -1134,10 +1154,12 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            this.directoriesWatchedForWildcards.forEach(watcher => {
-                watcher.close();
-            });
-            this.directoriesWatchedForWildcards = undefined;
+            if (this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards.forEach(watcher => {
+                    watcher.close();
+                });
+                this.directoriesWatchedForWildcards = undefined;
+            }
 
             this.stopWatchingDirectory();
         }
@@ -1161,6 +1183,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
+        excludedFiles: ReadonlyArray<NormalizedPath> = [];
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -1170,6 +1193,11 @@ namespace ts.server {
             public compileOnSaveEnabled: boolean,
             private readonly projectFilePath?: string) {
             super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+
+        }
+
+        getExcludedFiles() {
+            return this.excludedFiles;
         }
 
         getProjectRootPath() {
@@ -1186,7 +1214,7 @@ namespace ts.server {
             return this.typeAcquisition;
         }
 
-        setProjectErrors(projectErrors: Diagnostic[]) {
+        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
             this.projectErrors = projectErrors;
         }
 

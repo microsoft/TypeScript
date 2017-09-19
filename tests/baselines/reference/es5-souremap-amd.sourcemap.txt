@@ -8,7 +8,7 @@ sources: es5-souremap-amd.ts
 emittedFile:tests/cases/compiler/es5-souremap-amd.js
 sourceFile:es5-souremap-amd.ts
 -------------------------------------------------------------------
->>>var A = (function () {
+>>>var A = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >

@@ -90,9 +90,16 @@ namespace RWC {
                         ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
-                    // Load the files
+                    // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
+                    const uniqueNames = ts.createMap<true>();
                     for (const fileName of fileNames) {
-                        inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        // Must maintain order, build result list while checking map
+                        const normalized = ts.normalizeSlashes(fileName);
+                        if (!uniqueNames.has(normalized)) {
+                            uniqueNames.set(normalized, true);
+                            // Load the file
+                            inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                        }
                     }
 
                     // Add files to compilation
@@ -163,29 +170,29 @@ namespace RWC {
 
 
             it("has the expected emitted code", () => {
-                Harness.Baseline.runBaseline(`${baseName}.output.js`, () => {
-                    return Harness.Compiler.collateOutputs(compilerResult.files);
-                }, baselineOpts);
+                Harness.Baseline.runMultifileBaseline(baseName, "", () => {
+                    return Harness.Compiler.iterateOutputs(compilerResult.files);
+                }, baselineOpts, [".js", ".jsx"]);
             });
 
             it("has the expected declaration file content", () => {
-                Harness.Baseline.runBaseline(`${baseName}.d.ts`, () => {
+                Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     if (!compilerResult.declFilesCode.length) {
                         return null;
                     }
 
-                    return Harness.Compiler.collateOutputs(compilerResult.declFilesCode);
-                }, baselineOpts);
+                    return Harness.Compiler.iterateOutputs(compilerResult.declFilesCode);
+                }, baselineOpts, [".d.ts"]);
             });
 
             it("has the expected source maps", () => {
-                Harness.Baseline.runBaseline(`${baseName}.map`, () => {
+                Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     if (!compilerResult.sourceMaps.length) {
                         return null;
                     }
 
-                    return Harness.Compiler.collateOutputs(compilerResult.sourceMaps);
-                }, baselineOpts);
+                    return Harness.Compiler.iterateOutputs(compilerResult.sourceMaps);
+                }, baselineOpts, [".map"]);
             });
 
             /*it("has correct source map record", () => {
@@ -197,34 +204,15 @@ namespace RWC {
             });*/
 
             it("has the expected errors", () => {
-                Harness.Baseline.runBaseline(`${baseName}.errors.txt`, () => {
+                Harness.Baseline.runMultifileBaseline(baseName, ".errors.txt", () => {
                     if (compilerResult.errors.length === 0) {
                         return null;
                     }
                     // Do not include the library in the baselines to avoid noise
                     const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
                     const errors = compilerResult.errors.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
-                    return Harness.Compiler.getErrorBaseline(baselineFiles, errors);
+                    return Harness.Compiler.iterateErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
-            });
-
-            // Ideally, a generated declaration file will have no errors. But we allow generated
-            // declaration file errors as part of the baseline.
-            it("has the expected errors in generated declaration files", () => {
-                if (compilerOptions.declaration && !compilerResult.errors.length) {
-                    Harness.Baseline.runBaseline(`${baseName}.dts.errors.txt`, () => {
-                        if (compilerResult.errors.length === 0) {
-                            return null;
-                        }
-
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
-
-                        return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
-                            Harness.IO.newLine() + Harness.IO.newLine() +
-                            Harness.Compiler.getErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
-                    }, baselineOpts);
-                }
             });
 
             it("has the expected types", () => {
@@ -232,7 +220,28 @@ namespace RWC {
                 Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
                     .concat(otherFiles)
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
-                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);
+                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true);
+            });
+
+            // Ideally, a generated declaration file will have no errors. But we allow generated
+            // declaration file errors as part of the baseline.
+            it("has the expected errors in generated declaration files", () => {
+                if (compilerOptions.declaration && !compilerResult.errors.length) {
+                    Harness.Baseline.runMultifileBaseline(baseName, ".dts.errors.txt", () => {
+                        if (compilerResult.errors.length === 0) {
+                            return null;
+                        }
+
+                        const declContext = Harness.Compiler.prepareDeclarationCompilationContext(
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory
+                        );
+                        // Reset compilerResult before calling into `compileDeclarationFiles` so the memory from the original compilation can be freed
+                        compilerResult = undefined;
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext);
+
+                        return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                    }, baselineOpts);
+                }
             });
         });
     }
@@ -252,7 +261,7 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.enumerateTestFiles();
+        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
         for (let i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }

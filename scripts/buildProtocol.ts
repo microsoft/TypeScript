@@ -7,11 +7,15 @@ function endsWith(s: string, suffix: string) {
     return s.lastIndexOf(suffix, s.length - suffix.length) !== -1;
 }
 
+function isStringEnum(declaration: ts.EnumDeclaration) {
+    return declaration.members.length && declaration.members.every(m => m.initializer && m.initializer.kind === ts.SyntaxKind.StringLiteral);
+}
+
 class DeclarationsWalker {
     private visitedTypes: ts.Type[] = [];
     private text = "";
     private removedTypes: ts.Type[] = [];
-    
+
     private constructor(private typeChecker: ts.TypeChecker, private protocolFile: ts.SourceFile) {
     }
 
@@ -19,7 +23,7 @@ class DeclarationsWalker {
         let text = "declare namespace ts.server.protocol {\n";
         var walker = new DeclarationsWalker(typeChecker, protocolFile);
         walker.visitTypeNodes(protocolFile);
-        text = walker.text 
+        text = walker.text
             ? `declare namespace ts.server.protocol {\n${walker.text}}`
             : "";
         if (walker.removedTypes) {
@@ -52,7 +56,7 @@ class DeclarationsWalker {
                 if (sourceFile === this.protocolFile || path.basename(sourceFile.fileName) === "lib.d.ts") {
                     return;
                 }
-                if (decl.kind === ts.SyntaxKind.EnumDeclaration) {
+                if (decl.kind === ts.SyntaxKind.EnumDeclaration && !isStringEnum(decl as ts.EnumDeclaration)) {
                     this.removedTypes.push(type);
                     return;
                 }
@@ -91,7 +95,7 @@ class DeclarationsWalker {
                         for (const type of heritageClauses[0].types) {
                             this.processTypeOfNode(type);
                         }
-                    } 
+                    }
                     break;
             }
         }
@@ -110,7 +114,7 @@ class DeclarationsWalker {
                 this.processType(type);
             }
         }
-    } 
+    }
 }
 
 function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {

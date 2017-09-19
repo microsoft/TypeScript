@@ -6,6 +6,7 @@
 ////    constructor() {[|
 ////    |]}
 ////}
+// TODO: GH#18445
 verify.rangeAfterCodeFix(`
-        super();
+        super();\r
     `, /*includeWhitespace*/ true);

@@ -49,7 +49,7 @@ namespace ts.server {
     export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
             compilerOptions: project.getCompilerOptions(),
             typeAcquisition,
             unresolvedImports,
@@ -95,7 +95,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes(target: MapLike<any>, source: MapLike <any>): void {
+    export function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -126,9 +126,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-/* tslint:disable:no-null-keyword */
         const map = createMap<T>();
-/* tslint:enable:no-null-keyword */
         return {
             get(path) {
                 return map.get(path);
@@ -176,49 +174,17 @@ namespace ts.server {
         return [] as SortedArray<T>;
     }
 
-    export function toSortedArray(arr: string[]): SortedArray<string>;
-    export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
-    export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
-        arr.sort(comparer);
-        return arr as SortedArray<T>;
-    }
-
-    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
-        compare = compare || compareValues;
-        let newIndex = 0;
-        let oldIndex = 0;
-        const newLen = newItems.length;
-        const oldLen = oldItems.length;
-        while (newIndex < newLen && oldIndex < oldLen) {
-            const newItem = newItems[newIndex];
-            const oldItem = oldItems[oldIndex];
-            const compareResult = compare(newItem, oldItem);
-            if (compareResult === Comparison.LessThan) {
-                inserted(newItem);
-                newIndex++;
-            }
-            else if (compareResult === Comparison.GreaterThan) {
-                deleted(oldItem);
-                oldIndex++;
-            }
-            else {
-                newIndex++;
-                oldIndex++;
-            }
-        }
-        while (newIndex < newLen) {
-            inserted(newItems[newIndex++]);
-        }
-        while (oldIndex < oldLen) {
-            deleted(oldItems[oldIndex++]);
-        }
-    }
-
     export class ThrottledOperations {
         private pendingTimeouts: Map<any> = createMap<any>();
         constructor(private readonly host: ServerHost) {
         }
 
+        /**
+         * Wait `number` milliseconds and then invoke `cb`.  If, while waiting, schedule
+         * is called again with the same `operationId`, cancel this operation in favor
+         * of the new one.  (Note that the amount of time the canceled operation had been
+         * waiting does not affect the amount of time that the new operation waits.)
+         */
         public schedule(operationId: string, delay: number, cb: () => void) {
             const pendingTimeout = this.pendingTimeouts.get(operationId);
             if (pendingTimeout) {
@@ -261,7 +227,10 @@ namespace ts.server {
             }
         }
     }
+}
 
+/* @internal */
+namespace ts.server {
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
         if (array.length === 0) {
             array.push(insert);
@@ -287,6 +256,53 @@ namespace ts.server {
         const removeIndex = binarySearch(array, remove, compare);
         if (removeIndex >= 0) {
             array.splice(removeIndex, 1);
+        }
+    }
+
+    export function toSortedArray(arr: string[]): SortedArray<string>;
+    export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
+    export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
+        arr.sort(comparer);
+        return arr as SortedArray<T>;
+    }
+
+    export function toDeduplicatedSortedArray(arr: string[]): SortedArray<string> {
+        arr.sort();
+        filterMutate(arr, isNonDuplicateInSortedArray);
+        return arr as SortedArray<string>;
+    }
+    function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
+        return index === 0 || value !== array[index - 1];
+    }
+
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
+        compare = compare || compareValues;
+        let newIndex = 0;
+        let oldIndex = 0;
+        const newLen = newItems.length;
+        const oldLen = oldItems.length;
+        while (newIndex < newLen && oldIndex < oldLen) {
+            const newItem = newItems[newIndex];
+            const oldItem = oldItems[oldIndex];
+            const compareResult = compare(newItem, oldItem);
+            if (compareResult === Comparison.LessThan) {
+                inserted(newItem);
+                newIndex++;
+            }
+            else if (compareResult === Comparison.GreaterThan) {
+                deleted(oldItem);
+                oldIndex++;
+            }
+            else {
+                newIndex++;
+                oldIndex++;
+            }
+        }
+        while (newIndex < newLen) {
+            inserted(newItems[newIndex++]);
+        }
+        while (oldIndex < oldLen) {
+            deleted(oldItems[oldIndex++]);
         }
     }
 }

@@ -120,24 +120,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var EmptyTypes;
 (function (EmptyTypes) {
-    var base = (function () {
+    var base = /** @class */ (function () {
         function base() {
         }
         return base;
     }());
-    var base2 = (function () {
+    var base2 = /** @class */ (function () {
         function base2() {
         }
         return base2;
     }());
-    var derived = (function (_super) {
+    var derived = /** @class */ (function (_super) {
         __extends(derived, _super);
         function derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));
-    var f = (function () {
+    var f = /** @class */ (function () {
         function f() {
         }
         f.prototype.voidIfAny = function (x, y) {
@@ -179,24 +179,24 @@ var EmptyTypes;
 })(EmptyTypes || (EmptyTypes = {}));
 var NonEmptyTypes;
 (function (NonEmptyTypes) {
-    var base = (function () {
+    var base = /** @class */ (function () {
         function base() {
         }
         return base;
     }());
-    var base2 = (function () {
+    var base2 = /** @class */ (function () {
         function base2() {
         }
         return base2;
     }());
-    var derived = (function (_super) {
+    var derived = /** @class */ (function (_super) {
         __extends(derived, _super);
         function derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));
-    var f = (function () {
+    var f = /** @class */ (function () {
         function f() {
         }
         f.prototype.voidIfAny = function (x, y) {
