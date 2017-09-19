@@ -16,13 +16,12 @@ namespace ts.refactor.convertJSDocToTypes {
             return undefined;
         }
 
-        let node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
+        const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         // NB getJSDocType might not be cheap enough to call on everything here
         // TODO: Should be able to getJSDocType(node), not have to call on parent.
-        if (node.parent.kind === SyntaxKind.VariableDeclaration) {
-            node = node.parent;
-        }
-        if (getJSDocType(node)) { // && isKindThatIKnowHowToConvert(node)
+        //   or maybe I should just walk up until I hit something that has a .type and can have getJSDocType called on it
+        const decl = findAncestor(node, isVariableLike);
+        if (getJSDocType(decl) && !decl.type) { // && isKindThatIKnowHowToConvert(node)
             return [
                 {
                     name: convertJSDocToTypes.name,
@@ -41,18 +40,21 @@ namespace ts.refactor.convertJSDocToTypes {
     function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
         // Somehow wrong action got invoked?
         if (actionName !== action) {
+            Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
             return undefined;
         }
 
         const start = context.startPosition;
         const sourceFile = context.file;
         // const checker = context.program.getTypeChecker();
-        let token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        if (token.parent.kind === SyntaxKind.VariableDeclaration) {
-            token = token.parent;
+        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        const decl = findAncestor(token, isVariableLike);
+        decl.kind
+        const jsdocType = getJSDocType(decl);
+        if (!jsdocType || decl.type) {
+            Debug.fail(`!jsdocType || decl.type: !${jsdocType} || ${decl.type}`);
+            return undefined;
         }
-        const jsdocType = getJSDocType(token);
-        if (!jsdocType) { return undefined; }
 
         // const ctorSymbol = checker.getSymbolAtLocation(token);
         // const newLine = context.rulesProvider.getFormatOptions().newLineCharacter;
@@ -65,10 +67,13 @@ namespace ts.refactor.convertJSDocToTypes {
         // }
 
         // const ctorDeclaration = ctorSymbol.valueDeclaration;
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context as { newLineCharacter: string, rulesProvider: formatting.RulesProvider });
-
-        const precedingNode = token.parent; // probably wrong!
-        changeTracker.insertNodeAfter(sourceFile, precedingNode, jsdocType);
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
+        changeTracker.replaceNode(sourceFile, decl, createVariableDeclaration(decl.name as string | BindingName, jsdocType, decl.initializer));
+        return {
+            edits: changeTracker.getChanges(),
+            renameFilename: undefined,
+            renameLocation: undefined
+        };
 
         // let precedingNode: Node;
         // let newClassDeclaration: ClassDeclaration;
@@ -99,11 +104,13 @@ namespace ts.refactor.convertJSDocToTypes {
         // changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration, { suffix: newLine });
         // for (const deleteCallback of deletes) {
         //     deleteCallback();
-        //}
+        // }
 
-        return {
-            edits: changeTracker.getChanges()
-        };
+        // return {
+            // edits: changeTracker.getChanges(),
+            // renameFilename: undefined,
+            // renameLocation: undefined
+        // };
 
         // function deleteNode(node: Node, inList = false) {
         //     if (deletedNodes.some(n => isNodeDescendantOf(node, n))) {
