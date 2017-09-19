@@ -12,14 +12,18 @@ goTo.select('start', 'end')
 
 verify.refactorAvailable('Extract Method');
 
-edit.applyRefactor('Extract Method', "scope_0");
-
-verify.currentFileContentIs(`class Foo {
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_0",
+    actionDescription: "Extract to method in class 'Foo'",
+    newContent:
+`class Foo {
     static method() {
-        return Foo.newFunction();
+        return Foo./*RENAME*/newFunction();
     }
 
     private static newFunction() {
         return 1;
     }
-}`);
+}`
+});

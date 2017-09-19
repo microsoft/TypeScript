@@ -1,11 +1,11 @@
 // This file contains the build logic for the public repo
+// @ts-check
 
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var fold = require("travis-fold");
-var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 var ts = require("./lib/typescript");
 
 
@@ -38,7 +38,7 @@ else if (process.env.PATH !== undefined) {
 
 function filesFromConfig(configPath) {
     var configText = fs.readFileSync(configPath).toString();
-    var config = ts.parseConfigFileTextToJson(configPath, configText, /*stripComments*/ true);
+    var config = ts.parseConfigFileTextToJson(configPath, configText);
     if (config.error) {
         throw new Error(diagnosticsToString([config.error]));
     }
@@ -88,6 +88,8 @@ var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/t
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
 
+var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
+
 var harnessCoreSources = [
     "harness.ts",
     "virtualFileSystem.ts",
@@ -102,6 +104,9 @@ var harnessCoreSources = [
     "loggedIO.ts",
     "rwcRunner.ts",
     "test262Runner.ts",
+    "./parallel/shared.ts",
+    "./parallel/host.ts",
+    "./parallel/worker.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
@@ -140,6 +145,8 @@ var harnessSources = harnessCoreSources.concat([
     "transform.ts",
     "customTransforms.ts",
     "programMissingFiles.ts",
+    "symbolWalker.ts",
+    "languageService.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -423,6 +430,7 @@ var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
 var buildProtocolDts = path.join(builtLocalDirectory, "protocol.d.ts");
 var typescriptServicesDts = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+var typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 
 file(buildProtocolTs);
 
@@ -587,6 +595,16 @@ var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
+file(typesMapOutputPath, function() {
+    var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
+    // Validate that it's valid JSON
+    try {
+        JSON.parse(content.toString());
+    } catch (e) {
+        console.log("Parse error in typesMap.json: " + e);
+    }
+    fs.writeFileSync(typesMapOutputPath, content);
+});
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
@@ -609,7 +627,7 @@ compileFile(
 
 // Local target to build the language service server library
 desc("Builds language service server library");
-task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
+task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile, typesMapOutputPath]);
 
 desc("Emit the start of the build fold");
 task("build-fold-start", [], function () {
@@ -637,7 +655,6 @@ task("release", function () {
 
 // Set the default task to "local"
 task("default", ["local"]);
-
 
 // Cleans the built directory
 desc("Cleans the compiler output, declare files, and tests");
@@ -726,7 +743,7 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler, errorHandler) {
-    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true });
+    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true, interactive: true });
     // Add listeners for output and error
     ex.addListener("stdout", function (output) {
         process.stdout.write(output);
@@ -752,15 +769,16 @@ function exec(cmd, completeHandler, errorHandler) {
     ex.run();
 }
 
+const del = require("del");
 function cleanTestDirs() {
     // Clean the local baselines directory
     if (fs.existsSync(localBaseline)) {
-        jake.rmRf(localBaseline);
+        del.sync(localBaseline);
     }
 
     // Clean the local Rwc baselines directory
     if (fs.existsSync(localRwcBaseline)) {
-        jake.rmRf(localRwcBaseline);
+        del.sync(localRwcBaseline);
     }
 
     jake.mkdirP(localRwcBaseline);
@@ -769,13 +787,14 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit) {
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
     var testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,
         taskConfigsFolder: taskConfigsFolder,
-        stackTraceLimit: stackTraceLimit
+        stackTraceLimit: stackTraceLimit,
+        noColor: !colors
     });
     fs.writeFileSync('test.config', testConfigContents);
 }
@@ -817,7 +836,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -880,19 +899,15 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
         var startTime = mark();
-        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors }, function (err) {
+        exec(host + " " + run, function () {
             process.env.NODE_ENV = savedNodeEnv;
             measure(startTime);
-            // last worker clean everything and runs linter in case if there were no errors
-            deleteTemporaryProjectOutput();
-            jake.rmRf(taskConfigsFolder);
-            if (err) {
-                fail(err);
-            }
-            else {
-                runLinter();
-                complete();
-            }
+            runLinter();
+            finish();
+        }, function (e, status) {
+            process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
+            finish(status);
         });
     }
 
@@ -955,8 +970,8 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
-    browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
-    tests = process.env.test || process.env.tests || process.env.t;
+    var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
@@ -1028,6 +1043,7 @@ function acceptBaseline(sourceFolder, targetFolder) {
                     if (fs.existsSync(target)) {
                         fs.unlinkSync(target);
                     }
+                    jake.mkdirP(path.dirname(target));
                     fs.renameSync(path.join(sourceFolder, filename), target);
                 }
             }
@@ -1086,7 +1102,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function () {
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
 var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
-compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true, { lib: "es6", types: ["node"] });
+compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true, { lib: "es6", types: ["node"], noOutFile: true, outDir: builtLocalDirectory });
 
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function () {

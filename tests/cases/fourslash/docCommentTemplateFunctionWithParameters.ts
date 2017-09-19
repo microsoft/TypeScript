@@ -11,7 +11,5 @@ const noIndentOffset = 8;
 const oneIndentOffset = noIndentOffset + 4;
 
 goTo.marker("0");
-verify.DocCommentTemplate(noIndentScaffolding, noIndentOffset);
-
-goTo.marker("1");
-verify.DocCommentTemplate(oneIndentScaffolding, oneIndentOffset);
+verify.docCommentTemplateAt("0", noIndentOffset, noIndentScaffolding);
+verify.docCommentTemplateAt("1", oneIndentOffset, oneIndentScaffolding);

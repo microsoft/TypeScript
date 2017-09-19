@@ -9,14 +9,18 @@
 //// }
 
 goTo.select('a', 'b');
-edit.applyRefactor('Extract Method', 'scope_1');
-
-verify.currentFileContentIs(`function foo() {
+edit.applyRefactor({
+    refactorName: "Extract Method",
+    actionName: "scope_1",
+    actionDescription: "Extract to function in global scope",
+    newContent:
+`function foo() {
     var i = 10;
-    i = newFunction(i);
+    i = /*RENAME*/newFunction(i);
 }
 function newFunction(i: number) {
     i++;
     return i;
 }
-`);
+`
+});

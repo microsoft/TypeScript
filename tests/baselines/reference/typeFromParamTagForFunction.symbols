@@ -9,6 +9,7 @@ declare var module: any, exports: any;
 
 === tests/cases/conformance/salsa/a-ext.js ===
 exports.A = function () {
+>exports.A : Symbol(A, Decl(a-ext.js, 0, 0))
 >exports : Symbol(A, Decl(a-ext.js, 0, 0))
 >A : Symbol(A, Decl(a-ext.js, 0, 0))
 
@@ -33,6 +34,7 @@ function a(p) { p.x; }
 
 === tests/cases/conformance/salsa/b-ext.js ===
 exports.B = class {
+>exports.B : Symbol(B, Decl(b-ext.js, 0, 0))
 >exports : Symbol(B, Decl(b-ext.js, 0, 0))
 >B : Symbol(B, Decl(b-ext.js, 0, 0))
 

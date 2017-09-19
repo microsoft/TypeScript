@@ -48,18 +48,18 @@ namespace ts {
             const program = createProgram(["./nonexistent.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
-            assert.deepEqual(missing, ["d:/pretend/nonexistent.ts"]); // Absolute path
+            assert.deepEqual(missing, ["d:/pretend/nonexistent.ts" as Path]); // Absolute path
         });
 
         it("handles multiple missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", "./nonexistent1.ts"], options, testCompilerHost);
-            const missing = program.getMissingFilePaths().sort();
+            const missing = program.getMissingFilePaths().slice().sort();
             assert.deepEqual(missing, ["d:/pretend/nonexistent0.ts", "d:/pretend/nonexistent1.ts"]);
         });
 
         it("handles a mix of present and missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", emptyFileRelativePath, "./nonexistent1.ts"], options, testCompilerHost);
-            const missing = program.getMissingFilePaths().sort();
+            const missing = program.getMissingFilePaths().slice().sort();
             assert.deepEqual(missing, ["d:/pretend/nonexistent0.ts", "d:/pretend/nonexistent1.ts"]);
         });
 
@@ -67,7 +67,7 @@ namespace ts {
             const program = createProgram(["./nonexistent.ts", "./nonexistent.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
-            assert.deepEqual(missing, ["d:/pretend/nonexistent.ts"]);
+            assert.deepEqual(missing, ["d:/pretend/nonexistent.ts" as Path]);
         });
 
         it("normalizes file paths", () => {
@@ -81,7 +81,7 @@ namespace ts {
 
         it("handles missing triple slash references", () => {
             const program = createProgram([referenceFileRelativePath], options, testCompilerHost);
-            const missing = program.getMissingFilePaths().sort();
+            const missing = program.getMissingFilePaths().slice().sort();
             assert.isDefined(missing);
             assert.deepEqual(missing, [
                 // From absolute reference

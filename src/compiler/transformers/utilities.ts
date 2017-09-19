@@ -124,7 +124,7 @@ namespace ts {
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.escapedText))) {
+                            if (name && !uniqueExports.get(unescapeLeadingUnderscores(name.escapedText))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(unescapeLeadingUnderscores(name.escapedText), true);
                                 exportedNames = append(exportedNames, name);
