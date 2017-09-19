@@ -9422,10 +9422,13 @@ namespace ts {
                             return result;
                         }
                         // The type arguments did not relate appropriately, but it may be because getVariances was
-                        // invoked recursively and returned emptyArray (in which case typeArgumentsRelatedTo defaults
-                        // to covariance for all type arguments). In that case we need to contine with a structural
-                        // comparison. Otherwise, we know for certain the instantiations aren't related.
-                        if (variances !== emptyArray) {
+                        // invoked recursively and returned emptyArray (in which case typeArgumentsRelatedTo defaulted
+                        // to covariance for all type arguments). It might also be the case that the target type has a
+                        // 'void' type argument for a covariant type parameter that is only used in return positions
+                        // within the generic type (in which case any type argument is permitted on the source side).
+                        // In those cases we proceed with a structural comparison. Otherwise, we know for certain the
+                        // instantiations aren't related and we can return here.
+                        if (variances !== emptyArray && !hasCovariantVoidArgument(<TypeReference>target, variances)) {
                             return Ternary.False;
                         }
                     }
@@ -9839,7 +9842,7 @@ namespace ts {
         }
 
         function getVarianceType(type: GenericType, source: TypeParameter, target: Type) {
-            return createTypeReference(type, map(type.typeParameters, t => t === source ? target: t));
+            return createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
@@ -9848,7 +9851,7 @@ namespace ts {
         // instantiations of the generic type for type arguments with known relations. Note that the
         // function returns the emptyArray singleton to signal that it has been invoked recursively for
         // the given generic type.
-        function getVariances(type: GenericType) {
+        function getVariances(type: GenericType): Variance[] {
             const typeParameters = type.typeParameters || emptyArray;
             let variances = type.variances;
             if (!variances) {
@@ -9881,6 +9884,17 @@ namespace ts {
                 type.variances = variances;
             }
             return variances;
+        }
+
+        // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
+        // See comment at call in recursiveTypeRelatedTo for when this case matters.
+        function hasCovariantVoidArgument(type: TypeReference, variances: Variance[]): boolean {
+            for (let i = 0; i < variances.length; i++) {
+                if (variances[i] === Variance.Covariant && type.typeArguments[i].flags & TypeFlags.Void) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function isUnconstrainedTypeParameter(type: Type) {
