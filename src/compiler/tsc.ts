@@ -100,7 +100,6 @@ namespace ts {
         const commandLine = parseCommandLine(args);
         let configFileName: string;                                 // Configuration file name (if any)
         let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
-        let configFileWatcher: FileWatcher;                         // Configuration file watcher
         let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
         let cachedProgram: Program;                                 // Program cached from last compilation
         let rootFileNames: string[];                                // Root fileNames for compilation
@@ -189,7 +188,7 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+                sys.watchFile(configFileName, configFileChanged);
             }
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);

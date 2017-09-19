@@ -13,78 +13,78 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function 'a'==
+// ==SCOPE::inner function in function 'a'==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction();
+            return await /*RENAME*/newFunction();
 
             async function newFunction() {
                 let y = 5;
-                if(z) {
-                await z1;
-            }
+                if (z) {
+                    await z1;
+                }
                 return foo();
             }
         }
     }
 }
-// ==SCOPE::namespace 'B'==
+// ==SCOPE::function in namespace 'B'==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1);
+            return await /*RENAME*/newFunction(z, z1);
         }
 
         async function newFunction(z: number, z1: any) {
             let y = 5;
-            if(z) {
-            await z1;
-        }
+            if (z) {
+                await z1;
+            }
             return foo();
         }
     }
 }
-// ==SCOPE::namespace 'A'==
+// ==SCOPE::function in namespace 'A'==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1);
+            return await /*RENAME*/newFunction(z, z1);
         }
     }
 
     async function newFunction(z: number, z1: any) {
         let y = 5;
-        if(z) {
-        await z1;
-    }
+        if (z) {
+            await z1;
+        }
         return foo();
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 namespace A {
     function foo() {
     }
     namespace B {
         async function a(z: number, z1: any) {
         
-            return await newFunction(z, z1, foo);
+            return await /*RENAME*/newFunction(z, z1, foo);
         }
     }
 }
 async function newFunction(z: number, z1: any, foo: () => void) {
     let y = 5;
-    if(z) {
-    await z1;
-}
+    if (z) {
+        await z1;
+    }
     return foo();
 }

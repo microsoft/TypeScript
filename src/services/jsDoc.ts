@@ -173,38 +173,15 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        // TODO: add support for:
-        // - enums/enum members
-        // - interfaces
-        // - property declarations
-        // - potentially property assignments
-        let commentOwner: Node;
-        findOwner: for (commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
-            switch (commentOwner.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.VariableStatement:
-                    break findOwner;
-                case SyntaxKind.SourceFile:
-                    return undefined;
-                case SyntaxKind.ModuleDeclaration:
-                    // If in walking up the tree, we hit a a nested namespace declaration,
-                    // then we must be somewhere within a dotted namespace name; however we don't
-                    // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
-                    if (commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
-                        return undefined;
-                    }
-                    break findOwner;
-            }
+        const commentOwnerInfo = getCommentOwnerInfo(tokenAtPos);
+        if (!commentOwnerInfo) {
+            return undefined;
         }
-
-        if (!commentOwner || commentOwner.getStart() < position) {
+        const { commentOwner, parameters } = commentOwnerInfo;
+        if (commentOwner.getStart() < position) {
             return undefined;
         }
 
-        const parameters = getParametersForJsDocOwningNode(commentOwner);
         const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
         const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
@@ -213,16 +190,18 @@ namespace ts.JsDoc {
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
         let docParams = "";
-        for (let i = 0; i < parameters.length; i++) {
-            const currentName = parameters[i].name;
-            const paramName = currentName.kind === SyntaxKind.Identifier ?
-                (<Identifier>currentName).escapedText :
-                "param" + i;
-            if (isJavaScriptFile) {
-                docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
-            }
-            else {
-                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+        if (parameters) {
+            for (let i = 0; i < parameters.length; i++) {
+                const currentName = parameters[i].name;
+                const paramName = currentName.kind === SyntaxKind.Identifier ?
+                    (<Identifier>currentName).escapedText :
+                    "param" + i;
+                if (isJavaScriptFile) {
+                    docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
+                }
+                else {
+                    docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+                }
             }
         }
 
@@ -244,21 +223,55 @@ namespace ts.JsDoc {
         return { newText: result, caretOffset: preamble.length };
     }
 
-    function getParametersForJsDocOwningNode(commentOwner: Node): ReadonlyArray<ParameterDeclaration> {
-        if (isFunctionLike(commentOwner)) {
-            return commentOwner.parameters;
-        }
+    interface CommentOwnerInfo {
+        readonly commentOwner: Node;
+        readonly parameters?: ReadonlyArray<ParameterDeclaration>;
+    }
+    function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
+        // TODO: add support for:
+        // - enums/enum members
+        // - interfaces
+        // - property declarations
+        // - potentially property assignments
+        for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
+            switch (commentOwner.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                    const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration;
+                    return { commentOwner, parameters };
 
-        if (commentOwner.kind === SyntaxKind.VariableStatement) {
-            const varStatement = <VariableStatement>commentOwner;
-            const varDeclarations = varStatement.declarationList.declarations;
+                case SyntaxKind.ClassDeclaration:
+                    return { commentOwner };
 
-            if (varDeclarations.length === 1 && varDeclarations[0].initializer) {
-                return getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer);
+                case SyntaxKind.VariableStatement: {
+                    const varStatement = <VariableStatement>commentOwner;
+                    const varDeclarations = varStatement.declarationList.declarations;
+                    const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
+                        ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
+                        : undefined;
+                    return { commentOwner, parameters };
+                }
+
+                case SyntaxKind.SourceFile:
+                    return undefined;
+
+                case SyntaxKind.ModuleDeclaration:
+                    // If in walking up the tree, we hit a a nested namespace declaration,
+                    // then we must be somewhere within a dotted namespace name; however we don't
+                    // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
+                    return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
+
+                case SyntaxKind.BinaryExpression: {
+                    const be = commentOwner as BinaryExpression;
+                    if (getSpecialPropertyAssignmentKind(be) === ts.SpecialPropertyAssignmentKind.None) {
+                        return undefined;
+                    }
+                    const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
+                    return { commentOwner, parameters };
+                }
             }
         }
-
-        return emptyArray;
     }
 
     /**

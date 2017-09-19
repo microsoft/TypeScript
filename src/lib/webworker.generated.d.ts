@@ -470,7 +470,7 @@ interface Headers {
 
 declare var Headers: {
     prototype: Headers;
-    new(init?: Headers | string[][]): Headers;
+    new(init?: Headers | string[][] | object): Headers;
 };
 
 interface IDBCursor {

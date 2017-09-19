@@ -9,13 +9,13 @@ namespace A {
         }
     }
 }
-// ==SCOPE::class 'C'==
+// ==SCOPE::method in class 'C'==
 namespace A {
     export interface I { x: number };
     class C {
         a() {
             let z = 1;
-            return this.newFunction();
+            return this./*RENAME*/newFunction();
         }
 
         private newFunction() {
@@ -24,13 +24,13 @@ namespace A {
         }
     }
 }
-// ==SCOPE::namespace 'A'==
+// ==SCOPE::function in namespace 'A'==
 namespace A {
     export interface I { x: number };
     class C {
         a() {
             let z = 1;
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 
@@ -39,13 +39,13 @@ namespace A {
         return a1.x + 10;
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 namespace A {
     export interface I { x: number };
     class C {
         a() {
             let z = 1;
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 }

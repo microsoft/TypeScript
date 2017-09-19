@@ -92,6 +92,9 @@
         "loggedIO.ts",
         "rwcRunner.ts",
         "test262Runner.ts",
+        "./parallel/shared.ts",
+        "./parallel/host.ts",
+        "./parallel/worker.ts",
         "runner.ts",
         "../server/protocol.ts",
         "../server/session.ts",
@@ -128,6 +131,7 @@
         "./unittests/extractMethods.ts",
         "./unittests/textChanges.ts",
         "./unittests/telemetry.ts",
+        "./unittests/languageService.ts",
         "./unittests/programMissingFiles.ts"
     ]
 }

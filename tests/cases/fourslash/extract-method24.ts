@@ -10,14 +10,15 @@ goTo.select('a', 'b')
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_1",
-    actionDescription: "Extract function into global scope",
-});
-verify.currentFileContentIs(`function M() {
+    actionDescription: "Extract to function in global scope",
+    newContent:
+`function M() {
     let a = [1,2,3];
     let x = 0;
-    console.log(newFunction(a, x));
+    console.log(/*RENAME*/newFunction(a, x));
 }
 function newFunction(a: number[], x: number): any {
     return a[x];
 }
-`);
+`
+});

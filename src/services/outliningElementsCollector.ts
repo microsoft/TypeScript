@@ -2,13 +2,17 @@
 namespace ts.OutliningElementsCollector {
     const collapseText = "...";
     const maxDepth = 20;
+    const defaultLabel = "#region";
+    const regionMatch = new RegExp("^\\s*//\\s*#(end)?region(?:\\s+(.*))?$");
 
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         let depth = 0;
+        const regions: OutliningSpan[] = [];
 
         walk(sourceFile);
-        return elements;
+        gatherRegions();
+        return elements.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
 
         /** If useFullStart is true, then the collapsing span includes leading whitespace, including linebreaks. */
         function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean, useFullStart: boolean) {
@@ -87,6 +91,39 @@ namespace ts.OutliningElementsCollector {
 
         function autoCollapse(node: Node) {
             return isFunctionBlock(node) && node.parent.kind !== SyntaxKind.ArrowFunction;
+        }
+
+        function gatherRegions(): void {
+            const lineStarts = sourceFile.getLineStarts();
+
+            for (let i = 0; i < lineStarts.length; i++) {
+                const currentLineStart = lineStarts[i];
+                const lineEnd = lineStarts[i + 1] - 1 || sourceFile.getEnd();
+                const comment = sourceFile.text.substring(currentLineStart, lineEnd);
+                const result = comment.match(regionMatch);
+
+                if (result && !isInComment(sourceFile, currentLineStart)) {
+                    if (!result[1]) {
+                        const start = sourceFile.getFullText().indexOf("//", currentLineStart);
+                        const textSpan = createTextSpanFromBounds(start, lineEnd);
+                        const region: OutliningSpan = {
+                            textSpan,
+                            hintSpan: textSpan,
+                            bannerText: result[2] || defaultLabel,
+                            autoCollapse: false
+                        };
+                        regions.push(region);
+                    }
+                    else {
+                        const region = regions.pop();
+                        if (region) {
+                            region.textSpan.length = lineEnd - region.textSpan.start;
+                            region.hintSpan.length = lineEnd - region.textSpan.start;
+                            elements.push(region);
+                        }
+                    }
+                }
+            }
         }
 
         function walk(n: Node): void {

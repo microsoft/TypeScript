@@ -200,6 +200,7 @@ namespace ts {
          */
         function transformUMDModule(node: SourceFile) {
             const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, /*includeNonAmdDependencies*/ false);
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const umdHeader = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
@@ -260,6 +261,8 @@ namespace ts {
                                                 createIdentifier("define"),
                                                 /*typeArguments*/ undefined,
                                                 [
+                                                    // Add the module name (if provided).
+                                                    ...(moduleName ? [moduleName] : []),
                                                     createArrayLiteral([
                                                         createLiteral("require"),
                                                         createLiteral("exports"),
