@@ -24,7 +24,7 @@ namespace ts.codefix {
     });
 
     function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken }: CodeFixContext): CodeAction[] | undefined {
-        const token = getTokenAtPosition(sourceFile, start);
+        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
 
         switch (token.kind) {
             case SyntaxKind.Identifier:
@@ -169,7 +169,7 @@ namespace ts.codefix {
             Debug.assert(!!references, "Found no references!");
             Debug.assert(references.length === 1, "Found more references than expected");
 
-            return map(references[0].references, r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
+            return map(references[0].references, r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start, /*includeJsDocComment*/ false));
         }
 
         function inferTypeForVariableFromUsage(token: Identifier) {
@@ -240,7 +240,7 @@ namespace ts.codefix {
             isString?: boolean;
             isNumberOrString?: boolean;
             candidateTypes?: Type[];
-            properties?: Map<UsageContext>;
+            properties?: UnderscoreEscapedMap<UsageContext>;
             callContexts?: CallContext[];
             constructContexts?: CallContext[];
             numberIndexContext?: UsageContext;
@@ -278,16 +278,16 @@ namespace ts.codefix {
             else if (usageContext.candidateTypes) {
                 return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), /*subtypeReduction*/ true));
             }
-            else if (usageContext.properties && hasCallContext(usageContext.properties.get("then"))) {
-                const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then").callContexts, /*isRestParameter*/ false, checker);
+            else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
+                const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String).callContexts, /*isRestParameter*/ false, checker);
                 const types = paramType.getCallSignatures().map(c => c.getReturnType());
                 return checker.createPromiseType(types.length ? checker.getUnionType(types, /*subtypeReduction*/ true) : checker.getAnyType());
             }
-            else if (usageContext.properties && hasCallContext(usageContext.properties.get("push"))) {
-                return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push").callContexts, /*isRestParameter*/ false, checker));
+            else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
+                return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String).callContexts, /*isRestParameter*/ false, checker));
             }
             else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
-                const members = createMap<Symbol>();
+                const members = createUnderscoreEscapedMap<Symbol>();
                 const callSignatures: Signature[] = [];
                 const constructSignatures: Signature[] = [];
                 let stringIndexInfo: IndexInfo;
@@ -353,7 +353,7 @@ namespace ts.codefix {
         function getSignatureFromCallContext(callContext: CallContext, checker: TypeChecker): Signature {
             const parameters: Symbol[] = [];
             for (let i = 0; i < callContext.argumentTypes.length; i++) {
-                const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, `p${i}`);
+                const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`p${i}`));
                 symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                 parameters.push(symbol);
             }
@@ -550,9 +550,9 @@ namespace ts.codefix {
         }
 
         function inferTypeFromPropertyAccessExpressionContext(parent: PropertyAccessExpression, checker: TypeChecker, usageContext: UsageContext): void {
-            const name = parent.name.text;
+            const name = escapeLeadingUnderscores(parent.name.text);
             if (!usageContext.properties) {
-                usageContext.properties = createMap<UsageContext>();
+                usageContext.properties = createUnderscoreEscapedMap<UsageContext>();
             }
             const propertyUsageContext = {};
             inferTypeFromContext(parent, checker, propertyUsageContext);
