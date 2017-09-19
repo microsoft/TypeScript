@@ -934,12 +934,8 @@ namespace ts.refactor.extractMethod {
      * Otherwise, return `undefined`.
      */
     function getNodeToInsertBefore(minPos: number, scope: Scope): Node | undefined {
-        const children = getStatementsOrClassElements(scope);
-        for (const child of children) {
-            if (child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child)) {
-                return child;
-            }
-        }
+        return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
+            child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child));
     }
 
     function getPropertyAssignmentsForWrites(writes: ReadonlyArray<UsageEntry>): ShorthandPropertyAssignment[] {
