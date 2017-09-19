@@ -14,7 +14,7 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
-({}).toString();
+({}.toString());
 (function () {
-    ({}).toString();
+    ({}.toString());
 })();

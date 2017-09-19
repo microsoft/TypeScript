@@ -3875,18 +3875,14 @@ namespace ts {
      */
     export function parenthesizeForAccess(expression: Expression): LeftHandSideExpression {
         // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
-        // to parenthesize the expression before a dot. There are two known exceptions:
+        // to parenthesize the expression before a dot. The known exception is:
         //
         //    NewExpression:
         //       new C.x        -> not the same as (new C).x
         //
-        //    ObjectLiteral:
-        //       {a:1}.toString()  -> is incorrect syntax, should be ({a:1}).toString()
-        //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
-            && (!isNewExpression(emittedExpression) || (<NewExpression>emittedExpression).arguments)
-            && !isObjectLiteralExpression(emittedExpression)) {
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)) {
             return <LeftHandSideExpression>expression;
         }
 
@@ -3945,11 +3941,10 @@ namespace ts {
                 return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
-        else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
-            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                return setTextRange(createParen(expression), expression);
-            }
+
+        const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
+        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+            return setTextRange(createParen(expression), expression);
         }
 
         return expression;
