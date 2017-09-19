@@ -17,6 +17,7 @@ var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
 var unittestsDirectory = "src/harness/unittests/";
 var docDirectory = "doc/";
+var lclDirectory = "src/loc/lcl";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
@@ -424,7 +425,38 @@ compileFile(processDiagnosticMessagesJs,
     [processDiagnosticMessagesTs],
     [processDiagnosticMessagesTs],
     [],
-            /*useBuiltCompiler*/ false);
+    /*useBuiltCompiler*/ false);
+
+// Localize diagnostics script
+var generateLocalizedDiagnosticMessagesJs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.js");
+var generateLocalizedDiagnosticMessagesTs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.ts");
+
+file(generateLocalizedDiagnosticMessagesTs);
+
+compileFile(generateLocalizedDiagnosticMessagesJs,
+    [generateLocalizedDiagnosticMessagesTs],
+    [generateLocalizedDiagnosticMessagesTs],
+    [],
+    /*useBuiltCompiler*/ false, { noOutFile: true, types: ["node", "xml2js"] });
+
+// Localize diagnostics
+task("localize",  [generateLocalizedDiagnosticMessagesJs], function () {
+    var cmd = host + " " + generateLocalizedDiagnosticMessagesJs + " " + lclDirectory + " " + builtLocalDirectory;
+    console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function (output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function (error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function () {
+        complete();
+    });
+    ex.run();
+}, { async: true });
+
 
 var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
@@ -695,8 +727,10 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
-    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].concat(libraryTargets);
+task("LKG", ["clean", "release", "local", "localize"].concat(libraryTargets), function () {
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
+        concat(libraryTargets).
+        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d) }));
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
