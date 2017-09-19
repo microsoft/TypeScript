@@ -213,7 +213,7 @@ namespace ts.NavigationBar {
                 if (isBindingPattern(name)) {
                     addChildrenRecursively(name);
                 }
-                else if (initializer && (isArrowFunction(initializer) || isFunctionExpression(initializer) || isClassExpression(initializer))) {
+                else if (initializer && isFunctionOrClassExpression(initializer)) {
                     if (initializer.name) {
                         // Don't add a node for the VariableDeclaration, just for the initializer.
                         addChildrenRecursively(initializer);
@@ -648,6 +648,17 @@ namespace ts.NavigationBar {
         }
         else {
             return isClassLike(node) ? "<class>" : "<function>";
+        }
+    }
+
+    function isFunctionOrClassExpression(node: Node): node is ArrowFunction | FunctionExpression | ClassExpression {
+        switch (node.kind) {
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
+                return true;
+            default:
+                return false;
         }
     }
 }
