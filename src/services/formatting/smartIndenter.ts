@@ -202,7 +202,14 @@ namespace ts.formatting {
                     indentationDelta += options.indentSize;
                 }
 
-                // Update `current` and `parent`.
+                // In our AST, a call argument's `parent` is the call-expression, not the argument list.
+                // We would like to increase indentation based on the relationship between an argument and its argument-list,
+                // so we spoof the starting position of the (parent) call-expression to match the (non-parent) argument-list.
+                // But, the spoofed start-value could then cause a problem when comparing the start position of the call-expression
+                // to *its* parent (in the case of an iife, an expression statement), adding an extra level of indentation.
+                //
+                // Instead, when at an argument, we unspoof the starting position of the enclosing call expression
+                // *after* applying indentation for the argument.
 
                 const useTrueStart =
                     isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
@@ -210,7 +217,6 @@ namespace ts.formatting {
                 current = parent;
                 parent = current.parent;
                 currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart()) : containingListOrParentStart;
-                containingListOrParentStart = undefined;
             }
 
             return indentationDelta + getBaseIndentation(options);
