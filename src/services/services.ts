@@ -1772,7 +1772,7 @@ namespace ts {
 
             start = timestamp();
 
-            const result = formatting.SmartIndenter.getIndentationAtPosition(position, sourceFile, settings);
+            const result = formatting.SmartIndenter.getIndentation(position, sourceFile, settings);
             log("getIndentationAtPosition: computeIndentation  : " + (timestamp() - start));
 
             return result;

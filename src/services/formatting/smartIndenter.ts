@@ -23,7 +23,7 @@ namespace ts.formatting {
          * When inserting some text after an open brace, we would like to get indentation as if a newline was already there.
          * By default indentation at `position` will be 0 so 'assumeNewLineBeforeCloseBrace' overrides this behavior.
          */
-        export function getIndentationAtPosition(position: number, sourceFile: SourceFile, options: EditorSettings, assumeNewLineBeforeCloseBrace = false): number {
+        export function getIndentation(position: number, sourceFile: SourceFile, options: EditorSettings, assumeNewLineBeforeCloseBrace = false): number {
             if (position > sourceFile.text.length) {
                 return getBaseIndentation(options); // past EOF
             }
