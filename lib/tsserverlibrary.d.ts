@@ -2198,6 +2198,7 @@ declare namespace ts {
     }
     interface PackageId {
         name: string;
+        subModuleName: string;
         version: string;
     }
     enum Extension {
@@ -2213,6 +2214,7 @@ declare namespace ts {
     interface ResolvedTypeReferenceDirective {
         primary: boolean;
         resolvedFileName?: string;
+        packageId?: PackageId;
     }
     interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
