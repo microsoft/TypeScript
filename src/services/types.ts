@@ -414,8 +414,8 @@ namespace ts {
      */
     export interface RefactorEditInfo {
         edits: FileTextChanges[];
-        renameFilename?: string;
-        renameLocation?: number;
+        renameFilename: string | undefined;
+        renameLocation: number | undefined;
     }
 
     export interface TextInsertion {

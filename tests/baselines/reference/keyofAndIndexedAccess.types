@@ -205,7 +205,7 @@ type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 >Options : Options
 
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
->Q41 : (true & "yes") | (true & "no") | (false & "yes") | (false & "no")
+>Q41 : never
 >Shape : Shape
 >Options : Options
 

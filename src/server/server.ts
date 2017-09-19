@@ -380,82 +380,96 @@ namespace ts.server {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
 
-            if (response.kind === EventInitializationFailed) {
-                if (!this.eventSender) {
-                    return;
-                }
-                const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                    message: response.message
-                };
-                const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-                this.eventSender.event(body, eventName);
-                return;
-            }
-
-            if (response.kind === EventBeginInstallTypes) {
-                if (!this.eventSender) {
-                    return;
-                }
-                const body: protocol.BeginInstallTypesEventBody = {
-                    eventId: response.eventId,
-                    packages: response.packagesToInstall,
-                };
-                const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                this.eventSender.event(body, eventName);
-
-                return;
-            }
-
-            if (response.kind === EventEndInstallTypes) {
-                if (!this.eventSender) {
-                    return;
-                }
-                if (this.telemetryEnabled) {
-                    const body: protocol.TypingsInstalledTelemetryEventBody = {
-                        telemetryEventName: "typingsInstalled",
-                        payload: {
-                            installedPackages: response.packagesToInstall.join(","),
-                            installSuccess: response.installSuccess,
-                            typingsInstallerVersion: response.typingsInstallerVersion
-                        }
+            switch (response.kind) {
+                case EventInitializationFailed:
+                {
+                    if (!this.eventSender) {
+                        break;
+                    }
+                    const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                        message: response.message
                     };
-                    const eventName: protocol.TelemetryEventName = "telemetry";
+                    const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                     this.eventSender.event(body, eventName);
-                }
-
-                const body: protocol.EndInstallTypesEventBody = {
-                    eventId: response.eventId,
-                    packages: response.packagesToInstall,
-                    success: response.installSuccess,
-                };
-                const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
-                this.eventSender.event(body, eventName);
-                return;
-            }
-
-            if (this.activeRequestCount > 0) {
-                this.activeRequestCount--;
-            }
-            else {
-                Debug.fail("Received too many responses");
-            }
-
-            while (this.requestQueue.length > 0) {
-                const queuedRequest = this.requestQueue.shift();
-                if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
-                    this.requestMap.delete(queuedRequest.operationId);
-                    this.scheduleRequest(queuedRequest);
                     break;
                 }
-
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                case EventBeginInstallTypes:
+                {
+                    if (!this.eventSender) {
+                        break;
+                    }
+                    const body: protocol.BeginInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                    };
+                    const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                    this.eventSender.event(body, eventName);
+                    break;
                 }
-            }
+                case EventEndInstallTypes:
+                {
+                    if (!this.eventSender) {
+                        break;
+                    }
+                    if (this.telemetryEnabled) {
+                        const body: protocol.TypingsInstalledTelemetryEventBody = {
+                            telemetryEventName: "typingsInstalled",
+                            payload: {
+                                installedPackages: response.packagesToInstall.join(","),
+                                installSuccess: response.installSuccess,
+                                typingsInstallerVersion: response.typingsInstallerVersion
+                            }
+                        };
+                        const eventName: protocol.TelemetryEventName = "telemetry";
+                        this.eventSender.event(body, eventName);
+                    }
 
-            this.projectService.updateTypingsForProject(response);
-            if (response.kind === ActionSet && this.socket) {
-                this.sendEvent(0, "setTypings", response);
+                    const body: protocol.EndInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                        success: response.installSuccess,
+                    };
+                    const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                    this.eventSender.event(body, eventName);
+                    break;
+                }
+                case ActionInvalidate:
+                {
+                    this.projectService.updateTypingsForProject(response);
+                    break;
+                }
+                case ActionSet:
+                {
+                    if (this.activeRequestCount > 0) {
+                        this.activeRequestCount--;
+                    }
+                    else {
+                        Debug.fail("Received too many responses");
+                    }
+
+                    while (this.requestQueue.length > 0) {
+                        const queuedRequest = this.requestQueue.shift();
+                        if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
+                            this.requestMap.delete(queuedRequest.operationId);
+                            this.scheduleRequest(queuedRequest);
+                            break;
+                        }
+
+                        if (this.logger.hasLevel(LogLevel.verbose)) {
+                            this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                        }
+                    }
+
+                    this.projectService.updateTypingsForProject(response);
+
+                    if (this.socket) {
+                        this.sendEvent(0, "setTypings", response);
+                    }
+
+                    break;
+                }
+                default:
+                    assertTypeIsNever(response);
             }
         }
 
@@ -585,7 +599,6 @@ namespace ts.server {
     function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
         const watchedFiles: WatchedFile[] = [];
         let nextFileToCheck = 0;
-        let watchTimer: any;
         return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
@@ -622,7 +635,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
-            watchTimer = setInterval(() => {
+            setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
                 let firstCheck = -1;

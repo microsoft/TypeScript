@@ -97,7 +97,9 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         return {
-            edits: changeTracker.getChanges()
+            edits: changeTracker.getChanges(),
+            renameFilename: undefined,
+            renameLocation: undefined,
         };
 
         function deleteNode(node: Node, inList = false) {

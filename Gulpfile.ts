@@ -31,8 +31,6 @@ import merge2 = require("merge2");
 import * as os from "os";
 import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
-const mochaParallel = require("./scripts/mocha-parallel.js");
-const {runTestsInParallel} = mochaParallel;
 
 Error.stackTraceLimit = 1000;
 
@@ -668,26 +666,9 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         }
         else {
             // run task to load all tests and partition them between workers
-            const args = [];
-            args.push("-R", "min");
-            if (colors) {
-                args.push("--colors");
-            }
-            else {
-                args.push("--no-colors");
-            }
-            args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout, noColors: colors === " --no-colors " }, function(err) {
-                // last worker clean everything and runs linter in case if there were no errors
-                del(taskConfigsFolder).then(() => {
-                    if (!err) {
-                        lintThenFinish();
-                    }
-                    else {
-                        finish(err);
-                    }
-                });
+            exec(host, [run], lintThenFinish, function(e, status) {
+                finish(e, status);
             });
         }
     });
@@ -711,7 +692,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
 
     function finish(error?: any, errorStatus?: number) {
         restoreSavedNodeEnv();
-        deleteTemporaryProjectOutput().then(() => {
+        deleteTestConfig().then(deleteTemporaryProjectOutput).then(() => {
             if (error !== undefined || errorStatus !== undefined) {
                 failWithStatus(error, errorStatus);
             }
@@ -719,6 +700,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
                 done();
             }
         });
+    }
+
+    function deleteTestConfig() {
+        return del("test.config");
     }
 }
 
@@ -836,7 +821,7 @@ function cleanTestDirs(done: (e?: any) => void) {
 
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder });
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions["colors"] });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }

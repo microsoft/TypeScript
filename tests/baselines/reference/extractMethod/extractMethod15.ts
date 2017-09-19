@@ -7,7 +7,7 @@ function F<T>(t1: T) {
 // ==SCOPE::inner function in function 'F'==
 function F<T>(t1: T) {
     function F<U extends T[]>(t2: U) {
-        newFunction();
+        /*RENAME*/newFunction();
 
         function newFunction() {
             t2.toString();
@@ -17,7 +17,7 @@ function F<T>(t1: T) {
 // ==SCOPE::inner function in function 'F'==
 function F<T>(t1: T) {
     function F<U extends T[]>(t2: U) {
-        newFunction<U>(t2);
+        /*RENAME*/newFunction<U>(t2);
     }
 
     function newFunction<U extends T[]>(t2: U) {
@@ -27,7 +27,7 @@ function F<T>(t1: T) {
 // ==SCOPE::function in global scope==
 function F<T>(t1: T) {
     function F<U extends T[]>(t2: U) {
-        newFunction<T, U>(t2);
+        /*RENAME*/newFunction<T, U>(t2);
     }
 }
 function newFunction<T, U extends T[]>(t2: U) {

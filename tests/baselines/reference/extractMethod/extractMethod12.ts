@@ -21,7 +21,7 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ __return, z } = this.newFunction(z));
+            ({ __return, z } = this./*RENAME*/newFunction(z));
             return __return;
         }
 

@@ -773,13 +773,13 @@ namespace ts {
             : node;
     }
 
-    export function createLiteralTypeNode(literal: Expression) {
+    export function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
         const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         node.literal = literal;
         return node;
     }
 
-    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Expression) {
+    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]) {
         return node.literal !== literal
             ? updateNode(createLiteralTypeNode(literal), node)
             : node;
@@ -4157,7 +4157,8 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = hasExportStarsToExportValues
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015;
+                && moduleKind !== ModuleKind.ES2015
+                && moduleKind !== ModuleKind.ESNext;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {
