@@ -1,60 +1,102 @@
 namespace Harness.Parallel.Worker {
     let errors: ErrorInfo[] = [];
     let passing = 0;
+    let reportedUnitTests = false;
+
+    type Executor = {name: string, callback: Function, kind: "suite" | "test"} | never;
+
     function resetShimHarnessAndExecute(runner: RunnerBase) {
-        errors = [];
-        passing = 0;
+        if (reportedUnitTests) {
+            errors = [];
+            passing = 0;
+            testList.length = 0;
+        }
+        reportedUnitTests = true;
         runner.initializeTests();
+        testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
         return { errors, passing };
     }
 
+
+    let beforeEachFunc: Function;
+    const namestack: string[] = [];
+    let testList: Executor[] = [];
     function shimMochaHarness() {
         (global as any).before = undefined;
         (global as any).after = undefined;
         (global as any).beforeEach = undefined;
-        let beforeEachFunc: Function;
-        describe = ((_name, callback) => {
-            const fakeContext: Mocha.ISuiteCallbackContext = {
-                retries() { return this; },
-                slow() { return this; },
-                timeout() { return this; },
-            };
-            (before as any) = (cb: Function) => cb();
-            let afterFunc: Function;
-            (after as any) = (cb: Function) => afterFunc = cb;
-            const savedBeforeEach = beforeEachFunc;
-            (beforeEach as any) = (cb: Function) => beforeEachFunc = cb;
-            callback.call(fakeContext);
-            afterFunc && afterFunc();
-            afterFunc = undefined;
-            beforeEachFunc = savedBeforeEach;
+        describe = ((name, callback) => {
+            testList.push({ name, callback, kind: "suite" });
         }) as Mocha.IContextDefinition;
         it = ((name, callback) => {
-            const fakeContext: Mocha.ITestCallbackContext = {
-                skip() { return this; },
-                timeout() { return this; },
-                retries() { return this; },
-                slow() { return this; },
-            };
-            // TODO: If we ever start using async test completions, polyfill the `done` parameter/promise return handling
-            if (beforeEachFunc) {
-                try {
-                    beforeEachFunc();
-                }
-                catch (error) {
-                    errors.push({ error: error.message, stack: error.stack, name });
-                    return;
-                }
+            if (!testList) {
+                throw new Error("Tests must occur within a describe block");
             }
+            testList.push({ name, callback, kind: "test" });
+        }) as Mocha.ITestDefinition;
+    }
+
+    function executeSuiteCallback(name: string, callback: Function) {
+        const fakeContext: Mocha.ISuiteCallbackContext = {
+            retries() { return this; },
+            slow() { return this; },
+            timeout() { return this; },
+        };
+        namestack.push(name);
+        (before as any) = (cb: Function) => cb();
+        let afterFunc: Function;
+        (after as any) = (cb: Function) => afterFunc = cb;
+        const savedBeforeEach = beforeEachFunc;
+        (beforeEach as any) = (cb: Function) => beforeEachFunc = cb;
+        const savedTestList = testList;
+
+        testList = [];
+        callback.call(fakeContext);
+        testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+        testList.length = 0;
+        testList = savedTestList;
+
+        afterFunc && afterFunc();
+        afterFunc = undefined;
+        beforeEachFunc = savedBeforeEach;
+        namestack.pop();
+    }
+
+    function executeCallback(name: string, callback: Function, kind: "suite" | "test") {
+        if (kind === "suite") {
+            executeSuiteCallback(name, callback);
+        }
+        else {
+            executeTestCallback(name, callback);
+        }
+    }
+
+    function executeTestCallback(name: string, callback: Function) {
+        const fakeContext: Mocha.ITestCallbackContext = {
+            skip() { return this; },
+            timeout() { return this; },
+            retries() { return this; },
+            slow() { return this; },
+        };
+        // TODO: If we ever start using async test completions, polyfill the `done` parameter/promise return handling
+        name = [...namestack, name].join(" ");
+        if (beforeEachFunc) {
             try {
-                callback.call(fakeContext);
+                beforeEachFunc();
             }
             catch (error) {
                 errors.push({ error: error.message, stack: error.stack, name });
                 return;
             }
-            passing++;
-        }) as Mocha.ITestDefinition;
+        }
+        try {
+            callback.call(fakeContext);
+        }
+        catch (error) {
+            errors.push({ error: error.message, stack: error.stack, name });
+            return;
+        }
+        passing++;
     }
 
     export function start() {
