@@ -217,7 +217,7 @@ namespace RWC {
 
             it("has the expected types", () => {
                 // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
-                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
+                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult.program, inputFiles
                     .concat(otherFiles)
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
                     .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true);

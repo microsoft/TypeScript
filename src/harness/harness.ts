@@ -1446,10 +1446,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, result: CompilerResult, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean) {
-            if (result.errors.length !== 0) {
-                return;
-            }
+        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean) {
             // The full walker simulates the types that you would get from doing a full
             // compile.  The pull walker simulates the types you get when you just do
             // a type query for a random node (like how the LS would do it).  Most of the
@@ -1464,8 +1461,6 @@ namespace Harness {
             //
             // These types are equivalent, but depend on what order the compiler observed
             // certain parts of the program.
-
-            const program = result.program;
 
             const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
