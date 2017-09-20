@@ -27,8 +27,9 @@ function main(): void {
             handelError(err);
             xml2js.parseString(data.toString(), (err, result) => {
                 handelError(err);
-                ensureDirectoryExists(path.dirname(outputFilePath));
-                fs.writeFile(outputFilePath, xmlObjectToString(result), handelError);
+                ensureDirectoryExists(path.dirname(outputFilePath), () => {
+                    fs.writeFile(outputFilePath, xmlObjectToString(result), handelError);
+                });
             });
         });
     }
@@ -46,6 +47,11 @@ function main(): void {
             let ItemId = item["$"]["ItemId"];
             let Val = item["Str"][0]["Tgt"] ? item["Str"][0]["Tgt"][0]["Val"][0] : item["Str"][0]["Val"][0];
 
+            if (typeof ItemId !== "string" || typeof Val !== "string") {
+                console.error("Unexpected XML file structure");
+                process.exit(1);
+            }
+
             if (ItemId.charAt(0) === ";") {
                 ItemId = ItemId.slice(1); // remove leading semicolon
             }
@@ -57,15 +63,16 @@ function main(): void {
     }
 
 
-    function ensureDirectoryExists(directoryPath: string) {
-        const basePath = path.dirname(directoryPath);
-        const shouldCreateParent = directoryPath !== basePath && !fs.existsSync(basePath);
-        if (shouldCreateParent) {
-            ensureDirectoryExists(basePath);
-        }
-        if (shouldCreateParent || !fs.existsSync(directoryPath)) {
-            fs.mkdirSync(directoryPath);
-        }
+    function ensureDirectoryExists(directoryPath: string, action: () => void) {
+        fs.exists(directoryPath, exists => {
+            if (!exists) {
+                const basePath = path.dirname(directoryPath);
+                if (basePath !== directoryPath) {
+                    return ensureDirectoryExists(basePath, () => fs.mkdir(directoryPath, action));
+                }
+            }
+            action();
+        });
     }
 }
 
