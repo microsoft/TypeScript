@@ -6,4 +6,5 @@
 
 verify.applicableRefactorAvailableAtMarker('1');
 verify.fileAfterApplyingRefactorAtMarker('1',
-`var x: number;`, 'Convert to Typescript type', 'convert');
+`/** @type {number} */
+var x: number;`, 'Convert to Typescript type', 'convert');
