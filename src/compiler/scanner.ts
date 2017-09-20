@@ -289,9 +289,7 @@ namespace ts {
     tokenStrings[SyntaxKind.ThisType] = "this";
 
     export function tokenToString(t: SyntaxKind): string | undefined {
-        const res = tokenStrings[t];
-        Debug.assert(!!res);
-        return res;
+        return tokenStrings[t];
     }
 
     /* @internal */
