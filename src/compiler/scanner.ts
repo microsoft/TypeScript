@@ -285,9 +285,13 @@ namespace ts {
     }
 
     const tokenStrings = makeReverseMap(textToToken);
+    // "this" maps to SyntaxKind.ThisKeyword normally, so can't be in textToToken. But can put it in tokenStrings.
+    tokenStrings[SyntaxKind.ThisType] = "this";
 
     export function tokenToString(t: SyntaxKind): string | undefined {
-        return tokenStrings[t];
+        const res = tokenStrings[t];
+        Debug.assert(!!res);
+        return res;
     }
 
     /* @internal */
