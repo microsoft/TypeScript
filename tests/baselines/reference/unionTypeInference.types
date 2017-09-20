@@ -20,7 +20,7 @@ var a1: number;
 
 var a1 = f(1, 2);
 >a1 : number
->f(1, 2) : number
+>f(1, 2) : any
 >f : <T>(x: T, y: string | T) => T
 >1 : 1
 >2 : 2
@@ -30,7 +30,7 @@ var a2: number;
 
 var a2 = f(1, "hello");
 >a2 : number
->f(1, "hello") : number
+>f(1, "hello") : 1
 >f : <T>(x: T, y: string | T) => T
 >1 : 1
 >"hello" : "hello"
@@ -92,11 +92,11 @@ function h<T>(x: string|boolean|T): T {
 >typeof x === "string" || typeof x === "boolean" ? undefined : x : T
 >typeof x === "string" || typeof x === "boolean" : boolean
 >typeof x === "string" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | boolean | T
 >"string" : "string"
 >typeof x === "boolean" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : boolean | T
 >"boolean" : "boolean"
 >undefined : undefined
