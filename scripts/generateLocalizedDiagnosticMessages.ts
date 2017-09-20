@@ -4,15 +4,20 @@ import * as xml2js from "xml2js";
 
 function main(): void {
     const args = process.argv.slice(2);
-    if (args.length != 2) {
+    if (args.length != 3) {
         console.log("Usage:")
-        console.log("\tnode generateLocalizedDiagnosticMessages.js <lcl source directory> <output directory>");
+        console.log("\tnode generateLocalizedDiagnosticMessages.js <lcl source directory> <output directory> <generated diagnostics map file>");
         return;
     }
 
     const inputPath = args[0];
     const outputPath = args[1];
+    const diagnosticsMapFilePath = args[2];
 
+    // generate the lcg file for enu
+    generateLCGFile();
+
+    // generate other langs
     fs.readdir(inputPath, (err, files) => {
         handelError(err);
         files.forEach(visitDirectory);
@@ -27,9 +32,7 @@ function main(): void {
             handelError(err);
             xml2js.parseString(data.toString(), (err, result) => {
                 handelError(err);
-                ensureDirectoryExists(path.dirname(outputFilePath), () => {
-                    fs.writeFile(outputFilePath, xmlObjectToString(result), handelError);
-                });
+                writeFile(outputFilePath, xmlObjectToString(result));
             });
         });
     }
@@ -74,9 +77,63 @@ function main(): void {
             action();
         });
     }
+
+    function writeFile(fileName: string, contents: string) {
+        ensureDirectoryExists(path.dirname(fileName), () => {
+            fs.writeFile(fileName, contents, handelError);
+        });
+    }
+
+    function objectToList(o:  Record<string, string>) {
+        let list: { key: string, value: string }[] = [];
+        for (const key in o) {
+            list.push({ key, value: o[key] });
+        }
+        return list;
+    }
+
+    function generateLCGFile() {
+        return fs.readFile(diagnosticsMapFilePath, (err, data) => {
+            handelError(err);
+            writeFile(
+                path.join(outputPath, "enu", "diagnosticMessages.generated.json.lcg"),
+                getLCGFileXML(
+                    objectToList(JSON.parse(data.toString()))
+                        .sort((a, b) => a.key > b.key ? 1 : -1)  // lcg sorted by property keys
+                        .reduce((s, { key, value }) => s + getItemXML(key, value), "")
+                ));
+        });
+
+        function getItemXML(key: string, value: string) {
+            // escape entrt value
+            value = value.replace(/]/, "]5D;");
+
+            return `
+            <Item ItemId=";${key}" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[${value}]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>`
+        }
+
+        function getLCGFileXML(items: string) {
+            return `<?xml version="1.0" encoding="utf-8"?>
+<LCX SchemaVersion="6.0" Name="diagnosticMessages.generated.json" PsrId="306" FileType="1" SrcCul="en-US" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
+  <OwnedComments>
+    <Cmt Name="Dev" />
+    <Cmt Name="LcxAdmin" />
+    <Cmt Name="Rccx" />
+  </OwnedComments>
+  <Item ItemId=";String Table" ItemType="0" PsrId="306" Leaf="false">
+    <Disp Icon="Expand" Expand="true" Disp="true" LocTbl="false" />
+    <Item ItemId=";Strings" ItemType="0" PsrId="306" Leaf="false">
+      <Disp Icon="Str" Disp="true" LocTbl="false" />${items}
+    </Item>
+  </Item>
+</LCX>`;
+        }
+    }
 }
 
 main();
-
-
-

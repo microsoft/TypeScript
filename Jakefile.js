@@ -440,8 +440,8 @@ compileFile(generateLocalizedDiagnosticMessagesJs,
     /*useBuiltCompiler*/ false, { noOutFile: true, types: ["node", "xml2js"] });
 
 // Localize diagnostics
-task("localize",  [generateLocalizedDiagnosticMessagesJs], function () {
-    var cmd = host + " " + generateLocalizedDiagnosticMessagesJs + " " + lclDirectory + " " + builtLocalDirectory;
+task("localize",  [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs, generatedDiagnosticMessagesJSON], function () {
+    var cmd = host + " " + generateLocalizedDiagnosticMessagesJs + " " + lclDirectory + " " + builtLocalDirectory + " " + generatedDiagnosticMessagesJSON;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error
@@ -730,7 +730,8 @@ desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local", "localize"].concat(libraryTargets), function () {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
         concat(libraryTargets).
-        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d) }));
+        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d) })).
+        concat(path.join(builtLocalDirectory, "enu"));
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
