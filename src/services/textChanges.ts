@@ -152,7 +152,7 @@ namespace ts.textChanges {
             return position === Position.Start ? start : fullStart;
         }
         // get start position of the line following the line that contains fullstart position
-        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + 1, sourceFile);
+        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + (fullStart > 0 ? 1 : 0), sourceFile);
         // skip whitespaces/newlines
         adjustedStartPosition = skipWhitespacesAndLineBreaks(sourceFile.text, adjustedStartPosition);
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
