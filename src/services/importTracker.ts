@@ -609,9 +609,6 @@ namespace ts.FindAllReferences {
         }
 
         return forEach(symbol.declarations, decl => {
-            if (isExportAssignment(decl)) {
-                return isIdentifier(decl.expression) ? decl.expression.escapedText : undefined;
-            }
             const name = getNameOfDeclaration(decl);
             return name && name.kind === SyntaxKind.Identifier && name.escapedText;
         });
