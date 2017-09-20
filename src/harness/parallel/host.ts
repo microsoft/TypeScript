@@ -175,7 +175,7 @@ namespace Harness.Parallel.Host {
             batcher: while (true) {
                 for (let i = 0; i < batchCount; i++) {
                     if (tasks.length === 0) {
-                        console.log(`Suboptimal packing detcted: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
+                        console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
                         break batcher;
                     }
                     if (doneBatching[i]) {
