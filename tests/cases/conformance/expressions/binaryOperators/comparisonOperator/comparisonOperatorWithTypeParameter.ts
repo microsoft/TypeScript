@@ -76,3 +76,36 @@ function foo<T, U/* extends T*/, V/* extends U*/>(t: T, u: U, v: V) {
     var rh7 = b === t;
     var rh8 = b !== t;
 }
+
+function Generic<T extends string, U extends string, V extends number, W>(t: T, b: U, v: V, w: W) {
+
+    // generics with related constraints, ok
+    var ri1 = b < t;
+    var ri2 = b > t;
+    var ri3 = b <= t;
+    var ri4 = b >= t;
+    var ri5 = b == t;
+    var ri6 = b != t;
+    var ri7 = b === t;
+    var ri8 = b !== t;
+
+    // generics with constraints that preventing conforming values from matching, error
+    var rj1 = v < t;
+    var rj2 = v > t;
+    var rj3 = v <= t;
+    var rj4 = v >= t;
+    var rj5 = v == t;
+    var rj6 = v != t;
+    var rj7 = v === t;
+    var rj8 = v !== t;
+
+    // generics with vs. without constraint, can match, ok
+    var rk1 = w < t;
+    var rk2 = w > t;
+    var rk3 = w <= t;
+    var rk4 = w >= t;
+    var rk5 = w == t;
+    var rk6 = w != t;
+    var rk7 = w === t;
+    var rk8 = w !== t;
+}
