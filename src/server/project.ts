@@ -767,9 +767,10 @@ namespace ts.server {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
                 const externalFiles = this.getExternalFiles().map(f => toNormalizedPath(f));
-                this.lastReportedFileNames = arrayToSet(projectFileNames.concat(externalFiles));
+                const allFiles = projectFileNames.concat(externalFiles);
+                this.lastReportedFileNames = arrayToSet(allFiles);
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, files: projectFileNames, projectErrors: this.getGlobalProjectErrors() };
+                return { info, files: allFiles, projectErrors: this.getGlobalProjectErrors() };
             }
         }
 
