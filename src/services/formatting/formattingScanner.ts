@@ -170,45 +170,7 @@ namespace ts.formatting {
                 scanner.scan();
             }
 
-            let currentToken = scanner.getToken();
-
-            lastScanAction = ScanAction.Scan;
-            switch (expectedScanAction) {
-                case ScanAction.RescanGreaterThanToken:
-                    if (currentToken === SyntaxKind.GreaterThanToken) {
-                        currentToken = scanner.reScanGreaterToken();
-                        Debug.assert(n.kind === currentToken);
-                        lastScanAction = ScanAction.RescanGreaterThanToken;
-                    }
-                    break;
-                case ScanAction.RescanSlashToken:
-                    if (startsWithSlashToken(currentToken)) {
-                        currentToken = scanner.reScanSlashToken();
-                        Debug.assert(n.kind === currentToken);
-                        lastScanAction = ScanAction.RescanSlashToken;
-                    }
-                    break;
-                case ScanAction.RescanTemplateToken:
-                    if (currentToken === SyntaxKind.CloseBraceToken) {
-                        currentToken = scanner.reScanTemplateToken();
-                        lastScanAction = ScanAction.RescanTemplateToken;
-                    }
-                    break;
-                case ScanAction.RescanJsxIdentifier:
-                    if (currentToken === SyntaxKind.Identifier) {
-                        currentToken = scanner.scanJsxIdentifier();
-                        lastScanAction = ScanAction.RescanJsxIdentifier;
-                    }
-                    break;
-                case ScanAction.RescanJsxText:
-                    currentToken = scanner.reScanJsxToken();
-                    lastScanAction = ScanAction.RescanJsxText;
-                    break;
-                case ScanAction.Scan:
-                    break;
-                default:
-                    Debug.assertNever(expectedScanAction);
-            }
+            let currentToken = getNextToken(n, expectedScanAction);
 
             const token: TextRangeWithKind = {
                 pos: scanner.getStartPos(),
@@ -247,6 +209,47 @@ namespace ts.formatting {
             lastTokenInfo = { leadingTrivia, trailingTrivia, token };
 
             return fixTokenKind(lastTokenInfo, n);
+        }
+
+        function getNextToken(n: Node, expectedScanAction: ScanAction): SyntaxKind {
+            const token = scanner.getToken();
+            lastScanAction = ScanAction.Scan;
+            switch (expectedScanAction) {
+                case ScanAction.RescanGreaterThanToken:
+                    if (token === SyntaxKind.GreaterThanToken) {
+                        Debug.assert(n.kind === token);
+                        lastScanAction = ScanAction.RescanGreaterThanToken;
+                        return scanner.reScanGreaterToken();
+                    }
+                    break;
+                case ScanAction.RescanSlashToken:
+                    if (startsWithSlashToken(token)) {
+                        Debug.assert(n.kind === token);
+                        lastScanAction = ScanAction.RescanSlashToken;
+                        return scanner.reScanSlashToken();
+                    }
+                    break;
+                case ScanAction.RescanTemplateToken:
+                    if (token === SyntaxKind.CloseBraceToken) {
+                        lastScanAction = ScanAction.RescanTemplateToken;
+                        return scanner.reScanTemplateToken();
+                    }
+                    break;
+                case ScanAction.RescanJsxIdentifier:
+                    if (token === SyntaxKind.Identifier) {
+                        lastScanAction = ScanAction.RescanJsxIdentifier;
+                        return scanner.scanJsxIdentifier();
+                    }
+                    break;
+                case ScanAction.RescanJsxText:
+                    lastScanAction = ScanAction.RescanJsxText;
+                    return scanner.reScanJsxToken();
+                case ScanAction.Scan:
+                    break;
+                default:
+                    Debug.assertNever(expectedScanAction);
+            }
+            return token;
         }
 
         function isOnToken(): boolean {
