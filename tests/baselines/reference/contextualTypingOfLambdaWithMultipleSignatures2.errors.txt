@@ -1,0 +1,14 @@
+tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures2.ts(6,23): error TS2339: Property 'asdf' does not exist on type 'string | number'.
+  Property 'asdf' does not exist on type 'string'.
+
+
+==== tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures2.ts (1 errors) ====
+    var f: {
+        (x: string): string;
+        (x: number): string
+    };
+    
+    f = (a) => { return a.asdf }
+                          ~~~~
+!!! error TS2339: Property 'asdf' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'asdf' does not exist on type 'string'.

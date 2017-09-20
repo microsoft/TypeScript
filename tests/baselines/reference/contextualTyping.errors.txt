@@ -1,3 +1,6 @@
+tests/cases/compiler/contextualTyping.ts(36,5): error TS2322: Type '(n: string | number) => string | number' is not assignable to type '{ (n: number): number; (s1: string): number; }'.
+  Type 'string | number' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 tests/cases/compiler/contextualTyping.ts(197,15): error TS2300: Duplicate identifier 'Point'.
 tests/cases/compiler/contextualTyping.ts(207,10): error TS2300: Duplicate identifier 'Point'.
@@ -5,7 +8,7 @@ tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not 
   Property 'x' is missing in type '{}'.
 
 
-==== tests/cases/compiler/contextualTyping.ts (4 errors) ====
+==== tests/cases/compiler/contextualTyping.ts (5 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;
@@ -42,6 +45,10 @@ tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not 
     var c3t5: (n: number) => IFoo = function(n) { return <IFoo>({}) };
     var c3t6: (n: number, s: string) => IFoo = function(n, s) { return <IFoo>({}) };
     var c3t7: {
+        ~~~~
+!!! error TS2322: Type '(n: string | number) => string | number' is not assignable to type '{ (n: number): number; (s1: string): number; }'.
+!!! error TS2322:   Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
         (n: number): number;    
         (s1: string): number;
     } = function(n) { return n; };
