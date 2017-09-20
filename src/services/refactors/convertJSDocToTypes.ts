@@ -9,7 +9,12 @@ namespace ts.refactor.convertJSDocToTypes {
         getAvailableActions
     };
 
-    type Typed = FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration;
+    type Typed =
+        | FunctionLikeDeclaration
+        | VariableDeclaration
+        | ParameterDeclaration
+        | PropertySignature
+        | PropertyDeclaration;
 
     registerRefactor(convertJSDocToTypes);
 
@@ -21,7 +26,7 @@ namespace ts.refactor.convertJSDocToTypes {
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         // NB getJSDocType might not be cheap enough to call on everything here
         const decl = findAncestor(node, isTypedNode);
-        if (decl && getJSDocType(decl) && !decl.type) {
+        if (decl && (getJSDocType(decl) || getJSDocReturnType(decl)) && !decl.type) {
             return [
                 {
                     name: convertJSDocToTypes.name,
@@ -37,14 +42,6 @@ namespace ts.refactor.convertJSDocToTypes {
         }
     }
 
-    function isTypedNode(node: Node): node is Typed {
-        return isFunctionLikeDeclaration(node) ||
-            node.kind === SyntaxKind.VariableDeclaration ||
-            node.kind === SyntaxKind.Parameter ||
-            node.kind === SyntaxKind.PropertySignature ||
-            node.kind === SyntaxKind.PropertyDeclaration;
-    }
-
     function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
         // Somehow wrong action got invoked?
         if (actionName !== action) {
@@ -55,26 +52,16 @@ namespace ts.refactor.convertJSDocToTypes {
         const start = context.startPosition;
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        // TODO: Cover @return for function declarations too (and arrows and function expressions and methods and get/set accessors)
         const decl = findAncestor(token, isTypedNode);
         const jsdocType = getJSDocType(decl);
-        if (!decl || !jsdocType || decl.type) {
-            Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
+        const jsdocReturn = getJSDocReturnType(decl);
+        if (!decl || !jsdocType && !jsdocReturn || decl.type) {
+            Debug.fail(`!decl || !jsdocType && !jsdocReturn || decl.type: !${decl} || !${jsdocType} && !{jsdocReturn} || ${decl.type}`);
             return undefined;
         }
 
-    // SyntaxKind.VariableDeclaration
-    // SyntaxKind.Parameter
-    // SyntaxKind.BindingElement
-    // SyntaxKind.Property
-    // SyntaxKind.PropertyAssignment
-    // SyntaxKind.JsxAttribute
-    // SyntaxKind.ShorthandPropertyAssignment
-    // SyntaxKind.EnumMember
-    // SyntaxKind.JSDocPropertyTag
-    // SyntaxKind.JSDocParameterTag
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        changeTracker.replaceNode(sourceFile, decl, updateDeclaration(decl, jsdocType));
+        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, replaceType(decl, jsdocType, jsdocReturn));
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
@@ -82,7 +69,22 @@ namespace ts.refactor.convertJSDocToTypes {
         };
     }
 
-    function updateDeclaration(decl: Typed, jsdocType: ts.TypeNode) {
+    function isTypedNode(node: Node): node is Typed {
+        return isFunctionLikeDeclaration(node) ||
+            node.kind === SyntaxKind.VariableDeclaration ||
+            node.kind === SyntaxKind.Parameter ||
+            node.kind === SyntaxKind.PropertySignature ||
+            node.kind === SyntaxKind.PropertyDeclaration;
+    }
+
+        //| FunctionDeclaration
+        //| MethodDeclaration
+        //| ConstructorDeclaration
+        //| GetAccessorDeclaration
+        //| SetAccessorDeclaration
+        //| FunctionExpression
+        //| ArrowFunction;
+    function replaceType(decl: Typed, jsdocType: TypeNode, jsdocReturn: TypeNode) {
         switch (decl.kind) {
             case SyntaxKind.VariableDeclaration:
                 return createVariableDeclaration(decl.name, jsdocType, decl.initializer);
@@ -92,6 +94,10 @@ namespace ts.refactor.convertJSDocToTypes {
                 return createPropertySignature(decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
             case SyntaxKind.PropertyDeclaration:
                 return createProperty(decl.decorators, decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
+            case SyntaxKind.FunctionDeclaration:
+                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
+            case SyntaxKind.FunctionExpression:
+                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
             default:
                 Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
                 return undefined;
