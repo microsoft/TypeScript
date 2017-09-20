@@ -1,0 +1,13 @@
+=== tests/cases/compiler/conflictMarkerTrivia1.ts ===
+class C {
+>C : C
+
+<<<<<<< HEAD
+    v = 1;
+>v : number
+>1 : 1
+
+=======
+    v = 2;
+>>>>>>> Branch-a
+}

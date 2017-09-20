@@ -1,0 +1,14 @@
+=== tests/cases/compiler/unusedPrivateMethodInClass1.ts ===
+class greeter {
+>greeter : Symbol(greeter, Decl(unusedPrivateMethodInClass1.ts, 0, 0))
+
+    private function1() {
+>function1 : Symbol(greeter.function1, Decl(unusedPrivateMethodInClass1.ts, 0, 15))
+
+        var y = 10;
+>y : Symbol(y, Decl(unusedPrivateMethodInClass1.ts, 2, 11))
+
+        y++;
+>y : Symbol(y, Decl(unusedPrivateMethodInClass1.ts, 2, 11))
+    }
+}

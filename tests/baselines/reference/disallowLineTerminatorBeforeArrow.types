@@ -1,0 +1,218 @@
+=== tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts ===
+var f1 = ()
+>f1 : () => void
+>()    => { } : () => void
+
+    => { }
+var f2 = (x: string, y: string) /*
+>f2 : (x: string, y: string) => void
+>(x: string, y: string) /*  */  => { } : (x: string, y: string) => void
+>x : string
+>y : string
+
+  */  => { }
+var f3 = (x: string, y: number, ...rest)
+>f3 : (x: string, y: number, ...rest: any[]) => void
+>(x: string, y: number, ...rest)    => { } : (x: string, y: number, ...rest: any[]) => void
+>x : string
+>y : number
+>rest : any[]
+
+    => { }
+var f4 = (x: string, y: number, ...rest) /*
+>f4 : (x: string, y: number, ...rest: any[]) => void
+>(x: string, y: number, ...rest) /*  */  => { } : (x: string, y: number, ...rest: any[]) => void
+>x : string
+>y : number
+>rest : any[]
+
+  */  => { }
+var f5 = (...rest)
+>f5 : (...rest: any[]) => void
+>(...rest)    => { } : (...rest: any[]) => void
+>rest : any[]
+
+    => { }
+var f6 = (...rest) /*
+>f6 : (...rest: any[]) => void
+>(...rest) /*  */  => { } : (...rest: any[]) => void
+>rest : any[]
+
+  */  => { }
+var f7 = (x: string, y: number, z = 10)
+>f7 : (x: string, y: number, z?: number) => void
+>(x: string, y: number, z = 10)    => { } : (x: string, y: number, z?: number) => void
+>x : string
+>y : number
+>z : number
+>10 : 10
+
+    => { }
+var f8 = (x: string, y: number, z = 10) /*
+>f8 : (x: string, y: number, z?: number) => void
+>(x: string, y: number, z = 10) /*  */  => { } : (x: string, y: number, z?: number) => void
+>x : string
+>y : number
+>z : number
+>10 : 10
+
+  */  => { }
+var f9 = (a: number): number
+>f9 : (a: number) => number
+>(a: number): number    => a : (a: number) => number
+>a : number
+
+    => a;
+>a : number
+
+var f10 = (a: number) :
+>f10 : (a: number) => number
+>(a: number) :  number    => a : (a: number) => number
+>a : number
+
+  number
+    => a
+>a : number
+
+var f11 = (a: number): number /*
+>f11 : (a: number) => number
+>(a: number): number /*    */ => a : (a: number) => number
+>a : number
+
+    */ => a;
+>a : number
+
+var f12 = (a: number) :
+>f12 : (a: number) => number
+>(a: number) :  number /*    */ => a : (a: number) => number
+>a : number
+
+  number /*
+    */ => a
+>a : number
+
+// Should be valid.
+var f11 = (a: number
+>f11 : (a: number) => number
+>(a: number    ) => a : (a: number) => number
+>a : number
+
+    ) => a;
+>a : number
+
+// Should be valid.
+var f12 = (a: number)
+>f12 : (a: number) => number
+>(a: number)    : number => a : (a: number) => number
+>a : number
+
+    : number => a;
+>a : number
+
+// Should be valid.
+var f13 = (a: number):
+>f13 : (a: number) => number
+>(a: number):    number => a : (a: number) => number
+>a : number
+
+    number => a;
+>a : number
+
+// Should be valid.
+var f14 = () /* */ => {}
+>f14 : () => void
+>() /* */ => {} : () => void
+
+// Should be valid.
+var f15 = (a: number): number /* */ => a
+>f15 : (a: number) => number
+>(a: number): number /* */ => a : (a: number) => number
+>a : number
+>a : number
+
+// Should be valid.
+var f16 = (a: number, b = 10):
+>f16 : (a: number, b?: number) => number
+>(a: number, b = 10):  number /* */ => a + b : (a: number, b?: number) => number
+>a : number
+>b : number
+>10 : 10
+
+  number /* */ => a + b;
+>a + b : number
+>a : number
+>b : number
+
+function foo(func: () => boolean) { }
+>foo : (func: () => boolean) => void
+>func : () => boolean
+
+foo(()
+>foo(()    => true) : void
+>foo : (func: () => boolean) => void
+>()    => true : () => true
+
+    => true);
+>true : true
+
+foo(()
+>foo(()    => { return false; }) : void
+>foo : (func: () => boolean) => void
+>()    => { return false; } : () => false
+
+    => { return false; });
+>false : false
+
+module m {
+>m : typeof m
+
+    class City {
+>City : City
+
+        constructor(x: number, thing = ()
+>x : number
+>thing : () => number
+>()            => 100 : () => number
+
+            => 100) {
+>100 : 100
+        }
+
+        public m = ()
+>m : () => number
+>()            => 2 * 2 * 2 : () => number
+
+            => 2 * 2 * 2
+>2 * 2 * 2 : number
+>2 * 2 : number
+>2 : 2
+>2 : 2
+>2 : 2
+    }
+
+    export enum Enum {
+>Enum : Enum
+
+        claw = (()
+>claw : Enum
+>(()            => 10)() : number
+>(()            => 10) : () => number
+>()            => 10 : () => number
+
+            => 10)()
+>10 : 10
+    }
+
+    export var v = x
+>v : (x: any) => City
+>x        => new City(Enum.claw) : (x: any) => City
+>x : any
+
+        => new City(Enum.claw);
+>new City(Enum.claw) : City
+>City : typeof City
+>Enum.claw : Enum
+>Enum : typeof Enum
+>claw : Enum
+}
+

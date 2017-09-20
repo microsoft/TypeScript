@@ -1,0 +1,6 @@
+=== tests/cases/compiler/catchClauseWithInitializer1.ts ===
+try {
+}
+catch (e = 1) {
+>e : Symbol(e, Decl(catchClauseWithInitializer1.ts, 2, 7))
+}

@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts ===
+var v = {
+>v : Symbol(v, Decl(parserAccessors10.ts, 0, 3))
+
+  public get foo() { }
+>foo : Symbol(foo, Decl(parserAccessors10.ts, 0, 9))
+
+};

@@ -1,0 +1,31 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedEnums.ts ===
+module A {
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 0))
+
+    export enum Color { Red, Blue }
+>Color : Symbol(Color, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 10))
+>Red : Symbol(Color.Red, Decl(ModuleWithExportedAndNonExportedEnums.ts, 1, 23))
+>Blue : Symbol(Color.Blue, Decl(ModuleWithExportedAndNonExportedEnums.ts, 1, 28))
+
+    enum Day { Monday, Tuesday }
+>Day : Symbol(Day, Decl(ModuleWithExportedAndNonExportedEnums.ts, 1, 35))
+>Monday : Symbol(Day.Monday, Decl(ModuleWithExportedAndNonExportedEnums.ts, 2, 14))
+>Tuesday : Symbol(Day.Tuesday, Decl(ModuleWithExportedAndNonExportedEnums.ts, 2, 22))
+}
+
+// not an error since exported
+var a: A.Color = A.Color.Red;
+>a : Symbol(a, Decl(ModuleWithExportedAndNonExportedEnums.ts, 6, 3))
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 0))
+>Color : Symbol(A.Color, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 10))
+>A.Color.Red : Symbol(A.Color.Red, Decl(ModuleWithExportedAndNonExportedEnums.ts, 1, 23))
+>A.Color : Symbol(A.Color, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 10))
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 0))
+>Color : Symbol(A.Color, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 10))
+>Red : Symbol(A.Color.Red, Decl(ModuleWithExportedAndNonExportedEnums.ts, 1, 23))
+
+// error not exported
+var b = A.Day.Monday;
+>b : Symbol(b, Decl(ModuleWithExportedAndNonExportedEnums.ts, 9, 3))
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedEnums.ts, 0, 0))
+

@@ -1,0 +1,34 @@
+=== tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts ===
+class a {
+>a : Symbol(a, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 0))
+
+    private __x: () => string;
+>__x : Symbol(a.__x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 9))
+
+    get x() {
+>x : Symbol(a.x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 1, 30), Decl(inheritanceMemberPropertyOverridingAccessor.ts, 4, 5))
+
+        return this.__x;
+>this.__x : Symbol(a.__x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 9))
+>this : Symbol(a, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 0))
+>__x : Symbol(a.__x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 9))
+    }
+    set x(aValue: () => string) {
+>x : Symbol(a.x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 1, 30), Decl(inheritanceMemberPropertyOverridingAccessor.ts, 4, 5))
+>aValue : Symbol(aValue, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 5, 10))
+
+        this.__x = aValue;
+>this.__x : Symbol(a.__x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 9))
+>this : Symbol(a, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 0))
+>__x : Symbol(a.__x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 9))
+>aValue : Symbol(aValue, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 5, 10))
+    }
+}
+
+class b extends a {
+>b : Symbol(b, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 8, 1))
+>a : Symbol(a, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 0, 0))
+
+    x: () => string;
+>x : Symbol(b.x, Decl(inheritanceMemberPropertyOverridingAccessor.ts, 10, 19))
+}

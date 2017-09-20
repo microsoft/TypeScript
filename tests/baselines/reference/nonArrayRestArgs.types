@@ -1,0 +1,14 @@
+=== tests/cases/compiler/nonArrayRestArgs.ts ===
+function foo(...rest: number) { // error
+>foo : (...rest: number) => string
+>rest : number
+
+	var x: string = rest[0];
+>x : string
+>rest[0] : any
+>rest : number
+>0 : 0
+
+	return x;
+>x : string
+}

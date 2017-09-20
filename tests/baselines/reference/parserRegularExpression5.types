@@ -1,0 +1,11 @@
+=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression5.ts ===
+if (a) / (\\ ? | & ) rct = j / .test(c.href);
+>a : any
+>/ (\\ ? | & ) rct = j / .test(c.href) : boolean
+>/ (\\ ? | & ) rct = j / .test : (string: string) => boolean
+>/ (\\ ? | & ) rct = j / : RegExp
+>test : (string: string) => boolean
+>c.href : any
+>c : any
+>href : any
+
