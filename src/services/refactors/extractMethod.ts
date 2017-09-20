@@ -92,7 +92,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
         export const TypeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
         export const FunctionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
-        export const InsufficientSelection = createMessage("Select more than a single token.");
+        export const InsufficientSelection = createMessage("Select more than a single identifier.");
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
         export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
         export const CannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
@@ -149,6 +149,11 @@ namespace ts.refactor.extractMethod {
     // exported only for tests
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
         const length = span.length || 0;
+
+        if (length === 0) {
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.StatementOrExpressionExpected)] };
+        }
+
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
         let start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
@@ -227,7 +232,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
-            if (isToken(isExpressionStatement(node) ? node.expression : node)) {
+            if (isIdentifier(isExpressionStatement(node) ? node.expression : node)) {
                 return [createDiagnosticForNode(node, Messages.InsufficientSelection)];
             }
             return undefined;
@@ -340,45 +345,31 @@ namespace ts.refactor.extractMethod {
                     return false;
                 }
                 const savedPermittedJumps = permittedJumps;
-                if (node.parent) {
-                    switch (node.parent.kind) {
-                        case SyntaxKind.IfStatement:
-                            if ((<IfStatement>node.parent).thenStatement === node || (<IfStatement>node.parent).elseStatement === node) {
-                                // forbid all jumps inside thenStatement or elseStatement
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            break;
-                        case SyntaxKind.TryStatement:
-                            if ((<TryStatement>node.parent).tryBlock === node) {
-                                // forbid all jumps inside try blocks
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            else if ((<TryStatement>node.parent).finallyBlock === node) {
-                                // allow unconditional returns from finally blocks
-                                permittedJumps = PermittedJumps.Return;
-                            }
-                            break;
-                        case SyntaxKind.CatchClause:
-                            if ((<CatchClause>node.parent).block === node) {
-                                // forbid all jumps inside the block of catch clause
-                                permittedJumps = PermittedJumps.None;
-                            }
-                            break;
-                        case SyntaxKind.CaseClause:
-                            if ((<CaseClause>node).expression !== node) {
-                                // allow unlabeled break inside case clauses
-                                permittedJumps |= PermittedJumps.Break;
-                            }
-                            break;
-                        default:
-                            if (isIterationStatement(node.parent, /*lookInLabeledStatements*/ false)) {
-                                if ((<IterationStatement>node.parent).statement === node) {
-                                    // allow unlabeled break/continue inside loops
-                                    permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
-                                }
-                            }
-                            break;
-                    }
+
+                switch (node.kind) {
+                    case SyntaxKind.IfStatement:
+                        permittedJumps = PermittedJumps.None;
+                        break;
+                    case SyntaxKind.TryStatement:
+                        // forbid all jumps inside try blocks
+                        permittedJumps = PermittedJumps.None;
+                        break;
+                    case SyntaxKind.Block:
+                        if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (<TryStatement>node).finallyBlock === node) {
+                            // allow unconditional returns from finally blocks
+                            permittedJumps = PermittedJumps.Return;
+                        }
+                        break;
+                    case SyntaxKind.CaseClause:
+                        // allow unlabeled break inside case clauses
+                        permittedJumps |= PermittedJumps.Break;
+                        break;
+                    default:
+                        if (isIterationStatement(node, /*lookInLabeledStatements*/ false)) {
+                            // allow unlabeled break/continue inside loops
+                            permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
+                        }
+                        break;
                 }
 
                 switch (node.kind) {
@@ -405,7 +396,7 @@ namespace ts.refactor.extractMethod {
                                 }
                             }
                             else {
-                                if (!(permittedJumps & (SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                                if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
                                     // attempt to break or continue in a forbidden context
                                     (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements));
                                 }
@@ -570,7 +561,7 @@ namespace ts.refactor.extractMethod {
         else if (isClassLike(scope)) {
             return scope.kind === SyntaxKind.ClassDeclaration
                 ? `class '${scope.name.text}'`
-                : scope.name.text
+                : scope.name && scope.name.text
                     ? `class expression '${scope.name.text}'`
                     : "anonymous class expression";
         }
@@ -683,8 +674,14 @@ namespace ts.refactor.extractMethod {
         }
 
         const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-        // insert function at the end of the scope
-        changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+        const minInsertionPos = (isReadonlyArray(range.range) ? lastOrUndefined(range.range) : range.range).end;
+        const nodeToInsertBefore = getNodeToInsertBefore(minInsertionPos, scope);
+        if (nodeToInsertBefore) {
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
+        }
+        else {
+            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+        }
 
         const newNodes: Node[] = [];
         // replace range with function call
@@ -722,6 +719,10 @@ namespace ts.refactor.extractMethod {
                 }
                 else {
                     newNodes.push(createStatement(createBinary(assignments[0].name, SyntaxKind.EqualsToken, call)));
+
+                    if (range.facts & RangeFacts.HasReturn) {
+                        newNodes.push(createReturn());
+                    }
                 }
             }
             else {
@@ -762,6 +763,39 @@ namespace ts.refactor.extractMethod {
         const renameFilename = renameRange.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, functionNameText);
         return { renameFilename, renameLocation, edits };
+
+        function getStatementsOrClassElements(scope: Scope): ReadonlyArray<Statement> | ReadonlyArray<ClassElement> {
+            if (isFunctionLike(scope)) {
+                const body = scope.body;
+                if (isBlock(body)) {
+                    return body.statements;
+                }
+            }
+            else if (isModuleBlock(scope) || isSourceFile(scope)) {
+                return scope.statements;
+            }
+            else if (isClassLike(scope)) {
+                return scope.members;
+            }
+            else {
+                assertTypeIsNever(scope);
+            }
+
+            return emptyArray;
+        }
+
+        /**
+         * If `scope` contains a function after `minPos`, then return the first such function.
+         * Otherwise, return `undefined`.
+         */
+        function getNodeToInsertBefore(minPos: number, scope: Scope): Node | undefined {
+            const children = getStatementsOrClassElements(scope);
+            for (const child of children) {
+                if (child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child)) {
+                    return child;
+                }
+            }
+        }
     }
 
     function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, functionNameText: string): number {
@@ -794,12 +828,14 @@ namespace ts.refactor.extractMethod {
         }
     }
 
+
     function transformFunctionBody(body: Node, writes: ReadonlyArray<UsageEntry>, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string } {
         if (isBlock(body) && !writes && substitutions.size === 0) {
             // already block, no writes to propagate back, no substitutions - can use node as is
             return { body: createBlock(body.statements, /*multLine*/ true), returnValueProperty: undefined };
         }
         let returnValueProperty: string;
+        let ignoreReturns = false;
         const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : createReturn(<Expression>body)]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (writes || substitutions.size) {
@@ -822,7 +858,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.kind === SyntaxKind.ReturnStatement && writes) {
+            if (!ignoreReturns && node.kind === SyntaxKind.ReturnStatement && writes) {
                 const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWrites(writes);
                 if ((<ReturnStatement>node).expression) {
                     if (!returnValueProperty) {
@@ -838,8 +874,12 @@ namespace ts.refactor.extractMethod {
                 }
             }
             else {
+                const oldIgnoreReturns = ignoreReturns;
+                ignoreReturns = ignoreReturns || isFunctionLike(node) || isClassLike(node);
                 const substitution = substitutions.get(getNodeId(node).toString());
-                return substitution || visitEachChild(node, visitor, nullTransformationContext);
+                const result = substitution || visitEachChild(node, visitor, nullTransformationContext);
+                ignoreReturns = oldIgnoreReturns;
+                return result;
             }
         }
     }
@@ -992,7 +1032,11 @@ namespace ts.refactor.extractMethod {
         }
 
         function recordUsagebySymbol(identifier: Identifier, usage: Usage, isTypeName: boolean) {
-            const symbol = checker.getSymbolAtLocation(identifier);
+            // If the identifier is both a property name and its value, we're only interested in its value
+            // (since the name is a declaration and will be included in the extracted range).
+            const symbol = identifier.parent && isShorthandPropertyAssignment(identifier.parent) && identifier.parent.name === identifier
+                ? checker.getShorthandAssignmentValueSymbol(identifier.parent)
+                : checker.getSymbolAtLocation(identifier);
             if (!symbol) {
                 // cannot find symbol - do nothing
                 return undefined;
@@ -1026,7 +1070,7 @@ namespace ts.refactor.extractMethod {
             if (!declInFile) {
                 return undefined;
             }
-            if (rangeContainsRange(enclosingTextRange, declInFile)) {
+            if (rangeContainsStartEnd(enclosingTextRange, declInFile.getStart(), declInFile.end)) {
                 // declaration is located in range to be extracted - do nothing
                 return undefined;
             }

@@ -2596,4 +2596,6 @@ namespace ts {
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
+
+    export function assertTypeIsNever(_: never): void {}
 }

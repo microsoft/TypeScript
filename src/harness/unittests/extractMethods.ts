@@ -378,7 +378,37 @@ namespace A {
             "Cannot extract range containing conditional return statement."
         ]);
 
-        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single token."]);
+        testExtractRangeFailed("extractRangeFailed7",
+        `
+function test(x: number) {
+    while (x) {
+        x--;
+        [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
+        testExtractRangeFailed("extractRangeFailed8",
+        `
+function test(x: number) {
+    switch (x) {
+        case 1:
+            [#|break;|]
+    }
+}
+        `,
+        [
+            "Cannot extract range containing conditional break or continue statements."
+        ]);
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single identifier."]);
+
+        testExtractRangeFailed("extractRangeFailed9",
+        `var x = ([#||]1 + 2);`,
+        [
+            "Statement or expression expected."
+        ]);
 
         testExtractMethod("extractMethod1",
             `namespace A {
@@ -547,12 +577,141 @@ namespace A {
         }
     }
 }`);
+
+        testExtractMethod("extractMethod20",
+        `const _ = class {
+    a() {
+        [#|let a1 = { x: 1 };
+        return a1.x + 10;|]
+    }
+}`);
+        // Write + void return
+        testExtractMethod("extractMethod21",
+            `function foo() {
+    let x = 10;
+    [#|x++;
+    return;|]
+}`);
+        // Return in finally block
+        testExtractMethod("extractMethod22",
+            `function test() {
+    try {
+    }
+    finally {
+        [#|return 1;|]
+    }
+}`);
+        // Extraction position - namespace
+        testExtractMethod("extractMethod23",
+            `namespace NS {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - function
+        testExtractMethod("extractMethod24",
+            `function Outer() {
+    function M1() { }
+    function M2() {
+        [#|return 1;|]
+    }
+    function M3() { }
+}`);
+        // Extraction position - file
+        testExtractMethod("extractMethod25",
+            `function M1() { }
+function M2() {
+    [#|return 1;|]
+}
+function M3() { }`);
+        // Extraction position - class without ctor
+        testExtractMethod("extractMethod26",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+}`);
+        // Extraction position - class with ctor in middle
+        testExtractMethod("extractMethod27",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    constructor() { }
+    M3() { }
+}`);
+        // Extraction position - class with ctor at end
+        testExtractMethod("extractMethod28",
+            `class C {
+    M1() { }
+    M2() {
+        [#|return 1;|]
+    }
+    M3() { }
+    constructor() { }
+}`);
+        // Shorthand property names
+        testExtractMethod("extractMethod29",
+            `interface UnaryExpression {
+    kind: "Unary";
+    operator: string;
+    operand: any;
+}
+
+function parseUnaryExpression(operator: string): UnaryExpression {
+    [#|return {
+        kind: "Unary",
+        operator,
+        operand: parsePrimaryExpression(),
+    };|]
+}
+
+function parsePrimaryExpression(): any {
+    throw "Not implemented";
+}`);
+        // Return in nested function
+        testExtractMethod("extractMethod31",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        var f: () => number;
+        [#|f = function (): number {
+            return value;
+        }|]
+    }
+}`);
+        // Return in nested class
+        testExtractMethod("extractMethod32",
+            `namespace N {
+
+    export const value = 1;
+
+    () => {
+        [#|var c = class {
+            M() {
+                return value;
+            }
+        }|]
+    }
+}`);
+        // Selection excludes leading trivia of declaration
+        testExtractMethod("extractMethod33",
+            `function F() {
+    [#|function G() { }|]
+}`);
     });
 
 
     function testExtractMethod(caption: string, text: string) {
         it(caption, () => {
-            Harness.Baseline.runBaseline(`extractMethod/${caption}.js`, () => {
+            Harness.Baseline.runBaseline(`extractMethod/${caption}.ts`, () => {
                 const t = extractTest(text);
                 const selectionRange = t.ranges.get("selection");
                 if (!selectionRange) {
@@ -562,7 +721,7 @@ namespace A {
                     path: "/a.ts",
                     content: t.source
                 };
-                const host = projectSystem.createServerHost([f]);
+                const host = projectSystem.createServerHost([f, projectSystem.libFile]);
                 const projectService = projectSystem.createProjectService(host);
                 projectService.openClientFile(f.path);
                 const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -579,12 +738,12 @@ namespace A {
                 assert.equal(result.errors, undefined, "expect no errors");
                 const results = refactor.extractMethod.getPossibleExtractions(result.targetRange, context);
                 const data: string[] = [];
-                data.push(`==ORIGINAL==`);
+                data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);
                 for (const r of results) {
                     const { renameLocation, edits } = refactor.extractMethod.getExtractionAtIndex(result.targetRange, context, results.indexOf(r));
                     assert.lengthOf(edits, 1);
-                    data.push(`==SCOPE::${r.scopeDescription}==`);
+                    data.push(`// ==SCOPE::${r.scopeDescription}==`);
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
