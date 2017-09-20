@@ -53,27 +53,18 @@ namespace ts.formatting {
         return res;
 
         function advance(): void {
-            Debug.assert(scanner !== undefined, "Scanner should be present");
-
             lastTokenInfo = undefined;
             const isStarted = scanner.getStartPos() !== startPos;
 
             if (isStarted) {
-                if (trailingTrivia) {
-                    Debug.assert(trailingTrivia.length !== 0);
-                    wasNewLine = lastOrUndefined(trailingTrivia).kind === SyntaxKind.NewLineTrivia;
-                }
-                else {
-                    wasNewLine = false;
-                }
+                wasNewLine = trailingTrivia && lastOrUndefined(trailingTrivia)!.kind === SyntaxKind.NewLineTrivia;
+            }
+            else {
+                scanner.scan();
             }
 
             leadingTrivia = undefined;
             trailingTrivia = undefined;
-
-            if (!isStarted) {
-                scanner.scan();
-            }
 
             let pos = scanner.getStartPos();
 
@@ -94,25 +85,20 @@ namespace ts.formatting {
 
                 pos = scanner.getStartPos();
 
-                if (!leadingTrivia) {
-                    leadingTrivia = [];
-                }
-                leadingTrivia.push(item);
+                leadingTrivia = append(leadingTrivia, item);
             }
 
             savedPos = scanner.getStartPos();
         }
 
         function shouldRescanGreaterThanToken(node: Node): boolean {
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.GreaterThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanToken:
-                        return true;
-                }
+            switch (node.kind) {
+                case SyntaxKind.GreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                    return true;
             }
 
             return false;
@@ -133,7 +119,7 @@ namespace ts.formatting {
         }
 
         function shouldRescanJsxText(node: Node): boolean {
-            return node && node.kind === SyntaxKind.JsxText;
+            return node.kind === SyntaxKind.JsxText;
         }
 
         function shouldRescanSlashToken(container: Node): boolean {
@@ -150,16 +136,7 @@ namespace ts.formatting {
         }
 
         function readTokenInfo(n: Node): TokenInfo {
-            Debug.assert(scanner !== undefined);
-
-            if (!isOnToken()) {
-                // scanner is not on the token (either advance was not called yet or scanner is already past the end position)
-                return {
-                    leadingTrivia,
-                    trailingTrivia: undefined,
-                    token: undefined
-                };
-            }
+            Debug.assert(isOnToken());
 
             // normally scanner returns the smallest available token
             // check the kind of context node to determine if scanner should have more greedy behavior and consume more text.
@@ -195,30 +172,42 @@ namespace ts.formatting {
 
             let currentToken = scanner.getToken();
 
-            if (expectedScanAction === ScanAction.RescanGreaterThanToken && currentToken === SyntaxKind.GreaterThanToken) {
-                currentToken = scanner.reScanGreaterToken();
-                Debug.assert(n.kind === currentToken);
-                lastScanAction = ScanAction.RescanGreaterThanToken;
-            }
-            else if (expectedScanAction === ScanAction.RescanSlashToken && startsWithSlashToken(currentToken)) {
-                currentToken = scanner.reScanSlashToken();
-                Debug.assert(n.kind === currentToken);
-                lastScanAction = ScanAction.RescanSlashToken;
-            }
-            else if (expectedScanAction === ScanAction.RescanTemplateToken && currentToken === SyntaxKind.CloseBraceToken) {
-                currentToken = scanner.reScanTemplateToken();
-                lastScanAction = ScanAction.RescanTemplateToken;
-            }
-            else if (expectedScanAction === ScanAction.RescanJsxIdentifier && currentToken === SyntaxKind.Identifier) {
-                currentToken = scanner.scanJsxIdentifier();
-                lastScanAction = ScanAction.RescanJsxIdentifier;
-            }
-            else if (expectedScanAction === ScanAction.RescanJsxText) {
-                currentToken = scanner.reScanJsxToken();
-                lastScanAction = ScanAction.RescanJsxText;
-            }
-            else {
-                lastScanAction = ScanAction.Scan;
+            lastScanAction = ScanAction.Scan;
+            switch (expectedScanAction) {
+                case ScanAction.RescanGreaterThanToken:
+                    if (currentToken === SyntaxKind.GreaterThanToken) {
+                        currentToken = scanner.reScanGreaterToken();
+                        Debug.assert(n.kind === currentToken);
+                        lastScanAction = ScanAction.RescanGreaterThanToken;
+                    }
+                    break;
+                case ScanAction.RescanSlashToken:
+                    if (startsWithSlashToken(currentToken)) {
+                        currentToken = scanner.reScanSlashToken();
+                        Debug.assert(n.kind === currentToken);
+                        lastScanAction = ScanAction.RescanSlashToken;
+                    }
+                    break;
+                case ScanAction.RescanTemplateToken:
+                    if (currentToken === SyntaxKind.CloseBraceToken) {
+                        currentToken = scanner.reScanTemplateToken();
+                        lastScanAction = ScanAction.RescanTemplateToken;
+                    }
+                    break;
+                case ScanAction.RescanJsxIdentifier:
+                    if (currentToken === SyntaxKind.Identifier) {
+                        currentToken = scanner.scanJsxIdentifier();
+                        lastScanAction = ScanAction.RescanJsxIdentifier;
+                    }
+                    break;
+                case ScanAction.RescanJsxText:
+                    currentToken = scanner.reScanJsxToken();
+                    lastScanAction = ScanAction.RescanJsxText;
+                    break;
+                case ScanAction.Scan:
+                    break;
+                default:
+                    Debug.assertNever(expectedScanAction);
             }
 
             const token: TextRangeWithKind = {
@@ -261,8 +250,6 @@ namespace ts.formatting {
         }
 
         function isOnToken(): boolean {
-            Debug.assert(scanner !== undefined);
-
             const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
             const startPos = lastTokenInfo ? lastTokenInfo.token.pos : scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
