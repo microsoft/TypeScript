@@ -12,9 +12,10 @@ namespace Harness.Parallel.Worker {
             testList.length = 0;
         }
         reportedUnitTests = true;
+        const start = +(new Date());
         runner.initializeTests();
         testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
-        return { errors, passing };
+        return { errors, passing, duration: +(new Date()) - start };
     }
 
 
@@ -172,7 +173,13 @@ namespace Harness.Parallel.Worker {
         });
         process.on("uncaughtException", error => {
             const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack } };
-            process.send(message);
+            try {
+                process.send(message);
+            }
+            catch (e) {
+                console.error(error);
+                throw error;
+            }
         });
         if (!runUnitTests) {
             // ensure unit tests do not get run
@@ -189,7 +196,7 @@ namespace Harness.Parallel.Worker {
             }
             const instance = runners.get(runner);
             instance.tests = [file];
-            return resetShimHarnessAndExecute(instance);
+            return { ...resetShimHarnessAndExecute(instance), runner, file };
         }
     }
 }
