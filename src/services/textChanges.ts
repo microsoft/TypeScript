@@ -553,7 +553,6 @@ namespace ts.textChanges {
             const posStartsLine = getLineStartPositionForPosition(pos, sourceFile) === pos;
 
             const initialIndentation =
-
                 options.indentation !== undefined
                     ? options.indentation
                     : (options.useIndentationFromFile !== false)
