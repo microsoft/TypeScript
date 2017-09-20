@@ -9,8 +9,7 @@ edit.applyRefactor({
     actionName: "scope_0",
     actionDescription: "Extract to function in global scope",
     newContent:
-`// newFunction
-/*RENAME*/newFunction_1();
+`/*RENAME*/newFunction_1();
 
 function newFunction_1() {
     // newFunction

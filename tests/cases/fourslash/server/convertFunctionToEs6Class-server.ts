@@ -13,8 +13,7 @@
 
 verify.applicableRefactorAvailableAtMarker('1');
 verify.fileAfterApplyingRefactorAtMarker('1',
-`// Comment
-class fn {
+`class fn {
     constructor() {
         this.baz = 10;
     }
