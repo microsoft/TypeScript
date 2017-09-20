@@ -778,15 +778,18 @@ function parsePrimaryExpression(): any {
 
 
     function testExtractMethod(caption: string, text: string) {
-        it(caption, () => {
-            Harness.Baseline.runBaseline(`extractMethod/${caption}.ts`, () => {
-                const t = extractTest(text);
-                const selectionRange = t.ranges.get("selection");
-                if (!selectionRange) {
-                    throw new Error(`Test ${caption} does not specify selection range`);
-                }
+        const t = extractTest(text);
+        const selectionRange = t.ranges.get("selection");
+        if (!selectionRange) {
+            throw new Error(`Test ${caption} does not specify selection range`);
+        }
+
+        it(caption, () => runBaseline(Extension.Ts));
+
+        function runBaseline(extension: Extension) {
+            Harness.Baseline.runBaseline(`extractMethod/${caption}${extension}`, () => {
                 const f = {
-                    path: "/a.ts",
+                    path: "/a" + extension,
                     content: t.source
                 };
                 const host = projectSystem.createServerHost([f, projectSystem.libFile]);
@@ -818,6 +821,6 @@ function parsePrimaryExpression(): any {
                 }
                 return data.join(newLineCharacter);
             });
-        });
+        }
     }
 }
