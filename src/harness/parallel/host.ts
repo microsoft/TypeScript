@@ -138,16 +138,16 @@ namespace Harness.Parallel.Host {
                             updateProgress(progress, errorResults.length ? `${errorResults.length} failing` : `${totalPassing} passing`, errorResults.length ? "fail" : undefined);
                         }
 
-                        if (tasks.length === 0) {
-                            // No more tasks to distribute
-                            child.send({ type: "close" });
-                            closedWorkers++;
-                            if (closedWorkers === workerCount) {
-                                outputFinalResult();
-                            }
-                            return;
-                        }
                         if (data.type === "result") {
+                            if (tasks.length === 0) {
+                                // No more tasks to distribute
+                                child.send({ type: "close" });
+                                closedWorkers++;
+                                if (closedWorkers === workerCount) {
+                                    outputFinalResult();
+                                }
+                                return;
+                            }
                             // Send tasks in blocks if the tasks are small
                             const taskList = [tasks.pop()];
                             while (tasks.length && taskList.reduce((p, c) => p + c.size, 0) > chunkSize) {
