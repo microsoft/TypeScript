@@ -18,10 +18,8 @@ namespace ts.refactor.convertJSDocToTypes {
 
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         // NB getJSDocType might not be cheap enough to call on everything here
-        // TODO: Should be able to getJSDocType(node), not have to call on parent.
-        //   or maybe I should just walk up until I hit something that has a .type and can have getJSDocType called on it
         const decl = findAncestor(node, isVariableLike);
-        if (getJSDocType(decl) && !decl.type) { // && isKindThatIKnowHowToConvert(node)
+        if (decl && getJSDocType(decl) && !decl.type) { // && isKindThatIKnowHowToConvert(node)
             return [
                 {
                     name: convertJSDocToTypes.name,
@@ -48,15 +46,34 @@ namespace ts.refactor.convertJSDocToTypes {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isVariableLike);
-        decl.kind
         const jsdocType = getJSDocType(decl);
-        if (!jsdocType || decl.type) {
-            Debug.fail(`!jsdocType || decl.type: !${jsdocType} || ${decl.type}`);
+        if (!decl || !jsdocType || decl.type) {
+            Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
             return undefined;
         }
 
+    // SyntaxKind.VariableDeclaration
+    // SyntaxKind.Parameter
+    // SyntaxKind.BindingElement
+    // SyntaxKind.Property
+    // SyntaxKind.PropertyAssignment
+    // SyntaxKind.JsxAttribute
+    // SyntaxKind.ShorthandPropertyAssignment
+    // SyntaxKind.EnumMember
+    // SyntaxKind.JSDocPropertyTag
+    // SyntaxKind.JSDocParameterTag
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        changeTracker.replaceNode(sourceFile, decl, createVariableDeclaration(decl.name as string | BindingName, jsdocType, decl.initializer));
+        switch (decl.kind) {
+            case SyntaxKind.VariableDeclaration:
+                changeTracker.replaceNode(sourceFile, decl, createVariableDeclaration(decl.name as string | BindingName, jsdocType, decl.initializer));
+                break;
+            case SyntaxKind.Parameter:
+                changeTracker.replaceNode(sourceFile, decl, createParameter(decl.decorators, decl.modifiers, decl.dotDotDotToken, decl.name as string | BindingName, decl.questionToken, jsdocType, decl.initializer));
+                break;
+            default:
+                Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
+                return undefined;
+        }
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
