@@ -8948,7 +8948,7 @@ namespace ts {
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                if (source.flags & TypeFlags.MarkerType && target.flags & TypeFlags.MarkerType) {
+                if (source.flags & TypeFlags.MarkerType && target.flags & TypeFlags.MarkerType && !(source.flags & TypeFlags.Object || target.flags & TypeFlags.Object)) {
                     return source === markerSubType && target === markerSuperType ? Ternary.True : Ternary.False;
                 }
 
@@ -9414,9 +9414,11 @@ namespace ts {
                     }
                 }
                 else {
-                    if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
-                        // We have type references to the same generic type. Obtain the variance information for the
-                        // type parameters and relate the type arguments accordingly.
+                    if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
+                        !(source.flags & TypeFlags.MarkerType || target.flags & TypeFlags.MarkerType)) {
+                        // We have type references to the same generic type, and the type references are not marker
+                        // type references (which we always compare structurally). Obtain the variance information
+                        // for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, variances, reportErrors)) {
                             return result;
@@ -9841,8 +9843,12 @@ namespace ts {
             }
         }
 
-        function getVarianceType(type: GenericType, source: TypeParameter, target: Type) {
-            return createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
+        // Return a type reference where the source type parameter is replaced with the target marker
+        // type, and flag the result as a marker type reference.
+        function getMarkerTypeReference(type: GenericType, source: TypeParameter, target: Type) {
+            const result = createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
+            result.flags |= TypeFlags.MarkerType;
+            return result;
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
@@ -9867,15 +9873,15 @@ namespace ts {
                         // We first compare instantiations where the type parameter is replaced with
                         // marker types that have a known subtype relationship. From this we can infer
                         // invariance, covariance, contravariance or bivariance.
-                        const typeWithSuper = getVarianceType(type, tp, markerSuperType);
-                        const typeWithSub = getVarianceType(type, tp, markerSubType);
+                        const typeWithSuper = getMarkerTypeReference(type, tp, markerSuperType);
+                        const typeWithSub = getMarkerTypeReference(type, tp, markerSubType);
                         let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? Variance.Covariant : 0) |
                             (isTypeAssignableTo(typeWithSuper, typeWithSub) ? Variance.Contravariant : 0);
                         // If the instantiations appear to be related bivariantly, it may be because the
                         // type parameter is omnivariant (i.e. it isn't witnessed anywhere in the generic
                         // type). To determine this we compare instantiations where the type parameter is
                         // replaced with marker types that are known to be unrelated.
-                        if (variance === Variance.Bivariant && isTypeAssignableTo(getVarianceType(type, tp, markerOtherType), typeWithSuper)) {
+                        if (variance === Variance.Bivariant && isTypeAssignableTo(getMarkerTypeReference(type, tp, markerOtherType), typeWithSuper)) {
                             variance = Variance.Omnivariant;
                         }
                         variances.push(variance);
