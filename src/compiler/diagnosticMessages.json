@@ -3507,7 +3507,7 @@
         "category": "Error",
         "code": 8020
     },
-    "JSDoc @typedef tag should either have a type annotation or be followed by @property or @member tags.": {
+    "JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.": {
         "category": "Error",
         "code": 8021
     },
