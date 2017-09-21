@@ -386,6 +386,61 @@ namespace ts.server {
         });
     });
 
+    describe("exceptions", () => {
+        const command = "testhandler";
+        class TestSession extends Session {
+            lastSent: protocol.Message;
+            private exceptionRaisingHandler(_request: protocol.Request): { response?: any, responseRequired: boolean } {
+                f1();
+                return;
+                function f1() {
+                    throw new Error("myMessage");
+                }
+            }
+
+            constructor() {
+                super({
+                    host: mockHost,
+                    cancellationToken: nullCancellationToken,
+                    useSingleInferredProject: false,
+                    useInferredProjectPerProjectRoot: false,
+                    typingsInstaller: undefined,
+                    byteLength: Utils.byteLength,
+                    hrtime: process.hrtime,
+                    logger: projectSystem.nullLogger,
+                    canUseEvents: true
+                });
+                this.addProtocolHandler(command, this.exceptionRaisingHandler);
+            }
+            send(msg: protocol.Message) {
+                this.lastSent = msg;
+            }
+        }
+
+        it("raised in a protocol handler generate an event", () => {
+
+            const session = new TestSession();
+
+            const request = {
+                command,
+                seq: 0,
+                type: "request"
+            };
+
+            session.onMessage(JSON.stringify(request));
+            const lastSent = session.lastSent as protocol.Response;
+
+            expect(lastSent).to.contain({
+                seq: 0,
+                type: "response",
+                command,
+                success: false
+            });
+
+            expect(lastSent.message).has.string("myMessage").and.has.string("f1");
+        });
+    });
+
     describe("how Session is extendable via subclassing", () => {
         class TestSession extends Session {
             lastSent: protocol.Message;
