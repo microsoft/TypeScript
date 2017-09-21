@@ -9,7 +9,7 @@ namespace ts.refactor.convertJSDocToTypes {
         getAvailableActions
     };
 
-    type Typed =
+    type DeclarationWithType =
         | FunctionLikeDeclaration
         | VariableDeclaration
         | ParameterDeclaration
@@ -24,7 +24,6 @@ namespace ts.refactor.convertJSDocToTypes {
         }
 
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
-        // NB getJSDocType might not be cheap enough to call on everything here
         const decl = findAncestor(node, isTypedNode);
         if (decl && (getJSDocType(decl) || getJSDocReturnType(decl)) && !decl.type) {
             return [
@@ -61,7 +60,19 @@ namespace ts.refactor.convertJSDocToTypes {
         }
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, replaceType(decl, jsdocType, jsdocReturn));
+        if (isParameterOfSimpleArrowFunction(decl)) {
+            // `x => x` becomes `(x: number) => x`, but in order to make the changeTracker generate the parentheses,
+            // we have to replace the entire function; it doesn't check that the node it's replacing might require
+            // other syntax changes
+            const arrow = decl.parent as ArrowFunction;
+            const param = decl as ParameterDeclaration;
+            const replacementParam = createParameter(param.decorators, param.modifiers, param.dotDotDotToken, param.name, param.questionToken, jsdocType, param.initializer);
+            const replacement = createArrowFunction(arrow.modifiers, arrow.typeParameters, [replacementParam], arrow.type, arrow.equalsGreaterThanToken, arrow.body);
+            changeTracker.replaceRange(sourceFile, { pos: arrow.getStart(), end: arrow.end }, replacement);
+        }
+        else {
+            changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, replaceType(decl, jsdocType, jsdocReturn));
+        }
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
@@ -69,7 +80,7 @@ namespace ts.refactor.convertJSDocToTypes {
         };
     }
 
-    function isTypedNode(node: Node): node is Typed {
+    function isTypedNode(node: Node): node is DeclarationWithType {
         return isFunctionLikeDeclaration(node) ||
             node.kind === SyntaxKind.VariableDeclaration ||
             node.kind === SyntaxKind.Parameter ||
@@ -77,14 +88,11 @@ namespace ts.refactor.convertJSDocToTypes {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-        //| FunctionDeclaration
         //| MethodDeclaration
         //| ConstructorDeclaration
         //| GetAccessorDeclaration
         //| SetAccessorDeclaration
-        //| FunctionExpression
-        //| ArrowFunction;
-    function replaceType(decl: Typed, jsdocType: TypeNode, jsdocReturn: TypeNode) {
+    function replaceType(decl: DeclarationWithType, jsdocType: TypeNode, jsdocReturn: TypeNode) {
         switch (decl.kind) {
             case SyntaxKind.VariableDeclaration:
                 return createVariableDeclaration(decl.name, jsdocType, decl.initializer);
@@ -98,9 +106,34 @@ namespace ts.refactor.convertJSDocToTypes {
                 return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
             case SyntaxKind.FunctionExpression:
                 return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
+            case SyntaxKind.ArrowFunction:
+                return createArrowFunction(decl.modifiers, decl.typeParameters, decl.parameters, jsdocReturn, decl.equalsGreaterThanToken, decl.body);
+            case SyntaxKind.MethodDeclaration:
+                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
             default:
                 Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
                 return undefined;
         }
+    }
+
+    function isParameterOfSimpleArrowFunction(decl: DeclarationWithType) {
+        return decl.kind === SyntaxKind.Parameter && decl.parent.kind === SyntaxKind.ArrowFunction && isSimpleArrowFunction(decl.parent);
+    }
+
+    function isSimpleArrowFunction(parentNode: FunctionTypeNode | ArrowFunction | JSDocFunctionType) {
+        const parameter = singleOrUndefined(parentNode.parameters);
+        return parameter
+            && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
+            && !(isArrowFunction(parentNode) && parentNode.type) // arrow function may not have return type annotation
+            && !some(parentNode.decorators)     // parent may not have decorators
+            && !some(parentNode.modifiers)      // parent may not have modifiers
+            && !some(parentNode.typeParameters) // parent may not have type parameters
+            && !some(parameter.decorators)      // parameter may not have decorators
+            && !some(parameter.modifiers)       // parameter may not have modifiers
+            && !parameter.dotDotDotToken        // parameter may not be rest
+            && !parameter.questionToken         // parameter may not be optional
+            && !parameter.type                  // parameter may not have a type annotation
+            && !parameter.initializer           // parameter may not have an initializer
+            && isIdentifier(parameter.name);    // parameter name must be identifier
     }
 }
