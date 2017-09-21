@@ -88,26 +88,38 @@ class TypeWriterWalker {
             };
         }
         const symbol = this.checker.getSymbolAtLocation(node);
-        let symbolString: string;
-        if (symbol) {
-            symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
-            if (symbol.declarations) {
-                for (const declaration of symbol.declarations) {
-                    symbolString += ", ";
-                    const declSourceFile = declaration.getSourceFile();
-                    const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
-                    const fileName = ts.getBaseFileName(declSourceFile.fileName);
-                    const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
-                    symbolString += `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
-                }
-            }
-            symbolString += ")";
-            return {
-                line: lineAndCharacter.line,
-                syntaxKind: node.kind,
-                sourceText,
-                symbol: symbolString
-            };
+        if (!symbol) {
+            return;
         }
+        let symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
+        if (symbol.declarations) {
+            let count = 0;
+            for (const declaration of symbol.declarations) {
+                if (count >= 20) {
+                    symbolString += ` ... and ${symbol.declarations.length - count} more`;
+                    break;
+                }
+                count++;
+                symbolString += ", ";
+                if ((declaration as any)["__symbolTestOutputCache"]) {
+                    symbolString += (declaration as any)["__symbolTestOutputCache"];
+                    continue;
+                }
+                const declSourceFile = declaration.getSourceFile();
+                const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
+                const fileName = ts.getBaseFileName(declSourceFile.fileName);
+                const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
+                const declText = `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
+                symbolString += declText;
+                (declaration as any)["__symbolTestOutputCache"] = declText;
+            }
+        }
+        symbolString += ")";
+        return {
+            line: lineAndCharacter.line,
+            syntaxKind: node.kind,
+            sourceText,
+            symbol: symbolString
+        };
     }
 }
