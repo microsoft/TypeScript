@@ -986,7 +986,20 @@ namespace ts {
 
     function getNameOfTopDirectory(name: string): { top: string, rest: string } {
         const idx = name.indexOf(directorySeparator);
-        return idx === -1 ? { top: name, rest: "" } : { top: name.slice(0, idx), rest: name.slice(idx + 1) };
+        if (idx === -1) {
+            return { top: name, rest: "" };
+        }
+        else {
+            const top = name.slice(0, idx);
+            const rest = name.slice(idx + 1);
+            // Scoped packages should be treated as a distinct unit
+            if (top[0] === '@') {
+                return { top: name, rest: "" };
+            }
+            else {
+                return { top, rest };
+            }
+        }
     }
 
     function loadModuleFromNodeModules(extensions: Extensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, cache: NonRelativeModuleNameResolutionCache): SearchResult<Resolved> {
