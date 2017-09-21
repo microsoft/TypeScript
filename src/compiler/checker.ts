@@ -13319,7 +13319,7 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression: {
                     const arrayLiteral = <ArrayLiteralExpression>parent;
                     const type = getApparentTypeOfContextualType(arrayLiteral);
-                    return getContextualTypeForElementExpression(type, indexOf(arrayLiteral.elements, node));
+                    return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
                 }
                 case SyntaxKind.ConditionalExpression:
                     return getContextualTypeForConditionalOperand(node);
