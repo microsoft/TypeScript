@@ -1,1 +1,1 @@
-declare module global { }
+declare global { }
