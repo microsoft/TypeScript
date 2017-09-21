@@ -1464,12 +1464,6 @@ namespace Harness {
 
             const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-            const fullResults = ts.createMap<TypeWriterResult[]>();
-
-            for (const sourceFile of allFiles) {
-                fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
-            }
-
             // Produce baselines.  The first gives the types for all expressions.
             // The second gives symbols for all identifiers.
             let typesError: Error, symbolsError: Error;
@@ -1510,19 +1504,19 @@ namespace Harness {
                     baselinePath.replace(/\.tsx?/, "") : baselinePath;
 
                 if (!multifile) {
-                    const fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);
+                    const fullBaseLine = generateBaseLine(isSymbolBaseLine);
                     Harness.Baseline.runBaseline(outputFileName + fullExtension, () => fullBaseLine, opts);
                 }
                 else {
                     Harness.Baseline.runMultifileBaseline(outputFileName, fullExtension, () => {
-                        return iterateBaseLine(fullResults, isSymbolBaseLine);
+                        return iterateBaseLine(isSymbolBaseLine);
                     }, opts);
                 }
             }
 
-            function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+            function generateBaseLine(isSymbolBaseline: boolean): string {
                 let result = "";
-                const gen = iterateBaseLine(typeWriterResults, isSymbolBaseline);
+                const gen = iterateBaseLine(isSymbolBaseline);
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [, content] = value;
                     result += content;
@@ -1530,39 +1524,37 @@ namespace Harness {
                 return result;
             }
 
-            function *iterateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): IterableIterator<[string, string]> {
-                let typeLines = "";
-                const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+            function *iterateBaseLine(isSymbolBaseline: boolean): IterableIterator<[string, string]> {
                 const dupeCase = ts.createMap<number>();
 
                 for (const file of allFiles) {
+                    let typeLines = "";
+                    const typeMap: { [lineNum: number]: string[]; } = {};
                     const codeLines = file.content.split("\n");
-                    const key = file.unitName;
-                    typeWriterResults.get(file.unitName).forEach(result => {
+                    const { unitName } = file;
+                    const results: TypeWriterResult[] = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
+                    results.forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }
 
                         const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                         const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                        if (!typeMap[key]) {
-                            typeMap[key] = {};
-                        }
 
                         let typeInfo = [formattedLine];
-                        const existingTypeInfo = typeMap[key][result.line];
+                        const existingTypeInfo = typeMap[result.line];
                         if (existingTypeInfo) {
                             typeInfo = existingTypeInfo.concat(typeInfo);
                         }
-                        typeMap[key][result.line] = typeInfo;
+                        typeMap[result.line] = typeInfo;
                     });
 
-                    typeLines += "=== " + file.unitName + " ===\r\n";
+                    typeLines += "=== " + unitName + " ===\r\n";
                     for (let i = 0; i < codeLines.length; i++) {
                         const currentCodeLine = codeLines[i];
                         typeLines += currentCodeLine + "\r\n";
-                        if (typeMap[key]) {
-                            const typeInfo = typeMap[key][i];
+                        if (typeMap) {
+                            const typeInfo = typeMap[i];
                             if (typeInfo) {
                                 typeInfo.forEach(ty => {
                                     typeLines += ">" + ty + "\r\n";
@@ -1578,8 +1570,7 @@ namespace Harness {
                             typeLines += "No type information for this code.";
                         }
                     }
-                    yield [checkDuplicatedFileName(file.unitName, dupeCase), typeLines];
-                    typeLines = "";
+                    yield [checkDuplicatedFileName(unitName, dupeCase), typeLines];
                 }
             }
         }

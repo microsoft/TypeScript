@@ -1,9 +1,23 @@
-interface TypeWriterResult {
+interface TypeWriterTypeResult {
     line: number;
     syntaxKind: number;
     sourceText: string;
     type: string;
+}
+
+interface TypeWriterSymbolResult {
+    line: number;
+    syntaxKind: number;
+    sourceText: string;
     symbol: string;
+}
+
+interface TypeWriterResult {
+    line: number;
+    syntaxKind: number;
+    sourceText: string;
+    symbol?: string;
+    type?: string;
 }
 
 class TypeWriterWalker {
@@ -20,33 +34,49 @@ class TypeWriterWalker {
             : program.getTypeChecker();
     }
 
-    public getTypeAndSymbols(fileName: string): TypeWriterResult[] {
+    public getSymbols(fileName: string): TypeWriterSymbolResult[] {
         const sourceFile = this.program.getSourceFile(fileName);
         this.currentSourceFile = sourceFile;
         this.results = [];
-        this.visitNode(sourceFile);
-        return this.results;
+        this.visitNode(sourceFile, /*isSymbolWalk*/ true);
+        return this.results as TypeWriterSymbolResult[];
     }
 
-    private visitNode(node: ts.Node): void {
+    public getTypes(fileName: string): TypeWriterTypeResult[] {
+        const sourceFile = this.program.getSourceFile(fileName);
+        this.currentSourceFile = sourceFile;
+        this.results = [];
+        this.visitNode(sourceFile, /*isSymbolWalk*/ false);
+        return this.results as TypeWriterTypeResult[];
+    }
+
+    private visitNode(node: ts.Node, isSymbolWalk: boolean): void {
         if (ts.isPartOfExpression(node) || node.kind === ts.SyntaxKind.Identifier) {
-            this.logTypeAndSymbol(node);
+            this.logTypeOrSymbol(node, isSymbolWalk);
         }
 
-        ts.forEachChild(node, child => this.visitNode(child));
+        ts.forEachChild(node, child => this.visitNode(child, isSymbolWalk));
     }
 
-    private logTypeAndSymbol(node: ts.Node): void {
+    private logTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): void {
         const actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         const lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
         const sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
 
+
+        if (!isSymbolWalk) {
         // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
         // let type = this.checker.getTypeAtLocation(node);
         const type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
-        const symbol = this.checker.getSymbolAtLocation(node);
-
         const typeString = type ? this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation) : "No type information available!";
+            this.results.push({
+                line: lineAndCharacter.line,
+                syntaxKind: node.kind,
+                sourceText,
+                type: typeString
+            });
+        }
+        const symbol = this.checker.getSymbolAtLocation(node);
         let symbolString: string;
         if (symbol) {
             symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
@@ -61,14 +91,12 @@ class TypeWriterWalker {
                 }
             }
             symbolString += ")";
+            this.results.push({
+                line: lineAndCharacter.line,
+                syntaxKind: node.kind,
+                sourceText,
+                symbol: symbolString
+            });
         }
-
-        this.results.push({
-            line: lineAndCharacter.line,
-            syntaxKind: node.kind,
-            sourceText,
-            type: typeString,
-            symbol: symbolString
-        });
     }
 }
