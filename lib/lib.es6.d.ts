@@ -6205,7 +6205,7 @@ interface MediaTrackConstraints extends MediaTrackConstraintSet {
 interface MediaTrackConstraintSet {
     aspectRatio?: number | ConstrainDoubleRange;
     deviceId?: string | string[] | ConstrainDOMStringParameters;
-    echoCancelation?: boolean | ConstrainBooleanParameters;
+    echoCancellation?: boolean | ConstrainBooleanParameters;
     facingMode?: string | string[] | ConstrainDOMStringParameters;
     frameRate?: number | ConstrainDoubleRange;
     groupId?: string | string[] | ConstrainDOMStringParameters;
