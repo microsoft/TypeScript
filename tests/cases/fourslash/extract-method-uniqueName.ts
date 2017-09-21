@@ -3,6 +3,8 @@
 ////// newFunction
 /////*start*/1 + 1/*end*/;
 
+// NOTE: '// newFunction' should be included, but due to incorrect handling of trivia,
+// it's omitted right now.
 goTo.select('start', 'end')
 edit.applyRefactor({
     refactorName: "Extract Method",
