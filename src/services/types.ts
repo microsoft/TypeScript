@@ -280,7 +280,7 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         //TODO: this will be public, so think about api
-        applyCodeFixAction(fileName: string, action: CodeActionAction): void;
+        applyCodeFixCommand(fileName: string, action: CodeActionCommand): void;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
 
@@ -375,11 +375,12 @@ namespace ts {
          * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
          * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
          */
-        actions?: Array<CodeActionAction>;
+        commands?: Array<CodeActionCommand>;
     }
 
     //Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
-    export type CodeActionAction = InstallPackageAction;
+    //See `commands?: Array<{}>;` in protocol.ts
+    export type CodeActionCommand = InstallPackageAction;
 
     //TODO: installPackageOptions should derive from this
     export interface InstallPackageAction {

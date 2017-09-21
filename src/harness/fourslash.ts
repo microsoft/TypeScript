@@ -2722,7 +2722,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, info?: Array<{ description: string, actions: Array<ts.CodeActionAction> }>) {
+        public verifyCodeFixAvailable(negative: boolean, info?: Array<{ description: string, commands?: Array<ts.CodeActionCommand> }>) {
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName);
 
             if (negative) {
@@ -2739,7 +2739,7 @@ namespace FourSlash {
                 assert.equal(info.length, codeFixes.length); //neater
                 ts.zipWith(codeFixes, info, (fix, info) => {
                     assert.equal(fix.description, info.description);
-                    this.assertObjectsEqual(fix.actions, info.actions);
+                    this.assertObjectsEqual(fix.commands, info.commands);
                 });
             }
         }

@@ -540,10 +540,10 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
 
-        applyCodeFixAction(file: string, action: CodeActionAction): void {
-            const args: protocol.ApplyCodeFixActionRequestArgs = { file, action };
+        applyCodeFixCommand(file: string, action: CodeActionCommand): void {
+            const args: protocol.ApplyCodeFixCommandRequestArgs = { file, action };
 
-            this.processRequest<protocol.ApplyCodeFixActionRequest>(CommandNames.ApplyCodeFixAction, args);
+            this.processRequest<protocol.ApplyCodeFixCommandRequest>(CommandNames.ApplyCodeFixCommand, args);
             //TODO: there should probably be a response to indicate if there was an error?
         }
 

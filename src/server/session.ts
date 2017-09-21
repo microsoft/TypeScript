@@ -1540,6 +1540,11 @@ namespace ts.server {
             }
         }
 
+        private applyCodeFixCommand(args: protocol.ApplyCodeFixCommandRequestArgs): protocol.ApplyCodeFixCommandResponse {
+            args;
+            throw new Error("TODO");
+        }
+
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
             let startPosition: number = undefined, endPosition: number = undefined;
             if (args.startPosition !== undefined) {
@@ -1562,13 +1567,14 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(codeAction: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
+        private mapCodeAction({ description, changes, commands }: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
             return {
-                description: codeAction.description,
-                changes: codeAction.changes.map(change => ({
+                description: description,
+                changes: changes.map(change => ({
                     fileName: change.fileName,
                     textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
-                }))
+                })),
+                commands,
             };
         }
 
@@ -1908,6 +1914,9 @@ namespace ts.server {
             },
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.ApplyCodeFixCommand]: (request: protocol.ApplyCodeFixCommandRequest) => {
+                return this.requiredResponse(this.applyCodeFixCommand(request.arguments));
             },
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());

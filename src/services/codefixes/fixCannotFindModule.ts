@@ -39,7 +39,7 @@ namespace ts.codefix {
             const action: CodeAction = {
                 description: `Install typings for ${packageName}`,
                 changes: [],
-                actions: [{
+                commands: [{
                     type: "install package",
                     packageName: `@types/${packageName}`,
                     tsconfigLocation: context.host.getTsconfigLocation(), //context.program.getCommonSourceDirectory(),

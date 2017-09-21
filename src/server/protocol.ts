@@ -94,7 +94,7 @@ namespace ts.server.protocol {
         BreakpointStatement = "breakpointStatement",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
-        ApplyCodeFixAction = "applyCodeFixAction",
+        ApplyCodeFixCommand = "applyCodeFixCommand",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
@@ -523,9 +523,16 @@ namespace ts.server.protocol {
     }
 
     //!
-    export interface ApplyCodeFixActionRequest extends Request {
-        command: CommandTypes.ApplyCodeFixAction;
-        arguments: ApplyCodeFixActionRequestArgs;
+    export interface ApplyCodeFixCommandRequest extends Request {
+        command: CommandTypes.ApplyCodeFixCommand;
+        arguments: ApplyCodeFixCommandRequestArgs;
+    }
+
+    export interface ApplyCodeFixCommandResponse extends Response {
+        body: {
+            success: boolean;
+            userMessage: string;
+        };
     }
 
     export interface FileRangeRequestArgs extends FileRequestArgs {
@@ -572,8 +579,8 @@ namespace ts.server.protocol {
         errorCodes?: number[];
     }
 
-    export interface ApplyCodeFixActionRequestArgs extends FileRequestArgs {
-        action: CodeActionAction;
+    export interface ApplyCodeFixCommandRequestArgs extends FileRequestArgs {
+        action: CodeActionCommand; //TODO: should just be `{}` from the protocol's perspective
     }
 
     /**
@@ -1553,6 +1560,7 @@ namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        commands?: Array<{}>;
     }
 
     /**
