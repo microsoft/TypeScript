@@ -11,7 +11,7 @@ class bar {
 
 
 //// [declInput.js]
-var bar = (function () {
+var bar = /** @class */ (function () {
     function bar() {
     }
     bar.prototype.f = function () { return ''; };

@@ -40,7 +40,7 @@ var v = 1;
 exports.v = v;
 function f() { }
 exports.f = f;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

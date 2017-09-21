@@ -61,7 +61,7 @@ namespace ts {
     }
 
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine + sys.newLine);
+        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine);
     }
 
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
@@ -100,7 +100,6 @@ namespace ts {
         const commandLine = parseCommandLine(args);
         let configFileName: string;                                 // Configuration file name (if any)
         let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
-        let configFileWatcher: FileWatcher;                         // Configuration file watcher
         let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
         let cachedProgram: Program;                                 // Program cached from last compilation
         let rootFileNames: string[];                                // Root fileNames for compilation
@@ -189,7 +188,7 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+                sys.watchFile(configFileName, configFileChanged);
             }
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);
@@ -223,20 +222,13 @@ namespace ts {
                 return;
             }
 
-            const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
-            const configObject = result.config;
-            if (!configObject) {
-                reportDiagnostics([result.error], /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
+            const result = parseJsonText(configFileName, cachedConfigFileText);
+            reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
+
             const cwd = sys.getCurrentDirectory();
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
-            if (configParseResult.errors.length > 0) {
-                reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
+            const configParseResult = parseJsonSourceFileConfigFileContent(result, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
+            reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
+
             if (isWatchSet(configParseResult.options)) {
                 if (!sys.watchFile) {
                     reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
@@ -292,6 +284,16 @@ namespace ts {
 
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+
+            const missingPaths = compileResult.program.getMissingFilePaths();
+            missingPaths.forEach(path => {
+                const fileWatcher = sys.watchFile(path, (_fileName, eventKind) => {
+                    if (eventKind === FileWatcherEventKind.Created) {
+                        fileWatcher.close();
+                        startTimerForRecompilation();
+                    }
+                });
+            });
         }
 
         function cachedFileExists(fileName: string): boolean {
@@ -315,7 +317,7 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName, eventKind) => sourceFileChanged(sourceFile, eventKind));
             }
             return sourceFile;
         }
@@ -337,10 +339,10 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile, removed?: boolean) {
+        function sourceFileChanged(sourceFile: SourceFile, eventKind: FileWatcherEventKind) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
-            if (removed) {
+            if (eventKind === FileWatcherEventKind.Deleted) {
                 unorderedRemoveItem(rootFileNames, sourceFile.fileName);
             }
             startTimerForRecompilation();
@@ -466,7 +468,7 @@ namespace ts {
             let diagnostics: Diagnostic[];
 
             // First get and report any syntactic errors.
-            diagnostics = program.getSyntacticDiagnostics();
+            diagnostics = program.getSyntacticDiagnostics().slice();
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
@@ -474,13 +476,13 @@ namespace ts {
                 diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
-                    diagnostics = program.getSemanticDiagnostics();
+                    diagnostics = program.getSemanticDiagnostics().slice();
                 }
             }
 
             // Otherwise, emit and report any errors we ran into.
             const emitOutput = program.emit();
-            diagnostics = diagnostics.concat(emitOutput.diagnostics);
+            addRange(diagnostics, emitOutput.diagnostics);
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
@@ -661,6 +663,8 @@ namespace ts {
         return;
     }
 }
+
+ts.setStackTraceLimit();
 
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();

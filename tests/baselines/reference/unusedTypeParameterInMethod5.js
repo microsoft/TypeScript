@@ -6,7 +6,7 @@ class A {
 }
 
 //// [unusedTypeParameterInMethod5.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         this.f1 = function () {
         };

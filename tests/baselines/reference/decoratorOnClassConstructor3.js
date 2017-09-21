@@ -18,7 +18,7 @@ export class C  extends base{
 //// [0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var base = (function () {
+var base = /** @class */ (function () {
     function base() {
     }
     return base;
@@ -51,7 +51,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _0_1 = require("./0");
 var _0_2 = require("./0");
 /* Comment on the Class Declaration */
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C(prop) {
         return _super.call(this) || this;

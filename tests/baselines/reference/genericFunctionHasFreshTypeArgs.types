@@ -9,11 +9,11 @@ function f(p: <T>(x: T) => void) { };
 f(x => f(y => x = y));
 >f(x => f(y => x = y)) : void
 >f : (p: <T>(x: T) => void) => void
->x => f(y => x = y) : (x: T) => void
+>x => f(y => x = y) : <T>(x: T) => void
 >x : T
 >f(y => x = y) : void
 >f : (p: <T>(x: T) => void) => void
->y => x = y : (y: T) => T
+>y => x = y : <T>(y: T) => T
 >y : T
 >x = y : T
 >x : T

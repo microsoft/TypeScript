@@ -5,7 +5,7 @@
 namespace ts.server {
 
     export function shouldEmitFile(scriptInfo: ScriptInfo) {
-        return !scriptInfo.hasMixedContent;
+        return !scriptInfo.hasMixedContent && !scriptInfo.isDynamic;
     }
 
     /**
@@ -84,13 +84,17 @@ namespace ts.server {
          * NOTE: this field is created on demand and should not be accessed directly.
          * Use 'getFileInfos' instead.
          */
-        private fileInfos_doNotAccessDirectly: FileMap<T>;
+        private fileInfos_doNotAccessDirectly: Map<T>;
 
         constructor(public readonly project: Project, private ctor: { new (scriptInfo: ScriptInfo, project: Project): T }) {
         }
 
         private getFileInfos() {
-            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createFileMap<T>());
+            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createMap<T>());
+        }
+
+        protected hasFileInfos() {
+            return !!this.fileInfos_doNotAccessDirectly;
         }
 
         public clear() {
@@ -113,7 +117,7 @@ namespace ts.server {
         }
 
         protected getFileInfoPaths(): Path[] {
-            return this.getFileInfos().getKeys();
+            return arrayFrom(this.getFileInfos().keys() as Iterator<Path>);
         }
 
         protected setFileInfo(path: Path, info: T) {
@@ -121,20 +125,22 @@ namespace ts.server {
         }
 
         protected removeFileInfo(path: Path) {
-            this.getFileInfos().remove(path);
+            this.getFileInfos().delete(path);
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.getFileInfos().forEachValue((_path, value) => action(value));
+            this.getFileInfos().forEach(action);
         }
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         abstract onProjectUpdateGraph(): void;
+        protected abstract ensureFileInfoIfInProject(scriptInfo: ScriptInfo): void;
 
         /**
          * @returns {boolean} whether the emit was conducted or not
          */
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+            this.ensureFileInfoIfInProject(scriptInfo);
             const fileInfo = this.getFileInfo(scriptInfo.path);
             if (!fileInfo) {
                 return false;
@@ -158,7 +164,21 @@ namespace ts.server {
             super(project, BuilderFileInfo);
         }
 
+        protected ensureFileInfoIfInProject(scriptInfo: ScriptInfo) {
+            if (this.project.containsScriptInfo(scriptInfo)) {
+                this.getOrCreateFileInfo(scriptInfo.path);
+            }
+        }
+
         onProjectUpdateGraph() {
+            if (this.hasFileInfos()) {
+                this.forEachFileInfo(fileInfo => {
+                    if (!this.project.containsScriptInfo(fileInfo.scriptInfo)) {
+                        // This file was deleted from this project
+                        this.removeFileInfo(fileInfo.scriptInfo.path);
+                    }
+                });
+            }
         }
 
         /**
@@ -168,7 +188,7 @@ namespace ts.server {
          */
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             const info = this.getOrCreateFileInfo(scriptInfo.path);
-            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
+            const singleFileResult = scriptInfo.hasMixedContent || scriptInfo.isDynamic ? [] : [scriptInfo.fileName];
             if (info.updateShapeSignature()) {
                 const options = this.project.getCompilerOptions();
                 // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
@@ -183,57 +203,27 @@ namespace ts.server {
     }
 
     class ModuleBuilderFileInfo extends BuilderFileInfo {
-        references: ModuleBuilderFileInfo[] = [];
-        referencedBy: ModuleBuilderFileInfo[] = [];
+        references = createSortedArray<ModuleBuilderFileInfo>();
+        readonly referencedBy = createSortedArray<ModuleBuilderFileInfo>();
         scriptVersionForReferences: string;
 
-        static compareFileInfos(lf: ModuleBuilderFileInfo, rf: ModuleBuilderFileInfo): number {
-            const l = lf.scriptInfo.fileName;
-            const r = rf.scriptInfo.fileName;
-            return (l < r ? -1 : (l > r ? 1 : 0));
-        }
-
-        static addToReferenceList(array: ModuleBuilderFileInfo[], fileInfo: ModuleBuilderFileInfo) {
-            if (array.length === 0) {
-                array.push(fileInfo);
-                return;
-            }
-
-            const insertIndex = binarySearch(array, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
-            if (insertIndex < 0) {
-                array.splice(~insertIndex, 0, fileInfo);
-            }
-        }
-
-        static removeFromReferenceList(array: ModuleBuilderFileInfo[], fileInfo: ModuleBuilderFileInfo) {
-            if (!array || array.length === 0) {
-                return;
-            }
-
-            if (array[0] === fileInfo) {
-                array.splice(0, 1);
-                return;
-            }
-
-            const removeIndex = binarySearch(array, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
-            if (removeIndex >= 0) {
-                array.splice(removeIndex, 1);
-            }
+        static compareFileInfos(lf: ModuleBuilderFileInfo, rf: ModuleBuilderFileInfo): Comparison {
+            return compareStrings(lf.scriptInfo.fileName, rf.scriptInfo.fileName);
         }
 
         addReferencedBy(fileInfo: ModuleBuilderFileInfo): void {
-            ModuleBuilderFileInfo.addToReferenceList(this.referencedBy, fileInfo);
+            insertSorted(this.referencedBy, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
         }
 
         removeReferencedBy(fileInfo: ModuleBuilderFileInfo): void {
-            ModuleBuilderFileInfo.removeFromReferenceList(this.referencedBy, fileInfo);
+            removeSorted(this.referencedBy, fileInfo, ModuleBuilderFileInfo.compareFileInfos);
         }
 
         removeFileReferences() {
             for (const reference of this.references) {
                 reference.removeReferencedBy(this);
             }
-            this.references = [];
+            clear(this.references);
         }
     }
 
@@ -250,20 +240,24 @@ namespace ts.server {
             super.clear();
         }
 
-        private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): ModuleBuilderFileInfo[] {
+        private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): SortedArray<ModuleBuilderFileInfo> {
             if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
-                return [];
+                return createSortedArray();
             }
 
             const referencedFilePaths = this.project.getReferencedFiles(fileInfo.scriptInfo.path);
-            if (referencedFilePaths.length > 0) {
-                return map(referencedFilePaths, f => this.getOrCreateFileInfo(f)).sort(ModuleBuilderFileInfo.compareFileInfos);
-            }
-            return [];
+            return toSortedArray(referencedFilePaths.map(f => this.getOrCreateFileInfo(f)), ModuleBuilderFileInfo.compareFileInfos);
+        }
+
+        protected ensureFileInfoIfInProject(_scriptInfo: ScriptInfo) {
+            this.ensureProjectDependencyGraphUpToDate();
         }
 
         onProjectUpdateGraph() {
-            this.ensureProjectDependencyGraphUpToDate();
+            // Update the graph only if we have computed graph earlier
+            if (this.hasFileInfos()) {
+                this.ensureProjectDependencyGraphUpToDate();
+            }
         }
 
         private ensureProjectDependencyGraphUpToDate() {
@@ -292,39 +286,15 @@ namespace ts.server {
 
             const newReferences = this.getReferencedFileInfos(fileInfo);
             const oldReferences = fileInfo.references;
-
-            let oldIndex = 0;
-            let newIndex = 0;
-            while (oldIndex < oldReferences.length && newIndex < newReferences.length) {
-                const oldReference = oldReferences[oldIndex];
-                const newReference = newReferences[newIndex];
-                const compare = ModuleBuilderFileInfo.compareFileInfos(oldReference, newReference);
-                if (compare < 0) {
+            enumerateInsertsAndDeletes(newReferences, oldReferences,
+                /*inserted*/ newReference => newReference.addReferencedBy(fileInfo),
+                /*deleted*/ oldReference => {
                     // New reference is greater then current reference. That means
                     // the current reference doesn't exist anymore after parsing. So delete
                     // references.
                     oldReference.removeReferencedBy(fileInfo);
-                    oldIndex++;
-                }
-                else if (compare > 0) {
-                    // A new reference info. Add it.
-                    newReference.addReferencedBy(fileInfo);
-                    newIndex++;
-                }
-                else {
-                    // Equal. Go to next
-                    oldIndex++;
-                    newIndex++;
-                }
-            }
-            // Clean old references
-            for (let i = oldIndex; i < oldReferences.length; i++) {
-                oldReferences[i].removeReferencedBy(fileInfo);
-            }
-            // Update new references
-            for (let i = newIndex; i < newReferences.length; i++) {
-                newReferences[i].addReferencedBy(fileInfo);
-            }
+                },
+                /*compare*/ ModuleBuilderFileInfo.compareFileInfos);
 
             fileInfo.references = newReferences;
             fileInfo.scriptVersionForReferences = fileInfo.scriptInfo.getLatestVersion();
@@ -333,7 +303,7 @@ namespace ts.server {
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             this.ensureProjectDependencyGraphUpToDate();
 
-            const singleFileResult = scriptInfo.hasMixedContent ? [] : [scriptInfo.fileName];
+            const singleFileResult = scriptInfo.hasMixedContent || scriptInfo.isDynamic ? [] : [scriptInfo.fileName];
             const fileInfo = this.getFileInfo(scriptInfo.path);
             if (!fileInfo || !fileInfo.updateShapeSignature()) {
                 return singleFileResult;

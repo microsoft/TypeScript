@@ -105,7 +105,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     Base.prototype.method = function () {
@@ -122,7 +122,7 @@ var Base = (function () {
     };
     return Base;
 }());
-var Derived1 = (function (_super) {
+var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -141,7 +141,7 @@ var Derived1 = (function (_super) {
     };
     return Derived1;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -160,7 +160,7 @@ var Derived2 = (function (_super) {
     };
     return Derived2;
 }(Base));
-var Derived3 = (function (_super) {
+var Derived3 = /** @class */ (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -179,7 +179,7 @@ var Derived3 = (function (_super) {
     };
     return Derived3;
 }(Derived1));
-var Derived4 = (function (_super) {
+var Derived4 = /** @class */ (function (_super) {
     __extends(Derived4, _super);
     function Derived4() {
         return _super !== null && _super.apply(this, arguments) || this;

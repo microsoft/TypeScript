@@ -6,19 +6,19 @@
 
 [![Join the chat at https://gitter.im/Microsoft/TypeScript](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Microsoft/TypeScript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[TypeScript](http://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types, classes, and modules to JavaScript. TypeScript supports tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](http://www.typescriptlang.org/Playground), and stay up to date via [our blog](https://blogs.msdn.microsoft.com/typescript) and [Twitter account](https://twitter.com/typescriptlang).
+[TypeScript](https://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types, classes, and modules to JavaScript. TypeScript supports tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](https://www.typescriptlang.org/play/), and stay up to date via [our blog](https://blogs.msdn.microsoft.com/typescript) and [Twitter account](https://twitter.com/typescriptlang).
 
 ## Installing
 
 For the latest stable version:
 
-```
+```bash
 npm install -g typescript
 ```
 
 For our nightly builds:
 
-```
+```bash
 npm install -g typescript@next
 ```
 
@@ -27,8 +27,8 @@ npm install -g typescript@next
 There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md) to TypeScript.
 * [Submit bugs](https://github.com/Microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
 * Review the [source code changes](https://github.com/Microsoft/TypeScript/pulls).
-* Engage with other TypeScript users and developers on [StackOverflow](http://stackoverflow.com/questions/tagged/typescript). 
-* Join the [#typescript](http://twitter.com/#!/search/realtime/%23typescript) discussion on Twitter.
+* Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript). 
+* Join the [#typescript](https://twitter.com/#!/search/realtime/%23typescript) discussion on Twitter.
 * [Contribute bug fixes](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md).
 * Read the language specification ([docx](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.docx?raw=true),
  [pdf](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.pdf?raw=true), [md](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)).
@@ -39,30 +39,30 @@ with any additional questions or comments.
 
 ## Documentation
 
-*  [Quick tutorial](http://www.typescriptlang.org/docs/tutorial.html)
-*  [Programming handbook](http://www.typescriptlang.org/docs/handbook/basic-types.html)
+*  [Quick tutorial](https://www.typescriptlang.org/docs/tutorial.html)
+*  [Programming handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html)
 *  [Language specification](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)
-*  [Homepage](http://www.typescriptlang.org/)
+*  [Homepage](https://www.typescriptlang.org/)
 
 ## Building
 
-In order to build the TypeScript compiler, ensure that you have [Git](http://git-scm.com/downloads) and [Node.js](http://nodejs.org/) installed.
+In order to build the TypeScript compiler, ensure that you have [Git](https://git-scm.com/downloads) and [Node.js](https://nodejs.org/) installed.
 
 Clone a copy of the repo:
 
-```
+```bash
 git clone https://github.com/Microsoft/TypeScript.git
 ```
 
 Change to the TypeScript directory:
 
-```
+```bash
 cd TypeScript
 ```
 
 Install Gulp tools and dev dependencies:
 
-```
+```bash
 npm install -g gulp
 npm install
 ```
@@ -88,7 +88,7 @@ gulp help             # List the above commands.
 
 ## Usage
 
-```shell
+```bash
 node built/local/tsc.js hello.ts
 ```
 

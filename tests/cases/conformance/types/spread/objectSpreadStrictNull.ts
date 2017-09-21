@@ -28,3 +28,18 @@ type Movie = {
 const m = { title: "The Matrix", yearReleased: 1999 };
 // should error here because title: undefined is not assignable to string
 const x: Movie = { ...m, title: undefined };
+
+interface Fields {
+    foo: number;
+    bar: string;
+}
+interface NearlyPartialFields {
+    foo: number | undefined;
+    bar: string | undefined;
+}
+function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) {
+    // ok, undefined is stripped from optional properties when spread
+    fields = { ...fields, ...partialFields };
+    // error: not optional, undefined remains
+    fields = { ...fields, ...nearlyPartialFields };
+}

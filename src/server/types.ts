@@ -9,7 +9,7 @@ declare namespace ts.server {
         data: any;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
     export interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
@@ -20,8 +20,12 @@ declare namespace ts.server {
         require?(initialPath: string, moduleName: string): RequireResult;
     }
 
+    export interface SortedArray<T> extends Array<T> {
+        " __sortedArrayBrand": any;
+    }
+
     export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedReadonlyArrayBrand": any;
+        " __sortedArrayBrand": any;
     }
 
     export interface TypingInstallerRequest {
@@ -31,9 +35,9 @@ declare namespace ts.server {
 
     export interface DiscoverTypings extends TypingInstallerRequest {
         readonly fileNames: string[];
-        readonly projectRootPath: ts.Path;
-        readonly compilerOptions: ts.CompilerOptions;
-        readonly typeAcquisition: ts.TypeAcquisition;
+        readonly projectRootPath: Path;
+        readonly compilerOptions: CompilerOptions;
+        readonly typeAcquisition: TypeAcquisition;
         readonly unresolvedImports: SortedReadonlyArray<string>;
         readonly cachePath?: string;
         readonly kind: "discover";
@@ -63,8 +67,8 @@ declare namespace ts.server {
     }
 
     export interface SetTypings extends ProjectResponse {
-        readonly typeAcquisition: ts.TypeAcquisition;
-        readonly compilerOptions: ts.CompilerOptions;
+        readonly typeAcquisition: TypeAcquisition;
+        readonly compilerOptions: CompilerOptions;
         readonly typings: string[];
         readonly unresolvedImports: SortedReadonlyArray<string>;
         readonly kind: ActionSet;

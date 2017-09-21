@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.4.0",
+    "version": "2.6.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -31,10 +31,11 @@
     "devDependencies": {
         "@types/browserify": "latest",
         "@types/chai": "latest",
+        "@types/colors": "latest",
         "@types/convert-source-map": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
-        "@types/gulp": "latest",
+        "@types/gulp": "3.X",
         "@types/gulp-concat": "latest",
         "@types/gulp-help": "latest",
         "@types/gulp-newer": "latest",
@@ -48,11 +49,12 @@
         "@types/q": "latest",
         "@types/run-sequence": "latest",
         "@types/through2": "latest",
+        "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
         "convert-source-map": "latest",
         "del": "latest",
-        "gulp": "latest",
+        "gulp": "3.X",
         "gulp-clone": "latest",
         "gulp-concat": "latest",
         "gulp-help": "latest",
@@ -60,7 +62,6 @@
         "gulp-newer": "latest",
         "gulp-sourcemaps": "latest",
         "gulp-typescript": "latest",
-        "into-stream": "latest",
         "istanbul": "latest",
         "jake": "latest",
         "merge2": "latest",
@@ -75,6 +76,7 @@
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
+        "colors": "latest",
         "typescript": "next"
     },
     "scripts": {
@@ -91,7 +93,6 @@
         "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {
-        "buffer": false,
         "fs": false,
         "os": false,
         "path": false

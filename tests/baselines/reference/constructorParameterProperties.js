@@ -22,7 +22,7 @@ var r4 = d.z; // error
 
 
 //// [constructorParameterProperties.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x, z) {
         this.x = x;
         this.z = z;
@@ -33,7 +33,7 @@ var c;
 var r = c.y;
 var r2 = c.x; // error
 var r3 = c.z; // error
-var D = (function () {
+var D = /** @class */ (function () {
     function D(a, x, z) {
         this.x = x;
         this.z = z;

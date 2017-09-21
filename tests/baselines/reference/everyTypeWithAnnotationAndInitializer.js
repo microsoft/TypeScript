@@ -49,12 +49,12 @@ var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';
 
 
 //// [everyTypeWithAnnotationAndInitializer.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
@@ -62,7 +62,7 @@ var D = (function () {
 function F(x) { return 42; }
 var M;
 (function (M) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;

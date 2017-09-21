@@ -350,7 +350,7 @@ exports.__esModule = true;
 / /;
 commonjs;
 var TestFileDir = ".\\TempTestFiles";
-var TestCase = (function () {
+var TestCase = /** @class */ (function () {
     function TestCase(name, test, errorMessageRegEx) {
         this.name = name;
         this.test = test;
@@ -359,7 +359,7 @@ var TestCase = (function () {
     return TestCase;
 }());
 exports.TestCase = TestCase;
-var TestRunner = (function () {
+var TestRunner = /** @class */ (function () {
     function TestRunner() {
         this.tests = [];
     }

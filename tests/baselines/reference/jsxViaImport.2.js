@@ -37,7 +37,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 /// <reference path="component.d.ts" />
 var BaseComponent_1 = require("BaseComponent");
-var TestComponent = (function (_super) {
+var TestComponent = /** @class */ (function (_super) {
     __extends(TestComponent, _super);
     function TestComponent() {
         return _super !== null && _super.apply(this, arguments) || this;

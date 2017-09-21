@@ -209,17 +209,24 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                const decl = <VariableDeclaration>node;
-                const name = decl.name;
+                const { name, initializer } = <VariableDeclaration | BindingElement>node;
                 if (isBindingPattern(name)) {
                     addChildrenRecursively(name);
                 }
-                else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
-                    // For `const x = function() {}`, just use the function node, not the const.
-                    addChildrenRecursively(decl.initializer);
+                else if (initializer && isFunctionOrClassExpression(initializer)) {
+                    if (initializer.name) {
+                        // Don't add a node for the VariableDeclaration, just for the initializer.
+                        addChildrenRecursively(initializer);
+                    }
+                    else {
+                        // Add a node for the VariableDeclaration, but not for the initializer.
+                        startNode(node);
+                        forEachChild(initializer, addChildrenRecursively);
+                        endNode();
+                    }
                 }
                 else {
-                    addNodeWithRecursiveChild(decl, decl.initializer);
+                    addNodeWithRecursiveChild(node, initializer);
                 }
                 break;
 
@@ -263,13 +270,15 @@ namespace ts.NavigationBar {
                 break;
 
             default:
-                forEach(node.jsDoc, jsDoc => {
-                    forEach(jsDoc.tags, tag => {
-                        if (tag.kind === SyntaxKind.JSDocTypedefTag) {
-                            addLeafNode(tag);
-                        }
+                if (hasJSDocNodes(node)) {
+                    forEach(node.jsDoc, jsDoc => {
+                        forEach(jsDoc.tags, tag => {
+                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                                addLeafNode(tag);
+                            }
+                        });
                     });
-                });
+                }
 
                 forEachChild(node, addChildrenRecursively);
         }
@@ -380,7 +389,7 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName) {
-            return getPropertyNameForPropertyNameNode(declName);
+            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName));
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -450,7 +459,7 @@ namespace ts.NavigationBar {
                 if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                     const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
                     if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return (<Identifier>nameIdentifier).text;
+                        return nameIdentifier.text;
                     }
                 }
             }
@@ -580,12 +589,12 @@ namespace ts.NavigationBar {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result: string[] = [];
 
-        result.push(moduleDeclaration.name.text);
+        result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
 
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
             moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
-            result.push(moduleDeclaration.name.text);
+            result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
         }
 
         return result.join(".");
@@ -642,7 +651,14 @@ namespace ts.NavigationBar {
         }
     }
 
-    function isFunctionOrClassExpression(node: Node): boolean {
-        return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
+    function isFunctionOrClassExpression(node: Node): node is ArrowFunction | FunctionExpression | ClassExpression {
+        switch (node.kind) {
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
+                return true;
+            default:
+                return false;
+        }
     }
 }

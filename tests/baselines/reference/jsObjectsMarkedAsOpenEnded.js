@@ -38,7 +38,7 @@ getObj().a = 1;
 //// [output.js]
 var variable = {};
 variable.a = 0;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.initializedMember = {};
         this.member = {};
