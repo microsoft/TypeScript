@@ -1528,47 +1528,46 @@ namespace Harness {
                 const dupeCase = ts.createMap<number>();
 
                 for (const file of allFiles) {
-                    let typeLines = "";
-                    const typeMap: { [lineNum: number]: string[]; } = {};
-                    const codeLines = file.content.split("\n");
                     const { unitName } = file;
-                    const results: TypeWriterResult[] = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
-                    results.forEach(result => {
+                    let typeLines = "=== " + unitName + " ===\r\n";
+                    const codeLines = file.content.split(/[\r\n\u2028\u2029]/g);
+                    const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
+                    let lastIndexWritten: number | undefined;
+                    for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }
-
+                        if (lastIndexWritten === undefined) {
+                            typeLines += codeLines.slice(0, result.line + 1).join("\r\n") + "\r\n";
+                        }
+                        else if (result.line !== lastIndexWritten) {
+                            if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                                typeLines += "\r\n";
+                            }
+                            typeLines += codeLines.slice(lastIndexWritten + 1, result.line + 1).join("\r\n") + "\r\n";
+                        }
+                        lastIndexWritten = result.line;
                         const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                         const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
+                        typeLines += ">" + formattedLine + "\r\n";
+                    }
 
-                        let typeInfo = [formattedLine];
-                        const existingTypeInfo = typeMap[result.line];
-                        if (existingTypeInfo) {
-                            typeInfo = existingTypeInfo.concat(typeInfo);
-                        }
-                        typeMap[result.line] = typeInfo;
-                    });
-
-                    typeLines += "=== " + unitName + " ===\r\n";
-                    for (let i = 0; i < codeLines.length; i++) {
-                        const currentCodeLine = codeLines[i];
-                        typeLines += currentCodeLine + "\r\n";
-                        if (typeMap) {
-                            const typeInfo = typeMap[i];
-                            if (typeInfo) {
-                                typeInfo.forEach(ty => {
-                                    typeLines += ">" + ty + "\r\n";
-                                });
-                                if (i + 1 < codeLines.length && (codeLines[i + 1].match(/^\s*[{|}]\s*$/) || codeLines[i + 1].trim() === "")) {
-                                }
-                                else {
-                                    typeLines += "\r\n";
-                                }
-                            }
-                        }
-                        else {
+                    // Preserve legacy behavior
+                    if (lastIndexWritten === undefined) {
+                        for (let i = 0; i < codeLines.length; i++) {
+                            const currentCodeLine = codeLines[i];
+                            typeLines += currentCodeLine + "\r\n";
                             typeLines += "No type information for this code.";
                         }
+                    }
+                    else {
+                        if (lastIndexWritten + 1 < codeLines.length) {
+                            if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                                typeLines += "\r\n";
+                            }
+                            typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");
+                        }
+                        typeLines += "\r\n";
                     }
                     yield [checkDuplicatedFileName(unitName, dupeCase), typeLines];
                 }
