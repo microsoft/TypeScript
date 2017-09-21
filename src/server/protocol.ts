@@ -466,7 +466,7 @@ namespace ts.server.protocol {
      * Represents a single refactoring action - for example, the "Extract Method..." refactor might
      * offer several actions, each corresponding to a surround class or closure to extract into.
      */
-    export type RefactorActionInfo = {
+    export interface RefactorActionInfo {
         /**
          * The programmatic name of the refactoring action
          */
@@ -478,7 +478,7 @@ namespace ts.server.protocol {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
-    };
+    }
 
     export interface GetEditsForRefactorRequest extends Request {
         command: CommandTypes.GetEditsForRefactor;
@@ -494,6 +494,7 @@ namespace ts.server.protocol {
         refactor: string;
         /* The 'name' property from the refactoring action */
         action: string;
+        formatOptions?: FormatCodeSettings,
     };
 
 
@@ -501,7 +502,7 @@ namespace ts.server.protocol {
         body?: RefactorEditInfo;
     }
 
-    export type RefactorEditInfo = {
+    export interface RefactorEditInfo {
         edits: FileCodeEdits[];
 
         /**
@@ -510,7 +511,7 @@ namespace ts.server.protocol {
          */
         renameLocation?: Location;
         renameFilename?: string;
-    };
+    }
 
     /**
      * Request for the available codefixes at a specific position.

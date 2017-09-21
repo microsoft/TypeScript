@@ -5,19 +5,25 @@ namespace ts.textChanges {
      * Currently for simplicity we store recovered positions on the node itself.
      * It can be changed to side-table later if we decide that current design is too invasive.
      */
-    function getPos(n: TextRange) {
-        return (<any>n)["__pos"];
+    function getPos(n: TextRange): number {
+        const result = (<any>n)["__pos"];
+        Debug.assert(typeof result === "number");
+        return result;
     }
 
-    function setPos(n: TextRange, pos: number) {
+    function setPos(n: TextRange, pos: number): void {
+        Debug.assert(typeof pos === "number");
         (<any>n)["__pos"] = pos;
     }
 
-    function getEnd(n: TextRange) {
-        return (<any>n)["__end"];
+    function getEnd(n: TextRange): number {
+        const result = (<any>n)["__end"];
+        Debug.assert(typeof result === "number");
+        return result;
     }
 
-    function setEnd(n: TextRange, end: number) {
+    function setEnd(n: TextRange, end: number): void {
+        Debug.assert(typeof end === "number");
         (<any>n)["__end"] = end;
     }
 
@@ -146,7 +152,9 @@ namespace ts.textChanges {
             return position === Position.Start ? start : fullStart;
         }
         // get start position of the line following the line that contains fullstart position
-        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + 1, sourceFile);
+        // (but only if the fullstart isn't the very beginning of the file)
+        const nextLineStart = fullStart > 0 ? 1 : 0;
+        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + nextLineStart, sourceFile);
         // skip whitespaces/newlines
         adjustedStartPosition = skipWhitespacesAndLineBreaks(sourceFile.text, adjustedStartPosition);
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
@@ -178,16 +186,12 @@ namespace ts.textChanges {
         return s;
     }
 
-    function getNewlineKind(context: { newLineCharacter: string }) {
-        return context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-    }
-
     export class ChangeTracker {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
-        public static fromCodeFixContext(context: { newLineCharacter: string, rulesProvider?: formatting.RulesProvider }) {
-            return new ChangeTracker(getNewlineKind(context), context.rulesProvider);
+        public static fromContext(context: RefactorContext | CodeFixContext) {
+            return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
         }
 
         constructor(
@@ -582,7 +586,7 @@ namespace ts.textChanges {
         readonly node: Node;
     }
 
-    export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLine: NewLineKind): NonFormattedText {
+    function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLine: NewLineKind): NonFormattedText {
         const options = { newLine, target: sourceFile && sourceFile.languageVersion };
         const writer = new Writer(getNewLineCharacter(options));
         const printer = createPrinter(options, writer);
@@ -590,7 +594,7 @@ namespace ts.textChanges {
         return { text: writer.getText(), node: assignPositionsToNode(node) };
     }
 
-    export function applyFormatting(nonFormattedText: NonFormattedText, sourceFile: SourceFile, initialIndentation: number, delta: number, rulesProvider: formatting.RulesProvider) {
+    function applyFormatting(nonFormattedText: NonFormattedText, sourceFile: SourceFile, initialIndentation: number, delta: number, rulesProvider: formatting.RulesProvider) {
         const lineMap = computeLineStarts(nonFormattedText.text);
         const file: SourceFileLike = {
             text: nonFormattedText.text,
@@ -616,14 +620,10 @@ namespace ts.textChanges {
     function assignPositionsToNode(node: Node): Node {
         const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
-        const newNode = nodeIsSynthesized(visited)
-            ? visited
-            : (Proxy.prototype = visited, new (<any>Proxy)());
+        const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         newNode.pos = getPos(node);
         newNode.end = getEnd(node);
         return newNode;
-
-        function Proxy() { }
     }
 
     function assignPositionsToNodeArray(nodes: NodeArray<any>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) {

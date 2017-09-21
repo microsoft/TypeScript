@@ -1,11 +1,11 @@
 // This file contains the build logic for the public repo
+// @ts-check
 
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var fold = require("travis-fold");
-var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 var ts = require("./lib/typescript");
 
 
@@ -38,7 +38,7 @@ else if (process.env.PATH !== undefined) {
 
 function filesFromConfig(configPath) {
     var configText = fs.readFileSync(configPath).toString();
-    var config = ts.parseConfigFileTextToJson(configPath, configText, /*stripComments*/ true);
+    var config = ts.parseConfigFileTextToJson(configPath, configText);
     if (config.error) {
         throw new Error(diagnosticsToString([config.error]));
     }
@@ -104,6 +104,9 @@ var harnessCoreSources = [
     "loggedIO.ts",
     "rwcRunner.ts",
     "test262Runner.ts",
+    "./parallel/shared.ts",
+    "./parallel/host.ts",
+    "./parallel/worker.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
@@ -143,6 +146,7 @@ var harnessSources = harnessCoreSources.concat([
     "customTransforms.ts",
     "programMissingFiles.ts",
     "symbolWalker.ts",
+    "languageService.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -595,7 +599,7 @@ file(typesMapOutputPath, function() {
     var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
     // Validate that it's valid JSON
     try {
-        JSON.parse(content);
+        JSON.parse(content.toString());
     } catch (e) {
         console.log("Parse error in typesMap.json: " + e);
     }
@@ -739,7 +743,7 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler, errorHandler) {
-    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true });
+    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true, interactive: true });
     // Add listeners for output and error
     ex.addListener("stdout", function (output) {
         process.stdout.write(output);
@@ -765,15 +769,16 @@ function exec(cmd, completeHandler, errorHandler) {
     ex.run();
 }
 
+const del = require("del");
 function cleanTestDirs() {
     // Clean the local baselines directory
     if (fs.existsSync(localBaseline)) {
-        jake.rmRf(localBaseline);
+        del.sync(localBaseline);
     }
 
     // Clean the local Rwc baselines directory
     if (fs.existsSync(localRwcBaseline)) {
-        jake.rmRf(localRwcBaseline);
+        del.sync(localRwcBaseline);
     }
 
     jake.mkdirP(localRwcBaseline);
@@ -782,13 +787,14 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit) {
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
     var testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         light: light,
         workerCount: workerCount,
         taskConfigsFolder: taskConfigsFolder,
-        stackTraceLimit: stackTraceLimit
+        stackTraceLimit: stackTraceLimit,
+        noColor: !colors
     });
     fs.writeFileSync('test.config', testConfigContents);
 }
@@ -830,7 +836,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -893,19 +899,15 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
         var startTime = mark();
-        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors }, function (err) {
+        exec(host + " " + run, function () {
             process.env.NODE_ENV = savedNodeEnv;
             measure(startTime);
-            // last worker clean everything and runs linter in case if there were no errors
-            deleteTemporaryProjectOutput();
-            jake.rmRf(taskConfigsFolder);
-            if (err) {
-                fail(err);
-            }
-            else {
-                runLinter();
-                complete();
-            }
+            runLinter();
+            finish();
+        }, function (e, status) {
+            process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
+            finish(status);
         });
     }
 
@@ -968,8 +970,8 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
-    browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
-    tests = process.env.test || process.env.tests || process.env.t;
+    var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
@@ -1041,6 +1043,7 @@ function acceptBaseline(sourceFolder, targetFolder) {
                     if (fs.existsSync(target)) {
                         fs.unlinkSync(target);
                     }
+                    jake.mkdirP(path.dirname(target));
                     fs.renameSync(path.join(sourceFolder, filename), target);
                 }
             }
@@ -1118,7 +1121,7 @@ task("update-sublime", ["local", serverFile], function () {
     jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
 });
 
-var tslintRuleDir = "scripts/tslint";
+var tslintRuleDir = "scripts/tslint/rules";
 var tslintRules = [
     "booleanTriviaRule",
     "debugAssertRule",
@@ -1134,13 +1137,27 @@ var tslintRulesFiles = tslintRules.map(function (p) {
     return path.join(tslintRuleDir, p + ".ts");
 });
 var tslintRulesOutFiles = tslintRules.map(function (p) {
-    return path.join(builtLocalDirectory, "tslint", p + ".js");
+    return path.join(builtLocalDirectory, "tslint/rules", p + ".js");
+});
+var tslintFormattersDir = "scripts/tslint/formatters";
+var tslintFormatters = [
+    "autolinkableStylishFormatter",
+];
+var tslintFormatterFiles = tslintFormatters.map(function (p) {
+    return path.join(tslintFormattersDir, p + ".ts");
+});
+var tslintFormattersOutFiles = tslintFormatters.map(function (p) {
+    return path.join(builtLocalDirectory, "tslint/formatters", p + ".js");
 });
 desc("Compiles tslint rules to js");
-task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(["build-rules-end"]));
+task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(tslintFormattersOutFiles).concat(["build-rules-end"]));
 tslintRulesFiles.forEach(function (ruleFile, i) {
     compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
-        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint"), lib: "es6" });
+        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint/rules"), lib: "es6" });
+});
+tslintFormatterFiles.forEach(function (ruleFile, i) {
+    compileFile(tslintFormattersOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
+        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint/formatters"), lib: "es6" });
 });
 
 desc("Emit the start of the build-rules fold");
@@ -1208,8 +1225,8 @@ task("lint", ["build-rules"], () => {
     const fileMatcher = process.env.f || process.env.file || process.env.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+        : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {
         if (fold.isTravis()) console.log(fold.end("lint"));

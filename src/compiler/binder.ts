@@ -203,9 +203,11 @@ namespace ts {
             node.symbol = symbol;
 
             if (!symbol.declarations) {
-                symbol.declarations = [];
+                symbol.declarations = [node];
             }
-            symbol.declarations.push(node);
+            else {
+                symbol.declarations.push(node);
+            }
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
                 symbol.exports = createSymbolTable();
@@ -282,17 +284,8 @@ namespace ts {
                     const index = indexOf(functionType.parameters, node);
                     return "arg" + index as __String;
                 case SyntaxKind.JSDocTypedefTag:
-                    const parentNode = node.parent && node.parent.parent;
-                    let nameFromParentNode: __String;
-                    if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
-                        if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
-                            const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
-                            if (isIdentifier(nameIdentifier)) {
-                                nameFromParentNode = nameIdentifier.escapedText;
-                            }
-                        }
-                    }
-                    return nameFromParentNode;
+                    const name = getNameOfJSDocTypedef(node as JSDocTypedefTag);
+                    return typeof name !== "undefined" ? name.escapedText : undefined;
             }
         }
 
@@ -598,7 +591,7 @@ namespace ts {
             // Binding of JsDocComment should be done before the current block scope container changes.
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
-            if (node.jsDoc) {
+            if (hasJSDocNodes(node)) {
                 if (isInJavaScriptFile(node)) {
                     for (const j of node.jsDoc) {
                         bind(j);
@@ -1931,7 +1924,7 @@ namespace ts {
         }
 
         function bindJSDocTypedefTagIfAny(node: Node) {
-            if (!node.jsDoc) {
+            if (!hasJSDocNodes(node)) {
                 return;
             }
 

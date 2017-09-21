@@ -6,11 +6,6 @@ namespace ts.formatting {
     const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
     const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);
 
-    /**
-     * Scanner that is currently used for formatting
-     */
-    let scanner: Scanner;
-
     export interface FormattingScanner {
         advance(): void;
         isOnToken(): boolean;
@@ -18,7 +13,6 @@ namespace ts.formatting {
         getCurrentLeadingTrivia(): TextRangeWithKind[];
         lastTrailingTriviaWasNewLine(): boolean;
         skipToEndOf(node: Node): void;
-        close(): void;
     }
 
     const enum ScanAction {
@@ -30,9 +24,8 @@ namespace ts.formatting {
         RescanJsxText,
     }
 
-    export function getFormattingScanner(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number): FormattingScanner {
-        Debug.assert(scanner === undefined, "Scanner should be undefined");
-        scanner = languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
+    export function getFormattingScanner<T>(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number, cb: (scanner: FormattingScanner) => T): T {
+        const scanner = languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
 
         scanner.setText(text);
         scanner.setTextPos(startPos);
@@ -45,21 +38,19 @@ namespace ts.formatting {
         let lastScanAction: ScanAction | undefined;
         let lastTokenInfo: TokenInfo | undefined;
 
-        return {
+        const res = cb({
             advance,
             readTokenInfo,
             isOnToken,
             getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             skipToEndOf,
-            close: () => {
-                Debug.assert(scanner !== undefined);
+        });
 
-                lastTokenInfo = undefined;
-                scanner.setText(undefined);
-                scanner = undefined;
-            }
-        };
+        lastTokenInfo = undefined;
+        scanner.setText(undefined);
+
+        return res;
 
         function advance(): void {
             Debug.assert(scanner !== undefined, "Scanner should be present");
@@ -134,7 +125,8 @@ namespace ts.formatting {
                     case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.JsxClosingElement:
                     case SyntaxKind.JsxSelfClosingElement:
-                        return node.kind === SyntaxKind.Identifier;
+                        // May parse an identifier like `module-layout`; that will be scanned as a keyword at first, but we should parse the whole thing to get an identifier.
+                        return isKeyword(node.kind) || node.kind === SyntaxKind.Identifier;
                 }
             }
 
@@ -218,7 +210,7 @@ namespace ts.formatting {
                 currentToken = scanner.reScanTemplateToken();
                 lastScanAction = ScanAction.RescanTemplateToken;
             }
-            else if (expectedScanAction === ScanAction.RescanJsxIdentifier && currentToken === SyntaxKind.Identifier) {
+            else if (expectedScanAction === ScanAction.RescanJsxIdentifier) {
                 currentToken = scanner.scanJsxIdentifier();
                 lastScanAction = ScanAction.RescanJsxIdentifier;
             }

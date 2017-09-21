@@ -1,5 +1,5 @@
 {
-    "rulesDirectory": "built/local/tslint",
+    "rulesDirectory": "built/local/tslint/rules",
     "rules": {
         "boolean-trivia": true,
         "class-name": true,
@@ -11,6 +11,7 @@
         "indent": [true,
             "spaces"
         ],
+        "interface-over-type-literal": true,
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
         "next-line": [true,
