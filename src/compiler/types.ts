@@ -343,6 +343,7 @@ namespace ts {
         PropertyAssignment,
         ShorthandPropertyAssignment,
         SpreadAssignment,
+        TypeSpread,
 
         // Enum
         EnumMember,
@@ -1007,7 +1008,12 @@ namespace ts {
 
     export interface TupleTypeNode extends TypeNode {
         kind: SyntaxKind.TupleType;
-        elementTypes: NodeArray<TypeNode>;
+        elementTypes: NodeArray<TypeNode | TypeSpreadTypeNode>;
+    }
+
+    export interface TypeSpreadTypeNode extends TypeNode {
+        kind: SyntaxKind.TypeSpread;
+        type: TypeNode;
     }
 
     export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
@@ -3215,6 +3221,7 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        SpreadTuple             = 1 << 26,  // tuple types containing spreads
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3461,6 +3468,12 @@ namespace ts {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
+    }
+
+    // spread tuple types (TypeFlags.SpreadTuple)
+    export interface SpreadTupleType extends Type {
+        elements: Type[];
+        idxIsSpread: boolean[];
     }
 
     // keyof T types (TypeFlags.Index)

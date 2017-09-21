@@ -2216,6 +2216,10 @@
         "category": "Error",
         "code": 2714
     },
+    "Tuple type spreads may only be created from tuple types.": {
+        "category": "Error",
+        "code": 2715
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

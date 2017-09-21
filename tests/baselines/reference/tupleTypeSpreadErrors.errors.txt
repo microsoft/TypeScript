@@ -1,0 +1,8 @@
+tests/cases/compiler/tupleTypeSpreadErrors.ts(1,32): error TS2714: Tuple type spreads may only be created from tuple types.
+
+
+==== tests/cases/compiler/tupleTypeSpreadErrors.ts (1 errors) ====
+    type Boom<T extends string> = [...T];
+                                   ~~~~
+!!! error TS2714: Tuple type spreads may only be created from tuple types.
+    

@@ -872,6 +872,10 @@ namespace ts {
                 return updateSpreadAssignment(<SpreadAssignment>node,
                     visitNode((<SpreadAssignment>node).expression, visitor, isExpression));
 
+            case SyntaxKind.TypeSpread:
+                return updateTypeSpread(<TypeSpreadTypeNode>node,
+                    visitNode((<TypeSpreadTypeNode>node).type, visitor, isTypeNode));
+
             // Enum
             case SyntaxKind.EnumMember:
                 return updateEnumMember(<EnumMember>node,
@@ -1392,6 +1396,10 @@ namespace ts {
 
             case SyntaxKind.SpreadAssignment:
                 result = reduceNode((<SpreadAssignment>node).expression, cbNode, result);
+                break;
+
+            case SyntaxKind.TypeSpread:
+                result = reduceNode((<TypeSpreadTypeNode>node).type, cbNode, result);
                 break;
 
             // Enum
