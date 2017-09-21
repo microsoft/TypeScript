@@ -224,7 +224,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(node);
+            const index = indexOfNode(containingList, node);
             if (index < 0) {
                 return this;
             }
@@ -356,7 +356,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(after);
+            const index = indexOfNode(containingList, after);
             if (index < 0) {
                 return this;
             }
