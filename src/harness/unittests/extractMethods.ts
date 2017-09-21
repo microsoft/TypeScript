@@ -412,7 +412,7 @@ function test(x: number) {
 
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single identifier."]);
 
-        testExtractMethod("extractMethod1",
+        testExtractMethod("extractMethod1", [Extension.Ts],
             `namespace A {
     let x = 1;
     function foo() {
@@ -428,7 +428,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod2",
+        testExtractMethod("extractMethod2", [Extension.Ts],
             `namespace A {
     let x = 1;
     function foo() {
@@ -442,7 +442,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod3",
+        testExtractMethod("extractMethod3", [Extension.Ts],
             `namespace A {
     function foo() {
     }
@@ -455,7 +455,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod4",
+        testExtractMethod("extractMethod4", [Extension.Ts],
             `namespace A {
     function foo() {
     }
@@ -470,7 +470,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod5",
+        testExtractMethod("extractMethod5", [Extension.Ts],
             `namespace A {
     let x = 1;
     export function foo() {
@@ -486,7 +486,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod6",
+        testExtractMethod("extractMethod6", [Extension.Ts],
             `namespace A {
     let x = 1;
     export function foo() {
@@ -502,7 +502,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod7",
+        testExtractMethod("extractMethod7", [Extension.Ts],
             `namespace A {
     let x = 1;
     export namespace C {
@@ -520,7 +520,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod8",
+        testExtractMethod("extractMethod8", [Extension.Ts],
             `namespace A {
     let x = 1;
     namespace B {
@@ -530,7 +530,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod9",
+        testExtractMethod("extractMethod9", [Extension.Ts],
             `namespace A {
     export interface I { x: number };
     namespace B {
@@ -540,7 +540,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod10",
+        testExtractMethod("extractMethod10", [Extension.Ts],
             `namespace A {
     export interface I { x: number };
     class C {
@@ -551,7 +551,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod11",
+        testExtractMethod("extractMethod11", [Extension.Ts],
             `namespace A {
     let y = 1;
     class C {
@@ -564,7 +564,7 @@ function test(x: number) {
         }
     }
 }`);
-        testExtractMethod("extractMethod12",
+        testExtractMethod("extractMethod12", [Extension.Ts],
             `namespace A {
     let y = 1;
     class C {
@@ -584,7 +584,7 @@ function test(x: number) {
         // In all cases, we could use type inference, rather than passing explicit type arguments.
         // Note the inclusion of arrow functions to ensure that some type parameters are not from
         //   targetable scopes.
-        testExtractMethod("extractMethod13",
+        testExtractMethod("extractMethod13", [Extension.Ts],
             `<U1a, U1b>(u1a: U1a, u1b: U1b) => {
     function F1<T1a, T1b>(t1a: T1a, t1b: T1b) {
         <U2a, U2b>(u2a: U2a, u2b: U2b) => {
@@ -602,7 +602,7 @@ function test(x: number) {
 }`);
         // This test is descriptive, rather than normative.  The current implementation
         // doesn't handle type parameter shadowing.
-        testExtractMethod("extractMethod14",
+        testExtractMethod("extractMethod14", [Extension.Ts],
             `function F<T>(t1: T) {
     function F<T>(t2: T) {
         [#|t1.toString();
@@ -610,38 +610,38 @@ function test(x: number) {
     }
 }`);
         // Confirm that the constraint is preserved.
-        testExtractMethod("extractMethod15",
+        testExtractMethod("extractMethod15", [Extension.Ts],
             `function F<T>(t1: T) {
     function F<U extends T[]>(t2: U) {
         [#|t2.toString();|]
     }
 }`);
         // Confirm that the contextual type of an extracted expression counts as a use.
-        testExtractMethod("extractMethod16",
+        testExtractMethod("extractMethod16", [Extension.Ts],
             `function F<T>() {
     const array: T[] = [#|[]|];
 }`);
         // Class type parameter
-        testExtractMethod("extractMethod17",
+        testExtractMethod("extractMethod17", [Extension.Ts],
             `class C<T1, T2> {
     M(t1: T1, t2: T2) {
         [#|t1.toString()|];
     }
 }`);
         // Method type parameter
-        testExtractMethod("extractMethod18",
+        testExtractMethod("extractMethod18", [Extension.Ts],
             `class C {
     M<T1, T2>(t1: T1, t2: T2) {
         [#|t1.toString()|];
     }
 }`);
         // Coupled constraints
-        testExtractMethod("extractMethod19",
+        testExtractMethod("extractMethod19", [Extension.Ts],
             `function F<T, U extends T[], V extends U[]>(v: V) {
     [#|v.toString()|];
 }`);
 
-        testExtractMethod("extractMethod20",
+        testExtractMethod("extractMethod20", [Extension.Ts],
         `const _ = class {
     a() {
         [#|let a1 = { x: 1 };
@@ -649,14 +649,14 @@ function test(x: number) {
     }
 }`);
         // Write + void return
-        testExtractMethod("extractMethod21",
+        testExtractMethod("extractMethod21", [Extension.Ts],
             `function foo() {
     let x = 10;
     [#|x++;
     return;|]
 }`);
         // Return in finally block
-        testExtractMethod("extractMethod22",
+        testExtractMethod("extractMethod22", [Extension.Ts],
             `function test() {
     try {
     }
@@ -665,7 +665,7 @@ function test(x: number) {
     }
 }`);
         // Extraction position - namespace
-        testExtractMethod("extractMethod23",
+        testExtractMethod("extractMethod23", [Extension.Ts],
             `namespace NS {
     function M1() { }
     function M2() {
@@ -674,7 +674,7 @@ function test(x: number) {
     function M3() { }
 }`);
         // Extraction position - function
-        testExtractMethod("extractMethod24",
+        testExtractMethod("extractMethod24", [Extension.Ts],
             `function Outer() {
     function M1() { }
     function M2() {
@@ -683,14 +683,14 @@ function test(x: number) {
     function M3() { }
 }`);
         // Extraction position - file
-        testExtractMethod("extractMethod25",
+        testExtractMethod("extractMethod25", [Extension.Ts],
             `function M1() { }
 function M2() {
     [#|return 1;|]
 }
 function M3() { }`);
         // Extraction position - class without ctor
-        testExtractMethod("extractMethod26",
+        testExtractMethod("extractMethod26", [Extension.Ts],
             `class C {
     M1() { }
     M2() {
@@ -699,7 +699,7 @@ function M3() { }`);
     M3() { }
 }`);
         // Extraction position - class with ctor in middle
-        testExtractMethod("extractMethod27",
+        testExtractMethod("extractMethod27", [Extension.Ts],
             `class C {
     M1() { }
     M2() {
@@ -709,7 +709,7 @@ function M3() { }`);
     M3() { }
 }`);
         // Extraction position - class with ctor at end
-        testExtractMethod("extractMethod28",
+        testExtractMethod("extractMethod28", [Extension.Ts],
             `class C {
     M1() { }
     M2() {
@@ -719,7 +719,7 @@ function M3() { }`);
     constructor() { }
 }`);
         // Shorthand property names
-        testExtractMethod("extractMethod29",
+        testExtractMethod("extractMethod29", [Extension.Ts],
             `interface UnaryExpression {
     kind: "Unary";
     operator: string;
@@ -738,12 +738,12 @@ function parsePrimaryExpression(): any {
     throw "Not implemented";
 }`);
         // Type parameter as declared type
-        testExtractMethod("extractMethod30",
+        testExtractMethod("extractMethod30", [Extension.Ts],
             `function F<T>() {
     [#|let t: T;|]
 }`);
         // Return in nested function
-        testExtractMethod("extractMethod31",
+        testExtractMethod("extractMethod31", [Extension.Ts],
             `namespace N {
 
     export const value = 1;
@@ -756,7 +756,7 @@ function parsePrimaryExpression(): any {
     }
 }`);
         // Return in nested class
-        testExtractMethod("extractMethod32",
+        testExtractMethod("extractMethod32", [Extension.Ts],
             `namespace N {
 
     export const value = 1;
@@ -770,21 +770,22 @@ function parsePrimaryExpression(): any {
     }
 }`);
         // Selection excludes leading trivia of declaration
-        testExtractMethod("extractMethod33",
+        testExtractMethod("extractMethod33", [Extension.Ts],
             `function F() {
     [#|function G() { }|]
 }`);
     });
 
 
-    function testExtractMethod(caption: string, text: string) {
+    function testExtractMethod(caption: string, extensions: Extension[], text: string) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {
             throw new Error(`Test ${caption} does not specify selection range`);
         }
 
-        it(caption, () => runBaseline(Extension.Ts));
+        extensions.forEach(extension =>
+            it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
         function runBaseline(extension: Extension) {
             Harness.Baseline.runBaseline(`extractMethod/${caption}${extension}`, () => {
