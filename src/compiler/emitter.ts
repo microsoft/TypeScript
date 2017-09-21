@@ -1862,8 +1862,19 @@ namespace ts {
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
-            emitModifiers(node, node.modifiers);
-            write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
+            if (node.flags & NodeFlags.GlobalAugmentation) {
+                if (!hasModifier(node, ModifierFlags.Ambient)) {
+                    // Always emit a 'declare' keyword in case it wasn't provided by a factory function call.
+                    write("declare ");
+                }
+                else {
+                    emitModifiers(node, node.modifiers);
+                }
+            }
+            else {
+                emitModifiers(node, node.modifiers);
+                write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
+            }
             emit(node.name);
 
             let body = node.body;
