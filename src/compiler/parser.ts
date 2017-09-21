@@ -6136,10 +6136,14 @@ namespace ts {
 
             // Parses out a JSDoc type expression.
             /* @internal */
-            export function parseJSDocTypeExpression(): JSDocTypeExpression {
+            export function parseJSDocTypeExpression(): JSDocTypeExpression;
+            export function parseJSDocTypeExpression(mayBail: true): JSDocTypeExpression | undefined;
+            export function parseJSDocTypeExpression(mayBail?: boolean): JSDocTypeExpression | undefined {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                parseExpected(SyntaxKind.OpenBraceToken);
+                if (!parseExpected(SyntaxKind.OpenBraceToken) && mayBail) {
+                    return undefined;
+                }
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
                 parseExpected(SyntaxKind.CloseBraceToken);
 
@@ -6602,7 +6606,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = tryParseTypeExpression();
+                    result.typeExpression = parseJSDocTypeExpression(/*mayBail*/ true);
                     return finishNode(result);
                 }
 
