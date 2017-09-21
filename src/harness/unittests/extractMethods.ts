@@ -641,7 +641,7 @@ function test(x: number) {
     [#|v.toString()|];
 }`);
 
-        testExtractMethod("extractMethod20", [Extension.Ts],
+        testExtractMethod("extractMethod20", [Extension.Ts, Extension.Js],
         `const _ = class {
     a() {
         [#|let a1 = { x: 1 };
@@ -649,14 +649,14 @@ function test(x: number) {
     }
 }`);
         // Write + void return
-        testExtractMethod("extractMethod21", [Extension.Ts],
+        testExtractMethod("extractMethod21", [Extension.Ts, Extension.Js],
             `function foo() {
     let x = 10;
     [#|x++;
     return;|]
 }`);
         // Return in finally block
-        testExtractMethod("extractMethod22", [Extension.Ts],
+        testExtractMethod("extractMethod22", [Extension.Ts, Extension.Js],
             `function test() {
     try {
     }
@@ -674,7 +674,7 @@ function test(x: number) {
     function M3() { }
 }`);
         // Extraction position - function
-        testExtractMethod("extractMethod24", [Extension.Ts],
+        testExtractMethod("extractMethod24", [Extension.Ts, Extension.Js],
             `function Outer() {
     function M1() { }
     function M2() {
@@ -683,14 +683,14 @@ function test(x: number) {
     function M3() { }
 }`);
         // Extraction position - file
-        testExtractMethod("extractMethod25", [Extension.Ts],
+        testExtractMethod("extractMethod25", [Extension.Ts, Extension.Js],
             `function M1() { }
 function M2() {
     [#|return 1;|]
 }
 function M3() { }`);
         // Extraction position - class without ctor
-        testExtractMethod("extractMethod26", [Extension.Ts],
+        testExtractMethod("extractMethod26", [Extension.Ts, Extension.Js],
             `class C {
     M1() { }
     M2() {
@@ -699,7 +699,7 @@ function M3() { }`);
     M3() { }
 }`);
         // Extraction position - class with ctor in middle
-        testExtractMethod("extractMethod27", [Extension.Ts],
+        testExtractMethod("extractMethod27", [Extension.Ts, Extension.Js],
             `class C {
     M1() { }
     M2() {
@@ -709,7 +709,7 @@ function M3() { }`);
     M3() { }
 }`);
         // Extraction position - class with ctor at end
-        testExtractMethod("extractMethod28", [Extension.Ts],
+        testExtractMethod("extractMethod28", [Extension.Ts, Extension.Js],
             `class C {
     M1() { }
     M2() {
@@ -738,12 +738,12 @@ function parsePrimaryExpression(): any {
     throw "Not implemented";
 }`);
         // Type parameter as declared type
-        testExtractMethod("extractMethod30", [Extension.Ts],
+        testExtractMethod("extractMethod30", [Extension.Ts, Extension.Js],
             `function F<T>() {
     [#|let t: T;|]
 }`);
         // Return in nested function
-        testExtractMethod("extractMethod31", [Extension.Ts],
+        testExtractMethod("extractMethod31", [Extension.Ts, Extension.Js],
             `namespace N {
 
     export const value = 1;
@@ -756,7 +756,7 @@ function parsePrimaryExpression(): any {
     }
 }`);
         // Return in nested class
-        testExtractMethod("extractMethod32", [Extension.Ts],
+        testExtractMethod("extractMethod32", [Extension.Ts, Extension.Js],
             `namespace N {
 
     export const value = 1;
@@ -770,7 +770,7 @@ function parsePrimaryExpression(): any {
     }
 }`);
         // Selection excludes leading trivia of declaration
-        testExtractMethod("extractMethod33", [Extension.Ts],
+        testExtractMethod("extractMethod33", [Extension.Ts, Extension.Js],
             `function F() {
     [#|function G() { }|]
 }`);
