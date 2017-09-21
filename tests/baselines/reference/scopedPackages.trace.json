@@ -2,7 +2,7 @@
     "======== Resolving module '@cow/boy' from '/a.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
     "Loading module '@cow/boy' from 'node_modules' folder, target file type 'TypeScript'.",
-    "File '/node_modules/@cow/package.json' does not exist.",
+    "File '/node_modules/@cow/boy/package.json' does not exist.",
     "File '/node_modules/@cow/boy.ts' does not exist.",
     "File '/node_modules/@cow/boy.tsx' does not exist.",
     "File '/node_modules/@cow/boy.d.ts' does not exist.",
