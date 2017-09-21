@@ -6135,7 +6135,6 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            /* @internal */
             export function parseJSDocTypeExpression(): JSDocTypeExpression {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
