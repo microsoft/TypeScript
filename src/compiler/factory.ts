@@ -3941,11 +3941,10 @@ namespace ts {
                 return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
-        else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
-            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                return setTextRange(createParen(expression), expression);
-            }
+
+        const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
+        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+            return setTextRange(createParen(expression), expression);
         }
 
         return expression;
