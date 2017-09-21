@@ -13198,7 +13198,7 @@ namespace ts {
         // the type of the property with the numeric name N in T, if one exists. Otherwise, if T has a numeric index signature,
         // it is the type of the numeric index signature in T. Otherwise, in ES6 and higher, the contextual type is the iterated
         // type of T.
-        function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type {
+        function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
             return arrayContextualType && (
                 getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
                 || getIndexTypeOfContextualType(arrayContextualType, IndexKind.Number)
@@ -13449,12 +13449,12 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode?: CheckMode): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
             const elements = node.elements;
             let hasSpreadElement = false;
             const elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
-            const arrayContextualType = getApparentTypeOfContextualType(node);
+            const contextualType = getApparentTypeOfContextualType(node);
             for (let index = 0; index < elements.length; index++) {
                 const e = elements[index];
                 if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElement) {
@@ -13478,8 +13478,8 @@ namespace ts {
                     }
                 }
                 else {
-                    const contextualType = getContextualTypeForElementExpression(arrayContextualType, index);
-                    const type = checkExpressionForMutableLocation(e, checkMode, contextualType);
+                    const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
+                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
                     elementTypes.push(type);
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
@@ -18024,7 +18024,10 @@ namespace ts {
             return false;
         }
 
-        function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode, contextualType: Type = getContextualType(node)): Type {
+        function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode, contextualType?: Type): Type {
+            if (arguments.length === 2) {
+                contextualType = getContextualType(node);
+            }
             const type = checkExpression(node, checkMode);
             const shouldWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType);
             return shouldWiden ? type : getWidenedLiteralType(type);
