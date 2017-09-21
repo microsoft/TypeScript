@@ -9417,8 +9417,8 @@ namespace ts {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
                         !(source.flags & TypeFlags.MarkerType || target.flags & TypeFlags.MarkerType)) {
                         // We have type references to the same generic type, and the type references are not marker
-                        // type references (which we always compare structurally). Obtain the variance information
-                        // for the type parameters and relate the type arguments accordingly.
+                        // type references (which are intended by be compared structurally). Obtain the variance
+                        // information for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, variances, reportErrors)) {
                             return result;
