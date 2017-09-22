@@ -4986,10 +4986,10 @@ namespace ts {
                 baseType = getReturnTypeOfSignature(constructors[0]);
             }
 
-            // In a JS file, you can use the @augments jsdoc tag to specify a base type with type parameters
+            // In a JS file, you can use the @augments and @extends jsdoc tags to specify a base type with type parameters
             const valueDecl = type.symbol.valueDeclaration;
             if (valueDecl && isInJavaScriptFile(valueDecl)) {
-                const augTag = getJSDocAugmentsTag(type.symbol.valueDeclaration);
+                const augTag = getJSDocAugmentsOrExtendsTag(type.symbol.valueDeclaration);
                 if (augTag) {
                     baseType = getTypeFromTypeNode(augTag.typeExpression.type);
                 }

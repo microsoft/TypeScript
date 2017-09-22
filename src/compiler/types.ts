@@ -363,7 +363,8 @@ namespace ts {
         JSDocVariadicType,
         JSDocComment,
         JSDocTag,
-        JSDocAugmentsTag,
+        JSDocAugmentsOrExtendsTag,
+        JSDocExtendsTag,
         JSDocClassTag,
         JSDocParameterTag,
         JSDocReturnTag,
@@ -2159,8 +2160,12 @@ namespace ts {
         kind: SyntaxKind.JSDocTag;
     }
 
-    export interface JSDocAugmentsTag extends JSDocTag {
-        kind: SyntaxKind.JSDocAugmentsTag;
+    /**
+     * Note that `@extends` is a synonym of `@augments`.
+     * Both are covered by this interface.
+     */
+    export interface JSDocAugmentsOrExtendsTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAugmentsOrExtendsTag;
         typeExpression: JSDocTypeExpression;
     }
 

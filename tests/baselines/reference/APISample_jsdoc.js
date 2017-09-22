@@ -101,7 +101,7 @@ function getAllTags(node: ts.Node) {
 
 function getSomeOtherTags(node: ts.Node) {
     const tags: (ts.JSDocTag | undefined)[] = [];
-    tags.push(ts.getJSDocAugmentsTag(node));
+    tags.push(ts.getJSDocAugmentsOrExtendsTag(node));
     tags.push(ts.getJSDocClassTag(node));
     tags.push(ts.getJSDocReturnTag(node));
     const type = ts.getJSDocTypeTag(node);
@@ -200,7 +200,7 @@ function getAllTags(node) {
 }
 function getSomeOtherTags(node) {
     var tags = [];
-    tags.push(ts.getJSDocAugmentsTag(node));
+    tags.push(ts.getJSDocAugmentsOrExtendsTag(node));
     tags.push(ts.getJSDocClassTag(node));
     tags.push(ts.getJSDocReturnTag(node));
     var type = ts.getJSDocTypeTag(node);

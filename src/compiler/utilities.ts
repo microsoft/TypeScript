@@ -4072,8 +4072,8 @@ namespace ts {
     }
 
     /** Gets the JSDoc augments tag for the node if present */
-    export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsTag) as JSDocAugmentsTag;
+    export function getJSDocAugmentsOrExtendsTag(node: Node): JSDocAugmentsOrExtendsTag | undefined {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsOrExtendsTag) as JSDocAugmentsOrExtendsTag;
     }
 
     /** Gets the JSDoc class tag for the node if present */
@@ -4765,8 +4765,8 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocComment;
     }
 
-    export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag {
-        return node.kind === SyntaxKind.JSDocAugmentsTag;
+    export function isJSDocAugmentsOrExtendsTag(node: Node): node is JSDocAugmentsOrExtendsTag {
+        return node.kind === SyntaxKind.JSDocAugmentsOrExtendsTag;
     }
 
     export function isJSDocParameterTag(node: Node): node is JSDocParameterTag {

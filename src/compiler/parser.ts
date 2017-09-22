@@ -423,8 +423,9 @@ namespace ts {
                 return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
             case SyntaxKind.JSDocTypeTag:
                 return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
-            case SyntaxKind.JSDocAugmentsTag:
-                return visitNode(cbNode, (<JSDocAugmentsTag>node).typeExpression);
+            case SyntaxKind.JSDocAugmentsOrExtendsTag:
+            case SyntaxKind.JSDocExtendsTag:
+                return visitNode(cbNode, (<JSDocAugmentsOrExtendsTag>node).typeExpression);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
@@ -6366,7 +6367,8 @@ namespace ts {
                     if (tagName) {
                         switch (tagName.escapedText) {
                             case "augments":
-                                tag = parseAugmentsTag(atToken, tagName);
+                            case "extends":
+                                tag = parseAugmentsOrExtendsTag(atToken, tagName);
                                 break;
                             case "class":
                             case "constructor":
@@ -6603,10 +6605,10 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function parseAugmentsTag(atToken: AtToken, tagName: Identifier): JSDocAugmentsTag {
+                function parseAugmentsOrExtendsTag(atToken: AtToken, tagName: Identifier): JSDocAugmentsOrExtendsTag {
                     const typeExpression = tryParseTypeExpression();
 
-                    const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, atToken.pos);
+                    const result = <JSDocAugmentsOrExtendsTag>createNode(SyntaxKind.JSDocAugmentsOrExtendsTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = typeExpression;
