@@ -4079,9 +4079,11 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
     }
 
-    /** Gets the JSDoc type tag for the node if present */
+    /** Gets the JSDoc type tag for the node if present and valid */
     export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
+        // We should have already issued an error if there were multiple type jsdocs, so just use the first one.
+        const tag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
+        return tag && tag.typeExpression && tag.typeExpression.type && tag;
     }
 
     /**
