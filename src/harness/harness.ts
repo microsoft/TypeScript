@@ -2090,8 +2090,7 @@ namespace Harness {
             const missing: string[] = [];
             for (const name of existing) {
                 const localCopy = name.substring(referenceDir.length - relativeFileBase.length);
-                const path = ts.toPath(localCopy, "", Utils.canonicalizeForHarness);
-                if (!writtenFiles.has(path)) {
+                if (!writtenFiles.has(localCopy)) {
                     missing.push(localCopy);
                 }
             }
