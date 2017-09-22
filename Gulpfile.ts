@@ -568,7 +568,7 @@ gulp.task("dontUseDebugMode", /*help*/ false, [], (done) => { useDebugMode = fal
 gulp.task("VerifyLKG", /*help*/ false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, typingsInstallerJs, cancellationTokenJs].concat(libraryTargets);
     const missingFiles = expectedFiles.
-        concat(fs.readdirSync(lclDirectory).map(function(d) { return path.join(builtLocalDirectory, d, "diagnosticMessages.generated.json") })).
+        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d, "diagnosticMessages.generated.json"); })).
         concat(generatedLCGFile).
         filter(f => !fs.existsSync(f));
     if (missingFiles.length > 0) {
@@ -576,7 +576,7 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
             ". The following files are missing:\n" + missingFiles.join("\n"));
     }
     // Copy all the targets into the LKG directory
-    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"),`!${path.join(builtLocalDirectory, "tslint")}`,`!${path.join(builtLocalDirectory, "*.*")}` ]).pipe(gulp.dest(LKGDirectory));
+    return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"), `!${path.join(builtLocalDirectory, "tslint")}`, `!${path.join(builtLocalDirectory, "*.*")}`]).pipe(gulp.dest(LKGDirectory));
 });
 
 gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
