@@ -2425,15 +2425,6 @@ namespace ts {
                 }
             };
 
-            interface NodeBuilderContext {
-                enclosingDeclaration: Node | undefined;
-                flags: NodeBuilderFlags | undefined;
-
-                // State
-                encounteredError: boolean;
-                symbolStack: Symbol[] | undefined;
-            }
-
             function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeBuilderContext {
                 return {
                     enclosingDeclaration,
@@ -3027,30 +3018,6 @@ namespace ts {
                     }
                 }
             }
-
-            function getNameOfSymbol(symbol: Symbol, context: NodeBuilderContext): string {
-                const declaration = firstOrUndefined(symbol.declarations);
-                if (declaration) {
-                    const name = getNameOfDeclaration(declaration);
-                    if (name) {
-                        return declarationNameToString(name);
-                    }
-                    if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
-                        return declarationNameToString((<VariableDeclaration>declaration.parent).name);
-                    }
-                    if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
-                        context.encounteredError = true;
-                    }
-                    switch (declaration.kind) {
-                        case SyntaxKind.ClassExpression:
-                            return "(Anonymous class)";
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ArrowFunction:
-                            return "(Anonymous function)";
-                    }
-                }
-                return unescapeLeadingUnderscores(symbol.escapedName);
-            }
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
@@ -3115,7 +3082,16 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? '"' + escapeString((<StringLiteralType>type).value) + '"' : "" + (<NumberLiteralType>type).value;
         }
 
-        function getNameOfSymbol(symbol: Symbol): string {
+        interface NodeBuilderContext {
+            enclosingDeclaration: Node | undefined;
+            flags: NodeBuilderFlags | undefined;
+
+            // State
+            encounteredError: boolean;
+            symbolStack: Symbol[] | undefined;
+        }
+
+        function getNameOfSymbol(symbol: Symbol, context?: NodeBuilderContext): string {
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
@@ -3124,6 +3100,9 @@ namespace ts {
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                     return declarationNameToString((<VariableDeclaration>declaration.parent).name);
+                }
+                if (context && !context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
+                    context.encounteredError = true;
                 }
                 switch (declaration.kind) {
                     case SyntaxKind.ClassExpression:
