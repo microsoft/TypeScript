@@ -1659,7 +1659,7 @@ namespace ts {
     }
 
     export function isRootedDiskPath(path: string) {
-        return getRootLength(path) !== 0;
+        return path && getRootLength(path) !== 0;
     }
 
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {

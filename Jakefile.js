@@ -1121,7 +1121,7 @@ task("update-sublime", ["local", serverFile], function () {
     jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
 });
 
-var tslintRuleDir = "scripts/tslint";
+var tslintRuleDir = "scripts/tslint/rules";
 var tslintRules = [
     "booleanTriviaRule",
     "debugAssertRule",
@@ -1137,13 +1137,27 @@ var tslintRulesFiles = tslintRules.map(function (p) {
     return path.join(tslintRuleDir, p + ".ts");
 });
 var tslintRulesOutFiles = tslintRules.map(function (p) {
-    return path.join(builtLocalDirectory, "tslint", p + ".js");
+    return path.join(builtLocalDirectory, "tslint/rules", p + ".js");
+});
+var tslintFormattersDir = "scripts/tslint/formatters";
+var tslintFormatters = [
+    "autolinkableStylishFormatter",
+];
+var tslintFormatterFiles = tslintFormatters.map(function (p) {
+    return path.join(tslintFormattersDir, p + ".ts");
+});
+var tslintFormattersOutFiles = tslintFormatters.map(function (p) {
+    return path.join(builtLocalDirectory, "tslint/formatters", p + ".js");
 });
 desc("Compiles tslint rules to js");
-task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(["build-rules-end"]));
+task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(tslintFormattersOutFiles).concat(["build-rules-end"]));
 tslintRulesFiles.forEach(function (ruleFile, i) {
     compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
-        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint"), lib: "es6" });
+        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint/rules"), lib: "es6" });
+});
+tslintFormatterFiles.forEach(function (ruleFile, i) {
+    compileFile(tslintFormattersOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
+        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint/formatters"), lib: "es6" });
 });
 
 desc("Emit the start of the build-rules fold");
@@ -1211,8 +1225,8 @@ task("lint", ["build-rules"], () => {
     const fileMatcher = process.env.f || process.env.file || process.env.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+        : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {
         if (fold.isTravis()) console.log(fold.end("lint"));

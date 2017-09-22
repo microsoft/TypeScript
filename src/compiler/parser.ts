@@ -6135,7 +6135,6 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            /* @internal */
             export function parseJSDocTypeExpression(): JSDocTypeExpression {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
@@ -6486,14 +6485,8 @@ namespace ts {
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression | undefined {
-                    return tryParse(() => {
-                        skipWhitespace();
-                        if (token() !== SyntaxKind.OpenBraceToken) {
-                            return undefined;
-                        }
-
-                        return parseJSDocTypeExpression();
-                    });
+                    skipWhitespace();
+                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {

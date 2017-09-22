@@ -111,7 +111,8 @@ namespace ts.formatting {
                     case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.JsxClosingElement:
                     case SyntaxKind.JsxSelfClosingElement:
-                        return node.kind === SyntaxKind.Identifier;
+                        // May parse an identifier like `module-layout`; that will be scanned as a keyword at first, but we should parse the whole thing to get an identifier.
+                        return isKeyword(node.kind) || node.kind === SyntaxKind.Identifier;
                 }
             }
 
@@ -238,11 +239,8 @@ namespace ts.formatting {
                     }
                     break;
                 case ScanAction.RescanJsxIdentifier:
-                    if (token === SyntaxKind.Identifier) {
-                        lastScanAction = ScanAction.RescanJsxIdentifier;
-                        return scanner.scanJsxIdentifier();
-                    }
-                    break;
+                    lastScanAction = ScanAction.RescanJsxIdentifier;
+                    return scanner.scanJsxIdentifier();
                 case ScanAction.RescanJsxText:
                     lastScanAction = ScanAction.RescanJsxText;
                     return scanner.reScanJsxToken();

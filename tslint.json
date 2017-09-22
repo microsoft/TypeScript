@@ -1,5 +1,5 @@
 {
-    "rulesDirectory": "built/local/tslint",
+    "rulesDirectory": "built/local/tslint/rules",
     "rules": {
         "boolean-trivia": true,
         "class-name": true,
