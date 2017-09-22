@@ -2077,10 +2077,9 @@ namespace Harness {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
-                    const relativeFileName = ts.combinePaths(relativeFileBase, name) + extension;
+                    const relativeFileName = relativeFileBase + (ts.startsWith(name, "/") ? "" : "/") + name + extension;
                     const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
-                    const actual = content;
-                    const comparison = compareToBaseline(actual, relativeFileName, opts);
+                    const comparison = compareToBaseline(content, relativeFileName, opts);
                     try {
                         writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
                     }

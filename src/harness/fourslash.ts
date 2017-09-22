@@ -2571,36 +2571,33 @@ namespace FourSlash {
             }
         }
 
-        public verifyNavigationBar(json: any) {
-            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-            if (JSON.stringify(items, replacer) !== JSON.stringify(json)) {
-                this.raiseError(`verifyNavigationBar failed - expected: ${stringify(json)}, got: ${stringify(items, replacer)}`);
+        public verifyNavigationBar(json: any, options: { checkSpans?: boolean } | undefined) {
+            this.verifyNavigationTreeOrBar(json, this.languageService.getNavigationBarItems(this.activeFile.fileName), "Bar", options);
+        }
+
+        public verifyNavigationTree(json: any, options: { checkSpans?: boolean } | undefined) {
+            this.verifyNavigationTreeOrBar(json, this.languageService.getNavigationTree(this.activeFile.fileName), "Tree", options);
+        }
+
+        private verifyNavigationTreeOrBar(json: any, tree: any, name: "Tree" | "Bar", options: { checkSpans?: boolean } | undefined) {
+            if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigation${name} failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
             }
 
-            // Make the data easier to read.
             function replacer(key: string, value: any) {
                 switch (key) {
                     case "spans":
-                        // We won't ever check this.
-                        return undefined;
+                        return options && options.checkSpans ? value : undefined;
+                    case "start":
+                    case "length":
+                        // Never omit the values in a span, even if they are 0.
+                        return value;
                     case "childItems":
-                        return value.length === 0 ? undefined : value;
+                        return !value || value.length === 0 ? undefined : value;
                     default:
                         // Omit falsy values, those are presumed to be the default.
                         return value || undefined;
                 }
-            }
-        }
-
-        public verifyNavigationTree(json: any) {
-            const tree = this.languageService.getNavigationTree(this.activeFile.fileName);
-            if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
-                this.raiseError(`verifyNavigationTree failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
-            }
-
-            function replacer(key: string, value: any) {
-                // Don't check "spans", and omit falsy values.
-                return key === "spans" ? undefined : (value || undefined);
             }
         }
 
@@ -3533,6 +3530,10 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
+        public spans(): ts.TextSpan[] {
+            return this.ranges().map(r => ts.createTextSpan(r.start, r.end - r.start));
+        }
+
         public rangesByText(): ts.Map<FourSlash.Range[]> {
             return this.state.rangesByText();
         }
@@ -3966,12 +3967,12 @@ namespace FourSlashInterface {
             this.state.verifyImportFixAtPosition(expectedTextArray, errorCode);
         }
 
-        public navigationBar(json: any) {
-            this.state.verifyNavigationBar(json);
+        public navigationBar(json: any, options?: { checkSpans?: boolean }) {
+            this.state.verifyNavigationBar(json, options);
         }
 
-        public navigationTree(json: any) {
-            this.state.verifyNavigationTree(json);
+        public navigationTree(json: any, options?: { checkSpans?: boolean }) {
+            this.state.verifyNavigationTree(json, options);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string) {

@@ -31,6 +31,7 @@
     "devDependencies": {
         "@types/browserify": "latest",
         "@types/chai": "latest",
+        "@types/colors": "latest",
         "@types/convert-source-map": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
@@ -77,6 +78,7 @@
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
+        "colors": "latest",
         "typescript": "next"
     },
     "scripts": {

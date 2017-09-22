@@ -1190,7 +1190,8 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
+            const filesToAdd = projectOptions.files.concat(project.getExternalFiles());
+            this.addFilesToProjectAndUpdateGraph(project, filesToAdd, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
             if (!sizeLimitExceeded) {
@@ -1210,7 +1211,7 @@ namespace ts.server {
             }
         }
 
-        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: ReadonlyArray<Diagnostic>): void {
+        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: ReadonlyArray<T>, propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: ReadonlyArray<Diagnostic>): void {
             let errors: Diagnostic[];
             for (const f of files) {
                 const rootFileName = propertyReader.getFileName(f);
