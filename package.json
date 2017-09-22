@@ -28,11 +28,25 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "scripts": {
+        "precommit": "lint-staged",
+        "pretest": "jake tests",
+        "test": "jake runtests-parallel",
+        "build": "npm run build:compiler && npm run build:tests",
+        "build:compiler": "jake local",
+        "build:tests": "jake tests",
+        "start": "node lib/tsc",
+        "clean": "jake clean",
+        "gulp": "gulp",
+        "jake": "jake",
+        "lint": "jake lint",
+        "setup-hooks": "node scripts/link-hooks.js"
+    },
     "lint-staged": {
-      "src/**/*.ts": [
-        "prettier --write",
-        "git add"
-      ]
+        "src/**/*.ts": [
+            "prettier --write",
+            "git add"
+        ]
     },
     "devDependencies": {
         "@types/browserify": "latest",
@@ -87,19 +101,6 @@
         "ts-node": "latest",
         "tslint": "latest",
         "typescript": "next"
-    },
-    "scripts": {
-        "pretest": "jake tests",
-        "test": "jake runtests-parallel",
-        "build": "npm run build:compiler && npm run build:tests",
-        "build:compiler": "jake local",
-        "build:tests": "jake tests",
-        "start": "node lib/tsc",
-        "clean": "jake clean",
-        "gulp": "gulp",
-        "jake": "jake",
-        "lint": "jake lint",
-        "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {
         "fs": false,
