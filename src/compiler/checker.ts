@@ -5250,6 +5250,10 @@ namespace ts {
         }
 
         function getDeclaredTypeOfSymbol(symbol: Symbol): Type {
+            return tryGetDeclaredTypeOfSymbol(symbol) || unknownType;
+        }
+
+        function tryGetDeclaredTypeOfSymbol(symbol: Symbol): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getDeclaredTypeOfClassOrInterface(symbol);
             }
@@ -5268,7 +5272,7 @@ namespace ts {
             if (symbol.flags & SymbolFlags.Alias) {
                 return getDeclaredTypeOfAlias(symbol);
             }
-            return unknownType;
+            return undefined;
         }
 
         // A type reference is considered independent if each type argument is considered independent.
@@ -6870,17 +6874,6 @@ namespace ts {
             return type;
         }
 
-        /**
-         * Get type from reference to named type that cannot be generic (enum or type parameter)
-         */
-        function getTypeFromNonGenericTypeReference(node: TypeReferenceType, symbol: Symbol): Type {
-            if (node.typeArguments) {
-                error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
-                return unknownType;
-            }
-            return getDeclaredTypeOfSymbol(symbol);
-        }
-
         function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
@@ -6917,24 +6910,34 @@ namespace ts {
                 return type;
             }
 
-            if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
-                // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
-                // the symbol is a constructor function, return the inferred class type; otherwise,
-                // the type of this reference is just the type of the value we resolved to.
-                const valueType = getTypeOfSymbol(symbol);
-                if (valueType.symbol && !isInferredClassType(valueType)) {
-                    const referenceType = getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
-                    if (referenceType) {
-                        return referenceType;
-                    }
+            // Get type from reference to named type that cannot be generic (enum or type parameter)
+            const res = tryGetDeclaredTypeOfSymbol(symbol);
+            if (res !== undefined) {
+                if (typeArguments) {
+                    error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
+                    return unknownType;
                 }
-
-                // Resolve the type reference as a Type for the purpose of reporting errors.
-                resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
-                return valueType;
+                return res;
             }
 
-            return getTypeFromNonGenericTypeReference(node, symbol);
+            if (!(symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node))) {
+                return unknownType;
+            }
+
+            // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
+            // the symbol is a constructor function, return the inferred class type; otherwise,
+            // the type of this reference is just the type of the value we resolved to.
+            const valueType = getTypeOfSymbol(symbol);
+            if (valueType.symbol && !isInferredClassType(valueType)) {
+                const referenceType = getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+                if (referenceType) {
+                    return referenceType;
+                }
+            }
+
+            // Resolve the type reference as a Type for the purpose of reporting errors.
+            resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
+            return valueType;
         }
 
         function getTypeReferenceTypeWorker(node: TypeReferenceType, symbol: Symbol, typeArguments: Type[]): Type | undefined {
