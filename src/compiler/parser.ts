@@ -6137,11 +6137,11 @@ namespace ts {
             // Parses out a JSDoc type expression.
             /* @internal */
             export function parseJSDocTypeExpression(): JSDocTypeExpression;
-            export function parseJSDocTypeExpression(mayBail: true): JSDocTypeExpression | undefined;
-            export function parseJSDocTypeExpression(mayBail?: boolean): JSDocTypeExpression | undefined {
+            export function parseJSDocTypeExpression(requireBraces: true): JSDocTypeExpression | undefined;
+            export function parseJSDocTypeExpression(requireBraces?: boolean): JSDocTypeExpression | undefined {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                if (!parseExpected(SyntaxKind.OpenBraceToken) && mayBail) {
+                if (!parseExpected(SyntaxKind.OpenBraceToken) && requireBraces) {
                     return undefined;
                 }
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
