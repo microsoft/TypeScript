@@ -28,6 +28,12 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "lint-staged": {
+      "src/**/*.ts": [
+        "prettier --write",
+        "git add"
+      ]
+    },
     "devDependencies": {
         "@types/browserify": "latest",
         "@types/chai": "latest",
@@ -52,6 +58,7 @@
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
+        "colors": "latest",
         "convert-source-map": "latest",
         "del": "latest",
         "gulp": "3.X",
@@ -62,13 +69,16 @@
         "gulp-newer": "latest",
         "gulp-sourcemaps": "latest",
         "gulp-typescript": "latest",
+        "husky": "^0.14.3",
         "istanbul": "latest",
         "jake": "latest",
+        "lint-staged": "^4.2.2",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
+        "prettier-miscellaneous": "latest",
         "q": "latest",
         "run-sequence": "latest",
         "sorcery": "latest",
@@ -76,7 +86,6 @@
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
-        "colors": "latest",
         "typescript": "next"
     },
     "scripts": {

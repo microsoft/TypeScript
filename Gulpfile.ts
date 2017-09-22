@@ -1045,7 +1045,13 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
     sendNextFile(files, child, callback, failures);
 }
 
-gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
+gulp.task("pretty", "Runs prettier.", [], () => {
+    const cmd = "node node_modules/prettier-miscellaneous/bin/prettier --write src/**/*.ts";
+    child_process.execSync(cmd, { stdio: [0, 1, 2] });
+});
+
+//TODO: this should run pretty first
+gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules", "pretty"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
     const fileMatcher = cmdLineOptions["files"];
     const files = fileMatcher
