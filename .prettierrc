@@ -1,0 +1,7 @@
+print-width: 120
+trailing-comma: all
+tab-width: 4
+# Thanks prettier-miscellaneous.
+# This doesn't seem to be documented though.
+# https://github.com/arijs/prettier-miscellaneous/pull/21
+break-before-else: true

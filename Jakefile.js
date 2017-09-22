@@ -1219,17 +1219,43 @@ function spawnLintWorker(files, callback) {
     sendNextFile(files, child, callback, failures);
 }
 
-desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
-task("lint", ["build-rules"], () => {
-    if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = process.env.f || process.env.file || process.env.files;
-    const files = fileMatcher
-        ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
-    console.log("Linting: " + cmd);
-    jake.exec([cmd], { interactive: true }, () => {
-        if (fold.isTravis()) console.log(fold.end("lint"));
-        complete();
+task("prettier", [], () => {
+    withFold("prettier", endFold => {
+        const cmd = "node node_modules/prettier-miscellaneous/bin/prettier --write src/**/*.ts";
+        jake.exec([cmd], { interactive: true }, () => {
+            endFold();
+            complete();
+        });
     });
 });
+
+desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
+task("lint", ["build-rules", "prettier"], () => {
+    withFold("lint", endFold => {
+        const fileMatcher = process.env.f || process.env.file || process.env.files;
+        const files = fileMatcher
+            ? `src/**/${fileMatcher}`
+            : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        console.log("Linting: " + cmd);
+        jake.exec([cmd], { interactive: true }, () => {
+            endFold();
+            complete();
+        });
+    });
+});
+
+/**
+ * @param {string} name
+ * @param {(endFold: () => void) => void} action
+ */
+function withFold(name, action) {
+    if (fold.isTravis()) {
+        console.log(fold.start(name));
+    }
+    action(() => {
+        if (fold.isTravis()) {
+            console.log(fold.end(name));
+        }
+    });
+}
