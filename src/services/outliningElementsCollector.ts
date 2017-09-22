@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.OutliningElementsCollector {
     const collapseText = "...";
-    const maxDepth = 20;
+    const maxDepth = 120;
     const defaultLabel = "#region";
     const regionMatch = new RegExp("^\\s*//\\s*#(end)?region(?:\\s+(.*))?$");
 
