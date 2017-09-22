@@ -597,7 +597,7 @@ namespace ts {
         }
 
         const children = list.getChildren();
-        const listItemIndex = indexOf(children, node);
+        const listItemIndex = indexOfNode(children, node);
 
         return {
             listItemIndex,

@@ -150,7 +150,7 @@ namespace Harness.Parallel.Host {
                             }
                             // Send tasks in blocks if the tasks are small
                             const taskList = [tasks.pop()];
-                            while (tasks.length && taskList.reduce((p, c) => p + c.size, 0) > chunkSize) {
+                            while (tasks.length && taskList.reduce((p, c) => p + c.size, 0) < chunkSize) {
                                 taskList.push(tasks.pop());
                             }
                             if (taskList.length === 1) {

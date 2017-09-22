@@ -664,7 +664,7 @@ namespace ts.refactor.extractMethod {
             }
             newFunction = createMethod(
                 /*decorators*/ undefined,
-                modifiers,
+                modifiers.length ? modifiers : undefined,
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
                 /*questionToken*/ undefined,
