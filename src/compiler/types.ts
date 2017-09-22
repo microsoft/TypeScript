@@ -3345,11 +3345,9 @@ namespace ts {
     }
 
     export const enum Variance {
-        Invariant     = 0,  // Both covariant and contravariant
+        Invariant     = 0,  // Neither covariant nor contravariant
         Covariant     = 1,  // Covariant
         Contravariant = 2,  // Contravariant
-        Bivariant     = 3,  // Either covariant or contravariant
-        Omnivariant   = 4   // Unwitnessed type parameter
     }
 
     // Generic class and interface types
