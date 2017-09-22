@@ -440,7 +440,8 @@ compileFile(generateLocalizedDiagnosticMessagesJs,
     /*useBuiltCompiler*/ false, { noOutFile: true, types: ["node", "xml2js"] });
 
 // Localize diagnostics
-task("localize",  [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs, generatedDiagnosticMessagesJSON], function () {
+var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+file(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs, generatedDiagnosticMessagesJSON], function () {
     var cmd = host + " " + generateLocalizedDiagnosticMessagesJs + " " + lclDirectory + " " + builtLocalDirectory + " " + generatedDiagnosticMessagesJSON;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
@@ -457,6 +458,7 @@ task("localize",  [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs, g
     ex.run();
 }, { async: true });
 
+task("localize", [generatedLCGFile]);
 
 var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
@@ -673,7 +675,7 @@ task("build-fold-end", [], function () {
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, buildProtocolDts, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end"]);
+task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, buildProtocolDts, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end", "localize"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -727,11 +729,11 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local", "localize"].concat(libraryTargets), function () {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
         concat(libraryTargets).
         concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d) })).
-        concat(path.join(builtLocalDirectory, "enu"));
+        concat(path.dirname(generatedLCGFile));
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });

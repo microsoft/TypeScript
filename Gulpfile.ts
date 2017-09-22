@@ -390,9 +390,14 @@ gulp.task(generateLocalizedDiagnosticMessagesJs, /*help*/ false, [], () => {
 });
 
 // Localize diagnostics
-gulp.task("localize", [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs], (done) => {
-    exec(host, [generateLocalizedDiagnosticMessagesJs, lclDirectory, builtLocalDirectory, generatedDiagnosticMessagesJSON], done, done);
+const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+gulp.task(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs], (done) => {
+    if (fs.existsSync(builtLocalDirectory) && needsUpdate(generatedDiagnosticMessagesJSON, generatedLCGFile)) {
+        exec(host, [generateLocalizedDiagnosticMessagesJs, lclDirectory, builtLocalDirectory, generatedDiagnosticMessagesJSON], done, done);
+    }
 });
+
+gulp.task("localize", [generatedLCGFile]);
 
 const servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 const standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -520,7 +525,7 @@ gulp.task(typesMapJson, /*help*/ false, [], () => {
 });
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
-gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile]);
+gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile, "localize"]);
 gulp.task("tsc", "Builds only the compiler", [builtLocalCompiler]);
 
 // Generate Markdown spec
@@ -564,7 +569,7 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, typingsInstallerJs, cancellationTokenJs].concat(libraryTargets);
     const missingFiles = expectedFiles.
         concat(fs.readdirSync(lclDirectory).map(function(d) { return path.join(builtLocalDirectory, d, "diagnosticMessages.generated.json") })).
-        concat(path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg")).
+        concat(generatedLCGFile).
         filter(f => !fs.existsSync(f));
     if (missingFiles.length > 0) {
         throw new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
@@ -574,7 +579,7 @@ gulp.task("VerifyLKG", /*help*/ false, [], () => {
     return gulp.src([...expectedFiles, path.join(builtLocalDirectory, "**"),`!${path.join(builtLocalDirectory, "tslint")}`,`!${path.join(builtLocalDirectory, "*.*")}` ]).pipe(gulp.dest(LKGDirectory));
 });
 
-gulp.task("LKGInternal", /*help*/ false, ["lib", "local", "localize"]);
+gulp.task("LKGInternal", /*help*/ false, ["lib", "local"]);
 
 gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
     return runSequence("LKGInternal", "VerifyLKG");
