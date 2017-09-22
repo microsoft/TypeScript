@@ -515,7 +515,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
+        private readonly sourceFileToSeenSymbols: true[][] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
             const sourceId = getNodeId(sourceFile);
