@@ -217,16 +217,18 @@ namespace ts.formatting {
             switch (expectedScanAction) {
                 case ScanAction.RescanGreaterThanToken:
                     if (token === SyntaxKind.GreaterThanToken) {
-                        Debug.assert(n.kind === token);
                         lastScanAction = ScanAction.RescanGreaterThanToken;
-                        return scanner.reScanGreaterToken();
+                        const newToken = scanner.reScanGreaterToken();
+                        Debug.assert(n.kind === newToken);
+                        return newToken;
                     }
                     break;
                 case ScanAction.RescanSlashToken:
                     if (startsWithSlashToken(token)) {
-                        Debug.assert(n.kind === token);
                         lastScanAction = ScanAction.RescanSlashToken;
-                        return scanner.reScanSlashToken();
+                        const newToken = scanner.reScanSlashToken();
+                        Debug.assert(n.kind === newToken);
+                        return newToken;
                     }
                     break;
                 case ScanAction.RescanTemplateToken:
