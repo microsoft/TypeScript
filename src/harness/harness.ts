@@ -2099,13 +2099,14 @@ namespace Harness {
             if (errors.length || missing.length) {
                 let errorMsg = "";
                 if (errors.length) {
-                    errorMsg += `The baseline for ${relativeFileBase} has changed:${"\n    " + errors.map(e => e.message).join("\n    ")}`;
+                    errorMsg += `The baseline for ${relativeFileBase} in ${errors.length} files has changed:${"\n    " + errors.slice(0, 5).map(e => e.message).join("\n    ") + (errors.length > 5 ? "\n" + `    and ${errors.length - 5} more` : "")}`;
                 }
                 if (errors.length && missing.length) {
                     errorMsg += "\n";
                 }
                 if (missing.length) {
-                    errorMsg += `Baseline missing files:${"\n    " + missing.join("\n    ") + "\n"}Written:${"\n    " + ts.arrayFrom(writtenFiles.keys()).join("\n    ")}`;
+                    const writtenFilesArray = ts.arrayFrom(writtenFiles.keys());
+                    errorMsg += `Baseline missing ${missing.length} files:${"\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"}Written ${writtenFiles.size} files:${"\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")}`;
                 }
                 throw new Error(errorMsg);
             }
