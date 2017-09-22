@@ -11,9 +11,9 @@ var f: {
 >x : number
 
 } = (x) => x;
->(x) => x : (x: any) => any
->x : any
->x : any
+>(x) => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
 
 var f2: {
 >f2 : { <T>(x: string): string; <T>(x: number): number; }
@@ -27,9 +27,9 @@ var f2: {
 >x : number
 
 } = (x) => x;
->(x) => x : (x: any) => any
->x : any
->x : any
+>(x) => x : <T, T>(x: string | number) => string | number
+>x : string | number
+>x : string | number
 
 var f3: {
 >f3 : { <T>(x: T): string; <T>(x: T): number; }
@@ -45,9 +45,9 @@ var f3: {
 >T : T
 
 } = (x) => x;
->(x) => x : (x: any) => any
->x : any
->x : any
+>(x) => x : <T>(x: T) => T
+>x : T
+>x : T
 
 var f4: {
 >f4 : { <T>(x: string): T; <T>(x: number): T; }
@@ -63,7 +63,7 @@ var f4: {
 >T : T
 
 } = (x) => x;
->(x) => x : (x: any) => any
->x : any
->x : any
+>(x) => x : <T, T>(x: string | number) => string | number
+>x : string | number
+>x : string | number
 
