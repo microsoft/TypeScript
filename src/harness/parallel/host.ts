@@ -174,7 +174,7 @@ namespace Harness.Parallel.Host {
             let scheduledTotal = 0;
             batcher: while (true) {
                 for (let i = 0; i < batchCount; i++) {
-                    if (tasks.length === 0) {
+                    if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
                         console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
                         break batcher;
                     }
@@ -213,7 +213,9 @@ namespace Harness.Parallel.Host {
                     worker.send({ type: "batch", payload });
                 }
                 else { // Unittest thread - send off just one test
-                    worker.send({ type: "test", payload: tasks.pop() });
+                    const payload = tasks.pop();
+                    ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
+                    worker.send({ type: "test", payload });
                 }
             }
         }
