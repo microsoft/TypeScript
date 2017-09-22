@@ -240,7 +240,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
-        SymbolType,
+        ESSymbolType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -399,7 +399,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = SymbolType,
+        LastTypeNode = ESSymbolType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1053,8 +1053,9 @@ namespace ts {
         literal: BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     }
 
-    export interface SymbolTypeNode extends TypeNode {
-        kind: SyntaxKind.SymbolType;
+    // Represents a unique `symbol()` type
+    export interface ESSymbolTypeNode extends TypeNode {
+        kind: SyntaxKind.ESSymbolType;
     }
 
     export interface StringLiteral extends LiteralExpression {
@@ -2738,6 +2739,7 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 20,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+        IsDeclarationOfUniqueESSymbolType       = 1 << 24,
     }
 
     /* @internal */
@@ -3051,10 +3053,10 @@ namespace ts {
         isDeclarationWithCollidingName?: boolean; // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        enumKind?: EnumKind;                // Enum declaration classification
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
         lateMembers?: UnderscoreEscapedMap<TransientSymbol>; // Late-bound members resolved during check
         resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
-        enumKind?: EnumKind;                // Enum declaration classification
     }
 
     /* @internal */
@@ -3204,7 +3206,7 @@ namespace ts {
         BooleanLiteral          = 1 << 7,
         EnumLiteral             = 1 << 8,   // Always combined with StringLiteral, NumberLiteral, or Union
         ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
-        Unique                  = 1 << 10,  // symbol()
+        UniqueESSymbol          = 1 << 10,  // symbol()
         Void                    = 1 << 11,
         Undefined               = 1 << 12,
         Null                    = 1 << 13,
@@ -3216,7 +3218,7 @@ namespace ts {
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
         /* @internal */
-        Fresh                   = 1 << 21,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 21,  // Fresh literal or unique type
         /* @internal */
         ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
         /* @internal */
@@ -3229,11 +3231,11 @@ namespace ts {
 
         /* @internal */
         Nullable = Undefined | Null,
-        Literal = StringLiteral | NumberLiteral | BooleanLiteral | Unique,
+        Literal = StringLiteral | NumberLiteral | BooleanLiteral | UniqueESSymbol,
         Unit = Literal | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
-        StringOrNumberLiteralOrUnique = StringOrNumberLiteral | Unique,
+        StringOrNumberLiteralOrUnique = StringOrNumberLiteral | UniqueESSymbol,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
@@ -3245,7 +3247,7 @@ namespace ts {
         NumberLike = Number | NumberLiteral | Enum,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
-        ESSymbolLike = ESSymbol | Unique,
+        ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
@@ -3253,7 +3255,7 @@ namespace ts {
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | Unique | NonPrimitive,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -3288,11 +3290,9 @@ namespace ts {
         regularType?: LiteralType;  // Regular version of type
     }
 
-    // Unique symbol types (TypeFlags.Unique)
-    export interface UniqueType extends Type {
+    // Unique symbol types (TypeFlags.UniqueESSymbol)
+    export interface UniqueESSymbolType extends Type {
         symbol: Symbol;
-        freshType?: UniqueType;     // Fresh version of the type
-        regularType?: UniqueType;   // Regular version of the type
     }
 
     export interface StringLiteralType extends LiteralType {

@@ -1,0 +1,416 @@
+=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts ===
+// declarations with call initializer
+const constCall = Symbol();
+>constCall : symbol()
+>Symbol() : symbol()
+>Symbol : SymbolConstructor
+
+let letCall = Symbol();
+>letCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+var varCall = Symbol();
+>varCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+// ambient declaration with type
+declare const constType: symbol();
+>constType : symbol()
+
+// declaration with type and call initializer
+const constTypeAndCall: symbol() = Symbol();
+>constTypeAndCall : symbol()
+>Symbol() : symbol()
+>Symbol : SymbolConstructor
+
+// declaration from initializer
+const constInitToConstCall = constCall;
+>constInitToConstCall : symbol
+>constCall : symbol()
+
+const constInitToLetCall = letCall;
+>constInitToLetCall : symbol
+>letCall : symbol
+
+const constInitToVarCall = varCall;
+>constInitToVarCall : symbol
+>varCall : symbol
+
+const constInitToConstDeclAmbient = constType;
+>constInitToConstDeclAmbient : symbol
+>constType : symbol()
+
+let letInitToConstCall = constCall;
+>letInitToConstCall : symbol
+>constCall : symbol()
+
+let letInitToLetCall = letCall;
+>letInitToLetCall : symbol
+>letCall : symbol
+
+let letInitToVarCall = varCall;
+>letInitToVarCall : symbol
+>varCall : symbol
+
+let letInitToConstDeclAmbient = constType;
+>letInitToConstDeclAmbient : symbol
+>constType : symbol()
+
+var varInitToConstCall = constCall;
+>varInitToConstCall : symbol
+>constCall : symbol()
+
+var varInitToLetCall = letCall;
+>varInitToLetCall : symbol
+>letCall : symbol
+
+var varInitToVarCall = varCall;
+>varInitToVarCall : symbol
+>varCall : symbol
+
+var varInitToConstDeclAmbient = constType;
+>varInitToConstDeclAmbient : symbol
+>constType : symbol()
+
+// declaration from initializer with type query
+const constInitToConstCallWithTypeQuery: typeof constCall = constCall;
+>constInitToConstCallWithTypeQuery : symbol
+>constCall : symbol()
+>constCall : symbol()
+
+const constInitToConstDeclAmbientWithTypeQuery: typeof constType = constType;
+>constInitToConstDeclAmbientWithTypeQuery : symbol
+>constType : symbol()
+>constType : symbol()
+
+// function return inference
+function funcReturnConstCall() { return constCall; }
+>funcReturnConstCall : () => symbol
+>constCall : symbol()
+
+function funcReturnLetCall() { return letCall; }
+>funcReturnLetCall : () => symbol
+>letCall : symbol
+
+function funcReturnVarCall() { return varCall; }
+>funcReturnVarCall : () => symbol
+>varCall : symbol
+
+// function return value with type query
+function funcReturnConstCallWithTypeQuery(): typeof constCall { return constCall; }
+>funcReturnConstCallWithTypeQuery : () => symbol()
+>constCall : symbol()
+>constCall : symbol()
+
+// generator function yield inference
+function* genFuncYieldConstCall() { yield constCall; }
+>genFuncYieldConstCall : () => IterableIterator<symbol>
+>yield constCall : any
+>constCall : symbol()
+
+function* genFuncYieldLetCall() { yield letCall; }
+>genFuncYieldLetCall : () => IterableIterator<symbol>
+>yield letCall : any
+>letCall : symbol
+
+function* genFuncYieldVarCall() { yield varCall; }
+>genFuncYieldVarCall : () => IterableIterator<symbol>
+>yield varCall : any
+>varCall : symbol
+
+// generator function yield with return type query
+function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
+>genFuncYieldConstCallWithTypeQuery : () => IterableIterator<symbol()>
+>IterableIterator : IterableIterator<T>
+>constCall : symbol()
+>yield constCall : any
+>constCall : symbol()
+
+// async function return inference
+async function asyncFuncReturnConstCall() { return constCall; }
+>asyncFuncReturnConstCall : () => Promise<symbol>
+>constCall : symbol()
+
+async function asyncFuncReturnLetCall() { return letCall; }
+>asyncFuncReturnLetCall : () => Promise<symbol>
+>letCall : symbol
+
+async function asyncFuncReturnVarCall() { return varCall; }
+>asyncFuncReturnVarCall : () => Promise<symbol>
+>varCall : symbol
+
+// async generator function yield inference
+async function* asyncGenFuncYieldConstCall() { yield constCall; }
+>asyncGenFuncYieldConstCall : () => AsyncIterableIterator<symbol>
+>yield constCall : any
+>constCall : symbol()
+
+async function* asyncGenFuncYieldLetCall() { yield letCall; }
+>asyncGenFuncYieldLetCall : () => AsyncIterableIterator<symbol>
+>yield letCall : any
+>letCall : symbol
+
+async function* asyncGenFuncYieldVarCall() { yield varCall; }
+>asyncGenFuncYieldVarCall : () => AsyncIterableIterator<symbol>
+>yield varCall : any
+>varCall : symbol
+
+// classes
+class C {
+>C : C
+
+    static readonly readonlyStaticCall = Symbol();
+>readonlyStaticCall : symbol()
+>Symbol() : symbol()
+>Symbol : SymbolConstructor
+
+    static readonly readonlyStaticType: symbol();
+>readonlyStaticType : symbol()
+
+    static readonly readonlyStaticTypeAndCall: symbol() = Symbol();
+>readonlyStaticTypeAndCall : symbol()
+>Symbol() : symbol()
+>Symbol : SymbolConstructor
+
+    static readwriteStaticCall = Symbol();
+>readwriteStaticCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+    readonly readonlyCall = Symbol();
+>readonlyCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+    readwriteCall = Symbol();
+>readwriteCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+}
+declare const c: C;
+>c : C
+>C : C
+
+const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
+>constInitToCReadonlyStaticCall : symbol
+>C.readonlyStaticCall : symbol()
+>C : typeof C
+>readonlyStaticCall : symbol()
+
+const constInitToCReadonlyStaticType = C.readonlyStaticType;
+>constInitToCReadonlyStaticType : symbol
+>C.readonlyStaticType : symbol()
+>C : typeof C
+>readonlyStaticType : symbol()
+
+const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
+>constInitToCReadonlyStaticTypeAndCall : symbol
+>C.readonlyStaticTypeAndCall : symbol()
+>C : typeof C
+>readonlyStaticTypeAndCall : symbol()
+
+const constInitToCReadwriteStaticCall = C.readwriteStaticCall;
+>constInitToCReadwriteStaticCall : symbol
+>C.readwriteStaticCall : symbol
+>C : typeof C
+>readwriteStaticCall : symbol
+
+const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall = C.readonlyStaticCall;
+>constInitToCReadonlyStaticCallWithTypeQuery : symbol
+>C.readonlyStaticCall : symbol()
+>C : typeof C
+>readonlyStaticCall : symbol()
+>C.readonlyStaticCall : symbol()
+>C : typeof C
+>readonlyStaticCall : symbol()
+
+const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType = C.readonlyStaticType;
+>constInitToCReadonlyStaticTypeWithTypeQuery : symbol
+>C.readonlyStaticType : symbol()
+>C : typeof C
+>readonlyStaticType : symbol()
+>C.readonlyStaticType : symbol()
+>C : typeof C
+>readonlyStaticType : symbol()
+
+const constInitToCReadonlyStaticTypeAndCallWithTypeQuery: typeof C.readonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
+>constInitToCReadonlyStaticTypeAndCallWithTypeQuery : symbol
+>C.readonlyStaticTypeAndCall : symbol()
+>C : typeof C
+>readonlyStaticTypeAndCall : symbol()
+>C.readonlyStaticTypeAndCall : symbol()
+>C : typeof C
+>readonlyStaticTypeAndCall : symbol()
+
+const constInitToCReadwriteStaticCallWithTypeQuery: typeof C.readwriteStaticCall = C.readwriteStaticCall;
+>constInitToCReadwriteStaticCallWithTypeQuery : symbol
+>C.readwriteStaticCall : symbol
+>C : typeof C
+>readwriteStaticCall : symbol
+>C.readwriteStaticCall : symbol
+>C : typeof C
+>readwriteStaticCall : symbol
+
+const constInitToCReadonlyCall = c.readonlyCall;
+>constInitToCReadonlyCall : symbol
+>c.readonlyCall : symbol
+>c : C
+>readonlyCall : symbol
+
+const constInitToCReadwriteCall = c.readwriteCall;
+>constInitToCReadwriteCall : symbol
+>c.readwriteCall : symbol
+>c : C
+>readwriteCall : symbol
+
+const constInitToCReadonlyCallWithTypeQuery: typeof c.readonlyCall = c.readonlyCall;
+>constInitToCReadonlyCallWithTypeQuery : symbol
+>c.readonlyCall : symbol
+>c : C
+>readonlyCall : symbol
+>c.readonlyCall : symbol
+>c : C
+>readonlyCall : symbol
+
+const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall = c.readwriteCall;
+>constInitToCReadwriteCallWithTypeQuery : symbol
+>c.readwriteCall : symbol
+>c : C
+>readwriteCall : symbol
+>c.readwriteCall : symbol
+>c : C
+>readwriteCall : symbol
+
+const constInitToCReadonlyCallWithIndexedAccess: C["readonlyCall"] = c.readonlyCall;
+>constInitToCReadonlyCallWithIndexedAccess : symbol
+>C : C
+>c.readonlyCall : symbol
+>c : C
+>readonlyCall : symbol
+
+const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"] = c.readwriteCall;
+>constInitToCReadwriteCallWithIndexedAccess : symbol
+>C : C
+>c.readwriteCall : symbol
+>c : C
+>readwriteCall : symbol
+
+// interfaces
+interface I {
+>I : I
+
+    readonly readonlyType: symbol();
+>readonlyType : symbol()
+}
+declare const i: I;
+>i : I
+>I : I
+
+const constInitToIReadonlyType = i.readonlyType;
+>constInitToIReadonlyType : symbol
+>i.readonlyType : symbol()
+>i : I
+>readonlyType : symbol()
+
+const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyType;
+>constInitToIReadonlyTypeWithTypeQuery : symbol
+>i.readonlyType : symbol()
+>i : I
+>readonlyType : symbol()
+>i.readonlyType : symbol()
+>i : I
+>readonlyType : symbol()
+
+const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyType;
+>constInitToIReadonlyTypeWithIndexedAccess : symbol
+>I : I
+>i.readonlyType : symbol()
+>i : I
+>readonlyType : symbol()
+
+// type literals
+type L = {
+>L : L
+
+    readonly readonlyType: symbol();
+>readonlyType : symbol()
+
+    nested: {
+>nested : { readonly readonlyNestedType: symbol(); }
+
+        readonly readonlyNestedType: symbol();
+>readonlyNestedType : symbol()
+    }
+};
+declare const l: L;
+>l : L
+>L : L
+
+const constInitToLReadonlyType = l.readonlyType;
+>constInitToLReadonlyType : symbol
+>l.readonlyType : symbol()
+>l : L
+>readonlyType : symbol()
+
+const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
+>constInitToLReadonlyNestedType : symbol
+>l.nested.readonlyNestedType : symbol()
+>l.nested : { readonly readonlyNestedType: symbol(); }
+>l : L
+>nested : { readonly readonlyNestedType: symbol(); }
+>readonlyNestedType : symbol()
+
+const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyType;
+>constInitToLReadonlyTypeWithTypeQuery : symbol
+>l.readonlyType : symbol()
+>l : L
+>readonlyType : symbol()
+>l.readonlyType : symbol()
+>l : L
+>readonlyType : symbol()
+
+const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType = l.nested.readonlyNestedType;
+>constInitToLReadonlyNestedTypeWithTypeQuery : symbol
+>l.nested.readonlyNestedType : symbol()
+>l.nested : { readonly readonlyNestedType: symbol(); }
+>l : L
+>nested : { readonly readonlyNestedType: symbol(); }
+>readonlyNestedType : symbol()
+>l.nested.readonlyNestedType : symbol()
+>l.nested : { readonly readonlyNestedType: symbol(); }
+>l : L
+>nested : { readonly readonlyNestedType: symbol(); }
+>readonlyNestedType : symbol()
+
+const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"] = l.readonlyType;
+>constInitToLReadonlyTypeWithIndexedAccess : symbol
+>L : L
+>l.readonlyType : symbol()
+>l : L
+>readonlyType : symbol()
+
+const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"] = l.nested.readonlyNestedType;
+>constInitToLReadonlyNestedTypeWithIndexedAccess : symbol
+>L : L
+>l.nested.readonlyNestedType : symbol()
+>l.nested : { readonly readonlyNestedType: symbol(); }
+>l : L
+>nested : { readonly readonlyNestedType: symbol(); }
+>readonlyNestedType : symbol()
+
+// type argument inference
+const promiseForConstCall = Promise.resolve(constCall);
+>promiseForConstCall : Promise<symbol>
+>Promise.resolve(constCall) : Promise<symbol>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>constCall : symbol()
+
+const arrayOfConstCall = [constCall];
+>arrayOfConstCall : symbol[]
+>[constCall] : symbol[]
+>constCall : symbol()
+

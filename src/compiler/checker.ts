@@ -630,6 +630,15 @@ namespace ts {
             }
         }
 
+        function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined {
+            if (!first || first.size === 0) return second;
+            if (!second || second.size === 0) return first;
+            const combined = createSymbolTable();
+            mergeSymbolTable(combined, first);
+            mergeSymbolTable(combined, second);
+            return combined;
+        }
+
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             source.forEach((sourceSymbol, id) => {
                 let targetSymbol = target.get(id);
@@ -751,7 +760,7 @@ namespace ts {
             const classDeclaration = parameter.parent.parent;
 
             const parameterSymbol = getSymbol(constructorDeclaration.locals, parameterName, SymbolFlags.Value);
-            const propertySymbol = getSymbol(classDeclaration.symbol.members, parameterName, SymbolFlags.Value);
+            const propertySymbol = getSymbol(getMembersOfSymbol(classDeclaration.symbol), parameterName, SymbolFlags.Value);
 
             if (parameterSymbol && propertySymbol) {
                 return [parameterSymbol, propertySymbol];
@@ -2479,10 +2488,8 @@ namespace ts {
                 if (type.flags & TypeFlags.BooleanLiteral) {
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                 }
-                if (type.flags & TypeFlags.Unique) {
-                    return type.flags & TypeFlags.Fresh
-                        ? <SymbolTypeNode>createToken(SyntaxKind.SymbolType)
-                        : createTypeQueryNodeFromSymbol(type.symbol, SymbolFlags.Value);
+                if (type.flags & TypeFlags.UniqueESSymbol) {
+                    return createESSymbolTypeNode();
                 }
                 if (type.flags & TypeFlags.Void) {
                     return createKeywordTypeNode(SyntaxKind.VoidKeyword);
@@ -3297,15 +3304,10 @@ namespace ts {
                     else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
                     }
-                    else if (type.flags & TypeFlags.Unique) {
-                        if (type.flags & TypeFlags.Fresh) {
-                            writeKeyword(writer, SyntaxKind.SymbolKeyword);
-                            writePunctuation(writer, SyntaxKind.OpenParenToken);
-                            writePunctuation(writer, SyntaxKind.CloseParenToken);
-                        }
-                        else {
-                            writeTypeOfSymbol(type.symbol, flags);
-                        }
+                    else if (type.flags & TypeFlags.UniqueESSymbol) {
+                        writeKeyword(writer, SyntaxKind.SymbolKeyword);
+                        writePunctuation(writer, SyntaxKind.OpenParenToken);
+                        writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
@@ -4522,6 +4524,12 @@ namespace ts {
                 if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
                 }
+
+                // always widen a unique 'symbol()' type if the type was created for a different declaration.
+                if (type.flags & TypeFlags.UniqueESSymbol && !declaration.type && type.symbol !== getSymbolOfNode(declaration)) {
+                    type = esSymbolType;
+                }
+
                 // During a normal type check we'll never get to here with a property assignment (the check of the containing
                 // object literal uses a different path). We exclude widening only so that language services and type verification
                 // tools see the actual type.
@@ -4590,16 +4598,6 @@ namespace ts {
                 if (!popTypeResolution()) {
                     type = reportCircularityError(symbol);
                 }
-
-                // If the type is a fresh, unique symbol type and is not the type for this symbol, get its regular type
-                // For example:
-                //
-                //  const x = Symbol(); // fresh type, e.g. 'symbol()'
-                //  const y = x;        // regular type, e.g. 'typeof x'
-                if (type.flags & TypeFlags.Unique && type.flags & TypeFlags.Fresh && type.symbol !== symbol) {
-                    type = (<UniqueType>type).regularType;
-                }
-
                 links.type = type;
             }
             return links.type;
@@ -5417,9 +5415,10 @@ namespace ts {
         function resolveDeclaredMembers(type: InterfaceType): InterfaceTypeWithDeclaredMembers {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 const symbol = type.symbol;
+                const members = getMembersOfSymbol(symbol);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(getMembersOfSymbol(symbol));
-                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.Call));
-                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get(InternalSymbolName.New));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.Call));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.New));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
             }
@@ -5439,16 +5438,7 @@ namespace ts {
                         lateBindMembers(lateMembers, decl);
                     }
                 }
-                if (!lateMembers || lateMembers.size === 0) {
-                    return links.resolvedMembers = symbol.members || emptySymbols;
-                }
-                if (!symbol.members || symbol.members.size === 0) {
-                    return links.resolvedMembers = lateMembers;
-                }
-                const resolvedMembers = createUnderscoreEscapedMap<Symbol>();
-                mergeSymbolTable(resolvedMembers, symbol.members);
-                mergeSymbolTable(resolvedMembers, lateMembers);
-                return links.resolvedMembers = resolvedMembers;
+                links.resolvedMembers = combineSymbolTables(symbol.members, lateMembers) || emptySymbols;
             }
             return links.resolvedMembers;
         }
@@ -5456,7 +5446,7 @@ namespace ts {
         /**
          * Gets the late-bound members of a symbol.
          */
-        function getLateBoundMembersOfSymbol(symbol: Symbol) {
+        function getLateBoundMembersOfSymbol(symbol: Symbol): UnderscoreEscapedMap<TransientSymbol> | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral)) {
                 const links = getSymbolLinks(symbol);
                 return links.lateMembers || (links.lateMembers = createUnderscoreEscapedMap<TransientSymbol>());
@@ -5477,7 +5467,11 @@ namespace ts {
         function isLateBoundName(node: DeclarationName): node is LateBoundName {
             return isComputedPropertyName(node)
                 && isEntityNameExpression(node.expression)
-                && (checkComputedPropertyName(node).flags & TypeFlags.StringOrNumberLiteralOrUnique) !== 0;
+                && isLateBoundNameType(checkComputedPropertyName(node));
+        }
+
+        function isLateBoundNameType(type: Type): type is LiteralType | UniqueESSymbolType {
+            return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
         }
 
         /**
@@ -5511,8 +5505,8 @@ namespace ts {
         /**
          * Gets the symbolic name for a late-bound member from its type.
          */
-        function getLateBoundNameFromType(type: Type) {
-            if (type.flags & TypeFlags.Unique) {
+        function getLateBoundNameFromType(type: LiteralType | UniqueESSymbolType) {
+            if (type.flags & TypeFlags.UniqueESSymbol) {
                 return `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
             }
             if (type.flags & TypeFlags.StringOrNumberLiteral) {
@@ -5552,7 +5546,7 @@ namespace ts {
                 const memberSymbol = member.symbol;
                 links.resolvedSymbol = memberSymbol || unknownSymbol;
                 const type = checkComputedPropertyName(member.name);
-                if (type.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
+                if (isLateBoundNameType(type)) {
                     const memberName = getLateBoundNameFromType(type);
                     let symbol = lateMembers.get(memberName);
                     if (!symbol) {
@@ -5633,7 +5627,7 @@ namespace ts {
             }
             const baseTypes = getBaseTypes(source);
             if (baseTypes.length) {
-                if (source.symbol && members === source.symbol.members) {
+                if (source.symbol && members === getMembersOfSymbol(source.symbol)) {
                     members = createSymbolTable(source.declaredProperties);
                 }
                 const thisArgument = lastOrUndefined(typeArguments);
@@ -7464,7 +7458,7 @@ namespace ts {
             containsString?: boolean;
             containsNumber?: boolean;
             containsESSymbol?: boolean;
-            containsStringOrNumberLiteralOrUnique?: boolean;
+            containsStringOrNumberLiteralOrUniqueESSymbol?: boolean;
             containsObjectType?: boolean;
             containsEmptyObject?: boolean;
             unionIndex?: number;
@@ -7531,7 +7525,7 @@ namespace ts {
                 if (flags & TypeFlags.String) typeSet.containsString = true;
                 if (flags & TypeFlags.Number) typeSet.containsNumber = true;
                 if (flags & TypeFlags.ESSymbol) typeSet.containsESSymbol = true;
-                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) typeSet.containsStringOrNumberLiteralOrUnique = true;
+                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) typeSet.containsStringOrNumberLiteralOrUniqueESSymbol = true;
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
                 if (index < 0) {
@@ -7606,8 +7600,8 @@ namespace ts {
                 const remove =
                     t.flags & TypeFlags.StringLiteral && types.containsString ||
                     t.flags & TypeFlags.NumberLiteral && types.containsNumber ||
-                    t.flags & TypeFlags.Unique && types.containsESSymbol ||
-                    t.flags & TypeFlags.StringOrNumberLiteralOrUnique && t.flags & TypeFlags.Fresh && containsType(types, getRegularTypeOfLiteralOrUniqueType(t));
+                    t.flags & TypeFlags.UniqueESSymbol && types.containsESSymbol ||
+                    t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
                 }
@@ -7636,7 +7630,7 @@ namespace ts {
             if (subtypeReduction) {
                 removeSubtypes(typeSet);
             }
-            else if (typeSet.containsStringOrNumberLiteralOrUnique) {
+            else if (typeSet.containsStringOrNumberLiteralOrUniqueESSymbol) {
                 removeRedundantLiteralTypes(typeSet);
             }
             if (typeSet.length === 0) {
@@ -7823,8 +7817,7 @@ namespace ts {
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
-            const propName = indexType.flags & TypeFlags.StringOrNumberLiteralOrUnique ?
-                getLateBoundNameFromType(indexType) :
+            const propName = isLateBoundNameType(indexType) ? getLateBoundNameFromType(indexType) :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).escapedText)) :
                     undefined;
@@ -8137,22 +8130,20 @@ namespace ts {
             return type;
         }
 
-        function getFreshTypeOfLiteralOrUniqueType(type: Type) {
-            if (type.flags & TypeFlags.StringOrNumberLiteralOrUnique && !(type.flags & TypeFlags.Fresh)) {
-                if (!(<UniqueType | LiteralType>type).freshType) {
-                    const freshType = type.flags & TypeFlags.Unique
-                        ? createUniqueType(type.symbol, TypeFlags.Fresh)
-                        : createLiteralType(type.flags | TypeFlags.Fresh, (<LiteralType>type).value, (<LiteralType>type).symbol);
-                    freshType.regularType = <UniqueType | LiteralType>type;
-                    (<UniqueType | LiteralType>type).freshType = freshType;
+        function getFreshTypeOfLiteralType(type: Type) {
+            if (type.flags & TypeFlags.StringOrNumberLiteral && !(type.flags & TypeFlags.FreshLiteral)) {
+                if (!(<LiteralType>type).freshType) {
+                    const freshType = createLiteralType(type.flags | TypeFlags.FreshLiteral, (<LiteralType>type).value, (<LiteralType>type).symbol);
+                    freshType.regularType = <LiteralType>type;
+                    (<LiteralType>type).freshType = freshType;
                 }
-                return (<UniqueType | LiteralType>type).freshType;
+                return (<LiteralType>type).freshType;
             }
             return type;
         }
 
-        function getRegularTypeOfLiteralOrUniqueType(type: Type) {
-            return type.flags & TypeFlags.StringOrNumberLiteralOrUnique && type.flags & TypeFlags.Fresh ? (<UniqueType | LiteralType>type).regularType : type;
+        function getRegularTypeOfLiteralType(type: Type) {
+            return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType : type;
         }
 
         function getLiteralType(value: string | number, enumId?: number, symbol?: Symbol) {
@@ -8173,36 +8164,63 @@ namespace ts {
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getRegularTypeOfLiteralOrUniqueType(checkExpression(node.literal));
+                links.resolvedType = getRegularTypeOfLiteralType(checkExpression(node.literal));
             }
             return links.resolvedType;
         }
 
-        function getTypeFromSymbolTypeNode(node: SymbolTypeNode): Type {
-            const parent = node.parent;
-            if (parent.kind === SyntaxKind.VariableDeclaration ||
-                parent.kind === SyntaxKind.PropertyDeclaration ||
-                parent.kind === SyntaxKind.PropertySignature ||
-                parent.kind === SyntaxKind.PropertyAssignment) {
-                const symbol = getSymbolOfNode(parent);
-                if (symbol) return getUniqueTypeForSymbol(symbol);
-            }
-            return esSymbolType;
+        function getWidenedTypeOfUniqueESSymbolType(type: Type): Type {
+            return type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
+                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedTypeOfUniqueESSymbolType)) :
+                type.flags & TypeFlags.Intersection ? getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedTypeOfUniqueESSymbolType)) :
+                type;
         }
 
-        function getRegularTypeOfUniqueType(type: Type) {
-            return type.flags & TypeFlags.Unique && type.flags & TypeFlags.Fresh ? (<UniqueType>type).regularType : type;
-        }
-
-        function createUniqueType(symbol: Symbol, flags?: TypeFlags) {
-            const type = <UniqueType>createType(TypeFlags.Unique | flags);
+        function createUniqueESSymbolType(symbol: Symbol) {
+            const type = <UniqueESSymbolType>createType(TypeFlags.UniqueESSymbol);
             type.symbol = symbol;
             return type;
         }
 
-        function getUniqueTypeForSymbol(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            return links.type || (links.type = createUniqueType(symbol));
+        function isReferenceToValidDeclarationForUniqueESSymbol(symbol: Symbol) {
+            if (symbol.valueDeclaration) {
+                switch (symbol.valueDeclaration.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                        return getNameOfDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Identifier
+                            && symbol.valueDeclaration.parent.kind === SyntaxKind.VariableDeclarationList
+                            && symbol.valueDeclaration.parent.parent.kind === SyntaxKind.VariableStatement
+                            && !!(symbol.valueDeclaration.parent.flags & NodeFlags.Const);
+                    case SyntaxKind.PropertySignature:
+                        return hasModifier(symbol.valueDeclaration, ModifierFlags.Readonly);
+                    case SyntaxKind.PropertyDeclaration:
+                        return hasModifier(symbol.valueDeclaration, ModifierFlags.Readonly)
+                            && hasModifier(symbol.valueDeclaration, ModifierFlags.Static);
+                }
+            }
+            return false;
+        }
+
+        function getUniqueESSymbolTypeForSymbol(symbol: Symbol) {
+            if (isReferenceToValidDeclarationForUniqueESSymbol(symbol)) {
+                const links = getSymbolLinks(symbol);
+                return links.type || (links.type = createUniqueESSymbolType(symbol));
+            }
+            return esSymbolType;
+        }
+
+        function getTypeFromESSymbolTypeNode(node: ESSymbolTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                const parent = skipParentheses(node).parent;
+                const symbol = getSymbolOfNode(parent);
+                if (symbol) {
+                    links.resolvedType = getUniqueESSymbolTypeForSymbol(symbol);
+                }
+                else {
+                    links.resolvedType = esSymbolType;
+                }
+            }
+            return links.resolvedType;
         }
 
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
@@ -8264,8 +8282,8 @@ namespace ts {
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
-                case SyntaxKind.SymbolType:
-                    return getTypeFromSymbolTypeNode(<SymbolTypeNode>node);
+                case SyntaxKind.ESSymbolType:
+                    return getTypeFromESSymbolTypeNode(<ESSymbolTypeNode>node);
                 case SyntaxKind.TypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
@@ -9003,7 +9021,7 @@ namespace ts {
             if (s & TypeFlags.Undefined && (!strictNullChecks || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
-            if (s & TypeFlags.Unique || t & TypeFlags.Unique) return false;
+            if (s & TypeFlags.UniqueESSymbol || t & TypeFlags.UniqueESSymbol) return false;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
@@ -9016,8 +9034,8 @@ namespace ts {
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            source = getRegularTypeOfLiteralOrUniqueType(source);
-            target = getRegularTypeOfLiteralOrUniqueType(target);
+            source = getRegularTypeOfLiteralType(source);
+            target = getRegularTypeOfLiteralType(target);
             if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
@@ -9148,8 +9166,8 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
-                source = getRegularTypeOfLiteralOrUniqueType(source);
-                target = getRegularTypeOfLiteralOrUniqueType(target);
+                source = getRegularTypeOfLiteralType(source);
+                target = getRegularTypeOfLiteralType(target);
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
@@ -9159,7 +9177,7 @@ namespace ts {
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && source.flags & TypeFlags.Fresh) {
+                if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
@@ -10315,9 +10333,8 @@ namespace ts {
 
         function getWidenedLiteralType(type: Type): Type {
             return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
-                type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.Fresh ? stringType :
-                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.Fresh ? numberType :
-                type.flags & TypeFlags.Unique && type.flags & TypeFlags.Fresh ? esSymbolType :
+                type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
+                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
                 type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
                 type;
@@ -10425,7 +10442,7 @@ namespace ts {
          * Leave signatures alone since they are not subject to the check.
          */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
-            if (!(getObjectFlags(type) & ObjectFlags.ObjectLiteral && type.flags & TypeFlags.Fresh)) {
+            if (!(getObjectFlags(type) & ObjectFlags.ObjectLiteral && type.flags & TypeFlags.FreshLiteral)) {
                 return type;
             }
             const regularType = (<FreshObjectLiteralType>type).regularType;
@@ -10441,7 +10458,7 @@ namespace ts {
                 resolved.constructSignatures,
                 resolved.stringIndexInfo,
                 resolved.numberIndexInfo);
-            regularNew.flags = resolved.flags & ~TypeFlags.Fresh;
+            regularNew.flags = resolved.flags & ~TypeFlags.FreshLiteral;
             regularNew.objectFlags |= ObjectFlags.ObjectLiteral;
             (<FreshObjectLiteralType>type).regularType = regularNew;
             return regularNew;
@@ -11067,7 +11084,7 @@ namespace ts {
                     }
                 }
             }
-            return inferredType;
+            return getWidenedTypeOfUniqueESSymbolType(inferredType);
         }
 
         function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
@@ -11515,7 +11532,7 @@ namespace ts {
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
             if (clause.kind === SyntaxKind.CaseClause) {
-                const caseType = getRegularTypeOfLiteralOrUniqueType(getTypeOfExpression((<CaseClause>clause).expression));
+                const caseType = getRegularTypeOfLiteralType(getTypeOfExpression((<CaseClause>clause).expression));
                 return isUnitType(caseType) ? caseType : undefined;
             }
             return neverType;
@@ -12160,8 +12177,8 @@ namespace ts {
                     return narrowedType.flags & TypeFlags.Never ? type : replacePrimitivesWithLiterals(narrowedType, valueType);
                 }
                 if (isUnitType(valueType)) {
-                    const regularType = getRegularTypeOfLiteralOrUniqueType(valueType);
-                    return filterType(type, t => getRegularTypeOfLiteralOrUniqueType(t) !== regularType);
+                    const regularType = getRegularTypeOfLiteralType(valueType);
+                    return filterType(type, t => getRegularTypeOfLiteralType(t) !== regularType);
                 }
                 return type;
             }
@@ -12218,7 +12235,7 @@ namespace ts {
                 if (!hasDefaultClause) {
                     return caseType;
                 }
-                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, getRegularTypeOfLiteralOrUniqueType(t))));
+                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, getRegularTypeOfLiteralType(t))));
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
@@ -13700,7 +13717,7 @@ namespace ts {
                 else {
                     const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
-                    elementTypes.push(type);
+                    elementTypes.push(getWidenedTypeOfUniqueESSymbolType(type));
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
             }
@@ -13882,7 +13899,7 @@ namespace ts {
                     let prop: TransientSymbol;
                     if (hasLateBoundName(memberDecl)) {
                         const nameType = checkComputedPropertyName(memberDecl.name);
-                        if (nameType && nameType.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
+                        if (nameType && isLateBoundNameType(nameType)) {
                             prop = createSymbol(SymbolFlags.Property | SymbolFlags.Late | member.flags, getLateBoundNameFromType(nameType));
                         }
                     }
@@ -13994,7 +14011,7 @@ namespace ts {
                 if (spread.flags & TypeFlags.Object) {
                     // only set the symbol and flags if this is a (fresh) object type
                     spread.flags |= propagatedFlags;
-                    spread.flags |= TypeFlags.Fresh;
+                    spread.flags |= TypeFlags.FreshLiteral;
                     (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
                     spread.symbol = node.symbol;
                 }
@@ -14007,7 +14024,7 @@ namespace ts {
                 const stringIndexInfo = isJSObjectLiteral ? jsObjectLiteralIndexInfo : hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
                 const numberIndexInfo = hasComputedNumberProperty && !isJSObjectLiteral ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.Fresh;
+                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
                 result.flags |= TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 if (patternWithComputedProperties) {
@@ -16832,11 +16849,8 @@ namespace ts {
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
                 const parent = skipParentheses(node).parent;
-                if ((parent.kind === SyntaxKind.VariableDeclaration && parent.parent.flags & NodeFlags.Const) ||
-                    (parent.kind === SyntaxKind.PropertyDeclaration && hasModifier(parent, ModifierFlags.Readonly))) {
-                    const symbol = getSymbolOfNode(parent);
-                    if (symbol) return getFreshTypeOfLiteralOrUniqueType(getUniqueTypeForSymbol(symbol));
-                }
+                const symbol = getSymbolOfNode(parent);
+                if (symbol) return getUniqueESSymbolTypeForSymbol(symbol);
             }
             return returnType;
         }
@@ -17117,7 +17131,7 @@ namespace ts {
             const functionFlags = getFunctionFlags(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                type = getRegularTypeOfUniqueType(checkExpressionCached(<Expression>func.body, checkMode));
+                type = checkExpressionCached(<Expression>func.body, checkMode);
                 if (functionFlags & FunctionFlags.Async) {
                     // From within an async function you can return either a non-promise value or a promise. Any
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -17125,6 +17139,9 @@ namespace ts {
                     // the native Promise<T> type later in this function.
                     type = checkAwaitedType(type, /*errorNode*/ func, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
+
+                // widen 'symbol()' types when we infer the return type.
+                type = getWidenedTypeOfUniqueESSymbolType(type);
             }
             else {
                 let types: Type[];
@@ -17157,7 +17174,10 @@ namespace ts {
                     }
                 }
                 // Return a union of the return expression types.
-                type = getUnionType(map(types, getRegularTypeOfUniqueType), /*subtypeReduction*/ true);
+                type = getUnionType(types, /*subtypeReduction*/ true);
+
+                // widen 'symbol()' types when we infer the return type.
+                type = getWidenedTypeOfUniqueESSymbolType(type);
 
                 if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
                     type = functionFlags & FunctionFlags.Async
@@ -17170,12 +17190,11 @@ namespace ts {
                 reportErrorsFromWidening(func, type);
             }
 
-            if (isUnitType(type)) {
-                if (!(contextualSignature &&
+            if (isUnitType(type) &&
+                !(contextualSignature &&
                     isLiteralContextualType(
                         contextualSignature === getSignatureFromDeclaration(func) ? type : getReturnTypeOfSignature(contextualSignature)))) {
-                    type = getWidenedLiteralType(type);
-                }
+                type = getWidenedLiteralType(type);
             }
 
             const widenedType = getWidenedType(type);
@@ -17222,7 +17241,7 @@ namespace ts {
             if (!switchTypes.length) {
                 return false;
             }
-            return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralOrUniqueType), switchTypes);
+            return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
         }
 
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
@@ -17549,10 +17568,10 @@ namespace ts {
             }
             if (node.operand.kind === SyntaxKind.NumericLiteral) {
                 if (node.operator === SyntaxKind.MinusToken) {
-                    return getFreshTypeOfLiteralOrUniqueType(getLiteralType(-(<LiteralExpression>node.operand).text));
+                    return getFreshTypeOfLiteralType(getLiteralType(-(<LiteralExpression>node.operand).text));
                 }
                 else if (node.operator === SyntaxKind.PlusToken) {
-                    return getFreshTypeOfLiteralOrUniqueType(getLiteralType(+(<LiteralExpression>node.operand).text));
+                    return getFreshTypeOfLiteralType(getLiteralType(+(<LiteralExpression>node.operand).text));
                 }
             }
             switch (node.operator) {
@@ -18431,10 +18450,10 @@ namespace ts {
                     return nullWideningType;
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
-                    return getFreshTypeOfLiteralOrUniqueType(getLiteralType((node as LiteralExpression).text));
+                    return getFreshTypeOfLiteralType(getLiteralType((node as LiteralExpression).text));
                 case SyntaxKind.NumericLiteral:
                     checkGrammarNumericLiteral(node as NumericLiteral);
-                    return getFreshTypeOfLiteralOrUniqueType(getLiteralType(+(node as NumericLiteral).text));
+                    return getFreshTypeOfLiteralType(getLiteralType(+(node as NumericLiteral).text));
                 case SyntaxKind.TrueKeyword:
                     return trueType;
                 case SyntaxKind.FalseKeyword:
@@ -19236,8 +19255,8 @@ namespace ts {
             checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
         }
 
-        function checkSymbolType(node: SymbolTypeNode) {
-            checkGrammarSymbolTypeNode(node);
+        function checkSymbolType(node: ESSymbolTypeNode) {
+            checkGrammarESSymbolTypeNode(node);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
@@ -22795,8 +22814,8 @@ namespace ts {
                     return checkIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return checkMappedType(<MappedTypeNode>node);
-                case SyntaxKind.SymbolType:
-                    return checkSymbolType(<SymbolTypeNode>node);
+                case SyntaxKind.ESSymbolType:
+                    return checkSymbolType(<ESSymbolTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
@@ -23548,7 +23567,7 @@ namespace ts {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = <Expression>expr.parent;
             }
-            return getRegularTypeOfLiteralOrUniqueType(getTypeOfExpression(expr));
+            return getRegularTypeOfLiteralType(getTypeOfExpression(expr));
         }
 
         /**
@@ -23991,14 +24010,7 @@ namespace ts {
             let type: Type = unknownType;
             if (symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))) {
                 type = getTypeOfSymbol(symbol);
-                if (type.flags & TypeFlags.Unique) {
-                    if (type.symbol !== symbol) {
-                        type = getRegularTypeOfUniqueType(type);
-                    }
-                }
-                else {
-                    type = getWidenedLiteralType(type);
-                }
+                type = getWidenedLiteralType(type);
             }
             if (flags & TypeFormatFlags.AddUndefined) {
                 type = getNullableType(type, TypeFlags.Undefined);
@@ -24065,7 +24077,7 @@ namespace ts {
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
             if (isConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
-                return !!(type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.Fresh);
+                return !!(type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral);
             }
             return false;
         }
@@ -25116,21 +25128,58 @@ namespace ts {
             }
         }
 
-        function checkGrammarSymbolTypeNode(node: SymbolTypeNode) {
-            const parent = node.parent;
-            if (parent.kind !== SyntaxKind.VariableDeclaration &&
-                parent.kind !== SyntaxKind.PropertyDeclaration &&
-                parent.kind !== SyntaxKind.PropertySignature &&
-                parent.kind !== SyntaxKind.PropertyAssignment) {
-                return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_only_allowed_on_variables_and_properties);
+        function checkGrammarESSymbolTypeNode(node: ESSymbolTypeNode) {
+            let parent = node.parent;
+            while (parent.kind === SyntaxKind.ParenthesizedType) {
+                parent = parent.parent;
             }
-            if (parent.kind === SyntaxKind.VariableDeclaration &&
-                (<VariableDeclaration>parent).name.kind !== SyntaxKind.Identifier) {
-                return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
+
+            switch (parent.kind) {
+                case SyntaxKind.VariableDeclaration:
+                    const decl = parent as VariableDeclaration;
+                    if (decl.name.kind !== SyntaxKind.Identifier) {
+                        return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
+                    }
+                    if (!isVariableDeclarationInVariableStatement(decl)) {
+                        return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement);
+                    }
+                    if (!(decl.parent.flags & NodeFlags.Const)) {
+                        return grammarErrorOnNode((<VariableDeclaration>parent).name, Diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const);
+                    }
+                    break;
+
+                case SyntaxKind.PropertyDeclaration:
+                    if (!hasModifier(parent, ModifierFlags.Static) ||
+                        !hasModifier(parent, ModifierFlags.Readonly)) {
+                        return grammarErrorOnNode((<PropertyDeclaration>parent).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
+                    }
+                    break;
+
+                case SyntaxKind.PropertySignature:
+                    if (!hasModifier(parent, ModifierFlags.Readonly)) {
+                        return grammarErrorOnNode((<PropertySignature>parent).name, Diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly);
+                    }
+                    break;
+
+                // report specific errors for cases where a `symbol()` type is disallowed even when it is in a `const` or `readonly` declaration.
+                case SyntaxKind.UnionType:
+                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_a_union_type);
+                case SyntaxKind.IntersectionType:
+                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_an_intersection_type);
+                case SyntaxKind.ArrayType:
+                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_an_array_type);
+                case SyntaxKind.TupleType:
+                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_a_tuple_type);
+                case SyntaxKind.MappedType:
+                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_a_mapped_type);
+
+                // report a general error for any other invalid use site.
+                default:
+                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_here);
             }
         }
 
-        function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
+        function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
             if (isUnboundDynamicName(node)) {
                 return grammarErrorOnNode(node, message);
             }
@@ -25159,17 +25208,17 @@ namespace ts {
                 // and accessors are not allowed in ambient contexts in general,
                 // so this error only really matters for methods.
                 if (isInAmbientContext(node)) {
-                    return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_ambient_context_must_directly_refer_to_a_built_in_symbol);
+                    return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_an_ambient_context_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
                 }
                 else if (!node.body) {
-                    return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_method_overload_must_directly_refer_to_a_built_in_symbol);
+                    return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_method_overload_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
                 }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol);
+                return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
-                return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol);
+                return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
             }
         }
 
@@ -25421,12 +25470,12 @@ namespace ts {
 
         function checkGrammarProperty(node: PropertyDeclaration) {
             if (isClassLike(node.parent)) {
-                if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_symbol)) {
+                if (checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type)) {
                     return true;
                 }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol)) {
+                if (checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type)) {
                     return true;
                 }
                 if (node.initializer) {
@@ -25434,7 +25483,7 @@ namespace ts {
                 }
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
-                if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol)) {
+                if (checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type)) {
                     return true;
                 }
                 if (node.initializer) {

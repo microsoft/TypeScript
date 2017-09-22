@@ -425,7 +425,7 @@ namespace ts {
                 case SyntaxKind.ThisType:
                 case SyntaxKind.LiteralType:
                     return writeTextOfNode(currentText, type);
-                case SyntaxKind.SymbolType:
+                case SyntaxKind.ESSymbolType:
                     return write("symbol()");
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);

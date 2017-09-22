@@ -74,12 +74,13 @@ namespace N {
     export const c3 = 1;
 >c3 : Symbol(c3, Decl(main.ts, 5, 16))
 
-    export const s1 = s0;
+    export const s1: typeof s0 = s0;
 >s1 : Symbol(s1, Decl(main.ts, 6, 16))
+>s0 : Symbol(s0, Decl(main.ts, 0, 16))
 >s0 : Symbol(s0, Decl(main.ts, 0, 16))
 
     export interface T4 {
->T4 : Symbol(T4, Decl(main.ts, 6, 25))
+>T4 : Symbol(T4, Decl(main.ts, 6, 36))
 
         [N.c2]: number;
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
@@ -98,7 +99,7 @@ namespace N {
     }
     export declare class T5 implements T4 {
 >T5 : Symbol(T5, Decl(main.ts, 12, 5))
->T4 : Symbol(T4, Decl(main.ts, 6, 25))
+>T4 : Symbol(T4, Decl(main.ts, 6, 36))
 
         [N.c2]: number;
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
@@ -146,12 +147,13 @@ export const c4 = "a";
 export const c5 = 1;
 >c5 : Symbol(c5, Decl(main.ts, 28, 12))
 
-export const s2 = s0;
+export const s2: typeof s0 = s0;
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
+>s0 : Symbol(s0, Decl(main.ts, 0, 16))
 >s0 : Symbol(s0, Decl(main.ts, 0, 16))
 
 interface T8 {
->T8 : Symbol(T8, Decl(main.ts, 29, 21))
+>T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
     [c4]: number;
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
@@ -164,7 +166,7 @@ interface T8 {
 }
 declare class T9 implements T8 {
 >T9 : Symbol(T9, Decl(main.ts, 35, 1))
->T8 : Symbol(T8, Decl(main.ts, 29, 21))
+>T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
     [c4]: number;
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
@@ -269,7 +271,7 @@ let t3_1: M.T3;
 let t4: N.T4;
 >t4 : Symbol(t4, Decl(main.ts, 75, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
->T4 : Symbol(N.T4, Decl(main.ts, 6, 25))
+>T4 : Symbol(N.T4, Decl(main.ts, 6, 36))
 
 let t5: N.T5;
 >t5 : Symbol(t5, Decl(main.ts, 76, 3))
@@ -288,7 +290,7 @@ let t7: N.T7;
 
 let t8: T8;
 >t8 : Symbol(t8, Decl(main.ts, 79, 3))
->T8 : Symbol(T8, Decl(main.ts, 29, 21))
+>T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
 let t9: T9;
 >t9 : Symbol(t9, Decl(main.ts, 80, 3))

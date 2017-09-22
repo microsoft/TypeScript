@@ -574,7 +574,7 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
-                case SyntaxKind.SymbolType:
+                case SyntaxKind.ESSymbolType:
                     return write("symbol()");
 
                 // Binding patterns

@@ -2615,7 +2615,7 @@ namespace ts {
             if (token() === SyntaxKind.DotToken) return undefined;
             if (parseOptional(SyntaxKind.OpenParenToken)) {
                 parseExpected(SyntaxKind.CloseParenToken);
-                return finishNode(<SymbolTypeNode>createNode(SyntaxKind.SymbolType, fullStart));
+                return finishNode(<ESSymbolTypeNode>createNode(SyntaxKind.ESSymbolType, fullStart));
             }
             else {
                 return finishNode(<TypeNode>createNode(SyntaxKind.SymbolKeyword, fullStart));

@@ -785,6 +785,10 @@ namespace ts {
             : node;
     }
 
+    export function createESSymbolTypeNode() {
+        return <ESSymbolTypeNode>createSynthesizedNode(SyntaxKind.ESSymbolType);
+    }
+
     // Binding Patterns
 
     export function createObjectBindingPattern(elements: ReadonlyArray<BindingElement>) {

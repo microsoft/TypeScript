@@ -31,7 +31,7 @@ import * as M from "./module";
 namespace N {
     export const c2 = "a";
     export const c3 = 1;
-    export const s1 = s0;
+    export const s1: typeof s0 = s0;
 
     export interface T4 {
         [N.c2]: number;
@@ -54,7 +54,7 @@ namespace N {
 
 export const c4 = "a";
 export const c5 = 1;
-export const s2 = s0;
+export const s2: typeof s0 = s0;
 
 interface T8 {
     [c4]: number;

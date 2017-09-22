@@ -926,6 +926,11 @@ namespace ts {
         return false;
     }
 
+    export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
+        return node.parent.kind === SyntaxKind.VariableDeclarationList
+            && node.parent.parent.kind === SyntaxKind.VariableStatement;
+    }
+
     export function introducesArgumentsExoticObject(node: Node) {
         switch (node.kind) {
             case SyntaxKind.MethodDeclaration:
