@@ -88,10 +88,6 @@ namespace ts.refactor.convertJSDocToTypes {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-        //| MethodDeclaration
-        //| ConstructorDeclaration
-        //| GetAccessorDeclaration
-        //| SetAccessorDeclaration
     function replaceType(decl: DeclarationWithType, jsdocType: TypeNode, jsdocReturn: TypeNode) {
         switch (decl.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -110,6 +106,8 @@ namespace ts.refactor.convertJSDocToTypes {
                 return createArrowFunction(decl.modifiers, decl.typeParameters, decl.parameters, jsdocReturn, decl.equalsGreaterThanToken, decl.body);
             case SyntaxKind.MethodDeclaration:
                 return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
+            case SyntaxKind.GetAccessor:
+                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, decl.parameters, jsdocReturn, decl.body);
             default:
                 Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
                 return undefined;
