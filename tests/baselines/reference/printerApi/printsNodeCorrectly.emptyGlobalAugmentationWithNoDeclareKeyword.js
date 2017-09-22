@@ -1,1 +1,1 @@
-declare global { }
+global { }
