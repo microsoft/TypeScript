@@ -13305,8 +13305,11 @@ namespace ts {
                 case SyntaxKind.TemplateSpan:
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
-                case SyntaxKind.ParenthesizedExpression:
-                    return getContextualType(<ParenthesizedExpression>parent);
+                case SyntaxKind.ParenthesizedExpression: {
+                    // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
+                    const tag = isInJavaScriptFile(parent) ? getJSDocTypeTag(parent) : undefined;
+                    return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent);
+                }
                 case SyntaxKind.JsxExpression:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
                 case SyntaxKind.JsxAttribute:
@@ -18127,13 +18130,9 @@ namespace ts {
         }
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
-            if (isInJavaScriptFile(node) && node.jsDoc) {
-                const typecasts = flatMap(node.jsDoc, doc => filter(doc.tags, tag => tag.kind === SyntaxKind.JSDocTypeTag && !!(tag as JSDocTypeTag).typeExpression && !!(tag as JSDocTypeTag).typeExpression.type));
-                if (typecasts && typecasts.length) {
-                    // We should have already issued an error if there were multiple type jsdocs
-                    const cast = typecasts[0] as JSDocTypeTag;
-                    return checkAssertionWorker(cast, cast.typeExpression.type, node.expression, checkMode);
-                }
+            const tag = isInJavaScriptFile(node) ? getJSDocTypeTag(node) : undefined;
+            if (tag) {
+                return checkAssertionWorker(tag, tag.typeExpression.type, node.expression, checkMode);
             }
             return checkExpression(node.expression, checkMode);
         }
