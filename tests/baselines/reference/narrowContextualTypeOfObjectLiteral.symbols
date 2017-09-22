@@ -1,0 +1,43 @@
+=== tests/cases/compiler/narrowContextualTypeOfObjectLiteral.ts ===
+interface X {
+>X : Symbol(X, Decl(narrowContextualTypeOfObjectLiteral.ts, 0, 0))
+
+    type: 'x';
+>type : Symbol(X.type, Decl(narrowContextualTypeOfObjectLiteral.ts, 0, 13))
+
+    value: 1 | 2 | 3;
+>value : Symbol(X.value, Decl(narrowContextualTypeOfObjectLiteral.ts, 1, 14))
+
+    xtra: number;
+>xtra : Symbol(X.xtra, Decl(narrowContextualTypeOfObjectLiteral.ts, 2, 21))
+}
+
+interface Y {
+>Y : Symbol(Y, Decl(narrowContextualTypeOfObjectLiteral.ts, 4, 1))
+
+    type: 'y';
+>type : Symbol(Y.type, Decl(narrowContextualTypeOfObjectLiteral.ts, 6, 13))
+
+    value: 11 | 12 | 13;
+>value : Symbol(Y.value, Decl(narrowContextualTypeOfObjectLiteral.ts, 7, 14))
+
+    ytra: number;
+>ytra : Symbol(Y.ytra, Decl(narrowContextualTypeOfObjectLiteral.ts, 8, 24))
+}
+
+let resa: X | Y = {
+>resa : Symbol(resa, Decl(narrowContextualTypeOfObjectLiteral.ts, 12, 3))
+>X : Symbol(X, Decl(narrowContextualTypeOfObjectLiteral.ts, 0, 0))
+>Y : Symbol(Y, Decl(narrowContextualTypeOfObjectLiteral.ts, 4, 1))
+
+    type: 'y',
+>type : Symbol(type, Decl(narrowContextualTypeOfObjectLiteral.ts, 12, 19))
+
+    value: 11,
+>value : Symbol(value, Decl(narrowContextualTypeOfObjectLiteral.ts, 13, 14))
+
+    ytra: 12
+>ytra : Symbol(ytra, Decl(narrowContextualTypeOfObjectLiteral.ts, 14, 14))
+
+};
+
