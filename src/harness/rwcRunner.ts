@@ -220,23 +220,11 @@ namespace RWC {
             });
 
             it("has the expected types", () => {
-                if (skipTypeAndSymbolbaselines) {
-                    // Run no-file baselines to assert that these files should not exist
-                    const outputFileName = ts.endsWith(baseName, ts.Extension.Ts) || ts.endsWith(baseName, ts.Extension.Tsx) ?
-                        baseName.replace(/\.tsx?/, "") : baseName;
-                    Harness.Baseline.runMultifileBaseline(outputFileName, ".types", () => {
-                        return (function*(): IterableIterator<any> {})();
-                    }, baselineOpts);
-                    Harness.Baseline.runMultifileBaseline(outputFileName, ".symbols", () => {
-                        return (function*(): IterableIterator<any> {})();
-                    }, baselineOpts);
-                    return;
-                }
                 // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
                 Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult.program, inputFiles
                     .concat(otherFiles)
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
-                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true);
+                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true, skipTypeAndSymbolbaselines);
             });
 
             // Ideally, a generated declaration file will have no errors. But we allow generated
