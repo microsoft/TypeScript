@@ -95,7 +95,7 @@ class TypeWriterWalker {
         if (symbol.declarations) {
             let count = 0;
             for (const declaration of symbol.declarations) {
-                if (count >= 20) {
+                if (count >= 5) {
                     symbolString += ` ... and ${symbol.declarations.length - count} more`;
                     break;
                 }

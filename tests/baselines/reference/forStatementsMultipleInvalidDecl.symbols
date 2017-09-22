@@ -69,24 +69,24 @@ module M {
 
 // all of these are errors
 for( var a: any;;){}
->a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8), Decl(forStatementsMultipleInvalidDecl.ts, 35, 8))
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
 
 for( var a = 1;;){}
->a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8), Decl(forStatementsMultipleInvalidDecl.ts, 35, 8))
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
 
 for( var a = 'a string';;){}
->a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8), Decl(forStatementsMultipleInvalidDecl.ts, 35, 8))
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
 
 for( var a = new C();;){}
->a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8), Decl(forStatementsMultipleInvalidDecl.ts, 35, 8))
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
 >C : Symbol(C, Decl(forStatementsMultipleInvalidDecl.ts, 2, 1))
 
 for( var a = new D<string>();;){}
->a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8), Decl(forStatementsMultipleInvalidDecl.ts, 35, 8))
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
 >D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
 
 for( var a = M;;){}
->a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8), Decl(forStatementsMultipleInvalidDecl.ts, 35, 8))
+>a : Symbol(a, Decl(forStatementsMultipleInvalidDecl.ts, 30, 8), Decl(forStatementsMultipleInvalidDecl.ts, 31, 8), Decl(forStatementsMultipleInvalidDecl.ts, 32, 8), Decl(forStatementsMultipleInvalidDecl.ts, 33, 8), Decl(forStatementsMultipleInvalidDecl.ts, 34, 8) ... and 1 more)
 >M : Symbol(M, Decl(forStatementsMultipleInvalidDecl.ts, 19, 44))
 
 for( var b: I;;){}

@@ -59,7 +59,7 @@ declare function foo2(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo2(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo2 : Symbol(foo2, Decl(enumAssignabilityInInheritance.ts, 16, 24), Decl(enumAssignabilityInInheritance.ts, 18, 41))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -76,7 +76,7 @@ declare function foo3(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo3(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo3 : Symbol(foo3, Decl(enumAssignabilityInInheritance.ts, 21, 19), Decl(enumAssignabilityInInheritance.ts, 23, 43))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -95,7 +95,7 @@ declare function foo4(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo4(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo4 : Symbol(foo4, Decl(enumAssignabilityInInheritance.ts, 26, 19), Decl(enumAssignabilityInInheritance.ts, 28, 37))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -114,7 +114,7 @@ declare function foo5(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo5(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo5 : Symbol(foo5, Decl(enumAssignabilityInInheritance.ts, 31, 19), Decl(enumAssignabilityInInheritance.ts, 33, 41))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -133,7 +133,7 @@ declare function foo6(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo6(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo6 : Symbol(foo6, Decl(enumAssignabilityInInheritance.ts, 36, 19), Decl(enumAssignabilityInInheritance.ts, 38, 59))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -150,7 +150,7 @@ declare function foo7(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo7(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo7 : Symbol(foo7, Decl(enumAssignabilityInInheritance.ts, 41, 19), Decl(enumAssignabilityInInheritance.ts, 43, 45))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -173,7 +173,7 @@ declare function foo8(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo8(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo8 : Symbol(foo8, Decl(enumAssignabilityInInheritance.ts, 48, 29), Decl(enumAssignabilityInInheritance.ts, 49, 33))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -196,7 +196,7 @@ declare function foo9(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo9(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo9 : Symbol(foo9, Decl(enumAssignabilityInInheritance.ts, 54, 24), Decl(enumAssignabilityInInheritance.ts, 55, 31))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -221,7 +221,7 @@ declare function foo10(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo10(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo10 : Symbol(foo10, Decl(enumAssignabilityInInheritance.ts, 60, 23), Decl(enumAssignabilityInInheritance.ts, 61, 50))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -240,7 +240,7 @@ declare function foo11(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo11(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo11 : Symbol(foo11, Decl(enumAssignabilityInInheritance.ts, 64, 20), Decl(enumAssignabilityInInheritance.ts, 66, 56))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -265,7 +265,7 @@ declare function foo12(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo12(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo12 : Symbol(foo12, Decl(enumAssignabilityInInheritance.ts, 69, 20), Decl(enumAssignabilityInInheritance.ts, 71, 58))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -288,7 +288,7 @@ declare function foo13(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo13(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo13 : Symbol(foo13, Decl(enumAssignabilityInInheritance.ts, 76, 13), Decl(enumAssignabilityInInheritance.ts, 77, 34))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -316,7 +316,7 @@ declare function foo14(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo14(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo14 : Symbol(foo14, Decl(enumAssignabilityInInheritance.ts, 85, 1), Decl(enumAssignabilityInInheritance.ts, 86, 46))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -345,7 +345,7 @@ declare function foo15(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo15(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo15 : Symbol(foo15, Decl(enumAssignabilityInInheritance.ts, 94, 1), Decl(enumAssignabilityInInheritance.ts, 95, 34))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -364,7 +364,7 @@ declare function foo16(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo16(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo16 : Symbol(foo16, Decl(enumAssignabilityInInheritance.ts, 98, 20), Decl(enumAssignabilityInInheritance.ts, 100, 42))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
@@ -381,7 +381,7 @@ declare function foo17(x: E): E;
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 
 var r4 = foo16(E.A);
->r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3), Decl(enumAssignabilityInInheritance.ts, 46, 3), Decl(enumAssignabilityInInheritance.ts, 52, 3), Decl(enumAssignabilityInInheritance.ts, 58, 3), Decl(enumAssignabilityInInheritance.ts, 64, 3), Decl(enumAssignabilityInInheritance.ts, 69, 3), Decl(enumAssignabilityInInheritance.ts, 74, 3), Decl(enumAssignabilityInInheritance.ts, 80, 3), Decl(enumAssignabilityInInheritance.ts, 89, 3), Decl(enumAssignabilityInInheritance.ts, 98, 3), Decl(enumAssignabilityInInheritance.ts, 103, 3), Decl(enumAssignabilityInInheritance.ts, 108, 3))
+>r4 : Symbol(r4, Decl(enumAssignabilityInInheritance.ts, 21, 3), Decl(enumAssignabilityInInheritance.ts, 26, 3), Decl(enumAssignabilityInInheritance.ts, 31, 3), Decl(enumAssignabilityInInheritance.ts, 36, 3), Decl(enumAssignabilityInInheritance.ts, 41, 3) ... and 11 more)
 >foo16 : Symbol(foo16, Decl(enumAssignabilityInInheritance.ts, 98, 20), Decl(enumAssignabilityInInheritance.ts, 100, 42))
 >E.A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))

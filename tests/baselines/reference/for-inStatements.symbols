@@ -12,26 +12,26 @@ for (anAny in {}) { }
 >anAny : Symbol(anAny, Decl(for-inStatements.ts, 3, 3))
 
 for (var x in {}) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 
 for (var x in []) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 
 for (var x in [1, 2, 3, 4, 5]) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 
 function fn(): any { }
 >fn : Symbol(fn, Decl(for-inStatements.ts, 8, 34))
 
 for (var x in fn()) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >fn : Symbol(fn, Decl(for-inStatements.ts, 8, 34))
 
 for (var x in /[a-z]/) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 
 for (var x in new Date()) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var c: any, d: any, e: any;
@@ -40,47 +40,47 @@ var c: any, d: any, e: any;
 >e : Symbol(e, Decl(for-inStatements.ts, 16, 19))
 
 for (var x in c || d) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
 >d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
 
 for (var x in e ? c : d) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >e : Symbol(e, Decl(for-inStatements.ts, 16, 19))
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
 >d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
 
 for (var x in 42 ? c : d) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
 >d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
 
 for (var x in '' ? c : d) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
 >d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
 
 for (var x in 42 ? d[x] : c[x]) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 
 for (var x in c[d]) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
 >d : Symbol(d, Decl(for-inStatements.ts, 16, 11))
 
 for (var x in (<T>(x: T) => x)) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >T : Symbol(T, Decl(for-inStatements.ts, 25, 16))
 >x : Symbol(x, Decl(for-inStatements.ts, 25, 19))
 >T : Symbol(T, Decl(for-inStatements.ts, 25, 16))
 >x : Symbol(x, Decl(for-inStatements.ts, 25, 19))
 
 for (var x in function (x: string, y: number) { return x + y }) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >x : Symbol(x, Decl(for-inStatements.ts, 26, 24))
 >y : Symbol(y, Decl(for-inStatements.ts, 26, 34))
 >x : Symbol(x, Decl(for-inStatements.ts, 26, 24))
@@ -188,7 +188,7 @@ var i: I;
 >I : Symbol(I, Decl(for-inStatements.ts, 55, 1))
 
 for (var x in i[42]) { } 
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >i : Symbol(i, Decl(for-inStatements.ts, 61, 3))
 
 
@@ -205,11 +205,11 @@ module M {
 }
 
 for (var x in M) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >M : Symbol(M, Decl(for-inStatements.ts, 63, 24))
 
 for (var x in M.X) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >M.X : Symbol(M.X, Decl(for-inStatements.ts, 66, 10))
 >M : Symbol(M, Decl(for-inStatements.ts, 63, 24))
 >X : Symbol(M.X, Decl(for-inStatements.ts, 66, 10))
@@ -220,11 +220,11 @@ enum Color { Red, Blue }
 >Blue : Symbol(Color.Blue, Decl(for-inStatements.ts, 75, 17))
 
 for (var x in Color) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >Color : Symbol(Color, Decl(for-inStatements.ts, 73, 22))
 
 for (var x in Color.Blue) { }
->x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8), Decl(for-inStatements.ts, 14, 8), Decl(for-inStatements.ts, 18, 8), Decl(for-inStatements.ts, 19, 8), Decl(for-inStatements.ts, 20, 8), Decl(for-inStatements.ts, 21, 8), Decl(for-inStatements.ts, 22, 8), Decl(for-inStatements.ts, 23, 8), Decl(for-inStatements.ts, 25, 8), Decl(for-inStatements.ts, 26, 8), Decl(for-inStatements.ts, 63, 8), Decl(for-inStatements.ts, 72, 8), Decl(for-inStatements.ts, 73, 8), Decl(for-inStatements.ts, 77, 8), Decl(for-inStatements.ts, 78, 8))
+>x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
 >Color.Blue : Symbol(Color.Blue, Decl(for-inStatements.ts, 75, 17))
 >Color : Symbol(Color, Decl(for-inStatements.ts, 73, 22))
 >Blue : Symbol(Color.Blue, Decl(for-inStatements.ts, 75, 17))

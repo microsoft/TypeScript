@@ -38,18 +38,18 @@ var fn = A.Point;
 >Point : Symbol(A.Point, Decl(function.ts, 0, 10), Decl(module.ts, 0, 10))
 
 var cl: { x: number; y: number; }
->cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3), Decl(simple.ts, 16, 3))
+>cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3) ... and 1 more)
 >x : Symbol(x, Decl(test.ts, 3, 9))
 >y : Symbol(y, Decl(test.ts, 3, 20))
 
 var cl = A.Point();
->cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3), Decl(simple.ts, 16, 3))
+>cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3) ... and 1 more)
 >A.Point : Symbol(A.Point, Decl(function.ts, 0, 10), Decl(module.ts, 0, 10))
 >A : Symbol(A, Decl(function.ts, 0, 0), Decl(module.ts, 0, 0))
 >Point : Symbol(A.Point, Decl(function.ts, 0, 10), Decl(module.ts, 0, 10))
 
 var cl = A.Point.Origin; // not expected to be an error.
->cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3), Decl(simple.ts, 16, 3))
+>cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3) ... and 1 more)
 >A.Point.Origin : Symbol(A.Point.Origin, Decl(module.ts, 2, 18))
 >A.Point : Symbol(A.Point, Decl(function.ts, 0, 10), Decl(module.ts, 0, 10))
 >A : Symbol(A, Decl(function.ts, 0, 0), Decl(module.ts, 0, 0))
@@ -91,18 +91,18 @@ var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Functi
 >Point : Symbol(B.Point, Decl(simple.ts, 0, 10), Decl(simple.ts, 4, 5))
 
 var cl: { x: number; y: number; }
->cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3), Decl(simple.ts, 16, 3))
+>cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3) ... and 1 more)
 >x : Symbol(x, Decl(simple.ts, 14, 9))
 >y : Symbol(y, Decl(simple.ts, 14, 20))
 
 var cl = B.Point();
->cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3), Decl(simple.ts, 16, 3))
+>cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3) ... and 1 more)
 >B.Point : Symbol(B.Point, Decl(simple.ts, 0, 10), Decl(simple.ts, 4, 5))
 >B : Symbol(B, Decl(simple.ts, 0, 0))
 >Point : Symbol(B.Point, Decl(simple.ts, 0, 10), Decl(simple.ts, 4, 5))
 
 var cl = B.Point.Origin;
->cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3), Decl(simple.ts, 16, 3))
+>cl : Symbol(cl, Decl(test.ts, 3, 3), Decl(test.ts, 4, 3), Decl(test.ts, 5, 3), Decl(simple.ts, 14, 3), Decl(simple.ts, 15, 3) ... and 1 more)
 >B.Point.Origin : Symbol(B.Point.Origin, Decl(simple.ts, 7, 18))
 >B.Point : Symbol(B.Point, Decl(simple.ts, 0, 10), Decl(simple.ts, 4, 5))
 >B : Symbol(B, Decl(simple.ts, 0, 0))

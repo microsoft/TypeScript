@@ -19,7 +19,7 @@ import defaultBinding2, { a } from "./es6ImportDefaultBindingFollowedWithNamedIm
 >a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 1, 25))
 
 var x1: number = a;
->x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 11, 3))
+>x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3) ... and 1 more)
 >a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 1, 25))
 
 import defaultBinding3, { a as b } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
@@ -28,7 +28,7 @@ import defaultBinding3, { a as b } from "./es6ImportDefaultBindingFollowedWithNa
 >b : Symbol(b, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 3, 25))
 
 var x1: number = b;
->x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 11, 3))
+>x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3) ... and 1 more)
 >b : Symbol(b, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 3, 25))
 
 import defaultBinding4, { x, a as y } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
@@ -38,11 +38,11 @@ import defaultBinding4, { x, a as y } from "./es6ImportDefaultBindingFollowedWit
 >y : Symbol(y, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 5, 28))
 
 var x1: number = x;
->x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 11, 3))
+>x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3) ... and 1 more)
 >x : Symbol(x, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 5, 25))
 
 var x1: number = y;
->x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 11, 3))
+>x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3) ... and 1 more)
 >y : Symbol(y, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 5, 28))
 
 import defaultBinding5, { x as z,  } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
@@ -51,7 +51,7 @@ import defaultBinding5, { x as z,  } from "./es6ImportDefaultBindingFollowedWith
 >z : Symbol(z, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 8, 25))
 
 var x1: number = z;
->x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 11, 3))
+>x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3) ... and 1 more)
 >z : Symbol(z, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 8, 25))
 
 import defaultBinding6, { m,  } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
@@ -59,6 +59,6 @@ import defaultBinding6, { m,  } from "./es6ImportDefaultBindingFollowedWithNamed
 >m : Symbol(m, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 10, 25))
 
 var x1: number = m;
->x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 11, 3))
+>x1 : Symbol(x1, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 2, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 4, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 6, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 7, 3), Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 9, 3) ... and 1 more)
 >m : Symbol(m, Decl(es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts, 10, 25))
 

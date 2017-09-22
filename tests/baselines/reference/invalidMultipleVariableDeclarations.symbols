@@ -69,24 +69,24 @@ module M {
 
 // all of these are errors
 var a: any;
->a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3), Decl(invalidMultipleVariableDeclarations.ts, 35, 3))
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
 
 var a = 1;
->a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3), Decl(invalidMultipleVariableDeclarations.ts, 35, 3))
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
 
 var a = 'a string';
->a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3), Decl(invalidMultipleVariableDeclarations.ts, 35, 3))
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
 
 var a = new C();
->a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3), Decl(invalidMultipleVariableDeclarations.ts, 35, 3))
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
 >C : Symbol(C, Decl(invalidMultipleVariableDeclarations.ts, 2, 1))
 
 var a = new D<string>();
->a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3), Decl(invalidMultipleVariableDeclarations.ts, 35, 3))
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
 >D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
 
 var a = M;
->a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3), Decl(invalidMultipleVariableDeclarations.ts, 35, 3))
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
 >M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
 
 var b: I;

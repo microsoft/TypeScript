@@ -554,66 +554,66 @@ declare module Immutable {
 >context : Symbol(context, Decl(immutable.d.ts, 61, 67))
   }
   export module Map {
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 
     function isMap(maybeMap: any): maybeMap is Map<any, any>;
 >isMap : Symbol(isMap, Decl(immutable.d.ts, 63, 21))
 >maybeMap : Symbol(maybeMap, Decl(immutable.d.ts, 64, 19))
 >maybeMap : Symbol(maybeMap, Decl(immutable.d.ts, 64, 19))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 
     function of(...keyValues: Array<any>): Map<any, any>;
 >of : Symbol(of, Decl(immutable.d.ts, 64, 61))
 >keyValues : Symbol(keyValues, Decl(immutable.d.ts, 65, 16))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
   }
   export function Map<K, V>(collection: Iterable<[K, V]>): Map<K, V>;
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 67, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 67, 24))
 >collection : Symbol(collection, Decl(immutable.d.ts, 67, 28))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >K : Symbol(K, Decl(immutable.d.ts, 67, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 67, 24))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 67, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 67, 24))
 
   export function Map<T>(collection: Iterable<Iterable<T>>): Map<T, T>;
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >T : Symbol(T, Decl(immutable.d.ts, 68, 22))
 >collection : Symbol(collection, Decl(immutable.d.ts, 68, 25))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 68, 22))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >T : Symbol(T, Decl(immutable.d.ts, 68, 22))
 >T : Symbol(T, Decl(immutable.d.ts, 68, 22))
 
   export function Map<V>(obj: {[key: string]: V}): Map<string, V>;
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >V : Symbol(V, Decl(immutable.d.ts, 69, 22))
 >obj : Symbol(obj, Decl(immutable.d.ts, 69, 25))
 >key : Symbol(key, Decl(immutable.d.ts, 69, 32))
 >V : Symbol(V, Decl(immutable.d.ts, 69, 22))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >V : Symbol(V, Decl(immutable.d.ts, 69, 22))
 
   export function Map<K, V>(): Map<K, V>;
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 70, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 70, 24))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 70, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 70, 24))
 
   export function Map(): Map<any, any>;
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 
   export interface Map<K, V> extends Collection.Keyed<K, V> {
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.d.ts, 72, 25))
 >Collection.Keyed : Symbol(Collection.Keyed, Decl(immutable.d.ts, 336, 51), Decl(immutable.d.ts, 337, 26), Decl(immutable.d.ts, 338, 86), Decl(immutable.d.ts, 339, 83))
@@ -807,7 +807,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >KC : Symbol(KC, Decl(immutable.d.ts, 100, 11))
 >VC : Symbol(VC, Decl(immutable.d.ts, 100, 14))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 72, 23))
 >KC : Symbol(KC, Decl(immutable.d.ts, 100, 11))
 >V : Symbol(V, Decl(immutable.d.ts, 72, 25))
@@ -820,7 +820,7 @@ declare module Immutable {
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.d.ts, 101, 38))
 >C : Symbol(C, Decl(immutable.d.ts, 101, 11))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.d.ts, 72, 25))
 >C : Symbol(C, Decl(immutable.d.ts, 101, 11))
@@ -836,7 +836,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 102, 37))
 >M : Symbol(M, Decl(immutable.d.ts, 102, 8))
 >context : Symbol(context, Decl(immutable.d.ts, 102, 55))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 72, 23))
 >M : Symbol(M, Decl(immutable.d.ts, 102, 8))
 
@@ -851,7 +851,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 103, 41))
 >M : Symbol(M, Decl(immutable.d.ts, 103, 12))
 >context : Symbol(context, Decl(immutable.d.ts, 103, 59))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >M : Symbol(M, Decl(immutable.d.ts, 103, 12))
 >V : Symbol(V, Decl(immutable.d.ts, 72, 25))
 
@@ -868,7 +868,7 @@ declare module Immutable {
 >KM : Symbol(KM, Decl(immutable.d.ts, 104, 15))
 >VM : Symbol(VM, Decl(immutable.d.ts, 104, 18))
 >context : Symbol(context, Decl(immutable.d.ts, 104, 86))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >KM : Symbol(KM, Decl(immutable.d.ts, 104, 15))
 >VM : Symbol(VM, Decl(immutable.d.ts, 104, 18))
 
@@ -884,7 +884,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >M : Symbol(M, Decl(immutable.d.ts, 105, 12))
 >context : Symbol(context, Decl(immutable.d.ts, 105, 69))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>;
 >filter : Symbol(Map.filter, Decl(immutable.d.ts, 105, 100), Decl(immutable.d.ts, 106, 107))
@@ -899,7 +899,7 @@ declare module Immutable {
 >value : Symbol(value, Decl(immutable.d.ts, 106, 36))
 >F : Symbol(F, Decl(immutable.d.ts, 106, 11))
 >context : Symbol(context, Decl(immutable.d.ts, 106, 80))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 72, 23))
 >F : Symbol(F, Decl(immutable.d.ts, 106, 11))
 
@@ -914,63 +914,63 @@ declare module Immutable {
 >context : Symbol(context, Decl(immutable.d.ts, 107, 60))
   }
   export module OrderedMap {
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 
     function isOrderedMap(maybeOrderedMap: any): maybeOrderedMap is OrderedMap<any, any>;
 >isOrderedMap : Symbol(isOrderedMap, Decl(immutable.d.ts, 109, 28))
 >maybeOrderedMap : Symbol(maybeOrderedMap, Decl(immutable.d.ts, 110, 26))
 >maybeOrderedMap : Symbol(maybeOrderedMap, Decl(immutable.d.ts, 110, 26))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
   }
   export function OrderedMap<K, V>(collection: Iterable<[K, V]>): OrderedMap<K, V>;
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 112, 29))
 >V : Symbol(V, Decl(immutable.d.ts, 112, 31))
 >collection : Symbol(collection, Decl(immutable.d.ts, 112, 35))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >K : Symbol(K, Decl(immutable.d.ts, 112, 29))
 >V : Symbol(V, Decl(immutable.d.ts, 112, 31))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 112, 29))
 >V : Symbol(V, Decl(immutable.d.ts, 112, 31))
 
   export function OrderedMap<T>(collection: Iterable<Iterable<T>>): OrderedMap<T, T>;
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >T : Symbol(T, Decl(immutable.d.ts, 113, 29))
 >collection : Symbol(collection, Decl(immutable.d.ts, 113, 32))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 113, 29))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >T : Symbol(T, Decl(immutable.d.ts, 113, 29))
 >T : Symbol(T, Decl(immutable.d.ts, 113, 29))
 
   export function OrderedMap<V>(obj: {[key: string]: V}): OrderedMap<string, V>;
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >V : Symbol(V, Decl(immutable.d.ts, 114, 29))
 >obj : Symbol(obj, Decl(immutable.d.ts, 114, 32))
 >key : Symbol(key, Decl(immutable.d.ts, 114, 39))
 >V : Symbol(V, Decl(immutable.d.ts, 114, 29))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >V : Symbol(V, Decl(immutable.d.ts, 114, 29))
 
   export function OrderedMap<K, V>(): OrderedMap<K, V>;
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 115, 29))
 >V : Symbol(V, Decl(immutable.d.ts, 115, 31))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 115, 29))
 >V : Symbol(V, Decl(immutable.d.ts, 115, 31))
 
   export function OrderedMap(): OrderedMap<any, any>;
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 
   export interface OrderedMap<K, V> extends Map<K, V> {
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 117, 30))
 >V : Symbol(V, Decl(immutable.d.ts, 117, 32))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 117, 30))
 >V : Symbol(V, Decl(immutable.d.ts, 117, 32))
 
@@ -984,7 +984,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >KC : Symbol(KC, Decl(immutable.d.ts, 119, 11))
 >VC : Symbol(VC, Decl(immutable.d.ts, 119, 14))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 117, 30))
 >KC : Symbol(KC, Decl(immutable.d.ts, 119, 11))
 >V : Symbol(V, Decl(immutable.d.ts, 117, 32))
@@ -997,7 +997,7 @@ declare module Immutable {
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.d.ts, 120, 38))
 >C : Symbol(C, Decl(immutable.d.ts, 120, 11))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 117, 30))
 >V : Symbol(V, Decl(immutable.d.ts, 117, 32))
 >C : Symbol(C, Decl(immutable.d.ts, 120, 11))
@@ -1013,7 +1013,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 121, 37))
 >M : Symbol(M, Decl(immutable.d.ts, 121, 8))
 >context : Symbol(context, Decl(immutable.d.ts, 121, 55))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 117, 30))
 >M : Symbol(M, Decl(immutable.d.ts, 121, 8))
 
@@ -1028,7 +1028,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 122, 41))
 >M : Symbol(M, Decl(immutable.d.ts, 122, 12))
 >context : Symbol(context, Decl(immutable.d.ts, 122, 59))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >M : Symbol(M, Decl(immutable.d.ts, 122, 12))
 >V : Symbol(V, Decl(immutable.d.ts, 117, 32))
 
@@ -1045,7 +1045,7 @@ declare module Immutable {
 >KM : Symbol(KM, Decl(immutable.d.ts, 123, 15))
 >VM : Symbol(VM, Decl(immutable.d.ts, 123, 18))
 >context : Symbol(context, Decl(immutable.d.ts, 123, 86))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >KM : Symbol(KM, Decl(immutable.d.ts, 123, 15))
 >VM : Symbol(VM, Decl(immutable.d.ts, 123, 18))
 
@@ -1061,7 +1061,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >M : Symbol(M, Decl(immutable.d.ts, 124, 12))
 >context : Symbol(context, Decl(immutable.d.ts, 124, 69))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>;
 >filter : Symbol(OrderedMap.filter, Decl(immutable.d.ts, 124, 107), Decl(immutable.d.ts, 125, 114))
@@ -1076,7 +1076,7 @@ declare module Immutable {
 >value : Symbol(value, Decl(immutable.d.ts, 125, 36))
 >F : Symbol(F, Decl(immutable.d.ts, 125, 11))
 >context : Symbol(context, Decl(immutable.d.ts, 125, 80))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 117, 30))
 >F : Symbol(F, Decl(immutable.d.ts, 125, 11))
 
@@ -1658,7 +1658,7 @@ declare module Immutable {
 >start : Symbol(start, Decl(immutable.d.ts, 210, 24))
 >end : Symbol(end, Decl(immutable.d.ts, 210, 39))
 >step : Symbol(step, Decl(immutable.d.ts, 210, 53))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 
   export function Repeat<T>(value: T, times?: number): Seq.Indexed<T>;
@@ -1667,7 +1667,7 @@ declare module Immutable {
 >value : Symbol(value, Decl(immutable.d.ts, 211, 28))
 >T : Symbol(T, Decl(immutable.d.ts, 211, 25))
 >times : Symbol(times, Decl(immutable.d.ts, 211, 37))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 211, 25))
 
@@ -1901,8 +1901,8 @@ declare module Immutable {
       // Sequence algorithms
       toSeq(): Seq.Keyed<keyof T, T[keyof T]>;
 >toSeq : Symbol(Instance.toSeq, Decl(immutable.d.ts, 254, 26))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >T : Symbol(T, Decl(immutable.d.ts, 219, 30))
 >T : Symbol(T, Decl(immutable.d.ts, 219, 30))
 >T : Symbol(T, Decl(immutable.d.ts, 219, 30))
@@ -1928,16 +1928,16 @@ declare module Immutable {
 >T : Symbol(T, Decl(immutable.d.ts, 260, 25))
 
   export module Seq {
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 
     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
 >isSeq : Symbol(isSeq, Decl(immutable.d.ts, 261, 21))
 >maybeSeq : Symbol(maybeSeq, Decl(immutable.d.ts, 262, 19))
 >maybeSeq : Symbol(maybeSeq, Decl(immutable.d.ts, 262, 19))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 
     function of<T>(...values: Array<T>): Seq.Indexed<T>;
 >of : Symbol(of, Decl(immutable.d.ts, 262, 86))
@@ -1945,55 +1945,55 @@ declare module Immutable {
 >values : Symbol(values, Decl(immutable.d.ts, 263, 19))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 263, 16))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 263, 16))
 
     export module Keyed {}
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 265, 26))
 >V : Symbol(V, Decl(immutable.d.ts, 265, 28))
 >collection : Symbol(collection, Decl(immutable.d.ts, 265, 32))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >K : Symbol(K, Decl(immutable.d.ts, 265, 26))
 >V : Symbol(V, Decl(immutable.d.ts, 265, 28))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 265, 26))
 >V : Symbol(V, Decl(immutable.d.ts, 265, 28))
 
     export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >V : Symbol(V, Decl(immutable.d.ts, 266, 26))
 >obj : Symbol(obj, Decl(immutable.d.ts, 266, 29))
 >key : Symbol(key, Decl(immutable.d.ts, 266, 36))
 >V : Symbol(V, Decl(immutable.d.ts, 266, 26))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >V : Symbol(V, Decl(immutable.d.ts, 266, 26))
 
     export function Keyed<K, V>(): Seq.Keyed<K, V>;
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 267, 26))
 >V : Symbol(V, Decl(immutable.d.ts, 267, 28))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 267, 26))
 >V : Symbol(V, Decl(immutable.d.ts, 267, 28))
 
     export function Keyed(): Seq.Keyed<any, any>;
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 
     export interface Keyed<K, V> extends Seq<K, V>, Collection.Keyed<K, V> {
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 269, 27))
 >V : Symbol(V, Decl(immutable.d.ts, 269, 29))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >K : Symbol(K, Decl(immutable.d.ts, 269, 27))
 >V : Symbol(V, Decl(immutable.d.ts, 269, 29))
 >Collection.Keyed : Symbol(Collection.Keyed, Decl(immutable.d.ts, 336, 51), Decl(immutable.d.ts, 337, 26), Decl(immutable.d.ts, 338, 86), Decl(immutable.d.ts, 339, 83))
@@ -2023,8 +2023,8 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >KC : Symbol(KC, Decl(immutable.d.ts, 273, 13))
 >VC : Symbol(VC, Decl(immutable.d.ts, 273, 16))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 269, 27))
 >KC : Symbol(KC, Decl(immutable.d.ts, 273, 13))
 >V : Symbol(V, Decl(immutable.d.ts, 269, 29))
@@ -2037,8 +2037,8 @@ declare module Immutable {
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.d.ts, 274, 40))
 >C : Symbol(C, Decl(immutable.d.ts, 274, 13))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 269, 27))
 >V : Symbol(V, Decl(immutable.d.ts, 269, 29))
 >C : Symbol(C, Decl(immutable.d.ts, 274, 13))
@@ -2054,8 +2054,8 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 275, 39))
 >M : Symbol(M, Decl(immutable.d.ts, 275, 10))
 >context : Symbol(context, Decl(immutable.d.ts, 275, 57))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 269, 27))
 >M : Symbol(M, Decl(immutable.d.ts, 275, 10))
 
@@ -2070,8 +2070,8 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 276, 43))
 >M : Symbol(M, Decl(immutable.d.ts, 276, 14))
 >context : Symbol(context, Decl(immutable.d.ts, 276, 61))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >M : Symbol(M, Decl(immutable.d.ts, 276, 14))
 >V : Symbol(V, Decl(immutable.d.ts, 269, 29))
 
@@ -2088,8 +2088,8 @@ declare module Immutable {
 >KM : Symbol(KM, Decl(immutable.d.ts, 277, 17))
 >VM : Symbol(VM, Decl(immutable.d.ts, 277, 20))
 >context : Symbol(context, Decl(immutable.d.ts, 277, 88))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >KM : Symbol(KM, Decl(immutable.d.ts, 277, 17))
 >VM : Symbol(VM, Decl(immutable.d.ts, 277, 20))
 
@@ -2105,8 +2105,8 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >M : Symbol(M, Decl(immutable.d.ts, 278, 14))
 >context : Symbol(context, Decl(immutable.d.ts, 278, 71))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>;
 >filter : Symbol(Keyed.filter, Decl(immutable.d.ts, 278, 108), Decl(immutable.d.ts, 279, 115))
@@ -2121,8 +2121,8 @@ declare module Immutable {
 >value : Symbol(value, Decl(immutable.d.ts, 279, 38))
 >F : Symbol(F, Decl(immutable.d.ts, 279, 13))
 >context : Symbol(context, Decl(immutable.d.ts, 279, 82))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 269, 27))
 >F : Symbol(F, Decl(immutable.d.ts, 279, 13))
 
@@ -2145,19 +2145,19 @@ declare module Immutable {
 >values : Symbol(values, Decl(immutable.d.ts, 283, 21))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 283, 18))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 283, 18))
     }
     export function Indexed(): Seq.Indexed<any>;
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 
     export function Indexed<T>(): Seq.Indexed<T>;
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 286, 28))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 286, 28))
 
@@ -2167,14 +2167,14 @@ declare module Immutable {
 >collection : Symbol(collection, Decl(immutable.d.ts, 287, 31))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 287, 28))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 287, 28))
 
     export interface Indexed<T> extends Seq<number, T>, Collection.Indexed<T> {
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 288, 29))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >T : Symbol(T, Decl(immutable.d.ts, 288, 29))
 >Collection.Indexed : Symbol(Collection.Indexed, Decl(immutable.d.ts, 355, 5), Decl(immutable.d.ts, 356, 28), Decl(immutable.d.ts, 357, 79))
 >Collection : Symbol(Collection, Decl(immutable.d.ts, 331, 3), Decl(immutable.d.ts, 402, 3), Decl(immutable.d.ts, 403, 79), Decl(immutable.d.ts, 404, 80), Decl(immutable.d.ts, 405, 86))
@@ -2201,7 +2201,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.d.ts, 292, 13))
 >C : Symbol(C, Decl(immutable.d.ts, 292, 13))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 288, 29))
 >C : Symbol(C, Decl(immutable.d.ts, 292, 13))
@@ -2216,7 +2216,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 293, 44))
 >M : Symbol(M, Decl(immutable.d.ts, 293, 10))
 >context : Symbol(context, Decl(immutable.d.ts, 293, 62))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >M : Symbol(M, Decl(immutable.d.ts, 293, 10))
 
@@ -2231,7 +2231,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >M : Symbol(M, Decl(immutable.d.ts, 294, 14))
 >context : Symbol(context, Decl(immutable.d.ts, 294, 76))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >M : Symbol(M, Decl(immutable.d.ts, 294, 14))
 
@@ -2247,7 +2247,7 @@ declare module Immutable {
 >value : Symbol(value, Decl(immutable.d.ts, 295, 38))
 >F : Symbol(F, Decl(immutable.d.ts, 295, 13))
 >context : Symbol(context, Decl(immutable.d.ts, 295, 89))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >F : Symbol(F, Decl(immutable.d.ts, 295, 13))
 
@@ -2269,19 +2269,19 @@ declare module Immutable {
 >values : Symbol(values, Decl(immutable.d.ts, 299, 21))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 299, 18))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 299, 18))
     }
     export function Set(): Seq.Set<any>;
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 
     export function Set<T>(): Seq.Set<T>;
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 302, 24))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 302, 24))
 
@@ -2291,14 +2291,14 @@ declare module Immutable {
 >collection : Symbol(collection, Decl(immutable.d.ts, 303, 27))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 303, 24))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 303, 24))
 
     export interface Set<T> extends Seq<never, T>, Collection.Set<T> {
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 304, 25))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >T : Symbol(T, Decl(immutable.d.ts, 304, 25))
 >Collection.Set : Symbol(Collection.Set, Decl(immutable.d.ts, 387, 5), Decl(immutable.d.ts, 388, 24), Decl(immutable.d.ts, 389, 71))
 >Collection : Symbol(Collection, Decl(immutable.d.ts, 331, 3), Decl(immutable.d.ts, 402, 3), Decl(immutable.d.ts, 403, 79), Decl(immutable.d.ts, 404, 80), Decl(immutable.d.ts, 405, 86))
@@ -2325,7 +2325,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.d.ts, 308, 13))
 >C : Symbol(C, Decl(immutable.d.ts, 308, 13))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 304, 25))
 >C : Symbol(C, Decl(immutable.d.ts, 308, 13))
@@ -2340,7 +2340,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 309, 43))
 >M : Symbol(M, Decl(immutable.d.ts, 309, 10))
 >context : Symbol(context, Decl(immutable.d.ts, 309, 61))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >M : Symbol(M, Decl(immutable.d.ts, 309, 10))
 
@@ -2355,7 +2355,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >M : Symbol(M, Decl(immutable.d.ts, 310, 14))
 >context : Symbol(context, Decl(immutable.d.ts, 310, 75))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >M : Symbol(M, Decl(immutable.d.ts, 310, 14))
 
@@ -2371,7 +2371,7 @@ declare module Immutable {
 >value : Symbol(value, Decl(immutable.d.ts, 311, 38))
 >F : Symbol(F, Decl(immutable.d.ts, 311, 13))
 >context : Symbol(context, Decl(immutable.d.ts, 311, 86))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >F : Symbol(F, Decl(immutable.d.ts, 311, 13))
 
@@ -2386,15 +2386,15 @@ declare module Immutable {
     }
   }
   export function Seq<S extends Seq<any, any>>(seq: S): S;
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >S : Symbol(S, Decl(immutable.d.ts, 315, 22))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >seq : Symbol(seq, Decl(immutable.d.ts, 315, 47))
 >S : Symbol(S, Decl(immutable.d.ts, 315, 22))
 >S : Symbol(S, Decl(immutable.d.ts, 315, 22))
 
   export function Seq<K, V>(collection: Collection.Keyed<K, V>): Seq.Keyed<K, V>;
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >K : Symbol(K, Decl(immutable.d.ts, 316, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 316, 24))
 >collection : Symbol(collection, Decl(immutable.d.ts, 316, 28))
@@ -2402,59 +2402,59 @@ declare module Immutable {
 >Keyed : Symbol(Collection.Keyed, Decl(immutable.d.ts, 336, 51), Decl(immutable.d.ts, 337, 26), Decl(immutable.d.ts, 338, 86), Decl(immutable.d.ts, 339, 83))
 >K : Symbol(K, Decl(immutable.d.ts, 316, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 316, 24))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 316, 22))
 >V : Symbol(V, Decl(immutable.d.ts, 316, 24))
 
   export function Seq<T>(collection: Collection.Indexed<T>): Seq.Indexed<T>;
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >T : Symbol(T, Decl(immutable.d.ts, 317, 22))
 >collection : Symbol(collection, Decl(immutable.d.ts, 317, 25))
 >Collection : Symbol(Collection, Decl(immutable.d.ts, 331, 3), Decl(immutable.d.ts, 402, 3), Decl(immutable.d.ts, 403, 79), Decl(immutable.d.ts, 404, 80), Decl(immutable.d.ts, 405, 86))
 >Indexed : Symbol(Collection.Indexed, Decl(immutable.d.ts, 355, 5), Decl(immutable.d.ts, 356, 28), Decl(immutable.d.ts, 357, 79))
 >T : Symbol(T, Decl(immutable.d.ts, 317, 22))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 317, 22))
 
   export function Seq<T>(collection: Collection.Set<T>): Seq.Set<T>;
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >T : Symbol(T, Decl(immutable.d.ts, 318, 22))
 >collection : Symbol(collection, Decl(immutable.d.ts, 318, 25))
 >Collection : Symbol(Collection, Decl(immutable.d.ts, 331, 3), Decl(immutable.d.ts, 402, 3), Decl(immutable.d.ts, 403, 79), Decl(immutable.d.ts, 404, 80), Decl(immutable.d.ts, 405, 86))
 >Set : Symbol(Collection.Set, Decl(immutable.d.ts, 387, 5), Decl(immutable.d.ts, 388, 24), Decl(immutable.d.ts, 389, 71))
 >T : Symbol(T, Decl(immutable.d.ts, 318, 22))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Seq.Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 318, 22))
 
   export function Seq<T>(collection: Iterable<T>): Seq.Indexed<T>;
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >T : Symbol(T, Decl(immutable.d.ts, 319, 22))
 >collection : Symbol(collection, Decl(immutable.d.ts, 319, 25))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.d.ts, 319, 22))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 319, 22))
 
   export function Seq<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >V : Symbol(V, Decl(immutable.d.ts, 320, 22))
 >obj : Symbol(obj, Decl(immutable.d.ts, 320, 25))
 >key : Symbol(key, Decl(immutable.d.ts, 320, 32))
 >V : Symbol(V, Decl(immutable.d.ts, 320, 22))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >V : Symbol(V, Decl(immutable.d.ts, 320, 22))
 
   export function Seq(): Seq<any, any>;
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 
   export interface Seq<K, V> extends Collection<K, V> {
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >K : Symbol(K, Decl(immutable.d.ts, 322, 23))
 >V : Symbol(V, Decl(immutable.d.ts, 322, 25))
 >Collection : Symbol(Collection, Decl(immutable.d.ts, 331, 3), Decl(immutable.d.ts, 402, 3), Decl(immutable.d.ts, 403, 79), Decl(immutable.d.ts, 404, 80), Decl(immutable.d.ts, 405, 86))
@@ -2480,7 +2480,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 327, 37))
 >M : Symbol(M, Decl(immutable.d.ts, 327, 8))
 >context : Symbol(context, Decl(immutable.d.ts, 327, 55))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >K : Symbol(K, Decl(immutable.d.ts, 322, 23))
 >M : Symbol(M, Decl(immutable.d.ts, 327, 8))
 
@@ -2496,7 +2496,7 @@ declare module Immutable {
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >M : Symbol(M, Decl(immutable.d.ts, 328, 12))
 >context : Symbol(context, Decl(immutable.d.ts, 328, 69))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >K : Symbol(K, Decl(immutable.d.ts, 322, 23))
 >M : Symbol(M, Decl(immutable.d.ts, 328, 12))
 
@@ -2513,7 +2513,7 @@ declare module Immutable {
 >value : Symbol(value, Decl(immutable.d.ts, 329, 36))
 >F : Symbol(F, Decl(immutable.d.ts, 329, 11))
 >context : Symbol(context, Decl(immutable.d.ts, 329, 80))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >K : Symbol(K, Decl(immutable.d.ts, 322, 23))
 >F : Symbol(F, Decl(immutable.d.ts, 329, 11))
 
@@ -2602,8 +2602,8 @@ declare module Immutable {
 
       toSeq(): Seq.Keyed<K, V>;
 >toSeq : Symbol(Keyed.toSeq, Decl(immutable.d.ts, 342, 37))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 340, 27))
 >V : Symbol(V, Decl(immutable.d.ts, 340, 29))
 
@@ -2787,14 +2787,14 @@ declare module Immutable {
       // Conversion to Seq
       toSeq(): Seq.Indexed<T>;
 >toSeq : Symbol(Indexed.toSeq, Decl(immutable.d.ts, 363, 40))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >T : Symbol(T, Decl(immutable.d.ts, 358, 29))
 
       fromEntrySeq(): Seq.Keyed<any, any>;
 >fromEntrySeq : Symbol(Indexed.fromEntrySeq, Decl(immutable.d.ts, 365, 30))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 
       // Combination
       interpose(separator: T): this;
@@ -3013,7 +3013,7 @@ declare module Immutable {
 
       toSeq(): Seq.Set<T>;
 >toSeq : Symbol(Set.toSeq, Decl(immutable.d.ts, 392, 25))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Seq.Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >T : Symbol(T, Decl(immutable.d.ts, 390, 25))
 
@@ -3222,13 +3222,13 @@ declare module Immutable {
     // Conversion to Collections
     toMap(): Map<K, V>;
 >toMap : Symbol(Collection.toMap, Decl(immutable.d.ts, 427, 37))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 406, 30))
 >V : Symbol(V, Decl(immutable.d.ts, 406, 32))
 
     toOrderedMap(): OrderedMap<K, V>;
 >toOrderedMap : Symbol(Collection.toOrderedMap, Decl(immutable.d.ts, 429, 23))
->OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80), Decl(immutable.d.ts, 115, 55), Decl(immutable.d.ts, 116, 53))
+>OrderedMap : Symbol(OrderedMap, Decl(immutable.d.ts, 108, 3), Decl(immutable.d.ts, 111, 3), Decl(immutable.d.ts, 112, 83), Decl(immutable.d.ts, 113, 85), Decl(immutable.d.ts, 114, 80) ... and 2 more)
 >K : Symbol(K, Decl(immutable.d.ts, 406, 30))
 >V : Symbol(V, Decl(immutable.d.ts, 406, 32))
 
@@ -3258,20 +3258,20 @@ declare module Immutable {
 
     toKeyedSeq(): Seq.Keyed<K, V>;
 >toKeyedSeq : Symbol(Collection.toKeyedSeq, Decl(immutable.d.ts, 436, 18))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >K : Symbol(K, Decl(immutable.d.ts, 406, 30))
 >V : Symbol(V, Decl(immutable.d.ts, 406, 32))
 
     toIndexedSeq(): Seq.Indexed<V>;
 >toIndexedSeq : Symbol(Collection.toIndexedSeq, Decl(immutable.d.ts, 437, 34))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >V : Symbol(V, Decl(immutable.d.ts, 406, 32))
 
     toSetSeq(): Seq.Set<V>;
 >toSetSeq : Symbol(Collection.toSetSeq, Decl(immutable.d.ts, 438, 35))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Set : Symbol(Seq.Set, Decl(immutable.d.ts, 297, 5), Decl(immutable.d.ts, 300, 5), Decl(immutable.d.ts, 301, 40), Decl(immutable.d.ts, 302, 41), Decl(immutable.d.ts, 303, 64))
 >V : Symbol(V, Decl(immutable.d.ts, 406, 32))
 
@@ -3295,19 +3295,19 @@ declare module Immutable {
     // Collections (Seq)
     keySeq(): Seq.Indexed<K>;
 >keySeq : Symbol(Collection.keySeq, Decl(immutable.d.ts, 443, 40))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >K : Symbol(K, Decl(immutable.d.ts, 406, 30))
 
     valueSeq(): Seq.Indexed<V>;
 >valueSeq : Symbol(Collection.valueSeq, Decl(immutable.d.ts, 445, 29))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >V : Symbol(V, Decl(immutable.d.ts, 406, 32))
 
     entrySeq(): Seq.Indexed<[K, V]>;
 >entrySeq : Symbol(Collection.entrySeq, Decl(immutable.d.ts, 446, 31))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
 >Indexed : Symbol(Seq.Indexed, Decl(immutable.d.ts, 281, 5), Decl(immutable.d.ts, 284, 5), Decl(immutable.d.ts, 285, 48), Decl(immutable.d.ts, 286, 49), Decl(immutable.d.ts, 287, 72))
 >K : Symbol(K, Decl(immutable.d.ts, 406, 30))
 >V : Symbol(V, Decl(immutable.d.ts, 406, 32))
@@ -3403,8 +3403,8 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 456, 42))
 >G : Symbol(G, Decl(immutable.d.ts, 456, 12))
 >context : Symbol(context, Decl(immutable.d.ts, 456, 60))
->Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76), Decl(immutable.d.ts, 318, 68), Decl(immutable.d.ts, 319, 66), Decl(immutable.d.ts, 320, 72), Decl(immutable.d.ts, 321, 39))
->Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51), Decl(immutable.d.ts, 268, 49))
+>Seq : Symbol(Seq, Decl(immutable.d.ts, 260, 78), Decl(immutable.d.ts, 314, 3), Decl(immutable.d.ts, 315, 58), Decl(immutable.d.ts, 316, 81), Decl(immutable.d.ts, 317, 76) ... and 4 more)
+>Keyed : Symbol(Seq.Keyed, Decl(immutable.d.ts, 263, 56), Decl(immutable.d.ts, 264, 26), Decl(immutable.d.ts, 265, 79), Decl(immutable.d.ts, 266, 76), Decl(immutable.d.ts, 267, 51) ... and 1 more)
 >G : Symbol(G, Decl(immutable.d.ts, 456, 12))
 >Collection : Symbol(Collection, Decl(immutable.d.ts, 331, 3), Decl(immutable.d.ts, 402, 3), Decl(immutable.d.ts, 403, 79), Decl(immutable.d.ts, 404, 80), Decl(immutable.d.ts, 405, 86))
 >K : Symbol(K, Decl(immutable.d.ts, 406, 30))
@@ -3638,7 +3638,7 @@ declare module Immutable {
 >iter : Symbol(iter, Decl(immutable.d.ts, 487, 42))
 >G : Symbol(G, Decl(immutable.d.ts, 487, 12))
 >context : Symbol(context, Decl(immutable.d.ts, 487, 60))
->Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66), Decl(immutable.d.ts, 70, 41), Decl(immutable.d.ts, 71, 39))
+>Map : Symbol(Map, Decl(immutable.d.ts, 62, 3), Decl(immutable.d.ts, 66, 3), Decl(immutable.d.ts, 67, 69), Decl(immutable.d.ts, 68, 71), Decl(immutable.d.ts, 69, 66) ... and 2 more)
 >G : Symbol(G, Decl(immutable.d.ts, 487, 12))
 
     // Search for value

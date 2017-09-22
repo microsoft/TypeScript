@@ -24,37 +24,37 @@ var b = false;
 >b : Symbol(b, Decl(literals.ts, 10, 3), Decl(literals.ts, 11, 3), Decl(literals.ts, 12, 3))
 
 var n: number;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = 1;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = 1.0;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = 1e4;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = 001; // Error in ES5
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = 0x1;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = -1;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = -1.0;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = -1e-4;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = -003; // Error in ES5
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var n = -0x1;
->n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3), Decl(literals.ts, 19, 3), Decl(literals.ts, 20, 3), Decl(literals.ts, 21, 3), Decl(literals.ts, 22, 3), Decl(literals.ts, 23, 3), Decl(literals.ts, 24, 3))
+>n : Symbol(n, Decl(literals.ts, 14, 3), Decl(literals.ts, 15, 3), Decl(literals.ts, 16, 3), Decl(literals.ts, 17, 3), Decl(literals.ts, 18, 3) ... and 6 more)
 
 var s: string;
 >s : Symbol(s, Decl(literals.ts, 26, 3), Decl(literals.ts, 27, 3), Decl(literals.ts, 28, 3), Decl(literals.ts, 29, 3), Decl(literals.ts, 31, 3))
