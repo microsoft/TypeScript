@@ -47,7 +47,8 @@ namespace Harness.Parallel.Host {
         console.log("Discovering tests...");
         const discoverStart = +(new Date());
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
-        const tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
+        let tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
+        const newTasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
         const perfData = readSavedPerfData(configOption);
         let totalCost = 0;
         let unknownValue: string | undefined;
@@ -63,8 +64,10 @@ namespace Harness.Parallel.Host {
                     const hashedName = hashName(runner.kind(), file);
                     size = perfData[hashedName];
                     if (size === undefined) {
-                        size = Number.MAX_SAFE_INTEGER;
+                        size = 0;
                         unknownValue = hashedName;
+                        newTasks.push({ runner: runner.kind(), file, size });
+                        continue;
                     }
                 }
                 tasks.push({ runner: runner.kind(), file, size });
@@ -72,6 +75,7 @@ namespace Harness.Parallel.Host {
             }
         }
         tasks.sort((a, b) => a.size - b.size);
+        tasks = tasks.concat(newTasks);
         // 1 fewer batches than threads to account for unittests running on the final thread
         const batchCount = runners.length === 1 ? workerCount : workerCount - 1;
         const packfraction = 0.9;
@@ -177,7 +181,7 @@ namespace Harness.Parallel.Host {
             let scheduledTotal = 0;
             batcher: while (true) {
                 for (let i = 0; i < batchCount; i++) {
-                    if (tasks.length === 0) {
+                    if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
                         console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
                         break batcher;
                     }
@@ -216,7 +220,9 @@ namespace Harness.Parallel.Host {
                     worker.send({ type: "batch", payload });
                 }
                 else { // Unittest thread - send off just one test
-                    worker.send({ type: "test", payload: tasks.pop() });
+                    const payload = tasks.pop();
+                    ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
+                    worker.send({ type: "test", payload });
                 }
             }
         }

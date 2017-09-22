@@ -110,6 +110,29 @@ namespace ts {
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
 
+
+            printsCorrectly("emptyGlobalAugmentation", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createModuleDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ [createToken(SyntaxKind.DeclareKeyword)],
+                    createIdentifier("global"),
+                    createModuleBlock(emptyArray),
+                    NodeFlags.GlobalAugmentation),
+                createSourceFile("source.ts", "", ScriptTarget.ES2015)
+            ));
+
+            printsCorrectly("emptyGlobalAugmentationWithNoDeclareKeyword", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createModuleDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createIdentifier("global"),
+                    createModuleBlock(emptyArray),
+                    NodeFlags.GlobalAugmentation),
+                createSourceFile("source.ts", "", ScriptTarget.ES2015)
+            ));
+
             // https://github.com/Microsoft/TypeScript/issues/15971
             printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
