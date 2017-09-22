@@ -2726,9 +2726,8 @@ namespace ts {
         AllowQualifedNameInPlaceOfIdentifier    = 1 << 11,
         AllowAnonymousIdentifier                = 1 << 13,
         AllowEmptyUnionOrIntersection           = 1 << 14,
-        AllowEmptyTuple                         = 1 << 15,
 
-        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
+        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection,
 
         // State
         InObjectTypeLiteral                     = 1 << 20,

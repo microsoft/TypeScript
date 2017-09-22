@@ -1,8 +1,0 @@
-tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts(1,10): error TS1122: A tuple type element list cannot be empty.
-
-
-==== tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts (1 errors) ====
-    let x = <[]>[];
-             ~~
-!!! error TS1122: A tuple type element list cannot be empty.
-    let y = x[0];
