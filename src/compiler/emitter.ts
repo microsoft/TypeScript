@@ -1862,17 +1862,8 @@ namespace ts {
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
-            if (node.flags & NodeFlags.GlobalAugmentation) {
-                if (!hasModifier(node, ModifierFlags.Ambient)) {
-                    // Always emit a 'declare' keyword in case it wasn't provided by a factory function call.
-                    write("declare ");
-                }
-                else {
-                    emitModifiers(node, node.modifiers);
-                }
-            }
-            else {
-                emitModifiers(node, node.modifiers);
+            emitModifiers(node, node.modifiers);
+            if (~node.flags & NodeFlags.GlobalAugmentation) {
                 write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
             }
             emit(node.name);
