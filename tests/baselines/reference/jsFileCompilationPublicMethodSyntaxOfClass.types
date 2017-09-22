@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.js ===
+class C {
+>C : C
+
+    public foo() {
+>foo : () => void
+    }
+}

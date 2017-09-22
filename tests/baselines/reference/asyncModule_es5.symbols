@@ -1,0 +1,4 @@
+=== tests/cases/conformance/async/es5/asyncModule_es5.ts ===
+async module M {
+>M : Symbol(M, Decl(asyncModule_es5.ts, 0, 0))
+}

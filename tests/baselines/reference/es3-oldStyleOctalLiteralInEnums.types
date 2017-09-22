@@ -1,0 +1,13 @@
+=== tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts ===
+enum E {
+>E : E
+
+  x = -01,
+>x : E.x
+>-01 : -1
+>01 : 1
+
+  y = 02,
+>y : E.y
+>02 : 2
+}

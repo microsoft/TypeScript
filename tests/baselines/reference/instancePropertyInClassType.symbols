@@ -1,0 +1,129 @@
+=== tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts ===
+module NonGeneric {
+>NonGeneric : Symbol(NonGeneric, Decl(instancePropertyInClassType.ts, 0, 0))
+
+    class C {
+>C : Symbol(C, Decl(instancePropertyInClassType.ts, 0, 19))
+
+        x: string;
+>x : Symbol(C.x, Decl(instancePropertyInClassType.ts, 1, 13))
+
+        get y() {
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+
+            return 1;
+        }
+        set y(v) { }
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+>v : Symbol(v, Decl(instancePropertyInClassType.ts, 6, 14))
+
+        fn() { return this; }
+>fn : Symbol(C.fn, Decl(instancePropertyInClassType.ts, 6, 20))
+>this : Symbol(C, Decl(instancePropertyInClassType.ts, 0, 19))
+
+        constructor(public a: number, private b: number) { }
+>a : Symbol(C.a, Decl(instancePropertyInClassType.ts, 8, 20))
+>b : Symbol(C.b, Decl(instancePropertyInClassType.ts, 8, 37))
+    }
+
+    var c = new C(1, 2);
+>c : Symbol(c, Decl(instancePropertyInClassType.ts, 11, 7))
+>C : Symbol(C, Decl(instancePropertyInClassType.ts, 0, 19))
+
+    var r = c.fn();
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 12, 7))
+>c.fn : Symbol(C.fn, Decl(instancePropertyInClassType.ts, 6, 20))
+>c : Symbol(c, Decl(instancePropertyInClassType.ts, 11, 7))
+>fn : Symbol(C.fn, Decl(instancePropertyInClassType.ts, 6, 20))
+
+    var r2 = r.x;
+>r2 : Symbol(r2, Decl(instancePropertyInClassType.ts, 13, 7))
+>r.x : Symbol(C.x, Decl(instancePropertyInClassType.ts, 1, 13))
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 12, 7))
+>x : Symbol(C.x, Decl(instancePropertyInClassType.ts, 1, 13))
+
+    var r3 = r.y;
+>r3 : Symbol(r3, Decl(instancePropertyInClassType.ts, 14, 7))
+>r.y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 12, 7))
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+
+    r.y = 4;
+>r.y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 12, 7))
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+
+    var r6 = c.y(); // error
+>r6 : Symbol(r6, Decl(instancePropertyInClassType.ts, 16, 7))
+>c.y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+>c : Symbol(c, Decl(instancePropertyInClassType.ts, 11, 7))
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 2, 18), Decl(instancePropertyInClassType.ts, 5, 9))
+
+}
+
+module Generic {
+>Generic : Symbol(Generic, Decl(instancePropertyInClassType.ts, 18, 1))
+
+    class C<T,U> {
+>C : Symbol(C, Decl(instancePropertyInClassType.ts, 20, 16))
+>T : Symbol(T, Decl(instancePropertyInClassType.ts, 21, 12))
+>U : Symbol(U, Decl(instancePropertyInClassType.ts, 21, 14))
+
+        x: T;
+>x : Symbol(C.x, Decl(instancePropertyInClassType.ts, 21, 18))
+>T : Symbol(T, Decl(instancePropertyInClassType.ts, 21, 12))
+
+        get y() {
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+
+            return null;
+        }
+        set y(v: U) { }
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+>v : Symbol(v, Decl(instancePropertyInClassType.ts, 26, 14))
+>U : Symbol(U, Decl(instancePropertyInClassType.ts, 21, 14))
+
+        fn() { return this; }
+>fn : Symbol(C.fn, Decl(instancePropertyInClassType.ts, 26, 23))
+>this : Symbol(C, Decl(instancePropertyInClassType.ts, 20, 16))
+
+        constructor(public a: T, private b: U) { }
+>a : Symbol(C.a, Decl(instancePropertyInClassType.ts, 28, 20))
+>T : Symbol(T, Decl(instancePropertyInClassType.ts, 21, 12))
+>b : Symbol(C.b, Decl(instancePropertyInClassType.ts, 28, 32))
+>U : Symbol(U, Decl(instancePropertyInClassType.ts, 21, 14))
+    }
+
+    var c = new C(1, '');
+>c : Symbol(c, Decl(instancePropertyInClassType.ts, 31, 7))
+>C : Symbol(C, Decl(instancePropertyInClassType.ts, 20, 16))
+
+    var r = c.fn();
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 32, 7))
+>c.fn : Symbol(C.fn, Decl(instancePropertyInClassType.ts, 26, 23))
+>c : Symbol(c, Decl(instancePropertyInClassType.ts, 31, 7))
+>fn : Symbol(C.fn, Decl(instancePropertyInClassType.ts, 26, 23))
+
+    var r2 = r.x;
+>r2 : Symbol(r2, Decl(instancePropertyInClassType.ts, 33, 7))
+>r.x : Symbol(C.x, Decl(instancePropertyInClassType.ts, 21, 18))
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 32, 7))
+>x : Symbol(C.x, Decl(instancePropertyInClassType.ts, 21, 18))
+
+    var r3 = r.y;
+>r3 : Symbol(r3, Decl(instancePropertyInClassType.ts, 34, 7))
+>r.y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 32, 7))
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+
+    r.y = '';
+>r.y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+>r : Symbol(r, Decl(instancePropertyInClassType.ts, 32, 7))
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+
+    var r6 = c.y(); // error
+>r6 : Symbol(r6, Decl(instancePropertyInClassType.ts, 36, 7))
+>c.y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+>c : Symbol(c, Decl(instancePropertyInClassType.ts, 31, 7))
+>y : Symbol(C.y, Decl(instancePropertyInClassType.ts, 22, 13), Decl(instancePropertyInClassType.ts, 25, 9))
+}

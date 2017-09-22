@@ -26,9 +26,12 @@ namespace Harness.Parallel.Host {
         text?: string;
     }
 
-    const perfdataFileName = ".parallelperf.json";
-    function readSavedPerfData(): {[testHash: string]: number} {
-        const perfDataContents = Harness.IO.readFile(perfdataFileName);
+    const perfdataFileNameFragment = ".parallelperf";
+    function perfdataFileName(target?: string) {
+        return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
+    }
+    function readSavedPerfData(target?: string): {[testHash: string]: number} {
+        const perfDataContents = Harness.IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
         }
@@ -46,7 +49,7 @@ namespace Harness.Parallel.Host {
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
         let tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
         const newTasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
-        const perfData = readSavedPerfData();
+        const perfData = readSavedPerfData(configOption);
         let totalCost = 0;
         let unknownValue: string | undefined;
         for (const runner of runners) {
@@ -290,7 +293,7 @@ namespace Harness.Parallel.Host {
                 reporter.epilogue();
             }
 
-            Harness.IO.writeFile(perfdataFileName, JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+            Harness.IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
             process.exit(errorResults.length);
         }

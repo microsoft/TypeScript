@@ -5,7 +5,7 @@ var v: void = function () { } ();
 
 // FunctionExpression f with no return type annotation and directly references f in its body returns any
 var a: any = function f() {
->a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3), Decl(functionImplementations.ts, 84, 3))
+>a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3) ... and 1 more)
 >f : Symbol(f, Decl(functionImplementations.ts, 4, 12))
 
     return f;
@@ -13,7 +13,7 @@ var a: any = function f() {
 
 };
 var a: any = function f() {
->a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3), Decl(functionImplementations.ts, 84, 3))
+>a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3) ... and 1 more)
 >f : Symbol(f, Decl(functionImplementations.ts, 7, 12))
 
     return f();
@@ -23,7 +23,7 @@ var a: any = function f() {
 
 // FunctionExpression f with no return type annotation and indirectly references f in its body returns any
 var a: any = function f() {
->a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3), Decl(functionImplementations.ts, 84, 3))
+>a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3) ... and 1 more)
 >f : Symbol(f, Decl(functionImplementations.ts, 12, 12))
 
     var x = f;
@@ -49,11 +49,11 @@ function rec2() {
 >rec1 : Symbol(rec1, Decl(functionImplementations.ts, 15, 2))
 }
 var a = rec1();
->a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3), Decl(functionImplementations.ts, 84, 3))
+>a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3) ... and 1 more)
 >rec1 : Symbol(rec1, Decl(functionImplementations.ts, 15, 2))
 
 var a = rec2();
->a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3), Decl(functionImplementations.ts, 84, 3))
+>a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3) ... and 1 more)
 >rec2 : Symbol(rec2, Decl(functionImplementations.ts, 20, 1))
 
 // Two mutually recursive function implementations with return type annotation in one
@@ -70,19 +70,19 @@ function rec4() {
 >rec3 : Symbol(rec3, Decl(functionImplementations.ts, 25, 15))
 }
 var n: number;
->n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3), Decl(functionImplementations.ts, 61, 3), Decl(functionImplementations.ts, 66, 3))
+>n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3) ... and 2 more)
 
 var n = rec3();
->n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3), Decl(functionImplementations.ts, 61, 3), Decl(functionImplementations.ts, 66, 3))
+>n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3) ... and 2 more)
 >rec3 : Symbol(rec3, Decl(functionImplementations.ts, 25, 15))
 
 var n = rec4();
->n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3), Decl(functionImplementations.ts, 61, 3), Decl(functionImplementations.ts, 66, 3))
+>n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3) ... and 2 more)
 >rec4 : Symbol(rec4, Decl(functionImplementations.ts, 30, 1))
 
 // FunctionExpression with no return type annotation and returns a number
 var n = function () {
->n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3), Decl(functionImplementations.ts, 61, 3), Decl(functionImplementations.ts, 66, 3))
+>n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3) ... and 2 more)
 
     return 3;
 } ();
@@ -112,7 +112,7 @@ var un = function () {
 
 // FunctionExpression with no return type annotation and returns a type parameter type
 var n = function <T>(x: T) {
->n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3), Decl(functionImplementations.ts, 61, 3), Decl(functionImplementations.ts, 66, 3))
+>n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3) ... and 2 more)
 >T : Symbol(T, Decl(functionImplementations.ts, 56, 18))
 >x : Symbol(x, Decl(functionImplementations.ts, 56, 21))
 >T : Symbol(T, Decl(functionImplementations.ts, 56, 18))
@@ -124,7 +124,7 @@ var n = function <T>(x: T) {
 
 // FunctionExpression with no return type annotation and returns a constrained type parameter type
 var n = function <T extends {}>(x: T) {
->n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3), Decl(functionImplementations.ts, 61, 3), Decl(functionImplementations.ts, 66, 3))
+>n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3) ... and 2 more)
 >T : Symbol(T, Decl(functionImplementations.ts, 61, 18))
 >x : Symbol(x, Decl(functionImplementations.ts, 61, 32))
 >T : Symbol(T, Decl(functionImplementations.ts, 61, 18))
@@ -136,7 +136,7 @@ var n = function <T extends {}>(x: T) {
 
 // FunctionExpression with no return type annotation with multiple return statements with identical types
 var n = function () {
->n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3), Decl(functionImplementations.ts, 61, 3), Decl(functionImplementations.ts, 66, 3))
+>n : Symbol(n, Decl(functionImplementations.ts, 34, 3), Decl(functionImplementations.ts, 35, 3), Decl(functionImplementations.ts, 36, 3), Decl(functionImplementations.ts, 39, 3), Decl(functionImplementations.ts, 56, 3) ... and 2 more)
 
     return 3;
     return 5;
@@ -171,7 +171,7 @@ var b = function () {
 
 // FunctionExpression with no return type annotation with multiple return statements with one a recursive call
 var a = function f() {
->a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3), Decl(functionImplementations.ts, 84, 3))
+>a : Symbol(a, Decl(functionImplementations.ts, 4, 3), Decl(functionImplementations.ts, 7, 3), Decl(functionImplementations.ts, 12, 3), Decl(functionImplementations.ts, 24, 3), Decl(functionImplementations.ts, 25, 3) ... and 1 more)
 >f : Symbol(f, Decl(functionImplementations.ts, 84, 7))
 
     return new Base(); return new Derived(); return f(); // ?

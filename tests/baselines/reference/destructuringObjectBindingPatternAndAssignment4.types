@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts ===
+const {
+    a = 1,
+>a : 1
+>1 : 1
+
+    b = 2,
+>b : 2
+>2 : 2
+
+    c = b, // ok
+>c : 2
+>b : 2
+
+    d = a, // ok
+>d : 1
+>a : 1
+
+    e = f, // error
+>e : any
+>f : any
+
+    f = f  // error
+>f : any
+>f : any
+
+} = { } as any;
+>{ } as any : any
+>{ } : {}
+

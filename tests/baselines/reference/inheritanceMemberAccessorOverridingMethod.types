@@ -1,0 +1,28 @@
+=== tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts ===
+class a {
+>a : a
+
+    x() {
+>x : () => string
+
+        return "20";
+>"20" : "20"
+    }
+}
+
+class b extends a {
+>b : b
+>a : a
+
+    get x() {
+>x : string
+
+        return "20";
+>"20" : "20"
+    }
+    set x(aValue: string) {
+>x : string
+>aValue : string
+
+    }
+}
