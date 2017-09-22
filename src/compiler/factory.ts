@@ -1207,6 +1207,54 @@ namespace ts {
             : node;
     }
 
+    export function createTemplateHead(text: string) {
+        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+        node.text = text;
+        return node;
+    }
+
+    export function updateTemplateHead(node: TemplateHead, text: string) {
+        return node.text !== text
+            ? updateNode(createTemplateHead(text), node)
+            : node;
+    }
+
+    export function createTemplateMiddle(text: string) {
+        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+        node.text = text;
+        return node;
+    }
+
+    export function updateTemplateMiddle(node: TemplateMiddle, text: string) {
+        return node.text !== text
+            ? updateNode(createTemplateMiddle(text), node)
+            : node;
+    }
+
+    export function createTemplateTail(text: string) {
+        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+        node.text = text;
+        return node;
+    }
+
+    export function updateTemplateTail(node: TemplateTail, text: string) {
+        return node.text !== text
+            ? updateNode(createTemplateTail(text), node)
+            : node;
+    }
+
+    export function createNoSubstitutionTemplateLiteral(text: string) {
+        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
+        node.text = text;
+        return node;
+    }
+
+    export function updateNoSubstitutionTemplateLiteral(node: NoSubstitutionTemplateLiteral, text: string) {
+        return node.text !== text
+        ? updateNode(createNoSubstitutionTemplateLiteral(text), node)
+        : node;
+    }
+
     export function createYield(expression?: Expression): YieldExpression;
     export function createYield(asteriskToken: AsteriskToken, expression: Expression): YieldExpression;
     export function createYield(asteriskTokenOrExpression?: AsteriskToken | Expression, expression?: Expression) {
