@@ -2425,15 +2425,6 @@ namespace ts {
                 }
             };
 
-            interface NodeBuilderContext {
-                enclosingDeclaration: Node | undefined;
-                flags: NodeBuilderFlags | undefined;
-
-                // State
-                encounteredError: boolean;
-                symbolStack: Symbol[] | undefined;
-            }
-
             function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeBuilderContext {
                 return {
                     enclosingDeclaration,
@@ -3027,30 +3018,6 @@ namespace ts {
                     }
                 }
             }
-
-            function getNameOfSymbol(symbol: Symbol, context: NodeBuilderContext): string {
-                const declaration = firstOrUndefined(symbol.declarations);
-                if (declaration) {
-                    const name = getNameOfDeclaration(declaration);
-                    if (name) {
-                        return declarationNameToString(name);
-                    }
-                    if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
-                        return declarationNameToString((<VariableDeclaration>declaration.parent).name);
-                    }
-                    if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
-                        context.encounteredError = true;
-                    }
-                    switch (declaration.kind) {
-                        case SyntaxKind.ClassExpression:
-                            return "(Anonymous class)";
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ArrowFunction:
-                            return "(Anonymous function)";
-                    }
-                }
-                return unescapeLeadingUnderscores(symbol.escapedName);
-            }
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
@@ -3115,7 +3082,16 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? '"' + escapeString((<StringLiteralType>type).value) + '"' : "" + (<NumberLiteralType>type).value;
         }
 
-        function getNameOfSymbol(symbol: Symbol): string {
+        interface NodeBuilderContext {
+            enclosingDeclaration: Node | undefined;
+            flags: NodeBuilderFlags | undefined;
+
+            // State
+            encounteredError: boolean;
+            symbolStack: Symbol[] | undefined;
+        }
+
+        function getNameOfSymbol(symbol: Symbol, context?: NodeBuilderContext): string {
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
@@ -3124,6 +3100,9 @@ namespace ts {
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                     return declarationNameToString((<VariableDeclaration>declaration.parent).name);
+                }
+                if (context && !context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
+                    context.encounteredError = true;
                 }
                 switch (declaration.kind) {
                     case SyntaxKind.ClassExpression:
@@ -13198,16 +13177,11 @@ namespace ts {
         // the type of the property with the numeric name N in T, if one exists. Otherwise, if T has a numeric index signature,
         // it is the type of the numeric index signature in T. Otherwise, in ES6 and higher, the contextual type is the iterated
         // type of T.
-        function getContextualTypeForElementExpression(node: Expression): Type {
-            const arrayLiteral = <ArrayLiteralExpression>node.parent;
-            const type = getApparentTypeOfContextualType(arrayLiteral);
-            if (type) {
-                const index = indexOf(arrayLiteral.elements, node);
-                return getTypeOfPropertyOfContextualType(type, "" + index as __String)
-                    || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
-            }
-            return undefined;
+        function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
+            return arrayContextualType && (
+                getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
+                || getIndexTypeOfContextualType(arrayContextualType, IndexKind.Number)
+                || getIteratedTypeOrElementType(arrayContextualType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false));
         }
 
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
@@ -13321,8 +13295,11 @@ namespace ts {
                     return getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>parent);
                 case SyntaxKind.SpreadAssignment:
                     return getApparentTypeOfContextualType(parent.parent as ObjectLiteralExpression);
-                case SyntaxKind.ArrayLiteralExpression:
-                    return getContextualTypeForElementExpression(node);
+                case SyntaxKind.ArrayLiteralExpression: {
+                    const arrayLiteral = <ArrayLiteralExpression>parent;
+                    const type = getApparentTypeOfContextualType(arrayLiteral);
+                    return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
+                }
                 case SyntaxKind.ConditionalExpression:
                     return getContextualTypeForConditionalOperand(node);
                 case SyntaxKind.TemplateSpan:
@@ -13451,12 +13428,14 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode?: CheckMode): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
             const elements = node.elements;
             let hasSpreadElement = false;
             const elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
-            for (const e of elements) {
+            const contextualType = getApparentTypeOfContextualType(node);
+            for (let index = 0; index < elements.length; index++) {
+                const e = elements[index];
                 if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElement) {
                     // Given the following situation:
                     //    var c: {};
@@ -13478,7 +13457,8 @@ namespace ts {
                     }
                 }
                 else {
-                    const type = checkExpressionForMutableLocation(e, checkMode);
+                    const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
+                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
                     elementTypes.push(type);
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
@@ -18023,9 +18003,13 @@ namespace ts {
             return false;
         }
 
-        function checkExpressionForMutableLocation(node: Expression, checkMode?: CheckMode): Type {
+        function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode, contextualType?: Type): Type {
+            if (arguments.length === 2) {
+                contextualType = getContextualType(node);
+            }
             const type = checkExpression(node, checkMode);
-            return isTypeAssertion(node) || isLiteralContextualType(getContextualType(node)) ? type : getWidenedLiteralType(type);
+            const shouldWiden = isTypeAssertion(node) || isLiteralContextualType(contextualType);
+            return shouldWiden ? type : getWidenedLiteralType(type);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
