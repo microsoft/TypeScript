@@ -53,17 +53,41 @@ namespace Harness.Parallel.Worker {
         const savedTestList = testList;
 
         testList = [];
-        callback.call(fakeContext);
-        beforeFunc && beforeFunc();
-        beforeFunc = undefined;
+        try {
+            callback.call(fakeContext);
+        }
+        catch (e) {
+            errors.push({ error: `Error executing suite: ${e.message}`, stack: e.stack, name: namestack.join(" ") });
+            return cleanup();
+        }
+        try {
+            beforeFunc && beforeFunc();
+        }
+        catch (e) {
+            errors.push({ error: `Error executing before function: ${e.message}`, stack: e.stack, name: namestack.join(" ") });
+            return cleanup();
+        }
+        finally {
+            beforeFunc = undefined;
+        }
         testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
-        testList.length = 0;
-        testList = savedTestList;
 
-        afterFunc && afterFunc();
-        afterFunc = undefined;
-        beforeEachFunc = savedBeforeEach;
-        namestack.pop();
+        try {
+            afterFunc && afterFunc();
+        }
+        catch (e) {
+            errors.push({ error: `Error executing after function: ${e.message}`, stack: e.stack, name: namestack.join(" ") });
+        }
+        finally {
+            afterFunc = undefined;
+            cleanup();
+        }
+        function cleanup() {
+            testList.length = 0;
+            testList = savedTestList;
+            beforeEachFunc = savedBeforeEach;
+            namestack.pop();
+        }
     }
 
     function executeCallback(name: string, callback: Function, kind: "suite" | "test") {
@@ -82,13 +106,15 @@ namespace Harness.Parallel.Worker {
             retries() { return this; },
             slow() { return this; },
         };
-        name = [...namestack, name].join(" ");
+        namestack.push(name);
+        name = namestack.join(" ");
         if (beforeEachFunc) {
             try {
                 beforeEachFunc();
             }
             catch (error) {
                 errors.push({ error: error.message, stack: error.stack, name });
+                namestack.pop();
                 return;
             }
         }
@@ -100,6 +126,9 @@ namespace Harness.Parallel.Worker {
             catch (error) {
                 errors.push({ error: error.message, stack: error.stack, name });
                 return;
+            }
+            finally {
+                namestack.pop();
             }
             passing++;
         }
@@ -123,6 +152,9 @@ namespace Harness.Parallel.Worker {
             catch (error) {
                 errors.push({ error: error.message, stack: error.stack, name });
                 return;
+            }
+            finally {
+                namestack.pop();
             }
             if (!completed) {
                 errors.push({ error: "Test completes asynchronously, which is unsupported by the parallel harness", stack: "", name });
@@ -172,7 +204,7 @@ namespace Harness.Parallel.Worker {
             }
         });
         process.on("uncaughtException", error => {
-            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack } };
+            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack, name: namestack.join(" ") } };
             try {
                 process.send(message);
             }
