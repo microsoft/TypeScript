@@ -1514,7 +1514,7 @@ namespace ts {
     }
 
     export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
-        let result: Array<JSDoc | JSDocTag> | undefined;
+        let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
 

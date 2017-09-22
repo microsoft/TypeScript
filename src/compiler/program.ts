@@ -1462,7 +1462,7 @@ namespace ts {
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: StringLiteral[];
-            let moduleAugmentations: Array<StringLiteral | Identifier>;
+            let moduleAugmentations: (StringLiteral | Identifier)[];
             let ambientModules: string[];
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the

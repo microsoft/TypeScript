@@ -286,7 +286,7 @@ namespace ts.refactor.extractMethod {
 
             let errors: Diagnostic[];
             let permittedJumps = PermittedJumps.Return;
-            let seenLabels: Array<__String>;
+            let seenLabels: __String[];
 
             visit(nodeToCheck);
 
