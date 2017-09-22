@@ -148,6 +148,8 @@ namespace Utils {
         });
     }
 
+    export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+
     export function assertInvariants(node: ts.Node, parent: ts.Node): void {
         if (node) {
             assert.isFalse(node.pos < 0, "node.pos < 0");
@@ -1716,7 +1718,7 @@ namespace Harness {
         }
 
         function sanitizeTestFilePath(name: string) {
-            return ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/").toLowerCase();
+            return ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", Utils.canonicalizeForHarness);
         }
 
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
@@ -2060,14 +2062,13 @@ namespace Harness {
         export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]>, opts?: BaselineOptions, referencedExtensions?: string[]): void {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
-            const canonicalize = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
             /* tslint:disable-next-line:no-null-keyword */
             const errors: Error[] = [];
             if (gen !== null) {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
-                    const relativeFileName = ts.toPath(relativeFileBase + (ts.startsWith(name, "/") ? "" : "/") + name + extension, "", canonicalize);
+                    const relativeFileName = relativeFileBase + (ts.startsWith(name, "/") ? "" : "/") + name + extension;
                     const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
                     const comparison = compareToBaseline(content, relativeFileName, opts);
                     try {
@@ -2089,7 +2090,7 @@ namespace Harness {
             const missing: string[] = [];
             for (const name of existing) {
                 const localCopy = name.substring(referenceDir.length - relativeFileBase.length);
-                const path = ts.toPath(localCopy, "", canonicalize);
+                const path = ts.toPath(localCopy, "", Utils.canonicalizeForHarness);
                 if (!writtenFiles.has(path)) {
                     missing.push(localCopy);
                 }
