@@ -1530,7 +1530,7 @@ namespace Harness {
                 for (const file of allFiles) {
                     const { unitName } = file;
                     let typeLines = "=== " + unitName + " ===\r\n";
-                    const codeLines = file.content.split(/[\r\n\u2028\u2029]/g);
+                    const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
                     const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
                     let lastIndexWritten: number | undefined;
                     for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
