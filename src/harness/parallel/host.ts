@@ -44,7 +44,8 @@ namespace Harness.Parallel.Host {
         console.log("Discovering tests...");
         const discoverStart = +(new Date());
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
-        const tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
+        let tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
+        const newTasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
         const perfData = readSavedPerfData();
         let totalCost = 0;
         let unknownValue: string | undefined;
@@ -60,8 +61,10 @@ namespace Harness.Parallel.Host {
                     const hashedName = hashName(runner.kind(), file);
                     size = perfData[hashedName];
                     if (size === undefined) {
-                        size = Number.MAX_SAFE_INTEGER;
+                        size = 0;
                         unknownValue = hashedName;
+                        newTasks.push({ runner: runner.kind(), file, size });
+                        continue;
                     }
                 }
                 tasks.push({ runner: runner.kind(), file, size });
@@ -69,6 +72,7 @@ namespace Harness.Parallel.Host {
             }
         }
         tasks.sort((a, b) => a.size - b.size);
+        tasks = tasks.concat(newTasks);
         // 1 fewer batches than threads to account for unittests running on the final thread
         const batchCount = runners.length === 1 ? workerCount : workerCount - 1;
         const packfraction = 0.9;
