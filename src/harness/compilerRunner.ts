@@ -173,13 +173,13 @@ class CompilerBaselineRunner extends RunnerBase {
                 Harness.Compiler.doSourcemapBaseline(justName, options, result, harnessSettings);
             });
 
-            it("Correct type/symbol baselines for " + fileName, () => {
-                if (fileName.indexOf("APISample") >= 0) {
-                    return;
-                }
+            // it("Correct type/symbol baselines for " + fileName, () => {
+            //     if (fileName.indexOf("APISample") >= 0) {
+            //         return;
+            //     }
 
-                Harness.Compiler.doTypeAndSymbolBaseline(justName, result, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
-            });
+            //     Harness.Compiler.doTypeAndSymbolBaseline(justName, result, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
+            // });
         });
     }
 

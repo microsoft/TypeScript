@@ -7,14 +7,15 @@
 // ${cwd}: the current working directory of the spawned process
 {
     "version": "0.1.0",
-    "command": "gulp",
+    "command": "tsc",
     "isShellCommand": true,
-    "showOutput": "silent",
     "tasks": [
         {
-            "taskName": "local",
+            "taskName": "-w",
+            "args": ["-p", "src/compiler/tsconfig.json"],
             "isBuildCommand": true,
-            "showOutput": "silent",
+            "showOutput": "always",
+            "isBackground": true,
             "problemMatcher": [
                 "$tsc"
             ]
