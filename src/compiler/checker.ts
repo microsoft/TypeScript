@@ -13333,8 +13333,7 @@ namespace ts {
             return filter(getSignaturesOfStructuredType(type, SignatureKind.Call), s => !isAritySmaller(s, node));
         }
 
-        /** If the contextual signature has fewer parameters than the function expression, do not use it */
-        function isAritySmaller(signature: Signature, target: FunctionExpression | ArrowFunction | MethodDeclaration) {
+        function getMinimumArityOf(target: SignatureDeclaration) {
             let targetParameterCount = 0;
             for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
                 const param = target.parameters[targetParameterCount];
@@ -13345,6 +13344,12 @@ namespace ts {
             if (target.parameters.length && parameterIsThisKeyword(target.parameters[0])) {
                 targetParameterCount--;
             }
+            return targetParameterCount;
+        }
+
+        /** If the contextual signature has fewer parameters than the function expression, do not use it */
+        function isAritySmaller(signature: Signature, target: FunctionExpression | ArrowFunction | MethodDeclaration) {
+            const targetParameterCount = getMinimumArityOf(target);
             const sourceLength = signature.hasRestParameter ? Number.MAX_VALUE : signature.parameters.length;
             return sourceLength < targetParameterCount;
         }
@@ -13369,7 +13374,6 @@ namespace ts {
         function combineSignatures(signatureList: Signature[], declaration: SignatureDeclaration): Signature {
             // Produce a synthetic signature whose arguments are a union of the parameters of the inferred signatures and whose return type is an intersection
             const parameters: Symbol[] = [];
-            let minimumParameterCount = Number.POSITIVE_INFINITY;
             const restTypes: TypeSet = [];
             let thisTypes: Type[];
             let hasLiteralTypes = false;
@@ -13410,9 +13414,6 @@ namespace ts {
 
             // Then, collect aggrgate statistics about all signatures to determine the characteristics of the resulting signature
             for (const signature of signatureList) {
-                if (signature.minArgumentCount < minimumParameterCount) {
-                    minimumParameterCount = signature.minArgumentCount;
-                }
                 if (signature.hasLiteralTypes) {
                     hasLiteralTypes = true;
                 }
@@ -13437,7 +13438,7 @@ namespace ts {
                 parameters,
                 instantiateType(getIntersectionType(map(signatureList, getReturnTypeOfSignature)), mapper),
                 /*typePredicate*/ undefined,
-                minimumParameterCount,
+                getMinimumArityOf(declaration),
                 hasRestParameter,
                 hasLiteralTypes
             );
