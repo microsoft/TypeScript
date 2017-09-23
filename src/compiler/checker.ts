@@ -13366,76 +13366,62 @@ namespace ts {
                 getApparentTypeOfContextualType(node);
         }
 
-        function combineSignatures(signatureList: Signature[], declaration?: SignatureDeclaration): Signature {
+        function combineSignatures(signatureList: Signature[], declaration: SignatureDeclaration): Signature {
             // Produce a synthetic signature whose arguments are a union of the parameters of the inferred signatures and whose return type is an intersection
-            let parameters: Symbol[];
+            const parameters: Symbol[] = [];
             let minimumParameterCount = Number.POSITIVE_INFINITY;
-            let maximumRealParameterCount = 0;
-            let restTypes: Type[];
+            const restTypes: TypeSet = [];
             let thisTypes: Type[];
             let hasLiteralTypes = false;
+            let hasRestParameter = false;
+            const oldTypeParameters = flatMap(signatureList, s => s.typeParameters);
+            const newTypeParameters = map(oldTypeParameters, cloneTypeParameter);
+            const mapper = createTypeMapper(oldTypeParameters, newTypeParameters);
 
-            // First, collect aggrgate statistics about all signatures to determine the characteristics of the resulting signature
+            // First, for every parameter the user has written, lookup a corresponding union of types from the associated signatures
+            if (declaration.parameters && declaration.parameters.length) {
+                for (let i = 0; i < declaration.parameters.length ; i++) {
+                    const param = declaration.parameters[i];
+                    // We do this so the name is reasonable for users; however it is very rare for this symbol name to appear anywhere user-facing, as the result signature is used only for contextual typing
+                    const canUseUserSuppliedName = isIdentifier(param.name);
+                    const paramName = canUseUserSuppliedName ? (param.name as Identifier).escapedText : escapeLeadingUnderscores("arg");
+                    const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
+                    const parameterTypes: TypeSet = [];
+                    if (param.dotDotDotToken) {
+                        hasRestParameter = true;
+                        for (const signature of signatureList) {
+                            for (let j = i; j < signature.parameters.length; j++) {
+                                handleAddingTypesForParameter(signature, j, parameterTypes);
+                            }
+                        }
+                        paramSymbol.type = createArrayType(getUnionType(restTypes ? parameterTypes.concat(restTypes) : parameterTypes));
+                        parameters.push(paramSymbol);
+                        break;
+                    }
+                    else {
+                        for (const signature of signatureList) {
+                            handleAddingTypesForParameter(signature, i, parameterTypes);
+                        }
+                        paramSymbol.type = getUnionType(restTypes.length ? parameterTypes.concat(restTypes) : parameterTypes);
+                        parameters.push(paramSymbol);
+                    }
+                }
+            }
+
+            // Then, collect aggrgate statistics about all signatures to determine the characteristics of the resulting signature
             for (const signature of signatureList) {
                 if (signature.minArgumentCount < minimumParameterCount) {
                     minimumParameterCount = signature.minArgumentCount;
                 }
-                if (signature.hasRestParameter) {
-                    (restTypes || (restTypes = [])).push(getRestTypeOfSignature(signature));
-                }
                 if (signature.hasLiteralTypes) {
                     hasLiteralTypes = true;
                 }
-                const realParameterCount = length(signature.parameters) - (signature.hasRestParameter ? 1 : 0);
-                if (maximumRealParameterCount < realParameterCount) {
-                    maximumRealParameterCount = realParameterCount;
-                }
                 if (signature.thisParameter) {
-                    (thisTypes || (thisTypes = [])).push(getTypeOfSymbol(signature.thisParameter));
+                    (thisTypes || (thisTypes = [])).push(instantiateType(getTypeOfSymbol(signature.thisParameter), mapper));
                 }
-            }
-
-            // Then, for every real parameter up to the maximum, combine those parameter types and names into a new symbol
-            for (let i = 0; i < maximumRealParameterCount; i++) {
-                const parameterNames: __String[] = [];
-                const parameterTypes: Type[] = [];
-                for (const signature of signatureList) {
-                    let type: Type;
-                    const index = signature.thisParameter ? i + 1 : i;
-                    if (index < (signature.hasRestParameter ? signature.parameters.length - 1 : signature.parameters.length)) {
-                        // If the argument is present, add it to the mixed argument
-                        const param = signature.parameters[index];
-                        if (!contains(parameterNames, param.escapedName)) {
-                            parameterNames.push(param.escapedName);
-                        }
-                        type = getTypeOfSymbol(param);
-                    }
-                    else if (signature.hasRestParameter) {
-                        // Otherwise, if there is a rest type for this signature, add that type
-                        type = getRestTypeOfSignature(signature);
-                    }
-                    else {
-                        // Otherwise, this argument may be `undefined` on some uses
-                        type = undefinedType;
-                    }
-                    if (!contains(parameterTypes, type)) {
-                        parameterTypes.push(type);
-                    }
+                else if (compilerOptions.noImplicitThis) {
+                    (thisTypes || (thisTypes = [])).push(undefinedType);
                 }
-                // We do this so the name is reasonable for users; however it is very rare for this symbol name to appear anywhere user-facing, as the result signature is used only for contextual typing
-                const canUseUserSuppliedName = declaration && declaration.parameters && declaration.parameters[i] && isIdentifier(declaration.parameters[i].name);
-                const paramName = canUseUserSuppliedName ? (declaration.parameters[i].name as Identifier).escapedText : escapeLeadingUnderscores(map(parameterNames, unescapeLeadingUnderscores).join("or"));
-                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
-                paramSymbol.type = getUnionType(parameterTypes);
-                (parameters || (parameters = [])).push(paramSymbol);
-            }
-
-            const hasRestParameter = !!(restTypes && restTypes.length);
-            if (hasRestParameter) {
-                const restSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "rest" as __String);
-                restSymbol.type = getUnionType(restTypes);
-                restSymbol.isRestParameter = true;
-                (parameters || (parameters = [])).push(restSymbol);
             }
 
             let thisParameterSymbol: TransientSymbol;
@@ -13444,18 +13430,34 @@ namespace ts {
                 thisParameterSymbol.type = getUnionType(thisTypes);
             }
 
-            // TODO (weswigham): Merge type predicates?
             return createSignature(
                 declaration,
-                map(flatMap(signatureList, s => s.typeParameters), cloneTypeParameter),
+                newTypeParameters,
                 thisParameterSymbol,
                 parameters,
-                getIntersectionType(map(signatureList, getReturnTypeOfSignature)),
+                instantiateType(getIntersectionType(map(signatureList, getReturnTypeOfSignature)), mapper),
                 /*typePredicate*/ undefined,
                 minimumParameterCount,
                 hasRestParameter,
                 hasLiteralTypes
             );
+
+            function handleAddingTypesForParameter(signature: Signature, i: number, parameterTypes: TypeSet) {
+                const sigParam = signature.parameters[i];
+                if (sigParam && !(signature.hasRestParameter && i === (signature.parameters.length - 1))) {
+                    addTypeToUnion(parameterTypes, instantiateType(getTypeOfSymbol(sigParam), mapper));
+                    return;
+                }
+                if (signature.hasRestParameter) {
+                    const innerType = getRestTypeOfSignature(signature) || anyType;
+                    const newInnerType = instantiateType(innerType, mapper);
+                    addTypeToUnion(parameterTypes, newInnerType);
+                    addTypeToUnion(restTypes, newInnerType);
+                }
+                if (compilerOptions.strictNullChecks) {
+                    addTypeToUnion(parameterTypes, undefinedType);
+                }
+            }
         }
 
         // Return the contextual signature for a given expression node. A contextual type provides a

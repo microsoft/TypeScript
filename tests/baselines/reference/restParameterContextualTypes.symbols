@@ -1,0 +1,63 @@
+=== tests/cases/compiler/restParameterContextualTypes.ts ===
+type ComplexCalls = {
+>ComplexCalls : Symbol(ComplexCalls, Decl(restParameterContextualTypes.ts, 0, 0))
+
+    (): string;
+    (a: number): string;
+>a : Symbol(a, Decl(restParameterContextualTypes.ts, 2, 5))
+
+    (a: {x: number}, b: string): string;
+>a : Symbol(a, Decl(restParameterContextualTypes.ts, 3, 5))
+>x : Symbol(x, Decl(restParameterContextualTypes.ts, 3, 9))
+>b : Symbol(b, Decl(restParameterContextualTypes.ts, 3, 20))
+
+    (a: symbol, ...rest: {y: string}[]): string;
+>a : Symbol(a, Decl(restParameterContextualTypes.ts, 4, 5))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 4, 15))
+>y : Symbol(y, Decl(restParameterContextualTypes.ts, 4, 26))
+
+    (...rest: {z: string}[]): string;
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 5, 5))
+>z : Symbol(z, Decl(restParameterContextualTypes.ts, 5, 15))
+
+};
+
+const x: ComplexCalls = (...rest) => rest.toString();
+>x : Symbol(x, Decl(restParameterContextualTypes.ts, 8, 5))
+>ComplexCalls : Symbol(ComplexCalls, Decl(restParameterContextualTypes.ts, 0, 0))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 8, 25))
+>rest.toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 8, 25))
+>toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+
+const y: ComplexCalls = (_a = 1, ...rest) => rest.toString();
+>y : Symbol(y, Decl(restParameterContextualTypes.ts, 10, 5))
+>ComplexCalls : Symbol(ComplexCalls, Decl(restParameterContextualTypes.ts, 0, 0))
+>_a : Symbol(_a, Decl(restParameterContextualTypes.ts, 10, 25))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 10, 32))
+>rest.toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 10, 32))
+>toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+
+const z: ComplexCalls = (_a = 1, _b = "", ...rest) => rest.toString();
+>z : Symbol(z, Decl(restParameterContextualTypes.ts, 12, 5))
+>ComplexCalls : Symbol(ComplexCalls, Decl(restParameterContextualTypes.ts, 0, 0))
+>_a : Symbol(_a, Decl(restParameterContextualTypes.ts, 12, 25))
+>_b : Symbol(_b, Decl(restParameterContextualTypes.ts, 12, 32))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 12, 41))
+>rest.toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 12, 41))
+>toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+
+const more: ComplexCalls = (_a = 1, _b = "", _c = { z: "" }, ...rest) => rest.toString();
+>more : Symbol(more, Decl(restParameterContextualTypes.ts, 14, 5))
+>ComplexCalls : Symbol(ComplexCalls, Decl(restParameterContextualTypes.ts, 0, 0))
+>_a : Symbol(_a, Decl(restParameterContextualTypes.ts, 14, 28))
+>_b : Symbol(_b, Decl(restParameterContextualTypes.ts, 14, 35))
+>_c : Symbol(_c, Decl(restParameterContextualTypes.ts, 14, 44))
+>z : Symbol(z, Decl(restParameterContextualTypes.ts, 14, 51))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 14, 60))
+>rest.toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+>rest : Symbol(rest, Decl(restParameterContextualTypes.ts, 14, 60))
+>toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+
