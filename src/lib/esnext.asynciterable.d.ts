@@ -11,7 +11,7 @@ interface SymbolConstructor {
 
 interface AsyncIterator<T> {
     next(value?: any): Promise<IteratorResult<T>>;
-    return?(value?: any): Promise<IteratorResult<T>>;
+    return?(value?: any): Promise<IteratorResult<any>>;
     throw?(e?: any): Promise<IteratorResult<T>>;
 }
 

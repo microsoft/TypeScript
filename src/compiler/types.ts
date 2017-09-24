@@ -3419,6 +3419,10 @@ namespace ts {
         iteratedTypeOfIterator?: Type;
         iteratedTypeOfAsyncIterable?: Type;
         iteratedTypeOfAsyncIterator?: Type;
+        returnTypeOfIterable?: Type;
+        returnTypeOfIterator?: Type;
+        returnTypeOfAsyncIterable?: Type;
+        returnTypeOfAsyncIterator?: Type;
     }
 
     /* @internal */

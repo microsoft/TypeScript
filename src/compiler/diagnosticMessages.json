@@ -2216,6 +2216,14 @@
         "category": "Error",
         "code": 2714
     },
+    "The type returned by the 'return()' method of an iterator must have a 'value' property.": {
+        "category": "Error",
+        "code": 2715
+    },
+    "The type returned by the 'return()' method of an async iterator must be a promise for a type with a 'value' property.": {
+        "category": "Error",
+        "code": 2716
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
