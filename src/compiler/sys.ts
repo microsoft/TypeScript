@@ -43,7 +43,7 @@ namespace ts {
          * use native OS file watching
          */
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
-        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -114,7 +114,7 @@ namespace ts {
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, basePaths?: ReadonlyArray<string>, excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
-        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
         getEnvironmentVariable?(name: string): string;
     };
@@ -505,6 +505,7 @@ namespace ts {
                 fileExists: ChakraHost.fileExists,
                 directoryExists: ChakraHost.directoryExists,
                 createDirectory: ChakraHost.createDirectory,
+                watchDirectory: ChakraHost.watchDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,

@@ -20,6 +20,7 @@ namespace ts.server {
         getCurrentDirectory(): string { return void 0; },
         getEnvironmentVariable(): string { return ""; },
         readDirectory() { return []; },
+        watchDirectory() { return void 0; },
         exit: noop,
         setTimeout() { return 0; },
         clearTimeout: noop,
