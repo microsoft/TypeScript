@@ -3607,8 +3607,12 @@ namespace ts {
         next?: DiagnosticMessageChain;
     }
 
+    export interface SourceMapSource extends SourceFileLike {
+        fileName: string;
+    }
+
     export interface Diagnostic {
-        file: SourceFile | undefined;
+        file: SourceMapSource | undefined;
         start: number | undefined;
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
