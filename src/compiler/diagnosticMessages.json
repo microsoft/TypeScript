@@ -3703,5 +3703,9 @@
     "Extract to {0}": {
         "category": "Message",
         "code": 95004
+    },
+    "Convert to Typescript type": {
+        "category": "Message",
+        "code": 95005
     }
 }
