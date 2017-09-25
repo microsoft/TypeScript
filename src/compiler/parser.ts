@@ -6599,12 +6599,12 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = parseJSDocTypeExpression(/*mayBail*/ true);
+                    result.typeExpression = parseJSDocTypeExpression(/*requireBraces*/ true);
                     return finishNode(result);
                 }
 
                 function parseAugmentsTag(atToken: AtToken, tagName: Identifier): JSDocAugmentsTag {
-                    const typeExpression = tryParseTypeExpression();
+                    const typeExpression = parseJSDocTypeExpression(/*requireBraces*/ true);
 
                     const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, atToken.pos);
                     result.atToken = atToken;
