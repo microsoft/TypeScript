@@ -4990,7 +4990,7 @@ namespace ts {
             const valueDecl = type.symbol.valueDeclaration;
             if (valueDecl && isInJavaScriptFile(valueDecl)) {
                 const augTag = getJSDocAugmentsTag(type.symbol.valueDeclaration);
-                if (augTag) {
+                if (augTag && augTag.typeExpression && augTag.typeExpression.type) {
                     baseType = getTypeFromTypeNode(augTag.typeExpression.type);
                 }
             }
