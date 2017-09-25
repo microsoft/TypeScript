@@ -19798,13 +19798,6 @@ namespace ts {
             }
         }
 
-        function checkJSDoc(node: FunctionDeclaration | MethodDeclaration) {
-            if (!isInJavaScriptFile(node)) {
-                return;
-            }
-            forEach(node.jsDoc, checkSourceElement);
-        }
-
         function checkJSDocTypedefTag(node: JSDocTypedefTag) {
             if (!node.typeExpression) {
                 // If the node had `@property` tags, `typeExpression` would have been set to the first property tag.
@@ -19821,7 +19814,6 @@ namespace ts {
         }
 
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
-            checkJSDoc(node);
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const functionFlags = getFunctionFlags(node);
