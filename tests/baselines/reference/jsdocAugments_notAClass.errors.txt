@@ -1,0 +1,10 @@
+/b.js(3,10): error TS8022: JSDoc '@augments' tag will be ignored if not attached to a class declaration.
+
+
+==== /b.js (1 errors) ====
+    class A {}
+    /** @augments A */
+    function b() {}
+             ~
+!!! error TS8022: JSDoc '@augments' tag will be ignored if not attached to a class declaration.
+    

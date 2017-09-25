@@ -3511,6 +3511,14 @@
         "category": "Error",
         "code": 8021
     },
+    "JSDoc '@augments' tag will be ignored if not attached to a class declaration.": {
+        "category": "Error",
+        "code": 8022
+    },
+    "JSDoc '@augments' tag declares to extend '{0}', but actual class augments '{1}'.": {
+        "category": "Error",
+        "code": 8023
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002

@@ -1,4 +1,4 @@
-=== /a.js ===
+=== /b.js ===
 class A { constructor() { this.x = 0; } }
 >A : A
 >this.x = 0 : 0
@@ -7,18 +7,17 @@ class A { constructor() { this.x = 0; } }
 >x : number
 >0 : 0
 
-/** @augments */
-class B extends A {
+/** @augments A */
+class B {
 >B : B
->A : typeof A
 
     m() {
->m : () => void
+>m : () => number
 
-        this.x
->this.x : any
+        return this.x;
+>this.x : number
 >this : this
->x : any
+>x : number
     }
 }
 

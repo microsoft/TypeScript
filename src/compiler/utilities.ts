@@ -1581,14 +1581,18 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
-        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
-        const func = node.parent!.parent!;
+        const func = getNodeCommentedByJSDocTag(node);
         if (!isFunctionLike(func)) {
             return undefined;
         }
         const parameter = find(func.parameters, p =>
             p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
         return parameter && parameter.symbol;
+    }
+
+    export function getNodeCommentedByJSDocTag(node: JSDocTag): Node {
+        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
+        return node.parent!.parent!;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
