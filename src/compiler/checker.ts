@@ -5124,7 +5124,9 @@ namespace ts {
 
                 const declaration = <JSDocTypedefTag | TypeAliasDeclaration>find(symbol.declarations, d =>
                     d.kind === SyntaxKind.JSDocTypedefTag || d.kind === SyntaxKind.TypeAliasDeclaration);
-                let type = getTypeFromTypeNode(declaration.kind === SyntaxKind.JSDocTypedefTag ? declaration.typeExpression : declaration.type);
+                const typeNode = declaration.kind === SyntaxKind.JSDocTypedefTag ? declaration.typeExpression : declaration.type;
+                // If typeNode is missing, we will error in checkJSDocTypedefTag.
+                let type = typeNode ? getTypeFromTypeNode(typeNode) : unknownType;
 
                 if (popTypeResolution()) {
                     const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
@@ -19779,11 +19781,11 @@ namespace ts {
             }
         }
 
-        function checkJSDoc(node: FunctionDeclaration | MethodDeclaration) {
-            if (!isInJavaScriptFile(node)) {
-                return;
+        function checkJSDocTypedefTag(node: JSDocTypedefTag) {
+            if (!node.typeExpression) {
+                // If the node had `@property` tags, `typeExpression` would have been set to the first property tag.
+                error(node.name, Diagnostics.JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags);
             }
-            forEach(node.jsDoc, checkSourceElement);
         }
 
         function checkJSDocComment(node: JSDoc) {
@@ -19795,7 +19797,6 @@ namespace ts {
         }
 
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
-            checkJSDoc(node);
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const functionFlags = getFunctionFlags(node);
@@ -22429,6 +22430,12 @@ namespace ts {
                 return;
             }
 
+            if (isInJavaScriptFile(node) && (node as JSDocContainer).jsDoc) {
+                for (const jsdoc of (node as JSDocContainer).jsDoc) {
+                    checkJSDocComment(jsdoc);
+                }
+            }
+
             const kind = node.kind;
             if (cancellationToken) {
                 // Only bother checking on a few construct kinds.  We don't want to be excessively
@@ -22483,6 +22490,8 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TypeOperator:
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                case SyntaxKind.JSDocTypedefTag:
+                    return checkJSDocTypedefTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocComment:
                     return checkJSDocComment(node as JSDoc);
                 case SyntaxKind.JSDocParameterTag:
