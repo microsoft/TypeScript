@@ -23,7 +23,7 @@ f4 = f1;  // Error
 f4 = f2;  // Ok
 f4 = f3;  // Error
 
-interface Func<T, U> { (x: T): U }
+type Func<T, U> = (x: T) => U;
 
 declare let g1: Func<Object, Object>;
 declare let g2: Func<Object, string>;
