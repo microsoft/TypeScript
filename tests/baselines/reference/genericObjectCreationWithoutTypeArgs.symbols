@@ -1,0 +1,23 @@
+=== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts ===
+class SS<T>{
+>SS : Symbol(SS, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 0))
+>T : Symbol(T, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 9))
+
+}
+
+var x1 = new SS<number>(); // OK
+>x1 : Symbol(x1, Decl(genericObjectCreationWithoutTypeArgs.ts, 4, 3))
+>SS : Symbol(SS, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 0))
+
+var x2 = new SS < number>;   // Correctly give error 
+>x2 : Symbol(x2, Decl(genericObjectCreationWithoutTypeArgs.ts, 5, 3))
+>SS : Symbol(SS, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 0))
+
+var x3 = new SS();         // OK
+>x3 : Symbol(x3, Decl(genericObjectCreationWithoutTypeArgs.ts, 6, 3))
+>SS : Symbol(SS, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 0))
+
+var x4 = new SS;           // Should be allowed, but currently give error ('supplied parameters do not match any signature of the call target')
+>x4 : Symbol(x4, Decl(genericObjectCreationWithoutTypeArgs.ts, 7, 3))
+>SS : Symbol(SS, Decl(genericObjectCreationWithoutTypeArgs.ts, 0, 0))
+

@@ -130,7 +130,7 @@ namespace Harness.LanguageService {
         }
 
         public getNewLine(): string {
-            return "\r\n";
+            return harnessNewLine;
         }
 
         public getFilenames(): string[] {

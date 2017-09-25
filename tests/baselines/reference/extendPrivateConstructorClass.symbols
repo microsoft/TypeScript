@@ -1,0 +1,18 @@
+=== tests/cases/compiler/extendPrivateConstructorClass.ts ===
+declare namespace abc {
+>abc : Symbol(abc, Decl(extendPrivateConstructorClass.ts, 0, 0))
+
+    class XYZ {
+>XYZ : Symbol(XYZ, Decl(extendPrivateConstructorClass.ts, 0, 23))
+
+        private constructor();
+    }
+}
+
+class C extends abc.XYZ {
+>C : Symbol(C, Decl(extendPrivateConstructorClass.ts, 4, 1))
+>abc.XYZ : Symbol(abc.XYZ, Decl(extendPrivateConstructorClass.ts, 0, 23))
+>abc : Symbol(abc, Decl(extendPrivateConstructorClass.ts, 0, 0))
+>XYZ : Symbol(abc.XYZ, Decl(extendPrivateConstructorClass.ts, 0, 23))
+}
+

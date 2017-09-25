@@ -1,0 +1,16 @@
+=== tests/cases/compiler/importAsBaseClass_1.ts ===
+import Greeter = require("./importAsBaseClass_0");
+>Greeter : Symbol(Greeter, Decl(importAsBaseClass_1.ts, 0, 0))
+
+class Hello extends Greeter { }
+>Hello : Symbol(Hello, Decl(importAsBaseClass_1.ts, 0, 50))
+>Greeter : Symbol(Greeter, Decl(importAsBaseClass_1.ts, 0, 0))
+
+=== tests/cases/compiler/importAsBaseClass_0.ts ===
+export class Greeter {
+>Greeter : Symbol(Greeter, Decl(importAsBaseClass_0.ts, 0, 0))
+
+   greet() { return 'greet' }
+>greet : Symbol(Greeter.greet, Decl(importAsBaseClass_0.ts, 0, 22))
+}
+

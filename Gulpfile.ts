@@ -31,8 +31,6 @@ import merge2 = require("merge2");
 import * as os from "os";
 import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
-const mochaParallel = require("./scripts/mocha-parallel.js");
-const {runTestsInParallel} = mochaParallel;
 
 Error.stackTraceLimit = 1000;
 
@@ -668,36 +666,18 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         }
         else {
             // run task to load all tests and partition them between workers
-            const args = [];
-            args.push("-R", "min");
-            if (colors) {
-                args.push("--colors");
-            }
-            else {
-                args.push("--no-colors");
-            }
-            args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout, noColors: colors === " --no-colors " }, function(err) {
-                // last worker clean everything and runs linter in case if there were no errors
-                del(taskConfigsFolder).then(() => {
-                    if (!err) {
-                        lintThenFinish();
-                    }
-                    else {
-                        finish(err);
-                    }
-                });
+            exec(host, [run], lintThenFinish, function(e, status) {
+                finish(e, status);
             });
         }
     });
 
     function failWithStatus(err?: any, status?: number) {
-        if (err) {
-            console.log(err);
+        if (err || status) {
+            process.exit(typeof status === "number" ? status : 2);
         }
-        done(err || status);
-        process.exit(status);
+        done();
     }
 
     function lintThenFinish() {
@@ -711,7 +691,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
 
     function finish(error?: any, errorStatus?: number) {
         restoreSavedNodeEnv();
-        deleteTemporaryProjectOutput().then(() => {
+        deleteTestConfig().then(deleteTemporaryProjectOutput).then(() => {
             if (error !== undefined || errorStatus !== undefined) {
                 failWithStatus(error, errorStatus);
             }
@@ -719,6 +699,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
                 done();
             }
         });
+    }
+
+    function deleteTestConfig() {
+        return del("test.config");
     }
 }
 
@@ -836,7 +820,7 @@ function cleanTestDirs(done: (e?: any) => void) {
 
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder });
+    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions["colors"] });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -1066,10 +1050,11 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
     const fileMatcher = cmdLineOptions["files"];
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+        : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    if (fold.isTravis()) console.log(fold.end("lint"));
 });
 
 gulp.task("default", "Runs 'local'", ["local"]);

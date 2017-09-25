@@ -83,7 +83,7 @@ namespace ts.server {
     }
 
     export interface SafeList {
-        [name: string]: { match: RegExp, exclude?: Array<Array<string | number>>, types?: string[] };
+        [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
     }
 
     function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<Map<number>> {
@@ -1457,7 +1457,8 @@ namespace ts.server {
             }
 
             project.setProjectErrors(configFileErrors);
-            this.addFilesToNonInferredProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, projectOptions.typeAcquisition);
+            const filesToAdd = projectOptions.files.concat(project.getExternalFiles());
+            this.addFilesToNonInferredProjectAndUpdateGraph(project, filesToAdd, fileNamePropertyReader, projectOptions.typeAcquisition);
             this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFileExistenceByNewConfiguredProject(project);
             this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
@@ -2105,7 +2106,7 @@ namespace ts.server {
 
                         if (rule.exclude) {
                             for (const exclude of rule.exclude) {
-                                const processedRule = root.replace(rule.match, (...groups: Array<string>) => {
+                                const processedRule = root.replace(rule.match, (...groups: string[]) => {
                                     return exclude.map(groupNumberOrString => {
                                         // RegExp group numbers are 1-based, but the first element in groups
                                         // is actually the original string, so it all works out in the end.

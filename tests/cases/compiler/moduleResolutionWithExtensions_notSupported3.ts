@@ -1,7 +1,7 @@
 // @noImplicitReferences: true
 // @jsx: preserve
 // @traceResolution: true
-// Test the error message if we have `--jsx` but not `--allowJw`.
+// If we have "--jsx" set and not "--allowJs", it's an implicit-any module.
 
 // @Filename: /jsx.jsx
 

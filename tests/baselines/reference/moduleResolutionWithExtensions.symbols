@@ -27,5 +27,4 @@ import j from "./jquery";
 === /src/jquery_user_1.ts ===
 import j from "./jquery.js"
 >j : Symbol(j, Decl(jquery_user_1.ts, 0, 6))
->j : Symbol(j, Decl(jquery_user_1.ts, 0, 6))
 

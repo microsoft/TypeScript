@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement21.ts ===
+for (var of of) { }
+>of : any
+

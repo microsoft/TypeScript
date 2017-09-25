@@ -1014,11 +1014,6 @@ namespace ts {
 
     /**
      * Gets the owned, enumerable property keys of a map-like.
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       Object.keys instead as it offers better performance.
-     *
-     * @param map A map-like.
      */
     export function getOwnKeys<T>(map: MapLike<T>): string[] {
         const keys: string[] = [];
@@ -1029,6 +1024,17 @@ namespace ts {
         }
 
         return keys;
+    }
+
+    export function getOwnValues<T>(sparseArray: T[]): T[] {
+        const values: T[] = [];
+        for (const key in sparseArray) {
+            if (hasOwnProperty.call(sparseArray, key)) {
+                values.push(sparseArray[key]);
+            }
+        }
+
+        return values;
     }
 
     /** Shims `Array.from`. */
@@ -1692,7 +1698,7 @@ namespace ts {
     }
 
     export function isRootedDiskPath(path: string) {
-        return getRootLength(path) !== 0;
+        return path && getRootLength(path) !== 0;
     }
 
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {

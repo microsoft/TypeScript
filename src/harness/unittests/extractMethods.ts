@@ -410,6 +410,8 @@ function test(x: number) {
             "Statement or expression expected."
         ]);
 
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single identifier."]);
+
         testExtractMethod("extractMethod1",
             `namespace A {
     let x = 1;
@@ -766,6 +768,11 @@ function parsePrimaryExpression(): any {
             }
         }|]
     }
+}`);
+        // Selection excludes leading trivia of declaration
+        testExtractMethod("extractMethod33",
+            `function F() {
+    [#|function G() { }|]
 }`);
     });
 

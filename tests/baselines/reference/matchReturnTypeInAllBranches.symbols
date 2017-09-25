@@ -1,0 +1,97 @@
+=== tests/cases/compiler/matchReturnTypeInAllBranches.ts ===
+// Represents a monster who enjoys ice cream
+class IceCreamMonster {
+>IceCreamMonster : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+
+    private iceCreamFlavor: string;
+>iceCreamFlavor : Symbol(IceCreamMonster.iceCreamFlavor, Decl(matchReturnTypeInAllBranches.ts, 1, 23))
+
+    private iceCreamRemaining: number;
+>iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+
+    private wantsSprinkles: boolean;
+>wantsSprinkles : Symbol(IceCreamMonster.wantsSprinkles, Decl(matchReturnTypeInAllBranches.ts, 3, 38))
+
+    private soundsWhenEating: string;
+>soundsWhenEating : Symbol(IceCreamMonster.soundsWhenEating, Decl(matchReturnTypeInAllBranches.ts, 4, 36))
+
+    public name: string;
+>name : Symbol(IceCreamMonster.name, Decl(matchReturnTypeInAllBranches.ts, 5, 37))
+
+    constructor(iceCreamFlavor: string, wantsSprinkles: boolean, soundsWhenEating: string, name: string) {
+>iceCreamFlavor : Symbol(iceCreamFlavor, Decl(matchReturnTypeInAllBranches.ts, 7, 16))
+>wantsSprinkles : Symbol(wantsSprinkles, Decl(matchReturnTypeInAllBranches.ts, 7, 39))
+>soundsWhenEating : Symbol(soundsWhenEating, Decl(matchReturnTypeInAllBranches.ts, 7, 64))
+>name : Symbol(name, Decl(matchReturnTypeInAllBranches.ts, 7, 90))
+
+        this.iceCreamFlavor = iceCreamFlavor;
+>this.iceCreamFlavor : Symbol(IceCreamMonster.iceCreamFlavor, Decl(matchReturnTypeInAllBranches.ts, 1, 23))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>iceCreamFlavor : Symbol(IceCreamMonster.iceCreamFlavor, Decl(matchReturnTypeInAllBranches.ts, 1, 23))
+>iceCreamFlavor : Symbol(iceCreamFlavor, Decl(matchReturnTypeInAllBranches.ts, 7, 16))
+
+        this.iceCreamRemaining = 100;
+>this.iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+
+        this.wantsSprinkles = wantsSprinkles;
+>this.wantsSprinkles : Symbol(IceCreamMonster.wantsSprinkles, Decl(matchReturnTypeInAllBranches.ts, 3, 38))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>wantsSprinkles : Symbol(IceCreamMonster.wantsSprinkles, Decl(matchReturnTypeInAllBranches.ts, 3, 38))
+>wantsSprinkles : Symbol(wantsSprinkles, Decl(matchReturnTypeInAllBranches.ts, 7, 39))
+
+        this.soundsWhenEating = soundsWhenEating;
+>this.soundsWhenEating : Symbol(IceCreamMonster.soundsWhenEating, Decl(matchReturnTypeInAllBranches.ts, 4, 36))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>soundsWhenEating : Symbol(IceCreamMonster.soundsWhenEating, Decl(matchReturnTypeInAllBranches.ts, 4, 36))
+>soundsWhenEating : Symbol(soundsWhenEating, Decl(matchReturnTypeInAllBranches.ts, 7, 64))
+
+        this.name = name;
+>this.name : Symbol(IceCreamMonster.name, Decl(matchReturnTypeInAllBranches.ts, 5, 37))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>name : Symbol(IceCreamMonster.name, Decl(matchReturnTypeInAllBranches.ts, 5, 37))
+>name : Symbol(name, Decl(matchReturnTypeInAllBranches.ts, 7, 90))
+    }
+    /**
+* Tells the IceCreamMonster to eat their ice cre    am!    
+*
+* @param {number} amount The amount of ice cream to e    at.
+* @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
+*/
+    public eatIceCream(amount: number): boolean {
+>eatIceCream : Symbol(IceCreamMonster.eatIceCream, Decl(matchReturnTypeInAllBranches.ts, 13, 5))
+>amount : Symbol(amount, Decl(matchReturnTypeInAllBranches.ts, 20, 23))
+
+        this.iceCreamRemaining -= amount;
+>this.iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+>amount : Symbol(amount, Decl(matchReturnTypeInAllBranches.ts, 20, 23))
+
+        if (this.iceCreamRemaining <= 0)
+>this.iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+        {
+            this.iceCreamRemaining = 0;
+>this.iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+>this : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+>iceCreamRemaining : Symbol(IceCreamMonster.iceCreamRemaining, Decl(matchReturnTypeInAllBranches.ts, 2, 35))
+
+            return false;
+        }
+        else
+        {
+            return 12345;
+        }
+    }
+}
+var cookieMonster: IceCreamMonster;
+>cookieMonster : Symbol(cookieMonster, Decl(matchReturnTypeInAllBranches.ts, 33, 3))
+>IceCreamMonster : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+
+cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");
+>cookieMonster : Symbol(cookieMonster, Decl(matchReturnTypeInAllBranches.ts, 33, 3))
+>IceCreamMonster : Symbol(IceCreamMonster, Decl(matchReturnTypeInAllBranches.ts, 0, 0))
+

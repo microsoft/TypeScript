@@ -1,0 +1,42 @@
+=== tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts ===
+class LanguageSpec_section_4_5_error_cases {
+>LanguageSpec_section_4_5_error_cases : LanguageSpec_section_4_5_error_cases
+
+    public set AnnotatedSetter_SetterFirst(a: number) { }
+>AnnotatedSetter_SetterFirst : number
+>a : number
+
+    public get AnnotatedSetter_SetterFirst() { return ""; }
+>AnnotatedSetter_SetterFirst : number
+>"" : ""
+
+    public get AnnotatedSetter_SetterLast() { return ""; }
+>AnnotatedSetter_SetterLast : number
+>"" : ""
+
+    public set AnnotatedSetter_SetterLast(a: number) { }
+>AnnotatedSetter_SetterLast : number
+>a : number
+
+    public get AnnotatedGetter_GetterFirst(): string { return ""; }
+>AnnotatedGetter_GetterFirst : string
+>"" : ""
+
+    public set AnnotatedGetter_GetterFirst(aStr) { aStr = 0; }
+>AnnotatedGetter_GetterFirst : string
+>aStr : string
+>aStr = 0 : 0
+>aStr : string
+>0 : 0
+
+    public set AnnotatedGetter_GetterLast(aStr) { aStr = 0; }
+>AnnotatedGetter_GetterLast : string
+>aStr : string
+>aStr = 0 : 0
+>aStr : string
+>0 : 0
+
+    public get AnnotatedGetter_GetterLast(): string { return ""; }
+>AnnotatedGetter_GetterLast : string
+>"" : ""
+}

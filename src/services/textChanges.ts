@@ -152,7 +152,9 @@ namespace ts.textChanges {
             return position === Position.Start ? start : fullStart;
         }
         // get start position of the line following the line that contains fullstart position
-        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + 1, sourceFile);
+        // (but only if the fullstart isn't the very beginning of the file)
+        const nextLineStart = fullStart > 0 ? 1 : 0;
+        let adjustedStartPosition = getStartPositionOfLine(getLineOfLocalPosition(sourceFile, fullStartLine) + nextLineStart, sourceFile);
         // skip whitespaces/newlines
         adjustedStartPosition = skipWhitespacesAndLineBreaks(sourceFile.text, adjustedStartPosition);
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
@@ -184,16 +186,12 @@ namespace ts.textChanges {
         return s;
     }
 
-    function getNewlineKind(context: { newLineCharacter: string }) {
-        return context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-    }
-
     export class ChangeTracker {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
         public static fromContext(context: RefactorContext | CodeFixContext) {
-            return new ChangeTracker(getNewlineKind(context), context.rulesProvider);
+            return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
         }
 
         constructor(
@@ -228,7 +226,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(node);
+            const index = indexOfNode(containingList, node);
             if (index < 0) {
                 return this;
             }
@@ -360,7 +358,7 @@ namespace ts.textChanges {
                 Debug.fail("node is not a list element");
                 return this;
             }
-            const index = containingList.indexOf(after);
+            const index = indexOfNode(containingList, after);
             if (index < 0) {
                 return this;
             }

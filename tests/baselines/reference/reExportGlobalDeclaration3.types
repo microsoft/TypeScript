@@ -1,0 +1,34 @@
+=== tests/cases/compiler/file1.d.ts ===
+declare namespace NS1 {
+>NS1 : typeof NS1
+
+    export var foo: number;
+>foo : number
+}
+
+declare namespace NS2 {
+>NS2 : typeof NS2
+
+    export var foo: number;
+>foo : number
+}
+
+=== tests/cases/compiler/file2.ts ===
+export {NS1, NS1 as NNS1};
+>NS1 : typeof NS1
+>NS1 : typeof NS1
+>NNS1 : typeof NS1
+
+export {NS2, NS2 as NNS2};
+>NS2 : typeof NS2
+>NS2 : typeof NS2
+>NNS2 : typeof NS2
+
+export {NS1 as NNNS1};
+>NS1 : typeof NS1
+>NNNS1 : typeof NS1
+
+export {NS2 as NNNS2};
+>NS2 : typeof NS2
+>NNNS2 : typeof NS2
+

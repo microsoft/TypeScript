@@ -46,7 +46,7 @@ verify.navigationTree({
                 },
                 {
                     "text": "x",
-                    "kind": "function",
+                    "kind": "const",
                     "childItems": [
                         {
                             "text": "xx",
@@ -90,7 +90,7 @@ verify.navigationTree({
                 },
                 {
                     "text": "cls2",
-                    "kind": "class"
+                    "kind": "const"
                 },
                 {
                     "text": "cls3",
@@ -138,7 +138,7 @@ verify.navigationBar([
             },
             {
                 "text": "x",
-                "kind": "function"
+                "kind": "const"
             },
             {
                 "text": "y",
@@ -160,7 +160,7 @@ verify.navigationBar([
     },
     {
         "text": "x",
-        "kind": "function",
+        "kind": "const",
         "childItems": [
             {
                 "text": "xx",
@@ -205,7 +205,7 @@ verify.navigationBar([
             },
             {
                 "text": "cls2",
-                "kind": "class"
+                "kind": "const"
             },
             {
                 "text": "cls3",
@@ -216,11 +216,6 @@ verify.navigationBar([
     },
     {
         "text": "<class>",
-        "kind": "class",
-        "indent": 2
-    },
-    {
-        "text": "cls2",
         "kind": "class",
         "indent": 2
     },

@@ -586,6 +586,8 @@ namespace ts {
         host = host || createCompilerHost(options);
 
         let skipDefaultLib = options.noLib;
+        const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
+        const defaultLibraryPath = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(getDefaultLibraryFileName());
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
@@ -665,12 +667,11 @@ namespace ts {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
                 if (!options.lib) {
-                    processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+                    processRootFile(getDefaultLibraryFileName(), /*isDefaultLib*/ true);
                 }
                 else {
-                    const libDirectory = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
                     forEach(options.lib, libFileName => {
-                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true);
+                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true);
                     });
                 }
             }
@@ -722,6 +723,7 @@ namespace ts {
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             isSourceFileFromExternalLibrary,
+            isSourceFileDefaultLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
@@ -1149,6 +1151,18 @@ namespace ts {
             return sourceFilesFoundSearchingNodeModules.get(file.path);
         }
 
+        function isSourceFileDefaultLibrary(file: SourceFile): boolean {
+            if (file.hasNoDefaultLib) {
+                return true;
+            }
+
+            if (defaultLibraryPath && defaultLibraryPath.length !== 0) {
+                return containsPath(defaultLibraryPath, file.path, currentDirectory, /*ignoreCase*/ !host.useCaseSensitiveFileNames());
+            }
+
+            return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+        }
+
         function getDiagnosticsProducingTypeChecker() {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
         }
@@ -1330,9 +1344,7 @@ namespace ts {
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
-                return isSourceFileJavaScript(sourceFile)
-                    ? filter(diagnostics, shouldReportDiagnostic)
-                    : diagnostics;
+                return filter(diagnostics, shouldReportDiagnostic);
             });
         }
 
@@ -1380,7 +1392,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                                 return;
                             }
-                            // falls through
+                        // falls through
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
@@ -1462,7 +1474,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
-                            // falls through
+                        // falls through
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
@@ -1510,8 +1522,8 @@ namespace ts {
                                 if (isConstValid) {
                                     continue;
                                 }
-                                // to report error,
-                                // falls through
+                            // to report error,
+                            // falls through
                             case SyntaxKind.PublicKeyword:
                             case SyntaxKind.PrivateKeyword:
                             case SyntaxKind.ProtectedKeyword:
@@ -1622,7 +1634,7 @@ namespace ts {
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: StringLiteral[];
-            let moduleAugmentations: Array<StringLiteral | Identifier>;
+            let moduleAugmentations: (StringLiteral | Identifier)[];
             let ambientModules: string[];
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
@@ -1725,10 +1737,10 @@ namespace ts {
         }
 
         function getSourceFileFromReferenceWorker(
-                fileName: string,
-                getSourceFile: (fileName: string) => SourceFile | undefined,
-                fail?: (diagnostic: DiagnosticMessage, ...argument: string[]) => void,
-                refFile?: SourceFile): SourceFile | undefined {
+            fileName: string,
+            getSourceFile: (fileName: string) => SourceFile | undefined,
+            fail?: (diagnostic: DiagnosticMessage, ...argument: string[]) => void,
+            refFile?: SourceFile): SourceFile | undefined {
 
             if (hasExtension(fileName)) {
                 if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
@@ -2004,7 +2016,8 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFileFromNodeModules = isFromNodeModulesSearch && !extensionIsTypeScript(resolution.extension);
+                    const isJsFile = !extensionIsTypeScript(resolution.extension);
+                    const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
                     if (isFromNodeModulesSearch) {
@@ -2019,7 +2032,12 @@ namespace ts {
                     const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                     // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
-                    const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
+                    const shouldAddFile = resolvedFileName
+                        && !getResolutionDiagnostic(options, resolution)
+                        && !options.noResolve
+                        && i < file.imports.length
+                        && !elideImport
+                        && !(isJsFile && !options.allowJs);
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2394,7 +2412,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
+            return options.allowJs || !options.noImplicitAny ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
     }
 

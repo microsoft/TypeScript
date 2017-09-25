@@ -43,4 +43,8 @@ namespace ts {
             return refactor && refactor.getEditsForAction(context, actionName);
         }
     }
+
+    export function getRefactorContextLength(context: RefactorContext): number {
+        return context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
+    }
 }

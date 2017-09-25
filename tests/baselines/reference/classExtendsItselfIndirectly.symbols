@@ -1,0 +1,40 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts ===
+class C extends E { foo: string; } // error
+>C : Symbol(C, Decl(classExtendsItselfIndirectly.ts, 0, 0))
+>E : Symbol(E, Decl(classExtendsItselfIndirectly.ts, 2, 34))
+>foo : Symbol(C.foo, Decl(classExtendsItselfIndirectly.ts, 0, 19))
+
+class D extends C { bar: string; }
+>D : Symbol(D, Decl(classExtendsItselfIndirectly.ts, 0, 34))
+>C : Symbol(C, Decl(classExtendsItselfIndirectly.ts, 0, 0))
+>bar : Symbol(D.bar, Decl(classExtendsItselfIndirectly.ts, 2, 19))
+
+class E extends D { baz: number; }
+>E : Symbol(E, Decl(classExtendsItselfIndirectly.ts, 2, 34))
+>D : Symbol(D, Decl(classExtendsItselfIndirectly.ts, 0, 34))
+>baz : Symbol(E.baz, Decl(classExtendsItselfIndirectly.ts, 4, 19))
+
+class C2<T> extends E2<T> { foo: T; } // error
+>C2 : Symbol(C2, Decl(classExtendsItselfIndirectly.ts, 4, 34))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 6, 9))
+>E2 : Symbol(E2, Decl(classExtendsItselfIndirectly.ts, 8, 37))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 6, 9))
+>foo : Symbol(C2.foo, Decl(classExtendsItselfIndirectly.ts, 6, 27))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 6, 9))
+
+class D2<T> extends C2<T> { bar: T; }
+>D2 : Symbol(D2, Decl(classExtendsItselfIndirectly.ts, 6, 37))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 8, 9))
+>C2 : Symbol(C2, Decl(classExtendsItselfIndirectly.ts, 4, 34))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 8, 9))
+>bar : Symbol(D2.bar, Decl(classExtendsItselfIndirectly.ts, 8, 27))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 8, 9))
+
+class E2<T> extends D2<T> { baz: T; }
+>E2 : Symbol(E2, Decl(classExtendsItselfIndirectly.ts, 8, 37))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 10, 9))
+>D2 : Symbol(D2, Decl(classExtendsItselfIndirectly.ts, 6, 37))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 10, 9))
+>baz : Symbol(E2.baz, Decl(classExtendsItselfIndirectly.ts, 10, 27))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly.ts, 10, 9))
+

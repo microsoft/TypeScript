@@ -4213,22 +4213,23 @@ namespace ts.projectSystem {
     });
 
     describe("CachingFileSystemInformation", () => {
-        interface CalledMaps {
-            fileExists: MultiMap<true>;
-            directoryExists: MultiMap<true>;
-            getDirectories: MultiMap<true>;
-            readFile: MultiMap<true>;
-            readDirectory: MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>;
+        enum CalledMapsWithSingleArg {
+            fileExists = "fileExists",
+            directoryExists = "directoryExists",
+            getDirectories = "getDirectories",
+            readFile = "readFile"
         }
-
+        enum CalledMapsWithFiveArgs {
+            readDirectory = "readDirectory"
+        }
+        type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         function createCallsTrackingHost(host: TestServerHost) {
-            const keys: Array<keyof CalledMaps> = ["fileExists", "directoryExists", "getDirectories", "readFile", "readDirectory"];
-            const calledMaps: CalledMaps = {
-                fileExists: setCallsTrackingWithSingleArgFn("fileExists"),
-                directoryExists: setCallsTrackingWithSingleArgFn("directoryExists"),
-                getDirectories: setCallsTrackingWithSingleArgFn("getDirectories"),
-                readFile: setCallsTrackingWithSingleArgFn("readFile"),
-                readDirectory: setCallsTrackingWithFiveArgFn("readDirectory")
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>>  = {
+                fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
+                directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
+                getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
+                readFile: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.readFile),
+                readDirectory: setCallsTrackingWithFiveArgFn(CalledMapsWithFiveArgs.readDirectory)
             };
 
             return {
@@ -4241,7 +4242,7 @@ namespace ts.projectSystem {
                 clear
             };
 
-            function setCallsTrackingWithSingleArgFn(prop: keyof CalledMaps) {
+            function setCallsTrackingWithSingleArgFn(prop: CalledMapsWithSingleArg) {
                 const calledMap = createMultiMap<true>();
                 const cb = (<any>host)[prop].bind(host);
                 (<any>host)[prop] = (f: string) => {
@@ -4251,7 +4252,7 @@ namespace ts.projectSystem {
                 return calledMap;
             }
 
-            function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: keyof CalledMaps) {
+            function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: CalledMapsWithFiveArgs) {
                 const calledMap = createMultiMap<[U, V, W, X]>();
                 const cb = (<any>host)[prop].bind(host);
                 (<any>host)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
@@ -4261,18 +4262,18 @@ namespace ts.projectSystem {
                 return calledMap;
             }
 
-            function verifyCalledOn(callback: keyof CalledMaps, name: string) {
+            function verifyCalledOn(callback: CalledMaps, name: string) {
                 const calledMap = calledMaps[callback];
                 const result = calledMap.get(name);
                 assert.isTrue(result && !!result.length, `${callback} should be called with name: ${name}: ${arrayFrom(calledMap.keys())}`);
             }
 
-            function verifyNoCall(callback: keyof CalledMaps) {
+            function verifyNoCall(callback: CalledMaps) {
                 const calledMap = calledMaps[callback];
                 assert.equal(calledMap.size, 0, `${callback} shouldnt be called: ${arrayFrom(calledMap.keys())}`);
             }
 
-            function verifyCalledOnEachEntry(callback: keyof CalledMaps, expectedKeys: Map<number>) {
+            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
                 const calledMap = calledMaps[callback];
                 assert.equal(calledMap.size, expectedKeys.size, `${callback}: incorrect size of map: Actual keys: ${arrayFrom(calledMap.keys())} Expected: ${arrayFrom(expectedKeys.keys())}`);
                 expectedKeys.forEach((called, name) => {
@@ -4281,27 +4282,32 @@ namespace ts.projectSystem {
                 });
             }
 
-            function verifyCalledOnEachEntryNTimes(callback: keyof CalledMaps, expectedKeys: string[], nTimes: number) {
+            function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: string[], nTimes: number) {
                 return verifyCalledOnEachEntry(callback, zipToMap(expectedKeys, expectedKeys.map(() => nTimes)));
             }
 
             function verifyNoHostCalls() {
-                for (const key of keys) {
-                    verifyNoCall(key);
-                }
+                iterateOnCalledMaps(key => verifyNoCall(key));
             }
 
             function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: string[]) {
-                verifyCalledOnEachEntryNTimes("fileExists", expectedKeys, 1);
-                verifyNoCall("directoryExists");
-                verifyNoCall("getDirectories");
-                verifyNoCall("readFile");
-                verifyNoCall("readDirectory");
+                verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, expectedKeys, 1);
+                verifyNoCall(CalledMapsWithSingleArg.directoryExists);
+                verifyNoCall(CalledMapsWithSingleArg.getDirectories);
+                verifyNoCall(CalledMapsWithSingleArg.readFile);
+                verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
             }
 
             function clear() {
-                for (const key of keys) {
-                    calledMaps[key].clear();
+                iterateOnCalledMaps(key => calledMaps[key].clear());
+            }
+
+            function iterateOnCalledMaps(cb: (key: CalledMaps) => void) {
+                for (const key in CalledMapsWithSingleArg) {
+                    cb(key as CalledMapsWithSingleArg);
+                }
+                for (const key in CalledMapsWithFiveArgs) {
+                    cb(key as CalledMapsWithFiveArgs);
                 }
             }
         }
@@ -4350,12 +4356,12 @@ namespace ts.projectSystem {
                 assert.isTrue(e.message.indexOf(`Could not find file: '${imported.path}'.`) === 0);
             }
             const f2Lookups = getLocationsForModuleLookup("f2");
-            callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", f2Lookups, 1);
+            callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f2Lookups, 1);
             const f2DirLookups = getLocationsForDirectoryLookup();
-            callsTrackingHost.verifyCalledOnEachEntry("directoryExists", f2DirLookups);
-            callsTrackingHost.verifyNoCall("getDirectories");
-            callsTrackingHost.verifyNoCall("readFile");
-            callsTrackingHost.verifyNoCall("readDirectory");
+            callsTrackingHost.verifyCalledOnEachEntry(CalledMapsWithSingleArg.directoryExists, f2DirLookups);
+            callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
+            callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.readFile);
+            callsTrackingHost.verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
 
             editContent(`import {x} from "f1"`);
             verifyImportedDiagnostics();
@@ -4371,11 +4377,11 @@ namespace ts.projectSystem {
             vertifyF1Lookups();
 
             function vertifyF1Lookups() {
-                callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", f1Lookups, 1);
-                callsTrackingHost.verifyCalledOnEachEntryNTimes("directoryExists", f1DirLookups, 1);
-                callsTrackingHost.verifyNoCall("getDirectories");
-                callsTrackingHost.verifyNoCall("readFile");
-                callsTrackingHost.verifyNoCall("readDirectory");
+                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f1Lookups, 1);
+                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.directoryExists, f1DirLookups, 1);
+                callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
+                callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.readFile);
+                callsTrackingHost.verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
             }
 
             function editContent(newContent: string) {
@@ -4450,7 +4456,7 @@ namespace ts.projectSystem {
             const diag = diags[0];
             assert.equal(diag.code, Diagnostics.Cannot_find_module_0.code);
             assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'.");
-            callsTrackingHost.verifyCalledOn("fileExists", imported.path);
+            callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
 
 
             callsTrackingHost.clear();
@@ -4458,7 +4464,7 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
             diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 0);
-            callsTrackingHost.verifyCalledOn("fileExists", imported.path);
+            callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
         });
 
         it("when calling goto definition of module", () => {
@@ -4613,11 +4619,11 @@ namespace ts.projectSystem {
 
                 const canonicalFile3Path = useCaseSensitiveFileNames ? file3.path : file3.path.toLocaleLowerCase();
                 const numberOfTimesWatchInvoked = getNumberOfWatchesInvokedForRecursiveWatches(watchingRecursiveDirectories, canonicalFile3Path);
-                callsTrackingHost.verifyCalledOnEachEntryNTimes("fileExists", [canonicalFile3Path], numberOfTimesWatchInvoked);
-                callsTrackingHost.verifyCalledOnEachEntryNTimes("directoryExists", [canonicalFile3Path], numberOfTimesWatchInvoked);
-                callsTrackingHost.verifyNoCall("getDirectories");
-                callsTrackingHost.verifyCalledOnEachEntryNTimes("readFile", [file3.path], 1);
-                callsTrackingHost.verifyNoCall("readDirectory");
+                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, [canonicalFile3Path], numberOfTimesWatchInvoked);
+                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.directoryExists, [canonicalFile3Path], numberOfTimesWatchInvoked);
+                callsTrackingHost.verifyNoCall(CalledMapsWithSingleArg.getDirectories);
+                callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.readFile, [file3.path], 1);
+                callsTrackingHost.verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
 
                 checkNumberOfConfiguredProjects(projectService, 1);
                 assert.strictEqual(projectService.configuredProjects.get(canonicalConfigPath), project);

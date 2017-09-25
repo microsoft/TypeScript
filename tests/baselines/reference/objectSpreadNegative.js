@@ -29,12 +29,13 @@ spread = b; // error, missing 's'
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
 
-// primitives are not allowed
+// primitives are not allowed, except for falsy ones
 let spreadNum = { ...12 };
 let spreadSum = { ...1 + 1 };
-spreadSum.toFixed(); // error, no methods from number
-let spreadBool = { ...false };
-spreadBool.valueOf(); // error, what were you thinking?
+let spreadZero = { ...0 };
+spreadZero.toFixed(); // error, no methods even from a falsy number
+let spreadBool = { ...true };
+spreadBool.valueOf();
 let spreadStr = { ...'foo' };
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
@@ -121,12 +122,13 @@ spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
 var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
 var duplicatedSpread = __assign({}, o, o);
-// primitives are not allowed
+// primitives are not allowed, except for falsy ones
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);
-spreadSum.toFixed(); // error, no methods from number
-var spreadBool = __assign({}, false);
-spreadBool.valueOf(); // error, what were you thinking?
+var spreadZero = __assign({}, 0);
+spreadZero.toFixed(); // error, no methods even from a falsy number
+var spreadBool = __assign({}, true);
+spreadBool.valueOf();
 var spreadStr = __assign({}, 'foo');
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either

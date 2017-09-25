@@ -14,7 +14,7 @@ namespace ts.refactor.extractMethod {
 
     /** Compute the associated code actions */
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: context.endPosition - context.startPosition });
+        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
 
         const targetRange: TargetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -66,8 +66,7 @@ namespace ts.refactor.extractMethod {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const length = context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length });
+        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
         const targetRange: TargetRange = rangeToExtract.targetRange;
 
         const parsedIndexMatch = /^scope_(\d+)$/.exec(actionName);
@@ -92,7 +91,7 @@ namespace ts.refactor.extractMethod {
         export const CannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
         export const TypeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
         export const FunctionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
-        export const InsufficientSelection = createMessage("Select more than a single token.");
+        export const InsufficientSelection = createMessage("Select more than a single identifier.");
         export const CannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
         export const CannotCombineWritesAndReturns = createMessage("Cannot combine writes and returns");
         export const CannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
@@ -148,7 +147,7 @@ namespace ts.refactor.extractMethod {
      */
     // exported only for tests
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
-        const length = span.length || 0;
+        const { length } = span;
 
         if (length === 0) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.StatementOrExpressionExpected)] };
@@ -231,7 +230,7 @@ namespace ts.refactor.extractMethod {
         }
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
-            if (isToken(node)) {
+            if (isIdentifier(isExpressionStatement(node) ? node.expression : node)) {
                 return [createDiagnosticForNode(node, Messages.InsufficientSelection)];
             }
             return undefined;
@@ -286,7 +285,7 @@ namespace ts.refactor.extractMethod {
 
             let errors: Diagnostic[];
             let permittedJumps = PermittedJumps.Return;
-            let seenLabels: Array<__String>;
+            let seenLabels: __String[];
 
             visit(nodeToCheck);
 
@@ -664,7 +663,7 @@ namespace ts.refactor.extractMethod {
             }
             newFunction = createMethod(
                 /*decorators*/ undefined,
-                modifiers,
+                modifiers.length ? modifiers : undefined,
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
                 /*questionToken*/ undefined,
@@ -934,12 +933,8 @@ namespace ts.refactor.extractMethod {
      * Otherwise, return `undefined`.
      */
     function getNodeToInsertBefore(minPos: number, scope: Scope): Node | undefined {
-        const children = getStatementsOrClassElements(scope);
-        for (const child of children) {
-            if (child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child)) {
-                return child;
-            }
-        }
+        return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
+            child.pos >= minPos && isFunctionLike(child) && !isConstructorDeclaration(child));
     }
 
     function getPropertyAssignmentsForWrites(writes: ReadonlyArray<UsageEntry>): ShorthandPropertyAssignment[] {
@@ -1209,7 +1204,7 @@ namespace ts.refactor.extractMethod {
             if (!declInFile) {
                 return undefined;
             }
-            if (rangeContainsRange(enclosingTextRange, declInFile)) {
+            if (rangeContainsStartEnd(enclosingTextRange, declInFile.getStart(), declInFile.end)) {
                 // declaration is located in range to be extracted - do nothing
                 return undefined;
             }

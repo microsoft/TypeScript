@@ -1,0 +1,9 @@
+=== tests/cases/compiler/ClassDeclaration15.ts ===
+class C {
+>C : C
+
+   foo();
+>foo : () => any
+
+   constructor() { }
+}
