@@ -5,7 +5,8 @@
 /// <reference path="..\..\src\harness\typeWriter.ts" />
 
 interface FileInformation {
-    contents: string;
+    contents?: string;
+    contentsPath?: string;
     codepage: number;
 }
 
@@ -27,13 +28,15 @@ interface IOLog {
     filesRead: IOLogFile[];
     filesWritten: {
         path: string;
-        contents: string;
+        contents?: string;
+        contentsPath?: string;
         bom: boolean;
     }[];
     filesDeleted: string[];
     filesAppended: {
         path: string;
-        contents: string;
+        contents?: string;
+        contentsPath?: string;
     }[];
     fileExists: {
         path: string;
@@ -129,6 +132,53 @@ namespace Playback {
         };
     }
 
+    export function newStyleLogIntoOldStyleLog(log: IOLog, host: ts.System | Harness.IO) {
+        for (const file of log.filesAppended) {
+            if (file.contentsPath) {
+                file.contents = host.readFile(file.contentsPath);
+                delete file.contentsPath;
+            }
+        }
+        for (const file of log.filesWritten) {
+            if (file.contentsPath) {
+                file.contents = host.readFile(file.contentsPath);
+                delete file.contentsPath;
+            }
+        }
+        for (const file of log.filesRead) {
+            if (file.result.contentsPath) {
+                file.result.contents = host.readFile(file.result.contentsPath);
+                delete file.result.contentsPath;
+            }
+        }
+        return log;
+    }
+
+    export function oldStyleLogIntoNewStyleLog(log: IOLog, host: ts.System | Harness.IO, baseTestName: string) {
+        for (const file of log.filesAppended) {
+            if (file.contents !== undefined) {
+                file.contentsPath = ts.combinePaths(`${baseTestName}/appended`, Harness.Compiler.sanitizeTestFilePath(file.path));
+                host.writeFile(file.contentsPath, file.contents);
+                delete file.contents;
+            }
+        }
+        for (const file of log.filesWritten) {
+            if (file.contentsPath !== undefined) {
+                file.contentsPath = ts.combinePaths(`${baseTestName}/written`, Harness.Compiler.sanitizeTestFilePath(file.path));
+                host.writeFile(file.contentsPath, file.contents);
+                delete file.contents;
+            }
+        }
+        for (const file of log.filesRead) {
+            if (file.result.contentsPath !== undefined) {
+                file.result.contentsPath = ts.combinePaths(`${baseTestName}/read`, Harness.Compiler.sanitizeTestFilePath(file.path));
+                host.writeFile(file.result.contentsPath, file.result.contents);
+                delete file.result.contents;
+            }
+        }
+        return log;
+    }
+
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
     function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
@@ -140,7 +190,7 @@ namespace Playback {
             wrapper.startReplayFromData(JSON.parse(logString));
         };
         wrapper.startReplayFromData = log => {
-            replayLog = log;
+            replayLog = newStyleLogIntoOldStyleLog(log, underlying);
             // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
             replayLog.filesRead = replayLog.filesRead.filter(f => f.result.contents !== undefined);
         };
@@ -164,9 +214,10 @@ namespace Playback {
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
                 let i = 0;
-                const fn = () => recordLogFileNameBase + i + ".json";
-                while (underlying.fileExists(fn())) i++;
-                underlying.writeFile(fn(), JSON.stringify(recordLog));
+                const fn = () => recordLogFileNameBase + i;
+                while (underlying.fileExists(fn() + ".json")) i++;
+                const name = fn() + ".json";
+                underlying.writeFile(name, JSON.stringify(oldStyleLogIntoNewStyleLog(recordLog, underlying, name), null, 4)); // tslint:disable-line:no-null-keyword
                 recordLog = undefined;
             }
         };
