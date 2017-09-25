@@ -2337,6 +2337,38 @@ namespace FourSlash {
             }
         }
 
+        public verifyCodeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
+            const fileName = this.activeFile.fileName;
+            const actions = this.getCodeFixActions(fileName, options.errorCode);
+            let index = options.index;
+            if (index === undefined) {
+                if (!(actions && actions.length === 1)) {
+                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
+                }
+                index = 0;
+            }
+            else {
+                if (!(actions && actions.length >= index + 1)) {
+                    this.raiseError(`Should find at least ${index + 1} codefix(es), but ${actions ? actions.length : "none"} found.`);
+                }
+            }
+
+            const action = actions[index];
+
+            assert.equal(action.description, options.description);
+
+            for (const change of action.changes) {
+                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+            }
+
+            if (this.getRanges().length === 0) {
+                this.verifyCurrentFileContent(options.newContent);
+            }
+            else {
+                this.verifyRangeIs(options.newContent, /*includeWhitespace*/ true);
+            }
+        }
+
         /**
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
@@ -3716,6 +3748,10 @@ namespace FourSlashInterface {
             this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
+        public codeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
+            this.state.verifyCodeFix(options);
+        }
+
         public codeFixAvailable() {
             this.state.verifyCodeFixAvailable(this.negative);
         }
@@ -4358,5 +4394,12 @@ namespace FourSlashInterface {
 
     export interface CompletionsAtOptions {
         isNewIdentifierLocation?: boolean;
+    }
+
+    export interface VerifyCodeFixOptions {
+        description: string;
+        newContent: string;
+        errorCode?: number;
+        index?: number;
     }
 }

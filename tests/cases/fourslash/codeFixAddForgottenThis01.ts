@@ -7,6 +7,9 @@
 ////    |]}
 ////}
 
-verify.rangeAfterCodeFix(`
+verify.codeFix({
+    description: "Add 'this.' to unresolved variable.",
+    newContent: `
         this.foo = 10;
-    `, /*includeWhitespace*/ true);
+    `
+});
