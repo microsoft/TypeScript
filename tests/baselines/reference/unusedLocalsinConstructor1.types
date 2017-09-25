@@ -1,0 +1,10 @@
+=== tests/cases/compiler/unusedLocalsinConstructor1.ts ===
+class greeter {
+>greeter : greeter
+
+    constructor() {
+        var unused = 20;
+>unused : number
+>20 : 20
+    }
+}

@@ -1,0 +1,62 @@
+=== tests/cases/compiler/emitThisInSuperMethodCall.ts ===
+class User {
+>User : User
+
+    sayHello() {
+>sayHello : () => void
+    }
+}
+
+class RegisteredUser extends User {
+>RegisteredUser : RegisteredUser
+>User : User
+
+    f() {
+>f : () => void
+
+        () => {
+>() => {            function inner() {                super.sayHello();            }        } : () => void
+
+            function inner() {
+>inner : () => void
+
+                super.sayHello();
+>super.sayHello() : any
+>super.sayHello : any
+>super : any
+>sayHello : any
+            }
+        };
+    }
+    g() {
+>g : () => void
+
+        function inner() {
+>inner : () => void
+
+            () => {
+>() => {                super.sayHello();            } : () => void
+
+                super.sayHello();
+>super.sayHello() : any
+>super.sayHello : any
+>super : any
+>sayHello : any
+            }
+        }
+    }
+    h() {
+>h : () => void
+
+        function inner() {
+>inner : () => void
+
+            super.sayHello();
+>super.sayHello() : any
+>super.sayHello : any
+>super : any
+>sayHello : any
+        }
+    }
+}
+

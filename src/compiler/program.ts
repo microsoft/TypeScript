@@ -1172,9 +1172,7 @@ namespace ts {
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
-                return isSourceFileJavaScript(sourceFile)
-                    ? filter(diagnostics, shouldReportDiagnostic)
-                    : diagnostics;
+                return filter(diagnostics, shouldReportDiagnostic);
             });
         }
 
@@ -1464,7 +1462,7 @@ namespace ts {
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: StringLiteral[];
-            let moduleAugmentations: Array<StringLiteral | Identifier>;
+            let moduleAugmentations: (StringLiteral | Identifier)[];
             let ambientModules: string[];
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
@@ -1846,7 +1844,8 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFileFromNodeModules = isFromNodeModulesSearch && !extensionIsTypeScript(resolution.extension);
+                    const isJsFile = !extensionIsTypeScript(resolution.extension);
+                    const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
                     if (isFromNodeModulesSearch) {
@@ -1861,7 +1860,12 @@ namespace ts {
                     const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                     // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
-                    const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
+                    const shouldAddFile = resolvedFileName
+                        && !getResolutionDiagnostic(options, resolution)
+                        && !options.noResolve
+                        && i < file.imports.length
+                        && !elideImport
+                        && !(isJsFile && !options.allowJs);
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2236,7 +2240,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
+            return options.allowJs || !options.noImplicitAny ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
     }
 

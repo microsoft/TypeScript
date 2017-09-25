@@ -1,0 +1,19 @@
+=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts ===
+(arg1?, arg2) => 101;
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgsErrors1.ts, 0, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgsErrors1.ts, 0, 7))
+
+(...arg?) => 102;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors1.ts, 1, 1))
+
+(...arg) => 103;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors1.ts, 2, 1))
+
+(...arg:number [] = []) => 104;
+>arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors1.ts, 3, 1))
+
+// Uninitialized parameter makes the initialized one required
+(arg1 = 1, arg2) => 1; 
+>arg1 : Symbol(arg1, Decl(fatarrowfunctionsOptionalArgsErrors1.ts, 6, 1))
+>arg2 : Symbol(arg2, Decl(fatarrowfunctionsOptionalArgsErrors1.ts, 6, 10))
+

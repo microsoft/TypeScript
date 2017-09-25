@@ -1,0 +1,7 @@
+=== tests/cases/compiler/errorLocationForInterfaceExtension.ts ===
+var n = '';
+>n : Symbol(n, Decl(errorLocationForInterfaceExtension.ts, 0, 3))
+
+interface x extends string { }
+>x : Symbol(x, Decl(errorLocationForInterfaceExtension.ts, 0, 11))
+

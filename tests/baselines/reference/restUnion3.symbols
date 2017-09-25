@@ -1,0 +1,25 @@
+=== tests/cases/compiler/restUnion3.ts ===
+declare const nullAndUndefinedUnion: null | undefined;
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion3.ts, 0, 13))
+
+var rest4: { };
+>rest4 : Symbol(rest4, Decl(restUnion3.ts, 1, 3), Decl(restUnion3.ts, 2, 5))
+
+var {...rest4 } = nullAndUndefinedUnion;
+>rest4 : Symbol(rest4, Decl(restUnion3.ts, 1, 3), Decl(restUnion3.ts, 2, 5))
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion3.ts, 0, 13))
+
+declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined;
+>unionWithIntersection : Symbol(unionWithIntersection, Decl(restUnion3.ts, 4, 13))
+>n : Symbol(n, Decl(restUnion3.ts, 4, 39))
+>s : Symbol(s, Decl(restUnion3.ts, 4, 55))
+
+var rest5: { n: number, s: string };
+>rest5 : Symbol(rest5, Decl(restUnion3.ts, 5, 3), Decl(restUnion3.ts, 6, 5))
+>n : Symbol(n, Decl(restUnion3.ts, 5, 12))
+>s : Symbol(s, Decl(restUnion3.ts, 5, 23))
+
+var {...rest5 } = unionWithIntersection;
+>rest5 : Symbol(rest5, Decl(restUnion3.ts, 5, 3), Decl(restUnion3.ts, 6, 5))
+>unionWithIntersection : Symbol(unionWithIntersection, Decl(restUnion3.ts, 4, 13))
+

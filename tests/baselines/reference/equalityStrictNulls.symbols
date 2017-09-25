@@ -1,0 +1,141 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts ===
+function f1(x: string) {
+>f1 : Symbol(f1, Decl(equalityStrictNulls.ts, 0, 0))
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+
+    if (x == undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+>undefined : Symbol(undefined)
+    }
+    if (x != undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+>undefined : Symbol(undefined)
+    }
+    if (x === undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+>undefined : Symbol(undefined)
+    }
+    if (x !== undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+>undefined : Symbol(undefined)
+    }
+    if (x == null) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (x != null) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (x === null) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (x !== null) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (undefined == x) {
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (undefined != x) {
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (undefined === x) {
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (undefined !== x) {
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (null == x) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (null != x) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (null === x) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+    if (null !== x) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 0, 12))
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(equalityStrictNulls.ts, 33, 1))
+
+    if (undefined == undefined) {
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+    }
+    if (undefined == null) {
+>undefined : Symbol(undefined)
+    }
+    if (null == undefined) {
+>undefined : Symbol(undefined)
+    }
+    if (null == null) {
+    }
+}
+
+function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
+>f3 : Symbol(f3, Decl(equalityStrictNulls.ts, 44, 1))
+>a : Symbol(a, Decl(equalityStrictNulls.ts, 46, 12))
+>b : Symbol(b, Decl(equalityStrictNulls.ts, 46, 22))
+>c : Symbol(c, Decl(equalityStrictNulls.ts, 46, 34))
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 46, 39))
+>d : Symbol(d, Decl(equalityStrictNulls.ts, 46, 52))
+
+    if (a == null) {
+>a : Symbol(a, Decl(equalityStrictNulls.ts, 46, 12))
+    }
+    if (b == null) {
+>b : Symbol(b, Decl(equalityStrictNulls.ts, 46, 22))
+    }
+    if (c == null) {
+>c : Symbol(c, Decl(equalityStrictNulls.ts, 46, 34))
+    }
+    if (d == null) {
+>d : Symbol(d, Decl(equalityStrictNulls.ts, 46, 52))
+    }
+}
+
+function f4(x: number) {
+>f4 : Symbol(f4, Decl(equalityStrictNulls.ts, 55, 1))
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 57, 12))
+
+    if (x > undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 57, 12))
+>undefined : Symbol(undefined)
+    }
+    if (x < undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 57, 12))
+>undefined : Symbol(undefined)
+    }
+    if (x >= undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 57, 12))
+>undefined : Symbol(undefined)
+    }
+    if (x <= undefined) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 57, 12))
+>undefined : Symbol(undefined)
+    }
+}
+function f5(x: string) {
+>f5 : Symbol(f5, Decl(equalityStrictNulls.ts, 66, 1))
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 67, 12))
+
+    switch(x) {
+>x : Symbol(x, Decl(equalityStrictNulls.ts, 67, 12))
+
+        case null:
+            break;
+        case undefined:
+>undefined : Symbol(undefined)
+
+            break;
+        default:
+            return;
+    }
+}
+

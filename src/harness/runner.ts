@@ -101,6 +101,7 @@ interface TaskSet {
     files: string[];
 }
 
+let configOption: string;
 function handleTestConfig() {
     if (testConfigContent !== "") {
         const testConfig = <TestConfig>JSON.parse(testConfigContent);
@@ -134,6 +135,13 @@ function handleTestConfig() {
             for (const option of testConfig.test) {
                 if (!option) {
                     continue;
+                }
+
+                if (!configOption) {
+                    configOption = option;
+                }
+                else {
+                    configOption += "+" + option;
                 }
 
                 switch (option) {

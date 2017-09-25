@@ -509,7 +509,7 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: Array<(resp: protocol.Response) => void> = [];
+            private callbacks: ((resp: protocol.Response) => void)[] = [];
             private eventHandlers = createMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {

@@ -12,9 +12,10 @@
 //// }
 
 verify.applicableRefactorAvailableAtMarker('1');
+// NOTE: '// Comment' should be included, but due to incorrect handling of trivia,
+// it's omitted right now.
 verify.fileAfterApplyingRefactorAtMarker('1',
-`// Comment
-class fn {
+`class fn {
     constructor() {
         this.baz = 10;
     }

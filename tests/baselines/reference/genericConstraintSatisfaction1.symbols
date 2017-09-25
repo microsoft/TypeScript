@@ -1,0 +1,24 @@
+=== tests/cases/compiler/genericConstraintSatisfaction1.ts ===
+interface I<S> {
+>I : Symbol(I, Decl(genericConstraintSatisfaction1.ts, 0, 0))
+>S : Symbol(S, Decl(genericConstraintSatisfaction1.ts, 0, 12))
+
+   f: <T extends S>(x: T) => void
+>f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
+>T : Symbol(T, Decl(genericConstraintSatisfaction1.ts, 1, 7))
+>S : Symbol(S, Decl(genericConstraintSatisfaction1.ts, 0, 12))
+>x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 1, 20))
+>T : Symbol(T, Decl(genericConstraintSatisfaction1.ts, 1, 7))
+}
+ 
+var x: I<{s: string}>
+>x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3))
+>I : Symbol(I, Decl(genericConstraintSatisfaction1.ts, 0, 0))
+>s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 4, 10))
+
+x.f({s: 1})
+>x.f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
+>x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3))
+>f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
+>s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 5, 5))
+

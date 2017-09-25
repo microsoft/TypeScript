@@ -1,0 +1,55 @@
+=== tests/cases/compiler/strictModeReservedWord2.ts ===
+"use strict"
+interface public { }
+>public : Symbol(public, Decl(strictModeReservedWord2.ts, 0, 12))
+
+interface implements {
+>implements : Symbol(implements, Decl(strictModeReservedWord2.ts, 1, 20))
+
+    foo(package, protected);
+>foo : Symbol(implements.foo, Decl(strictModeReservedWord2.ts, 2, 22))
+>package : Symbol(package, Decl(strictModeReservedWord2.ts, 3, 8))
+>protected : Symbol(protected, Decl(strictModeReservedWord2.ts, 3, 16))
+}
+enum package { }
+>package : Symbol(package, Decl(strictModeReservedWord2.ts, 4, 1))
+
+enum foo {
+>foo : Symbol(foo, Decl(strictModeReservedWord2.ts, 5, 16))
+
+    public,
+>public : Symbol(foo.public, Decl(strictModeReservedWord2.ts, 6, 10))
+
+    private,
+>private : Symbol(foo.private, Decl(strictModeReservedWord2.ts, 7, 11))
+
+    pacakge
+>pacakge : Symbol(foo.pacakge, Decl(strictModeReservedWord2.ts, 8, 12))
+}
+
+const enum private {
+>private : Symbol(private, Decl(strictModeReservedWord2.ts, 10, 1))
+
+    public,
+>public : Symbol(private.public, Decl(strictModeReservedWord2.ts, 12, 20))
+
+    private,
+>private : Symbol(private.private, Decl(strictModeReservedWord2.ts, 13, 11))
+
+    pacakge
+>pacakge : Symbol(private.pacakge, Decl(strictModeReservedWord2.ts, 14, 12))
+}
+
+const enum bar {
+>bar : Symbol(bar, Decl(strictModeReservedWord2.ts, 16, 1))
+
+    public,
+>public : Symbol(bar.public, Decl(strictModeReservedWord2.ts, 18, 16))
+
+    private,
+>private : Symbol(bar.private, Decl(strictModeReservedWord2.ts, 19, 11))
+
+    pacakge
+>pacakge : Symbol(bar.pacakge, Decl(strictModeReservedWord2.ts, 20, 12))
+}
+

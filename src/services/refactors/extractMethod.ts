@@ -286,7 +286,7 @@ namespace ts.refactor.extractMethod {
 
             let errors: Diagnostic[];
             let permittedJumps = PermittedJumps.Return;
-            let seenLabels: Array<__String>;
+            let seenLabels: __String[];
 
             visit(nodeToCheck);
 
@@ -664,7 +664,7 @@ namespace ts.refactor.extractMethod {
             }
             newFunction = createMethod(
                 /*decorators*/ undefined,
-                modifiers,
+                modifiers.length ? modifiers : undefined,
                 range.facts & RangeFacts.IsGenerator ? createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
                 /*questionToken*/ undefined,

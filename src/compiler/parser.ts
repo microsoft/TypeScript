@@ -6135,11 +6135,14 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            /* @internal */
-            export function parseJSDocTypeExpression(): JSDocTypeExpression {
+            export function parseJSDocTypeExpression(): JSDocTypeExpression;
+            export function parseJSDocTypeExpression(requireBraces: true): JSDocTypeExpression | undefined;
+            export function parseJSDocTypeExpression(requireBraces?: boolean): JSDocTypeExpression | undefined {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                parseExpected(SyntaxKind.OpenBraceToken);
+                if (!parseExpected(SyntaxKind.OpenBraceToken) && requireBraces) {
+                    return undefined;
+                }
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
                 parseExpected(SyntaxKind.CloseBraceToken);
 
@@ -6486,14 +6489,8 @@ namespace ts {
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression | undefined {
-                    return tryParse(() => {
-                        skipWhitespace();
-                        if (token() !== SyntaxKind.OpenBraceToken) {
-                            return undefined;
-                        }
-
-                        return parseJSDocTypeExpression();
-                    });
+                    skipWhitespace();
+                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
@@ -6602,7 +6599,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = tryParseTypeExpression();
+                    result.typeExpression = parseJSDocTypeExpression(/*mayBail*/ true);
                     return finishNode(result);
                 }
 

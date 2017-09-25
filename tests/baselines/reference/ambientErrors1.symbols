@@ -1,0 +1,4 @@
+=== tests/cases/compiler/ambientErrors1.ts ===
+declare var x = 4;
+>x : Symbol(x, Decl(ambientErrors1.ts, 0, 11))
+

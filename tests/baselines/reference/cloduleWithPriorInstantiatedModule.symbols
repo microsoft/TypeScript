@@ -1,0 +1,27 @@
+=== tests/cases/compiler/cloduleWithPriorInstantiatedModule.ts ===
+// Non-ambient & instantiated module.
+module Moclodule {
+>Moclodule : Symbol(Moclodule, Decl(cloduleWithPriorInstantiatedModule.ts, 0, 0), Decl(cloduleWithPriorInstantiatedModule.ts, 6, 1), Decl(cloduleWithPriorInstantiatedModule.ts, 9, 1))
+
+    export interface Someinterface {
+>Someinterface : Symbol(Someinterface, Decl(cloduleWithPriorInstantiatedModule.ts, 1, 18))
+
+        foo(): void;
+>foo : Symbol(Someinterface.foo, Decl(cloduleWithPriorInstantiatedModule.ts, 2, 36))
+    }
+    var x = 10;
+>x : Symbol(x, Decl(cloduleWithPriorInstantiatedModule.ts, 5, 7))
+}
+
+class Moclodule {
+>Moclodule : Symbol(Moclodule, Decl(cloduleWithPriorInstantiatedModule.ts, 0, 0), Decl(cloduleWithPriorInstantiatedModule.ts, 6, 1), Decl(cloduleWithPriorInstantiatedModule.ts, 9, 1))
+}
+
+// Instantiated module.
+module Moclodule {
+>Moclodule : Symbol(Moclodule, Decl(cloduleWithPriorInstantiatedModule.ts, 0, 0), Decl(cloduleWithPriorInstantiatedModule.ts, 6, 1), Decl(cloduleWithPriorInstantiatedModule.ts, 9, 1))
+
+    export class Manager {
+>Manager : Symbol(Manager, Decl(cloduleWithPriorInstantiatedModule.ts, 12, 18))
+    }
+}

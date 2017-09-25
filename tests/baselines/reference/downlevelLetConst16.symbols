@@ -1,0 +1,577 @@
+=== tests/cases/compiler/downlevelLetConst16.ts ===
+'use strict'
+
+declare function use(a: any);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 2, 21))
+
+var x = 10;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+
+var y;
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 5, 3))
+
+var z;
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 6, 3))
+
+use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+
+use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 5, 3))
+
+use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 6, 3))
+
+function foo1() {
+>foo1 : Symbol(foo1, Decl(downlevelLetConst16.ts, 9, 7))
+
+    let x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 11, 7))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 11, 7))
+
+    let [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 13, 9))
+
+    use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 13, 9))
+
+    let {a: z} = {a: 1};
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 15, 18))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 15, 9))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 15, 18))
+
+    use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 15, 9))
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(downlevelLetConst16.ts, 17, 1))
+    {
+        let x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 21, 11))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 21, 11))
+
+        let [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 23, 13))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 23, 13))
+
+        let {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 25, 22))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 25, 13))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 25, 22))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 25, 13))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+class A {
+>A : Symbol(A, Decl(downlevelLetConst16.ts, 29, 1))
+
+    m1() {
+>m1 : Symbol(A.m1, Decl(downlevelLetConst16.ts, 31, 9))
+
+        let x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 33, 11))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 33, 11))
+
+        let [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 35, 13))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 35, 13))
+
+        let {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 37, 22))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 37, 13))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 37, 22))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 37, 13))
+    }
+    m2() {
+>m2 : Symbol(A.m2, Decl(downlevelLetConst16.ts, 39, 5))
+        {
+            let x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 42, 15))
+
+            use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 42, 15))
+
+            let [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 44, 17))
+
+            use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 44, 17))
+
+            let {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 46, 26))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 46, 17))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 46, 26))
+
+            use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 46, 17))
+        }
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+    }
+
+}
+
+class B {
+>B : Symbol(B, Decl(downlevelLetConst16.ts, 52, 1))
+
+    m1() {
+>m1 : Symbol(B.m1, Decl(downlevelLetConst16.ts, 54, 9))
+
+        const x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 56, 13))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 56, 13))
+
+        const [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 58, 15))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 58, 15))
+
+        const {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 60, 24))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 60, 15))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 60, 24))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 60, 15))
+
+    }
+    m2() {
+>m2 : Symbol(B.m2, Decl(downlevelLetConst16.ts, 63, 5))
+        {
+            const x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 66, 17))
+
+            use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 66, 17))
+
+            const [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 68, 19))
+
+            use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 68, 19))
+
+            const {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 70, 28))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 70, 19))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 70, 28))
+
+            use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 70, 19))
+
+        }
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+    }
+}
+
+function bar1() {
+>bar1 : Symbol(bar1, Decl(downlevelLetConst16.ts, 76, 1))
+
+    const x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 79, 9))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 79, 9))
+
+    const [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 81, 11))
+
+    use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 81, 11))
+
+    const {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 83, 20))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 83, 11))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 83, 20))
+
+    use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 83, 11))
+}
+
+function bar2() {
+>bar2 : Symbol(bar2, Decl(downlevelLetConst16.ts, 85, 1))
+    {
+        const x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 89, 13))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 89, 13))
+
+        const [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 91, 15))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 91, 15))
+
+        const {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 93, 24))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 93, 15))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 93, 24))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 93, 15))
+
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+module M1 {
+>M1 : Symbol(M1, Decl(downlevelLetConst16.ts, 98, 1))
+
+    let x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 101, 7))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 101, 7))
+
+    let [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 103, 9))
+
+    use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 103, 9))
+
+    let {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 105, 18))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 105, 9))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 105, 18))
+
+    use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 105, 9))
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(downlevelLetConst16.ts, 107, 1))
+    {
+        let x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 111, 11))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 111, 11))
+
+        let [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 113, 13))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 113, 13))
+
+        let {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 115, 22))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 115, 13))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 115, 22))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 115, 13))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+module M3 {
+>M3 : Symbol(M3, Decl(downlevelLetConst16.ts, 119, 1))
+
+    const x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 122, 9))
+
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 122, 9))
+
+    const [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 124, 11))
+
+    use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 124, 11))
+
+    const {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 126, 20))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 126, 11))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 126, 20))
+
+    use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 126, 11))
+
+}
+
+module M4 {
+>M4 : Symbol(M4, Decl(downlevelLetConst16.ts, 129, 1))
+    {
+        const x = 1;
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 133, 13))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 133, 13))
+
+        const [y] = [1];
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 135, 15))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 135, 15))
+
+        const {a: z} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 137, 24))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 137, 15))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 137, 24))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 137, 15))
+
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+
+    use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 5, 3))
+
+    use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 6, 3))
+}
+
+function foo3() {
+>foo3 : Symbol(foo3, Decl(downlevelLetConst16.ts, 144, 1))
+
+    for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 147, 12))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 147, 12))
+    }
+    for (let [y] = []; ;) {
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 150, 14))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 150, 14))
+    }
+    for (let {a: z} = {a: 1}; ;) {
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 153, 23))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 153, 14))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 153, 23))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 153, 14))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo4() {
+>foo4 : Symbol(foo4, Decl(downlevelLetConst16.ts, 157, 1))
+
+    for (const x = 1; ;) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 160, 14))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 160, 14))
+    }
+    for (const [y] = []; ;) {
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 163, 16))
+
+        use(y);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>y : Symbol(y, Decl(downlevelLetConst16.ts, 163, 16))
+    }
+    for (const {a: z} = { a: 1 }; ;) {
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 166, 25))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 166, 16))
+>a : Symbol(a, Decl(downlevelLetConst16.ts, 166, 25))
+
+        use(z);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>z : Symbol(z, Decl(downlevelLetConst16.ts, 166, 16))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo5() {
+>foo5 : Symbol(foo5, Decl(downlevelLetConst16.ts, 170, 1))
+
+    for (let x in []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 173, 12))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 173, 12))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo6() {
+>foo6 : Symbol(foo6, Decl(downlevelLetConst16.ts, 177, 1))
+
+    for (const x in []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 180, 14))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 180, 14))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo7() {
+>foo7 : Symbol(foo7, Decl(downlevelLetConst16.ts, 184, 1))
+
+    for (let x of []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 187, 12))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 187, 12))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo8() {
+>foo8 : Symbol(foo8, Decl(downlevelLetConst16.ts, 191, 1))
+
+    for (let [x] of []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 194, 14))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 194, 14))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo9() {
+>foo9 : Symbol(foo9, Decl(downlevelLetConst16.ts, 198, 1))
+
+    for (let {a: x} of []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 201, 14))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 201, 14))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo10() {
+>foo10 : Symbol(foo10, Decl(downlevelLetConst16.ts, 205, 1))
+
+    for (const x of []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 208, 14))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 208, 14))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo11() {
+>foo11 : Symbol(foo11, Decl(downlevelLetConst16.ts, 212, 1))
+
+    for (const [x] of []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 215, 16))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 215, 16))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
+
+function foo12() {
+>foo12 : Symbol(foo12, Decl(downlevelLetConst16.ts, 219, 1))
+
+    for (const {a: x} of []) {
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 222, 16))
+
+        use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 222, 16))
+    }
+    use(x);
+>use : Symbol(use, Decl(downlevelLetConst16.ts, 0, 12))
+>x : Symbol(x, Decl(downlevelLetConst16.ts, 4, 3))
+}
