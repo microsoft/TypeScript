@@ -1,0 +1,24 @@
+=== tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts ===
+function greeter(person: string, person2: string) {
+>greeter : (person: string, person2: string) => void
+>person : string
+>person2 : string
+
+    var unused = 20;
+>unused : number
+>20 : 20
+
+    var maker = function (child: string): void {
+>maker : (child: string) => void
+>function (child: string): void {        var unused2 = 22;    } : (child: string) => void
+>child : string
+
+        var unused2 = 22;
+>unused2 : number
+>22 : 22
+    }
+    person2 = "dummy value";
+>person2 = "dummy value" : "dummy value"
+>person2 : string
+>"dummy value" : "dummy value"
+}

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/importDeclWithExportModifier.ts ===
+module x {
+>x : any
+
+    interface c {
+>c : c
+    }
+}
+export import a = x.c;
+>a : any
+>x : any
+>c : No type information available!
+
+var b: a;
+>b : any
+>a : any
+

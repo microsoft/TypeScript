@@ -1,0 +1,33 @@
+=== tests/cases/compiler/sourceMapValidationEnums.ts ===
+enum e {
+>e : e
+
+    x,
+>x : e.x
+
+    y,
+>y : e.y
+
+    x
+>x : e.x
+}
+enum e2 {
+>e2 : e2
+
+    x = 10,
+>x : e2.x
+>10 : 10
+
+    y = 10,
+>y : e2.x
+>10 : 10
+
+    z,
+>z : e2.z
+
+    x2
+>x2 : e2.x2
+}
+enum e3 {
+>e3 : e3
+}

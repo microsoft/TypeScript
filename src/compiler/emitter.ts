@@ -1863,7 +1863,9 @@ namespace ts {
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
             emitModifiers(node, node.modifiers);
-            write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
+            if (~node.flags & NodeFlags.GlobalAugmentation) {
+                write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
+            }
             emit(node.name);
 
             let body = node.body;

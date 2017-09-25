@@ -24,8 +24,6 @@ export const bar = Cls.bar();
 >bar : () => Lib
 
 === /types/lib/index.d.ts ===
-
-
 interface Lib { x }
 >Lib : Lib
 >x : any

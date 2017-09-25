@@ -1003,7 +1003,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void {
+        public verifyReferenceGroups(startRanges: Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
             const fullExpected = ts.map(parts, ({ definition, ranges }) => ({ definition, ranges: ranges.map(rangeToReferenceEntry) }));
 
             for (const startRange of toArray(startRanges)) {
@@ -3833,7 +3833,7 @@ namespace FourSlashInterface {
             this.state.verifyReferencesOf(start, references);
         }
 
-        public referenceGroups(startRanges: FourSlash.Range[], parts: Array<{ definition: string, ranges: FourSlash.Range[] }>) {
+        public referenceGroups(startRanges: FourSlash.Range[], parts: ReferenceGroup[]) {
             this.state.verifyReferenceGroups(startRanges, parts);
         }
 
@@ -4342,6 +4342,11 @@ namespace FourSlashInterface {
             const textSpan = position === undefined ? undefined : { start: position, end: position + text.length };
             return { classificationType, text, textSpan };
         }
+    }
+
+    export interface ReferenceGroup {
+        definition: string;
+        ranges: FourSlash.Range[];
     }
 
     export interface ApplyRefactorOptions {

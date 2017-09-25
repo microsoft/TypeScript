@@ -139,18 +139,22 @@ namespace ts {
                         `/**
   * @param
   */`);
+
+                parsesIncorrectly("noType",
+`/**
+* @type
+*/`);
+
+                parsesIncorrectly("@augments with no type",
+`/**
+ * @augments
+ */`);
             });
 
             describe("parsesCorrectly", () => {
                 parsesCorrectly("noLeadingAsterisk",
 `/**
     @type {number}
-  */`);
-
-
-                parsesCorrectly("noType",
-`/**
-  * @type
   */`);
 
 

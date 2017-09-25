@@ -1,0 +1,236 @@
+=== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithAnyOtherType.ts ===
+// void  operator on any type
+
+var ANY: any;
+>ANY : any
+
+var ANY1;
+>ANY1 : any
+
+var ANY2: any[] = ["", ""];
+>ANY2 : any[]
+>["", ""] : string[]
+>"" : ""
+>"" : ""
+
+var obj: () => {}
+>obj : () => {}
+
+var obj1 = {x:"",y:1};
+>obj1 : { x: string; y: number; }
+>{x:"",y:1} : { x: string; y: number; }
+>x : string
+>"" : ""
+>y : number
+>1 : 1
+
+function foo(): any {
+>foo : () => any
+
+    var a;
+>a : any
+
+    return a;
+>a : any
+}
+class A {
+>A : A
+
+    public a: any;
+>a : any
+
+    static foo() {
+>foo : () => any
+
+        var a;
+>a : any
+
+        return a;
+>a : any
+    }
+}
+module M {
+>M : typeof M
+
+    export var n: any;
+>n : any
+}
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// any type var
+var ResultIsAny1 = void ANY1;
+>ResultIsAny1 : any
+>void ANY1 : undefined
+>ANY1 : any
+
+var ResultIsAny2 = void ANY2;
+>ResultIsAny2 : any
+>void ANY2 : undefined
+>ANY2 : any[]
+
+var ResultIsAny3 = void A;
+>ResultIsAny3 : any
+>void A : undefined
+>A : typeof A
+
+var ResultIsAny4 = void M;
+>ResultIsAny4 : any
+>void M : undefined
+>M : typeof M
+
+var ResultIsAny5 = void obj;
+>ResultIsAny5 : any
+>void obj : undefined
+>obj : () => {}
+
+var ResultIsAny6 = void obj1;
+>ResultIsAny6 : any
+>void obj1 : undefined
+>obj1 : { x: string; y: number; }
+
+// any type literal
+var ResultIsAny7 = void undefined;
+>ResultIsAny7 : any
+>void undefined : undefined
+>undefined : undefined
+
+var ResultIsAny8 = void null;
+>ResultIsAny8 : any
+>void null : undefined
+>null : null
+
+// any type expressions
+var ResultIsAny9 = void ANY2[0]
+>ResultIsAny9 : any
+>void ANY2[0] : undefined
+>ANY2[0] : any
+>ANY2 : any[]
+>0 : 0
+
+var ResultIsAny10 = void obj1.x;
+>ResultIsAny10 : any
+>void obj1.x : undefined
+>obj1.x : string
+>obj1 : { x: string; y: number; }
+>x : string
+
+var ResultIsAny11 = void obj1.y;
+>ResultIsAny11 : any
+>void obj1.y : undefined
+>obj1.y : number
+>obj1 : { x: string; y: number; }
+>y : number
+
+var ResultIsAny12 = void objA.a;
+>ResultIsAny12 : any
+>void objA.a : undefined
+>objA.a : any
+>objA : A
+>a : any
+
+var ResultIsAny13 = void M.n;
+>ResultIsAny13 : any
+>void M.n : undefined
+>M.n : any
+>M : typeof M
+>n : any
+
+var ResultIsAny14 = void foo();
+>ResultIsAny14 : any
+>void foo() : undefined
+>foo() : any
+>foo : () => any
+
+var ResultIsAny15 = void A.foo();
+>ResultIsAny15 : any
+>void A.foo() : undefined
+>A.foo() : any
+>A.foo : () => any
+>A : typeof A
+>foo : () => any
+
+var ResultIsAny16 = void (ANY + ANY1);
+>ResultIsAny16 : any
+>void (ANY + ANY1) : undefined
+>(ANY + ANY1) : any
+>ANY + ANY1 : any
+>ANY : any
+>ANY1 : any
+
+var ResultIsAny17 = void (null + undefined);
+>ResultIsAny17 : any
+>void (null + undefined) : undefined
+>(null + undefined) : any
+>null + undefined : any
+>null : null
+>undefined : undefined
+
+var ResultIsAny18 = void (null + null);
+>ResultIsAny18 : any
+>void (null + null) : undefined
+>(null + null) : any
+>null + null : any
+>null : null
+>null : null
+
+var ResultIsAny19 = void (undefined + undefined);
+>ResultIsAny19 : any
+>void (undefined + undefined) : undefined
+>(undefined + undefined) : any
+>undefined + undefined : any
+>undefined : undefined
+>undefined : undefined
+
+// multiple void  operators
+var ResultIsAny20 = void void ANY;
+>ResultIsAny20 : any
+>void void ANY : undefined
+>void ANY : undefined
+>ANY : any
+
+var ResultIsAny21 = void void void (ANY + ANY1);
+>ResultIsAny21 : any
+>void void void (ANY + ANY1) : undefined
+>void void (ANY + ANY1) : undefined
+>void (ANY + ANY1) : undefined
+>(ANY + ANY1) : any
+>ANY + ANY1 : any
+>ANY : any
+>ANY1 : any
+
+// miss assignment operators
+void ANY;
+>void ANY : undefined
+>ANY : any
+
+void ANY1;
+>void ANY1 : undefined
+>ANY1 : any
+
+void ANY2[0];
+>void ANY2[0] : undefined
+>ANY2[0] : any
+>ANY2 : any[]
+>0 : 0
+
+void ANY, ANY1;
+>void ANY, ANY1 : any
+>void ANY : undefined
+>ANY : any
+>ANY1 : any
+
+void objA.a;
+>void objA.a : undefined
+>objA.a : any
+>objA : A
+>a : any
+
+void M.n;
+>void M.n : undefined
+>M.n : any
+>M : typeof M
+>n : any
+

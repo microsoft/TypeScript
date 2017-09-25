@@ -322,6 +322,18 @@ namespace ts {
     }
 
     /**
+     * Note: it is expected that the `nodeArray` and the `node` are within the same file.
+     * For example, searching for a `SourceFile` in a `SourceFile[]` wouldn't work.
+     */
+    export function indexOfNode(nodeArray: ReadonlyArray<Node>, node: Node) {
+        return binarySearch(nodeArray, node, compareNodePos);
+    }
+
+    function compareNodePos({ pos: aPos }: Node, { pos: bPos}: Node) {
+        return aPos < bPos ? Comparison.LessThan : bPos < aPos ? Comparison.GreaterThan : Comparison.EqualTo;
+    }
+
+    /**
      * Gets flags that control emit behavior of a node.
      */
     export function getEmitFlags(node: Node): EmitFlags | undefined {
@@ -1502,7 +1514,7 @@ namespace ts {
     }
 
     export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
-        let result: Array<JSDoc | JSDocTag> | undefined;
+        let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
 
@@ -4079,9 +4091,14 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
     }
 
-    /** Gets the JSDoc type tag for the node if present */
+    /** Gets the JSDoc type tag for the node if present and valid */
     export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
+        // We should have already issued an error if there were multiple type jsdocs, so just use the first one.
+        const tag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
+        if (tag && tag.typeExpression && tag.typeExpression.type) {
+            return tag;
+        }
+        return undefined;
     }
 
     /**

@@ -1,0 +1,93 @@
+=== tests/cases/compiler/autolift4.ts ===
+class Point {
+>Point : Point
+
+    constructor(public x: number, public y: number) {
+>x : number
+>y : number
+
+    }
+    getDist() { 
+>getDist : () => number
+
+        return Math.sqrt(this.x*this.x + this.y*this.y); 
+>Math.sqrt(this.x*this.x + this.y*this.y) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>this.x*this.x + this.y*this.y : number
+>this.x*this.x : number
+>this.x : number
+>this : this
+>x : number
+>this.x : number
+>this : this
+>x : number
+>this.y*this.y : number
+>this.y : number
+>this : this
+>y : number
+>this.y : number
+>this : this
+>y : number
+    }
+    static origin = new Point(0,0);
+>origin : Point
+>new Point(0,0) : Point
+>Point : typeof Point
+>0 : 0
+>0 : 0
+}
+
+class Point3D extends Point {
+>Point3D : Point3D
+>Point : Point
+
+    constructor(x: number, y: number, public z: number, m:number) {
+>x : number
+>y : number
+>z : number
+>m : number
+
+        super(x, y);
+>super(x, y) : void
+>super : typeof Point
+>x : number
+>y : number
+    }
+    
+    getDist() {
+>getDist : () => number
+
+        return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.m);
+>Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.m) : number
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
+>this.x*this.x + this.y*this.y + this.z*this.m : number
+>this.x*this.x + this.y*this.y : number
+>this.x*this.x : number
+>this.x : number
+>this : this
+>x : number
+>this.x : number
+>this : this
+>x : number
+>this.y*this.y : number
+>this.y : number
+>this : this
+>y : number
+>this.y : number
+>this : this
+>y : number
+>this.z*this.m : number
+>this.z : number
+>this : this
+>z : number
+>this.m : any
+>this : this
+>m : any
+    }        
+}
+
+

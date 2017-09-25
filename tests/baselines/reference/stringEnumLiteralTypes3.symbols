@@ -1,0 +1,514 @@
+=== tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts ===
+const enum Choice { Unknown = "", Yes = "yes", No = "no" };
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+type Yes = Choice.Yes;
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+type YesNo = Choice.Yes | Choice.No;
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+type NoYes = Choice.No | Choice.Yes;
+>NoYes : Symbol(NoYes, Decl(stringEnumLiteralTypes3.ts, 3, 36))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+>f1 : Symbol(f1, Decl(stringEnumLiteralTypes3.ts, 5, 60))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 7, 12))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 7, 19))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 7, 29))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 7, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    a = a;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 7, 12))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 7, 12))
+
+    a = b;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 7, 12))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 7, 19))
+
+    a = c;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 7, 12))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 7, 29))
+
+    a = d;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 7, 12))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 7, 46))
+}
+
+function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+>f2 : Symbol(f2, Decl(stringEnumLiteralTypes3.ts, 12, 1))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 14, 12))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 14, 19))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 14, 29))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 14, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    b = a;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 14, 19))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 14, 12))
+
+    b = b;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 14, 19))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 14, 19))
+
+    b = c;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 14, 19))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 14, 29))
+
+    b = d;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 14, 19))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 14, 46))
+}
+
+function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+>f3 : Symbol(f3, Decl(stringEnumLiteralTypes3.ts, 19, 1))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 21, 12))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 21, 19))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 21, 29))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 21, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    c = a;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 21, 29))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 21, 12))
+
+    c = b;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 21, 29))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 21, 19))
+
+    c = c;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 21, 29))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 21, 29))
+
+    c = d;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 21, 29))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 21, 46))
+}
+
+function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+>f4 : Symbol(f4, Decl(stringEnumLiteralTypes3.ts, 26, 1))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 28, 12))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 28, 19))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 28, 29))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 28, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    d = a;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 28, 46))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 28, 12))
+
+    d = b;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 28, 46))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 28, 19))
+
+    d = c;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 28, 46))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 28, 29))
+
+    d = d;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 28, 46))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 28, 46))
+}
+
+function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+>f5 : Symbol(f5, Decl(stringEnumLiteralTypes3.ts, 33, 1))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 35, 12))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 35, 19))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 35, 29))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 35, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    a = Choice.Unknown;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 35, 12))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    a = Choice.Yes;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 35, 12))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    a = Choice.No;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 35, 12))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+    b = Choice.Unknown;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 35, 19))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    b = Choice.Yes;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 35, 19))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    b = Choice.No;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 35, 19))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+    c = Choice.Unknown;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 35, 29))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    c = Choice.Yes;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 35, 29))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    c = Choice.No;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 35, 29))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+    d = Choice.Unknown;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 35, 46))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    d = Choice.Yes;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 35, 46))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    d = Choice.No;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 35, 46))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+}
+
+function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+>f6 : Symbol(f6, Decl(stringEnumLiteralTypes3.ts, 48, 1))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 50, 12))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 50, 19))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 50, 29))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 50, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    a === Choice.Unknown;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 50, 12))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    a === Choice.Yes;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 50, 12))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    a === Choice.No;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 50, 12))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+    b === Choice.Unknown;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 50, 19))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    b === Choice.Yes;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 50, 19))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    b === Choice.No;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 50, 19))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+    c === Choice.Unknown;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 50, 29))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    c === Choice.Yes;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 50, 29))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    c === Choice.No;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 50, 29))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+
+    d === Choice.Unknown;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 50, 46))
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+
+    d === Choice.Yes;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 50, 46))
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+
+    d === Choice.No;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 50, 46))
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+}
+
+function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+>f7 : Symbol(f7, Decl(stringEnumLiteralTypes3.ts, 63, 1))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    a === a;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+
+    a === b;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+
+    a === c;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+
+    a === d;
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+
+    b === a;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+
+    b === b;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+
+    b === c;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+
+    b === d;
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+
+    c === a;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+
+    c === b;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+
+    c === c;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+
+    c === d;
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+
+    d === a;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+>a : Symbol(a, Decl(stringEnumLiteralTypes3.ts, 65, 12))
+
+    d === b;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+>b : Symbol(b, Decl(stringEnumLiteralTypes3.ts, 65, 19))
+
+    d === c;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+>c : Symbol(c, Decl(stringEnumLiteralTypes3.ts, 65, 29))
+
+    d === d;
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+>d : Symbol(d, Decl(stringEnumLiteralTypes3.ts, 65, 46))
+}
+
+function f10(x: Yes): Yes {
+>f10 : Symbol(f10, Decl(stringEnumLiteralTypes3.ts, 82, 1))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 84, 13))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+>Yes : Symbol(Yes, Decl(stringEnumLiteralTypes3.ts, 0, 59))
+
+    switch (x) {
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 84, 13))
+
+        case Choice.Unknown: return x;
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 84, 13))
+
+        case Choice.Yes: return x;
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 84, 13))
+
+        case Choice.No: return x;
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 84, 13))
+    }
+    return x;
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 84, 13))
+}
+
+function f11(x: YesNo): YesNo {
+>f11 : Symbol(f11, Decl(stringEnumLiteralTypes3.ts, 91, 1))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 93, 13))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+>YesNo : Symbol(YesNo, Decl(stringEnumLiteralTypes3.ts, 2, 22))
+
+    switch (x) {
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 93, 13))
+
+        case Choice.Unknown: return x;
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 93, 13))
+
+        case Choice.Yes: return x;
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 93, 13))
+
+        case Choice.No: return x;
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 93, 13))
+    }
+    return x;
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 93, 13))
+}
+
+function f12(x: UnknownYesNo): UnknownYesNo {
+>f12 : Symbol(f12, Decl(stringEnumLiteralTypes3.ts, 100, 1))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 102, 13))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+>UnknownYesNo : Symbol(UnknownYesNo, Decl(stringEnumLiteralTypes3.ts, 4, 36))
+
+    switch (x) {
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 102, 13))
+
+        case Choice.Unknown: return x;
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 102, 13))
+
+        case Choice.Yes: return x;
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 102, 13))
+
+        case Choice.No: return x;
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 102, 13))
+    }
+    return x;
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 102, 13))
+}
+
+function f13(x: Choice): Choice {
+>f13 : Symbol(f13, Decl(stringEnumLiteralTypes3.ts, 109, 1))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 111, 13))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+
+    switch (x) {
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 111, 13))
+
+        case Choice.Unknown: return x;
+>Choice.Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Unknown : Symbol(Choice.Unknown, Decl(stringEnumLiteralTypes3.ts, 0, 19))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 111, 13))
+
+        case Choice.Yes: return x;
+>Choice.Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>Yes : Symbol(Choice.Yes, Decl(stringEnumLiteralTypes3.ts, 0, 33))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 111, 13))
+
+        case Choice.No: return x;
+>Choice.No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>Choice : Symbol(Choice, Decl(stringEnumLiteralTypes3.ts, 0, 0))
+>No : Symbol(Choice.No, Decl(stringEnumLiteralTypes3.ts, 0, 46))
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 111, 13))
+    }
+    return x;
+>x : Symbol(x, Decl(stringEnumLiteralTypes3.ts, 111, 13))
+}
