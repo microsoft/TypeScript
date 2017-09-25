@@ -287,8 +287,9 @@ namespace ts.server {
             return undefined;
         }
 
-        installPackage(options: InstallPackageOptions): void {
+        installPackage(options: InstallPackageOptionsWithTsconfigLocation): ApplyCodeFixCommandResult { //return a Promise?
             this.send({ kind: "installPackage", ...options });
+            throw new Error("TODO"); //Need to add stuff to handle an async result... return something like a Promise?
         }
 
         private reportInstallerProcessId() {
@@ -309,7 +310,7 @@ namespace ts.server {
             this.eventSender = telemetrySender;
         }
 
-        attach(projectService: ProjectService) {
+        attach(projectService: ProjectService) { //This method has little to do with `projectService`...
             this.projectService = projectService;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 this.logger.info("Binding...");
@@ -359,7 +360,7 @@ namespace ts.server {
             this.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        private send(rq: TypingInstallerRequestUnion) {
+        private send(rq: TypingInstallerRequestUnion): void {
             this.installer.send(rq);
         }
 

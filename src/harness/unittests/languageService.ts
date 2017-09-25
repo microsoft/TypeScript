@@ -24,7 +24,7 @@ export function Component(x: Config): any;`
                 //TODO: remove (optional methods)
                 tryGetRegistry(): never { throw new Error("remove"); },
                 installPackage(): never { throw new Error("remove"); },
-                getTsconfigLocation(): never { throw new Error("remove"); },
+                //getTsconfigLocation(): never { throw new Error("remove"); },
                 writeFile(): never { throw new Error("remove"); },//kill
                 getCompilationSettings() {
                     return {};

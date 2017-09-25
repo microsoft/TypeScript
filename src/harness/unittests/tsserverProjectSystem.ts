@@ -82,7 +82,7 @@ namespace ts.projectSystem {
         tryGetRegistry(): Map<void> | undefined {
             throw new Error("TODO");
         }
-        installPackage(_options: InstallPackageOptions): never {
+        installPackage(_options: InstallPackageOptionsWithTsconfigLocation): never {
             throw new Error("TODO");
         }
 

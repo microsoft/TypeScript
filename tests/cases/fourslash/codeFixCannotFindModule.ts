@@ -7,10 +7,9 @@ test.setTypesRegistry({
 });
 
 verify.codeFixAvailable([{
-    description: "!",
-    actions: [{
-        type: "!!!",
-        data: {},
+    description: "Install typings for abs",
+    commands: [{
+        type: "install package",
+        packageName: "@types/abs",
     }],
 }]);
-

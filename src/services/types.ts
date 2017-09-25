@@ -202,8 +202,8 @@ namespace ts {
         //TODO: optional (for back-compat)
         writeFile(file: Path, content: string): void;
         tryGetRegistry(): Map<void> | undefined;
-        installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult;
-        getTsconfigLocation(): Path | undefined;
+        installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult; //must be async!
+        //getTsconfigLocation(): Path | undefined;
     }
 
     //
@@ -394,7 +394,8 @@ namespace ts {
     export interface InstallPackageAction {
         /* @internal */ type: "install package",
         /* @internal */ packageName: string,
-        /* @internal */ tsconfigLocation: Path,
+        //just get it in `installPackage()`
+        ///* @internal */ tsconfigLocation: Path,
     }
 
     export interface NonsenseAction {

@@ -57,8 +57,10 @@ namespace ts.server {
             //...reaching through so many layers...
             return this.typingsCache.tryGetRegistry();
         }
-        public installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult {
-            return this.typingsCache.installPackage(options);
+        public installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult { //must be async!
+            //misnamed -- change to 'getProjectRootPath'
+            const tsconfigLocation = this.project.getProjectRootPath() as Path; //TODO: it says path, why doesn't it return Path?
+            return this.typingsCache.installPackage({ ...options, tsconfigLocation });
         }
         private get typingsCache(): TypingsCache {
             return this.project.projectService.typingsCache;
@@ -69,10 +71,9 @@ namespace ts.server {
         }
 
         //misnamed -- change to 'getProjectRootPath'
-        public getTsconfigLocation(): Path | undefined {
-            return this.project.getProjectRootPath() as Path; //TODO: it says path, why doesn't it return Path?
-        }
-
+        ///*public*/private getTsconfigLocation(): Path | undefined {
+        //    return this.project.getProjectRootPath() as Path; //TODO: it says path, why doesn't it return Path?
+        //}
 
         public startRecordingFilesWithChangedResolutions() {
             this.filesWithChangedSetOfUnresolvedImports = [];

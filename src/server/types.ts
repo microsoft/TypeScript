@@ -56,7 +56,8 @@ declare namespace ts.server {
     }
 
     export interface InstallPackageRequest extends InstallPackageOptions {
-        readonly kind: "installPackage",
+        readonly kind: "installPackage";
+        readonly tsconfigLocation: Path;
     }
 
     export type ActionSet = "action::set";

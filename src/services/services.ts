@@ -1831,7 +1831,7 @@ namespace ts {
                     return host.installPackage({
                         fileName: toPath(fileName, currentDirectory, getCanonicalFileName),
                         packageName: action.packageName,
-                        tsconfigLocation: action.tsconfigLocation,
+                        //tsconfigLocation: action.tsconfigLocation,
                     });
                 case "nonsense": {
                     const nonsensePath = getDirectoryPath(fileName);

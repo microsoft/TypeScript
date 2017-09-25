@@ -1,16 +1,14 @@
 /// <reference path='fourslash.ts' />
 
-////import * as abs from "abs";
+////nonsense;
 
 test.setTypesRegistry({
     "abs": undefined,
 });
 
 verify.codeFixAvailable([{
-    description: "!",
-    actions: [{
-        type: "!!!",
-        data: {},
+    description: "Add declaration file for 'nonsense'",
+    commands: [{
+        type: "nonsense",
     }],
 }]);
-

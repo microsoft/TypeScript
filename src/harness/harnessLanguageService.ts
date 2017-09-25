@@ -189,8 +189,8 @@ namespace Harness.LanguageService {
             }
             return this.typesRegistry;
         }
+        //getTsconfigLocation() {};
         installPackage = ts.notImplemented;
-        getTsconfigLocation = ts.notImplemented;
         writeFile = ts.notImplemented; //kill
 
         getCompilationSettings() { return this.settings; }

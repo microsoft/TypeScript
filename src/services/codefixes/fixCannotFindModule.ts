@@ -42,7 +42,7 @@ namespace ts.codefix {
                 commands: [{
                     type: "install package",
                     packageName: `@types/${packageName}`,
-                    tsconfigLocation: context.host.getTsconfigLocation(), //context.program.getCommonSourceDirectory(),
+                    //tsconfigLocation: context.host.getTsconfigLocation(), //context.program.getCommonSourceDirectory(),
                 }],
             };
             return [action];

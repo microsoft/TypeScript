@@ -2722,7 +2722,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, info?: Array<{ description: string, commands?: Array<ts.CodeActionCommand> }>) {
+        public verifyCodeFixAvailable(negative: boolean, info: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined) {
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName);
 
             if (negative) {
@@ -3734,8 +3734,8 @@ namespace FourSlashInterface {
             this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
-        public codeFixAvailable() {
-            this.state.verifyCodeFixAvailable(this.negative);
+        public codeFixAvailable(options?: VerifyCodeFixAvailableOptions[]) {
+            this.state.verifyCodeFixAvailable(this.negative, options);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {
@@ -4376,5 +4376,10 @@ namespace FourSlashInterface {
 
     export interface CompletionsAtOptions {
         isNewIdentifierLocation?: boolean;
+    }
+
+    export interface VerifyCodeFixAvailableOptions {
+        description: string;
+        commands?: ts.CodeActionCommand[];
     }
 }
