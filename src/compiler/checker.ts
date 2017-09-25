@@ -285,6 +285,7 @@ namespace ts {
         const markerSuperType = <TypeParameter>createType(TypeFlags.TypeParameter);
         const markerSubType = <TypeParameter>createType(TypeFlags.TypeParameter);
         markerSubType.constraint = markerSuperType;
+        const markerOtherType = <TypeParameter>createType(TypeFlags.TypeParameter);
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
@@ -3548,7 +3549,7 @@ namespace ts {
                             return;
                         }
 
-                        if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
+                        if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length && isStrictSignature(resolved.callSignatures[0])) {
                             const parenthesizeSignature = shouldAddParenthesisAroundFunctionType(resolved.callSignatures[0], flags);
                             if (parenthesizeSignature) {
                                 writePunctuation(writer, SyntaxKind.OpenParenToken);
@@ -3559,7 +3560,7 @@ namespace ts {
                             }
                             return;
                         }
-                        if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
+                        if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length && isStrictSignature(resolved.constructSignatures[0])) {
                             if (flags & TypeFormatFlags.InElementType) {
                                 writePunctuation(writer, SyntaxKind.OpenParenToken);
                             }
@@ -8521,6 +8522,17 @@ namespace ts {
                 /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
         }
 
+        // A signature is considered strict if it is declared in a function type literal, a constructor type
+        // literal, a function expression, an arrow function, or a function declaration with no overloads. A
+        // strict signature is subject to strict checking in strictFunctionTypes mode.
+        function isStrictSignature(signature: Signature) {
+            const declaration = signature.declaration;
+            const kind = declaration ? declaration.kind : SyntaxKind.Unknown;
+            return kind === SyntaxKind.FunctionType || kind === SyntaxKind.ConstructorType ||
+                kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction ||
+                (kind === SyntaxKind.FunctionDeclaration && getSingleCallSignature(getTypeOfSymbol(getSymbolOfNode(declaration))));
+        }
+
         type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
 
         /**
@@ -8546,9 +8558,7 @@ namespace ts {
                 source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
             }
 
-            const targetKind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
-            const strictVariance = strictFunctionTypes && targetKind !== SyntaxKind.MethodDeclaration && targetKind !== SyntaxKind.MethodSignature;
-
+            const strictVariance = strictFunctionTypes && isStrictSignature(target);
             let result = Ternary.True;
 
             const sourceThisType = getThisTypeOfSignature(source);
@@ -9215,15 +9225,41 @@ namespace ts {
                     // in the process of computing variance information for recursive types and when
                     // comparing 'this' type arguments.
                     const variance = i < variances.length ? variances[i] : Variance.Covariant;
-                    const s = sources[i];
-                    const t = targets[i];
-                    const related = variance === Variance.Covariant ? isRelatedTo(s, t, reportErrors) :
-                        variance === Variance.Contravariant ? isRelatedTo(t, s, reportErrors) :
-                        Ternary.False;
-                    if (!related) {
-                        return Ternary.False;
+                    // We ignore arguments for independent type parameters (because they're never witnessed).
+                    if (variance !== Variance.Independent) {
+                        const s = sources[i];
+                        const t = targets[i];
+                        let related = Ternary.True;
+                        if (variance === Variance.Covariant) {
+                            related = isRelatedTo(s, t, reportErrors);
+                        }
+                        else if (variance === Variance.Contravariant) {
+                            related = isRelatedTo(t, s, reportErrors);
+                        }
+                        else if (variance === Variance.Bivariant) {
+                            // In the bivariant case we first compare contravariantly without reporting
+                            // errors. Then, if that doesn't succeed, we compare covariantly with error
+                            // reporting. Thus, error elaboration will be based on the the covariant check,
+                            // which is generally easier to reason about.
+                            related = isRelatedTo(t, s, /*reportErrors*/ false);
+                            if (!related) {
+                                related = isRelatedTo(s, t, reportErrors);
+                            }
+                        }
+                        else {
+                            // In the invariant case we first compare covariantly, and only when that
+                            // succeeds do we proceed to compare contravariantly. Thus, error elaboration
+                            // will typically be based on the covariant check.
+                            related = isRelatedTo(s, t, reportErrors);
+                            if (related) {
+                                related &= isRelatedTo(t, s, reportErrors);
+                            }
+                        }
+                        if (!related) {
+                            return Ternary.False;
+                        }
+                        result &= related;
                     }
-                    result &= related;
                 }
                 return result;
             }
@@ -9388,13 +9424,20 @@ namespace ts {
                         !(source.flags & TypeFlags.MarkerType || target.flags & TypeFlags.MarkerType)) {
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
-                        // information for the type parameters and relate the type arguments accordingly. If we do
-                        // not succeed, fall through and do a structural comparison instead (there are instances
-                        // where the variance information isn't accurate, e.g. when type parameters are used only
-                        // in bivariant positions or when a type argument is 'any' or 'void'.)
+                        // information for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, variances, reportErrors)) {
                             return result;
+                        }
+                        // The type arguments did not relate appropriately, but it may be because we have no variance
+                        // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
+                        // arguments). It might also be the case that the target type has a 'void' type argument for
+                        // a covariant type parameter that is only used in return positions within the generic type
+                        // (in which case any type argument is permitted on the source side). In those cases we proceed
+                        // with a structural comparison. Otherwise, we know for certain the instantiations aren't
+                        // related and we can return here.
+                        if (variances !== emptyArray && !hasCovariantVoidArgument(<TypeReference>target, variances)) {
+                            return Ternary.False;
                         }
                     }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
@@ -9814,14 +9857,12 @@ namespace ts {
             return result;
         }
 
-        // Return an array containing the variance of each type parameter. The variance information is
-        // computed by comparing instantiations of the generic type for type arguments with known relations.
-        // A type parameter is marked as covariant if a covariant comparison succeeds; otherwise, it is
-        // marked contravariant if a contravarint comparison succeeds; otherwise, it is marked invariant.
-        // One form of variance doesn't exclude another, so this information simply serves to indicate
-        // a "primary" relationship that can be checked as an optimization ahead of a full structural
-        // comparison. The function returns the emptyArray singleton if we're not in strictFunctionTypes
-        // mode or if the function has been invoked recursively for the given generic type.
+        // Return an array containing the variance of each type parameter. The variance is effectively
+        // a digest of the type comparisons that occur for each type argument when instantiations of the
+        // generic type are structurally compared. We infer the variance information by comparing
+        // instantiations of the generic type for type arguments with known relations. The function
+        // returns the emptyArray singleton if we're not in strictFunctionTypes mode or if the function
+        // has been invoked recursively for the given generic type.
         function getVariances(type: GenericType): Variance[] {
             if (!strictFunctionTypes) {
                 return emptyArray;
@@ -9838,20 +9879,37 @@ namespace ts {
                     type.variances = emptyArray;
                     variances = [];
                     for (const tp of typeParameters) {
-                        // We compare instantiations where the type parameter is replaced with marker types
-                        // that have a known subtype relationship. From this we infer covariance, contravariance
-                        // or invariance.
+                        // We first compare instantiations where the type parameter is replaced with
+                        // marker types that have a known subtype relationship. From this we can infer
+                        // invariance, covariance, contravariance or bivariance.
                         const typeWithSuper = getMarkerTypeReference(type, tp, markerSuperType);
                         const typeWithSub = getMarkerTypeReference(type, tp, markerSubType);
-                        const variance = isTypeAssignableTo(typeWithSub, typeWithSuper) ? Variance.Covariant :
-                            isTypeAssignableTo(typeWithSuper, typeWithSub) ? Variance.Contravariant :
-                            Variance.Invariant;
+                        let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? Variance.Covariant : 0) |
+                            (isTypeAssignableTo(typeWithSuper, typeWithSub) ? Variance.Contravariant : 0);
+                        // If the instantiations appear to be related bivariantly it may be because the
+                        // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
+                        // type). To determine this we compare instantiations where the type parameter is
+                        // replaced with marker types that are known to be unrelated.
+                        if (variance === Variance.Bivariant && isTypeAssignableTo(getMarkerTypeReference(type, tp, markerOtherType), typeWithSuper)) {
+                            variance = Variance.Independent;
+                        }
                         variances.push(variance);
                     }
                 }
                 type.variances = variances;
             }
             return variances;
+        }
+
+        // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
+        // See comment at call in recursiveTypeRelatedTo for when this case matters.
+        function hasCovariantVoidArgument(type: TypeReference, variances: Variance[]): boolean {
+            for (let i = 0; i < variances.length; i++) {
+                if (variances[i] === Variance.Covariant && type.typeArguments[i].flags & TypeFlags.Void) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function isUnconstrainedTypeParameter(type: Type) {

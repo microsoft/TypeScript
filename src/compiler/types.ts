@@ -3348,6 +3348,8 @@ namespace ts {
         Invariant     = 0,  // Neither covariant nor contravariant
         Covariant     = 1,  // Covariant
         Contravariant = 2,  // Contravariant
+        Bivariant     = 3,  // Both covariant and contravariant
+        Independent   = 4,  // Unwitnessed type parameter
     }
 
     // Generic class and interface types
