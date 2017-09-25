@@ -14,7 +14,7 @@ namespace ts.refactor.extractMethod {
 
     /** Compute the associated code actions */
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: context.endPosition - context.startPosition });
+        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
 
         const targetRange: TargetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -66,8 +66,7 @@ namespace ts.refactor.extractMethod {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const length = context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length });
+        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
         const targetRange: TargetRange = rangeToExtract.targetRange;
 
         const parsedIndexMatch = /^scope_(\d+)$/.exec(actionName);
@@ -148,7 +147,7 @@ namespace ts.refactor.extractMethod {
      */
     // exported only for tests
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
-        const length = span.length || 0;
+        const { length } = span;
 
         if (length === 0) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.StatementOrExpressionExpected)] };
