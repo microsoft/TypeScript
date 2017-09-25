@@ -1241,7 +1241,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
-            const installer = new (class extends Installer {
+            const installer: Installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }

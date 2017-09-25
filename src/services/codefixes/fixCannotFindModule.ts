@@ -10,7 +10,7 @@ namespace ts.codefix {
             const { start } = context.span;
 
             const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-            if (!ts.isStringLiteral(token)) {
+            if (!isStringLiteral(token)) {
                 throw Debug.fail(); // These errors should only happen on the module name.
             }
 

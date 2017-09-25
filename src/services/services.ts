@@ -1825,17 +1825,26 @@ namespace ts {
             });
         }
 
-        function applyCodeFixCommand(fileName: Path, action: CodeActionCommand): void {
+        function applyCodeFixCommand(fileName: Path, action: CodeActionCommand): ApplyCodeFixCommandResult {
             switch (action.type) {
                 case "install package":
-                    host.installPackage({
+                    return host.installPackage({
                         fileName: toPath(fileName, currentDirectory, getCanonicalFileName),
                         packageName: action.packageName,
                         tsconfigLocation: action.tsconfigLocation,
                     });
-                    break;
+                case "nonsense": {
+                    const nonsensePath = getDirectoryPath(fileName);
+                    if (host.fileExists(nonsensePath)) {
+                        throw new Error(`File already exists: ${nonsensePath}`);
+                    }
+                    else {
+                        host.writeFile(nonsensePath, "declare var nonsense: any;\n");
+                        return { successMessage: `Wrote file ${nonsensePath}` };
+                    }
+                }
                 default:
-                    Debug.assertNever(action.type);
+                    Debug.assertNever(action);
             }
         }
 

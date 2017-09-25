@@ -540,11 +540,14 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
 
-        applyCodeFixCommand(file: string, action: CodeActionCommand): void {
+        applyCodeFixCommand(file: string, action: CodeActionCommand): ApplyCodeFixCommandResult {
             const args: protocol.ApplyCodeFixCommandRequestArgs = { file, action };
 
-            this.processRequest<protocol.ApplyCodeFixCommandRequest>(CommandNames.ApplyCodeFixCommand, args);
-            //TODO: there should probably be a response to indicate if there was an error?
+            const request = this.processRequest<protocol.ApplyCodeFixCommandRequest>(CommandNames.ApplyCodeFixCommand, args);
+            const response = this.processResponse<protocol.ApplyCodeFixCommandResponse>(request);
+
+            //This would have thrown an error in `processResponse` if not `response.success`.
+            return { successMessage: response.message };
         }
 
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {

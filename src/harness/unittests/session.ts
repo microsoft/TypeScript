@@ -315,7 +315,7 @@ namespace ts.server {
                     item: false
                 };
                 const command = "newhandle";
-                const result = {
+                const result: ts.server.Handled = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -332,7 +332,7 @@ namespace ts.server {
                 const respBody = {
                     item: false
                 };
-                const resp = {
+                const resp: ts.server.Handled = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -372,7 +372,7 @@ namespace ts.server {
                 };
                 const command = "test";
 
-                session.output(body, command);
+                session.output(body, command, /*reqSeq*/ 0, /*success*/ true);
 
                 expect(lastSent).to.deep.equal({
                     seq: 0,
@@ -420,7 +420,7 @@ namespace ts.server {
             };
             const command = "test";
 
-            session.output(body, command);
+            session.output(body, command, /*reqSeq*/ 0, /*success*/ true);
 
             expect(session.lastSent).to.deep.equal({
                 seq: 0,
@@ -487,14 +487,14 @@ namespace ts.server {
             handleRequest(msg: protocol.Request) {
                 let response: protocol.Response;
                 try {
-                    ({ response } = this.executeCommand(msg));
+                    response = this.executeCommand(msg).response as protocol.Response;
                 }
                 catch (e) {
                     this.output(undefined, msg.command, msg.seq, e.toString());
                     return;
                 }
                 if (response) {
-                    this.output(response, msg.command, msg.seq);
+                    this.output(response, msg.command, msg.seq, /*success*/ true);
                 }
             }
 

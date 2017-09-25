@@ -181,6 +181,7 @@ namespace ts.server.protocol {
         /**
          * Contains error message if success === false.
          */
+        //Actually, can now contain a success mussage too.
         message?: string;
 
         /**
@@ -528,12 +529,8 @@ namespace ts.server.protocol {
         arguments: ApplyCodeFixCommandRequestArgs;
     }
 
-    export interface ApplyCodeFixCommandResponse extends Response {
-        body: {
-            success: boolean;
-            userMessage: string;
-        };
-    }
+    //success/failure and message go in the usual places... so nothing goes here...
+    export interface ApplyCodeFixCommandResponse extends Response {}
 
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**

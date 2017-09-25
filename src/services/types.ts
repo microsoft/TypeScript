@@ -200,8 +200,9 @@ namespace ts {
 
         /* @internal */
         //TODO: optional (for back-compat)
+        writeFile(file: Path, content: string): void;
         tryGetRegistry(): Map<void> | undefined;
-        installPackage(options: InstallPackageOptions): void;
+        installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult;
         getTsconfigLocation(): Path | undefined;
     }
 
@@ -280,7 +281,9 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         //TODO: this will be public, so think about api
-        applyCodeFixCommand(fileName: string, action: CodeActionCommand): void;
+        //Or just make it internal.
+        //currently: returns success message, or throws error for error message
+        applyCodeFixCommand(fileName: string, action: CodeActionCommand): ApplyCodeFixCommandResult;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
 
@@ -297,6 +300,11 @@ namespace ts {
         getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    //!
+    export interface ApplyCodeFixCommandResult {
+        successMessage: string;
     }
 
     export interface Classifications {
@@ -380,13 +388,17 @@ namespace ts {
 
     //Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
     //See `commands?: Array<{}>;` in protocol.ts
-    export type CodeActionCommand = InstallPackageAction;
+    export type CodeActionCommand = InstallPackageAction | NonsenseAction;
 
     //TODO: installPackageOptions should derive from this
     export interface InstallPackageAction {
         /* @internal */ type: "install package",
         /* @internal */ packageName: string,
         /* @internal */ tsconfigLocation: Path,
+    }
+
+    export interface NonsenseAction {
+        /* @internal */ type: "nonsense";
     }
 
     /**

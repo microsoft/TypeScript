@@ -4,7 +4,7 @@ namespace ts.server {
     export interface ITypingsInstaller {
         tryGetRegistry(): Map<void> | undefined;
         //document me
-        installPackage(options: InstallPackageOptions): void;
+        installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -87,8 +87,8 @@ namespace ts.server {
             return this.installer.tryGetRegistry();
         }
 
-        installPackage(options: InstallPackageOptions): void {
-            this.installer.installPackage(options);
+        installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult {
+            return this.installer.installPackage(options);
         }
 
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {

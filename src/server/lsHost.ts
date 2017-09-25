@@ -57,11 +57,15 @@ namespace ts.server {
             //...reaching through so many layers...
             return this.typingsCache.tryGetRegistry();
         }
-        public installPackage(options: InstallPackageOptions): void {
-            this.typingsCache.installPackage(options);
+        public installPackage(options: InstallPackageOptions): ApplyCodeFixCommandResult {
+            return this.typingsCache.installPackage(options);
         }
         private get typingsCache(): TypingsCache {
             return this.project.projectService.typingsCache;
+        }
+        //kill
+        public writeFile(path: Path, content: string): void {
+            this.host.writeFile(path, content);
         }
 
         //misnamed -- change to 'getProjectRootPath'

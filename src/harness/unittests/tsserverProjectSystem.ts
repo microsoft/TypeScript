@@ -82,7 +82,7 @@ namespace ts.projectSystem {
         tryGetRegistry(): Map<void> | undefined {
             throw new Error("TODO");
         }
-        installPackage(_options: InstallPackageOptions): void {
+        installPackage(_options: InstallPackageOptions): never {
             throw new Error("TODO");
         }
 
@@ -2546,11 +2546,11 @@ namespace ts.projectSystem {
 
             // Try to find some interface type defined in lib.d.ts
             const libTypeNavToRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
-            const items: protocol.NavtoItem[] = session.executeCommand(libTypeNavToRequest).response;
+            const items = session.executeCommand(libTypeNavToRequest).response as protocol.NavtoItem[];
             assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found lib.d.ts symbol in JavaScript project nav to request result.`);
 
             const localFunctionNavToRequst = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
-            const items2: protocol.NavtoItem[] = session.executeCommand(localFunctionNavToRequst).response;
+            const items2 = session.executeCommand(localFunctionNavToRequst).response as protocol.NavtoItem[];
             assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
         });
     });
@@ -3684,7 +3684,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName: projectName }
-            }).response;
+            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
@@ -3698,7 +3698,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName: projectName }
-            }).response;
+            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
 
@@ -3725,7 +3725,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName }
-            }).response;
+            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
@@ -3743,7 +3743,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName }
-            }).response;
+            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
@@ -4224,7 +4224,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 2);
 
             configFile.content = configFileContentWithoutCommentLine;
@@ -4236,7 +4236,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterEdit.length === 2);
 
             verifyDiagnostic(diags[0], diagsAfterEdit[0]);
