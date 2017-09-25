@@ -1,6 +1,6 @@
 /* @internal */
-interface Console { log(message?: any, ...optionalParams: any[]): void; }
-declare var console: Console;
+//interface Console { log(message?: any, ...optionalParams: any[]): void; }
+//declare var console: Console;
 
 namespace ts.codefix {
     registerCodeFix({
@@ -9,7 +9,6 @@ namespace ts.codefix {
         ],
         getCodeActions: context => {
             //context.host.log isn't defined...
-            console.log("Nonsense invoked!");
             const { sourceFile } = context;
             const { start } = context.span;
 
@@ -19,7 +18,6 @@ namespace ts.codefix {
             }
 
             if (token.text !== "nonsense") {
-                console.log("Token text is not nonsense, is " + token.text);
                 return undefined;
             }
 
@@ -36,7 +34,6 @@ namespace ts.codefix {
                     type: "nonsense",
                 }],
             };
-            console.log(JSON.stringify(action));
             return [action];
         },
     });
