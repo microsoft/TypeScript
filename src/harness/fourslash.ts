@@ -2382,7 +2382,7 @@ namespace FourSlash {
             }));
 
             return ts.flatMap(ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties), diagnostic => {
-                if (errorCode && errorCode !== diagnostic.code) {
+                if (errorCode !== undefined && errorCode !== diagnostic.code) {
                     return;
                 }
 
