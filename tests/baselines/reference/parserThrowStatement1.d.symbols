@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserThrowStatement1.d.ts ===
+throw e;
+No type information for this code.

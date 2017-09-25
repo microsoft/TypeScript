@@ -26,9 +26,12 @@ namespace Harness.Parallel.Host {
         text?: string;
     }
 
-    const perfdataFileName = ".parallelperf.json";
-    function readSavedPerfData(): {[testHash: string]: number} {
-        const perfDataContents = Harness.IO.readFile(perfdataFileName);
+    const perfdataFileNameFragment = ".parallelperf";
+    function perfdataFileName(target?: string) {
+        return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
+    }
+    function readSavedPerfData(target?: string): {[testHash: string]: number} {
+        const perfDataContents = Harness.IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
         }
@@ -44,8 +47,9 @@ namespace Harness.Parallel.Host {
         console.log("Discovering tests...");
         const discoverStart = +(new Date());
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
-        const tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
-        const perfData = readSavedPerfData();
+        let tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
+        const newTasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
+        const perfData = readSavedPerfData(configOption);
         let totalCost = 0;
         let unknownValue: string | undefined;
         for (const runner of runners) {
@@ -60,8 +64,10 @@ namespace Harness.Parallel.Host {
                     const hashedName = hashName(runner.kind(), file);
                     size = perfData[hashedName];
                     if (size === undefined) {
-                        size = Number.MAX_SAFE_INTEGER;
+                        size = 0;
                         unknownValue = hashedName;
+                        newTasks.push({ runner: runner.kind(), file, size });
+                        continue;
                     }
                 }
                 tasks.push({ runner: runner.kind(), file, size });
@@ -69,6 +75,7 @@ namespace Harness.Parallel.Host {
             }
         }
         tasks.sort((a, b) => a.size - b.size);
+        tasks = tasks.concat(newTasks);
         // 1 fewer batches than threads to account for unittests running on the final thread
         const batchCount = runners.length === 1 ? workerCount : workerCount - 1;
         const packfraction = 0.9;
@@ -113,7 +120,7 @@ namespace Harness.Parallel.Host {
             child.on("message", (data: ParallelClientMessage) => {
                 switch (data.type) {
                     case "error": {
-                        console.error(`Test worker encounted unexpected error and was forced to close:
+                        console.error(`Test worker encounted unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
         Message: ${data.payload.error}
         Stack: ${data.payload.stack}`);
                         return process.exit(2);
@@ -174,7 +181,7 @@ namespace Harness.Parallel.Host {
             let scheduledTotal = 0;
             batcher: while (true) {
                 for (let i = 0; i < batchCount; i++) {
-                    if (tasks.length === 0) {
+                    if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
                         console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
                         break batcher;
                     }
@@ -213,7 +220,9 @@ namespace Harness.Parallel.Host {
                     worker.send({ type: "batch", payload });
                 }
                 else { // Unittest thread - send off just one test
-                    worker.send({ type: "test", payload: tasks.pop() });
+                    const payload = tasks.pop();
+                    ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
+                    worker.send({ type: "test", payload });
                 }
             }
         }
@@ -284,7 +293,7 @@ namespace Harness.Parallel.Host {
                 reporter.epilogue();
             }
 
-            Harness.IO.writeFile(perfdataFileName, JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+            Harness.IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
             process.exit(errorResults.length);
         }

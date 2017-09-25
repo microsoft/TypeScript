@@ -1,0 +1,57 @@
+=== tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass2.ts ===
+class Base {
+>Base : Base
+
+    protected static x: string;
+>x : string
+
+    static staticMethod() {
+>staticMethod : () => void
+
+        this.x;         // OK, accessed within their declaring class
+>this.x : string
+>this : typeof Base
+>x : string
+    }
+}
+
+class Derived1 extends Base {
+>Derived1 : Derived1
+>Base : Base
+
+    static staticMethod1() {
+>staticMethod1 : () => void
+
+        this.x;         // OK, accessed within a class derived from their declaring class
+>this.x : string
+>this : typeof Derived1
+>x : string
+
+        super.x;        // Error, x is not public
+>super.x : string
+>super : typeof Base
+>x : string
+    }
+}
+
+class Derived2 extends Derived1 {
+>Derived2 : Derived2
+>Derived1 : Derived1
+
+    protected static x: string;
+>x : string
+
+    static staticMethod3() {
+>staticMethod3 : () => void
+
+        this.x;         // OK, accessed within a class derived from their declaring class
+>this.x : string
+>this : typeof Derived2
+>x : string
+
+        super.x;        // Error, x is not public
+>super.x : string
+>super : typeof Derived1
+>x : string
+    }
+}

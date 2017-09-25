@@ -1,0 +1,3 @@
+=== tests/cases/compiler/separate1-1.ts ===
+X.f();
+No type information for this code.

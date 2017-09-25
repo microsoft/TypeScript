@@ -1,0 +1,177 @@
+=== tests/cases/compiler/superInLambdas.ts ===
+class User {
+>User : User
+
+    name: string = "Bob";
+>name : string
+>"Bob" : "Bob"
+
+    sayHello(): void {
+>sayHello : () => void
+
+        //console.log("Hello, " + this.name);
+    }
+}
+
+class RegisteredUser extends User {
+>RegisteredUser : RegisteredUser
+>User : User
+
+    name: string = "Frank";
+>name : string
+>"Frank" : "Frank"
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof User
+
+        // super call in a constructor
+        super.sayHello();
+>super.sayHello() : void
+>super.sayHello : () => void
+>super : User
+>sayHello : () => void
+
+        // super call in a lambda in a constructor 
+        var x = () => super.sayHello();
+>x : () => void
+>() => super.sayHello() : () => void
+>super.sayHello() : void
+>super.sayHello : () => void
+>super : User
+>sayHello : () => void
+    }
+    sayHello(): void {
+>sayHello : () => void
+
+        // super call in a method
+        super.sayHello();
+>super.sayHello() : void
+>super.sayHello : () => void
+>super : User
+>sayHello : () => void
+
+        // super call in a lambda in a method
+       var x = () => super.sayHello();
+>x : () => void
+>() => super.sayHello() : () => void
+>super.sayHello() : void
+>super.sayHello : () => void
+>super : User
+>sayHello : () => void
+    }
+}
+class RegisteredUser2 extends User {
+>RegisteredUser2 : RegisteredUser2
+>User : User
+
+    name: string = "Joe";
+>name : string
+>"Joe" : "Joe"
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof User
+
+        // super call in a nested lambda in a constructor 
+        var x = () => () => () => super.sayHello();
+>x : () => () => () => void
+>() => () => () => super.sayHello() : () => () => () => void
+>() => () => super.sayHello() : () => () => void
+>() => super.sayHello() : () => void
+>super.sayHello() : void
+>super.sayHello : () => void
+>super : User
+>sayHello : () => void
+    }
+    sayHello(): void {
+>sayHello : () => void
+
+        // super call in a nested lambda in a method
+        var x = () => () => () => super.sayHello();
+>x : () => () => () => void
+>() => () => () => super.sayHello() : () => () => () => void
+>() => () => super.sayHello() : () => () => void
+>() => super.sayHello() : () => void
+>super.sayHello() : void
+>super.sayHello : () => void
+>super : User
+>sayHello : () => void
+    }
+}
+
+class RegisteredUser3 extends User {
+>RegisteredUser3 : RegisteredUser3
+>User : User
+
+    name: string = "Sam";
+>name : string
+>"Sam" : "Sam"
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof User
+
+        // super property in a nested lambda in a constructor 
+        var superName = () => () => () => super.name;
+>superName : () => () => () => string
+>() => () => () => super.name : () => () => () => string
+>() => () => super.name : () => () => string
+>() => super.name : () => string
+>super.name : string
+>super : User
+>name : string
+    }
+    sayHello(): void {
+>sayHello : () => void
+
+        // super property in a nested lambda in a method
+        var superName = () => () => () => super.name;
+>superName : () => () => () => string
+>() => () => () => super.name : () => () => () => string
+>() => () => super.name : () => () => string
+>() => super.name : () => string
+>super.name : string
+>super : User
+>name : string
+    }
+}
+
+class RegisteredUser4 extends User {
+>RegisteredUser4 : RegisteredUser4
+>User : User
+
+    name: string = "Mark";
+>name : string
+>"Mark" : "Mark"
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof User
+
+        // super in a nested lambda in a constructor 
+        var x = () => () => super;
+>x : () => () => any
+>() => () => super : () => () => any
+>() => super : () => any
+>super : any
+>super : User
+> : any
+    }
+    sayHello(): void {
+>sayHello : () => void
+
+        // super in a nested lambda in a method
+        var x = () => () => super;
+>x : () => () => any
+>() => () => super : () => () => any
+>() => super : () => any
+>super : any
+>super : User
+> : any
+    }
+}

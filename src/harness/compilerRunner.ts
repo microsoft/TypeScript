@@ -177,7 +177,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     return;
                 }
 
-                Harness.Compiler.doTypeAndSymbolBaseline(justName, result, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
+                Harness.Compiler.doTypeAndSymbolBaseline(justName, result.program, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
             });
         });
     }

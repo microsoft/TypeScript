@@ -1,0 +1,41 @@
+=== tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType.ts ===
+// these should be errors
+function foo(x) { };
+>foo : (x: any) => void
+>x : any
+
+function bar(x: number, y) { };  // error at "y"; no error at "x"
+>bar : (x: number, y: any) => void
+>x : number
+>y : any
+
+function func2(a, b, c) { };     // error at "a,b,c"
+>func2 : (a: any, b: any, c: any) => void
+>a : any
+>b : any
+>c : any
+
+function func3(...args) { };     // error at "args" 
+>func3 : (...args: any[]) => void
+>args : any[]
+
+function func4(z= null, w= undefined) { };  // error at "z,w"
+>func4 : (z?: any, w?: any) => void
+>z : any
+>null : null
+>w : any
+>undefined : undefined
+
+// these shouldn't be errors
+function noError1(x= 3, y= 2) { };
+>noError1 : (x?: number, y?: number) => void
+>x : number
+>3 : 3
+>y : number
+>2 : 2
+
+function noError2(x: number, y: string) { };
+>noError2 : (x: number, y: string) => void
+>x : number
+>y : string
+

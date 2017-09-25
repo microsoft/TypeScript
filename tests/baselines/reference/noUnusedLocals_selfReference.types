@@ -1,0 +1,44 @@
+=== tests/cases/compiler/noUnusedLocals_selfReference.ts ===
+export {}; // Make this a module scope, so these are local variables.
+
+function f() { f; }
+>f : () => void
+>f : () => void
+
+class C {
+>C : C
+
+    m() { C; }
+>m : () => void
+>C : typeof C
+}
+enum E { A = 0, B = E.A }
+>E : E
+>A : E
+>0 : 0
+>B : E
+>E.A : E
+>E : typeof E
+>A : E
+
+// Does not detect mutual recursion.
+function g() { D; }
+>g : () => void
+>D : typeof D
+
+class D { m() { g; } }
+>D : D
+>m : () => void
+>g : () => void
+
+// Does not work on private methods.
+class P { private m() { this.m; } }
+>P : P
+>m : () => void
+>this.m : () => void
+>this : this
+>m : () => void
+
+P;
+>P : typeof P
+

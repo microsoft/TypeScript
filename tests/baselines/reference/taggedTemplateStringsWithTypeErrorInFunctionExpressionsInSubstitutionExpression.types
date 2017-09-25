@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts ===
+function foo(...rest: any[]) {
+>foo : (...rest: any[]) => void
+>rest : any[]
+}
+
+foo `${function (x: number) { x = "bad"; } }`;
+>foo `${function (x: number) { x = "bad"; } }` : void
+>foo : (...rest: any[]) => void
+>`${function (x: number) { x = "bad"; } }` : string
+>function (x: number) { x = "bad"; } : (x: number) => void
+>x : number
+>x = "bad" : "bad"
+>x : number
+>"bad" : "bad"
+
