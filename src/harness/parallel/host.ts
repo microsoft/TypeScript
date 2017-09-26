@@ -57,8 +57,19 @@ namespace Harness.Parallel.Host {
             for (const file of files) {
                 let size: number;
                 if (!perfData) {
-                    size = statSync(file).size;
-
+                    try {
+                        size = statSync(file).size;
+                    }
+                    catch {
+                        // May be a directory
+                        try {
+                            size = Harness.IO.listFiles(file, /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                        }
+                        catch {
+                            // Unknown test kind, just return 0 and let the historical analysis take over after one run
+                            size = 0;
+                        }
+                    }
                 }
                 else {
                     const hashedName = hashName(runner.kind(), file);

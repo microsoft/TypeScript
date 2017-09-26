@@ -978,8 +978,9 @@ gulp.task(instrumenterJsPath, /*help*/ false, [servicesFile], () => {
         .pipe(gulp.dest(builtLocalDirectory));
 });
 
-gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
-    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalCompiler], done, done);
+gulp.task("tsc-instrumented", "Builds an instrumented tsc.js - run with --test=[testname]", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
+    const test = cmdLineOptions["tests"] || "iocapture";
+    exec(host, [instrumenterJsPath, "record", test, builtLocalCompiler], done, done);
 });
 
 gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () => {
