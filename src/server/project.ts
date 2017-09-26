@@ -201,7 +201,7 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
-            /*@internal*/public partialSystem: PartialSystem) {
+            /*@internal*/public directoryStructureHost: DirectoryStructureHost) {
 
             if (!this.compilerOptions) {
                 this.compilerOptions = getDefaultCompilerOptions();
@@ -236,7 +236,7 @@ namespace ts.server {
         }
 
         getNewLine() {
-            return this.partialSystem.newLine;
+            return this.directoryStructureHost.newLine;
         }
 
         getProjectVersion() {
@@ -263,7 +263,7 @@ namespace ts.server {
         }
 
         private getScriptInfoLSHost(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.partialSystem);
+            const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
                 if (existingValue !== undefined && existingValue !== scriptInfo) {
@@ -298,7 +298,7 @@ namespace ts.server {
         }
 
         getCurrentDirectory(): string {
-            return this.partialSystem.getCurrentDirectory();
+            return this.directoryStructureHost.getCurrentDirectory();
         }
 
         getDefaultLibFileName() {
@@ -307,22 +307,22 @@ namespace ts.server {
         }
 
         useCaseSensitiveFileNames() {
-            return this.partialSystem.useCaseSensitiveFileNames;
+            return this.directoryStructureHost.useCaseSensitiveFileNames;
         }
 
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return this.partialSystem.readDirectory(path, extensions, exclude, include, depth);
+            return this.directoryStructureHost.readDirectory(path, extensions, exclude, include, depth);
         }
 
         readFile(fileName: string): string | undefined {
-            return this.partialSystem.readFile(fileName);
+            return this.directoryStructureHost.readFile(fileName);
         }
 
         fileExists(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
             const path = this.toPath(file);
-            return !this.isWatchedMissingFile(path) && this.partialSystem.fileExists(file);
+            return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[] {
@@ -334,11 +334,11 @@ namespace ts.server {
         }
 
         directoryExists(path: string): boolean {
-            return this.partialSystem.directoryExists(path);
+            return this.directoryStructureHost.directoryExists(path);
         }
 
         getDirectories(path: string): string[] {
-            return this.partialSystem.getDirectories(path);
+            return this.directoryStructureHost.getDirectories(path);
         }
 
         /*@internal*/
@@ -518,7 +518,7 @@ namespace ts.server {
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
-            this.partialSystem = undefined;
+            this.directoryStructureHost = undefined;
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
@@ -835,7 +835,7 @@ namespace ts.server {
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.partialSystem);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.directoryStructureHost);
                     scriptInfo.attachToProject(this);
                 },
                 removed => this.detachScriptInfoFromProject(removed)
@@ -859,7 +859,7 @@ namespace ts.server {
                 missingFilePath,
                 (fileName, eventKind) => {
                     if (this.projectKind === ProjectKind.Configured) {
-                        (this.partialSystem as CachedPartialSystem).addOrDeleteFile(fileName, missingFilePath, eventKind);
+                        (this.directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
                     if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
@@ -882,7 +882,7 @@ namespace ts.server {
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
-                fileName, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.partialSystem
+                fileName, /*scriptKind*/ undefined, /*hasMixedContent*/ undefined, this.directoryStructureHost
             );
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
@@ -1134,8 +1134,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
-            cachedPartialSystem: PartialSystem) {
-            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, cachedPartialSystem);
+            cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
+            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled, cachedDirectoryStructureHost);
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
             this.enablePlugins();
             this.resolutionCache.setRootDirectory(getDirectoryPath(configFileName));
@@ -1155,8 +1155,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getCachedPartialSystem() {
-            return this.partialSystem as CachedPartialSystem;
+        getCachedDirectoryStructureHost() {
+            return this.directoryStructureHost as CachedDirectoryStructureHost;
         }
 
         getConfigFilePath() {
@@ -1342,7 +1342,7 @@ namespace ts.server {
         }
 
         getEffectiveTypeRoots() {
-            return getEffectiveTypeRoots(this.getCompilationSettings(), this.partialSystem) || [];
+            return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
         }
 
         /*@internal*/

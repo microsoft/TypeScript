@@ -4,7 +4,7 @@
 
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-    export type ParseConfigFile = (configFileName: string, optionsToExtend: CompilerOptions, system: PartialSystem, reportDiagnostic: DiagnosticReporter, reportWatchDiagnostic: DiagnosticReporter) => ParsedCommandLine;
+    export type ParseConfigFile = (configFileName: string, optionsToExtend: CompilerOptions, system: DirectoryStructureHost, reportDiagnostic: DiagnosticReporter, reportWatchDiagnostic: DiagnosticReporter) => ParsedCommandLine;
     export interface WatchingSystemHost {
         // FS system to use
         system: System;
@@ -18,7 +18,7 @@ namespace ts {
 
         // Callbacks to do custom action before creating program and after creating program
         beforeCompile(compilerOptions: CompilerOptions): void;
-        afterCompile(host: PartialSystem, program: Program, builder: Builder): void;
+        afterCompile(host: DirectoryStructureHost, program: Program, builder: Builder): void;
     }
 
     const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
@@ -61,7 +61,7 @@ namespace ts {
         system.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + host.getNewLine());
     }
 
-    export function parseConfigFile(configFileName: string, optionsToExtend: CompilerOptions, system: PartialSystem, reportDiagnostic: DiagnosticReporter, reportWatchDiagnostic: DiagnosticReporter): ParsedCommandLine {
+    export function parseConfigFile(configFileName: string, optionsToExtend: CompilerOptions, system: DirectoryStructureHost, reportDiagnostic: DiagnosticReporter, reportWatchDiagnostic: DiagnosticReporter): ParsedCommandLine {
         let configFileText: string;
         try {
             configFileText = system.readFile(configFileName);
@@ -89,7 +89,7 @@ namespace ts {
         return configParseResult;
     }
 
-    function reportEmittedFiles(files: string[], system: PartialSystem): void {
+    function reportEmittedFiles(files: string[], system: DirectoryStructureHost): void {
         if (!files || files.length === 0) {
             return;
         }
@@ -100,7 +100,7 @@ namespace ts {
         }
     }
 
-    export function handleEmitOutputAndReportErrors(system: PartialSystem, program: Program,
+    export function handleEmitOutputAndReportErrors(system: DirectoryStructureHost, program: Program,
         emittedFiles: string[], emitSkipped: boolean,
         diagnostics: Diagnostic[], reportDiagnostic: DiagnosticReporter
     ): ExitStatus {
@@ -141,7 +141,7 @@ namespace ts {
             afterCompile: compileWatchedProgram,
         };
 
-        function compileWatchedProgram(host: PartialSystem, program: Program, builder: Builder) {
+        function compileWatchedProgram(host: DirectoryStructureHost, program: Program, builder: Builder) {
             // First get and report any syntactic errors.
             let diagnostics = program.getSyntacticDiagnostics().slice();
             let reportSemanticDiagnostics = false;
@@ -256,14 +256,14 @@ namespace ts {
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
 
-        const partialSystem = configFileName ? createCachedPartialSystem(system) : system;
+        const directoryStructureHost = configFileName ? createCachedDirectoryStructureHost(system) : system;
         if (configFileName) {
             watchFile(system, configFileName, scheduleProgramReload, writeLog);
         }
 
-        const getCurrentDirectory = memoize(() => partialSystem.getCurrentDirectory());
+        const getCurrentDirectory = memoize(() => directoryStructureHost.getCurrentDirectory());
         const realpath = system.realpath && ((path: string) => system.realpath(path));
-        const getCachedPartialSystem = configFileName && (() => partialSystem as CachedPartialSystem);
+        const getCachedDirectoryStructureHost = configFileName && (() => directoryStructureHost as CachedDirectoryStructureHost);
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
         let newLine = getNewLineCharacter(compilerOptions, system);
 
@@ -294,7 +294,7 @@ namespace ts {
             getCompilationSettings: () => compilerOptions,
             watchDirectoryOfFailedLookupLocation: watchDirectory,
             watchTypeRootsDirectory: watchDirectory,
-            getCachedPartialSystem,
+            getCachedDirectoryStructureHost,
             onInvalidatedResolution: scheduleProgramUpdate,
             onChangedAutomaticTypeDirectiveNames,
             writeLog
@@ -361,7 +361,7 @@ namespace ts {
                 missingFilePathsRequestedForRelease = undefined;
             }
 
-            afterCompile(partialSystem, program, builder);
+            afterCompile(directoryStructureHost, program, builder);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
@@ -376,11 +376,11 @@ namespace ts {
                 return !isString(hostSourceFileInfo);
             }
 
-            return partialSystem.fileExists(fileName);
+            return directoryStructureHost.fileExists(fileName);
         }
 
         function directoryExists(directoryName: string) {
-            return partialSystem.directoryExists(directoryName);
+            return directoryStructureHost.directoryExists(directoryName);
         }
 
         function readFile(fileName: string) {
@@ -392,7 +392,7 @@ namespace ts {
         }
 
         function getDirectories(path: string) {
-            return partialSystem.getDirectories(path);
+            return directoryStructureHost.getDirectories(path);
         }
 
         function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]) {
@@ -541,7 +541,7 @@ namespace ts {
             writeLog(`Reloading config file: ${configFileName}`);
             needsReload = false;
 
-            const cachedHost = partialSystem as CachedPartialSystem;
+            const cachedHost = directoryStructureHost as CachedDirectoryStructureHost;
             cachedHost.clearCache();
             const configParseResult = parseConfigFile(configFileName, optionsToExtendForConfigFile, cachedHost, reportDiagnostic, reportWatchDiagnostic);
             rootFileNames = configParseResult.fileNames;
@@ -586,7 +586,7 @@ namespace ts {
 
         function updateCachedSystemWithFile(fileName: string, path: Path, eventKind: FileWatcherEventKind) {
             if (configFileName) {
-                (partialSystem as CachedPartialSystem).addOrDeleteFile(fileName, path, eventKind);
+                (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(fileName, path, eventKind);
             }
         }
 
@@ -639,7 +639,7 @@ namespace ts {
                     const fileOrFolderPath = toPath(fileOrFolder);
 
                     // Since the file existance changed, update the sourceFiles cache
-                    (partialSystem as CachedPartialSystem).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
                     removeSourceFile(fileOrFolderPath);
 
                     // If the the added or created file or folder is not supported file name, ignore the file
@@ -651,7 +651,7 @@ namespace ts {
 
                     // Reload is pending, do the reload
                     if (!needsReload) {
-                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, partialSystem);
+                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, directoryStructureHost);
                         if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
                             reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
                         }

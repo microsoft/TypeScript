@@ -42,7 +42,7 @@ namespace ts {
         onInvalidatedResolution(): void;
         watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
         onChangedAutomaticTypeDirectiveNames(): void;
-        getCachedPartialSystem?(): CachedPartialSystem;
+        getCachedDirectoryStructureHost?(): CachedDirectoryStructureHost;
         projectName?: string;
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
@@ -396,9 +396,9 @@ namespace ts {
         function createDirectoryWatcher(directory: string, dirPath: Path) {
             return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrFolder => {
                 const fileOrFolderPath = resolutionHost.toPath(fileOrFolder);
-                if (resolutionHost.getCachedPartialSystem) {
+                if (resolutionHost.getCachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
                 }
 
                 // If the files are added to project root or node_modules directory, always run through the invalidation process
@@ -515,9 +515,9 @@ namespace ts {
             // Create new watch and recursive info
             return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrFolder => {
                 const fileOrFolderPath = resolutionHost.toPath(fileOrFolder);
-                if (resolutionHost.getCachedPartialSystem) {
+                if (resolutionHost.getCachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
                 }
 
                 // For now just recompile

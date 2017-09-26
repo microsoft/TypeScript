@@ -755,7 +755,7 @@ namespace ts.server {
                 directory,
                 fileOrFolder => {
                     const fileOrFolderPath = this.toPath(fileOrFolder);
-                    project.getCachedPartialSystem().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    project.getCachedDirectoryStructureHost().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
                     const configFilename = project.getConfigFilePath();
 
                     // If the the added or created file or folder is not supported file name, ignore the file
@@ -768,7 +768,7 @@ namespace ts.server {
                     // Reload is pending, do the reload
                     if (!project.pendingReload) {
                         const configFileSpecs = project.configFileSpecs;
-                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilationSettings(), project.getCachedPartialSystem(), this.hostConfiguration.extraFileExtensions);
+                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFilename), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
                         project.updateErrorOnNoInputFiles(result.fileNames.length !== 0);
                         this.updateNonInferredProjectFiles(project, result.fileNames, fileNamePropertyReader);
                         this.delayUpdateProjectGraphAndInferredProjectsRefresh(project);
@@ -1292,7 +1292,7 @@ namespace ts.server {
             return findProjectByName(projectFileName, this.externalProjects);
         }
 
-        private convertConfigFileContentToProjectOptions(configFilename: string, cachedPartialSystem: CachedPartialSystem) {
+        private convertConfigFileContentToProjectOptions(configFilename: string, cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
@@ -1304,7 +1304,7 @@ namespace ts.server {
             const errors = result.parseDiagnostics;
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,
-                cachedPartialSystem,
+                cachedDirectoryStructureHost,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
                 configFilename,
@@ -1429,8 +1429,8 @@ namespace ts.server {
         }
 
         private createConfiguredProject(configFileName: NormalizedPath) {
-            const cachedPartialSystem = createCachedPartialSystem(this.host);
-            const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedPartialSystem);
+            const cachedDirectoryStructureHost = createCachedDirectoryStructureHost(this.host);
+            const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedDirectoryStructureHost);
             this.logger.info(`Opened configuration file ${configFileName}`);
             const languageServiceEnabled = !this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
@@ -1441,7 +1441,7 @@ namespace ts.server {
                 projectOptions.compilerOptions,
                 languageServiceEnabled,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
-                cachedPartialSystem);
+                cachedDirectoryStructureHost);
 
             project.configFileSpecs = configFileSpecs;
             // TODO: We probably should also watch the configFiles that are extended
@@ -1488,7 +1488,7 @@ namespace ts.server {
                 else {
                     const scriptKind = propertyReader.getScriptKind(f);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    scriptInfo = this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(normalizedPath, scriptKind, hasMixedContent, project.partialSystem);
+                    scriptInfo = this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(normalizedPath, scriptKind, hasMixedContent, project.directoryStructureHost);
                     path = scriptInfo.path;
                     // If this script info is not already a root add it
                     if (!project.isRoot(scriptInfo)) {
@@ -1539,7 +1539,7 @@ namespace ts.server {
         /* @internal */
         reloadConfiguredProject(project: ConfiguredProject) {
             // At this point, there is no reason to not have configFile in the host
-            const host = project.getCachedPartialSystem();
+            const host = project.getCachedDirectoryStructureHost();
 
             // Clear the cache since we are reloading the project from disk
             host.clearCache();
@@ -1637,7 +1637,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getOrCreateScriptInfoNotOpenedByClient(uncheckedFileName: string, hostToQueryFileExistsOn: PartialSystem) {
+        getOrCreateScriptInfoNotOpenedByClient(uncheckedFileName: string, hostToQueryFileExistsOn: DirectoryStructureHost) {
             return this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
                 toNormalizedPath(uncheckedFileName), /*scriptKind*/ undefined,
                 /*hasMixedContent*/ undefined, hostToQueryFileExistsOn
@@ -1669,15 +1669,15 @@ namespace ts.server {
             }
         }
 
-        getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: PartialSystem) {
+        getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
             return this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
-        getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: PartialSystem) {
+        getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
             return this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: PartialSystem) {
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
             Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
             const path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);

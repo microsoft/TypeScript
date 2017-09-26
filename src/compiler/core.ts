@@ -2668,13 +2668,10 @@ namespace ts {
 
     export function assertTypeIsNever(_: never): void { }
 
-    export interface CachedHost {
+    export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
         addOrDeleteFileOrFolder(fileOrFolder: string, fileOrFolderPath: Path): void;
         addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
         clearCache(): void;
-    }
-
-    export interface CachedPartialSystem extends PartialSystem, CachedHost {
     }
 
     interface MutableFileSystemEntries {
@@ -2682,7 +2679,7 @@ namespace ts {
         readonly directories: string[];
     }
 
-    export function createCachedPartialSystem(host: PartialSystem): CachedPartialSystem {
+    export function createCachedDirectoryStructureHost(host: DirectoryStructureHost): CachedDirectoryStructureHost {
         const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
         const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);

@@ -33,7 +33,7 @@ namespace ts {
     /**
      * Partial interface of the System thats needed to support the caching of directory structure
      */
-    export interface PartialSystem {
+    export interface DirectoryStructureHost {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
@@ -48,11 +48,8 @@ namespace ts {
         exit(exitCode?: number): void;
     }
 
-    export interface System extends PartialSystem {
+    export interface System extends DirectoryStructureHost {
         args: string[];
-        newLine: string;
-        useCaseSensitiveFileNames: boolean;
-        write(s: string): void;
         getFileSize?(path: string): number;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
