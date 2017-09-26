@@ -2338,15 +2338,15 @@ namespace ts {
             };
         }
 
-        function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
+        function writeKeyword(writer: EmitTextWriter, kind: SyntaxKind) {
             writer.writeKeyword(tokenToString(kind));
         }
 
-        function writePunctuation(writer: SymbolWriter, kind: SyntaxKind) {
+        function writePunctuation(writer: EmitTextWriter, kind: SyntaxKind) {
             writer.writePunctuation(tokenToString(kind));
         }
 
-        function writeSpace(writer: SymbolWriter) {
+        function writeSpace(writer: EmitTextWriter) {
             writer.writeSpace(" ");
         }
 
@@ -3127,7 +3127,7 @@ namespace ts {
              * Writes only the name of the symbol out to the writer. Uses the original source text
              * for the name of the symbol if it is available to match how the user wrote the name.
              */
-            function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
+            function appendSymbolNameOnly(symbol: Symbol, writer: EmitTextWriter): void {
                 writer.writeSymbol(getNameOfSymbol(symbol), symbol);
             }
 
@@ -3136,7 +3136,7 @@ namespace ts {
              * Uses the original source text for the name of the symbol if it is available to match how the user wrote the name,
              * ensuring that any names written with literals use element accesses.
              */
-            function appendPropertyOrElementAccessForSymbol(symbol: Symbol, writer: SymbolWriter): void {
+            function appendPropertyOrElementAccessForSymbol(symbol: Symbol, writer: EmitTextWriter): void {
                 const symbolName = getNameOfSymbol(symbol);
                 const firstChar = symbolName.charCodeAt(0);
                 const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
@@ -3161,7 +3161,7 @@ namespace ts {
              * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
              * Meaning needs to be specified if the enclosing declaration is given
              */
-            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags): void {
+            function buildSymbolDisplay(symbol: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags): void {
                 let parentSymbol: Symbol;
                 function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
                     if (parentSymbol) {
@@ -3235,7 +3235,7 @@ namespace ts {
                 }
             }
 
-            function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildTypeDisplay(type: Type, writer: EmitTextWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const globalFlagsToPass = globalFlags & (TypeFormatFlags.WriteOwnNameForAnyLike | TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
                 let inObjectTypeLiteral = false;
                 return writeType(type, globalFlags);
@@ -3629,14 +3629,14 @@ namespace ts {
                 }
             }
 
-            function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) {
+            function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) {
                 const targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface || targetSymbol.flags & SymbolFlags.TypeAlias) {
                     buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), writer, enclosingDeclaration, flags);
                 }
             }
 
-            function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildTypeParameterDisplay(tp: TypeParameter, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 appendSymbolNameOnly(tp.symbol, writer);
                 const constraint = getConstraintOfTypeParameter(tp);
                 if (constraint) {
@@ -3654,7 +3654,7 @@ namespace ts {
                 }
             }
 
-            function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildParameterDisplay(p: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const parameterNode = <ParameterDeclaration>p.valueDeclaration;
                 if (parameterNode ? isRestParameter(parameterNode) : isTransientSymbol(p) && p.isRestParameter) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
@@ -3678,7 +3678,7 @@ namespace ts {
                 buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
 
-            function buildBindingPatternDisplay(bindingPattern: BindingPattern, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildBindingPatternDisplay(bindingPattern: BindingPattern, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 // We have to explicitly emit square bracket and bracket because these tokens are not stored inside the node.
                 if (bindingPattern.kind === SyntaxKind.ObjectBindingPattern) {
                     writePunctuation(writer, SyntaxKind.OpenBraceToken);
@@ -3696,7 +3696,7 @@ namespace ts {
                 }
             }
 
-            function buildBindingElementDisplay(bindingElement: ArrayBindingElement, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildBindingElementDisplay(bindingElement: ArrayBindingElement, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (isOmittedExpression(bindingElement)) {
                     return;
                 }
@@ -3717,7 +3717,7 @@ namespace ts {
                 }
             }
 
-            function buildDisplayForTypeParametersAndDelimiters(typeParameters: ReadonlyArray<TypeParameter>, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildDisplayForTypeParametersAndDelimiters(typeParameters: ReadonlyArray<TypeParameter>, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, SyntaxKind.LessThanToken);
                     buildDisplayForCommaSeparatedList(typeParameters, writer, p => buildTypeParameterDisplay(p, writer, enclosingDeclaration, flags, symbolStack));
@@ -3725,7 +3725,7 @@ namespace ts {
                 }
             }
 
-            function buildDisplayForCommaSeparatedList<T>(list: ReadonlyArray<T>, writer: SymbolWriter, action: (item: T) => void) {
+            function buildDisplayForCommaSeparatedList<T>(list: ReadonlyArray<T>, writer: EmitTextWriter, action: (item: T) => void) {
                 for (let i = 0; i < list.length; i++) {
                     if (i > 0) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
@@ -3735,7 +3735,7 @@ namespace ts {
                 }
             }
 
-            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters: ReadonlyArray<TypeParameter>, mapper: TypeMapper, writer: SymbolWriter, enclosingDeclaration?: Node) {
+            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters: ReadonlyArray<TypeParameter>, mapper: TypeMapper, writer: EmitTextWriter, enclosingDeclaration?: Node) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, SyntaxKind.LessThanToken);
                     let flags = TypeFormatFlags.InFirstTypeArgument;
@@ -3751,7 +3751,7 @@ namespace ts {
                 }
             }
 
-            function buildDisplayForParametersAndDelimiters(thisParameter: Symbol | undefined, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildDisplayForParametersAndDelimiters(thisParameter: Symbol | undefined, parameters: Symbol[], writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 writePunctuation(writer, SyntaxKind.OpenParenToken);
                 if (thisParameter) {
                     buildParameterDisplay(thisParameter, writer, enclosingDeclaration, flags, symbolStack);
@@ -3766,7 +3766,7 @@ namespace ts {
                 writePunctuation(writer, SyntaxKind.CloseParenToken);
             }
 
-            function buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]): void {
+            function buildTypePredicateDisplay(predicate: TypePredicate, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]): void {
                 if (isIdentifierTypePredicate(predicate)) {
                     writer.writeParameter(predicate.parameterName);
                 }
@@ -3779,7 +3779,7 @@ namespace ts {
                 buildTypeDisplay(predicate.type, writer, enclosingDeclaration, flags, symbolStack);
             }
 
-            function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildReturnTypeDisplay(signature: Signature, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const returnType = getReturnTypeOfSignature(signature);
                 if (flags & TypeFormatFlags.SuppressAnyReturnType && isTypeAny(returnType)) {
                     return;
@@ -3802,7 +3802,7 @@ namespace ts {
                 }
             }
 
-            function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, symbolStack?: Symbol[]) {
+            function buildSignatureDisplay(signature: Signature, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, symbolStack?: Symbol[]) {
                 if (kind === SignatureKind.Construct) {
                     writeKeyword(writer, SyntaxKind.NewKeyword);
                     writeSpace(writer);
@@ -3822,7 +3822,7 @@ namespace ts {
                 buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
 
-            function buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildIndexSignatureDisplay(info: IndexInfo, writer: EmitTextWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (info) {
                     if (info.isReadonly) {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
@@ -23693,7 +23693,7 @@ namespace ts {
             }
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
             let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
@@ -23705,12 +23705,12 @@ namespace ts {
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
-        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             const signature = getSignatureFromDeclaration(signatureDeclaration);
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             const type = getWidenedType(getRegularTypeOfExpression(expr));
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
@@ -23760,7 +23760,7 @@ namespace ts {
             return false;
         }
 
-        function writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: SymbolWriter) {
+        function writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: EmitTextWriter) {
             const type = getTypeOfSymbol(getSymbolOfNode(node));
             writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
         }

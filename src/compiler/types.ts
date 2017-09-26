@@ -2744,39 +2744,17 @@ namespace ts {
     }
 
     export interface SymbolDisplayBuilder {
-        buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
-        buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
-        buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
-        buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-    }
-
-    export interface SymbolWriter {
-        writeKeyword(text: string): void;
-        writeOperator(text: string): void;
-        writePunctuation(text: string): void;
-        writeSpace(text: string): void;
-        writeStringLiteral(text: string): void;
-        writeParameter(text: string): void;
-        writeProperty(text: string): void;
-        writeSymbol(text: string, symbol: Symbol): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        clear(): void;
-
-        // Called when the symbol writer encounters a symbol to write.  Currently only used by the
-        // declaration emitter to help determine if it should patch up the final declaration file
-        // with import statements it previously saw (but chose not to emit).
-        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
-        reportInaccessibleThisError(): void;
-        reportPrivateInBaseOfClassExpression(propertyName: string): void;
+        buildTypeDisplay(type: Type, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildSymbolDisplay(symbol: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
+        buildSignatureDisplay(signature: Signature, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
+        buildIndexSignatureDisplay(info: IndexInfo, writer: EmitTextWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
+        buildParameterDisplay(parameter: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypeParameterDisplay(tp: TypeParameter, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypePredicateDisplay(predicate: TypePredicate, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildReturnTypeDisplay(signature: Signature, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
 
     export const enum TypeFormatFlags {
@@ -2902,9 +2880,9 @@ namespace ts {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
-        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter): void;
+        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter): void;
+        writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -2918,7 +2896,7 @@ namespace ts {
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-        writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: SymbolWriter): void;
+        writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: EmitTextWriter): void;
         getJsxFactoryEntity(): EntityName;
     }
 
@@ -4536,7 +4514,6 @@ namespace ts {
         /*@internal*/ extendedDiagnostics?: boolean;
     }
 
-    /*@internal*/
     export interface EmitTextWriter {
         write(s: string): void;
         writeTextOfNode(text: string, node: Node): void;
@@ -4552,6 +4529,22 @@ namespace ts {
         getIndent(): number;
         isAtStartOfLine(): boolean;
         reset(): void;
+
+        writeKeyword(text: string): void;
+        writeOperator(text: string): void;
+        writePunctuation(text: string): void;
+        writeSpace(text: string): void;
+        writeStringLiteral(text: string): void;
+        writeParameter(text: string): void;
+        writeProperty(text: string): void;
+        writeSymbol(text: string, symbol: Symbol): void;
+
+        // Called when the symbol writer encounters a symbol to write.  Currently only used by the
+        // declaration emitter to help determine if it should patch up the final declaration file
+        // with import statements it previously saw (but chose not to emit).
+        trackSymbol?(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError?(): void;
+        reportPrivateInBaseOfClassExpression?(propertyName: string): void;
     }
 
     export interface TextSpan {
@@ -4589,5 +4582,17 @@ namespace ts {
     // SyntaxKind.SyntaxList
     export interface SyntaxList extends Node {
         _children: Node[];
+    }
+
+    export interface SymbolAccessibilityDiagnostic {
+        errorNode: Node;
+        diagnosticMessage: DiagnosticMessage;
+        typeName?: DeclarationName | QualifiedName;
+    }
+
+    export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
+
+    export interface EmitTextWriterForDeclarations extends EmitTextWriter {
+        getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
     }
 }
