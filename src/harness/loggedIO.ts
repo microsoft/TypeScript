@@ -206,10 +206,10 @@ namespace Playback {
             (<any>wrapper)[prop] = (<any>underlying)[prop];
         });
 
-        wrapper.startReplayFromString = (logString) => {
+        wrapper.startReplayFromString = logString => {
             wrapper.startReplayFromData(JSON.parse(logString));
         };
-        wrapper.startReplayFromData = (log) => {
+        wrapper.startReplayFromData = log => {
             replayLog = log;
             // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
             replayLog.filesRead = replayLog.filesRead.filter(f => f.result.contents !== undefined);
