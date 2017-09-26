@@ -60,12 +60,12 @@ namespace Harness.Parallel.Host {
                     try {
                         size = statSync(file).size;
                     }
-                    catch (e) {
+                    catch {
                         // May be a directory
                         try {
                             size = Harness.IO.listFiles(file, /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
                         }
-                        catch (e2) {
+                        catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run
                             size = 0;
                         }
