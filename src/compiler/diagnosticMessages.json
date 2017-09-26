@@ -831,6 +831,11 @@
         "category": "Error",
         "code": 1254
     },
+    "Experimental support for optional chaining is a feature that is subject to change in a future release. Set the 'experimentalOptionalChaining' option to remove this warning.": {
+        "category": "Error",
+        "code": 1255
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -3313,6 +3318,10 @@
     "Disable strict checking of generic signatures in function types.": {
         "category": "Message",
         "code": 6185
+    },
+    "Enables experimental support for optional chaining.": {
+        "category": "Message",
+        "code": 6186
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

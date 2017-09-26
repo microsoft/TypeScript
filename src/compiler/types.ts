@@ -81,6 +81,7 @@ namespace ts {
         DotDotDotToken,
         SemicolonToken,
         CommaToken,
+        QuestionDotToken,
         LessThanToken,
         LessThanSlashToken,
         GreaterThanToken,
@@ -382,6 +383,7 @@ namespace ts {
         CommaListExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
+        OptionalExpression,
 
         // Enum value count
         Count,
@@ -425,20 +427,22 @@ namespace ts {
         NestedNamespace =    1 << 2,  // Namespace declaration
         Synthesized =        1 << 3,  // Node was synthesized during transformation
         Namespace =          1 << 4,  // Namespace declaration
-        ExportContext =      1 << 5,  // Export context (initialized by binding)
-        ContainsThis =       1 << 6,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions =  1 << 10, // If the file has async functions (initialized by binding)
-        DisallowInContext =  1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 13, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 14, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 15, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
+        OptionalExpression = 1 << 5,  // OptionalExpression (?.)
+        OptionalChain =      1 << 6,  // Optional chaining (expressions following ?.)
+        ExportContext =      1 << 7,  // Export context (initialized by binding)
+        ContainsThis =       1 << 8,  // Interface contains references to "this"
+        HasImplicitReturn =  1 << 9,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 10,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 11,  // Set if module declaration is an augmentation for the global scope
+        HasAsyncFunctions =  1 << 12, // If the file has async functions (initialized by binding)
+        DisallowInContext =  1 << 13, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 14, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 15, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 16, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 17, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 18, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 19, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 20, // If we've computed data from children and cached it in this node
 
         // This flag will be set when the parser encounters a dynamic import expression so that module resolution
         // will not have to walk the tree if the flag is not set. However, this flag is just a approximation because
@@ -449,8 +453,8 @@ namespace ts {
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
         /* @internal */
-        PossiblyContainsDynamicImport = 1 << 19,
-        JSDoc =              1 << 20, // If node was parsed inside jsdoc
+        PossiblyContainsDynamicImport = 1 << 20,
+        JSDoc =              1 << 21, // If node was parsed inside jsdoc
 
         BlockScoped = Let | Const,
 
@@ -458,10 +462,12 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | OptionalChain,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
+
+        Optional = OptionalExpression | OptionalChain,
     }
 
     export const enum ModifierFlags {
@@ -3215,17 +3221,18 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
-
         /* @internal */
+        Optional                = 1 << 26,  // Optional chaining type marker
+
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral,
         Unit = Literal | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
-        DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
+        DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null | Optional,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
+        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive | Optional,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral | Index,
@@ -3656,6 +3663,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalOptionalChaining?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;

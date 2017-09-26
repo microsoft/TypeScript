@@ -2532,6 +2532,11 @@ namespace ts {
             return token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken;
         }
 
+        function nextTokenIsOpenBracket() {
+            nextToken();
+            return token() === SyntaxKind.OpenBracketToken;
+        }
+
         function parseTypeLiteral(): TypeLiteralNode {
             const node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             node.members = parseObjectTypeMembers();
@@ -4186,9 +4191,22 @@ namespace ts {
 
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
-                const dotToken = parseOptionalToken(SyntaxKind.DotToken);
-                if (dotToken) {
+                const isOptionalExpression = token() === SyntaxKind.QuestionDotToken;
+                const isOptionalCall = isOptionalExpression && lookAhead(nextTokenIsOpenParenOrLessThan);
+                if (isOptionalCall) {
+                    // In an optional-chaining call or new expression, we defer parsing `.?` to parseCallExpressionRest.
+                    return <MemberExpression>expression;
+                }
+
+                let flags: NodeFlags = NodeFlags.None;
+                if (isOptionalExpression) flags |= NodeFlags.OptionalExpression;
+                if (expression.flags & NodeFlags.Optional) flags |= NodeFlags.OptionalChain;
+
+                const isOptionalPropertyAccess = isOptionalExpression && !lookAhead(nextTokenIsOpenBracket);
+                if (isOptionalPropertyAccess || token() === SyntaxKind.DotToken) {
+                    nextToken();
                     const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                    propertyAccess.flags = flags;
                     propertyAccess.expression = expression;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
                     expression = finishNode(propertyAccess);
@@ -4198,14 +4216,18 @@ namespace ts {
                 if (token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
                     nextToken();
                     const nonNullExpression = <NonNullExpression>createNode(SyntaxKind.NonNullExpression, expression.pos);
+                    nonNullExpression.flags = flags;
                     nonNullExpression.expression = expression;
                     expression = finishNode(nonNullExpression);
                     continue;
                 }
 
                 // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName
-                if (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken)) {
+                // however, `?.[` is unambiguously *not* a ComputedPropertyName.
+                const isOptionalElementAccess = isOptionalExpression && !isOptionalPropertyAccess;
+                if (isOptionalElementAccess || (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken))) {
                     const indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+                    indexedAccess.flags = flags;
                     indexedAccess.expression = expression;
 
                     // It's not uncommon for a user to write: "new Type[]".
@@ -4225,6 +4247,7 @@ namespace ts {
 
                 if (token() === SyntaxKind.NoSubstitutionTemplateLiteral || token() === SyntaxKind.TemplateHead) {
                     const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
+                    tagExpression.flags = flags;
                     tagExpression.tag = expression;
                     tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
                         ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
@@ -4240,32 +4263,41 @@ namespace ts {
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
+
+                // If we parsed MemberExpression and see a `?.` here, then we are part of an optional chain.
+                const isOptionalExpression = parseOptional(SyntaxKind.QuestionDotToken);
+
+                let flags: NodeFlags = NodeFlags.None;
+                if (isOptionalExpression) flags |= NodeFlags.OptionalExpression;
+                if (expression.flags & NodeFlags.Optional) flags |= NodeFlags.OptionalChain;
+
+                let typeArguments: NodeArray<TypeNode>;
                 if (token() === SyntaxKind.LessThanToken) {
-                    // See if this is the start of a generic invocation.  If so, consume it and
-                    // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
-                    // part of an arithmetic expression.  Break out so we consume it higher in the
-                    // stack.
-                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
-                    if (!typeArguments) {
-                        return expression;
+                    if (isOptionalExpression) {
+                        // If we are part of an optional chain, this *must* be a generic call.
+                        typeArguments = parseTypeArgumentsInExpression();
                     }
-
-                    const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.expression = expression;
-                    callExpr.typeArguments = typeArguments;
-                    callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
-                    continue;
+                    else {
+                        // See if this is the start of a generic invocation.  If so, consume it and
+                        // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
+                        // part of an arithmetic expression.  Break out so we consume it higher in the
+                        // stack.
+                        typeArguments = tryParse(parseTypeArgumentsInExpression);
+                        if (!typeArguments) {
+                            return expression;
+                        }
+                    }
                 }
-                else if (token() === SyntaxKind.OpenParenToken) {
-                    const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.expression = expression;
-                    callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
-                    continue;
+                else if (token() !== SyntaxKind.LessThanToken) {
+                    return expression;
                 }
 
-                return expression;
+                const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                callExpr.flags = flags;
+                callExpr.expression = expression;
+                callExpr.typeArguments = typeArguments;
+                callExpr.arguments = parseArgumentList();
+                expression = finishNode(callExpr);
             }
         }
 
@@ -4306,6 +4338,7 @@ namespace ts {
                 case SyntaxKind.ColonToken:                     // foo<x>:
                 case SyntaxKind.SemicolonToken:                 // foo<x>;
                 case SyntaxKind.QuestionToken:                  // foo<x>?
+                case SyntaxKind.QuestionDotToken:               // foo<x>?.
                 case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
                 case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
                 case SyntaxKind.ExclamationEqualsToken:         // foo<x> !=

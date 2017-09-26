@@ -1195,12 +1195,13 @@ namespace ts {
         }
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
+            const isOptionalExpression = node.flags & NodeFlags.OptionalExpression;
             let indentBeforeDot = false;
             let indentAfterDot = false;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
-                const dotToken = createToken(SyntaxKind.DotToken);
+                const dotToken = createToken(isOptionalExpression ? SyntaxKind.QuestionDotToken : SyntaxKind.DotToken);
                 dotToken.pos = dotRangeStart;
                 dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
@@ -1210,8 +1211,8 @@ namespace ts {
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);
 
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-            write(shouldEmitDotDot ? ".." : ".");
+            const shouldEmitDotDot = !isOptionalExpression && !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
+            write(shouldEmitDotDot ? ".." : isOptionalExpression ? "?." : ".");
 
             increaseIndentIf(indentAfterDot);
             emit(node.name);
@@ -1240,13 +1241,16 @@ namespace ts {
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            write("[");
+            write(node.flags & NodeFlags.OptionalExpression ? "?.[" : "[");
             emitExpression(node.argumentExpression);
             write("]");
         }
 
         function emitCallExpression(node: CallExpression) {
             emitExpression(node.expression);
+            if (node.flags & NodeFlags.OptionalExpression) {
+                write("?.");
+            }
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }

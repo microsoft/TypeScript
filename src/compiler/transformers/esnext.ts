@@ -26,6 +26,7 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
+        let optionalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression | undefined;
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
@@ -39,6 +40,7 @@ namespace ts {
 
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
+            optionalExpression = undefined;
             return visited;
         }
 
@@ -103,6 +105,12 @@ namespace ts {
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
                 case SyntaxKind.CatchClause:
                     return visitCatchClause(node as CatchClause);
+                case SyntaxKind.CallExpression:
+                    return visitCallExpression(node as CallExpression);
+                case SyntaxKind.PropertyAccessExpression:
+                    return visitPropertyAccessExpression(node as PropertyAccessExpression);
+                case SyntaxKind.ElementAccessExpression:
+                    return visitElementAccessExpression(node as ElementAccessExpression);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -716,6 +724,101 @@ namespace ts {
                 }
             }
             return statements;
+        }
+
+        function getEffectiveExpressionOfOptionalExpression(node: PropertyAccessExpression | ElementAccessExpression | CallExpression): Expression | undefined {
+            if (node.flags & NodeFlags.OptionalExpression) {
+                return node.expression;
+            }
+
+            if (node.flags & NodeFlags.OptionalChain) {
+                if (isPropertyAccessExpression(node.expression) ||
+                    isElementAccessExpression(node.expression) ||
+                    isCallExpression(node.expression)) {
+                    return getEffectiveExpressionOfOptionalExpression(node.expression);
+                }
+            }
+        }
+
+        type OptionalChain = PropertyAccessExpression | ElementAccessExpression | CallExpression;
+
+        function isOptionalExpression(node: OptionalChain) {
+            return !!(node.flags & NodeFlags.OptionalExpression);
+        }
+
+        function isOptionalChain(node: Expression): node is OptionalChain {
+            return isPropertyAccessExpression(node)
+                || isElementAccessExpression(node)
+                || isCallExpression(node);
+        }
+
+        function visitOptionalChain(node: OptionalChain) {
+            let chain = node;
+            const stack: OptionalChain[] = [chain];
+            while (!isOptionalExpression(chain) && isOptionalChain(chain.expression)) {
+                chain = chain.expression;
+                stack.push(chain);
+            }
+
+            const temp = createTempVariable(hoistVariableDeclaration);
+            const root = visitNode(chain.expression, visitor, isExpression);
+            setOriginalNode(temp, root);
+            setSourceMapRange(temp, root);
+            setEmitFlags(temp, EmitFlags.NoComments);
+
+            let expression: LeftHandSideExpression = temp;
+            while (stack.length) {
+                chain = stack.pop();
+                switch (chain.kind) {
+                    case SyntaxKind.PropertyAccessExpression:
+                        expression = createPropertyAccess(expression, visitNode(chain.name, visitor, isIdentifier));
+                        break;
+                    case SyntaxKind.ElementAccessExpression:
+                        expression = createElementAccess(expression, visitNode(chain.argumentExpression, visitor, isExpression));
+                        break;
+                    case SyntaxKind.CallExpression:
+                        expression = createCall(expression, /*typeArguments*/ undefined, visitNodes(chain.arguments, visitor, isExpression));
+                        break;
+                }
+
+                setOriginalNode(expression, chain);
+                setSourceMapRange(expression, chain);
+                setCommentRange(expression, chain);
+                setEmitFlags(expression, EmitFlags.NoLeadingComments);
+            }
+
+            const condition = createEquality(createAssignment(temp, root), createNull());
+            setSourceMapRange(condition, root);
+
+            const voidZero = createVoidZero();
+            setSourceMapRange(voidZero, root);
+
+            const conditional = createConditional(condition, voidZero, expression);
+            setOriginalNode(conditional, node);
+            setSourceMapRange(conditional, node);
+            setCommentRange(conditional, node);
+            return conditional;
+        }
+
+        function visitPropertyAccessExpression(node: PropertyAccessExpression) {
+            if (node.flags & NodeFlags.Optional) {
+                return visitOptionalChain(node);
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitElementAccessExpression(node: ElementAccessExpression) {
+            if (node.flags & NodeFlags.Optional) {
+                return visitOptionalChain(node);
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitCallExpression(node: CallExpression) {
+            if (node.flags & NodeFlags.Optional) {
+                return visitOptionalChain(node);
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         function enableSubstitutionForAsyncMethodsWithSuper() {

@@ -859,6 +859,7 @@ namespace ts {
 
     export function createPropertyAccess(expression: Expression, name: string | Identifier) {
         const node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
+        if (expression.flags & NodeFlags.Optional) node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
         node.name = asName(name);
         setEmitFlags(node, EmitFlags.NoIndentation);
@@ -876,6 +877,7 @@ namespace ts {
 
     export function createElementAccess(expression: Expression, index: number | Expression) {
         const node = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
+        if (expression.flags & NodeFlags.Optional) node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = asExpression(index);
         return node;
@@ -890,6 +892,7 @@ namespace ts {
 
     export function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>) {
         const node = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
+        if (expression.flags & NodeFlags.Optional) node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
         node.typeArguments = asNodeArray(typeArguments);
         node.arguments = parenthesizeListElements(createNodeArray(argumentsArray));
@@ -2500,6 +2503,10 @@ namespace ts {
     export function createAssignment(left: Expression, right: Expression): BinaryExpression;
     export function createAssignment(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.EqualsToken, right);
+    }
+
+    export function createEquality(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.EqualsEqualsToken, right);
     }
 
     export function createStrictEquality(left: Expression, right: Expression) {
