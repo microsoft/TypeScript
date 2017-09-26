@@ -548,11 +548,15 @@ declare class c1 {
 }
 declare var i1: c1;
 declare var i1_p: number;
-declare var i1_f: (b: number) => number;
+declare var i1_f: {
+    (b: number): number;
+};
 declare var i1_r: number;
 declare var i1_prop: number;
 declare var i1_nc_p: number;
-declare var i1_ncf: (b: number) => number;
+declare var i1_ncf: {
+    (b: number): number;
+};
 declare var i1_ncr: number;
 declare var i1_ncprop: number;
 declare var i1_s_p: number;
