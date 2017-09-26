@@ -35,16 +35,16 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         if (decl && !decl.type) {
             const annotate = getJSDocType(decl) ? annotateTypeFromJSDoc :
                 getJSDocReturnType(decl) ? annotateReturnTypeFromJSDoc :
-                undefined;
+                    undefined;
             if (annotate) {
                 return [{
                     name: annotate.name,
                     description: annotate.description,
                     actions: [
                         {
-                        description: annotate.description,
-                        name: actionName
-                    }
+                            description: annotate.description,
+                            name: actionName
+                        }
                     ]
                 }];
             }
@@ -62,10 +62,9 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isTypedNode);
-        const jsdocType = getJSDocType(decl);
-        const jsdocReturn = getJSDocReturnType(decl);
-        if (!decl || !jsdocType && !jsdocReturn || decl.type) {
-            Debug.fail(`!decl || !jsdocType && !jsdocReturn || decl.type: !${decl} || !${jsdocType} && !{jsdocReturn} || ${decl.type}`);
+        const jsdocType = getJSDocReturnType(decl) || getJSDocType(decl);
+        if (!decl || !jsdocType || decl.type) {
+            Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
             return undefined;
         }
 
@@ -76,12 +75,12 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             // other syntax changes
             const arrow = decl.parent as ArrowFunction;
             const param = decl as ParameterDeclaration;
-            const replacementParam = createParameter(param.decorators, param.modifiers, param.dotDotDotToken, param.name, param.questionToken, jsdocType, param.initializer);
+            const replacementParam = createParameter(param.decorators, param.modifiers, param.dotDotDotToken, param.name, param.questionToken, transformJSDocType(jsdocType) as TypeNode, param.initializer);
             const replacement = createArrowFunction(arrow.modifiers, arrow.typeParameters, [replacementParam], arrow.type, arrow.equalsGreaterThanToken, arrow.body);
             changeTracker.replaceRange(sourceFile, { pos: arrow.getStart(), end: arrow.end }, replacement);
         }
         else {
-            changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, replaceType(decl, jsdocType, jsdocReturn));
+            changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, replaceType(decl, transformJSDocType(jsdocType) as TypeNode));
         }
         return {
             edits: changeTracker.getChanges(),
@@ -98,7 +97,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-    function replaceType(decl: DeclarationWithType, jsdocType: TypeNode, jsdocReturn: TypeNode) {
+    function replaceType(decl: DeclarationWithType, jsdocType: TypeNode) {
         switch (decl.kind) {
             case SyntaxKind.VariableDeclaration:
                 return createVariableDeclaration(decl.name, jsdocType, decl.initializer);
@@ -109,15 +108,15 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.PropertyDeclaration:
                 return createProperty(decl.decorators, decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
             case SyntaxKind.FunctionDeclaration:
-                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
+                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocType, decl.body);
             case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
+                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, jsdocType, decl.body);
             case SyntaxKind.ArrowFunction:
-                return createArrowFunction(decl.modifiers, decl.typeParameters, decl.parameters, jsdocReturn, decl.equalsGreaterThanToken, decl.body);
+                return createArrowFunction(decl.modifiers, decl.typeParameters, decl.parameters, jsdocType, decl.equalsGreaterThanToken, decl.body);
             case SyntaxKind.MethodDeclaration:
-                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, decl.parameters, jsdocReturn, decl.body);
+                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, decl.parameters, jsdocType, decl.body);
             case SyntaxKind.GetAccessor:
-                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, decl.parameters, jsdocReturn, decl.body);
+                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, decl.parameters, jsdocType, decl.body);
             default:
                 Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
                 return undefined;
@@ -143,5 +142,83 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             && !parameter.type                  // parameter may not have a type annotation
             && !parameter.initializer           // parameter may not have an initializer
             && isIdentifier(parameter.name);    // parameter name must be identifier
+    }
+
+    function transformJSDocType(node: Node): Node | undefined {
+        if (node === undefined) {
+            return undefined;
+        }
+        switch (node.kind) {
+            case SyntaxKind.JSDocAllType:
+            case SyntaxKind.JSDocUnknownType:
+                return createTypeReferenceNode("any", emptyArray);
+            case SyntaxKind.JSDocOptionalType:
+                return visitJSDocOptionalType(node as JSDocOptionalType);
+            case SyntaxKind.JSDocNonNullableType:
+                return transformJSDocType((node as JSDocNonNullableType).type);
+            case SyntaxKind.JSDocNullableType:
+                return visitJSDocNullableType(node as JSDocNullableType);
+            case SyntaxKind.JSDocVariadicType:
+                return visitJSDocVariadicType(node as JSDocVariadicType);
+            case SyntaxKind.JSDocFunctionType:
+                return visitJSDocFunctionType(node as JSDocFunctionType);
+            case SyntaxKind.Parameter:
+                return visitJSDocParameter(node as ParameterDeclaration);
+            case SyntaxKind.TypeReference:
+                return visitJSDocTypeReference(node as TypeReferenceNode);
+            default:
+                return visitEachChild(node, transformJSDocType, /*context*/ undefined) as TypeNode;
+        }
+    }
+
+    function visitJSDocOptionalType(node: JSDocOptionalType) {
+        return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("undefined", emptyArray)]);
+    }
+
+    function visitJSDocNullableType(node: JSDocNullableType) {
+        return createUnionTypeNode([visitNode(node.type, transformJSDocType), createTypeReferenceNode("null", emptyArray)]);
+    }
+
+    function visitJSDocVariadicType(node: JSDocVariadicType) {
+        return createArrayTypeNode(visitNode(node.type, transformJSDocType));
+    }
+
+    function visitJSDocFunctionType(node: JSDocFunctionType) {
+        const parameters = node.parameters && node.parameters.map(transformJSDocType);
+        return createFunctionTypeNode(emptyArray, parameters as ParameterDeclaration[], node.type);
+    }
+
+    function visitJSDocParameter(node: ParameterDeclaration) {
+        const name = node.name || "arg" + node.parent.parameters.indexOf(node);
+        return createParameter(node.decorators, node.modifiers, node.dotDotDotToken, name, node.questionToken, node.type, node.initializer);
+    }
+
+    function visitJSDocTypeReference(node: TypeReferenceNode) {
+        let name = node.typeName;
+        let args = node.typeArguments;
+        if (isIdentifier(node.typeName)) {
+            let text = node.typeName.text;
+            switch (node.typeName.text) {
+                case "String":
+                case "Boolean":
+                case "Object":
+                case "Number":
+                    text = text.toLowerCase();
+                    break;
+                case "array":
+                case "date":
+                case "promise":
+                    text = text[0].toUpperCase() + text.slice(1);
+                    break;
+            }
+            name = createIdentifier(text);
+            if ((text === "Array" || text === "Promise") && !node.typeArguments) {
+                args = createNodeArray([createTypeReferenceNode("any", emptyArray)]);
+            }
+            else {
+                args = visitNodes(node.typeArguments, transformJSDocType);
+            }
+        }
+        return createTypeReferenceNode(name, args);
     }
 }

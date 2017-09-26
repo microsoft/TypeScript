@@ -545,8 +545,9 @@ namespace ts {
                 case SyntaxKind.TypeReference:
                     return emitTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.FunctionType:
-                case SyntaxKind.JSDocFunctionType:
                     return emitFunctionType(<FunctionTypeNode>node);
+                case SyntaxKind.JSDocFunctionType:
+                    return emitJSDocFunctionType(node as JSDocFunctionType);
                 case SyntaxKind.ConstructorType:
                     return emitConstructorType(<ConstructorTypeNode>node);
                 case SyntaxKind.TypeQuery:
@@ -576,8 +577,10 @@ namespace ts {
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
                 case SyntaxKind.JSDocAllType:
+                    write("*");
+                    break;
                 case SyntaxKind.JSDocUnknownType:
-                    write("any");
+                    write("?");
                     break;
                 case SyntaxKind.JSDocNullableType:
                     return emitJSDocNullableType(node as JSDocNullableType);
@@ -930,14 +933,13 @@ namespace ts {
             if (node.name) {
                 emit(node.name);
             }
-            else if (node.parent.kind === SyntaxKind.JSDocFunctionType) {
-                const i = (node.parent as JSDocFunctionType).parameters.indexOf(node);
-                if (i > -1) {
-                    write("arg" + i);
-                }
-            }
             emitIfPresent(node.questionToken);
-            emitWithPrefix(": ", node.type);
+            if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
+                emit(node.type);
+            }
+            else {
+                emitWithPrefix(": ", node.type);
+            }
             emitExpressionWithPrefix(" = ", node.initializer);
         }
 
@@ -1056,18 +1058,27 @@ namespace ts {
             emit(node.type);
         }
 
-        function emitJSDocNullableType(node: JSDocNullableType) {
+        function emitJSDocFunctionType(node: JSDocFunctionType) {
+            write("function");
+            emitParameters(node, node.parameters);
+            write(":");
             emit(node.type);
-            write(" | null");
+        }
+
+
+        function emitJSDocNullableType(node: JSDocNullableType) {
+            write("?");
+            emit(node.type);
         }
 
         function emitJSDocNonNullableType(node: JSDocNonNullableType) {
+            write("!");
             emit(node.type);
         }
 
         function emitJSDocOptionalType(node: JSDocOptionalType) {
             emit(node.type);
-            write(" | undefined");
+            write("=");
         }
 
         function emitConstructorType(node: ConstructorTypeNode) {
@@ -1096,8 +1107,8 @@ namespace ts {
         }
 
         function emitJSDocVariadicType(node: JSDocVariadicType) {
+            write("...");
             emit(node.type);
-            write("[]");
         }
 
         function emitTupleType(node: TupleTypeNode) {
@@ -2397,7 +2408,7 @@ namespace ts {
             emitList(parentNode, parameters, ListFormat.Parameters);
         }
 
-        function canEmitSimpleArrowHead(parentNode: FunctionTypeNode | ArrowFunction | JSDocFunctionType, parameters: NodeArray<ParameterDeclaration>) {
+        function canEmitSimpleArrowHead(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
             const parameter = singleOrUndefined(parameters);
             return parameter
                 && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
@@ -2414,7 +2425,7 @@ namespace ts {
                 && isIdentifier(parameter.name);    // parameter name must be identifier
         }
 
-        function emitParametersForArrow(parentNode: FunctionTypeNode | ArrowFunction | JSDocFunctionType, parameters: NodeArray<ParameterDeclaration>) {
+        function emitParametersForArrow(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
             if (canEmitSimpleArrowHead(parentNode, parameters)) {
                 emitList(parentNode, parameters, ListFormat.Parameters & ~ListFormat.Parenthesis);
             }
