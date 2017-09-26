@@ -6352,11 +6352,11 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScript: boolean) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
-                if ((isJavaScript || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
+                if ((isJavaScriptImplicitAny || numTypeArguments >= minTypeArgumentCount) && numTypeArguments <= numTypeParameters) {
                     if (!typeArguments) {
                         typeArguments = [];
                     }
@@ -6365,12 +6365,12 @@ namespace ts {
                     // If a type parameter does not have a default type, or if the default type
                     // is a forward reference, the empty object type is used.
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        typeArguments[i] = getDefaultTypeArgumentType(isJavaScript);
+                        typeArguments[i] = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
                         const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
-                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScript);
+                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                     }
                 }
             }
@@ -6806,21 +6806,24 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                const isJavascript = isInJavaScriptFile(node);
-                if (!isJavascript && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
-                    error(node,
-                        minTypeArgumentCount === typeParameters.length
-                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
-                        typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType),
-                        minTypeArgumentCount,
-                        typeParameters.length);
+                const isJs = isInJavaScriptFile(node);
+                const isJsImplicitAny = !compilerOptions.noImplicitAny && isJs;
+                if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                    const diag = minTypeArgumentCount === typeParameters.length
+                        ? isJs
+                            ? Diagnostics.Generic_type_0_requires_1_type_arguments_provide_these_with_an_augments_or_extends_tag
+                            : Diagnostics.Generic_type_0_requires_1_type_argument_s
+                        : isJs
+                            ? Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments_provide_these_with_an_augments_or_extends_tag
+                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
+                    const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
+                    error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
                     return unknownType;
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJavascript));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJsImplicitAny));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {

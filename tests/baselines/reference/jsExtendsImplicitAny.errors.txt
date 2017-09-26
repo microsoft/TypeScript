@@ -1,0 +1,11 @@
+/b.js(1,17): error TS8022: Generic type 'A<T>' requires '1' type arguments; provide these with an '@augments' or '@extends' tag.
+
+
+==== /a.d.ts (0 errors) ====
+    declare class A<T> { x: T; }
+    
+==== /b.js (1 errors) ====
+    class B extends A {}
+                    ~
+!!! error TS8022: Generic type 'A<T>' requires '1' type arguments; provide these with an '@augments' or '@extends' tag.
+    
