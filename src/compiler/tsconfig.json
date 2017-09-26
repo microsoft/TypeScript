@@ -39,7 +39,7 @@
         "program.ts",
         "builder.ts",
         "resolutionCache.ts",
-        "watchedProgram.ts",
+        "watch.ts",
         "commandLineParser.ts",
         "tsc.ts",
         "diagnosticInformationMap.generated.ts"

@@ -1,5 +1,5 @@
 /// <reference path="program.ts"/>
-/// <reference path="watchedProgram.ts"/>
+/// <reference path="watch.ts"/>
 /// <reference path="commandLineParser.ts"/>
 
 namespace ts {
