@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.convertJSDocToTypes {
+namespace ts.refactor.annotateWithTypeFromJSDoc {
     const actionName = "annotate";
 
     const annotateTypeFromJSDoc: Refactor = {
