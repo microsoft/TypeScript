@@ -173,16 +173,6 @@ function handleTestConfig() {
                         break;
                     case "rwc":
                         runners.push(new RWCRunner());
-                        const documents = Harness.IO.readDirectory("internal/cases/rwc", [".json"], [], [], 1);
-                        for (const doc of documents) {
-                            console.log(`Migrating ${doc} to new test format...`);
-                            const baseName = ts.getBaseFileName(doc);
-                            const name = baseName.substring(0, baseName.length - 5);
-                            const log = JSON.parse(Harness.IO.readFile(doc));
-                            const newFile = Playback.oldStyleLogIntoNewStyleLog(log, (path, string) => Harness.IO.writeFile(`./internal/cases/rwc/${path}`, string), name);
-                            Harness.IO.writeFile(`internal/cases/rwc/${name}/test.json`, JSON.stringify(newFile, null, 4)); // tslint:disable-line:no-null-keyword
-                            Harness.IO.deleteFile(doc);
-                        }
                         break;
                     case "test262":
                         runners.push(new Test262BaselineRunner());
