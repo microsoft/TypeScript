@@ -29,4 +29,4 @@ function () { });
 foo(/*c7*/ function () { });
 foo(
 /*c7*/
-/*c8*/function () { });
+/*c8*/ function () { });

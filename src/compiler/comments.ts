@@ -274,6 +274,9 @@ namespace ts {
             if (hasTrailingNewLine) {
                 writer.writeLine();
             }
+            else if (_kind === SyntaxKind.MultiLineCommentTrivia) {
+                writer.write(" ");
+            }
         }
 
         function emitLeadingCommentsOfPosition(pos: number) {

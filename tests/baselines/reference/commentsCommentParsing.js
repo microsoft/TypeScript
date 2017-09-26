@@ -178,7 +178,7 @@ jsDocMultiLine();
 *New line1
 *New Line2*/
 /** Shoul mege this line as well
-* and this too*//** Another this one too*/
+* and this too*/ /** Another this one too*/
 function jsDocMultiLineMerge() {
 }
 jsDocMultiLineMerge();
@@ -188,23 +188,23 @@ function jsDocMixedComments1() {
 }
 jsDocMixedComments1();
 /// Triple slash comment
-/** jsdoc comment *//*** another jsDocComment*/
+/** jsdoc comment */ /*** another jsDocComment*/
 function jsDocMixedComments2() {
 }
 jsDocMixedComments2();
-/** jsdoc comment *//*** another jsDocComment*/
+/** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 function jsDocMixedComments3() {
 }
 jsDocMixedComments3();
-/** jsdoc comment *//*** another jsDocComment*/
+/** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 /// Triple slash comment 2
 function jsDocMixedComments4() {
 }
 jsDocMixedComments4();
 /// Triple slash comment 1
-/** jsdoc comment *//*** another jsDocComment*/
+/** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 /// Triple slash comment 2
 function jsDocMixedComments5() {

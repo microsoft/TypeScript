@@ -86,8 +86,8 @@ function blah3(a // trailing commen single line
 ) {
 }
 lambdaFoo = function (a, b) { return a * b; }; // This is trailing comment
-/*leading comment*/(function () { return 0; }); // Needs to be wrapped in parens to be a valid expression (not declaration)
-/*leading comment*/(function () { return 0; }); //trailing comment
+/*leading comment*/ (function () { return 0; }); // Needs to be wrapped in parens to be a valid expression (not declaration)
+/*leading comment*/ (function () { return 0; }); //trailing comment
 function blah4(/*1*/ a /*2*/, /*3*/ b /*4*/) {
 }
 function foo1() {

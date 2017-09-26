@@ -59,4 +59,4 @@ interface B<TBase extends Base> extends A {
 }
 var b: B<Derived> = null;
 var z: Derived = b.foo();
-*/
+*/ 
