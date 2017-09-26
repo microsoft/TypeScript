@@ -367,16 +367,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return undefined;
             }
-
-            const getCurrentDirectoryCallback = memoize(
-                () => this.getCurrentDirectoryForScriptInfoEmit(info)
-            );
-            return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles, getCurrentDirectoryCallback);
-        }
-
-        getCurrentDirectoryForScriptInfoEmit(info: ScriptInfo) {
-            const projectRootPath = this.getProjectRootPath();
-            return projectRootPath || getDirectoryPath(info.fileName);
+            return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
