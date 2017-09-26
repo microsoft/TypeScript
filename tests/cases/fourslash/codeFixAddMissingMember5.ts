@@ -14,7 +14,7 @@ verify.codeFix({
     description: "Initialize static property 'foo'.",
     index: 0,
     // TODO: GH#18743 and GH#18445
-    newContent: `class C {
+    newFileContent: `class C {
     static method() {
         ()=>{ this.foo === 10 };
     }

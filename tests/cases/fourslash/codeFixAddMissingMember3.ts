@@ -10,7 +10,7 @@ verify.codeFix({
     description: "Declare static property 'foo'.",
     index: 0,
     // TODO: GH#18445
-    newContent: `class C {
+    newFileContent: `class C {
     static foo: number;\r
     static method() {
         this.foo = 10;

@@ -9,7 +9,7 @@
 
 verify.codeFix({
     description: "Add 'this.' to unresolved variable.",
-    newContent: `
+    newRangeContent: `
         this.foo = 10;
     `
 });

@@ -10,7 +10,7 @@ verify.codeFix({
     description: "Add index signature for property 'foo'.",
     index: 1,
     // TODO: GH#18445
-    newContent: `class C {
+    newFileContent: `class C {
     [x: string]: number;\r
     method() {
         this.foo = 10;

@@ -10,7 +10,7 @@ verify.codeFix({
     description: "Declare property 'foo'.",
     index: 0,
     // TODO: GH#18445
-    newContent: `class C {
+    newFileContent: `class C {
     foo: number;\r
     method() {
         this.foo = 10;

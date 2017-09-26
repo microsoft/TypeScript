@@ -2361,11 +2361,12 @@ namespace FourSlash {
                 this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
             }
 
-            if (this.getRanges().length === 0) {
-                this.verifyCurrentFileContent(options.newContent);
+            if (options.newFileContent) {
+                assert(!options.newRangeContent);
+                this.verifyCurrentFileContent(options.newFileContent);
             }
             else {
-                this.verifyRangeIs(options.newContent, /*includeWhitespace*/ true);
+                this.verifyRangeIs(options.newRangeContent, /*includeWhitespace*/ true);
             }
         }
 
@@ -4398,7 +4399,9 @@ namespace FourSlashInterface {
 
     export interface VerifyCodeFixOptions {
         description: string;
-        newContent: string;
+        // One of these should be defined.
+        newFileContent?: string;
+        newRangeContent?: string;
         errorCode?: number;
         index?: number;
     }
