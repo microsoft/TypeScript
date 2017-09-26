@@ -540,8 +540,8 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, file));
         }
 
-        applyCodeFixCommand(file: string, action: CodeActionCommand): ApplyCodeFixCommandResult {
-            const args: protocol.ApplyCodeFixCommandRequestArgs = { file, action };
+        applyCodeFixCommand(file: string, command: CodeActionCommand): ApplyCodeFixCommandResult {
+            const args: protocol.ApplyCodeFixCommandRequestArgs = { file, command };
 
             const request = this.processRequest<protocol.ApplyCodeFixCommandRequest>(CommandNames.ApplyCodeFixCommand, args);
             const response = this.processResponse<protocol.ApplyCodeFixCommandResponse>(request);

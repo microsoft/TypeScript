@@ -1834,7 +1834,7 @@ namespace ts {
                         //tsconfigLocation: action.tsconfigLocation,
                     });
                 case "nonsense": {
-                    const nonsensePath = getDirectoryPath(fileName);
+                    const nonsensePath = combinePaths(getDirectoryPath(fileName), "nonsense.d.ts");
                     if (host.fileExists(nonsensePath)) {
                         throw new Error(`File already exists: ${nonsensePath}`);
                     }

@@ -1543,7 +1543,7 @@ namespace ts.server {
 
         private applyCodeFixCommand(args: protocol.ApplyCodeFixCommandRequestArgs): { response: {}, successMessage: string } {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const { successMessage } = project.getLanguageService().applyCodeFixCommand(file, args.action);
+            const { successMessage } = project.getLanguageService().applyCodeFixCommand(file, args.command);
             return { response: {}, successMessage };
         }
 

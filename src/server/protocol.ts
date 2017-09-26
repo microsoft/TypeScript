@@ -577,7 +577,7 @@ namespace ts.server.protocol {
     }
 
     export interface ApplyCodeFixCommandRequestArgs extends FileRequestArgs {
-        action: CodeActionCommand; //TODO: should just be `{}` from the protocol's perspective
+        command: CodeActionCommand; //TODO: should just be `{}` from the protocol's perspective
     }
 
     /**
