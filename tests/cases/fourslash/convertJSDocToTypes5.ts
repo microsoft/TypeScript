@@ -12,4 +12,4 @@ verify.fileAfterApplyingRefactorAtMarker('1',
     /** @type {number | null} */
     /** @type {number | null} */
     p: number | null = null;
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');

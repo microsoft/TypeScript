@@ -8,4 +8,4 @@ verify.fileAfterApplyingRefactorAtMarker('1',
 `class C {
     /** @return {number} */
     get c(): number { return 12; }
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with return type from JSDoc', 'annotate');

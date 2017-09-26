@@ -14,4 +14,4 @@ verify.fileAfterApplyingRefactorAtMarker('1',
  * @returns {number}
  */
 function f(x): number {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with return type from JSDoc', 'annotate');

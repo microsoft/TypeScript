@@ -24,7 +24,7 @@ verify.fileAfterApplyingRefactorAtMarker('1',
  * @param {number!} delta
  */
 function f(x: any, y, z, alpha, beta, gamma, delta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 
 verify.applicableRefactorAvailableAtMarker('2');
 verify.fileAfterApplyingRefactorAtMarker('2',
@@ -38,7 +38,7 @@ verify.fileAfterApplyingRefactorAtMarker('2',
  * @param {number!} delta
  */
 function f(x: any, y: any, z, alpha, beta, gamma, delta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 
 verify.applicableRefactorAvailableAtMarker('3');
 verify.fileAfterApplyingRefactorAtMarker('3',
@@ -52,7 +52,7 @@ verify.fileAfterApplyingRefactorAtMarker('3',
  * @param {number!} delta
  */
 function f(x: any, y: any, z: number | undefined, alpha, beta, gamma, delta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 verify.applicableRefactorAvailableAtMarker('4');
 verify.fileAfterApplyingRefactorAtMarker('4',
 `/**
@@ -65,7 +65,7 @@ verify.fileAfterApplyingRefactorAtMarker('4',
  * @param {number!} delta
  */
 function f(x: any, y: any, z: number | undefined, alpha: number[], beta, gamma, delta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 
 verify.applicableRefactorAvailableAtMarker('5');
 verify.fileAfterApplyingRefactorAtMarker('5',
@@ -81,7 +81,7 @@ verify.fileAfterApplyingRefactorAtMarker('5',
 function f(x: any, y: any, z: number | undefined, alpha: number[], beta: (this: {
     a: string;
 }, arg1: string, arg2: number) => boolean, gamma, delta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 verify.applicableRefactorAvailableAtMarker('6');
 verify.fileAfterApplyingRefactorAtMarker('6',
 `/**
@@ -96,7 +96,7 @@ verify.fileAfterApplyingRefactorAtMarker('6',
 function f(x: any, y: any, z: number | undefined, alpha: number[], beta: (this: {
     a: string;
 }, arg1: string, arg2: number) => boolean, gamma: number | null, delta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 
 verify.applicableRefactorAvailableAtMarker('7');
 verify.fileAfterApplyingRefactorAtMarker('7',
@@ -112,4 +112,4 @@ verify.fileAfterApplyingRefactorAtMarker('7',
 function f(x: any, y: any, z: number | undefined, alpha: number[], beta: (this: {
     a: string;
 }, arg1: string, arg2: number) => boolean, gamma: number | null, delta: number) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');

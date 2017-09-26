@@ -1,17 +1,11 @@
 /// <reference path='fourslash.ts' />
-
-/////**
-//// * @param {number} x
-//// * @returns {number}
-//// */
-////var f = /*1*/function (x) {
+/////** @return {number} */
+////function f() {
+////    /*1*/return 12;
 ////}
-
 verify.applicableRefactorAvailableAtMarker('1');
 verify.fileAfterApplyingRefactorAtMarker('1',
-`/**
- * @param {number} x
- * @returns {number}
- */
-var f = function(x): number {
+`/** @return {number} */
+function f(): number {
+    return 12;
 }`, 'Annotate with return type from JSDoc', 'annotate');

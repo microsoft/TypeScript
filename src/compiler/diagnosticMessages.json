@@ -3704,8 +3704,12 @@
         "category": "Message",
         "code": 95004
     },
-    "Convert to Typescript type": {
+    "Annotate with type from JSDoc": {
         "category": "Message",
         "code": 95005
+    },
+    "Annotate with return type from JSDoc": {
+        "category": "Message",
+        "code": 95006
     }
 }

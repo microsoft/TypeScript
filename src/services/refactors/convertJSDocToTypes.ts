@@ -1,10 +1,16 @@
 /* @internal */
 namespace ts.refactor.convertJSDocToTypes {
-    const actionName = "convert";
+    const actionName = "annotate";
 
-    const convertJSDocToTypes: Refactor = {
-        name: "Convert to Typescript type",
-        description: Diagnostics.Convert_to_Typescript_type.message,
+    const annotateTypeFromJSDoc: Refactor = {
+        name: "Annotate with type from JSDoc",
+        description: Diagnostics.Annotate_with_type_from_JSDoc.message,
+        getEditsForAction,
+        getAvailableActions
+    };
+    const annotateReturnTypeFromJSDoc: Refactor = {
+        name: "Annotate with return type from JSDoc",
+        description: Diagnostics.Annotate_with_return_type_from_JSDoc.message,
         getEditsForAction,
         getAvailableActions
     };
@@ -16,7 +22,8 @@ namespace ts.refactor.convertJSDocToTypes {
         | PropertySignature
         | PropertyDeclaration;
 
-    registerRefactor(convertJSDocToTypes);
+    registerRefactor(annotateTypeFromJSDoc);
+    registerRefactor(annotateReturnTypeFromJSDoc);
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (isInJavaScriptFile(context.file)) {
@@ -25,19 +32,22 @@ namespace ts.refactor.convertJSDocToTypes {
 
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(node, isTypedNode);
-        if (decl && (getJSDocType(decl) || getJSDocReturnType(decl)) && !decl.type) {
-            return [
-                {
-                    name: convertJSDocToTypes.name,
-                    description: convertJSDocToTypes.description,
+        if (decl && !decl.type) {
+            const annotate = getJSDocType(decl) ? annotateTypeFromJSDoc :
+                getJSDocReturnType(decl) ? annotateReturnTypeFromJSDoc :
+                undefined;
+            if (annotate) {
+                return [{
+                    name: annotate.name,
+                    description: annotate.description,
                     actions: [
                         {
-                            description: convertJSDocToTypes.description,
-                            name: actionName
-                        }
+                        description: annotate.description,
+                        name: actionName
+                    }
                     ]
-                }
-            ];
+                }];
+            }
         }
     }
 

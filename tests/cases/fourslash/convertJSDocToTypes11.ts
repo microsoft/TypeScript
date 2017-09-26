@@ -12,4 +12,4 @@ verify.fileAfterApplyingRefactorAtMarker('2',
  * @param {?} x
  * @returns {number}
  */
-var f = (x: any) => x`, 'Convert to Typescript type', 'convert');
+var f = (x: any) => x`, 'Annotate with type from JSDoc', 'annotate');

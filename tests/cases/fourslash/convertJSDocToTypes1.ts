@@ -7,4 +7,4 @@
 verify.applicableRefactorAvailableAtMarker('1');
 verify.fileAfterApplyingRefactorAtMarker('1',
 `/** @type {number} */
-var x: number;`, 'Convert to Typescript type', 'convert');
+var x: number;`, 'Annotate with type from JSDoc', 'annotate');

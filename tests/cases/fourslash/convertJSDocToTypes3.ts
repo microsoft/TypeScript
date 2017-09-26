@@ -19,7 +19,7 @@ verify.fileAfterApplyingRefactorAtMarker('1',
  * @param {*} beta - I have no idea how this got here
  */
 function f(x: number, y, z: string, alpha, beta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 
 verify.applicableRefactorAvailableAtMarker('2');
 verify.fileAfterApplyingRefactorAtMarker('2',
@@ -34,7 +34,7 @@ function f(x: number, y: {
     a: string;
     b: Date;
 }, z: string, alpha, beta) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
 
 verify.not.applicableRefactorAvailableAtMarker('3');
 verify.not.applicableRefactorAvailableAtMarker('4');
@@ -51,4 +51,4 @@ function f(x: number, y: {
     a: string;
     b: Date;
 }, z: string, alpha, beta: any) {
-}`, 'Convert to Typescript type', 'convert');
+}`, 'Annotate with type from JSDoc', 'annotate');
