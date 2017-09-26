@@ -78,8 +78,7 @@ namespace ts {
         close(): void;
     }
 
-    export interface DirectoryWatcher extends FileWatcher {
-        directoryName: string;
+    interface DirectoryWatcher extends FileWatcher {
         referenceCount: number;
     }
 
@@ -187,7 +186,7 @@ namespace ts {
                     fileWatcherCallbacks.remove(filePath, callback);
                 }
 
-                function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {
+                function fileEventHandler(eventName: string, relativeFileName: string | undefined, baseDirPath: string) {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                     const fileName = !isString(relativeFileName)
                         ? undefined
@@ -255,19 +254,25 @@ namespace ts {
             }
 
             function fsWatchDirectory(directoryName: string, callback: (eventName: string, relativeFileName: string) => void, recursive?: boolean): FileWatcher {
-                // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
-                // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                 let options: any;
+                /** Watcher for the directory depending on whether it is missing or present */
                 let watcher = !directoryExists(directoryName) ?
                     watchMissingDirectory() :
                     watchPresentDirectory();
                 return {
                     close: () => {
+                        // Close the watcher (either existing directory watcher or missing directory watcher)
                         watcher.close();
                     }
                 };
 
+                /**
+                 * Watch the directory that is currently present
+                 * and when the watched directory is deleted, switch to missing directory watcher
+                 */
                 function watchPresentDirectory(): FileWatcher {
+                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
+                    // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     if (options === undefined) {
                         if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
                             options = { persistent: true, recursive: !!recursive };
@@ -283,14 +288,20 @@ namespace ts {
                         callback
                     );
                     dirWatcher.on("error", () => {
-                        // Deleting file
-                        watcher = watchMissingDirectory();
-                        // Call the callback for current directory
-                        callback("rename", "");
+                        if (!directoryExists(directoryName)) {
+                            // Deleting directory
+                            watcher = watchMissingDirectory();
+                            // Call the callback for current directory
+                            callback("rename", "");
+                        }
                     });
                     return dirWatcher;
                 }
 
+                /**
+                 * Watch the directory that is missing
+                 * and switch to existing directory when the directory is created
+                 */
                 function watchMissingDirectory(): FileWatcher {
                     return fsWatchFile(directoryName, (_fileName, eventKind) => {
                         if (eventKind === FileWatcherEventKind.Created && directoryExists(directoryName)) {

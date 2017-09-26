@@ -1683,7 +1683,7 @@ namespace ts {
             return undefined;
         }
         let extendedConfigPath = toPath(extendedConfig, basePath, getCanonicalFileName);
-        if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, ".json")) {
+        if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
             extendedConfigPath = `${extendedConfigPath}.json` as Path;
             if (!host.fileExists(extendedConfigPath)) {
                 errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));

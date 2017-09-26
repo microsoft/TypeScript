@@ -186,7 +186,7 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         hasInvalidatedResolution?: HasInvalidatedResolution;
-        hasChangedAutomaticTypeDirectiveNames?(): boolean;
+        hasChangedAutomaticTypeDirectiveNames?: boolean;
         directoryExists?(directoryName: string): boolean;
 
         /*
@@ -278,6 +278,7 @@ namespace ts {
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
 
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, isDetailed?: boolean): EmitOutput | EmitOutputDetailed;
 
         getProgram(): Program;

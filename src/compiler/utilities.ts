@@ -3521,7 +3521,7 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: Map<T>, onDeleteValue: (existingValue: T, key: string) => void) {
+    export function clearMap<T>(map: Map<T>, onDeleteValue: (valueInMap: T, key: string) => void) {
         // Remove all
         map.forEach(onDeleteValue);
         map.clear();
@@ -3566,76 +3566,6 @@ namespace ts {
                 map.set(key, createNewValue(key, valueInNewMap));
             }
         });
-    }
-
-    /**
-     * Find the index where arrayA and arrayB differ
-     */
-    export function findDiffIndex<T>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<T>) {
-        for (let i = 0; i < arrayA.length; i++) {
-            if (i === arrayB.length || arrayA[i] !== arrayB[i]) {
-                return i;
-            }
-        }
-        return arrayA.length;
-    }
-
-    export function addFileWatcher(host: System, file: string, cb: FileWatcherCallback): FileWatcher {
-        return host.watchFile(file, cb);
-    }
-
-    export function addFileWatcherWithLogging(host: System, file: string, cb: FileWatcherCallback, log: (s: string) => void): FileWatcher {
-        const watcherCaption = `FileWatcher:: `;
-        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, host, file, cb);
-    }
-
-    export type FilePathWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, filePath: Path) => void;
-    export function addFilePathWatcher(host: System, file: string, cb: FilePathWatcherCallback, path: Path): FileWatcher {
-        return host.watchFile(file, (fileName, eventKind) => cb(fileName, eventKind, path));
-    }
-
-    export function addFilePathWatcherWithLogging(host: System, file: string, cb: FilePathWatcherCallback, path: Path, log: (s: string) => void): FileWatcher {
-        const watcherCaption = `FileWatcher:: `;
-        return createWatcherWithLogging(addFileWatcher, watcherCaption, log, host, file, cb, path);
-    }
-
-    export function addDirectoryWatcher(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
-        const recursive = (flags & WatchDirectoryFlags.Recursive) !== 0;
-        return host.watchDirectory(directory, cb, recursive);
-    }
-
-    export function addDirectoryWatcherWithLogging(host: System, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, log: (s: string) => void): FileWatcher {
-        const watcherCaption = `DirectoryWatcher ${(flags & WatchDirectoryFlags.Recursive) !== 0 ? "recursive" : ""}:: `;
-        return createWatcherWithLogging(addDirectoryWatcher, watcherCaption, log, host, directory, cb, flags);
-    }
-
-    type WatchCallback<T, U> = (fileName: string, cbOptional1?: T, optional?: U) => void;
-    type AddWatch<T, U> = (host: System, file: string, cb: WatchCallback<T, U>, optional?: U) => FileWatcher;
-    function createWatcherWithLogging<T, U>(addWatch: AddWatch<T, U>, watcherCaption: string, log: (s: string) => void, host: System, file: string, cb: WatchCallback<T, U>, optional?: U): FileWatcher {
-        const info = `PathInfo: ${file}`;
-        log(`${watcherCaption}Added: ${info}`);
-        const watcher = addWatch(host, file, (fileName, cbOptional1?) => {
-            const optionalInfo = cbOptional1 !== undefined ? ` ${cbOptional1}` : "";
-            log(`${watcherCaption}Trigger: ${fileName}${optionalInfo} ${info}`);
-            const start = timestamp();
-            cb(fileName, cbOptional1, optional);
-            const elapsed = timestamp() - start;
-            log(`${watcherCaption}Elapsed: ${elapsed}ms Trigger: ${fileName}${optionalInfo} ${info}`);
-        }, optional);
-        return {
-            close: () => {
-                log(`${watcherCaption}Close: ${info}`);
-                watcher.close();
-            }
-        };
-    }
-
-    export function closeFileWatcher(watcher: FileWatcher) {
-        watcher.close();
-    }
-
-    export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
-        objWithWatcher.watcher.close();
     }
 
     /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */

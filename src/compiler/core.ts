@@ -2262,7 +2262,7 @@ namespace ts {
                 return ScriptKind.TS;
             case Extension.Tsx:
                 return ScriptKind.TSX;
-            case ".json":
+            case Extension.Json:
                 return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
@@ -2669,7 +2669,7 @@ namespace ts {
     export function assertTypeIsNever(_: never): void { }
 
     export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
-        addOrDeleteFileOrFolder(fileOrFolder: string, fileOrFolderPath: Path): void;
+        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): void;
         addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
         clearCache(): void;
     }
@@ -2695,7 +2695,7 @@ namespace ts {
             getCurrentDirectory,
             getDirectories,
             readDirectory,
-            addOrDeleteFileOrFolder,
+            addOrDeleteFileOrDirectory,
             addOrDeleteFile,
             clearCache,
             exit: code => host.exit(code)
@@ -2824,23 +2824,23 @@ namespace ts {
             }
         }
 
-        function addOrDeleteFileOrFolder(fileOrFolder: string, fileOrFolderPath: Path) {
-            const existingResult = getCachedFileSystemEntries(fileOrFolderPath);
+        function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
+            const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
             if (existingResult) {
                 // This was a folder already present, remove it if this doesnt exist any more
-                if (!host.directoryExists(fileOrFolder)) {
-                    cachedReadDirectoryResult.delete(fileOrFolderPath);
+                if (!host.directoryExists(fileOrDirectory)) {
+                    cachedReadDirectoryResult.delete(fileOrDirectoryPath);
                 }
             }
             else {
                 // This was earlier a file (hence not in cached directory contents)
                 // or we never cached the directory containing it
-                const parentResult = getCachedFileSystemEntriesForBaseDir(fileOrFolderPath);
+                const parentResult = getCachedFileSystemEntriesForBaseDir(fileOrDirectoryPath);
                 if (parentResult) {
-                    const baseName = getBaseNameOfFileName(fileOrFolder);
+                    const baseName = getBaseNameOfFileName(fileOrDirectory);
                     if (parentResult) {
-                        updateFilesOfFileSystemEntry(parentResult, baseName, host.fileExists(fileOrFolderPath));
-                        updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrFolderPath));
+                        updateFilesOfFileSystemEntry(parentResult, baseName, host.fileExists(fileOrDirectoryPath));
+                        updateFileSystemEntry(parentResult.directories, baseName, host.directoryExists(fileOrDirectoryPath));
                     }
                 }
             }

@@ -349,7 +349,7 @@ namespace ts.server {
         private readonly projectToSizeMap: Map<number> = createMap<number>();
         /**
          * This is a map of config file paths existance that doesnt need query to disk
-         * - The entry can be present because there is inferred project that needs to watch addition of config file to folder
+         * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
          *   In this case the exists could be true/false based on config file is present or not
          * - Or it is present if we have configured project open with config file at that location
          *   In this case the exists property is always true
@@ -753,15 +753,15 @@ namespace ts.server {
             return this.watchDirectory(
                 this.host,
                 directory,
-                fileOrFolder => {
-                    const fileOrFolderPath = this.toPath(fileOrFolder);
-                    project.getCachedDirectoryStructureHost().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                fileOrDirectory => {
+                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+                    project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                     const configFilename = project.getConfigFilePath();
 
-                    // If the the added or created file or folder is not supported file name, ignore the file
+                    // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrFolderPath !== directory && !isSupportedSourceFileName(fileOrFolder, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
-                        this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrFolder}`);
+                    if (fileOrDirectoryPath !== directory && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
+                        this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                         return;
                     }
 
@@ -833,7 +833,7 @@ namespace ts.server {
             switch (project.projectKind) {
                 case ProjectKind.External:
                     unorderedRemoveItem(this.externalProjects, <ExternalProject>project);
-                    this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
+                    this.projectToSizeMap.delete(project.getProjectName());
                     break;
                 case ProjectKind.Configured:
                     this.configuredProjects.delete((<ConfiguredProject>project).canonicalConfigFilePath);
@@ -852,7 +852,7 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.createInferredProject();
+                this.createInferredProject(getDirectoryPath(info.path));
 
             project.addRoot(info);
             project.updateGraph();
@@ -1374,7 +1374,7 @@ namespace ts.server {
 
             this.addFilesToNonInferredProjectAndUpdateGraph(project, files, externalFilePropertyReader, typeAcquisition);
             this.externalProjects.push(project);
-            this.sendProjectTelemetry(project.externalProjectName, project);
+            this.sendProjectTelemetry(projectFileName, project);
             return project;
         }
 
@@ -1461,7 +1461,7 @@ namespace ts.server {
             this.addFilesToNonInferredProjectAndUpdateGraph(project, filesToAdd, fileNamePropertyReader, projectOptions.typeAcquisition);
             this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFileExistenceByNewConfiguredProject(project);
-            this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
+            this.sendProjectTelemetry(configFileName, project, projectOptions);
             return project;
         }
 
@@ -1584,7 +1584,7 @@ namespace ts.server {
                         return project;
                     }
                 }
-                return this.createInferredProject(/*isSingleInferredProject*/ false, projectRootPath);
+                return this.createInferredProject(projectRootPath, /*isSingleInferredProject*/ false, projectRootPath);
             }
 
             // we don't have an explicit root path, so we should try to find an inferred project
@@ -1621,12 +1621,12 @@ namespace ts.server {
                 return this.inferredProjects[0];
             }
 
-            return this.createInferredProject(/*isSingleInferredProject*/ true);
+            return this.createInferredProject(/*rootDirectoryForResolution*/ undefined, /*isSingleInferredProject*/ true);
         }
 
-        private createInferredProject(isSingleInferredProject?: boolean, projectRootPath?: string): InferredProject {
+        private createInferredProject(rootDirectoryForResolution: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: string): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, rootDirectoryForResolution);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -1669,10 +1669,12 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
         getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
             return this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
+        /*@internal*/
         getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
             return this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }

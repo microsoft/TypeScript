@@ -245,7 +245,7 @@ namespace ts {
         const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[];                    // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
-        let changedAutomaticTypeDirectiveNames = false;                     // True if the automatic type directives have changed
+        let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
         const loggingEnabled = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
         const writeLog: (s: string) => void = loggingEnabled ? s => system.write(s) : noop;
@@ -269,26 +269,25 @@ namespace ts {
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
             // Members for CompilerHost
-            getSourceFile: getVersionedSourceFile,
+            getSourceFile: (fileName, languageVersion, onError?, shouldCreateNewSourceFile?) => getVersionedSourceFileByPath(fileName, toPath(fileName), languageVersion, onError, shouldCreateNewSourceFile),
             getSourceFileByPath: getVersionedSourceFileByPath,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
-            writeFile: (_fileName, _data, _writeByteOrderMark, _onError?, _sourceFiles?) => { },
+            writeFile: notImplemented,
             getCurrentDirectory,
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine,
             fileExists,
-            readFile,
-            trace,
-            directoryExists,
+            readFile: fileName => system.readFile(fileName),
+            trace: s => system.write(s + newLine),
+            directoryExists: directoryName => directoryStructureHost.directoryExists(directoryName),
             getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
-            getDirectories,
+            getDirectories: path => directoryStructureHost.getDirectories(path),
             realpath,
-            resolveTypeReferenceDirectives,
-            resolveModuleNames,
+            resolveTypeReferenceDirectives: (typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile),
+            resolveModuleNames: (moduleNames, containingFile, reusedNames?) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ false),
             onReleaseOldSourceFile,
-            hasChangedAutomaticTypeDirectiveNames,
             // Members for ResolutionCacheHost
             toPath,
             getCompilationSettings: () => compilerOptions,
@@ -296,12 +295,14 @@ namespace ts {
             watchTypeRootsDirectory: watchDirectory,
             getCachedDirectoryStructureHost,
             onInvalidatedResolution: scheduleProgramUpdate,
-            onChangedAutomaticTypeDirectiveNames,
+            onChangedAutomaticTypeDirectiveNames: () => {
+                hasChangedAutomaticTypeDirectiveNames = true;
+                scheduleProgramUpdate();
+            },
             writeLog
         };
         // Cache for the module resolution
-        const resolutionCache = createResolutionCache(compilerHost);
-        resolutionCache.setRootDirectory(configFileName ?
+        const resolutionCache = createResolutionCache(compilerHost, configFileName ?
             getDirectoryPath(getNormalizedAbsolutePath(configFileName, getCurrentDirectory())) :
             getCurrentDirectory()
         );
@@ -337,6 +338,7 @@ namespace ts {
             // Compile the program
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
+            compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
             program = createProgram(rootFileNames, compilerOptions, compilerHost, program);
             resolutionCache.finishCachingPerDirectoryResolution();
             builder.onProgramUpdateGraph(program, hasInvalidatedResolution);
@@ -379,36 +381,8 @@ namespace ts {
             return directoryStructureHost.fileExists(fileName);
         }
 
-        function directoryExists(directoryName: string) {
-            return directoryStructureHost.directoryExists(directoryName);
-        }
-
-        function readFile(fileName: string) {
-            return system.readFile(fileName);
-        }
-
-        function trace(s: string) {
-            return system.write(s + newLine);
-        }
-
-        function getDirectories(path: string) {
-            return directoryStructureHost.getDirectories(path);
-        }
-
-        function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]) {
-            return resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ false);
-        }
-
-        function resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string) {
-            return resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
-        }
-
         function getDefaultLibLocation(): string {
             return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
-        }
-
-        function getVersionedSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
-            return getVersionedSourceFileByPath(fileName, toPath(fileName), languageVersion, onError, shouldCreateNewSourceFile);
         }
 
         function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile {
@@ -594,15 +568,6 @@ namespace ts {
             return watchDirectoryWorker(system, directory, cb, flags, writeLog);
         }
 
-        function onChangedAutomaticTypeDirectiveNames() {
-            changedAutomaticTypeDirectiveNames = true;
-            scheduleProgramUpdate();
-        }
-
-        function hasChangedAutomaticTypeDirectiveNames() {
-            return changedAutomaticTypeDirectiveNames;
-        }
-
         function watchMissingFilePath(missingFilePath: Path) {
             return watchFilePath(system, missingFilePath, onMissingFileChange, missingFilePath, writeLog);
         }
@@ -633,19 +598,19 @@ namespace ts {
         function watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags) {
             return watchDirectory(
                 directory,
-                fileOrFolder => {
+                fileOrDirectory => {
                     Debug.assert(!!configFileName);
 
-                    const fileOrFolderPath = toPath(fileOrFolder);
+                    const fileOrDirectoryPath = toPath(fileOrDirectory);
 
                     // Since the file existance changed, update the sourceFiles cache
-                    (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
-                    removeSourceFile(fileOrFolderPath);
+                    (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    removeSourceFile(fileOrDirectoryPath);
 
-                    // If the the added or created file or folder is not supported file name, ignore the file
+                    // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrFolderPath !== directory && !isSupportedSourceFileName(fileOrFolder, compilerOptions)) {
-                        writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrFolder}`);
+                    if (fileOrDirectoryPath !== directory && !isSupportedSourceFileName(fileOrDirectory, compilerOptions)) {
+                        writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                         return;
                     }
 

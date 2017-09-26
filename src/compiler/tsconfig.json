@@ -36,6 +36,7 @@
         "sourcemap.ts",
         "declarationEmitter.ts",
         "emitter.ts",
+        "watchUtilities.ts",
         "program.ts",
         "builder.ts",
         "resolutionCache.ts",

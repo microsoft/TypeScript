@@ -4099,8 +4099,6 @@ namespace ts {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
         readonly failedLookupLocations: ReadonlyArray<string>;
-        /*@internal*/
-        isInvalidated?: boolean;
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -4114,8 +4112,6 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
         readonly failedLookupLocations: ReadonlyArray<string>;
-        /*@internal*/
-        isInvalidated?: boolean;
     }
 
     export interface HasInvalidatedResolution {
@@ -4150,7 +4146,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
         onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
         hasInvalidatedResolution?: HasInvalidatedResolution;
-        hasChangedAutomaticTypeDirectiveNames?(): boolean;
+        hasChangedAutomaticTypeDirectiveNames?: boolean;
     }
 
     /* @internal */

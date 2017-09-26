@@ -967,7 +967,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, libFile.path]);
         });
 
-        it("should resuse same project if file is opened from the configured project that has no open files", () => {
+        it("should reuse same project if file is opened from the configured project that has no open files", () => {
             const file1 = {
                 path: "/a/b/main.ts",
                 content: "let x =1;"
@@ -4639,7 +4639,7 @@ namespace ts.projectSystem {
                 verifyProjectAndWatchedDirectories();
                 callsTrackingHost.verifyNoHostCalls();
 
-                function getFilePathIfOpen(f: FileOrFolder) {
+                function getFilePathIfNotOpen(f: FileOrFolder) {
                     const path = toCanonical(f.path);
                     const info = projectService.getScriptInfoForPath(toCanonical(f.path));
                     return info && info.isScriptOpen() ? undefined : path;
@@ -4647,7 +4647,7 @@ namespace ts.projectSystem {
 
                 function verifyProjectAndWatchedDirectories() {
                     checkProjectActualFiles(project, map(projectFiles, f => f.path));
-                    checkWatchedFiles(host, mapDefined(projectFiles, getFilePathIfOpen));
+                    checkWatchedFiles(host, mapDefined(projectFiles, getFilePathIfNotOpen));
                     checkWatchedDirectories(host, watchingRecursiveDirectories, /*recursive*/ true);
                     checkWatchedDirectories(host, [], /*recursive*/ false);
                 }

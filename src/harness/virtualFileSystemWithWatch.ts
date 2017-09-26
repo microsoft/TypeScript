@@ -246,17 +246,17 @@ namespace ts.TestFSWithWatch {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             // always inject safelist file in the list of files
-            for (const fileOrFolder of fileOrFolderList.concat(this.withSafeList ? safeList : [])) {
-                const path = this.toFullPath(fileOrFolder.path);
+            for (const fileOrDirectory of fileOrFolderList.concat(this.withSafeList ? safeList : [])) {
+                const path = this.toFullPath(fileOrDirectory.path);
                 mapNewLeaves.set(path, true);
                 // If its a change
                 const currentEntry = this.fs.get(path);
                 if (currentEntry) {
                     if (isFile(currentEntry)) {
-                        if (isString(fileOrFolder.content)) {
+                        if (isString(fileOrDirectory.content)) {
                             // Update file
-                            if (currentEntry.content !== fileOrFolder.content) {
-                                currentEntry.content = fileOrFolder.content;
+                            if (currentEntry.content !== fileOrDirectory.content) {
+                                currentEntry.content = fileOrDirectory.content;
                                 this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
                             }
                         }
@@ -266,7 +266,7 @@ namespace ts.TestFSWithWatch {
                     }
                     else {
                         // Folder
-                        if (isString(fileOrFolder.content)) {
+                        if (isString(fileOrDirectory.content)) {
                             // TODO: Changing from folder => file
                         }
                         else {
@@ -275,32 +275,32 @@ namespace ts.TestFSWithWatch {
                     }
                 }
                 else {
-                    this.ensureFileOrFolder(fileOrFolder);
+                    this.ensureFileOrFolder(fileOrDirectory);
                 }
             }
 
             if (!isNewFs) {
-                this.fs.forEach((fileOrFolder, path) => {
+                this.fs.forEach((fileOrDirectory, path) => {
                     // If this entry is not from the new file or folder
                     if (!mapNewLeaves.get(path)) {
                         // Leaf entries that arent in new list => remove these
-                        if (isFile(fileOrFolder) || isFolder(fileOrFolder) && fileOrFolder.entries.length === 0) {
-                            this.removeFileOrFolder(fileOrFolder, folder => !mapNewLeaves.get(folder.path));
+                        if (isFile(fileOrDirectory) || isFolder(fileOrDirectory) && fileOrDirectory.entries.length === 0) {
+                            this.removeFileOrFolder(fileOrDirectory, folder => !mapNewLeaves.get(folder.path));
                         }
                     }
                 });
             }
         }
 
-        ensureFileOrFolder(fileOrFolder: FileOrFolder) {
-            if (isString(fileOrFolder.content)) {
-                const file = this.toFile(fileOrFolder);
+        ensureFileOrFolder(fileOrDirectory: FileOrFolder) {
+            if (isString(fileOrDirectory.content)) {
+                const file = this.toFile(fileOrDirectory);
                 Debug.assert(!this.fs.get(file.path));
                 const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
                 this.addFileOrFolderInFolder(baseFolder, file);
             }
             else {
-                const fullPath = getNormalizedAbsolutePath(fileOrFolder.path, this.currentDirectory);
+                const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
                 this.ensureFolder(fullPath);
             }
         }
@@ -326,44 +326,44 @@ namespace ts.TestFSWithWatch {
             return folder;
         }
 
-        private addFileOrFolderInFolder(folder: Folder, fileOrFolder: File | Folder) {
-            folder.entries.push(fileOrFolder);
-            this.fs.set(fileOrFolder.path, fileOrFolder);
+        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder) {
+            folder.entries.push(fileOrDirectory);
+            this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
-            if (isFile(fileOrFolder)) {
-                this.invokeFileWatcher(fileOrFolder.fullPath, FileWatcherEventKind.Created);
+            if (isFile(fileOrDirectory)) {
+                this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             }
-            this.invokeDirectoryWatcher(folder.fullPath, fileOrFolder.fullPath);
+            this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrFolder: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean) {
-            const basePath = getDirectoryPath(fileOrFolder.path);
+        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean) {
+            const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as Folder;
-            if (basePath !== fileOrFolder.path) {
+            if (basePath !== fileOrDirectory.path) {
                 Debug.assert(!!baseFolder);
-                filterMutate(baseFolder.entries, entry => entry !== fileOrFolder);
+                filterMutate(baseFolder.entries, entry => entry !== fileOrDirectory);
             }
-            this.fs.delete(fileOrFolder.path);
+            this.fs.delete(fileOrDirectory.path);
 
-            if (isFile(fileOrFolder)) {
-                this.invokeFileWatcher(fileOrFolder.fullPath, FileWatcherEventKind.Deleted);
+            if (isFile(fileOrDirectory)) {
+                this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
             }
             else {
-                Debug.assert(fileOrFolder.entries.length === 0);
-                const relativePath = this.getRelativePathToDirectory(fileOrFolder.fullPath, fileOrFolder.fullPath);
+                Debug.assert(fileOrDirectory.entries.length === 0);
+                const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
                 // since that is something we would want to do for both file as well as folder we are deleting
-                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrFolder.path), cb => this.directoryCallback(cb, relativePath));
-                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrFolder.path), cb => this.directoryCallback(cb, relativePath));
+                invokeWatcherCallbacks(this.watchedDirectories.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
+                invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(fileOrDirectory.path), cb => this.directoryCallback(cb, relativePath));
             }
 
-            if (basePath !== fileOrFolder.path) {
+            if (basePath !== fileOrDirectory.path) {
                 if (baseFolder.entries.length === 0 && isRemovableLeafFolder(baseFolder)) {
                     this.removeFileOrFolder(baseFolder, isRemovableLeafFolder);
                 }
                 else {
-                    this.invokeRecursiveDirectoryWatcher(baseFolder.fullPath, fileOrFolder.fullPath);
+                    this.invokeRecursiveDirectoryWatcher(baseFolder.fullPath, fileOrDirectory.fullPath);
                 }
             }
         }
@@ -402,13 +402,13 @@ namespace ts.TestFSWithWatch {
             }
         }
 
-        private toFile(fileOrFolder: FileOrFolder): File {
-            const fullPath = getNormalizedAbsolutePath(fileOrFolder.path, this.currentDirectory);
+        private toFile(fileOrDirectory: FileOrFolder): File {
+            const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
             return {
                 path: this.toPath(fullPath),
-                content: fileOrFolder.content,
+                content: fileOrDirectory.content,
                 fullPath,
-                fileSize: fileOrFolder.fileSize
+                fileSize: fileOrDirectory.fileSize
             };
         }
 
@@ -477,7 +477,7 @@ namespace ts.TestFSWithWatch {
             });
         }
 
-        watchDirectory(directoryName: string, cb: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
+        watchDirectory(directoryName: string, cb: DirectoryWatcherCallback, recursive: boolean): FileWatcher {
             const path = this.toFullPath(directoryName);
             const map = recursive ? this.watchedDirectoriesRecursive : this.watchedDirectories;
             const callback: TestDirectoryWatcher = {
@@ -486,8 +486,6 @@ namespace ts.TestFSWithWatch {
             };
             map.add(path, callback);
             return {
-                referenceCount: 0,
-                directoryName,
                 close: () => map.remove(path, callback)
             };
         }

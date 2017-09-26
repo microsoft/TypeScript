@@ -1,5 +1,6 @@
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
+/// <reference path="watchUtilities.ts"/>
 
 /*@internal*/
 namespace ts {
@@ -18,8 +19,6 @@ namespace ts {
         startCachingPerDirectoryResolution(): void;
         finishCachingPerDirectoryResolution(): void;
 
-        setRootDirectory(dir: string): void;
-
         updateTypeRootsWatch(): void;
         closeTypeRootsWatch(): void;
 
@@ -33,6 +32,12 @@ namespace ts {
 
     interface ResolutionWithResolvedFileName {
         resolvedFileName: string | undefined;
+    }
+
+    interface ResolvedModuleWithFailedLookupLocations extends ts.ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
+    }
+
+    interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
     }
 
     export interface ResolutionCacheHost extends ModuleResolutionHost {
@@ -67,7 +72,7 @@ namespace ts {
         (resolution: T): R;
     }
 
-    export function createResolutionCache(resolutionHost: ResolutionCacheHost): ResolutionCache {
+    export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Map<true> | undefined;
         let allFilesHaveInvalidatedResolution = false;
@@ -83,12 +88,18 @@ namespace ts {
 
         const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory());
 
+        /**
+         * These are the extensions that failed lookup files will have by default,
+         * any other extension of failed lookup will be store that path in custom failed lookup path
+         * This helps in not having to comb through all resolutions when files are added/removed
+         * Note that .d.ts file also has .d.ts extension hence will be part of default extensions
+         */
         const failedLookupDefaultExtensions = [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx, Extension.Json];
         const customFailedLookupPaths = createMap<number>();
 
         const directoryWatchesOfFailedLookups = createMap<DirectoryWatchesOfFailedLookup>();
-        let rootDir: string;
-        let rootPath: Path;
+        const rootDir = rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
+        const rootPath = rootDir && resolutionHost.toPath(rootDir);
 
         // TypeRoot watches for the types that get added as part of getAutomaticTypeDirectiveNames
         const typeRootsWatches = createMap<FileWatcher>();
@@ -103,7 +114,6 @@ namespace ts {
             removeResolutionsOfFile,
             invalidateResolutionOfFile,
             createHasInvalidatedResolution,
-            setRootDirectory,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
             clear
@@ -115,12 +125,6 @@ namespace ts {
 
         function getResolvedTypeReferenceDirective(resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
             return resolution.resolvedTypeReferenceDirective;
-        }
-
-        function setRootDirectory(dir: string) {
-            Debug.assert(!resolvedModuleNames.size && !resolvedTypeReferenceDirectives.size && !directoryWatchesOfFailedLookups.size);
-            rootDir = removeTrailingDirectorySeparator(getNormalizedAbsolutePath(dir, getCurrentDirectory()));
-            rootPath = resolutionHost.toPath(rootDir);
         }
 
         function isInDirectoryPath(dir: Path, file: Path) {
@@ -238,9 +242,17 @@ namespace ts {
                         perDirectoryResolution.set(name, resolution);
                     }
                     resolutionsInFile.set(name, resolution);
-                    const diffIndex = existingResolution && existingResolution.failedLookupLocations && resolution.failedLookupLocations && findDiffIndex(resolution.failedLookupLocations, existingResolution.failedLookupLocations);
-                    watchFailedLookupLocationOfResolution(resolution, diffIndex || 0);
-                    stopWatchFailedLookupLocationOfResolutionFrom(existingResolution, diffIndex || 0);
+                    if (resolution.failedLookupLocations) {
+                        if (existingResolution && existingResolution.failedLookupLocations) {
+                            watchAndStopWatchDiffFailedLookupLocations(resolution, existingResolution);
+                        }
+                        else {
+                            watchFailedLookupLocationOfResolution(resolution, 0);
+                        }
+                    }
+                    else if (existingResolution) {
+                        stopWatchFailedLookupLocationOfResolution(existingResolution);
+                    }
                     if (logChanges && filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
                         filesWithChangedSetOfUnresolvedImports.push(path);
                         // reset log changes to avoid recording the same file multiple times
@@ -344,68 +356,91 @@ namespace ts {
             return fileExtensionIsOneOf(path, failedLookupDefaultExtensions);
         }
 
-        function watchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations, startIndex?: number) {
-            if (resolution && resolution.failedLookupLocations) {
-                for (let i = startIndex || 0; i < resolution.failedLookupLocations.length; i++) {
-                    const failedLookupLocation = resolution.failedLookupLocations[i];
-                    const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
-                    // If the failed lookup location path is not one of the supported extensions,
-                    // store it in the custom path
-                    if (!isPathWithDefaultFailedLookupExtension(failedLookupLocationPath)) {
-                        const refCount = customFailedLookupPaths.get(failedLookupLocationPath) || 0;
-                        customFailedLookupPaths.set(failedLookupLocationPath, refCount + 1);
-                    }
-                    const { dir, dirPath } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
-                    const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
-                    if (dirWatcher) {
-                        dirWatcher.refCount++;
-                    }
-                    else {
-                        directoryWatchesOfFailedLookups.set(dirPath, { watcher: createDirectoryWatcher(dir, dirPath), refCount: 1 });
-                    }
+        function watchAndStopWatchDiffFailedLookupLocations(resolution: ResolutionWithFailedLookupLocations, existingResolution: ResolutionWithFailedLookupLocations) {
+            const failedLookupLocations = resolution.failedLookupLocations;
+            const existingFailedLookupLocations = existingResolution.failedLookupLocations;
+            for (let index = 0; index < failedLookupLocations.length; index++) {
+                if (index === existingFailedLookupLocations.length) {
+                    // Additional failed lookup locations, watch from this index
+                    watchFailedLookupLocationOfResolution(resolution, index);
+                    return;
+                }
+                else if (failedLookupLocations[index] !== existingFailedLookupLocations[index]) {
+                    // Different failed lookup locations,
+                    // Watch new resolution failed lookup locations from this index and
+                    // stop watching existing resolutions from this index
+                    watchFailedLookupLocationOfResolution(resolution, index);
+                    stopWatchFailedLookupLocationOfResolutionFrom(existingResolution, index);
+                    return;
+                }
+            }
+
+            // All new failed lookup locations are already watched (and are same),
+            // Stop watching failed lookup locations of existing resolution after failed lookup locations length
+            stopWatchFailedLookupLocationOfResolutionFrom(existingResolution, failedLookupLocations.length);
+        }
+
+        function watchFailedLookupLocationOfResolution({ failedLookupLocations }: ResolutionWithFailedLookupLocations, startIndex: number) {
+            for (let i = startIndex; i < failedLookupLocations.length; i++) {
+                const failedLookupLocation = failedLookupLocations[i];
+                const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
+                // If the failed lookup location path is not one of the supported extensions,
+                // store it in the custom path
+                if (!isPathWithDefaultFailedLookupExtension(failedLookupLocationPath)) {
+                    const refCount = customFailedLookupPaths.get(failedLookupLocationPath) || 0;
+                    customFailedLookupPaths.set(failedLookupLocationPath, refCount + 1);
+                }
+                const { dir, dirPath } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
+                if (dirWatcher) {
+                    dirWatcher.refCount++;
+                }
+                else {
+                    directoryWatchesOfFailedLookups.set(dirPath, { watcher: createDirectoryWatcher(dir, dirPath), refCount: 1 });
                 }
             }
         }
 
         function stopWatchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations) {
-            stopWatchFailedLookupLocationOfResolutionFrom(resolution, 0);
+            if (resolution.failedLookupLocations) {
+                stopWatchFailedLookupLocationOfResolutionFrom(resolution, 0);
+            }
         }
 
-        function stopWatchFailedLookupLocationOfResolutionFrom(resolution: ResolutionWithFailedLookupLocations, startIndex: number) {
-            if (resolution && resolution.failedLookupLocations) {
-                for (let i = startIndex; i < resolution.failedLookupLocations.length; i++) {
-                    const failedLookupLocation = resolution.failedLookupLocations[i];
-                    const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
-                    const refCount = customFailedLookupPaths.get(failedLookupLocationPath);
-                    if (refCount) {
-                        if (refCount === 1) {
-                            customFailedLookupPaths.delete(failedLookupLocationPath);
-                        }
-                        else {
-                            customFailedLookupPaths.set(failedLookupLocationPath, refCount - 1);
-                        }
+        function stopWatchFailedLookupLocationOfResolutionFrom({ failedLookupLocations }: ResolutionWithFailedLookupLocations, startIndex: number) {
+            for (let i = startIndex; i < failedLookupLocations.length; i++) {
+                const failedLookupLocation = failedLookupLocations[i];
+                const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
+                const refCount = customFailedLookupPaths.get(failedLookupLocationPath);
+                if (refCount) {
+                    if (refCount === 1) {
+                        customFailedLookupPaths.delete(failedLookupLocationPath);
                     }
-                    const { dirPath } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
-                    const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
-                    // Do not close the watcher yet since it might be needed by other failed lookup locations.
-                    dirWatcher.refCount--;
+                    else {
+                        Debug.assert(refCount > 1);
+                        customFailedLookupPaths.set(failedLookupLocationPath, refCount - 1);
+                    }
                 }
+                const { dirPath } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
+                // Do not close the watcher yet since it might be needed by other failed lookup locations.
+                dirWatcher.refCount--;
             }
         }
 
         function createDirectoryWatcher(directory: string, dirPath: Path) {
-            return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrFolder => {
-                const fileOrFolderPath = resolutionHost.toPath(fileOrFolder);
+            return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrDirectory => {
+                const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
                 if (resolutionHost.getCachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
                 // If the files are added to project root or node_modules directory, always run through the invalidation process
                 // Otherwise run through invalidation only if adding to the immediate directory
                 if (!allFilesHaveInvalidatedResolution &&
-                    dirPath === rootPath || isNodeModulesDirectory(dirPath) || getDirectoryPath(fileOrFolderPath) === dirPath) {
-                    if (invalidateResolutionOfFailedLookupLocation(fileOrFolderPath, dirPath === fileOrFolderPath)) {
+                    dirPath === rootPath || isNodeModulesDirectory(dirPath) || getDirectoryPath(fileOrDirectoryPath) === dirPath) {
+                    if (invalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath, dirPath === fileOrDirectoryPath)) {
                         resolutionHost.onInvalidatedResolution();
                     }
                 }
@@ -482,21 +517,21 @@ namespace ts {
             );
         }
 
-        function invalidateResolutionOfFailedLookupLocation(fileOrFolderPath: Path, isCreatingWatchedDirectory: boolean) {
+        function invalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath: Path, isCreatingWatchedDirectory: boolean) {
             let isChangedFailedLookupLocation: (location: string) => boolean;
             if (isCreatingWatchedDirectory) {
                 // Watching directory is created
                 // Invalidate any resolution has failed lookup in this directory
-                isChangedFailedLookupLocation = location => isInDirectoryPath(fileOrFolderPath, resolutionHost.toPath(location));
+                isChangedFailedLookupLocation = location => isInDirectoryPath(fileOrDirectoryPath, resolutionHost.toPath(location));
             }
             else {
-                // Some file or folder in the watching directory is created
+                // Some file or directory in the watching directory is created
                 // Return early if it does not have any of the watching extension or not the custom failed lookup path
-                if (!isPathWithDefaultFailedLookupExtension(fileOrFolderPath) && !customFailedLookupPaths.has(fileOrFolderPath)) {
+                if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
                     return false;
                 }
-                // Resolution need to be invalidated if failed lookup location is same as the file or folder getting created
-                isChangedFailedLookupLocation = location => resolutionHost.toPath(location) === fileOrFolderPath;
+                // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
+                isChangedFailedLookupLocation = location => resolutionHost.toPath(location) === fileOrDirectoryPath;
             }
             const hasChangedFailedLookupLocation = (resolution: ResolutionWithFailedLookupLocations) => some(resolution.failedLookupLocations, isChangedFailedLookupLocation);
             const invalidatedFilesCount = filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size;
@@ -513,11 +548,11 @@ namespace ts {
 
         function createTypeRootsWatch(_typeRootPath: string, typeRoot: string): FileWatcher {
             // Create new watch and recursive info
-            return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrFolder => {
-                const fileOrFolderPath = resolutionHost.toPath(fileOrFolder);
+            return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrDirectory => {
+                const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
                 if (resolutionHost.getCachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrFolder(fileOrFolder, fileOrFolderPath);
+                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
                 // For now just recompile

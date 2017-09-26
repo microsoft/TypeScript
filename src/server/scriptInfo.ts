@@ -4,17 +4,36 @@ namespace ts.server {
 
     /* @internal */
     export class TextStorage {
-        // Generated only on demand and removes the text if any edits
+        /**
+         * Generated only on demand (based on edits, or information requested)
+         * The property text is set to undefined when edits happen on the cache
+         */
         private svc: ScriptVersionCache | undefined;
         private svcVersion = 0;
 
-        // Store text when there is no svc or svc has no change, on edit, remove the text
+        /**
+         * Stores the text when there are no changes to the script version cache
+         * The script version cache is generated on demand and text is still retained.
+         * Only on edits to the script version cache, the text will be set to undefined
+         */
         private text: string;
+        /**
+         * Line map for the text when there is no script version cache present
+         */
         private lineMap: number[];
         private textVersion = 0;
 
+        /**
+         * True if the text is for the file thats open in the editor
+         */
         public isOpen: boolean;
+        /**
+         * True if the text present is the text from the file on the disk
+         */
         private ownFileText: boolean;
+        /**
+         * True when reloading contents of file from the disk is pending
+         */
         private pendingReloadFromDisk: boolean;
 
         constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath) {

@@ -43,10 +43,23 @@ namespace ts {
     }
 
     interface EmitHandler {
-        addScriptInfo(program: Program, sourceFile: SourceFile): void;
-        removeScriptInfo(path: Path): void;
-        updateScriptInfo(program: Program, sourceFile: SourceFile): void;
-        updaterScriptInfoWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
+        /**
+         * Called when sourceFile is added to the program
+         */
+        onAddSourceFile(program: Program, sourceFile: SourceFile): void;
+        /**
+         * Called when sourceFile is removed from the program
+         */
+        onRemoveSourceFile(path: Path): void;
+        /**
+         * Called when sourceFile is changed
+         */
+        onUpdateSourceFile(program: Program, sourceFile: SourceFile): void;
+        /**
+         * Called when source file has not changed but has some of the resolutions invalidated
+         * If returned true, builder will mark the file as changed (noting that something associated with file has changed)
+         */
+        onUpdateSourceFileWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
         /**
          * Gets the files affected by the script info which has updated shape from the known one
          */
@@ -135,23 +148,23 @@ namespace ts {
 
         function addNewFileInfo(program: Program, sourceFile: SourceFile): FileInfo {
             registerChangedFile(sourceFile.path, sourceFile.fileName);
-            emitHandler.addScriptInfo(program, sourceFile);
+            emitHandler.onAddSourceFile(program, sourceFile);
             return { fileName: sourceFile.fileName, version: sourceFile.version, signature: undefined };
         }
 
         function removeExistingFileInfo(existingFileInfo: FileInfo, path: Path) {
             registerChangedFile(path, existingFileInfo.fileName);
-            emitHandler.removeScriptInfo(path);
+            emitHandler.onRemoveSourceFile(path);
         }
 
         function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile, hasInvalidatedResolution: HasInvalidatedResolution) {
             if (existingInfo.version !== sourceFile.version) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
                 existingInfo.version = sourceFile.version;
-                emitHandler.updateScriptInfo(program, sourceFile);
+                emitHandler.onUpdateSourceFile(program, sourceFile);
             }
             else if (hasInvalidatedResolution(sourceFile.path) &&
-                emitHandler.updaterScriptInfoWithSameVersion(program, sourceFile)) {
+                emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
             }
         }
@@ -388,10 +401,10 @@ namespace ts {
 
         function getNonModuleEmitHandler(): EmitHandler {
             return {
-                addScriptInfo: noop,
-                removeScriptInfo: noop,
-                updateScriptInfo: noop,
-                updaterScriptInfoWithSameVersion: returnFalse,
+                onAddSourceFile: noop,
+                onRemoveSourceFile: noop,
+                onUpdateSourceFile: noop,
+                onUpdateSourceFileWithSameVersion: returnFalse,
                 getFilesAffectedByUpdatedShape
             };
 
@@ -409,17 +422,17 @@ namespace ts {
         function getModuleEmitHandler(): EmitHandler {
             const references = createMap<Map<true>>();
             return {
-                addScriptInfo: setReferences,
-                removeScriptInfo,
-                updateScriptInfo: updateReferences,
-                updaterScriptInfoWithSameVersion: updateReferencesTrackingChangedReferences,
+                onAddSourceFile: setReferences,
+                onRemoveSourceFile,
+                onUpdateSourceFile: updateReferences,
+                onUpdateSourceFileWithSameVersion: updateReferencesTrackingChangedReferences,
                 getFilesAffectedByUpdatedShape
             };
 
             function setReferences(program: Program, sourceFile: SourceFile) {
                 const newReferences = getReferencedFiles(program, sourceFile);
                 if (newReferences) {
-                    references.set(sourceFile.path, getReferencedFiles(program, sourceFile));
+                    references.set(sourceFile.path, newReferences);
                 }
             }
 
@@ -452,7 +465,7 @@ namespace ts {
                     !!oldReferences.size;
             }
 
-            function removeScriptInfo(removedFilePath: Path) {
+            function onRemoveSourceFile(removedFilePath: Path) {
                 // Remove existing references
                 references.forEach((referencesInFile, filePath) => {
                     if (referencesInFile.has(removedFilePath)) {

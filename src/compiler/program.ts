@@ -395,6 +395,9 @@ namespace ts {
         allDiagnostics?: Diagnostic[];
     }
 
+    /**
+     * Determines if program structure is upto date or needs to be recreated
+     */
     export function isProgramUptoDate(
         program: Program | undefined,
         rootFileNames: string[],
@@ -402,10 +405,10 @@ namespace ts {
         getSourceVersion: (path: Path) => string,
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
-        hasChangedAutomaticTypeDirectiveNames: () => boolean,
+        hasChangedAutomaticTypeDirectiveNames: boolean,
     ): boolean {
         // If we haven't create a program yet or has changed automatic type directives, then it is not up-to-date
-        if (!program || hasChangedAutomaticTypeDirectiveNames()) {
+        if (!program || hasChangedAutomaticTypeDirectiveNames) {
             return false;
         }
 
@@ -416,7 +419,7 @@ namespace ts {
 
         // If any file is not up-to-date, then the whole program is not up-to-date
         if (program.getSourceFiles().some(sourceFileNotUptoDate)) {
-                return false;
+            return false;
         }
 
         // If any of the missing file paths are now created
@@ -462,78 +465,6 @@ namespace ts {
             oldOptions.baseUrl !== newOptions.baseUrl ||
             !equalOwnProperties(oldOptions.paths, newOptions.paths)
         );
-    }
-
-    /**
-     * Updates the existing missing file watches with the new set of missing files after new program is created
-     */
-    export function updateMissingFilePathsWatch(
-        program: Program,
-        missingFileWatches: Map<FileWatcher>,
-        createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
-    ) {
-        const missingFilePaths = program.getMissingFilePaths();
-        const newMissingFilePathMap = arrayToSet(missingFilePaths);
-        // Update the missing file paths watcher
-        mutateMap(
-            missingFileWatches,
-            newMissingFilePathMap,
-            {
-                // Watch the missing files
-                createNewValue: createMissingFileWatch,
-                // Files that are no longer missing (e.g. because they are no longer required)
-                // should no longer be watched.
-                onDeleteValue: closeFileWatcher
-            }
-        );
-    }
-
-    export interface WildcardDirectoryWatcher {
-        watcher: FileWatcher;
-        flags: WatchDirectoryFlags;
-    }
-
-    /**
-     * Updates the existing wild card directory watches with the new set of wild card directories from the config file
-     * after new program is created because the config file was reloaded or program was created first time from the config file
-     * Note that there is no need to call this function when the program is updated with additional files without reloading config files,
-     * as wildcard directories wont change unless reloading config file
-     */
-    export function updateWatchingWildcardDirectories(
-        existingWatchedForWildcards: Map<WildcardDirectoryWatcher>,
-        wildcardDirectories: Map<WatchDirectoryFlags>,
-        watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher
-    ) {
-        mutateMap(
-            existingWatchedForWildcards,
-            wildcardDirectories,
-            {
-                // Create new watch and recursive info
-                createNewValue: createWildcardDirectoryWatcher,
-                // Close existing watch thats not needed any more
-                onDeleteValue: closeFileWatcherOf,
-                // Close existing watch that doesnt match in the flags
-                onExistingValue: updateWildcardDirectoryWatcher
-            }
-        );
-
-        function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
-            // Create new watch and recursive info
-            return {
-                watcher: watchDirectory(directory, flags),
-                flags
-            };
-        }
-
-        function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags, directory: string) {
-            // Watcher needs to be updated if the recursive flags dont match
-            if (existingWatcher.flags === flags) {
-                return;
-            }
-
-            existingWatcher.watcher.close();
-            existingWatchedForWildcards.set(directory, createWildcardDirectoryWatcher(directory, flags));
-        }
     }
 
     /**
@@ -599,7 +530,6 @@ namespace ts {
         let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
-        const hasChangedAutomaticTypeDirectiveNames = host.hasChangedAutomaticTypeDirectiveNames && host.hasChangedAutomaticTypeDirectiveNames.bind(host) || returnFalse;
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile, reusedNames).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
@@ -1105,7 +1035,7 @@ namespace ts {
                 return oldProgram.structureIsReused;
             }
 
-            if (hasChangedAutomaticTypeDirectiveNames()) {
+            if (host.hasChangedAutomaticTypeDirectiveNames) {
                 return oldProgram.structureIsReused = StructureIsReused.SafeModules;
             }
 

@@ -885,7 +885,7 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path).version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ returnFalse
+                /*hasChangedAutomaticTypeDirectiveNames*/ false
             );
             assert.isTrue(actual);
         }
