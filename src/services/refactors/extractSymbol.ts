@@ -262,10 +262,6 @@ namespace ts.refactor.extractSymbol {
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
 
-        if (isExpressionStatement(start)) {
-            start = start.expression;
-        }
-
         // We have a single node (start)
         const errors = checkRootNode(start) || checkNode(start);
         if (errors) {
@@ -274,7 +270,7 @@ namespace ts.refactor.extractSymbol {
         return { targetRange: { range: getStatementOrExpressionRange(start), facts: rangeFacts, declarations } };
 
         function checkRootNode(node: Node): Diagnostic[] | undefined {
-            if (isIdentifier(node)) {
+            if (isIdentifier(isExpressionStatement(node) ? node.expression : node)) {
                 return [createDiagnosticForNode(node, Messages.CannotExtractIdentifier)];
             }
             return undefined;
@@ -539,8 +535,10 @@ namespace ts.refactor.extractSymbol {
         const { scopes, readsAndWrites: { target, usagesPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         Debug.assert(!constantErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
         context.cancellationToken.throwIfCancellationRequested();
-        Debug.assert(target === targetRange.range);
-        return extractConstantInScope(target as Expression, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange.facts, context);
+        const expression = isExpression(target)
+            ? target
+            : (target.statements[0] as ExpressionStatement).expression;
+        return extractConstantInScope(expression, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange.facts, context);
     }
 
     interface PossibleExtraction {
@@ -1114,18 +1112,24 @@ namespace ts.refactor.extractSymbol {
             child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
     }
 
-    function getNodeToInsertConstantBefore(minPos: number, scope: Scope): Node {
-        const isClassLikeScope = isClassLike(scope);
+    // TODO (acasey): need to dig into nested statements
+    function getNodeToInsertConstantBefore(maxPos: number, scope: Scope): Node {
         const children = getStatementsOrClassElements(scope);
+        Debug.assert(children.length > 0); // There must be at least one child, since we extracted from one.
+
+        const isClassLikeScope = isClassLike(scope);
         let prevChild: Statement | ClassElement | undefined = undefined;
         for (const child of children) {
-            if (child.pos >= minPos || (isClassLikeScope && !isPropertyDeclaration(child))) {
+            if (child.pos >= maxPos) {
                 break;
             }
             prevChild = child;
+            if (isClassLikeScope && !isPropertyDeclaration(child)) {
+                break;
+            }
         }
 
-        return prevChild || children[0]; // There must be one - minPos is in one.
+        return prevChild;
     }
 
     function getPropertyAssignmentsForWrites(writes: ReadonlyArray<UsageEntry>): ShorthandPropertyAssignment[] {
@@ -1192,7 +1196,7 @@ namespace ts.refactor.extractSymbol {
         const visibleDeclarationsInExtractedRange: Symbol[] = [];
 
         const expressionDiagnostics =
-            isReadonlyArray(targetRange.range)
+            isReadonlyArray(targetRange.range) && !(targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0]))
                 ? ((start, end) => [createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected)])(firstOrUndefined(targetRange.range).getStart(), lastOrUndefined(targetRange.range).end)
                 : [];
 

@@ -805,7 +805,8 @@ function parsePrimaryExpression(): any {
                 };
                 const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
                 assert.equal(rangeToExtract.errors, undefined, "expect no errors");
-                const actions = refactor.extractSymbol.getAvailableActions(context)[0].actions; // TODO (acasey): smarter index
+                const infos = refactor.extractSymbol.getAvailableActions(context);
+                const actions = find(infos, info => info.description === Diagnostics.Extract_function.message).actions;
                 const data: string[] = [];
                 data.push(`// ==ORIGINAL==`);
                 data.push(sourceFile.text);

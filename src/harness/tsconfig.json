@@ -128,6 +128,7 @@
         "./unittests/printer.ts",
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
+        "./unittests/extractConstants.ts",
         "./unittests/extractMethods.ts",
         "./unittests/textChanges.ts",
         "./unittests/telemetry.ts",
