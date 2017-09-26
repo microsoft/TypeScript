@@ -1,0 +1,37 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts ===
+// it is an error to provide type arguments to a non-generic call
+// all of these are errors
+
+class C {
+>C : Symbol(C, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 0, 0))
+
+    x: string;
+>x : Symbol(C.x, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 3, 9))
+}
+
+var c = new C<number>();
+>c : Symbol(c, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 7, 3))
+>C : Symbol(C, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 0, 0))
+
+function Foo(): void { }
+>Foo : Symbol(Foo, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 7, 24))
+
+var r = new Foo<number>();
+>r : Symbol(r, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 10, 3))
+>Foo : Symbol(Foo, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 7, 24))
+
+var f: { (): void };
+>f : Symbol(f, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 12, 3))
+
+var r2 = new f<number>();
+>r2 : Symbol(r2, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 13, 3), Decl(instantiateNonGenericTypeWithTypeArguments.ts, 17, 3))
+>f : Symbol(f, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 12, 3))
+
+var a: any;
+>a : Symbol(a, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 15, 3))
+
+// BUG 790977
+var r2 = new a<number>();
+>r2 : Symbol(r2, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 13, 3), Decl(instantiateNonGenericTypeWithTypeArguments.ts, 17, 3))
+>a : Symbol(a, Decl(instantiateNonGenericTypeWithTypeArguments.ts, 15, 3))
+

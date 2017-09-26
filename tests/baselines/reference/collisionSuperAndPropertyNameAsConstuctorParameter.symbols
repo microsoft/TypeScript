@@ -1,0 +1,64 @@
+=== tests/cases/compiler/collisionSuperAndPropertyNameAsConstuctorParameter.ts ===
+class a {
+>a : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+}
+
+class b1 extends a {
+>b1 : Symbol(b1, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 1, 1))
+>a : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+
+    constructor(_super: number) { // should be error
+>_super : Symbol(_super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 4, 16))
+
+        super();
+>super : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+    }
+}
+
+class b2 extends a {
+>b2 : Symbol(b2, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 7, 1))
+>a : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+
+    constructor(private _super: number) { // should be error
+>_super : Symbol(b2._super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 10, 16))
+
+        super();
+>super : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+    }
+}
+
+class b3 extends a {
+>b3 : Symbol(b3, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 13, 1))
+>a : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+
+    constructor(_super: number); // no code gen - no error
+>_super : Symbol(_super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 16, 16))
+
+    constructor(_super: string);// no code gen - no error
+>_super : Symbol(_super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 17, 16))
+
+    constructor(_super: any) { // should be error
+>_super : Symbol(_super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 18, 16))
+
+        super();
+>super : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+    }
+}
+
+class b4 extends a {
+>b4 : Symbol(b4, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 21, 1))
+>a : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+
+    constructor(_super: number); // no code gen - no error
+>_super : Symbol(_super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 24, 16))
+
+    constructor(_super: string);// no code gen - no error
+>_super : Symbol(_super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 25, 16))
+
+    constructor(private _super: any) { // should be error
+>_super : Symbol(b4._super, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 26, 16))
+
+        super();
+>super : Symbol(a, Decl(collisionSuperAndPropertyNameAsConstuctorParameter.ts, 0, 0))
+    }
+}

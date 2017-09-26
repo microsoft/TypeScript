@@ -1,0 +1,170 @@
+=== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts ===
+// + operator on any type
+
+var ANY: any;
+>ANY : Symbol(ANY, Decl(plusOperatorWithAnyOtherType.ts, 2, 3))
+
+var ANY1;
+>ANY1 : Symbol(ANY1, Decl(plusOperatorWithAnyOtherType.ts, 3, 3))
+
+var ANY2: any[] = ["", ""];
+>ANY2 : Symbol(ANY2, Decl(plusOperatorWithAnyOtherType.ts, 4, 3))
+
+var obj: () => {}
+>obj : Symbol(obj, Decl(plusOperatorWithAnyOtherType.ts, 5, 3))
+
+var obj1 = { x: (s: string) => { }, y: (s1) => { }};
+>obj1 : Symbol(obj1, Decl(plusOperatorWithAnyOtherType.ts, 6, 3))
+>x : Symbol(x, Decl(plusOperatorWithAnyOtherType.ts, 6, 12))
+>s : Symbol(s, Decl(plusOperatorWithAnyOtherType.ts, 6, 17))
+>y : Symbol(y, Decl(plusOperatorWithAnyOtherType.ts, 6, 35))
+>s1 : Symbol(s1, Decl(plusOperatorWithAnyOtherType.ts, 6, 40))
+
+function foo(): any {
+>foo : Symbol(foo, Decl(plusOperatorWithAnyOtherType.ts, 6, 52))
+
+    var a;
+>a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 9, 7))
+
+    return a;
+>a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 9, 7))
+}
+class A {
+>A : Symbol(A, Decl(plusOperatorWithAnyOtherType.ts, 11, 1))
+
+    public a: any;
+>a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+
+    static foo() {
+>foo : Symbol(A.foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
+
+        var a;
+>a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 15, 11))
+
+        return a;
+>a : Symbol(a, Decl(plusOperatorWithAnyOtherType.ts, 15, 11))
+    }
+}
+module M {
+>M : Symbol(M, Decl(plusOperatorWithAnyOtherType.ts, 18, 1))
+
+    export var n: any;
+>n : Symbol(n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+}
+var objA = new A();
+>objA : Symbol(objA, Decl(plusOperatorWithAnyOtherType.ts, 22, 3))
+>A : Symbol(A, Decl(plusOperatorWithAnyOtherType.ts, 11, 1))
+
+// any other type var
+var ResultIsNumber1 = +ANY1;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(plusOperatorWithAnyOtherType.ts, 25, 3))
+>ANY1 : Symbol(ANY1, Decl(plusOperatorWithAnyOtherType.ts, 3, 3))
+
+var ResultIsNumber2 = +ANY2;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(plusOperatorWithAnyOtherType.ts, 26, 3))
+>ANY2 : Symbol(ANY2, Decl(plusOperatorWithAnyOtherType.ts, 4, 3))
+
+var ResultIsNumber3 = +A;
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(plusOperatorWithAnyOtherType.ts, 27, 3))
+>A : Symbol(A, Decl(plusOperatorWithAnyOtherType.ts, 11, 1))
+
+var ResultIsNumber4 = +M;
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(plusOperatorWithAnyOtherType.ts, 28, 3))
+>M : Symbol(M, Decl(plusOperatorWithAnyOtherType.ts, 18, 1))
+
+var ResultIsNumber5 = +obj;
+>ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(plusOperatorWithAnyOtherType.ts, 29, 3))
+>obj : Symbol(obj, Decl(plusOperatorWithAnyOtherType.ts, 5, 3))
+
+var ResultIsNumber6 = +obj1;
+>ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(plusOperatorWithAnyOtherType.ts, 30, 3))
+>obj1 : Symbol(obj1, Decl(plusOperatorWithAnyOtherType.ts, 6, 3))
+
+// any type literal
+var ResultIsNumber7 = +undefined;
+>ResultIsNumber7 : Symbol(ResultIsNumber7, Decl(plusOperatorWithAnyOtherType.ts, 33, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsNumber8 = +null;
+>ResultIsNumber8 : Symbol(ResultIsNumber8, Decl(plusOperatorWithAnyOtherType.ts, 34, 3))
+
+// any type expressions
+var ResultIsNumber9 = +ANY2[0];
+>ResultIsNumber9 : Symbol(ResultIsNumber9, Decl(plusOperatorWithAnyOtherType.ts, 37, 3))
+>ANY2 : Symbol(ANY2, Decl(plusOperatorWithAnyOtherType.ts, 4, 3))
+
+var ResultIsNumber10 = +obj1.x;
+>ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(plusOperatorWithAnyOtherType.ts, 38, 3))
+>obj1.x : Symbol(x, Decl(plusOperatorWithAnyOtherType.ts, 6, 12))
+>obj1 : Symbol(obj1, Decl(plusOperatorWithAnyOtherType.ts, 6, 3))
+>x : Symbol(x, Decl(plusOperatorWithAnyOtherType.ts, 6, 12))
+
+var ResultIsNumber11 = +obj1.y;
+>ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(plusOperatorWithAnyOtherType.ts, 39, 3))
+>obj1.y : Symbol(y, Decl(plusOperatorWithAnyOtherType.ts, 6, 35))
+>obj1 : Symbol(obj1, Decl(plusOperatorWithAnyOtherType.ts, 6, 3))
+>y : Symbol(y, Decl(plusOperatorWithAnyOtherType.ts, 6, 35))
+
+var ResultIsNumber12 = +objA.a;
+>ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(plusOperatorWithAnyOtherType.ts, 40, 3))
+>objA.a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+>objA : Symbol(objA, Decl(plusOperatorWithAnyOtherType.ts, 22, 3))
+>a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+
+var ResultIsNumber13 = +M.n;
+>ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(plusOperatorWithAnyOtherType.ts, 41, 3))
+>M.n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+>M : Symbol(M, Decl(plusOperatorWithAnyOtherType.ts, 18, 1))
+>n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+
+var ResultIsNumber14 = +foo();
+>ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(plusOperatorWithAnyOtherType.ts, 42, 3))
+>foo : Symbol(foo, Decl(plusOperatorWithAnyOtherType.ts, 6, 52))
+
+var ResultIsNumber15 = +A.foo();
+>ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(plusOperatorWithAnyOtherType.ts, 43, 3))
+>A.foo : Symbol(A.foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
+>A : Symbol(A, Decl(plusOperatorWithAnyOtherType.ts, 11, 1))
+>foo : Symbol(A.foo, Decl(plusOperatorWithAnyOtherType.ts, 13, 18))
+
+var ResultIsNumber16 = +(ANY + ANY1);
+>ResultIsNumber16 : Symbol(ResultIsNumber16, Decl(plusOperatorWithAnyOtherType.ts, 44, 3))
+>ANY : Symbol(ANY, Decl(plusOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(plusOperatorWithAnyOtherType.ts, 3, 3))
+
+var ResultIsNumber17 = +(null + undefined);
+>ResultIsNumber17 : Symbol(ResultIsNumber17, Decl(plusOperatorWithAnyOtherType.ts, 45, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsNumber18 = +(null + null);
+>ResultIsNumber18 : Symbol(ResultIsNumber18, Decl(plusOperatorWithAnyOtherType.ts, 46, 3))
+
+var ResultIsNumber19 = +(undefined + undefined);
+>ResultIsNumber19 : Symbol(ResultIsNumber19, Decl(plusOperatorWithAnyOtherType.ts, 47, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// miss assignment operators
++ANY;
+>ANY : Symbol(ANY, Decl(plusOperatorWithAnyOtherType.ts, 2, 3))
+
++ANY1;
+>ANY1 : Symbol(ANY1, Decl(plusOperatorWithAnyOtherType.ts, 3, 3))
+
++ANY2[0];
+>ANY2 : Symbol(ANY2, Decl(plusOperatorWithAnyOtherType.ts, 4, 3))
+
++ANY, ANY1;
+>ANY : Symbol(ANY, Decl(plusOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(plusOperatorWithAnyOtherType.ts, 3, 3))
+
++objA.a;
+>objA.a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+>objA : Symbol(objA, Decl(plusOperatorWithAnyOtherType.ts, 22, 3))
+>a : Symbol(A.a, Decl(plusOperatorWithAnyOtherType.ts, 12, 9))
+
++M.n;
+>M.n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+>M : Symbol(M, Decl(plusOperatorWithAnyOtherType.ts, 18, 1))
+>n : Symbol(M.n, Decl(plusOperatorWithAnyOtherType.ts, 20, 14))
+

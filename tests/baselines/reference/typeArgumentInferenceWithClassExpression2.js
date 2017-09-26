@@ -8,7 +8,7 @@ foo(class { static prop = "hello" }).length;
 
 //// [typeArgumentInferenceWithClassExpression2.js]
 function foo(x) {
-    if (x === void 0) { x = (function () {
+    if (x === void 0) { x = /** @class */ (function () {
         function class_1() {
         }
         return class_1;
@@ -16,7 +16,7 @@ function foo(x) {
     return undefined;
 }
 // Should not infer string because it is a static property
-foo((_a = (function () {
+foo((_a = /** @class */ (function () {
         function class_2() {
         }
         return class_2;

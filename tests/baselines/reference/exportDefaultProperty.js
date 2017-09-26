@@ -46,7 +46,7 @@ fooLength + 1;
 exports.__esModule = true;
 var A;
 (function (A) {
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B(b) {
         }
         return B;

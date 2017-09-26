@@ -1,5 +1,7 @@
-/// <reference path="..\src\harness\external\node.d.ts" />
-
+/**
+ * You should have ts-node installed globally before executing this, probably!
+ * Otherwise you'll need to compile this script before you start bisecting!
+ */
 import cp = require('child_process');
 import fs = require('fs');
 
@@ -42,8 +44,8 @@ jake.on('close', jakeExitCode => {
             });
         } else {
             console.log('Unknown command line arguments.');
-            console.log('Usage (compile errors): git bisect run scripts\bisect.js "foo.ts --module amd" compiles');
-            console.log('Usage (emit check): git bisect run scripts\bisect.js bar.ts emits bar.js "_this = this"');
+            console.log('Usage (compile errors): git bisect run ts-node scripts\bisect-test.ts "../failure.ts --module amd" !compiles');
+            console.log('Usage (emit check): git bisect run ts-node scripts\bisect-test.ts bar.ts emits bar.js "_this = this"');
             // Aborts the 'git bisect run' process
             process.exit(-1);
         }

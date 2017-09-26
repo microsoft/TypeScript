@@ -1,0 +1,71 @@
+=== tests/cases/compiler/typeIdentityConsidersBrands.ts ===
+class X{
+>X : Symbol(X, Decl(typeIdentityConsidersBrands.ts, 0, 0))
+
+      name: string;
+>name : Symbol(X.name, Decl(typeIdentityConsidersBrands.ts, 0, 8))
+}
+
+class Y{
+>Y : Symbol(Y, Decl(typeIdentityConsidersBrands.ts, 2, 1))
+
+      name: string;
+>name : Symbol(Y.name, Decl(typeIdentityConsidersBrands.ts, 4, 8))
+}
+
+class X_1 {
+>X_1 : Symbol(X_1, Decl(typeIdentityConsidersBrands.ts, 6, 1))
+
+    private name: string;
+>name : Symbol(X_1.name, Decl(typeIdentityConsidersBrands.ts, 8, 11))
+}
+
+class Y_1 {
+>Y_1 : Symbol(Y_1, Decl(typeIdentityConsidersBrands.ts, 10, 1))
+
+    private name: string;
+>name : Symbol(Y_1.name, Decl(typeIdentityConsidersBrands.ts, 12, 11))
+}
+
+function foo(arg: X){}
+>foo : Symbol(foo, Decl(typeIdentityConsidersBrands.ts, 14, 1))
+>arg : Symbol(arg, Decl(typeIdentityConsidersBrands.ts, 16, 13))
+>X : Symbol(X, Decl(typeIdentityConsidersBrands.ts, 0, 0))
+ 
+var a = new Y();
+>a : Symbol(a, Decl(typeIdentityConsidersBrands.ts, 18, 3))
+>Y : Symbol(Y, Decl(typeIdentityConsidersBrands.ts, 2, 1))
+
+var b = new X();
+>b : Symbol(b, Decl(typeIdentityConsidersBrands.ts, 19, 3))
+>X : Symbol(X, Decl(typeIdentityConsidersBrands.ts, 0, 0))
+ 
+a = b; // ok
+>a : Symbol(a, Decl(typeIdentityConsidersBrands.ts, 18, 3))
+>b : Symbol(b, Decl(typeIdentityConsidersBrands.ts, 19, 3))
+
+foo(a); // ok
+>foo : Symbol(foo, Decl(typeIdentityConsidersBrands.ts, 14, 1))
+>a : Symbol(a, Decl(typeIdentityConsidersBrands.ts, 18, 3))
+
+var a2 = new Y_1();
+>a2 : Symbol(a2, Decl(typeIdentityConsidersBrands.ts, 24, 3))
+>Y_1 : Symbol(Y_1, Decl(typeIdentityConsidersBrands.ts, 10, 1))
+
+var b2 = new X_1();
+>b2 : Symbol(b2, Decl(typeIdentityConsidersBrands.ts, 25, 3))
+>X_1 : Symbol(X_1, Decl(typeIdentityConsidersBrands.ts, 6, 1))
+
+function foo2(arg: X_1) { }
+>foo2 : Symbol(foo2, Decl(typeIdentityConsidersBrands.ts, 25, 19))
+>arg : Symbol(arg, Decl(typeIdentityConsidersBrands.ts, 27, 14))
+>X_1 : Symbol(X_1, Decl(typeIdentityConsidersBrands.ts, 6, 1))
+
+a2 = b2; // should error
+>a2 : Symbol(a2, Decl(typeIdentityConsidersBrands.ts, 24, 3))
+>b2 : Symbol(b2, Decl(typeIdentityConsidersBrands.ts, 25, 3))
+
+foo2(a2); // should error
+>foo2 : Symbol(foo2, Decl(typeIdentityConsidersBrands.ts, 25, 19))
+>a2 : Symbol(a2, Decl(typeIdentityConsidersBrands.ts, 24, 3))
+

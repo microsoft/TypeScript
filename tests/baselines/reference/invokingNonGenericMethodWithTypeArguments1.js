@@ -7,7 +7,7 @@ class Foo {
 
 
 //// [invokingNonGenericMethodWithTypeArguments1.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.foo();
     }

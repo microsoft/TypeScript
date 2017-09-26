@@ -1,0 +1,55 @@
+=== tests/cases/compiler/recursiveLetConst.ts ===
+'use strict'
+let x = x + 1;
+>x : Symbol(x, Decl(recursiveLetConst.ts, 1, 3))
+>x : Symbol(x, Decl(recursiveLetConst.ts, 1, 3))
+
+let [x1] = x1 + 1;
+>x1 : Symbol(x1, Decl(recursiveLetConst.ts, 2, 5))
+>x1 : Symbol(x1, Decl(recursiveLetConst.ts, 2, 5))
+
+const y = y + 2;
+>y : Symbol(y, Decl(recursiveLetConst.ts, 3, 5))
+>y : Symbol(y, Decl(recursiveLetConst.ts, 3, 5))
+
+const [y1] = y1 + 1;
+>y1 : Symbol(y1, Decl(recursiveLetConst.ts, 4, 7))
+>y1 : Symbol(y1, Decl(recursiveLetConst.ts, 4, 7))
+
+for (let v = v; ; ) { }
+>v : Symbol(v, Decl(recursiveLetConst.ts, 5, 8))
+>v : Symbol(v, Decl(recursiveLetConst.ts, 5, 8))
+
+for (let [v] = v; ;) { }
+>v : Symbol(v, Decl(recursiveLetConst.ts, 6, 10))
+>v : Symbol(v, Decl(recursiveLetConst.ts, 6, 10))
+
+for (let v in v) { }
+>v : Symbol(v, Decl(recursiveLetConst.ts, 7, 8))
+>v : Symbol(v, Decl(recursiveLetConst.ts, 7, 8))
+
+for (let v of v) { }
+>v : Symbol(v, Decl(recursiveLetConst.ts, 8, 8))
+>v : Symbol(v, Decl(recursiveLetConst.ts, 8, 8))
+
+for (let [v] of v) { }
+>v : Symbol(v, Decl(recursiveLetConst.ts, 9, 10))
+>v : Symbol(v, Decl(recursiveLetConst.ts, 9, 10))
+
+let [x2 = x2] = []
+>x2 : Symbol(x2, Decl(recursiveLetConst.ts, 10, 5))
+>x2 : Symbol(x2, Decl(recursiveLetConst.ts, 10, 5))
+
+let z0 = () => z0;
+>z0 : Symbol(z0, Decl(recursiveLetConst.ts, 11, 3))
+>z0 : Symbol(z0, Decl(recursiveLetConst.ts, 11, 3))
+
+let z1 = function () { return z1; }
+>z1 : Symbol(z1, Decl(recursiveLetConst.ts, 12, 3))
+>z1 : Symbol(z1, Decl(recursiveLetConst.ts, 12, 3))
+
+let z2 = { f() { return z2;}}
+>z2 : Symbol(z2, Decl(recursiveLetConst.ts, 13, 3))
+>f : Symbol(f, Decl(recursiveLetConst.ts, 13, 10))
+>z2 : Symbol(z2, Decl(recursiveLetConst.ts, 13, 3))
+

@@ -108,7 +108,7 @@ var a4 = ["a", "b"].map(combine(wrap(function (s) { return s.length; }), wrap(fu
 var a5 = ["a", "b"].map(combine(identity, wrap(function (s) { return s.length; })));
 var a6 = ["a", "b"].map(combine(wrap(function (s) { return s.length; }), identity));
 // This is a contrived class. We could do the same thing with Observables, etc.
-var SetOf = (function () {
+var SetOf = /** @class */ (function () {
     function SetOf() {
     }
     SetOf.prototype.add = function (a) {

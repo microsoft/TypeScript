@@ -1,0 +1,17 @@
+=== tests/cases/compiler/server.ts ===
+export var a = 10;
+>a : Symbol(a, Decl(server.ts, 0, 10))
+
+=== tests/cases/compiler/client.ts ===
+export import * as nameSpaceBinding from "server";
+>nameSpaceBinding : Symbol(nameSpaceBinding, Decl(client.ts, 0, 13))
+
+export var x = nameSpaceBinding.a;
+>x : Symbol(x, Decl(client.ts, 1, 10))
+>nameSpaceBinding.a : Symbol(nameSpaceBinding.a, Decl(server.ts, 0, 10))
+>nameSpaceBinding : Symbol(nameSpaceBinding, Decl(client.ts, 0, 13))
+>a : Symbol(nameSpaceBinding.a, Decl(server.ts, 0, 10))
+
+export import * as nameSpaceBinding2 from "server"; // Not referenced imports
+>nameSpaceBinding2 : Symbol(nameSpaceBinding2, Decl(client.ts, 2, 13))
+

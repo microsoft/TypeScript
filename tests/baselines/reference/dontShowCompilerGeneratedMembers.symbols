@@ -1,0 +1,9 @@
+=== tests/cases/compiler/dontShowCompilerGeneratedMembers.ts ===
+var f: {
+>f : Symbol(f, Decl(dontShowCompilerGeneratedMembers.ts, 0, 3))
+
+    x: number;
+>x : Symbol(x, Decl(dontShowCompilerGeneratedMembers.ts, 0, 8))
+
+    <-
+};

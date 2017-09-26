@@ -1,15 +1,18 @@
 {
-    "rulesDirectory": "built/local/tslint",
+    "rulesDirectory": "built/local/tslint/rules",
     "rules": {
+        "array-type": [true, "array"],
         "boolean-trivia": true,
         "class-name": true,
         "comment-format": [true,
             "check-space"
         ],
         "curly":[true, "ignore-same-line"],
+        "debug-assert": true,
         "indent": [true,
             "spaces"
         ],
+        "interface-over-type-literal": true,
         "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
         "next-line": [true,
@@ -26,6 +29,7 @@
         "no-trailing-whitespace": [true, "ignore-template-strings"],
         "no-type-assertion-whitespace": true,
         "no-var-keyword": true,
+        "object-literal-shorthand": true,
         "object-literal-surrounding-space": true,
         "one-line": [true,
             "check-open-brace",
@@ -63,6 +67,6 @@
             "check-module",
             "check-separator",
             "check-type"
-        ]	
+        ]
 	}
 }

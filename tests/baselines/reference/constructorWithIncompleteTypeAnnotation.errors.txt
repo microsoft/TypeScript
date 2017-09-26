@@ -34,7 +34,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(138,13): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(141,32): error TS1005: '{' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(143,13): error TS1005: 'try' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,24): error TS1109: Expression expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,30): error TS1005: '(' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,30): error TS1005: '{' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,31): error TS2304: Cannot find name 'Property'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(166,13): error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
@@ -323,7 +323,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                            ~~~~~
 !!! error TS1109: Expression expected.
                                  ~
-!!! error TS1005: '(' expected.
+!!! error TS1005: '{' expected.
                                   ~~~~~~~~
 !!! error TS2304: Cannot find name 'Property'.
                 retVal += c.Member();

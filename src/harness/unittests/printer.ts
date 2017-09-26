@@ -56,6 +56,9 @@ namespace ts {
 
             // github #14948
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
+
+            // github #18071
+            printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let regex = /abc/;", ScriptTarget.ES2017)));
         });
 
         describe("printBundle", () => {
@@ -104,6 +107,29 @@ namespace ts {
             printsCorrectly("namespaceExportDeclaration", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
                 createNamespaceExportDeclaration("B"),
+                createSourceFile("source.ts", "", ScriptTarget.ES2015)
+            ));
+
+
+            printsCorrectly("emptyGlobalAugmentation", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createModuleDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ [createToken(SyntaxKind.DeclareKeyword)],
+                    createIdentifier("global"),
+                    createModuleBlock(emptyArray),
+                    NodeFlags.GlobalAugmentation),
+                createSourceFile("source.ts", "", ScriptTarget.ES2015)
+            ));
+
+            printsCorrectly("emptyGlobalAugmentationWithNoDeclareKeyword", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createModuleDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createIdentifier("global"),
+                    createModuleBlock(emptyArray),
+                    NodeFlags.GlobalAugmentation),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
 

@@ -2,19 +2,13 @@
 // @allowJs: true
 // @noEmit: true
 
-// @Filename: foo.js
-/**
- * @param {(x)=>void} x
- * @param {typeof String} y
- * @param {string & number} z
- **/
-function foo(x, y, z) { }
+// @Filename: dummyType.d.ts
+declare class C<T> { t: T }
 
-// @Filename: skipped.js
-// @ts-nocheck
-/**
- * @param {(x)=>void} x
- * @param {typeof String} y
- * @param {string & number} z
- **/
-function bar(x, y, z) { }
+// @Filename: badTypeArguments.js
+/** @param {C.<>} x */
+/** @param {C.<number,>} y */
+function f(x, y) {
+    return x.t + y.t;
+}
+var x = f({ t: 1000 }, { t: 3000 });

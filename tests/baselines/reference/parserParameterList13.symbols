@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList13.ts ===
+interface I {
+>I : Symbol(I, Decl(parserParameterList13.ts, 0, 0))
+
+    new (public x);
+>x : Symbol(x, Decl(parserParameterList13.ts, 1, 9))
+}

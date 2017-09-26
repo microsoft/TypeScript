@@ -136,7 +136,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // test basic configurations
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1(v, p) {
         if (v === void 0) { v = 1; }
         if (p === void 0) { p = 0; }
@@ -163,7 +163,7 @@ var C1 = (function () {
     };
     return C1;
 }());
-var C2 = (function (_super) {
+var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2(v2) {
         if (v2 === void 0) { v2 = 6; }

@@ -15,6 +15,7 @@ declare var console: any;
 class C {
     private myModule = import("./0");
     method() {
+        const loadAsync = import("./0");
         this.myModule.then(Zero => {
             console.log(Zero.foo());
         }, async err => {
@@ -28,7 +29,7 @@ class C {
 //// [0.js]
 "use strict";
 exports.__esModule = true;
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.print = function () { return "I am B"; };
@@ -78,12 +79,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.myModule = Promise.resolve().then(function () { return require("./0"); });
     }
     C.prototype.method = function () {
         var _this = this;
+        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
         this.myModule.then(function (Zero) {
             console.log(Zero.foo());
         }, function (err) { return __awaiter(_this, void 0, void 0, function () {

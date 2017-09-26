@@ -2,8 +2,8 @@
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
-            Diagnostics._0_is_declared_but_never_used.code,
-            Diagnostics.Property_0_is_declared_but_never_used.code
+            Diagnostics._0_is_declared_but_its_value_is_never_read.code,
+            Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code
         ],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
@@ -25,15 +25,15 @@ namespace ts.codefix {
                     return [deleteNode(token.parent)];
 
                 default:
-                    return [deleteDefault()];
+                    return deleteDefault();
             }
 
-            function deleteDefault() {
+            function deleteDefault(): CodeAction[] | undefined {
                 if (isDeclarationName(token)) {
-                    return deleteNode(token.parent);
+                    return [deleteNode(token.parent)];
                 }
                 else if (isLiteralComputedPropertyDeclarationName(token)) {
-                    return deleteNode(token.parent.parent);
+                    return [deleteNode(token.parent.parent)];
                 }
                 else {
                     return undefined;
@@ -87,20 +87,16 @@ namespace ts.codefix {
                     case SyntaxKind.ImportSpecifier:
                         const namedImports = <NamedImports>parent.parent;
                         if (namedImports.elements.length === 1) {
-                            // Only 1 import and it is unused. So the entire declaration should be removed.
-                            const importSpec = getAncestor(identifier, SyntaxKind.ImportDeclaration);
-                            return [deleteNode(importSpec)];
+                            return deleteNamedImportBinding(namedImports);
                         }
                         else {
                             // delete import specifier
                             return [deleteNodeInList(parent)];
                         }
 
-                    // handle case where "import d, * as ns from './file'"
-                    // or "'import {a, b as ns} from './file'"
                     case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
                         const importClause = <ImportClause>parent;
-                        if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
+                        if (!importClause.namedBindings) { // |import d from './file'|
                             const importDecl = getAncestor(importClause, SyntaxKind.ImportDeclaration);
                             return [deleteNode(importDecl)];
                         }
@@ -118,22 +114,30 @@ namespace ts.codefix {
                         }
 
                     case SyntaxKind.NamespaceImport:
-                        const namespaceImport = <NamespaceImport>parent;
-                        if (namespaceImport.name === identifier && !(<ImportClause>namespaceImport.parent).name) {
-                            const importDecl = getAncestor(namespaceImport, SyntaxKind.ImportDeclaration);
-                            return [deleteNode(importDecl)];
-                        }
-                        else {
-                            const previousToken = getTokenAtPosition(sourceFile, namespaceImport.pos - 1, /*includeJsDocComment*/ false);
-                            if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
-                                const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
-                                return [deleteRange({ pos: startPosition, end: namespaceImport.end })];
-                            }
-                            return [deleteRange(namespaceImport)];
-                        }
+                        return deleteNamedImportBinding(<NamespaceImport>parent);
 
                     default:
-                        return [deleteDefault()];
+                        return deleteDefault();
+                }
+            }
+
+            function deleteNamedImportBinding(namedBindings: NamedImportBindings): CodeAction[] | undefined {
+                if ((<ImportClause>namedBindings.parent).name) {
+                    // Delete named imports while preserving the default import
+                    // import d|, * as ns| from './file'
+                    // import d|, { a }| from './file'
+                    const previousToken = getTokenAtPosition(sourceFile, namedBindings.pos - 1, /*includeJsDocComment*/ false);
+                    if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
+                        return [deleteRange({ pos: previousToken.getStart(), end: namedBindings.end })];
+                    }
+                    return undefined;
+                }
+                else {
+                    // Delete the entire import declaration
+                    // |import * as ns from './file'|
+                    // |import { a } from './file'|
+                    const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration);
+                    return [deleteNode(importDecl)];
                 }
             }
 
@@ -171,23 +175,23 @@ namespace ts.codefix {
             }
 
             function deleteNode(n: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNode(sourceFile, n));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNode(sourceFile, n));
             }
 
             function deleteRange(range: TextRange) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteRange(sourceFile, range));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteRange(sourceFile, range));
             }
 
             function deleteNodeInList(n: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeInList(sourceFile, n));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNodeInList(sourceFile, n));
             }
 
             function deleteNodeRange(start: Node, end: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeRange(sourceFile, start, end));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).deleteNodeRange(sourceFile, start, end));
             }
 
             function replaceNode(n: Node, newNode: Node) {
-                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).replaceNode(sourceFile, n, newNode));
+                return makeChange(textChanges.ChangeTracker.fromContext(context).replaceNode(sourceFile, n, newNode));
             }
 
             function makeChange(changeTracker: textChanges.ChangeTracker): CodeAction {

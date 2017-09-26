@@ -9,7 +9,7 @@ class Markup {
 
 //// [classCannotExtendVar.js]
 var Markup;
-var Markup = (function () {
+var Markup = /** @class */ (function () {
     function Markup() {
     }
     return Markup;

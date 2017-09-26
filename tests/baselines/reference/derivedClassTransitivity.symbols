@@ -1,0 +1,56 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity.ts ===
+// subclassing is not transitive when you can remove required parameters and add optional parameters
+
+class C {
+>C : Symbol(C, Decl(derivedClassTransitivity.ts, 0, 0))
+
+    foo(x: number) { }
+>foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
+>x : Symbol(x, Decl(derivedClassTransitivity.ts, 3, 8))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(derivedClassTransitivity.ts, 4, 1))
+>C : Symbol(C, Decl(derivedClassTransitivity.ts, 0, 0))
+
+    foo() { } // ok to drop parameters
+>foo : Symbol(D.foo, Decl(derivedClassTransitivity.ts, 6, 19))
+}
+
+class E extends D {
+>E : Symbol(E, Decl(derivedClassTransitivity.ts, 8, 1))
+>D : Symbol(D, Decl(derivedClassTransitivity.ts, 4, 1))
+
+    foo(x?: string) { } // ok to add optional parameters
+>foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
+>x : Symbol(x, Decl(derivedClassTransitivity.ts, 11, 8))
+}
+
+var c: C;
+>c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 3))
+>C : Symbol(C, Decl(derivedClassTransitivity.ts, 0, 0))
+
+var d: D;
+>d : Symbol(d, Decl(derivedClassTransitivity.ts, 15, 3))
+>D : Symbol(D, Decl(derivedClassTransitivity.ts, 4, 1))
+
+var e: E;
+>e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 3))
+>E : Symbol(E, Decl(derivedClassTransitivity.ts, 8, 1))
+
+c = e;
+>c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 3))
+>e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 3))
+
+var r = c.foo(1);
+>r : Symbol(r, Decl(derivedClassTransitivity.ts, 18, 3))
+>c.foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
+>c : Symbol(c, Decl(derivedClassTransitivity.ts, 14, 3))
+>foo : Symbol(C.foo, Decl(derivedClassTransitivity.ts, 2, 9))
+
+var r2 = e.foo('');
+>r2 : Symbol(r2, Decl(derivedClassTransitivity.ts, 19, 3))
+>e.foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
+>e : Symbol(e, Decl(derivedClassTransitivity.ts, 16, 3))
+>foo : Symbol(E.foo, Decl(derivedClassTransitivity.ts, 10, 19))
+

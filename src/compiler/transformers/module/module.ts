@@ -200,6 +200,7 @@ namespace ts {
          */
         function transformUMDModule(node: SourceFile) {
             const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, /*includeNonAmdDependencies*/ false);
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const umdHeader = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
@@ -260,6 +261,8 @@ namespace ts {
                                                 createIdentifier("define"),
                                                 /*typeArguments*/ undefined,
                                                 [
+                                                    // Add the module name (if provided).
+                                                    ...(moduleName ? [moduleName] : []),
                                                     createArrayLiteral([
                                                         createLiteral("require"),
                                                         createLiteral("exports"),
@@ -430,26 +433,29 @@ namespace ts {
          */
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (currentModuleInfo.exportEquals) {
-                if (emitAsReturn) {
-                    const statement = createReturn(currentModuleInfo.exportEquals.expression);
-                    setTextRange(statement, currentModuleInfo.exportEquals);
-                    setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
-                    statements.push(statement);
-                }
-                else {
-                    const statement = createStatement(
-                        createAssignment(
-                            createPropertyAccess(
-                                createIdentifier("module"),
-                                "exports"
-                            ),
-                            currentModuleInfo.exportEquals.expression
-                        )
-                    );
+                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, importCallExpressionVisitor);
+                if (expressionResult) {
+                    if (emitAsReturn) {
+                        const statement = createReturn(expressionResult);
+                        setTextRange(statement, currentModuleInfo.exportEquals);
+                        setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
+                        statements.push(statement);
+                    }
+                    else {
+                        const statement = createStatement(
+                            createAssignment(
+                                createPropertyAccess(
+                                    createIdentifier("module"),
+                                    "exports"
+                                ),
+                                expressionResult
+                            )
+                        );
 
-                    setTextRange(statement, currentModuleInfo.exportEquals);
-                    setEmitFlags(statement, EmitFlags.NoComments);
-                    statements.push(statement);
+                        setTextRange(statement, currentModuleInfo.exportEquals);
+                        setEmitFlags(statement, EmitFlags.NoComments);
+                        statements.push(statement);
+                    }
                 }
             }
         }
@@ -497,7 +503,7 @@ namespace ts {
             }
         }
 
-        function importCallExpressionVisitor(node: Node): VisitResult<Node> {
+        function importCallExpressionVisitor(node: Expression): VisitResult<Expression> {
             // This visitor does not need to descend into the tree if there is no dynamic import,
             // as export/import statements are only transformed at the top level of a file.
             if (!(node.transformFlags & TransformFlags.ContainsDynamicImport)) {
@@ -924,7 +930,7 @@ namespace ts {
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, importCallExpressionVisitor),
-                                node.members
+                                visitNodes(node.members, importCallExpressionVisitor)
                             ),
                             node
                         ),
@@ -1204,7 +1210,7 @@ namespace ts {
             }
 
             if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : decl.name;
+                const exportName = hasModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : getDeclarationName(decl);
                 statements = appendExportStatement(statements, exportName, getLocalName(decl), /*location*/ decl);
             }
 
@@ -1225,7 +1231,7 @@ namespace ts {
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
             const name = getDeclarationName(decl);
-            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(name.text);
+            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.escapedText));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);

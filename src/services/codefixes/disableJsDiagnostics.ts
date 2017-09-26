@@ -32,7 +32,7 @@ namespace ts.codefix {
             }
         }
 
-        // If all fails, add an extra new line immediatlly before the error span.
+        // If all fails, add an extra new line immediately before the error span.
         return {
             span: { start: position, length: 0 },
             newText: `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`

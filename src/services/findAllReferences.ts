@@ -41,7 +41,7 @@ namespace ts.FindAllReferences {
         readonly implementations?: boolean;
     }
 
-    export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
+    export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const referencedSymbols = findAllReferencedSymbols(program, cancellationToken, sourceFiles, sourceFile, position);
 
         if (!referencedSymbols || !referencedSymbols.length) {
@@ -60,7 +60,7 @@ namespace ts.FindAllReferences {
         return out;
     }
 
-    export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] {
+    export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ImplementationLocation[] {
         // A node in a JSDoc comment can't have an implementation anyway.
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false);
         const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node);
@@ -68,7 +68,7 @@ namespace ts.FindAllReferences {
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
 
-    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], node: Node): Entry[] | undefined {
+    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node): Entry[] | undefined {
         if (node.kind === SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -93,16 +93,16 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, options?: Options): ReferenceEntry[] | undefined {
+    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): ReferenceEntry[] | undefined {
         const x = flattenEntries(findAllReferencedSymbols(program, cancellationToken, sourceFiles, sourceFile, position, options));
         return map(x, toReferenceEntry);
     }
 
-    export function getReferenceEntriesForNode(node: Node, program: Program, sourceFiles: SourceFile[], cancellationToken: CancellationToken, options: Options = {}): Entry[] | undefined {
+    export function getReferenceEntriesForNode(node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): Entry[] | undefined {
         return flattenEntries(Core.getReferencedSymbolsForNode(node, program, sourceFiles, cancellationToken, options));
     }
 
-    function findAllReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, options?: Options): SymbolAndEntries[] | undefined {
+    function findAllReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): SymbolAndEntries[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         return Core.getReferencedSymbolsForNode(node, program, sourceFiles, cancellationToken, options);
     }
@@ -175,8 +175,10 @@ namespace ts.FindAllReferences {
         return {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
-            isWriteAccess: isWriteAccess(node),
-            isDefinition: isAnyDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
+            isWriteAccess: isWriteAccessForReference(node),
+            isDefinition: node.kind === SyntaxKind.DefaultKeyword
+                || isAnyDeclarationName(node)
+                || isLiteralComputedPropertyDeclarationName(node),
             isInString
         };
     }
@@ -222,7 +224,7 @@ namespace ts.FindAllReferences {
 
         const { node, isInString } = entry;
         const fileName = entry.node.getSourceFile().fileName;
-        const writeAccess = isWriteAccess(node);
+        const writeAccess = isWriteAccessForReference(node);
         const span: HighlightSpan = {
             textSpan: getTextSpan(node),
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
@@ -242,21 +244,8 @@ namespace ts.FindAllReferences {
     }
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
-    function isWriteAccess(node: Node): boolean {
-        if (isAnyDeclarationName(node)) {
-            return true;
-        }
-
-        const { parent } = node;
-        switch (parent && parent.kind) {
-            case SyntaxKind.PostfixUnaryExpression:
-            case SyntaxKind.PrefixUnaryExpression:
-                return true;
-            case SyntaxKind.BinaryExpression:
-                return (<BinaryExpression>parent).left === node && isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
-            default:
-                return false;
-        }
+    function isWriteAccessForReference(node: Node): boolean {
+        return node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node) || isWriteAccess(node);
     }
 }
 
@@ -264,7 +253,7 @@ namespace ts.FindAllReferences {
 /* @internal */
 namespace ts.FindAllReferences.Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
-    export function getReferencedSymbolsForNode(node: Node, program: Program, sourceFiles: SourceFile[], cancellationToken: CancellationToken, options: Options = {}): SymbolAndEntries[] | undefined {
+    export function getReferencedSymbolsForNode(node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): SymbolAndEntries[] | undefined {
         if (node.kind === ts.SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -313,7 +302,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, sourceFiles: SourceFile[]): SymbolAndEntries[] {
+    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, sourceFiles: ReadonlyArray<SourceFile>): SymbolAndEntries[] {
         Debug.assert(!!symbol.valueDeclaration);
 
         const references = findModuleReferences(program, sourceFiles, symbol).map<Entry>(reference => {
@@ -349,7 +338,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** getReferencedSymbols for special node kinds. */
-    function getReferencedSymbolsSpecial(node: Node, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
+    function getReferencedSymbolsSpecial(node: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
         if (isTypeKeyword(node.kind)) {
             return getAllReferencesForKeyword(sourceFiles, node.kind, cancellationToken);
         }
@@ -380,7 +369,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Core find-all-references algorithm for a normal symbol. */
-    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
+    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
         symbol = skipPastExportOrImportSpecifier(symbol, node, checker);
 
         // Compute the meaning from the location and the symbol it references
@@ -432,7 +421,7 @@ namespace ts.FindAllReferences.Core {
         readonly location: Node;
         readonly symbol: Symbol;
         readonly text: string;
-        readonly escapedText: string;
+        readonly escapedText: __String;
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
         readonly parents: Symbol[] | undefined;
 
@@ -474,7 +463,7 @@ namespace ts.FindAllReferences.Core {
         readonly markSeenReExportRHS = nodeSeenTracker();
 
         constructor(
-            readonly sourceFiles: SourceFile[],
+            readonly sourceFiles: ReadonlyArray<SourceFile>,
             /** True if we're searching for constructor references. */
             readonly isForConstructor: boolean,
             readonly checker: TypeChecker,
@@ -494,7 +483,7 @@ namespace ts.FindAllReferences.Core {
         createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
-            const escapedText = escapeIdentifier(text);
+            const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
             return {
                 location, symbol, comingFrom, text, escapedText, parents,
@@ -526,7 +515,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
+        private readonly sourceFileToSeenSymbols: true[][] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
             const sourceId = getNodeId(sourceFile);
@@ -593,20 +582,27 @@ namespace ts.FindAllReferences.Core {
             checker.getPropertySymbolOfDestructuringAssignment(<Identifier>location);
     }
 
-    function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol): boolean {
+    function getObjectBindingElementWithoutPropertyName(symbol: Symbol): BindingElement | undefined {
         const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
-        return bindingElement &&
+        if (bindingElement &&
             bindingElement.parent.kind === SyntaxKind.ObjectBindingPattern &&
-            !bindingElement.propertyName;
+            !bindingElement.propertyName) {
+            return bindingElement;
+        }
     }
 
     function getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol: Symbol, checker: TypeChecker): Symbol | undefined {
-        if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
-            const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
-            const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
+        const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
+        if (!bindingElement) return undefined;
+
+        const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
+        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
+        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
+            // See GH#16922
+            Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
+            return (propSymbol as TransientSymbol).target;
         }
-        return undefined;
+        return propSymbol;
     }
 
     /**
@@ -641,14 +637,19 @@ namespace ts.FindAllReferences.Core {
 
         // If symbol is of object binding pattern element without property name we would want to
         // look for property too and that could be anywhere
-        if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
+        if (getObjectBindingElementWithoutPropertyName(symbol)) {
             return undefined;
         }
 
-        // If the symbol has a parent, it's globally visible.
-        // Unless that parent is an external module, then we should only search in the module (and recurse on the export later).
-        // But if the parent is a module that has `export as namespace`, then the symbol *is* globally visible.
-        if (parent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
+        /*
+        If the symbol has a parent, it's globally visible unless:
+        - It's a private property (handled above).
+        - It's a type parameter.
+        - The parent is an external module: then we should only search in the module (and recurse on the export later).
+          - But if the parent has `export as namespace`, the symbol is globally visible through that namespace.
+        */
+        const exposedByParent = parent && !(symbol.flags & SymbolFlags.TypeParameter);
+        if (exposedByParent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
             return undefined;
         }
 
@@ -675,7 +676,7 @@ namespace ts.FindAllReferences.Core {
         //     declare module "a" { export type T = number; }
         //     declare module "b" { import { T } from "a"; export const x: T; }
         // So we must search the whole source file. (Because we will mark the source file as seen, we we won't return to it when searching for imports.)
-        return parent ? scope.getSourceFile() : scope;
+        return exposedByParent ? scope.getSourceFile() : scope;
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): number[] {
@@ -731,23 +732,26 @@ namespace ts.FindAllReferences.Core {
 
     function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
         // Compare the length so we filter out strict superstrings of the symbol we are looking for
-        switch (node && node.kind) {
+        switch (node.kind) {
             case SyntaxKind.Identifier:
-                return unescapeIdentifier((node as Identifier).text).length === searchSymbolName.length;
+                return (node as Identifier).text.length === searchSymbolName.length;
 
             case SyntaxKind.StringLiteral:
-                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) &&
+                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node as StringLiteral) || isNameOfExternalModuleImportOrDeclaration(node)) &&
                     (node as StringLiteral).text.length === searchSymbolName.length;
 
             case SyntaxKind.NumericLiteral:
-                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && (node as NumericLiteral).text.length === searchSymbolName.length;
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral) && (node as NumericLiteral).text.length === searchSymbolName.length;
+
+            case SyntaxKind.DefaultKeyword:
+                return "default".length === searchSymbolName.length;
 
             default:
                 return false;
         }
     }
 
-    function getAllReferencesForKeyword(sourceFiles: SourceFile[], keywordKind: ts.SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: ts.SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references: NodeEntry[] = [];
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
@@ -977,7 +981,7 @@ namespace ts.FindAllReferences.Core {
      * Reference the constructor and all calls to `new this()`.
      */
     function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
-        for (const decl of classSymbol.members.get("__constructor").declarations) {
+        for (const decl of classSymbol.members.get(InternalSymbolName.Constructor).declarations) {
             const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             addNode(ctrKeyword);
@@ -1001,7 +1005,7 @@ namespace ts.FindAllReferences.Core {
     /** Find references to `super` in the constructor of an extending class.  */
     function findSuperConstructorAccesses(cls: ClassLikeDeclaration, addNode: (node: Node) => void): void {
         const symbol = cls.symbol;
-        const ctr = symbol.members.get("__constructor");
+        const ctr = symbol.members.get(InternalSymbolName.Constructor);
         if (!ctr) {
             return;
         }
@@ -1049,16 +1053,17 @@ namespace ts.FindAllReferences.Core {
             if (isVariableLike(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
                 addReference(parent.initializer);
             }
-            else if (isFunctionLike(parent) && parent.type === containingTypeReference && parent.body) {
-                if (parent.body.kind === SyntaxKind.Block) {
-                    forEachReturnStatement(<Block>parent.body, returnStatement => {
+            else if (isFunctionLike(parent) && parent.type === containingTypeReference && (parent as FunctionLikeDeclaration).body) {
+                const body = (parent as FunctionLikeDeclaration).body;
+                if (body.kind === SyntaxKind.Block) {
+                    forEachReturnStatement(<Block>body, returnStatement => {
                         if (returnStatement.expression && isImplementationExpression(returnStatement.expression)) {
                             addReference(returnStatement.expression);
                         }
                     });
                 }
-                else if (isImplementationExpression(<Expression>parent.body)) {
-                    addReference(parent.body);
+                else if (isImplementationExpression(<Expression>body)) {
+                    addReference(body);
                 }
             }
             else if (isAssertionExpression(parent) && isImplementationExpression(parent.expression)) {
@@ -1246,7 +1251,7 @@ namespace ts.FindAllReferences.Core {
         return [{ definition: { type: "symbol", symbol: searchSpaceNode.symbol, node: superKeyword }, references }];
     }
 
-    function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] {
         let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
         // Whether 'this' occurs in a static context within a class.
@@ -1342,7 +1347,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references: NodeEntry[] = [];
 
         for (const sourceFile of sourceFiles) {
@@ -1422,22 +1427,27 @@ namespace ts.FindAllReferences.Core {
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker);
         if (bindingElementPropertySymbol) {
             result.push(bindingElementPropertySymbol);
+            addRootSymbols(bindingElementPropertySymbol);
         }
 
-        // If this is a union property, add all the symbols from all its source symbols in all unioned types.
-        // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-        for (const rootSymbol of checker.getRootSymbols(symbol)) {
-            if (rootSymbol !== symbol) {
-                result.push(rootSymbol);
-            }
-
-            // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
-            if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>(), checker);
-            }
-        }
+        addRootSymbols(symbol);
 
         return result;
+
+        function addRootSymbols(sym: Symbol): void {
+            // If this is a union property, add all the symbols from all its source symbols in all unioned types.
+            // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
+            for (const rootSymbol of checker.getRootSymbols(sym)) {
+                if (rootSymbol !== sym) {
+                    result.push(rootSymbol);
+                }
+
+                // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
+                if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
+                }
+            }
+        }
     }
 
     /**
@@ -1464,7 +1474,7 @@ namespace ts.FindAllReferences.Core {
         // the function will add any found symbol of the property-name, then its sub-routine will call
         // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
         // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-        if (previousIterationSymbolsCache.has(symbol.name)) {
+        if (previousIterationSymbolsCache.has(symbol.escapedName)) {
             return;
         }
 
@@ -1491,7 +1501,7 @@ namespace ts.FindAllReferences.Core {
                     }
 
                     // Visit the typeReference as well to see if it directly or indirectly use that property
-                    previousIterationSymbolsCache.set(symbol.name, symbol);
+                    previousIterationSymbolsCache.set(symbol.escapedName, symbol);
                     getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache, checker);
                 }
             }
@@ -1529,34 +1539,39 @@ namespace ts.FindAllReferences.Core {
         // then include the binding element in the related symbols
         //      let { a } : { a };
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, state.checker);
-        if (bindingElementPropertySymbol && search.includes(bindingElementPropertySymbol)) {
-            return bindingElementPropertySymbol;
+        if (bindingElementPropertySymbol) {
+            const fromBindingElement = findRootSymbol(bindingElementPropertySymbol);
+            if (fromBindingElement) return fromBindingElement;
         }
 
-        // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
-        // Or a union property, use its underlying unioned symbols
-        return forEach(state.checker.getRootSymbols(referenceSymbol), rootSymbol => {
-            // if it is in the list, then we are done
-            if (search.includes(rootSymbol)) {
-                return rootSymbol;
-            }
+        return findRootSymbol(referenceSymbol);
 
-            // Finally, try all properties with the same name in any type the containing type extended or implemented, and
-            // see if any is in the list. If we were passed a parent symbol, only include types that are subtypes of the
-            // parent symbol
-            if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                // Parents will only be defined if implementations is true
-                if (search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, state.checker))) {
-                    return undefined;
+        function findRootSymbol(sym: Symbol): Symbol | undefined {
+            // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
+            // Or a union property, use its underlying unioned symbols
+            return forEach(state.checker.getRootSymbols(sym), rootSymbol => {
+                // if it is in the list, then we are done
+                if (search.includes(rootSymbol)) {
+                    return rootSymbol;
                 }
 
-                const result: Symbol[] = [];
-                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>(), state.checker);
-                return find(result, search.includes);
-            }
+                // Finally, try all properties with the same name in any type the containing type extended or implemented, and
+                // see if any is in the list. If we were passed a parent symbol, only include types that are subtypes of the
+                // parent symbol
+                if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    // Parents will only be defined if implementations is true
+                    if (search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, state.checker))) {
+                        return undefined;
+                    }
 
-            return undefined;
-        });
+                    const result: Symbol[] = [];
+                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), state.checker);
+                    return find(result, search.includes);
+                }
+
+                return undefined;
+            });
+        }
     }
 
     function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {
@@ -1568,7 +1583,7 @@ namespace ts.FindAllReferences.Core {
             }
             return undefined;
         }
-        return (<Identifier | LiteralExpression>node.name).text;
+        return getTextOfIdentifierOrLiteral(node.name);
     }
 
     /** Gets all symbols for one property. Does not get symbols for every property. */
@@ -1643,7 +1658,7 @@ namespace ts.FindAllReferences.Core {
             }
         }
         else if (isFunctionLike(node)) {
-            return !!node.body || hasModifier(node, ModifierFlags.Ambient);
+            return !!(node as FunctionLikeDeclaration).body || hasModifier(node, ModifierFlags.Ambient);
         }
         else {
             switch (node.kind) {
