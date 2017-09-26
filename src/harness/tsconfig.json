@@ -130,6 +130,8 @@
         "./unittests/customTransforms.ts",
         "./unittests/extractConstants.ts",
         "./unittests/extractFunctions.ts",
+        "./unittests/extractRanges.ts",
+        "./unittests/extractTestHelpers.ts",
         "./unittests/textChanges.ts",
         "./unittests/telemetry.ts",
         "./unittests/languageService.ts",

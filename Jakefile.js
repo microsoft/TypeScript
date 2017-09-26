@@ -140,6 +140,8 @@ var harnessSources = harnessCoreSources.concat([
     "initializeTSConfig.ts",
     "extractConstants.ts",
     "extractFunctions.ts",
+    "extractRanges.ts",
+    "extractTestHelpers.ts",
     "printer.ts",
     "textChanges.ts",
     "telemetry.ts",
