@@ -19789,6 +19789,15 @@ namespace ts {
             }
         }
 
+        function checkJSDocParameterTag(node: JSDocParameterTag) {
+            checkSourceElement(node.typeExpression);
+            if (!getParameterSymbolFromJSDoc(node)) {
+                error(node.name,
+                    Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
+                    unescapeLeadingUnderscores((node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name).escapedText));
+            }
+        }
+
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
@@ -22486,7 +22495,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                     return checkJSDocTypedefTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocParameterTag:
-                    return checkSourceElement((node as JSDocParameterTag).typeExpression);
+                    return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocFunctionType:
                     checkSignatureDeclaration(node as JSDocFunctionType);
                     // falls through
