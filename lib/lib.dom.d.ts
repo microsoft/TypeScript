@@ -24,11 +24,11 @@ and limitations under the License.
 /////////////////////////////
 
 interface Account {
-    displayName?: string;
-    id?: string;
+    displayName: string;
+    id: string;
     imageURL?: string;
     name?: string;
-    rpDisplayName?: string;
+    rpDisplayName: string;
 }
 
 interface Algorithm {
@@ -55,11 +55,11 @@ interface CacheQueryOptions {
 }
 
 interface ClientData {
-    challenge?: string;
+    challenge: string;
     extensions?: WebAuthnExtensions;
-    hashAlg?: string | Algorithm;
-    origin?: string;
-    rpId?: string;
+    hashAlg: string | Algorithm;
+    origin: string;
+    rpId: string;
     tokenBinding?: string;
 }
 
@@ -107,9 +107,9 @@ interface CustomEventInit extends EventInit {
 }
 
 interface DeviceAccelerationDict {
-    x?: number;
-    y?: number;
-    z?: number;
+    x?: number | null;
+    y?: number | null;
+    z?: number | null;
 }
 
 interface DeviceLightEventInit extends EventInit {
@@ -117,30 +117,30 @@ interface DeviceLightEventInit extends EventInit {
 }
 
 interface DeviceMotionEventInit extends EventInit {
-    acceleration?: DeviceAccelerationDict;
-    accelerationIncludingGravity?: DeviceAccelerationDict;
-    interval?: number;
-    rotationRate?: DeviceRotationRateDict;
+    acceleration?: DeviceAccelerationDict | null;
+    accelerationIncludingGravity?: DeviceAccelerationDict | null;
+    interval?: number | null;
+    rotationRate?: DeviceRotationRateDict | null;
 }
 
 interface DeviceOrientationEventInit extends EventInit {
     absolute?: boolean;
-    alpha?: number;
-    beta?: number;
-    gamma?: number;
+    alpha?: number | null;
+    beta?: number | null;
+    gamma?: number | null;
 }
 
 interface DeviceRotationRateDict {
-    alpha?: number;
-    beta?: number;
-    gamma?: number;
+    alpha?: number | null;
+    beta?: number | null;
+    gamma?: number | null;
 }
 
 interface DOMRectInit {
-    height?: any;
-    width?: any;
-    x?: any;
-    y?: any;
+    height?: number;
+    width?: number;
+    x?: number;
+    y?: number;
 }
 
 interface DoubleRange {
@@ -181,15 +181,15 @@ interface EventModifierInit extends UIEventInit {
 }
 
 interface ExceptionInformation {
-    domain?: string;
+    domain?: string | null;
 }
 
 interface FocusEventInit extends UIEventInit {
-    relatedTarget?: EventTarget;
+    relatedTarget?: EventTarget | null;
 }
 
 interface FocusNavigationEventInit extends EventInit {
-    navigationReason?: string;
+    navigationReason?: string | null;
     originHeight?: number;
     originLeft?: number;
     originTop?: number;
@@ -204,7 +204,7 @@ interface FocusNavigationOrigin {
 }
 
 interface GamepadEventInit extends EventInit {
-    gamepad?: Gamepad;
+    gamepad?: Gamepad | null;
 }
 
 interface GetNotificationOptions {
@@ -212,8 +212,8 @@ interface GetNotificationOptions {
 }
 
 interface HashChangeEventInit extends EventInit {
-    newURL?: string;
-    oldURL?: string;
+    newURL?: string | null;
+    oldURL?: string | null;
 }
 
 interface IDBIndexParameters {
@@ -223,19 +223,20 @@ interface IDBIndexParameters {
 
 interface IDBObjectStoreParameters {
     autoIncrement?: boolean;
-    keyPath?: IDBKeyPath;
+    keyPath?: IDBKeyPath | null;
 }
 
 interface IntersectionObserverEntryInit {
-    boundingClientRect?: DOMRectInit;
-    intersectionRect?: DOMRectInit;
-    rootBounds?: DOMRectInit;
-    target?: Element;
-    time?: number;
+    isIntersecting: boolean;
+    boundingClientRect: DOMRectInit;
+    intersectionRect: DOMRectInit;
+    rootBounds: DOMRectInit;
+    target: Element;
+    time: number;
 }
 
 interface IntersectionObserverInit {
-    root?: Element;
+    root?: Element | null;
     rootMargin?: string;
     threshold?: number | number[];
 }
@@ -257,12 +258,12 @@ interface LongRange {
 }
 
 interface MediaEncryptedEventInit extends EventInit {
-    initData?: ArrayBuffer;
+    initData?: ArrayBuffer | null;
     initDataType?: string;
 }
 
 interface MediaKeyMessageEventInit extends EventInit {
-    message?: ArrayBuffer;
+    message?: ArrayBuffer | null;
     messageType?: MediaKeyMessageType;
 }
 
@@ -285,7 +286,7 @@ interface MediaStreamConstraints {
 }
 
 interface MediaStreamErrorEventInit extends EventInit {
-    error?: MediaStreamError;
+    error?: MediaStreamError | null;
 }
 
 interface MediaStreamEventInit extends EventInit {
@@ -293,7 +294,7 @@ interface MediaStreamEventInit extends EventInit {
 }
 
 interface MediaStreamTrackEventInit extends EventInit {
-    track?: MediaStreamTrack;
+    track?: MediaStreamTrack | null;
 }
 
 interface MediaTrackCapabilities {
@@ -370,7 +371,7 @@ interface MouseEventInit extends EventModifierInit {
     buttons?: number;
     clientX?: number;
     clientY?: number;
-    relatedTarget?: EventTarget;
+    relatedTarget?: EventTarget | null;
     screenX?: number;
     screenY?: number;
 }
@@ -378,8 +379,8 @@ interface MouseEventInit extends EventModifierInit {
 interface MSAccountInfo {
     accountImageUri?: string;
     accountName?: string;
-    rpDisplayName?: string;
-    userDisplayName?: string;
+    rpDisplayName: string;
+    userDisplayName: string;
     userId?: string;
 }
 
@@ -462,7 +463,7 @@ interface MSCredentialParameters {
 
 interface MSCredentialSpec {
     id?: string;
-    type?: MSCredentialType;
+    type: MSCredentialType;
 }
 
 interface MSDelay {
@@ -672,8 +673,8 @@ interface MsZoomToOptions {
     contentX?: number;
     contentY?: number;
     scaleFactor?: number;
-    viewportX?: string;
-    viewportY?: string;
+    viewportX?: string | null;
+    viewportY?: string | null;
 }
 
 interface MutationObserverInit {
@@ -699,9 +700,9 @@ interface ObjectURLOptions {
 }
 
 interface PaymentCurrencyAmount {
-    currency?: string;
+    currency: string;
     currencySystem?: string;
-    value?: string;
+    value: string;
 }
 
 interface PaymentDetails {
@@ -715,19 +716,19 @@ interface PaymentDetails {
 interface PaymentDetailsModifier {
     additionalDisplayItems?: PaymentItem[];
     data?: any;
-    supportedMethods?: string[];
+    supportedMethods: string[];
     total?: PaymentItem;
 }
 
 interface PaymentItem {
-    amount?: PaymentCurrencyAmount;
-    label?: string;
+    amount: PaymentCurrencyAmount;
+    label: string;
     pending?: boolean;
 }
 
 interface PaymentMethodData {
     data?: any;
-    supportedMethods?: string[];
+    supportedMethods: string[];
 }
 
 interface PaymentOptions {
@@ -742,9 +743,9 @@ interface PaymentRequestUpdateEventInit extends EventInit {
 }
 
 interface PaymentShippingOption {
-    amount?: PaymentCurrencyAmount;
-    id?: string;
-    label?: string;
+    amount: PaymentCurrencyAmount;
+    id: string;
+    label: string;
     selected?: boolean;
 }
 
@@ -792,7 +793,7 @@ interface RequestInit {
     body?: any;
     cache?: RequestCache;
     credentials?: RequestCredentials;
-    headers?: any;
+    headers?: Headers | string[][];
     integrity?: string;
     keepalive?: boolean;
     method?: string;
@@ -804,7 +805,7 @@ interface RequestInit {
 }
 
 interface ResponseInit {
-    headers?: any;
+    headers?: Headers | string[][];
     status?: number;
     statusText?: string;
 }
@@ -889,15 +890,15 @@ interface RTCIceGatherOptions {
 }
 
 interface RTCIceParameters {
-    iceLite?: boolean;
+    iceLite?: boolean | null;
     password?: string;
     usernameFragment?: string;
 }
 
 interface RTCIceServer {
-    credential?: string;
+    credential?: string | null;
     urls?: any;
-    username?: string;
+    username?: string | null;
 }
 
 interface RTCInboundRTPStreamStats extends RTCRTPStreamStats {
@@ -1107,9 +1108,9 @@ interface RTCTransportStats extends RTCStats {
 }
 
 interface ScopedCredentialDescriptor {
-    id?: any;
+    id: any;
     transports?: Transport[];
-    type?: ScopedCredentialType;
+    type: ScopedCredentialType;
 }
 
 interface ScopedCredentialOptions {
@@ -1120,29 +1121,29 @@ interface ScopedCredentialOptions {
 }
 
 interface ScopedCredentialParameters {
-    algorithm?: string | Algorithm;
-    type?: ScopedCredentialType;
+    algorithm: string | Algorithm;
+    type: ScopedCredentialType;
 }
 
 interface ServiceWorkerMessageEventInit extends EventInit {
     data?: any;
     lastEventId?: string;
     origin?: string;
-    ports?: MessagePort[];
-    source?: ServiceWorker | MessagePort;
+    ports?: MessagePort[] | null;
+    source?: ServiceWorker | MessagePort | null;
 }
 
 interface SpeechSynthesisEventInit extends EventInit {
     charIndex?: number;
     elapsedTime?: number;
     name?: string;
-    utterance?: SpeechSynthesisUtterance;
+    utterance?: SpeechSynthesisUtterance | null;
 }
 
 interface StoreExceptionsInformation extends ExceptionInformation {
-    detailURI?: string;
-    explanationString?: string;
-    siteName?: string;
+    detailURI?: string | null;
+    explanationString?: string | null;
+    siteName?: string | null;
 }
 
 interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformation {
@@ -1150,7 +1151,7 @@ interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformat
 }
 
 interface TrackEventInit extends EventInit {
-    track?: VideoTrack | AudioTrack | TextTrack;
+    track?: VideoTrack | AudioTrack | TextTrack | null;
 }
 
 interface TransitionEventInit extends EventInit {
@@ -1160,7 +1161,7 @@ interface TransitionEventInit extends EventInit {
 
 interface UIEventInit extends EventInit {
     detail?: number;
-    view?: Window;
+    view?: Window | null;
 }
 
 interface WebAuthnExtensions {
@@ -1540,9 +1541,9 @@ interface Cache {
     add(request: RequestInfo): Promise<void>;
     addAll(requests: RequestInfo[]): Promise<void>;
     delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
-    keys(request?: RequestInfo, options?: CacheQueryOptions): any;
+    keys(request?: RequestInfo, options?: CacheQueryOptions): Promise<Request[]>;
     match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response>;
-    matchAll(request?: RequestInfo, options?: CacheQueryOptions): any;
+    matchAll(request?: RequestInfo, options?: CacheQueryOptions): Promise<Response[]>;
     put(request: RequestInfo, response: Response): Promise<void>;
 }
 
@@ -1554,7 +1555,7 @@ declare var Cache: {
 interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
-    keys(): any;
+    keys(): Promise<string[]>;
     match(request: RequestInfo, options?: CacheQueryOptions): Promise<any>;
     open(cacheName: string): Promise<Cache>;
 }
@@ -2659,7 +2660,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
      */
     readonly compatMode: string;
     cookie: string;
-    readonly currentScript: HTMLScriptElement | SVGScriptElement;
+    readonly currentScript: HTMLScriptElement | SVGScriptElement | null;
     readonly defaultView: Window;
     /**
      * Sets or gets a value that indicates whether the document can be edited.
@@ -3398,7 +3399,7 @@ interface DOMException {
 
 declare var DOMException: {
     prototype: DOMException;
-    new(): DOMException;
+    new(message?: string, name?: string): DOMException;
     readonly ABORT_ERR: number;
     readonly DATA_CLONE_ERR: number;
     readonly DOMSTRING_SIZE_ERR: number;
@@ -3904,7 +3905,7 @@ interface Headers {
 
 declare var Headers: {
     prototype: Headers;
-    new(init?: any): Headers;
+    new(init?: Headers | string[][] | object): Headers;
 };
 
 interface History {
@@ -4064,7 +4065,7 @@ interface HTMLAppletElement extends HTMLElement {
      * Sets or retrieves a character string that can be used to implement your own declare functionality for the object.
      */
     declare: boolean;
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the height of the object.
      */
@@ -4302,7 +4303,7 @@ interface HTMLButtonElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Overrides the action attribute (where the data on a form is sent) on the parent form element.
      */
@@ -4735,7 +4736,7 @@ interface HTMLFieldSetElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     name: string;
     /**
      * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
@@ -5314,7 +5315,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Overrides the action attribute (where the data on a form is sent) on the parent form element.
      */
@@ -5481,7 +5482,7 @@ interface HTMLLabelElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the object to which the given label object is assigned.
      */
@@ -5503,7 +5504,7 @@ interface HTMLLegendElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLegendElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -5937,7 +5938,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the height of the object.
      */
@@ -6036,7 +6037,7 @@ interface HTMLOptGroupElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the ordinal position of an option in a list box.
      */
@@ -6075,7 +6076,7 @@ interface HTMLOptionElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the ordinal position of an option in a list box.
      */
@@ -6119,7 +6120,7 @@ declare var HTMLOptionsCollection: {
 
 interface HTMLOutputElement extends HTMLElement {
     defaultValue: string;
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     readonly htmlFor: DOMSettableTokenList;
     name: string;
     readonly type: string;
@@ -6208,7 +6209,7 @@ interface HTMLProgressElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Defines the maximum, or "done" value for a progress element.
      */
@@ -6294,7 +6295,7 @@ interface HTMLSelectElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the number of objects in a collection.
      */
@@ -6765,7 +6766,7 @@ interface HTMLTextAreaElement extends HTMLElement {
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
-    readonly form: HTMLFormElement;
+    readonly form: HTMLFormElement | null;
     /**
      * Sets or retrieves the maximum number of characters that the user can enter in a text control.
      */
@@ -7231,6 +7232,7 @@ interface IntersectionObserverEntry {
     readonly rootBounds: ClientRect;
     readonly target: Element;
     readonly time: number;
+    readonly isIntersecting: boolean;
 }
 
 declare var IntersectionObserverEntry: {
@@ -7332,7 +7334,7 @@ interface MediaDevicesEventMap {
 
 interface MediaDevices extends EventTarget {
     ondevicechange: (this: MediaDevices, ev: Event) => any;
-    enumerateDevices(): any;
+    enumerateDevices(): Promise<MediaDeviceInfo[]>;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
     getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
     addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, useCapture?: boolean): void;
@@ -9078,6 +9080,7 @@ interface Response extends Object, Body {
     readonly statusText: string;
     readonly type: ResponseType;
     readonly url: string;
+    readonly redirected: boolean;
     clone(): Response;
 }
 
@@ -9531,8 +9534,8 @@ interface ServiceWorkerContainer extends EventTarget {
     oncontrollerchange: (this: ServiceWorkerContainer, ev: Event) => any;
     onmessage: (this: ServiceWorkerContainer, ev: ServiceWorkerMessageEvent) => any;
     readonly ready: Promise<ServiceWorkerRegistration>;
-    getRegistration(clientURL?: USVString): Promise<any>;
-    getRegistrations(): any;
+    getRegistration(): Promise<ServiceWorkerRegistration | undefined>;
+    getRegistrations(): Promise<ServiceWorkerRegistration[]>;
     register(scriptURL: USVString, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
     addEventListener<K extends keyof ServiceWorkerContainerEventMap>(type: K, listener: (this: ServiceWorkerContainer, ev: ServiceWorkerContainerEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -9568,7 +9571,7 @@ interface ServiceWorkerRegistration extends EventTarget {
     readonly scope: USVString;
     readonly sync: SyncManager;
     readonly waiting: ServiceWorker | null;
-    getNotifications(filter?: GetNotificationOptions): any;
+    getNotifications(filter?: GetNotificationOptions): Promise<Notification[]>;
     showNotification(title: string, options?: NotificationOptions): Promise<void>;
     unregister(): Promise<boolean>;
     update(): Promise<void>;
@@ -11593,7 +11596,7 @@ declare var SVGZoomEvent: {
 };
 
 interface SyncManager {
-    getTags(): any;
+    getTags(): Promise<string[]>;
     register(tag: string): Promise<void>;
 }
 
@@ -11901,6 +11904,7 @@ interface ValidityState {
     readonly typeMismatch: boolean;
     readonly valid: boolean;
     readonly valueMissing: boolean;
+    readonly tooShort: boolean;
 }
 
 declare var ValidityState: {
@@ -13762,13 +13766,13 @@ interface NavigatorUserMedia {
 
 interface NodeSelector {
     querySelector<K extends keyof ElementTagNameMap>(selectors: K): ElementTagNameMap[K] | null;
-    querySelector(selectors: string): Element | null;
+    querySelector<E extends Element = Element>(selectors: string): E | null;
     querySelectorAll<K extends keyof ElementListTagNameMap>(selectors: K): ElementListTagNameMap[K];
-    querySelectorAll(selectors: string): NodeListOf<Element>;
+    querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
 }
 
 interface RandomSource {
-    getRandomValues(array: ArrayBufferView): ArrayBufferView;
+    getRandomValues<T extends Int8Array | Uint8ClampedArray | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array>(array: T): T;
 }
 
 interface SVGAnimatedPoints {
@@ -13843,15 +13847,35 @@ interface XMLHttpRequestEventTargetEventMap {
 }
 
 interface XMLHttpRequestEventTarget {
-    onabort: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onerror: (this: XMLHttpRequestEventTarget, ev: ErrorEvent) => any;
-    onload: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onloadend: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
-    onloadstart: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onprogress: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
-    ontimeout: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
+    onabort: (this: XMLHttpRequest, ev: Event) => any;
+    onerror: (this: XMLHttpRequest, ev: ErrorEvent) => any;
+    onload: (this: XMLHttpRequest, ev: Event) => any;
+    onloadend: (this: XMLHttpRequest, ev: ProgressEvent) => any;
+    onloadstart: (this: XMLHttpRequest, ev: Event) => any;
+    onprogress: (this: XMLHttpRequest, ev: ProgressEvent) => any;
+    ontimeout: (this: XMLHttpRequest, ev: ProgressEvent) => any;
     addEventListener<K extends keyof XMLHttpRequestEventTargetEventMap>(type: K, listener: (this: XMLHttpRequestEventTarget, ev: XMLHttpRequestEventTargetEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+interface BroadcastChannel extends EventTarget {
+    readonly name: string;
+    onmessage: (ev: MessageEvent) => any;
+    onmessageerror: (ev: MessageEvent) => any;
+    close(): void;
+    postMessage(message: any): void;
+    addEventListener<K extends keyof BroadcastChannelEventMap>(type: K, listener: (this: BroadcastChannel, ev: BroadcastChannelEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var BroadcastChannel: {
+    prototype: BroadcastChannel;
+    new(name: string): BroadcastChannel;
+};
+
+interface BroadcastChannelEventMap {
+    message: MessageEvent;
+    messageerror: MessageEvent;
 }
 
 interface ErrorEventInit {
@@ -13944,8 +13968,7 @@ interface BlobPropertyBag {
     endings?: string;
 }
 
-interface FilePropertyBag {
-    type?: string;
+interface FilePropertyBag extends BlobPropertyBag {
     lastModified?: number;
 }
 
@@ -14220,6 +14243,44 @@ interface TouchEventInit extends EventModifierInit {
     targetTouches?: Touch[];
     changedTouches?: Touch[];
 }
+
+interface HTMLDialogElement extends HTMLElement {
+    open: boolean;
+    returnValue: string;
+    close(returnValue?: string): void;
+    show(): void;
+    showModal(): void;
+}
+
+declare var HTMLDialogElement: {
+    prototype: HTMLDialogElement;
+    new(): HTMLDialogElement;
+};
+
+interface HTMLMainElement extends HTMLElement {
+}
+
+declare var HTMLMainElement: {
+    prototype: HTMLMainElement;
+    new(): HTMLMainElement;
+};
+
+interface HTMLDetailsElement extends HTMLElement {
+    open: boolean;
+}
+
+declare var HTMLDetailsElement: {
+    prototype: HTMLDetailsElement;
+    new(): HTMLDetailsElement;
+};
+
+interface HTMLSummaryElement extends HTMLElement {
+}
+
+declare var HTMLSummaryElement: {
+    prototype: HTMLSummaryElement;
+    new(): HTMLSummaryElement;
+};
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
@@ -14710,7 +14771,7 @@ type GLsizeiptr = number;
 type GLubyte = number;
 type GLuint = number;
 type GLushort = number;
-type HeadersInit = any;
+type HeadersInit = Headers | string[][];
 type IDBKeyPath = string;
 type KeyFormat = string;
 type KeyType = string;
