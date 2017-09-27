@@ -2367,7 +2367,7 @@ namespace ts {
 
             function signatureToStringWorker(writer: EmitTextWriter) {
                 const sig = nodeBuilder.signatureToSignatureDeclaration(signature, kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
-                const printer = createPrinter({ removeComments: true });
+                const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, sig, /*sourceFile*/ sourceFile, writer);
                 return writer;

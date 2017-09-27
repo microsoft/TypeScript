@@ -287,6 +287,7 @@ namespace ts {
         let writer: EmitTextWriter;
         let ownWriter: EmitTextWriter;
         let write = writeBase;
+        let pendingSemicolon = false;
 
         reset();
         return {
@@ -2114,6 +2115,7 @@ namespace ts {
         }
 
         function emitJsxText(node: JsxText) {
+            commitPendingSemicolon();
             writer.writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
         }
 
@@ -2625,43 +2627,64 @@ namespace ts {
             }
         }
 
+        function commitPendingSemicolon() {
+            if (pendingSemicolon) {
+                writer.writePunctuation(";");
+            }
+            pendingSemicolon = false;
+        }
+
         function writeBase(s: string) {
+            commitPendingSemicolon();
             writer.write(s);
         }
 
         function writePunctuation(s: string) {
+            commitPendingSemicolon();
+            if (printerOptions.omitTrailingSemicolon && s === ";") {
+                pendingSemicolon = true;
+                return;
+            }
             writer.writePunctuation(s);
         }
 
         function writeKeyword(s: string) {
+            commitPendingSemicolon();
             writer.writeKeyword(s);
         }
 
         function writeOperator(s: string) {
+            commitPendingSemicolon();
             writer.writeOperator(s);
         }
 
         function writeParameter(s: string) {
+            commitPendingSemicolon();
             writer.writeParameter(s);
         }
 
         function writeSpace(s: string) {
+            commitPendingSemicolon();
             writer.writeSpace(s);
         }
 
         function writeProperty(s: string) {
+            commitPendingSemicolon();
             writer.writeProperty(s);
         }
 
         function writeLine() {
+            commitPendingSemicolon();
             writer.writeLine();
         }
 
         function increaseIndent() {
+            commitPendingSemicolon();
             writer.increaseIndent();
         }
 
         function decreaseIndent() {
+            commitPendingSemicolon();
             writer.decreaseIndent();
         }
 
