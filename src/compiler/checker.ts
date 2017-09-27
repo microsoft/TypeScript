@@ -290,6 +290,7 @@ namespace ts {
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createSymbolTable();
+        let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
          * Unlike other ambient modules, these can't be stored in `globals` because symbol tables only deal with exact matches.
@@ -6251,13 +6252,11 @@ namespace ts {
 
         function symbolsToArray(symbols: SymbolTable): Symbol[] {
             const result: Symbol[] = [];
-            if (symbols) {
-                symbols.forEach((symbol, id) => {
-                    if (!isReservedMemberName(id)) {
-                        result.push(symbol);
-                    }
-                });
-            }
+            symbols.forEach((symbol, id) => {
+                if (!isReservedMemberName(id)) {
+                    result.push(symbol);
+                }
+            });
             return result;
         }
 
@@ -25229,13 +25228,16 @@ namespace ts {
         }
 
         function getAmbientModules(): Symbol[] {
-            const result: Symbol[] = [];
-            globals.forEach((global, sym) => {
-                if (ambientModuleSymbolRegex.test(unescapeLeadingUnderscores(sym))) {
-                    result.push(global);
-                }
-            });
-            return result;
+            if (!ambientModulesCache) {
+                ambientModulesCache = [];
+                globals.forEach((global, sym) => {
+                    // No need to `unescapeLeadingUnderscores`, an escaped symbol is never an ambient module.
+                    if (ambientModuleSymbolRegex.test(sym as string)) {
+                        ambientModulesCache.push(global);
+                    }
+                });
+            }
+            return ambientModulesCache;
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {

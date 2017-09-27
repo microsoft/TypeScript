@@ -1298,9 +1298,7 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 &&
-            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
-            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
             return name.substring(1, length - 1);
         }
         return name;
@@ -1313,33 +1311,12 @@ namespace ts {
 
     export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
-        // may override the default script kind for the file extensison.
+        // may override the default script kind for the file extension.
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
     }
 
-    export function getOtherModuleSymbols(
-        sourceFiles: ReadonlyArray<SourceFile>,
-        currentSourceFile: SourceFile,
-        typeChecker: TypeChecker
-    ) {
-        const results: Symbol[] = typeChecker.getAmbientModules();
-        for (const otherSourceFile of sourceFiles) {
-            if (otherSourceFile !== currentSourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
-                results.push(otherSourceFile.symbol);
-            }
-        }
-        return results;
-    }
-
-    export function getUniqueSymbolIdAsString(symbol: Symbol, typeChecker: TypeChecker) {
-        return getUniqueSymbolId(symbol, typeChecker) + "";
-    }
-
-    export function getUniqueSymbolId(symbol: Symbol, typeChecker: TypeChecker) {
-        if (symbol.flags & SymbolFlags.Alias) {
-            return getSymbolId(typeChecker.getAliasedSymbol(symbol));
-        }
-        return getSymbolId(symbol);
+    export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
+        return getSymbolId(skipAlias(symbol, checker));
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {

@@ -339,7 +339,7 @@ namespace ts.Completions.PathCompletions {
             }
         }
         else if (host.getDirectories) {
-            let typeRoots: string[];
+            let typeRoots: ReadonlyArray<string>;
             try {
                 // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
                 typeRoots = getEffectiveTypeRoots(options, host);

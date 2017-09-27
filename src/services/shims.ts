@@ -141,7 +141,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -601,7 +601,7 @@ namespace ts {
             this.logger = this.host;
         }
 
-        public forwardJSONCall(actionDescription: string, action: () => any): string {
+        public forwardJSONCall(actionDescription: string, action: () => {}): string {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
@@ -893,10 +893,13 @@ namespace ts {
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
-                () => this.languageService.getCompletionEntryDetails(fileName, position, entryName)
+                () => {
+                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions);
+                }
             );
         }
 
@@ -1030,7 +1033,7 @@ namespace ts {
             super(factory);
         }
 
-        private forwardJSONCall(actionDescription: string, action: () => any): any {
+        private forwardJSONCall(actionDescription: string, action: () => {}): any {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
