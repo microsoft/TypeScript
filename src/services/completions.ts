@@ -923,8 +923,7 @@ namespace ts.Completions {
             const tokenTextLowerCase = tokenText.toLowerCase();
             const symbolIdMap = arrayToMap(knownSymbols, s => getUniqueSymbolIdAsString(s, typeChecker));
 
-            const allPotentialModules = getOtherModuleSymbols(allSourceFiles, sourceFile, typeChecker);
-            for (const moduleSymbol of allPotentialModules) {
+            eachOtherModuleSymbol(allSourceFiles, sourceFile, typeChecker, moduleSymbol => {
                 // check the default export
                 const defaultExport = typeChecker.tryGetMemberInModuleExports("default", moduleSymbol);
                 if (defaultExport) {
@@ -945,7 +944,7 @@ namespace ts.Completions {
                         }
                     }
                 }
-            }
+            });
             return otherSourceFileExports;
         }
 
@@ -1897,5 +1896,22 @@ namespace ts.Completions {
         const filteredTypes = types.filter(memberType => !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType)));
         // If there are no property-only types, just provide completions for every type as usual.
         return checker.getAllPossiblePropertiesOfTypes(filteredTypes);
+    }
+
+    function eachOtherModuleSymbol(
+        sourceFiles: ReadonlyArray<SourceFile>,
+        currentSourceFile: SourceFile,
+        typeChecker: TypeChecker,
+        cb: (symbol: Symbol) => void,
+    ) {
+        for (const a of typeChecker.getAmbientModules()) {
+            cb(a);
+        }
+
+        for (const otherSourceFile of sourceFiles) {
+            if (otherSourceFile !== currentSourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
+                cb(otherSourceFile.symbol);
+            }
+        }
     }
 }

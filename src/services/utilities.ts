@@ -1317,20 +1317,6 @@ namespace ts {
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
     }
 
-    export function getOtherModuleSymbols(
-        sourceFiles: ReadonlyArray<SourceFile>,
-        currentSourceFile: SourceFile,
-        typeChecker: TypeChecker
-    ) {
-        const results: Symbol[] = typeChecker.getAmbientModules();
-        for (const otherSourceFile of sourceFiles) {
-            if (otherSourceFile !== currentSourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
-                results.push(otherSourceFile.symbol);
-            }
-        }
-        return results;
-    }
-
     export function getUniqueSymbolIdAsString(symbol: Symbol, typeChecker: TypeChecker) {
         return getUniqueSymbolId(symbol, typeChecker) + "";
     }

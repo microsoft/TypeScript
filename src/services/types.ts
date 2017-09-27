@@ -228,6 +228,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
+        //We should probably not take formatting options here.
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formattingOptions?: FormatCodeSettings): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
 
@@ -665,7 +666,7 @@ namespace ts {
          * be used in that case
          */
         replacementSpan?: TextSpan;
-        hasAction?: true;
+        hasAction?: true; //why do we need this?
     }
 
     export interface CompletionEntryDetails {
