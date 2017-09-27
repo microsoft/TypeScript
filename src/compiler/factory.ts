@@ -859,7 +859,6 @@ namespace ts {
 
     export function createPropertyAccess(expression: Expression, name: string | Identifier) {
         const node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
-        if (expression.flags & NodeFlags.Optional) node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
         node.name = asName(name);
         setEmitFlags(node, EmitFlags.NoIndentation);
@@ -877,7 +876,6 @@ namespace ts {
 
     export function createElementAccess(expression: Expression, index: number | Expression) {
         const node = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
-        if (expression.flags & NodeFlags.Optional) node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = asExpression(index);
         return node;
@@ -890,9 +888,66 @@ namespace ts {
             : node;
     }
 
+    export function createOptionalExpression(expression: Expression, chain: OptionalChain) {
+        const node = <OptionalExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
+        node.expression = parenthesizeForAccess(expression);
+        node.chain = chain;
+        return node;
+    }
+
+    export function updateOptionalExpression(node: OptionalExpression, expression: Expression, chain: OptionalChain) {
+        return node.expression !== expression
+            || node.chain !== chain
+            ? updateNode(createOptionalExpression(expression, chain), node)
+            : node;
+    }
+
+    export function createPropertyAccessChain(chain: OptionalChain | undefined, name: Identifier) {
+        const node = <PropertyAccessChain>createSynthesizedNode(SyntaxKind.PropertyAccessChain);
+        node.chain = chain;
+        node.name = name;
+        return node;
+    }
+
+    export function updatePropertyAccessChain(node: PropertyAccessChain, chain: OptionalChain | undefined, name: Identifier) {
+        return node.chain !== chain
+            || node.name !== name
+            ? updateNode(createPropertyAccessChain(chain, name), node)
+            : node;
+    }
+
+    export function createElementAccessChain(chain: OptionalChain | undefined, argumentExpression: Expression) {
+        const node = <ElementAccessChain>createSynthesizedNode(SyntaxKind.ElementAccessChain);
+        node.chain = chain;
+        node.argumentExpression = argumentExpression;
+        return node;
+    }
+
+    export function updateElementAccessChain(node: ElementAccessChain, chain: OptionalChain | undefined, argumentExpression: Expression) {
+        return node.chain !== chain
+            || node.argumentExpression !== argumentExpression
+            ? updateNode(createElementAccessChain(chain, argumentExpression), node)
+            : node;
+    }
+
+    export function createCallChain(chain: OptionalChain | undefined, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentList: ReadonlyArray<Expression>) {
+        const node = <CallChain>createSynthesizedNode(SyntaxKind.CallChain);
+        node.chain = chain;
+        node.typeArguments = asNodeArray(typeArguments);
+        node.arguments = createNodeArray(argumentList);
+        return node;
+    }
+
+    export function updateCallChain(node: CallChain, chain: OptionalChain | undefined, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentList: ReadonlyArray<Expression>) {
+        return node.chain !== chain
+            || node.typeArguments !== typeArguments
+            || node.arguments !== argumentList
+            ? updateNode(createCallChain(chain, typeArguments, argumentList), node)
+            : node;
+    }
+
     export function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>) {
         const node = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
-        if (expression.flags & NodeFlags.Optional) node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
         node.typeArguments = asNodeArray(typeArguments);
         node.arguments = parenthesizeListElements(createNodeArray(argumentsArray));
@@ -2503,10 +2558,6 @@ namespace ts {
     export function createAssignment(left: Expression, right: Expression): BinaryExpression;
     export function createAssignment(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.EqualsToken, right);
-    }
-
-    export function createEquality(left: Expression, right: Expression) {
-        return createBinary(left, SyntaxKind.EqualsEqualsToken, right);
     }
 
     export function createStrictEquality(left: Expression, right: Expression) {

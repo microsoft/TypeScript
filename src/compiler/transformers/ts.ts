@@ -513,6 +513,9 @@ namespace ts {
                     // TypeScript namespace or external module import.
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
+                case SyntaxKind.CallChain:
+                    return visitCallChain(<CallChain>node);
+
                 default:
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
@@ -2450,6 +2453,15 @@ namespace ts {
         function visitNonNullExpression(node: NonNullExpression): Expression {
             const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
             return createPartiallyEmittedExpression(expression, node);
+        }
+
+        function visitCallChain(node: CallChain) {
+            return updateCallChain(
+                node,
+                visitNode(node.chain, visitor, isOptionalChain),
+                /*typeArguments*/ undefined,
+                visitNodes(node.arguments, visitor, isExpression)
+            );
         }
 
         function visitCallExpression(node: CallExpression) {

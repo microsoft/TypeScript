@@ -2674,9 +2674,22 @@ namespace ts {
             case SyntaxKind.PropertyAccessExpression:
                 return computePropertyAccess(<PropertyAccessExpression>node, subtreeFlags);
 
+            case SyntaxKind.CallChain:
+                return computeCallChain(<CallChain>node, subtreeFlags);
+
             default:
                 return computeOther(node, kind, subtreeFlags);
         }
+    }
+
+    function computeCallChain(node: CallChain, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        if (node.typeArguments) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
     }
 
     function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
@@ -2686,10 +2699,6 @@ namespace ts {
 
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        if (node.flags & NodeFlags.Optional) {
-            transformFlags |= TransformFlags.AssertESNext;
         }
 
         if (subtreeFlags & TransformFlags.ContainsSpread
@@ -3136,10 +3145,6 @@ namespace ts {
         const expression = node.expression;
         const expressionKind = expression.kind;
 
-        if (node.flags & NodeFlags.Optional) {
-            transformFlags |= TransformFlags.AssertESNext;
-        }
-
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
         if (expressionKind === SyntaxKind.SuperKeyword) {
@@ -3294,6 +3299,12 @@ namespace ts {
             case SyntaxKind.JsxExpression:
                 // These nodes are Jsx syntax.
                 transformFlags |= TransformFlags.AssertJsx;
+                break;
+
+            case SyntaxKind.OptionalExpression:
+            case SyntaxKind.PropertyAccessChain:
+            case SyntaxKind.ElementAccessChain:
+                transformFlags |= TransformFlags.AssertESNext;
                 break;
 
             case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -3464,12 +3475,6 @@ namespace ts {
                     transformFlags |= TransformFlags.AssertES2015;
                 }
 
-                break;
-
-            case SyntaxKind.ElementAccessExpression:
-                if (node.flags & NodeFlags.Optional) {
-                    transformFlags |= TransformFlags.AssertESNext;
-                }
                 break;
 
             case SyntaxKind.DoStatement:

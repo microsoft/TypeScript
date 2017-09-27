@@ -251,7 +251,6 @@ namespace ts {
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
-        const optionalType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.Optional | TypeFlags.ContainsWideningType, "undefined");
         const nullType = createIntrinsicType(TypeFlags.Null, "null");
         const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsWideningType, "null");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
@@ -380,21 +379,19 @@ namespace ts {
             TypeofNEFunction = 1 << 12,   // typeof x !== "function"
             TypeofNEHostObject = 1 << 13, // typeof x !== "xxx"
             EQUndefined = 1 << 14,        // x === undefined
-            EQOptional = 1 << 15,
-            EQNull = 1 << 16,             // x === null
-            EQUndefinedOrNull = 1 << 17,  // x === undefined / x === null
-            NEUndefined = 1 << 18,        // x !== undefined
-            NEOptional = 1 << 19,
-            NENull = 1 << 20,             // x !== null
-            NEUndefinedOrNull = 1 << 21,  // x != undefined / x != null
-            Truthy = 1 << 22,             // x
-            Falsy = 1 << 23,              // !x
-            Discriminatable = 1 << 24,    // May have discriminant property
-            All = (1 << 25) - 1,
+            EQNull = 1 << 15,             // x === null
+            EQUndefinedOrNull = 1 << 16,  // x === undefined / x === null
+            NEUndefined = 1 << 17,        // x !== undefined
+            NENull = 1 << 18,             // x !== null
+            NEUndefinedOrNull = 1 << 19,  // x != undefined / x != null
+            Truthy = 1 << 20,             // x
+            Falsy = 1 << 21,              // !x
+            Discriminatable = 1 << 22,    // May have discriminant property
+            All = (1 << 23) - 1,
             // The following members encode facts about particular kinds of types for use in the getTypeFacts function.
             // The presence of a particular fact means that the given test is true for some (and possibly all) values
             // of that kind of type.
-            BaseStringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEOptional | NEUndefinedOrNull,
+            BaseStringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
             BaseStringFacts = BaseStringStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             StringStrictFacts = BaseStringStrictFacts | Truthy | Falsy,
             StringFacts = BaseStringFacts | Truthy,
@@ -402,7 +399,7 @@ namespace ts {
             EmptyStringFacts = BaseStringFacts,
             NonEmptyStringStrictFacts = BaseStringStrictFacts | Truthy,
             NonEmptyStringFacts = BaseStringFacts | Truthy,
-            BaseNumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEOptional | NEUndefinedOrNull,
+            BaseNumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
             BaseNumberFacts = BaseNumberStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             NumberStrictFacts = BaseNumberStrictFacts | Truthy | Falsy,
             NumberFacts = BaseNumberFacts | Truthy,
@@ -410,7 +407,7 @@ namespace ts {
             ZeroFacts = BaseNumberFacts,
             NonZeroStrictFacts = BaseNumberStrictFacts | Truthy,
             NonZeroFacts = BaseNumberFacts | Truthy,
-            BaseBooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEOptional | NEUndefinedOrNull,
+            BaseBooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
             BaseBooleanFacts = BaseBooleanStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             BooleanStrictFacts = BaseBooleanStrictFacts | Truthy | Falsy,
             BooleanFacts = BaseBooleanFacts | Truthy,
@@ -418,15 +415,14 @@ namespace ts {
             FalseFacts = BaseBooleanFacts,
             TrueStrictFacts = BaseBooleanStrictFacts | Truthy,
             TrueFacts = BaseBooleanFacts | Truthy,
-            SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEOptional | NEUndefinedOrNull | Truthy,
+            SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
             SymbolFacts = SymbolStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEOptional | NEUndefinedOrNull | Truthy | Discriminatable,
+            ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Discriminatable,
             ObjectFacts = ObjectStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            FunctionStrictFacts = TypeofEQFunction | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NEOptional | NEUndefinedOrNull | Truthy | Discriminatable,
+            FunctionStrictFacts = TypeofEQFunction | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Discriminatable,
             FunctionFacts = FunctionStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | NEOptional | Falsy,
-            OptionalFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQOptional | EQUndefinedOrNull | NENull | Falsy,
-            NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | NEOptional | Falsy,
+            UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy,
+            NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy,
         }
 
         const typeofEQFacts = createMapFromTemplate({
@@ -7613,7 +7609,7 @@ namespace ts {
             return type;
         }
 
-        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
+        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | ElementAccessChain | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
             const propName = indexType.flags & TypeFlags.StringOrNumberLiteral ?
                 escapeLeadingUnderscores("" + (<LiteralType>indexType).value) :
@@ -7661,7 +7657,7 @@ namespace ts {
                 }
             }
             if (accessNode) {
-                const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? (<ElementAccessExpression>accessNode).argumentExpression : (<IndexedAccessTypeNode>accessNode).indexType;
+                const indexNode = accessNode.kind === SyntaxKind.IndexedAccessType ? (<IndexedAccessTypeNode>accessNode).indexType : (<ElementAccessExpression | ElementAccessChain>accessNode).argumentExpression;
                 if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                     error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, "" + (<LiteralType>indexType).value, typeToString(objectType));
                 }
@@ -7737,13 +7733,14 @@ namespace ts {
             return undefined;
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode): Type {
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | ElementAccessChain | IndexedAccessTypeNode): Type {
             // If the index type is generic, or if the object type is generic and doesn't originate in an expression,
             // we are performing a higher-order index access where we cannot meaningfully access the properties of the
             // object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in
             // an expression. This is to preserve backwards compatibility. For example, an element access 'this["foo"]'
             // has always been resolved eagerly using the constraint type of 'this' at the given location.
-            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression) && isGenericObjectType(objectType)) {
+            if (isGenericIndexType(indexType) || !(accessNode && (accessNode.kind === SyntaxKind.ElementAccessExpression || accessNode.kind === SyntaxKind.ElementAccessChain)) &&
+                isGenericObjectType(objectType)) {
                 if (objectType.flags & TypeFlags.Any) {
                     return objectType;
                 }
@@ -10153,10 +10150,6 @@ namespace ts {
             return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
         }
 
-        function getNonOptionalType(type: Type): Type {
-            return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEOptional) : type;
-        }
-
         /**
          * Return true if type was inferred from an object literal or written as an object type literal
          * with no call or construct signatures.
@@ -10243,9 +10236,6 @@ namespace ts {
 
         function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
-                if (type.flags & TypeFlags.Optional) {
-                    return strictNullChecks ? undefinedType : anyType;
-                }
                 if (type.flags & TypeFlags.Nullable) {
                     return anyType;
                 }
@@ -11109,7 +11099,7 @@ namespace ts {
                     strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
             if (flags & (TypeFlags.Void | TypeFlags.Undefined)) {
-                return flags & TypeFlags.Optional ? TypeFacts.OptionalFacts : TypeFacts.UndefinedFacts;
+                return TypeFacts.UndefinedFacts;
             }
             if (flags & TypeFlags.Null) {
                 return TypeFacts.NullFacts;
@@ -14609,14 +14599,14 @@ namespace ts {
          * Check whether the requested property access is valid.
          * Returns true if node is a valid property access, and false otherwise.
          * @param node The node to be checked.
-         * @param left The left hand side of the property access (e.g.: the super in `super.foo`).
+         * @param isSuperProperty Whether the left hand side of the property access is `super`.
          * @param type The type of left.
          * @param prop The symbol for the right hand side of the property access.
          */
-        function checkPropertyAccessibility(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
+        function checkPropertyAccessibility(node: PropertyAccessExpression | PropertyAccessChain | QualifiedName | VariableLikeDeclaration, isSuperProperty: boolean, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
-            const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
-                (<PropertyAccessExpression | VariableDeclaration>node).name :
+            const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.PropertyAccessChain ?
+                (<PropertyAccessExpression | PropertyAccessChain | VariableDeclaration>node).name :
                 (<QualifiedName>node).right;
 
             if (getCheckFlags(prop) & CheckFlags.ContainsPrivate) {
@@ -14625,7 +14615,7 @@ namespace ts {
                 return false;
             }
 
-            if (left.kind === SyntaxKind.SuperKeyword) {
+            if (isSuperProperty) {
                 // TS 1.0 spec (April 2014): 4.8.2
                 // - In a constructor, instance member function, instance member accessor, or
                 //   instance member variable initializer where this references a derived class instance,
@@ -14673,7 +14663,7 @@ namespace ts {
             // Property is known to be protected at this point
 
             // All protected properties of a supertype are accessible in a super access
-            if (left.kind === SyntaxKind.SuperKeyword) {
+            if (isSuperProperty) {
                 return true;
             }
 
@@ -14708,14 +14698,7 @@ namespace ts {
             return checkNonNullType(checkExpression(node), node);
         }
 
-        function checkNonNullType(type: Type, errorNode: Node, optionality?: NodeFlags): Type {
-            if (optionality & NodeFlags.OptionalExpression) {
-                type = getNonNullableType(type);
-            }
-            else if (optionality & NodeFlags.OptionalChain) {
-                type = getNonOptionalType(type);
-            }
-
+        function checkNonNullType(type: Type, errorNode: Node): Type {
             const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
             if (kind) {
                 error(errorNode, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
@@ -14729,51 +14712,20 @@ namespace ts {
         }
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
+            return checkPropertyAccessExpressionOrQualifiedName(node, checkNonNullExpression(node.expression), node.name, node.expression.kind === SyntaxKind.SuperKeyword);
         }
 
         function checkQualifiedName(node: QualifiedName) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
+            return checkPropertyAccessExpressionOrQualifiedName(node, checkNonNullExpression(node.left), node.right, /*isSuperProperty*/ false);
         }
 
-        // function checkOptionality(node: Node) {
-        //     if (node.flags & NodeFlags.OptionalExpression) {
-        //         if (!compilerOptions.experimentalOptionalChaining) {
-        //             error(node, Diagnostics.Experimental_support_for_optional_chaining_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalOptionalChaining_option_to_remove_this_warning);
-        //         }
-        //         return strictNullChecks;
-        //     }
-        //     return false;
-        // }
-
-        function propagateOptionalChain(type: Type, sourceType: Type, optionality: NodeFlags) {
-            const expectedFacts = optionality & NodeFlags.OptionalExpression ? TypeFacts.EQUndefinedOrNull : TypeFacts.EQOptional;
-            return optionality && strictNullChecks && getTypeFacts(sourceType) & expectedFacts
-                ? getUnionType([type, optionalType])
-                : type;
-        }
-
-        function propagateOptionalChainSignature(signature: Signature, sourceType: Type, optionality: NodeFlags) {
-            const expectedFacts = optionality & NodeFlags.OptionalExpression ? TypeFacts.EQUndefinedOrNull : TypeFacts.EQOptional;
-            if (optionality && strictNullChecks && getTypeFacts(sourceType) & expectedFacts) {
-                signature = cloneSignature(signature);
-                signature.resolvedReturnType = getUnionType([getReturnTypeOfSignature(signature), optionalType]);
-            }
-            return signature;
-        }
-
-        function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            // if a node is an OptionalExpression, use its non-null type
-            const optionality = node.flags & NodeFlags.Optional;
-            const sourceType = checkExpression(left);
-            const type = checkNonNullType(sourceType, left, optionality);
-
-            if (isTypeAny(type) || type === silentNeverType) {
-                return type;
+        function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | PropertyAccessChain | QualifiedName, leftType: Type, right: Identifier, isSuperProperty: boolean) {
+            if (isTypeAny(leftType) || leftType === silentNeverType) {
+                return leftType;
             }
 
-            const apparentType = getApparentType(getWidenedType(type));
-            if (apparentType === unknownType || (type.flags & TypeFlags.TypeParameter && isTypeAny(apparentType))) {
+            const apparentType = getApparentType(getWidenedType(leftType));
+            if (apparentType === unknownType || (leftType.flags & TypeFlags.TypeParameter && isTypeAny(apparentType))) {
                 // handle cases when type is Type parameter with invalid or any constraint
                 return apparentType;
             }
@@ -14787,7 +14739,7 @@ namespace ts {
                     return indexInfo.type;
                 }
                 if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
-                    reportNonexistentProperty(right, type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType ? apparentType : type);
+                    reportNonexistentProperty(right, leftType.flags & TypeFlags.TypeParameter && (leftType as TypeParameter).isThisType ? apparentType : leftType);
                 }
                 return unknownType;
             }
@@ -14798,7 +14750,7 @@ namespace ts {
 
             getNodeLinks(node).resolvedSymbol = prop;
 
-            checkPropertyAccessibility(node, left, apparentType, prop);
+            checkPropertyAccessibility(node, isSuperProperty, apparentType, prop);
 
             const propType = getDeclaredOrApparentType(prop, node);
             const assignmentKind = getAssignmentTargetKind(node);
@@ -14816,14 +14768,13 @@ namespace ts {
             if (node.kind !== SyntaxKind.PropertyAccessExpression || assignmentKind === AssignmentKind.Definite ||
                 !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) &&
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
-                return propagateOptionalChain(propType, sourceType, optionality);
+                return propType;
             }
             const flowType = getFlowTypeOfReference(node, propType);
-            const resultType = assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
-            return propagateOptionalChain(resultType, sourceType, optionality);
+            return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
-        function checkPropertyNotUsedBeforeDeclaration(prop: Symbol, node: PropertyAccessExpression | QualifiedName, right: Identifier): void {
+        function checkPropertyNotUsedBeforeDeclaration(prop: Symbol, node: PropertyAccessExpression | PropertyAccessChain | QualifiedName, right: Identifier): void {
             const { valueDeclaration } = prop;
             if (!valueDeclaration) {
                 return;
@@ -15021,7 +14972,7 @@ namespace ts {
             if (type !== unknownType && !isTypeAny(type)) {
                 const prop = getPropertyOfType(type, propertyName);
                 if (prop) {
-                    return checkPropertyAccessibility(node, left, type, prop);
+                    return checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, type, prop);
                 }
 
                 // In js files properties of unions are allowed in completion
@@ -15089,10 +15040,11 @@ namespace ts {
         }
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
-            const optionality = node.flags & NodeFlags.Optional;
-            const sourceType = checkExpression(node.expression);
-            const objectType = checkNonNullType(sourceType, node.expression, optionality);
+            const objectType = checkNonNullExpression(node.expression);
+            return checkIndexedAccessWorker(node, objectType);
+        }
 
+        function checkIndexedAccessWorker(node: ElementAccessExpression | ElementAccessChain, objectType: Type) {
             const indexExpression = node.argumentExpression;
             if (!indexExpression) {
                 const sourceFile = getSourceFileOfNode(node);
@@ -15120,8 +15072,7 @@ namespace ts {
                 return unknownType;
             }
 
-            const resultType = checkIndexedAccessIndexType(getIndexedAccessType(objectType, indexType, node), node);
-            return propagateOptionalChain(resultType, objectType, optionality);
+            return checkIndexedAccessIndexType(getIndexedAccessType(objectType, indexType, node), node);
         }
 
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
@@ -15164,6 +15115,34 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function getLeftTypeOfOptionalChain(node: OptionalChain) {
+            if (node.chain) return checkOptionalChain(node.chain);
+            const optionalExpression = findAncestor(node, isOptionalExpression);
+            const type = checkExpressionCached(optionalExpression.expression);
+            return getNonNullableType(type);
+        }
+
+        function checkOptionalChain(node: OptionalChain): Type {
+            const objectType = getLeftTypeOfOptionalChain(node);
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessChain:
+                    return checkPropertyAccessExpressionOrQualifiedName(node, objectType, node.name, /*isSuperProperty*/ false);
+                case SyntaxKind.ElementAccessChain:
+                    return checkIndexedAccessWorker(node, objectType);
+                case SyntaxKind.CallChain:
+                    return checkCallExpression(node);
+            }
+        }
+
+        function checkOptionalExpression(node: OptionalExpression) {
+            const type = checkExpression(node.expression);
+            const chainType = checkOptionalChain(node.chain);
+            if ((strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable) {
+                return getNullableType(chainType, TypeFlags.Undefined);
+            }
+            return chainType;
         }
 
         function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression {
@@ -15383,7 +15362,10 @@ namespace ts {
             // example, given a 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
             // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
             // return type of 'wrap'.
-            if (node.kind !== SyntaxKind.Decorator) {
+            if (node.kind === SyntaxKind.CallChain) {
+                sys.write("TODO: getContextualTypeOfCallChain");
+            }
+            else if (node.kind !== SyntaxKind.Decorator) {
                 const contextualType = getContextualType(node);
                 if (contextualType) {
                     // We clone the contextual mapper to avoid disturbing a resolution in progress for an
@@ -16168,8 +16150,8 @@ namespace ts {
             return maxParamsIndex;
         }
 
-        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+        function resolveCallExpression(node: CallExpression | CallChain, candidatesOutArray: Signature[]): Signature {
+            if (node.kind !== SyntaxKind.CallChain && node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
@@ -16183,9 +16165,7 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
-            const optionality = node.flags & NodeFlags.Optional;
-            const sourceType = checkExpression(node.expression);
-            const funcType = checkNonNullType(sourceType, node.expression, optionality);
+            const funcType = node.kind === SyntaxKind.CallChain ? getLeftTypeOfOptionalChain(node) : checkNonNullExpression(node.expression);
             if (funcType === silentNeverType) {
                 return silentNeverSignature;
             }
@@ -16226,9 +16206,7 @@ namespace ts {
                 }
                 return resolveErrorCall(node);
             }
-
-            const signature = resolveCall(node, callSignatures, candidatesOutArray);
-            return propagateOptionalChainSignature(signature, sourceType, optionality);
+            return resolveCall(node, callSignatures, candidatesOutArray);
         }
 
         /**
@@ -16495,7 +16473,8 @@ namespace ts {
         function resolveSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
-                    return resolveCallExpression(<CallExpression>node, candidatesOutArray);
+                case SyntaxKind.CallChain:
+                    return resolveCallExpression(node, candidatesOutArray);
                 case SyntaxKind.NewExpression:
                     return resolveNewExpression(<NewExpression>node, candidatesOutArray);
                 case SyntaxKind.TaggedTemplateExpression:
@@ -16590,13 +16569,14 @@ namespace ts {
          * @param node The call/new expression to be checked.
          * @returns On success, the expression's signature's return type. On failure, anyType.
          */
-        function checkCallExpression(node: CallExpression | NewExpression): Type {
+        function checkCallExpression(node: CallExpression | CallChain | NewExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node.arguments);
 
             const signature = getResolvedSignature(node);
 
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+            const isSuper = node.kind !== SyntaxKind.CallChain && node.expression.kind === SyntaxKind.SuperKeyword;
+            if (isSuper) {
                 return voidType;
             }
 
@@ -18225,6 +18205,8 @@ namespace ts {
                     return checkPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
+                case SyntaxKind.OptionalExpression:
+                    return checkOptionalExpression(<OptionalExpression>node);
                 case SyntaxKind.CallExpression:
                     if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
                         return checkImportCallExpression(<ImportCall>node);
@@ -18973,7 +18955,7 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
-        function checkIndexedAccessIndexType(type: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode) {
+        function checkIndexedAccessIndexType(type: Type, accessNode: ElementAccessExpression | ElementAccessChain | IndexedAccessTypeNode) {
             if (!(type.flags & TypeFlags.IndexedAccess)) {
                 return type;
             }
@@ -20436,7 +20418,7 @@ namespace ts {
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
                 markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined); // A destructuring is never a write-only reference.
                 if (parent.initializer && property) {
-                    checkPropertyAccessibility(parent, parent.initializer, parentType, property);
+                    checkPropertyAccessibility(parent, /*isSuperProperty*/ false, parentType, property);
                 }
             }
 

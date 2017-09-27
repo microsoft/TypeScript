@@ -4464,6 +4464,19 @@ namespace ts {
         return node.kind === SyntaxKind.MetaProperty;
     }
 
+    export function isOptionalExpression(node: Node): node is OptionalExpression {
+        return node.kind === SyntaxKind.OptionalExpression;
+    }
+
+    // Optional chains
+
+    export function isOptionalChain(node: Node): node is OptionalChain {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAccessChain
+            || kind === SyntaxKind.ElementAccessChain
+            || kind === SyntaxKind.CallChain;
+    }
+
     // Misc
 
     export function isTemplateSpan(node: Node): node is TemplateSpan {
@@ -5201,6 +5214,7 @@ namespace ts {
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.MetaProperty:
+            case SyntaxKind.OptionalExpression:
             case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
                 return true;
             default:

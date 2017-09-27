@@ -583,6 +583,14 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     return emitBindingElement(<BindingElement>node);
 
+                // Optional chains
+                case SyntaxKind.PropertyAccessChain:
+                    return emitPropertyAccessChain(<PropertyAccessChain>node);
+                case SyntaxKind.ElementAccessChain:
+                    return emitElementAccessChain(<ElementAccessChain>node);
+                case SyntaxKind.CallChain:
+                    return emitCallChain(<CallChain>node);
+
                 // Misc
                 case SyntaxKind.TemplateSpan:
                     return emitTemplateSpan(<TemplateSpan>node);
@@ -768,6 +776,8 @@ namespace ts {
                     return emitPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return emitElementAccessExpression(<ElementAccessExpression>node);
+                case SyntaxKind.OptionalExpression:
+                    return emitOptionalExpression(<OptionalExpression>node);
                 case SyntaxKind.CallExpression:
                     return emitCallExpression(<CallExpression>node);
                 case SyntaxKind.NewExpression:
@@ -1195,13 +1205,12 @@ namespace ts {
         }
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
-            const isOptionalExpression = node.flags & NodeFlags.OptionalExpression;
             let indentBeforeDot = false;
             let indentAfterDot = false;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
-                const dotToken = createToken(isOptionalExpression ? SyntaxKind.QuestionDotToken : SyntaxKind.DotToken);
+                const dotToken = createToken(SyntaxKind.DotToken);
                 dotToken.pos = dotRangeStart;
                 dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
@@ -1211,8 +1220,8 @@ namespace ts {
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);
 
-            const shouldEmitDotDot = !isOptionalExpression && !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-            write(shouldEmitDotDot ? ".." : isOptionalExpression ? "?." : ".");
+            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
+            write(shouldEmitDotDot ? ".." : ".");
 
             increaseIndentIf(indentAfterDot);
             emit(node.name);
@@ -1241,16 +1250,55 @@ namespace ts {
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            write(node.flags & NodeFlags.OptionalExpression ? "?.[" : "[");
+            write("[");
             emitExpression(node.argumentExpression);
             write("]");
         }
 
-        function emitCallExpression(node: CallExpression) {
+        function emitOptionalExpression(node: OptionalExpression) {
             emitExpression(node.expression);
-            if (node.flags & NodeFlags.OptionalExpression) {
+            emit(node.chain);
+        }
+
+        function emitPropertyAccessChain(node: PropertyAccessChain) {
+            if (node.chain) {
+                emit(node.chain);
+                write(".");
+            }
+            else {
                 write("?.");
             }
+
+            emit(node.name);
+        }
+
+        function emitElementAccessChain(node: ElementAccessChain) {
+            if (node.chain) {
+                emit(node.chain);
+            }
+            else {
+                write("?.");
+            }
+
+            write("[");
+            emitExpression(node.argumentExpression);
+            write("]");
+        }
+
+        function emitCallChain(node: CallChain) {
+            if (node.chain) {
+                emit(node.chain);
+            }
+            else {
+                write("?.");
+            }
+
+            emitTypeArguments(node, node.typeArguments);
+            emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
+        }
+
+        function emitCallExpression(node: CallExpression) {
+            emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }

@@ -446,6 +446,11 @@ namespace ts {
                     visitNode((<ElementAccessExpression>node).expression, visitor, isExpression),
                     visitNode((<ElementAccessExpression>node).argumentExpression, visitor, isExpression));
 
+            case SyntaxKind.OptionalExpression:
+                return updateOptionalExpression(<OptionalExpression>node,
+                    visitNode((<OptionalExpression>node).expression, visitor, isExpression),
+                    visitNode((<OptionalExpression>node).chain, visitor, isOptionalChain));
+
             case SyntaxKind.CallExpression:
                 return updateCall(<CallExpression>node,
                     visitNode((<CallExpression>node).expression, visitor, isExpression),
@@ -568,6 +573,24 @@ namespace ts {
             case SyntaxKind.MetaProperty:
                 return updateMetaProperty(<MetaProperty>node,
                     visitNode((<MetaProperty>node).name, visitor, isIdentifier));
+
+            // Optional chains
+
+            case SyntaxKind.PropertyAccessChain:
+                return updatePropertyAccessChain(<PropertyAccessChain>node,
+                    visitNode((<PropertyAccessChain>node).chain, visitor, isOptionalChain),
+                    visitNode((<PropertyAccessChain>node).name, visitor, isIdentifier));
+
+            case SyntaxKind.ElementAccessChain:
+                return updateElementAccessChain(<ElementAccessChain>node,
+                    visitNode((<ElementAccessChain>node).chain, visitor, isOptionalChain),
+                    visitNode((<ElementAccessChain>node).argumentExpression, visitor, isExpression));
+
+            case SyntaxKind.CallChain:
+                return updateCallChain(<CallChain>node,
+                    visitNode((<CallChain>node).chain, visitor, isOptionalChain),
+                    nodesVisitor((<CallChain>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<CallChain>node).arguments, visitor, isExpression));
 
             // Misc
 
@@ -1063,6 +1086,11 @@ namespace ts {
                 result = reduceNode((<ElementAccessExpression>node).argumentExpression, cbNode, result);
                 break;
 
+            case SyntaxKind.OptionalExpression:
+                result = reduceNode((<OptionalExpression>node).expression, cbNode, result);
+                result = reduceNode((<OptionalExpression>node).chain, cbNode, result);
+                break;
+
             case SyntaxKind.CallExpression:
                 result = reduceNode((<CallExpression>node).expression, cbNode, result);
                 result = reduceNodes((<CallExpression>node).typeArguments, cbNodes, result);
@@ -1150,6 +1178,24 @@ namespace ts {
             case SyntaxKind.AsExpression:
                 result = reduceNode((<AsExpression>node).expression, cbNode, result);
                 result = reduceNode((<AsExpression>node).type, cbNode, result);
+                break;
+
+            // Optional chains
+
+            case SyntaxKind.PropertyAccessChain:
+                result = reduceNode((<PropertyAccessChain>node).chain, cbNode, result);
+                result = reduceNode((<PropertyAccessChain>node).name, cbNode, result);
+                break;
+
+            case SyntaxKind.ElementAccessChain:
+                result = reduceNode((<ElementAccessChain>node).chain, cbNode, result);
+                result = reduceNode((<ElementAccessChain>node).argumentExpression, cbNode, result);
+                break;
+
+            case SyntaxKind.CallChain:
+                result = reduceNode((<CallChain>node).chain, cbNode, result);
+                result = reduceNodes((<CallChain>node).typeArguments, cbNode, result);
+                result = reduceNodes((<CallChain>node).arguments, cbNode, result);
                 break;
 
             // Misc
