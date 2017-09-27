@@ -157,9 +157,11 @@ namespace ts.codefix {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const checker = context.program.getTypeChecker();
         const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
-        //TODO: invalid cast!
-        return <ImportCodeFixContext>{
-            ...context,
+        return {
+            host: context.host,
+            newLineCharacter: context.newLineCharacter,
+            rulesProvider: context.rulesProvider,
+            sourceFile: context.sourceFile,
             checker,
             compilerOptions: context.program.getCompilerOptions(),
             cachedImportDeclarations: [],
@@ -234,7 +236,7 @@ namespace ts.codefix {
             }
         }
 
-        const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport());
+        const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport(sourceFile, moduleSymbol, compilerOptions, getCanonicalFileName, host));
         const changeTracker = createChangeTracker(context);
         const importClause = isDefault
             ? createImportClause(createIdentifier(symbolName), /*namedBindings*/ undefined)
@@ -242,7 +244,7 @@ namespace ts.codefix {
                 ? createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(symbolName)))
                 : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
         const moduleSpecifierLiteral = createLiteral(moduleSpecifierWithoutQuotes);
-        moduleSpecifierLiteral.singleQuote = getSingleQuoteStyleFromExistingImports();
+        moduleSpecifierLiteral.singleQuote = getSingleQuoteStyleFromExistingImports(sourceFile);
         const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifierLiteral);
         if (!lastImportDeclaration) {
             changeTracker.insertNodeAt(sourceFile, getSourceFileImportLocation(sourceFile), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
@@ -261,286 +263,369 @@ namespace ts.codefix {
             "NewImport",
             moduleSpecifierWithoutQuotes
         );
+    }
 
-        function getSourceFileImportLocation(node: SourceFile) {
-            // For a source file, it is possible there are detached comments we should not skip
-            const text = node.text;
-            let ranges = getLeadingCommentRanges(text, 0);
-            if (!ranges) return 0;
-            let position = 0;
-            // However we should still skip a pinned comment at the top
-            if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
-                position = ranges[0].end + 1;
-                ranges = ranges.slice(1);
-            }
-            // As well as any triple slash references
-            for (const range of ranges) {
-                if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
-                    position = range.end + 1;
-                    continue;
-                }
-                break;
-            }
-            return position;
+    function getSourceFileImportLocation(node: SourceFile) {
+        // For a source file, it is possible there are detached comments we should not skip
+        const text = node.text;
+        let ranges = getLeadingCommentRanges(text, 0);
+        if (!ranges) return 0;
+        let position = 0;
+        // However we should still skip a pinned comment at the top
+        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+            position = ranges[0].end + 1;
+            ranges = ranges.slice(1);
         }
-
-        function getSingleQuoteStyleFromExistingImports() {
-            const firstModuleSpecifier = forEach(sourceFile.statements, node => {
-                if (isImportDeclaration(node) || isExportDeclaration(node)) {
-                    if (node.moduleSpecifier && isStringLiteral(node.moduleSpecifier)) {
-                        return node.moduleSpecifier;
-                    }
-                }
-                else if (isImportEqualsDeclaration(node)) {
-                    if (isExternalModuleReference(node.moduleReference) && isStringLiteral(node.moduleReference.expression)) {
-                        return node.moduleReference.expression;
-                    }
-                }
-            });
-            if (firstModuleSpecifier) {
-                return sourceFile.text.charCodeAt(firstModuleSpecifier.getStart()) === CharacterCodes.singleQuote;
+        // As well as any triple slash references
+        for (const range of ranges) {
+            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
+                position = range.end + 1;
+                continue;
             }
+            break;
         }
+        return position;
+    }
 
-        function getModuleSpecifierForNewImport() {
-            const fileName = sourceFile.fileName;
-            const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
-            const sourceDirectory = getDirectoryPath(fileName);
-            const options = compilerOptions;
-
-            return tryGetModuleNameFromAmbientModule() ||
-                tryGetModuleNameFromTypeRoots() ||
-                tryGetModuleNameAsNodeModule() ||
-                tryGetModuleNameFromBaseUrl() ||
-                tryGetModuleNameFromRootDirs() ||
-                removeFileExtension(getRelativePath(moduleFileName, sourceDirectory));
-
-            function tryGetModuleNameFromAmbientModule(): string {
-                const decl = moduleSymbol.valueDeclaration;
-                if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
-                    return decl.name.text;
+    function getSingleQuoteStyleFromExistingImports(sourceFile: SourceFile) {
+        const firstModuleSpecifier = forEach(sourceFile.statements, node => {
+            if (isImportDeclaration(node) || isExportDeclaration(node)) {
+                if (node.moduleSpecifier && isStringLiteral(node.moduleSpecifier)) {
+                    return node.moduleSpecifier;
                 }
             }
-
-            function tryGetModuleNameFromBaseUrl() {
-                if (!options.baseUrl) {
-                    return undefined;
-                }
-
-                let relativeName = getRelativePathIfInDirectory(moduleFileName, options.baseUrl);
-                if (!relativeName) {
-                    return undefined;
-                }
-
-                const relativeNameWithIndex = removeFileExtension(relativeName);
-                relativeName = removeExtensionAndIndexPostFix(relativeName);
-
-                if (options.paths) {
-                    for (const key in options.paths) {
-                        for (const pattern of options.paths[key]) {
-                            const indexOfStar = pattern.indexOf("*");
-                            if (indexOfStar === 0 && pattern.length === 1) {
-                                continue;
-                            }
-                            else if (indexOfStar !== -1) {
-                                const prefix = pattern.substr(0, indexOfStar);
-                                const suffix = pattern.substr(indexOfStar + 1);
-                                if (relativeName.length >= prefix.length + suffix.length &&
-                                    startsWith(relativeName, prefix) &&
-                                    endsWith(relativeName, suffix)) {
-                                    const matchedStar = relativeName.substr(prefix.length, relativeName.length - suffix.length);
-                                    return key.replace("\*", matchedStar);
-                                }
-                            }
-                            else if (pattern === relativeName || pattern === relativeNameWithIndex) {
-                                return key;
-                            }
-                        }
-                    }
-                }
-
-                return relativeName;
-            }
-
-            function tryGetModuleNameFromRootDirs() {
-                if (options.rootDirs) {
-                    const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, options.rootDirs);
-                    const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, options.rootDirs);
-                    if (normalizedTargetPath !== undefined) {
-                        const relativePath = normalizedSourcePath !== undefined ? getRelativePath(normalizedTargetPath, normalizedSourcePath) : normalizedTargetPath;
-                        return removeFileExtension(relativePath);
-                    }
-                }
-                return undefined;
-            }
-
-            function tryGetModuleNameFromTypeRoots() {
-                const typeRoots = getEffectiveTypeRoots(options, host);
-                if (typeRoots) {
-                    const normalizedTypeRoots = map(typeRoots, typeRoot => toPath(typeRoot, /*basePath*/ undefined, getCanonicalFileName));
-                    for (const typeRoot of normalizedTypeRoots) {
-                        if (startsWith(moduleFileName, typeRoot)) {
-                            const relativeFileName = moduleFileName.substring(typeRoot.length + 1);
-                            return removeExtensionAndIndexPostFix(relativeFileName);
-                        }
-                    }
+            else if (isImportEqualsDeclaration(node)) {
+                if (isExternalModuleReference(node.moduleReference) && isStringLiteral(node.moduleReference.expression)) {
+                    return node.moduleReference.expression;
                 }
             }
-
-            function tryGetModuleNameAsNodeModule() {
-                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
-                    // nothing to do here
-                    return undefined;
-                }
-
-                const parts = getNodeModulePathParts(moduleFileName);
-
-                if (!parts) {
-                    return undefined;
-                }
-
-                // Simplify the full file path to something that can be resolved by Node.
-
-                // If the module could be imported by a directory name, use that directory's name
-                let moduleSpecifier = getDirectoryOrExtensionlessFileName(moduleFileName);
-                // Get a path that's relative to node_modules or the importing file's path
-                moduleSpecifier = getNodeResolvablePath(moduleSpecifier);
-                // If the module was found in @types, get the actual Node package name
-                return getPackageNameFromAtTypesDirectory(moduleSpecifier);
-
-                function getDirectoryOrExtensionlessFileName(path: string): string {
-                    // If the file is the main module, it can be imported by the package name
-                    const packageRootPath = path.substring(0, parts.packageRootIndex);
-                    const packageJsonPath = combinePaths(packageRootPath, "package.json");
-                    if (host.fileExists(packageJsonPath)) {
-                        const packageJsonContent = JSON.parse(host.readFile(packageJsonPath));
-                        if (packageJsonContent) {
-                            const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
-                            if (mainFileRelative) {
-                                const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                                if (mainExportFile === getCanonicalFileName(path)) {
-                                    return packageRootPath;
-                                }
-                            }
-                        }
-                    }
-
-                    // We still have a file name - remove the extension
-                    const fullModulePathWithoutExtension = removeFileExtension(path);
-
-                    // If the file is /index, it can be imported by its directory name
-                    if (getCanonicalFileName(fullModulePathWithoutExtension.substring(parts.fileNameIndex)) === "/index") {
-                        return fullModulePathWithoutExtension.substring(0, parts.fileNameIndex);
-                    }
-
-                    return fullModulePathWithoutExtension;
-                }
-
-                function getNodeResolvablePath(path: string): string {
-                    const basePath = path.substring(0, parts.topLevelNodeModulesIndex);
-                    if (sourceDirectory.indexOf(basePath) === 0) {
-                        // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
-                        return path.substring(parts.topLevelPackageNameIndex + 1);
-                    }
-                    else {
-                        return getRelativePath(path, sourceDirectory);
-                    }
-                }
-            }
+        });
+        if (firstModuleSpecifier) {
+            return sourceFile.text.charCodeAt(firstModuleSpecifier.getStart()) === CharacterCodes.singleQuote;
         }
+    }
 
-        function getNodeModulePathParts(fullPath: string) {
-            // If fullPath can't be valid module file within node_modules, returns undefined.
-            // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
-            // Returns indices:                       ^            ^                                                      ^             ^
+    function getModuleSpecifierForNewImport(sourceFile: SourceFile, moduleSymbol: Symbol, options: CompilerOptions, getCanonicalFileName: (file: string) => string, host: LanguageServiceHost) {
+        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
+        const sourceDirectory = getDirectoryPath(sourceFile.fileName);
 
-            let topLevelNodeModulesIndex = 0;
-            let topLevelPackageNameIndex = 0;
-            let packageRootIndex = 0;
-            let fileNameIndex = 0;
+        return tryGetModuleNameFromAmbientModule(moduleSymbol) ||
+            tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName) ||
+            tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory) ||
+            tryGetModuleNameFromBaseUrl(options, moduleFileName, getCanonicalFileName) ||
+            tryGetModuleNameFromRootDirs(options, moduleFileName, sourceDirectory, getCanonicalFileName) ||
+            removeFileExtension(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName));
+    }
 
-            const enum States {
-                BeforeNodeModules,
-                NodeModules,
-                Scope,
-                PackageContent
-            }
-
-            let partStart = 0;
-            let partEnd = 0;
-            let state = States.BeforeNodeModules;
-
-            while (partEnd >= 0) {
-                partStart = partEnd;
-                partEnd = fullPath.indexOf("/", partStart + 1);
-                switch (state) {
-                    case States.BeforeNodeModules:
-                        if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
-                            topLevelNodeModulesIndex = partStart;
-                            topLevelPackageNameIndex = partEnd;
-                            state = States.NodeModules;
-                        }
-                        break;
-                    case States.NodeModules:
-                    case States.Scope:
-                        if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
-                            state = States.Scope;
-                        }
-                        else {
-                            packageRootIndex = partEnd;
-                            state = States.PackageContent;
-                        }
-                        break;
-                    case States.PackageContent:
-                        if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
-                            state = States.NodeModules;
-                        }
-                        else {
-                            state = States.PackageContent;
-                        }
-                        break;
-                }
-            }
-
-            fileNameIndex = partStart;
-
-            return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
+    function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
+        const decl = moduleSymbol.valueDeclaration;
+        if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
+            return decl.name.text;
         }
+    }
 
-        function getPathRelativeToRootDirs(path: string, rootDirs: string[]) {
-            for (const rootDir of rootDirs) {
-                const relativeName = getRelativePathIfInDirectory(path, rootDir);
-                if (relativeName !== undefined) {
-                    return relativeName;
-                }
-            }
+    function tryGetModuleNameFromBaseUrl(options: CompilerOptions, moduleFileName: string, getCanonicalFileName: (file: string) => string): string | undefined {
+        if (!options.baseUrl) {
             return undefined;
         }
 
-        function removeExtensionAndIndexPostFix(fileName: string) {
-            fileName = removeFileExtension(fileName);
-            if (endsWith(fileName, "/index")) {
-                fileName = fileName.substr(0, fileName.length - 6/* "/index".length */);
+        let relativeName = getRelativePathIfInDirectory(moduleFileName, options.baseUrl, getCanonicalFileName);
+        if (!relativeName) {
+            return undefined;
+        }
+
+        const relativeNameWithIndex = removeFileExtension(relativeName);
+        relativeName = removeExtensionAndIndexPostFix(relativeName);
+
+        if (options.paths) {
+            for (const key in options.paths) {
+                for (const pattern of options.paths[key]) {
+                    const indexOfStar = pattern.indexOf("*");
+                    if (indexOfStar === 0 && pattern.length === 1) {
+                        continue;
+                    }
+                    else if (indexOfStar !== -1) {
+                        const prefix = pattern.substr(0, indexOfStar);
+                        const suffix = pattern.substr(indexOfStar + 1);
+                        if (relativeName.length >= prefix.length + suffix.length &&
+                            startsWith(relativeName, prefix) &&
+                            endsWith(relativeName, suffix)) {
+                            const matchedStar = relativeName.substr(prefix.length, relativeName.length - suffix.length);
+                            return key.replace("\*", matchedStar);
+                        }
+                    }
+                    else if (pattern === relativeName || pattern === relativeNameWithIndex) {
+                        return key;
+                    }
+                }
             }
-            return fileName;
         }
 
-        function getRelativePathIfInDirectory(path: string, directoryPath: string) {
-            const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-            return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
+        return relativeName;
+    }
+
+    function tryGetModuleNameFromRootDirs(options: CompilerOptions, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string): string | undefined {
+        if (options.rootDirs) {
+            const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, options.rootDirs, getCanonicalFileName);
+            const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, options.rootDirs, getCanonicalFileName);
+            if (normalizedTargetPath !== undefined) {
+                const relativePath = normalizedSourcePath !== undefined ? getRelativePath(normalizedTargetPath, normalizedSourcePath, getCanonicalFileName) : normalizedTargetPath;
+                return removeFileExtension(relativePath);
+            }
+        }
+        return undefined;
+    }
+
+    function tryGetModuleNameFromTypeRoots(options: CompilerOptions, host: LanguageServiceHost, getCanonicalFileName: (file: string) => string, moduleFileName: string): string | undefined {
+        const typeRoots = getEffectiveTypeRoots(options, host);
+        if (!typeRoots) {
+            return undefined;
         }
 
-        function getRelativePath(path: string, directoryPath: string) {
-            const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-            return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
+        const normalizedTypeRoots = map(typeRoots, typeRoot => toPath(typeRoot, /*basePath*/ undefined, getCanonicalFileName));
+        for (const typeRoot of normalizedTypeRoots) {
+            if (startsWith(moduleFileName, typeRoot)) {
+                const relativeFileName = moduleFileName.substring(typeRoot.length + 1);
+                return removeExtensionAndIndexPostFix(relativeFileName);
+            }
         }
+    }
+
+    function tryGetModuleNameAsNodeModule(
+        options: CompilerOptions,
+        moduleFileName: string,
+        host: LanguageServiceHost,
+        getCanonicalFileName: (file: string) => string,
+        sourceDirectory: string,
+    ): string | undefined {
+        if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
+            // nothing to do here
+            return undefined;
+        }
+
+        const parts = getNodeModulePathParts(moduleFileName);
+
+        if (!parts) {
+            return undefined;
+        }
+
+        // Simplify the full file path to something that can be resolved by Node.
+
+        // If the module could be imported by a directory name, use that directory's name
+        let moduleSpecifier = getDirectoryOrExtensionlessFileName(moduleFileName);
+        // Get a path that's relative to node_modules or the importing file's path
+        moduleSpecifier = getNodeResolvablePath(moduleSpecifier);
+        // If the module was found in @types, get the actual Node package name
+        return getPackageNameFromAtTypesDirectory(moduleSpecifier);
+
+        function getDirectoryOrExtensionlessFileName(path: string): string {
+            // If the file is the main module, it can be imported by the package name
+            const packageRootPath = path.substring(0, parts.packageRootIndex);
+            const packageJsonPath = combinePaths(packageRootPath, "package.json");
+            if (host.fileExists(packageJsonPath)) {
+                const packageJsonContent = JSON.parse(host.readFile(packageJsonPath));
+                if (packageJsonContent) {
+                    const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
+                    if (mainFileRelative) {
+                        const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
+                        if (mainExportFile === getCanonicalFileName(path)) {
+                            return packageRootPath;
+                        }
+                    }
+                }
+            }
+
+            // We still have a file name - remove the extension
+            const fullModulePathWithoutExtension = removeFileExtension(path);
+
+            // If the file is /index, it can be imported by its directory name
+            if (getCanonicalFileName(fullModulePathWithoutExtension.substring(parts.fileNameIndex)) === "/index") {
+                return fullModulePathWithoutExtension.substring(0, parts.fileNameIndex);
+            }
+
+            return fullModulePathWithoutExtension;
+        }
+
+        function getNodeResolvablePath(path: string): string {
+            const basePath = path.substring(0, parts.topLevelNodeModulesIndex);
+            if (sourceDirectory.indexOf(basePath) === 0) {
+                // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
+                return path.substring(parts.topLevelPackageNameIndex + 1);
+            }
+            else {
+                return getRelativePath(path, sourceDirectory, getCanonicalFileName);
+            }
+        }
+    }
+
+    function getNodeModulePathParts(fullPath: string) {
+        // If fullPath can't be valid module file within node_modules, returns undefined.
+        // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
+        // Returns indices:                       ^            ^                                                      ^             ^
+
+        let topLevelNodeModulesIndex = 0;
+        let topLevelPackageNameIndex = 0;
+        let packageRootIndex = 0;
+        let fileNameIndex = 0;
+
+        const enum States {
+            BeforeNodeModules,
+            NodeModules,
+            Scope,
+            PackageContent
+        }
+
+        let partStart = 0;
+        let partEnd = 0;
+        let state = States.BeforeNodeModules;
+
+        while (partEnd >= 0) {
+            partStart = partEnd;
+            partEnd = fullPath.indexOf("/", partStart + 1);
+            switch (state) {
+                case States.BeforeNodeModules:
+                    if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
+                        topLevelNodeModulesIndex = partStart;
+                        topLevelPackageNameIndex = partEnd;
+                        state = States.NodeModules;
+                    }
+                    break;
+                case States.NodeModules:
+                case States.Scope:
+                    if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
+                        state = States.Scope;
+                    }
+                    else {
+                        packageRootIndex = partEnd;
+                        state = States.PackageContent;
+                    }
+                    break;
+                case States.PackageContent:
+                    if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
+                        state = States.NodeModules;
+                    }
+                    else {
+                        state = States.PackageContent;
+                    }
+                    break;
+            }
+        }
+
+        fileNameIndex = partStart;
+
+        return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
+    }
+
+    function getPathRelativeToRootDirs(path: string, rootDirs: string[], getCanonicalFileName: (fileName: string) => string) {
+        for (const rootDir of rootDirs) {
+            const relativeName = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+            if (relativeName !== undefined) {
+                return relativeName;
+            }
+        }
+        return undefined;
+    }
+
+    function removeExtensionAndIndexPostFix(fileName: string) {
+        fileName = removeFileExtension(fileName);
+        if (endsWith(fileName, "/index")) {
+            fileName = fileName.substr(0, fileName.length - 6/* "/index".length */);
+        }
+        return fileName;
+    }
+
+    function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string) {
+        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
+    }
+
+    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: (fileName: string) => string) {
+        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
     }
 
     function getCodeActionsForExistingImport(moduleSymbol: Symbol, context: ImportCodeFixContext, symbolName: string, isDefault: boolean, isNamespaceImport: boolean, declarations: AnyImportSyntax[]): ImportCodeAction[] {
         const { symbolName: name, sourceFile, symbolToken } = context;
+        const { namespaceImportDeclaration, namedImportDeclaration, existingModuleSpecifier } = getDeclarations(declarations);
 
         const actions: ImportCodeAction[] = [];
+        if (symbolToken && namespaceImportDeclaration) {
+            actions.push(getCodeActionForNamespaceImport(namespaceImportDeclaration));
+        }
 
+        if (!isNamespaceImport && namedImportDeclaration && namedImportDeclaration.importClause &&
+            (namedImportDeclaration.importClause.name || namedImportDeclaration.importClause.namedBindings)) {
+            /**
+             * If the existing import declaration already has a named import list, just
+             * insert the identifier into that list.
+             */
+            const fileTextChanges = getTextChangeForImportClause(namedImportDeclaration.importClause);
+            const moduleSpecifierWithoutQuotes = stripQuotes(namedImportDeclaration.moduleSpecifier.getText());
+            actions.push(createCodeAction(
+                Diagnostics.Add_0_to_existing_import_declaration_from_1,
+                [name, moduleSpecifierWithoutQuotes],
+                fileTextChanges,
+                "InsertingIntoExistingImport",
+                moduleSpecifierWithoutQuotes
+            ));
+        }
+        else {
+            // we need to create a new import statement, but the existing module specifier can be reused.
+            actions.push(getCodeActionForNewImport(context, moduleSymbol, symbolName, isDefault, existingModuleSpecifier, isNamespaceImport));
+        }
+        return actions;
+
+        function getTextChangeForImportClause(importClause: ImportClause): FileTextChanges[] {
+            const importList = <NamedImports>importClause.namedBindings;
+            const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name));
+            // case 1:
+            // original text: import default from "module"
+            // change to: import default, { name } from "module"
+            // case 2:
+            // original text: import {} from "module"
+            // change to: import { name } from "module"
+            if (!importList || importList.elements.length === 0) {
+                const newImportClause = createImportClause(importClause.name, createNamedImports([newImportSpecifier]));
+                return createChangeTracker(context).replaceNode(sourceFile, importClause, newImportClause).getChanges();
+            }
+
+            /**
+             * If the import list has one import per line, preserve that. Otherwise, insert on same line as last element
+             *     import {
+             *         foo
+             *     } from "./module";
+             */
+            return createChangeTracker(context).insertNodeInListAfter(
+                sourceFile,
+                importList.elements[importList.elements.length - 1],
+                newImportSpecifier).getChanges();
+        }
+
+        function getCodeActionForNamespaceImport(declaration: ImportDeclaration | ImportEqualsDeclaration): ImportCodeAction {
+            const namespacePrefix = stripQuotes(declaration.kind === SyntaxKind.ImportDeclaration
+                ? (<NamespaceImport>declaration.importClause.namedBindings).name.getText()
+                : declaration.name.getText());
+
+            /**
+             * Cases:
+             *     import * as ns from "mod"
+             *     import default, * as ns from "mod"
+             *     import ns = require("mod")
+             *
+             * Because there is no import list, we alter the reference to include the
+             * namespace instead of altering the import declaration. For example, "foo" would
+             * become "ns.foo"
+             */
+            return createCodeAction(
+                Diagnostics.Change_0_to_1,
+                [name, `${namespacePrefix}.${name}`],
+                createChangeTracker(context).replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), name)).getChanges(),
+                "CodeChange"
+            );
+        }
+    }
+
+    function getDeclarations(declarations: AnyImportSyntax[]) {
         // It is possible that multiple import statements with the same specifier exist in the file.
         // e.g.
         //
@@ -580,92 +665,10 @@ namespace ts.codefix {
                 existingModuleSpecifier = getModuleSpecifierFromImportEqualsDeclaration(declaration);
             }
         }
+        return { namespaceImportDeclaration, namedImportDeclaration, existingModuleSpecifier };
 
-        if (symbolToken && namespaceImportDeclaration) {
-            actions.push(getCodeActionForNamespaceImport(namespaceImportDeclaration));
-        }
-
-        if (!isNamespaceImport && namedImportDeclaration && namedImportDeclaration.importClause &&
-            (namedImportDeclaration.importClause.name || namedImportDeclaration.importClause.namedBindings)) {
-            /**
-             * If the existing import declaration already has a named import list, just
-             * insert the identifier into that list.
-             */
-            const fileTextChanges = getTextChangeForImportClause(namedImportDeclaration.importClause);
-            const moduleSpecifierWithoutQuotes = stripQuotes(namedImportDeclaration.moduleSpecifier.getText());
-            actions.push(createCodeAction(
-                Diagnostics.Add_0_to_existing_import_declaration_from_1,
-                [name, moduleSpecifierWithoutQuotes],
-                fileTextChanges,
-                "InsertingIntoExistingImport",
-                moduleSpecifierWithoutQuotes
-            ));
-        }
-        else {
-            // we need to create a new import statement, but the existing module specifier can be reused.
-            actions.push(getCodeActionForNewImport(context, moduleSymbol, symbolName, isDefault, existingModuleSpecifier, isNamespaceImport));
-        }
-        return actions;
-
-        function getModuleSpecifierFromImportEqualsDeclaration(declaration: ImportEqualsDeclaration) {
-            if (declaration.moduleReference && declaration.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                return declaration.moduleReference.expression.getText();
-            }
-            return declaration.moduleReference.getText();
-        }
-
-        function getTextChangeForImportClause(importClause: ImportClause): FileTextChanges[] {
-            const importList = <NamedImports>importClause.namedBindings;
-            const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name));
-            // case 1:
-            // original text: import default from "module"
-            // change to: import default, { name } from "module"
-            // case 2:
-            // original text: import {} from "module"
-            // change to: import { name } from "module"
-            if (!importList || importList.elements.length === 0) {
-                const newImportClause = createImportClause(importClause.name, createNamedImports([newImportSpecifier]));
-                return createChangeTracker(context).replaceNode(sourceFile, importClause, newImportClause).getChanges();
-            }
-
-            /**
-             * If the import list has one import per line, preserve that. Otherwise, insert on same line as last element
-             *     import {
-             *         foo
-             *     } from "./module";
-             */
-            return createChangeTracker(context).insertNodeInListAfter(
-                sourceFile,
-                importList.elements[importList.elements.length - 1],
-                newImportSpecifier).getChanges();
-        }
-
-        function getCodeActionForNamespaceImport(declaration: ImportDeclaration | ImportEqualsDeclaration): ImportCodeAction {
-            let namespacePrefix: string;
-            if (declaration.kind === SyntaxKind.ImportDeclaration) {
-                namespacePrefix = (<NamespaceImport>declaration.importClause.namedBindings).name.getText();
-            }
-            else {
-                namespacePrefix = declaration.name.getText();
-            }
-            namespacePrefix = stripQuotes(namespacePrefix);
-
-            /**
-             * Cases:
-             *     import * as ns from "mod"
-             *     import default, * as ns from "mod"
-             *     import ns = require("mod")
-             *
-             * Because there is no import list, we alter the reference to include the
-             * namespace instead of altering the import declaration. For example, "foo" would
-             * become "ns.foo"
-             */
-            return createCodeAction(
-                Diagnostics.Change_0_to_1,
-                [name, `${namespacePrefix}.${name}`],
-                createChangeTracker(context).replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), name)).getChanges(),
-                "CodeChange"
-            );
+        function getModuleSpecifierFromImportEqualsDeclaration({ moduleReference }: ImportEqualsDeclaration): string {
+            return (moduleReference.kind === SyntaxKind.ExternalModuleReference ? moduleReference.expression : moduleReference).getText();
         }
     }
 
