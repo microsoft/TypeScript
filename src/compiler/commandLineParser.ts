@@ -433,6 +433,12 @@ namespace ts {
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
+        {
+            name: "experimentalThrowExpressions",
+            type: "boolean",
+            category: Diagnostics.Experimental_Options,
+            description: Diagnostics.Enables_experimental_support_for_ECMAScript_Stage_2_throw_expressions
+        },
 
         // Advanced
         {

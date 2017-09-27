@@ -17179,6 +17179,10 @@ namespace ts {
         }
 
         function checkThrowExpression(node: ThrowExpression): Type {
+            if (!compilerOptions.experimentalThrowExpressions) {
+                error(node, Diagnostics.Experimental_support_for_throw_expressions_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalThrowExpressions_option_to_remove_this_warning);
+            }
+
             checkExpression(node.expression);
             return neverType;
         }

@@ -1,4 +1,5 @@
 // @target: esnext
+// @experimentalThrowExpressions: true
 declare const condition: boolean;
 const a = condition ? 1 : throw new Error();
 const b = condition || throw new Error();

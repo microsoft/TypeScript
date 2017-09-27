@@ -3658,6 +3658,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalThrowExpressions?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
