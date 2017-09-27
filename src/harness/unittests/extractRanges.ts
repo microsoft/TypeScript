@@ -180,7 +180,7 @@ function f() {
 }
         `,
         [
-            "Cannot extract range containing conditional return statement."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalReturnStatement.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed2",
@@ -199,7 +199,7 @@ function f() {
 }
         `,
         [
-            "Cannot extract range containing conditional break or continue statements."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed3",
@@ -218,7 +218,7 @@ function f() {
 }
         `,
         [
-            "Cannot extract range containing conditional break or continue statements."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed4",
@@ -237,7 +237,7 @@ function f() {
 }
         `,
         [
-            "Cannot extract range containing labeled break or continue with target outside of the range."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed5",
@@ -258,7 +258,7 @@ function f2() {
 }
         `,
         [
-            "Cannot extract range containing conditional return statement."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalReturnStatement.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed6",
@@ -279,7 +279,7 @@ function f2() {
 }
         `,
         [
-            "Cannot extract range containing conditional return statement."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalReturnStatement.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed7",
@@ -292,7 +292,7 @@ while (x) {
 }
         `,
         [
-            "Cannot extract range containing conditional break or continue statements."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed8",
@@ -305,7 +305,7 @@ switch (x) {
 }
         `,
         [
-            "Cannot extract range containing conditional break or continue statements."
+            refactor.extractSymbol.Messages.CannotExtractRangeContainingConditionalBreakOrContinueStatements.message
         ]);
 
         testExtractRangeFailed("extractRangeFailed9",
@@ -314,6 +314,6 @@ switch (x) {
             "Cannot extract empty range."
         ]);
 
-        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, ["Select more than a single identifier."]);
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.CannotExtractIdentifier.message]);
     });
 }

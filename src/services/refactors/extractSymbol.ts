@@ -117,7 +117,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     // Move these into diagnostic messages if they become user-facing
-    namespace Messages {
+    export namespace Messages {
         function createMessage(message: string): DiagnosticMessage {
             return { message, code: 0, category: DiagnosticCategory.Message, key: message };
         }
