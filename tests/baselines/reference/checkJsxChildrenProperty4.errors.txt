@@ -3,7 +3,7 @@ tests/cases/conformance/jsx/file.tsx(32,9): error TS2322: Type '{ children: ((us
   Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IFetchUserProps'.
     Types of property 'children' are incompatible.
       Type '((user: IUser) => Element)[]' is not assignable to type '(user: IUser) => Element'.
-        Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element'.
+        Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element;'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -46,7 +46,7 @@ tests/cases/conformance/jsx/file.tsx(32,9): error TS2322: Type '{ children: ((us
 !!! error TS2322:   Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IFetchUserProps'.
 !!! error TS2322:     Types of property 'children' are incompatible.
 !!! error TS2322:       Type '((user: IUser) => Element)[]' is not assignable to type '(user: IUser) => Element'.
-!!! error TS2322:         Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element'.
+!!! error TS2322:         Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element;'.
     
     
                 
