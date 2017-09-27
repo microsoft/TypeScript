@@ -151,15 +151,15 @@ namespace ts {
                 location = getParseTreeNode(location, isIdentifier);
                 return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
             },
-            signatureToString: (signature, enclosingDeclaration?, flags?, kind?) => {
-                return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
+            signatureToString: (signature, enclosingDeclaration?, flags?, kind?, writer?) => {
+                return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
             },
-            typeToString: (type, enclosingDeclaration?, flags?) => {
-                return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
+            typeToString: (type, enclosingDeclaration?, flags?, writer?) => {
+                return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
             getSymbolDisplayBuilder,
-            symbolToString: (symbol, enclosingDeclaration?, meaning?) => {
-                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning);
+            symbolToString: (symbol, enclosingDeclaration?, meaning?, writer?) => {
+                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, writer);
             },
             getAugmentedPropertiesOfType,
             getRootSymbols,
@@ -2350,22 +2350,28 @@ namespace ts {
             writer.writeSpace(" ");
         }
 
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
-            return usingSingleLineStringWriter(writer => {
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, writer?: EmitTextWriter): string {
+            return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
+
+            function symbolToStringWorker(writer: EmitTextWriter) {
                 const entity = nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, NodeBuilderFlags.IgnoreErrors);
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
-            });
+                return writer;
+            }
         }
 
-        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
-            return usingSingleLineStringWriter(writer => {
+        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string {
+            return writer ? signatureToStringWorker(writer).getText() : usingSingleLineStringWriter(signatureToStringWorker);
+
+            function signatureToStringWorker(writer: EmitTextWriter) {
                 const sig = nodeBuilder.signatureToSignatureDeclaration(signature, kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, sig, /*sourceFile*/ sourceFile, writer);
-            });
+                return writer;
+            }
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer: EmitTextWriter = createTextWriter("")): string {
