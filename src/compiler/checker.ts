@@ -2400,6 +2400,12 @@ namespace ts {
                 if (flags & TypeFormatFlags.MultilineObjectLiterals) {
                     result |= NodeBuilderFlags.MultilineObjectLiterals;
                 }
+                if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
+                    result |= NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
+                }
+                if (flags & TypeFormatFlags.UseTypeOfFunction) {
+                    result |= NodeBuilderFlags.UseTypeOfFunction;
+                }
 
                 return result;
             }
@@ -2610,7 +2616,7 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return contains(context.symbolStack, symbol); // it is type of the symbol uses itself recursively
+                            return !!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || contains(context.symbolStack, symbol); // it is type of the symbol uses itself recursively
                         }
                     }
                 }
@@ -2682,6 +2688,11 @@ namespace ts {
                         }
                         context.encounteredError = true;
                         return undefined;
+                    }
+                    else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
+                        type.symbol.valueDeclaration &&
+                        type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
+                        return createAnonymousTypeNode(getDeclaredTypeOfClassOrInterface(type.symbol));
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;

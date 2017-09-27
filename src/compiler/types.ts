@@ -2721,13 +2721,15 @@ namespace ts {
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
         WriteTypeParametersInQualifiedName      = 1 << 9,
         MultilineObjectLiterals                 = 1 << 10,  // Write object literals across multiple lines
+        WriteClassExpressionAsTypeLiteral       = 1 << 11,  // Write class {} as { new(): {} } - used for mixin declaration emit
+        UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
 
         // Error handling
-        AllowThisInObjectLiteral                = 1 << 11,
-        AllowQualifedNameInPlaceOfIdentifier    = 1 << 12,
-        AllowAnonymousIdentifier                = 1 << 13,
-        AllowEmptyUnionOrIntersection           = 1 << 14,
-        AllowEmptyTuple                         = 1 << 15,
+        AllowThisInObjectLiteral                = 1 << 13,
+        AllowQualifedNameInPlaceOfIdentifier    = 1 << 14,
+        AllowAnonymousIdentifier                = 1 << 15,
+        AllowEmptyUnionOrIntersection           = 1 << 16,
+        AllowEmptyTuple                         = 1 << 17,
 
         IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
 
