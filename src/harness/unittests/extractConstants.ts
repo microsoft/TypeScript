@@ -51,13 +51,13 @@ namespace ts {
     }
 }`);
 
-        testExtractConstantFailed("extractConstant_Parameters",
+        testExtractConstant("extractConstant_Parameters",
             `function F() {
     let w = 1;
     let x = [#|w + 1|];
 }`);
 
-        testExtractConstantFailed("extractConstant_TypeParameters",
+        testExtractConstant("extractConstant_TypeParameters",
             `function F<T>(t: T) {
     let x = [#|t + 1|];
 }`);

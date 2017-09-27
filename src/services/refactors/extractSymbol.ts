@@ -141,6 +141,7 @@ namespace ts.refactor.extractSymbol {
         export const CannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
         export const CannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
         export const CannotExtractToOtherFunctionLike = createMessage("Cannot extract method to a function-like scope that is not a function");
+        export const CannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
     }
 
     enum RangeFacts {
@@ -866,21 +867,17 @@ namespace ts.refactor.extractSymbol {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         if (isClassLike(scope)) {
-            // always create private method in TypeScript files
+            Debug.assert(!isJS); // See CannotExtractToJSClass
             const modifiers: Modifier[] = [];
-            if (!isJS) {
-                modifiers.push(createToken(SyntaxKind.PrivateKeyword));
-            }
+            modifiers.push(createToken(SyntaxKind.PrivateKeyword));
             if (rangeFacts & RangeFacts.InStaticRegion) {
                 modifiers.push(createToken(SyntaxKind.StaticKeyword));
             }
-            if (!isJS) {
-                modifiers.push(createToken(SyntaxKind.ReadonlyKeyword));
-            }
+            modifiers.push(createToken(SyntaxKind.ReadonlyKeyword));
 
             const newVariable = createProperty(
                 /*decorators*/ undefined,
-                modifiers.length ? modifiers : undefined,
+                modifiers,
                 localNameText,
                 /*questionToken*/ undefined,
                 variableType,
@@ -1195,20 +1192,29 @@ namespace ts.refactor.extractSymbol {
         const constantErrorsPerScope: Diagnostic[][] = [];
         const visibleDeclarationsInExtractedRange: Symbol[] = [];
 
-        const expressionDiagnostics =
+        const expressionDiagnostic =
             isReadonlyArray(targetRange.range) && !(targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0]))
-                ? ((start, end) => [createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected)])(firstOrUndefined(targetRange.range).getStart(), lastOrUndefined(targetRange.range).end)
-                : [];
+                ? ((start, end) => createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected))(firstOrUndefined(targetRange.range).getStart(), lastOrUndefined(targetRange.range).end)
+                : undefined;
 
         // initialize results
         for (const scope of scopes) {
             usagesPerScope.push({ usages: createMap<UsageEntry>(), typeParameterUsages: createMap<TypeParameter>(), substitutions: createMap<Expression>() });
             substitutionsPerScope.push(createMap<Expression>());
+
             functionErrorsPerScope.push(
                 isFunctionLikeDeclaration(scope) && scope.kind !== SyntaxKind.FunctionDeclaration
                     ? [createDiagnosticForNode(scope, Messages.CannotExtractToOtherFunctionLike)]
                     : []);
-            constantErrorsPerScope.push(expressionDiagnostics);
+
+            const constantErrors = [];
+            if (expressionDiagnostic) {
+                constantErrors.push(expressionDiagnostic);
+            }
+            if (isClassLike(scope) && isInJavaScriptFile(scope)) {
+                constantErrors.push(createDiagnosticForNode(scope, Messages.CannotExtractToJSClass));
+            }
+            constantErrorsPerScope.push(constantErrors);
         }
 
         const seenUsages = createMap<Usage>();
