@@ -693,6 +693,8 @@ namespace ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
         type: TypeNode | undefined;
+        /* @internal */
+        typeArguments?: NodeArray<TypeNode>; // Used for quick info, replaces typeParameters for instantiated signatures
     }
 
     export type SignatureDeclaration =
@@ -2720,7 +2722,7 @@ namespace ts {
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
         WriteTypeParametersInQualifiedName      = 1 << 9,
-        MultilineObjectLiterals                 = 1 << 10,  // Write object literals across multiple lines
+        MultilineObjectLiterals                 = 1 << 10,  // Always write object literals across multiple lines
         WriteClassExpressionAsTypeLiteral       = 1 << 11,  // Write class {} as { new(): {} } - used for mixin declaration emit
         UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
 
@@ -2778,7 +2780,7 @@ namespace ts {
         InArrayType                     = 1 << 15,  // Writing an array element type
         UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
                                                       // even though `T` can't be accessed in the current scope.
-        MultilineObjectLiterals         = 1 << 17,   // Print object literals across multiple lines (only used to map into node builder flags)
+        MultilineObjectLiterals         = 1 << 17,   // Always print object literals across multiple lines (only used to map into node builder flags)
     }
 
     export const enum SymbolFormatFlags {
