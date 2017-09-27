@@ -2352,13 +2352,16 @@ namespace ts {
 
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
             return usingSingleLineStringWriter(writer => {
-                getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
+                const entity = nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, NodeBuilderFlags.IgnoreErrors);
+                const printer = createPrinter({ removeComments: true });
+                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
             });
         }
 
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
             return usingSingleLineStringWriter(writer => {
-                const sig = nodeBuilder.signatureToSignatureDeclaration(signature, kind === SignatureKind.Construct ? SyntaxKind.ConstructorType : SyntaxKind.CallSignature, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+                const sig = nodeBuilder.signatureToSignatureDeclaration(signature, kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, sig, /*sourceFile*/ sourceFile, writer);
@@ -2431,6 +2434,12 @@ namespace ts {
                 signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
                     const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = signatureToSignatureDeclarationHelper(signature, kind, context);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
+                symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 }
@@ -3054,7 +3063,13 @@ namespace ts {
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
             return usingSingleLineStringWriter(writer => {
-                getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
+                const predicate = createTypePredicateNode(
+                    typePredicate.kind === TypePredicateKind.Identifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
+                    nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)
+                );
+                const printer = createPrinter({ removeComments: true });
+                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                printer.writeNode(EmitHint.Unspecified, predicate, /*sourceFile*/ sourceFile, writer);
             });
         }
 
