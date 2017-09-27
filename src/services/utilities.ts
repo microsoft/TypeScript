@@ -1313,8 +1313,33 @@ namespace ts {
 
     export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
-        // may override the default script kind for the file extension.
+        // may override the default script kind for the file extensison.
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
+    }
+
+    export function getOtherModuleSymbols(
+        sourceFiles: ReadonlyArray<SourceFile>,
+        currentSourceFile: SourceFile,
+        typeChecker: TypeChecker
+    ) {
+        const results: Symbol[] = typeChecker.getAmbientModules();
+        for (const otherSourceFile of sourceFiles) {
+            if (otherSourceFile !== currentSourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
+                results.push(otherSourceFile.symbol);
+            }
+        }
+        return results;
+    }
+
+    export function getUniqueSymbolIdAsString(symbol: Symbol, typeChecker: TypeChecker) {
+        return getUniqueSymbolId(symbol, typeChecker) + "";
+    }
+
+    export function getUniqueSymbolId(symbol: Symbol, typeChecker: TypeChecker) {
+        if (symbol.flags & SymbolFlags.Alias) {
+            return getSymbolId(typeChecker.getAliasedSymbol(symbol));
+        }
+        return getSymbolId(symbol);
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
