@@ -1037,8 +1037,7 @@ namespace FourSlash {
 
             const refs = this.getReferencesAtCaret();
             if (refs && refs.length) {
-                console.log(refs);
-                this.raiseError("Expected getReferences to fail");
+                this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
             }
         }
 
@@ -1050,9 +1049,9 @@ namespace FourSlash {
         private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
             const recur = <U>(actual: U, expected: U, path: string) => {
                 const fail = (msg: string) => {
-                    console.log("Expected:", stringify(fullExpected));
-                    console.log("Actual: ", stringify(fullActual));
-                    this.raiseError(`${msgPrefix}At ${path}: ${msg}`);
+                    this.raiseError(`${msgPrefix} At ${path}: ${msg}
+Expected: ${stringify(fullExpected)}
+Actual: ${stringify(fullActual)}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
@@ -1084,9 +1083,9 @@ namespace FourSlash {
                 if (fullActual === fullExpected) {
                     return;
                 }
-                console.log("Expected:", stringify(fullExpected));
-                console.log("Actual: ", stringify(fullActual));
-                this.raiseError(msgPrefix);
+                this.raiseError(`${msgPrefix}
+Expected: ${stringify(fullExpected)}
+Actual: ${stringify(fullActual)}`);
             }
             recur(fullActual, fullExpected, "");
 
@@ -2334,6 +2333,39 @@ namespace FourSlash {
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
                 this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n${expectedContents}`);
+            }
+        }
+
+        public verifyCodeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
+            const fileName = this.activeFile.fileName;
+            const actions = this.getCodeFixActions(fileName, options.errorCode);
+            let index = options.index;
+            if (index === undefined) {
+                if (!(actions && actions.length === 1)) {
+                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
+                }
+                index = 0;
+            }
+            else {
+                if (!(actions && actions.length >= index + 1)) {
+                    this.raiseError(`Should find at least ${index + 1} codefix(es), but ${actions ? actions.length : "none"} found.`);
+                }
+            }
+
+            const action = actions[index];
+
+            assert.equal(action.description, options.description);
+
+            for (const change of action.changes) {
+                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+            }
+
+            if (options.newFileContent) {
+                assert(!options.newRangeContent);
+                this.verifyCurrentFileContent(options.newFileContent);
+            }
+            else {
+                this.verifyRangeIs(options.newRangeContent, /*includeWhitespace*/ true);
             }
         }
 
@@ -3716,6 +3748,10 @@ namespace FourSlashInterface {
             this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
+        public codeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
+            this.state.verifyCodeFix(options);
+        }
+
         public codeFixAvailable() {
             this.state.verifyCodeFixAvailable(this.negative);
         }
@@ -4358,5 +4394,14 @@ namespace FourSlashInterface {
 
     export interface CompletionsAtOptions {
         isNewIdentifierLocation?: boolean;
+    }
+
+    export interface VerifyCodeFixOptions {
+        description: string;
+        // One of these should be defined.
+        newFileContent?: string;
+        newRangeContent?: string;
+        errorCode?: number;
+        index?: number;
     }
 }

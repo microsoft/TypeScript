@@ -36,7 +36,7 @@ namespace RWC {
                 Subfolder: "rwc",
                 Baselinefolder: "internal/baselines"
             };
-            const baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
+            const baseName = ts.getBaseFileName(jsonPath);
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
             let skipTypeAndSymbolbaselines = false;
@@ -61,7 +61,7 @@ namespace RWC {
                 this.timeout(800000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
-                const ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
+                const ioLog: IOLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
                 skipTypeAndSymbolbaselines = ioLog.filesRead.reduce((acc, elem) => (elem && elem.result && elem.result.contents) ? acc + elem.result.contents.length : acc, 0) > typeAndSymbolSizeLimit;
@@ -253,7 +253,7 @@ namespace RWC {
 
 class RWCRunner extends RunnerBase {
     public enumerateTestFiles() {
-        return Harness.IO.listFiles("internal/cases/rwc/", /.+\.json$/);
+        return Harness.IO.getDirectories("internal/cases/rwc/");
     }
 
     public kind(): TestRunnerKind {
