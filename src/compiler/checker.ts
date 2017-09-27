@@ -2562,7 +2562,7 @@ namespace ts {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     const readonlyToken = type.declaration && type.declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
                     const questionToken = type.declaration && type.declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
-                    const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context);
+                    const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context, getConstraintTypeFromMappedType(type));
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
 
                     const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
@@ -2905,9 +2905,8 @@ namespace ts {
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode);
             }
 
-            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext): TypeParameterDeclaration {
+            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {
                 const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
-                const constraint = getConstraintFromTypeParameter(type);
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
@@ -23737,7 +23736,7 @@ namespace ts {
 
         function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             const signature = getSignatureFromDeclaration(signatureDeclaration);
-            getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
+            typeToString(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         }
 
         function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
