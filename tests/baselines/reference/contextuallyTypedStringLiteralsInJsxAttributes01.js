@@ -34,5 +34,5 @@ declare namespace JSX {
     }
 }
 declare const FooComponent: (props: {
-    foo: "A" | "B" | "C";
-}) => JSX.Element;
+        foo: "A" | "B" | "C";
+    }) => JSX.Element;

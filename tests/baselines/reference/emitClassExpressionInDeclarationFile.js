@@ -102,8 +102,8 @@ export declare var circularReference: {
         tags(c: any): any;
     };
     getTags(c: {
-        tags(c: any): any;
-    }): {
+            tags(c: any): any;
+        }): {
         tags(c: any): any;
     };
 };

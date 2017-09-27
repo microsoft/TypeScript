@@ -23732,7 +23732,7 @@ namespace ts {
             if (flags & TypeFormatFlags.AddUndefined) {
                 type = getNullableType(type, TypeFlags.Undefined);
             }
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         }
 
         function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
