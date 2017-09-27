@@ -1110,6 +1110,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     // TODO (acasey): need to dig into nested statements
+    // TODO (acasey): don't insert before pinned comments, directives, or triple-slash references
     function getNodeToInsertConstantBefore(maxPos: number, scope: Scope): Node {
         const children = getStatementsOrClassElements(scope);
         Debug.assert(children.length > 0); // There must be at least one child, since we extracted from one.
@@ -1126,6 +1127,7 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
+        Debug.assert(prevChild !== undefined);
         return prevChild;
     }
 
