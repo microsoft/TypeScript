@@ -560,7 +560,7 @@ namespace ts {
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return getFullWidth(name) === 0 ? unescapeLeadingUnderscores(name.escapedText) : getTextOfNode(name);
+                return getFullWidth(name) === 0 ? idText(name) : getTextOfNode(name);
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
@@ -1987,7 +1987,7 @@ namespace ts {
     export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
         if (node) {
             if (node.kind === SyntaxKind.Identifier) {
-                return unescapeLeadingUnderscores((node as Identifier).escapedText);
+                return idText(node as Identifier);
             }
             if (node.kind === SyntaxKind.StringLiteral ||
                 node.kind === SyntaxKind.NumericLiteral) {
@@ -3941,6 +3941,13 @@ namespace ts {
     export function unescapeLeadingUnderscores(identifier: __String): string {
         const id = identifier as string;
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
+    }
+
+    export function idText(identifier: Identifier): string {
+        return unescapeLeadingUnderscores(identifier.escapedText);
+    }
+    export function symbolName(symbol: Symbol): string {
+        return unescapeLeadingUnderscores(symbol.escapedName);
     }
 
     /**
