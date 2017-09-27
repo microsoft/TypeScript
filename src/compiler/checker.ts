@@ -2358,7 +2358,10 @@ namespace ts {
 
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
             return usingSingleLineStringWriter(writer => {
-                getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
+                const sig = nodeBuilder.signatureToSignatureDeclaration(signature, kind === SignatureKind.Construct ? SyntaxKind.ConstructorType : SyntaxKind.CallSignature, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+                const printer = createPrinter({ removeComments: true });
+                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                printer.writeNode(EmitHint.Unspecified, sig, /*sourceFile*/ sourceFile, writer);
             });
         }
 
@@ -2376,39 +2379,39 @@ namespace ts {
                 return result.substr(0, maxLength - "...".length) + "...";
             }
             return result;
+        }
 
-            function toNodeBuilderFlags(flags?: TypeFormatFlags): NodeBuilderFlags {
-                let result = NodeBuilderFlags.None;
-                if (!flags) {
-                    return result;
-                }
-                if (flags & TypeFormatFlags.NoTruncation) {
-                    result |= NodeBuilderFlags.NoTruncation;
-                }
-                if (flags & TypeFormatFlags.UseFullyQualifiedType) {
-                    result |= NodeBuilderFlags.UseFullyQualifiedType;
-                }
-                if (flags & TypeFormatFlags.SuppressAnyReturnType) {
-                    result |= NodeBuilderFlags.SuppressAnyReturnType;
-                }
-                if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
-                    result |= NodeBuilderFlags.WriteArrayAsGenericType;
-                }
-                if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
-                    result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
-                }
-                if (flags & TypeFormatFlags.MultilineObjectLiterals) {
-                    result |= NodeBuilderFlags.MultilineObjectLiterals;
-                }
-                if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
-                    result |= NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
-                }
-                if (flags & TypeFormatFlags.UseTypeOfFunction) {
-                    result |= NodeBuilderFlags.UseTypeOfFunction;
-                }
-
+        function toNodeBuilderFlags(flags?: TypeFormatFlags): NodeBuilderFlags {
+            let result = NodeBuilderFlags.None;
+            if (!flags) {
                 return result;
             }
+            if (flags & TypeFormatFlags.NoTruncation) {
+                result |= NodeBuilderFlags.NoTruncation;
+            }
+            if (flags & TypeFormatFlags.UseFullyQualifiedType) {
+                result |= NodeBuilderFlags.UseFullyQualifiedType;
+            }
+            if (flags & TypeFormatFlags.SuppressAnyReturnType) {
+                result |= NodeBuilderFlags.SuppressAnyReturnType;
+            }
+            if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
+                result |= NodeBuilderFlags.WriteArrayAsGenericType;
+            }
+            if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
+                result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
+            }
+            if (flags & TypeFormatFlags.MultilineObjectLiterals) {
+                result |= NodeBuilderFlags.MultilineObjectLiterals;
+            }
+            if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
+                result |= NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
+            }
+            if (flags & TypeFormatFlags.UseTypeOfFunction) {
+                result |= NodeBuilderFlags.UseTypeOfFunction;
+            }
+
+            return result;
         }
 
         function createNodeBuilder() {
