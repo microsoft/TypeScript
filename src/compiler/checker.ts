@@ -2506,6 +2506,7 @@ namespace ts {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
                             context.encounteredError = true;
                         }
+                        context.tracker.reportInaccessibleThisError && context.tracker.reportInaccessibleThisError();
                     }
                     return createThis();
                 }
