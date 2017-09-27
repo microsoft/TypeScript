@@ -417,7 +417,7 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
-            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.host.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
@@ -440,6 +440,16 @@ namespace ts.server {
             };
 
             this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.host.getCurrentDirectory());
+        }
+
+        /*@internal*/
+        getExecutingFilePath() {
+            return this.getNormalizedAbsolutePath(this.host.getExecutingFilePath());
+        }
+
+        /*@internal*/
+        getNormalizedAbsolutePath(fileName: string) {
+            return getNormalizedAbsolutePath(fileName, this.host.getCurrentDirectory());
         }
 
         /* @internal */
@@ -924,6 +934,14 @@ namespace ts.server {
             });
         }
 
+        /*@internal*/ getScriptInfoPaths() {
+            const result: Path[] = [];
+            this.filenameToScriptInfo.forEach(info => {
+                result.push(info.path);
+            });
+            return result;
+        }
+
         /**
          * This function tries to search for a tsconfig.json for the given file. If we found it,
          * we first detect if there is already a configured project created for it: if so, we re-read
@@ -1365,7 +1383,7 @@ namespace ts.server {
                         return project;
                     }
                 }
-                return this.createInferredProject(/*isSingleInferredProject*/ false, projectRootPath);
+                return this.createInferredProject(projectRootPath, /*isSingleInferredProject*/ false, projectRootPath);
             }
 
             // we don't have an explicit root path, so we should try to find an inferred project
@@ -1402,12 +1420,13 @@ namespace ts.server {
                 return this.inferredProjects[0];
             }
 
-            return this.createInferredProject(/*isSingleInferredProject*/ true);
+            // Single inferred project does not have a project root.
+            return this.createInferredProject(/*currentDirectory*/ undefined, /*isSingleInferredProject*/ true);
         }
 
-        private createInferredProject(isSingleInferredProject?: boolean, projectRootPath?: string): InferredProject {
+        private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: string): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, currentDirectory, projectRootPath);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -1419,8 +1438,8 @@ namespace ts.server {
 
         createInferredProjectWithRootFileIfNecessary(root: ScriptInfo, projectRootPath?: string) {
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(root, projectRootPath) ||
-                            this.getOrCreateSingleInferredProjectIfEnabled() ||
-                            this.createInferredProject();
+                this.getOrCreateSingleInferredProjectIfEnabled() ||
+                this.createInferredProject(getDirectoryPath(root.path));
 
             project.addRoot(root);
 

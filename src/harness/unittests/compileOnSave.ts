@@ -567,7 +567,7 @@ namespace ts.projectSystem {
                 path: "/a/b/file3.js",
                 content: "console.log('file3');"
             };
-            const externalProjectName = "externalproject";
+            const externalProjectName = "/a/b/externalproject";
             const host = createServerHost([file1, file2, file3, libFile]);
             const session = createSession(host);
             const projectService = session.getProjectService();

@@ -173,7 +173,7 @@ namespace ts.server {
         }
 
         getDefaultLibFileName() {
-            const nodeModuleBinDir = getDirectoryPath(normalizePath(this.host.getExecutingFilePath()));
+            const nodeModuleBinDir = getDirectoryPath(this.project.projectService.getExecutingFilePath());
             return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilationSettings));
         }
 
@@ -203,7 +203,7 @@ namespace ts.server {
         }
 
         getCurrentDirectory(): string {
-            return this.host.getCurrentDirectory();
+            return this.project.currentDirectory;
         }
 
         resolvePath(path: string): string {

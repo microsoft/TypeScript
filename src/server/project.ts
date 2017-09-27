@@ -177,6 +177,9 @@ namespace ts.server {
             return result.module;
         }
 
+        /*@internal*/
+        readonly currentDirectory: string;
+
         constructor(
             private readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -185,8 +188,9 @@ namespace ts.server {
             hasExplicitListOfFiles: boolean,
             languageServiceEnabled: boolean,
             private compilerOptions: CompilerOptions,
-            public compileOnSaveEnabled: boolean) {
-
+            public compileOnSaveEnabled: boolean,
+            currentDirectory: string | undefined) {
+            this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
             if (!this.compilerOptions) {
                 this.compilerOptions = getDefaultCompilerOptions();
                 this.compilerOptions.allowNonTsExtensions = true;
@@ -268,7 +272,6 @@ namespace ts.server {
         getProjectName() {
             return this.projectName;
         }
-        abstract getProjectRootPath(): string | undefined;
         abstract getTypeAcquisition(): TypeAcquisition;
 
         getExternalFiles(): SortedReadonlyArray<string> {
@@ -363,7 +366,7 @@ namespace ts.server {
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
-                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' is missing.`);
+                    Debug.fail(`scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' is missing.\nProgram currentDirectory: '${this.program.getCurrentDirectory()}'\nCurrentScriptInfos: ${this.projectService.getScriptInfoPaths()}\ncurrentDirectory: ${this.projectService.host.getCurrentDirectory()}`);
                 }
                 return scriptInfo;
             });
@@ -842,8 +845,6 @@ namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
-        public readonly projectRootPath: string | undefined;
-
         private static readonly newName = (() => {
             let nextId = 1;
             return () => {
@@ -882,7 +883,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string) {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string | undefined, readonly projectRootPath: string | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -890,7 +891,8 @@ namespace ts.server {
                 /*files*/ undefined,
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
-                /*compileOnSaveEnabled*/ false);
+                /*compileOnSaveEnabled*/ false,
+                currentDirectory);
             this.projectRootPath = projectRootPath;
         }
 
@@ -908,15 +910,6 @@ namespace ts.server {
                 }
             }
             super.removeRoot(info);
-        }
-
-        getProjectRootPath() {
-            // Single inferred project does not have a project root.
-            if (this.projectService.useSingleInferredProject) {
-                return undefined;
-            }
-            const rootFiles = this.getRootFiles();
-            return getDirectoryPath(rootFiles[0]);
         }
 
         close() {
@@ -962,7 +955,15 @@ namespace ts.server {
             private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
-            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+            super(configFileName,
+                ProjectKind.Configured,
+                projectService,
+                documentRegistry,
+                hasExplicitListOfFiles,
+                languageServiceEnabled,
+                compilerOptions,
+                compileOnSaveEnabled,
+                getDirectoryPath(configFileName));
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
             this.enablePlugins();
         }
@@ -982,7 +983,7 @@ namespace ts.server {
 
             // Search our peer node_modules, then any globally-specified probe paths
             // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-            const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+            const searchPaths = [combinePaths(this.projectService.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
 
             if (this.projectService.allowLocalPluginLoads) {
                 const local = getDirectoryPath(this.canonicalConfigFilePath);
@@ -1060,10 +1061,6 @@ namespace ts.server {
             catch (e) {
                 this.projectService.logger.info(`Plugin activation failed: ${e}`);
             }
-        }
-
-        getProjectRootPath() {
-            return getDirectoryPath(this.getConfigFilePath());
         }
 
         setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>) {
@@ -1196,23 +1193,20 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
-            private readonly projectFilePath?: string) {
-            super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
-
+            projectFilePath?: string) {
+            super(externalProjectName,
+                ProjectKind.External,
+                projectService,
+                documentRegistry,
+                /*hasExplicitListOfFiles*/ true,
+                languageServiceEnabled,
+                compilerOptions,
+                compileOnSaveEnabled,
+                getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
         }
 
         getExcludedFiles() {
             return this.excludedFiles;
-        }
-
-        getProjectRootPath() {
-            if (this.projectFilePath) {
-                return getDirectoryPath(this.projectFilePath);
-            }
-            // if the projectFilePath is not given, we make the assumption that the project name
-            // is the path of the project file. AS the project name is provided by VS, we need to
-            // normalize slashes before using it as a file name.
-            return getDirectoryPath(normalizeSlashes(this.getProjectName()));
         }
 
         getTypeAcquisition() {
