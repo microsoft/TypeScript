@@ -14,7 +14,7 @@ const a = condition ? 1 : throw new Error();
 const b = condition || throw new Error();
 >b : true
 >condition || throw new Error() : true
->condition : true
+>condition : boolean
 >throw new Error() : never
 >new Error() : Error
 >Error : ErrorConstructor
@@ -37,7 +37,7 @@ const x = "x", y = "y", z = "z";
 const w = condition ? throw true ? x : y : z;
 >w : "x" | "y" | "z"
 >condition ? throw true ? x : y : z : "x" | "y" | "z"
->condition : true
+>condition : boolean
 >throw true ? x : y : "x" | "y"
 >throw true : never
 >true : true
