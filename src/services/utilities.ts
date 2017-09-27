@@ -1122,6 +1122,7 @@ namespace ts {
         let indent: number;
 
         resetWriter();
+        const unknownWrite = (text: string) => writeKind(text, SymbolDisplayPartKind.text);
         return {
             displayParts: () => displayParts,
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
@@ -1131,11 +1132,21 @@ namespace ts {
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
+            writeLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeSymbol,
             writeLine,
+            write: unknownWrite,
+            writeTextOfNode: unknownWrite,
+            getText: () => "",
+            getTextPos: () => 0,
+            getColumn: () => 0,
+            getLine: () => 0,
+            isAtStartOfLine: () => false,
+            rawWrite: noop,
+            getIndent: () => indent,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
-            clear: resetWriter,
+            reset: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -1249,7 +1260,7 @@ namespace ts {
             return displayPartWriter.displayParts();
         }
         finally {
-            displayPartWriter.clear();
+            displayPartWriter.reset();
         }
     }
 

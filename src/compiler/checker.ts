@@ -2362,11 +2362,10 @@ namespace ts {
             });
         }
 
-        function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+        function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer: EmitTextWriter = createTextWriter("")): string {
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName, writer);
             Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
-            const writer = createTextWriter("");
             const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
@@ -2398,6 +2397,9 @@ namespace ts {
                 if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
                     result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
                 }
+                if (flags & TypeFormatFlags.MultilineObjectLiterals) {
+                    result |= NodeBuilderFlags.MultilineObjectLiterals;
+                }
 
                 return result;
             }
@@ -2405,30 +2407,31 @@ namespace ts {
 
         function createNodeBuilder() {
             return {
-                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags);
+                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = typeToTypeNodeHelper(type, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },
-                indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags);
+                indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },
-                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags);
+                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = signatureToSignatureDeclarationHelper(signature, kind, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 }
             };
 
-            function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeBuilderContext {
+            function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined): NodeBuilderContext {
                 return {
                     enclosingDeclaration,
                     flags,
+                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
                     encounteredError: false,
                     symbolStack: undefined
                 };
@@ -2642,7 +2645,7 @@ namespace ts {
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
-                    return setEmitFlags(typeLiteralNode, EmitFlags.SingleLine);
+                    return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
 
                 function createTypeQueryNodeFromSymbol(symbol: Symbol, symbolFlags: SymbolFlags) {
@@ -2939,7 +2942,7 @@ namespace ts {
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: false): EntityName;
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: boolean): EntityName {
-
+                context.tracker.trackSymbol(symbol, context.enclosingDeclaration, meaning);
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
@@ -3085,6 +3088,7 @@ namespace ts {
         interface NodeBuilderContext {
             enclosingDeclaration: Node | undefined;
             flags: NodeBuilderFlags | undefined;
+            tracker: SymbolTracker | undefined;
 
             // State
             encounteredError: boolean;
@@ -23712,7 +23716,7 @@ namespace ts {
 
         function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             const type = getWidenedType(getRegularTypeOfExpression(expr));
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         }
 
         function hasGlobalName(name: string): boolean {

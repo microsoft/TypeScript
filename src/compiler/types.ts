@@ -2720,10 +2720,11 @@ namespace ts {
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
         WriteTypeParametersInQualifiedName      = 1 << 9,
+        MultilineObjectLiterals                 = 1 << 10,  // Write object literals across multiple lines
 
         // Error handling
-        AllowThisInObjectLiteral                = 1 << 10,
-        AllowQualifedNameInPlaceOfIdentifier    = 1 << 11,
+        AllowThisInObjectLiteral                = 1 << 11,
+        AllowQualifedNameInPlaceOfIdentifier    = 1 << 12,
         AllowAnonymousIdentifier                = 1 << 13,
         AllowEmptyUnionOrIntersection           = 1 << 14,
         AllowEmptyTuple                         = 1 << 15,
@@ -2775,6 +2776,7 @@ namespace ts {
         InArrayType                     = 1 << 15,  // Writing an array element type
         UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
                                                       // even though `T` can't be accessed in the current scope.
+        MultilineObjectLiterals         = 1 << 17,   // Print object literals across multiple lines (only used to map into node builder flags)
     }
 
     export const enum SymbolFormatFlags {
@@ -2792,7 +2794,6 @@ namespace ts {
         UseOnlyExternalAliasing = 0x00000002,
     }
 
-    /* @internal */
     export const enum SymbolAccessibility {
         Accessible,
         NotAccessible,
@@ -2827,10 +2828,8 @@ namespace ts {
 
     export type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
 
-    /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
-    /* @internal */
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
         aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
@@ -2838,7 +2837,6 @@ namespace ts {
         errorNode?: Node; // optional node that results in error
     }
 
-    /* @internal */
     export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
@@ -4496,7 +4494,7 @@ namespace ts {
          */
         substituteNode?(hint: EmitHint, node: Node): Node;
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
-        /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, pos: number, emitCallback: (token: SyntaxKind, pos: number) => number) => number;
+        /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
         /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
@@ -4514,7 +4512,7 @@ namespace ts {
         /*@internal*/ extendedDiagnostics?: boolean;
     }
 
-    export interface EmitTextWriter {
+    export interface EmitTextWriter extends SymbolTracker {
         write(s: string): void;
         writeTextOfNode(text: string, node: Node): void;
         writeLine(): void;
@@ -4538,7 +4536,9 @@ namespace ts {
         writeParameter(text: string): void;
         writeProperty(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
+    }
 
+    export interface SymbolTracker {
         // Called when the symbol writer encounters a symbol to write.  Currently only used by the
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
