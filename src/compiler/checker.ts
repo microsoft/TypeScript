@@ -2573,7 +2573,7 @@ namespace ts {
                     const symbol = type.symbol;
                     if (symbol) {
                         // Always use 'typeof T' for type of class, enum, and module objects
-                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
+                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                             shouldWriteTypeOfFunctionSymbol()) {
                             return createTypeQueryNodeFromSymbol(symbol, SymbolFlags.Value);
@@ -2596,10 +2596,17 @@ namespace ts {
                             if (!context.symbolStack) {
                                 context.symbolStack = [];
                             }
-                            context.symbolStack.push(symbol);
-                            const result = createTypeNodeFromObjectType(type);
-                            context.symbolStack.pop();
-                            return result;
+
+                            const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
+                            if (isConstructorObject) {
+                                return createTypeNodeFromObjectType(type);
+                            }
+                            else {
+                                context.symbolStack.push(symbol);
+                                const result = createTypeNodeFromObjectType(type);
+                                context.symbolStack.pop();
+                                return result;
+                            }
                         }
                     }
                     else {
@@ -2792,6 +2799,14 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
+                        if (context.flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
+                            if (propertySymbol.flags & SymbolFlags.Prototype) {
+                                continue;
+                            }
+                            if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                                context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                            }
+                        }
                         const propertyType = getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
