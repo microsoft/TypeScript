@@ -1,0 +1,12 @@
+=== /a.js ===
+/**
+ * @param {{ x: number, y: string }} p
+ * @param {number} m
+ */
+function f({ x, y }, m) {
+>f : ({ x, y }: { x: number; y: string; }, m: number) => void
+>x : number
+>y : string
+>m : number
+}
+

@@ -677,7 +677,46 @@ namespace ts {
                     break;
                 default:
                     bindEachChild(node);
+                    if (isFunctionLikeDeclaration(node)) {
+                        bindJSDocParameters(node);
+                    }
                     break;
+            }
+        }
+
+        function bindJSDocParameters(node: SignatureDeclaration): void {
+            const { parameters } = node;
+            if (parameters.length === 0) {
+                return;
+            }
+
+            // Clear any previous binding
+            for (const p of parameters) {
+                p.jsdocParamTags = undefined;
+            }
+
+            let paramIndex = 0;
+            for (const tag of getJSDocTags(parent)) {
+                if (!isJSDocParameterTag(tag)) {
+                    continue;
+                }
+
+                // If we run out of parameters, just do nothing.
+                // Will error in `checkJSDocParameterTag` since it will have no symbol.
+                const startParamIndex = paramIndex;
+                do {
+                    const param = parameters[paramIndex];
+                    paramIndex++;
+                    if (paramIndex === parameters.length) {
+                        paramIndex = 0;
+                    }
+
+                    if (param.name.kind !== SyntaxKind.Identifier || getLeftmostName(tag.name).escapedText === param.name.escapedText) {
+                        tag.symbol = param.symbol;
+                        param.jsdocParamTags = append(param.jsdocParamTags, tag);
+                        break;
+                    }
+                } while (paramIndex !== startParamIndex);
             }
         }
 

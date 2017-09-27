@@ -53,7 +53,7 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const documentationComment = <SymbolDisplayPart[]>[];
         forEachUnique(declarations, declaration => {
-            forEach(getAllJSDocs(declaration), doc => {
+            forEachJSDoc(declaration, doc => {
                 if (doc.comment) {
                     if (documentationComment.length) {
                         documentationComment.push(lineBreakPart());
