@@ -1037,8 +1037,7 @@ namespace FourSlash {
 
             const refs = this.getReferencesAtCaret();
             if (refs && refs.length) {
-                console.log(refs);
-                this.raiseError("Expected getReferences to fail");
+                this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
             }
         }
 
@@ -1050,9 +1049,9 @@ namespace FourSlash {
         private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
             const recur = <U>(actual: U, expected: U, path: string) => {
                 const fail = (msg: string) => {
-                    console.log("Expected:", stringify(fullExpected));
-                    console.log("Actual: ", stringify(fullActual));
-                    this.raiseError(`${msgPrefix}At ${path}: ${msg}`);
+                    this.raiseError(`${msgPrefix} At ${path}: ${msg}
+Expected: ${stringify(fullExpected)}
+Actual: ${stringify(fullActual)}`);
                 };
 
                 if ((actual === undefined) !== (expected === undefined)) {
@@ -1084,9 +1083,9 @@ namespace FourSlash {
                 if (fullActual === fullExpected) {
                     return;
                 }
-                console.log("Expected:", stringify(fullExpected));
-                console.log("Actual: ", stringify(fullActual));
-                this.raiseError(msgPrefix);
+                this.raiseError(`${msgPrefix}
+Expected: ${stringify(fullExpected)}
+Actual: ${stringify(fullActual)}`);
             }
             recur(fullActual, fullExpected, "");
 
