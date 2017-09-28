@@ -16381,6 +16381,11 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
+            if (callSignatures.length === 1 && callSignatures[0].parameters.length === 0) {
+                error(node, Diagnostics.A_decorator_function_must_accept_some_number_of_arguments_but_this_expression_takes_none_Did_you_mean_to_call_it_first);
+                return resolveErrorCall(node);
+            }
+
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
                 let errorInfo: DiagnosticMessageChain;

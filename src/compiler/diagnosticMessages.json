@@ -907,6 +907,10 @@
         "category": "Error",
         "code": 1328
     },
+    "A decorator function must accept some number of arguments, but this expression takes none. Did you mean to call it first?": {
+        "category": "Error",
+        "code": 1329
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
