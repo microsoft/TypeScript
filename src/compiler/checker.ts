@@ -2426,6 +2426,12 @@ namespace ts {
             if (flags & TypeFormatFlags.UseTypeOfFunction) {
                 result |= NodeBuilderFlags.UseTypeOfFunction;
             }
+            if (flags & TypeFormatFlags.OmitParameterModifiers) {
+                result |= NodeBuilderFlags.OmitParameterModifiers;
+            }
+            if (flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) {
+                result |= NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+            }
 
             return result;
         }
@@ -2547,7 +2553,7 @@ namespace ts {
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (!inTypeAlias && type.aliasSymbol && isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration)) {
+                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     return createTypeReferenceNode(name, typeArgumentNodes);
@@ -2825,7 +2831,7 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
-                        if (context.flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
+                        if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) {
                             if (propertySymbol.flags & SymbolFlags.Prototype) {
                                 continue;
                             }
@@ -2959,7 +2965,7 @@ namespace ts {
                         typeToTypeNodeHelper(anyArrayType, context),
                         /*initializer*/ undefined);
                 }
-                const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
+                const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(getSynthesizedClone) : undefined;
                 const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration.name ?
                     parameterDeclaration.name.kind === SyntaxKind.Identifier ?

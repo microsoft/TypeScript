@@ -2725,13 +2725,15 @@ namespace ts {
         MultilineObjectLiterals                 = 1 << 10,  // Always write object literals across multiple lines
         WriteClassExpressionAsTypeLiteral       = 1 << 11,  // Write class {} as { new(): {} } - used for mixin declaration emit
         UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
+        OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
+        UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
 
         // Error handling
-        AllowThisInObjectLiteral                = 1 << 13,
-        AllowQualifedNameInPlaceOfIdentifier    = 1 << 14,
-        AllowAnonymousIdentifier                = 1 << 15,
-        AllowEmptyUnionOrIntersection           = 1 << 16,
-        AllowEmptyTuple                         = 1 << 17,
+        AllowThisInObjectLiteral                = 1 << 15,
+        AllowQualifedNameInPlaceOfIdentifier    = 1 << 16,
+        AllowAnonymousIdentifier                = 1 << 17,
+        AllowEmptyUnionOrIntersection           = 1 << 18,
+        AllowEmptyTuple                         = 1 << 19,
 
         IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
 
@@ -2781,6 +2783,7 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
                                                       // even though `T` can't be accessed in the current scope.
         MultilineObjectLiterals         = 1 << 17,   // Always print object literals across multiple lines (only used to map into node builder flags)
+        OmitParameterModifiers          = 1 << 18,   // Omit modifiers on parameters
     }
 
     export const enum SymbolFormatFlags {
