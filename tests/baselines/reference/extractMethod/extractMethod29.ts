@@ -16,7 +16,7 @@ function parseUnaryExpression(operator: string): UnaryExpression {
 function parsePrimaryExpression(): any {
     throw "Not implemented";
 }
-// ==SCOPE::inner function in function 'parseUnaryExpression'==
+// ==SCOPE::Extract to inner function in function 'parseUnaryExpression'==
 interface UnaryExpression {
     kind: "Unary";
     operator: string;
@@ -38,7 +38,7 @@ function parseUnaryExpression(operator: string): UnaryExpression {
 function parsePrimaryExpression(): any {
     throw "Not implemented";
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 interface UnaryExpression {
     kind: "Unary";
     operator: string;

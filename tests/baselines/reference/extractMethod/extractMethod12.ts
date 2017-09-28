@@ -13,7 +13,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::method in class 'C'==
+// ==SCOPE::Extract to method in class 'C'==
 namespace A {
     let y = 1;
     class C {
@@ -21,11 +21,11 @@ namespace A {
         a() {
             let z = 1;
             var __return: any;
-            ({ __return, z } = this./*RENAME*/newFunction(z));
+            ({ __return, z } = this./*RENAME*/newMethod(z));
             return __return;
         }
 
-        private newFunction(z: number) {
+        private newMethod(z: number) {
             let a1 = { x: 1 };
             y = 10;
             z = 42;

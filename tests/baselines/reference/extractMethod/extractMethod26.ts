@@ -6,19 +6,19 @@ class C {
     }
     M3() { }
 }
-// ==SCOPE::method in class 'C'==
+// ==SCOPE::Extract to method in class 'C'==
 class C {
     M1() { }
     M2() {
-        return this./*RENAME*/newFunction();
+        return this./*RENAME*/newMethod();
     }
-    private newFunction() {
+    private newMethod() {
         return 1;
     }
 
     M3() { }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 class C {
     M1() { }
     M2() {

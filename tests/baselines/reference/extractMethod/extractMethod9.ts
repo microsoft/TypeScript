@@ -8,7 +8,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::inner function in function 'a'==
+// ==SCOPE::Extract to inner function in function 'a'==
 namespace A {
     export interface I { x: number };
     namespace B {
@@ -22,7 +22,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function in namespace 'B'==
+// ==SCOPE::Extract to function in namespace 'B'==
 namespace A {
     export interface I { x: number };
     namespace B {
@@ -36,7 +36,7 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function in namespace 'A'==
+// ==SCOPE::Extract to function in namespace 'A'==
 namespace A {
     export interface I { x: number };
     namespace B {
@@ -50,7 +50,7 @@ namespace A {
         return a1.x + 10;
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 namespace A {
     export interface I { x: number };
     namespace B {

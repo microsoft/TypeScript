@@ -2,7 +2,7 @@
 function F<T>() {
     const array: T[] = [];
 }
-// ==SCOPE::inner function in function 'F'==
+// ==SCOPE::Extract to inner function in function 'F'==
 function F<T>() {
     const array: T[] = /*RENAME*/newFunction();
 
@@ -10,7 +10,7 @@ function F<T>() {
         return [];
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 function F<T>() {
     const array: T[] = /*RENAME*/newFunction<T>();
 }

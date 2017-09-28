@@ -6,7 +6,7 @@ function test() {
         return 1;
     }
 }
-// ==SCOPE::inner function in function 'test'==
+// ==SCOPE::Extract to inner function in function 'test'==
 function test() {
     try {
     }
@@ -18,7 +18,7 @@ function test() {
         return 1;
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 function test() {
     try {
     }

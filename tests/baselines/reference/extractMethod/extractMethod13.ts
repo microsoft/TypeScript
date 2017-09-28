@@ -14,7 +14,7 @@
         }
     }
 }
-// ==SCOPE::inner function in function 'F2'==
+// ==SCOPE::Extract to inner function in function 'F2'==
 <U1a, U1b>(u1a: U1a, u1b: U1b) => {
     function F1<T1a, T1b>(t1a: T1a, t1b: T1b) {
         <U2a, U2b>(u2a: U2a, u2b: U2b) => {
@@ -34,7 +34,7 @@
         }
     }
 }
-// ==SCOPE::inner function in function 'F1'==
+// ==SCOPE::Extract to inner function in function 'F1'==
 <U1a, U1b>(u1a: U1a, u1b: U1b) => {
     function F1<T1a, T1b>(t1a: T1a, t1b: T1b) {
         <U2a, U2b>(u2a: U2a, u2b: U2b) => {
@@ -54,7 +54,7 @@
         }
     }
 }
-// ==SCOPE::function in global scope==
+// ==SCOPE::Extract to function in global scope==
 <U1a, U1b>(u1a: U1a, u1b: U1b) => {
     function F1<T1a, T1b>(t1a: T1a, t1b: T1b) {
         <U2a, U2b>(u2a: U2a, u2b: U2b) => {
