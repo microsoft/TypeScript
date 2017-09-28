@@ -11,6 +11,5 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     cooked.raw = raw;
     return cooked;
 };
-var x = {}(_a || (_a = __makeTemplateObject(["a"], ["a"])));
+var x = {}(__makeTemplateObject(["a"], ["a"]));
 321;
-var _a;

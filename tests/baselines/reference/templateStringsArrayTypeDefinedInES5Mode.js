@@ -25,5 +25,4 @@ var TemplateStringsArray = /** @class */ (function () {
 function f(x, y, z) {
 }
 f({}, 10, 10);
-f(_a || (_a = __makeTemplateObject(["abcdef", "", "ghijkl"], ["abcdef", "", "ghijkl"])), 1234, 5678);
-var _a;
+f(__makeTemplateObject(["abcdef", "", "ghijkl"], ["abcdef", "", "ghijkl"]), 1234, 5678);

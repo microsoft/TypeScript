@@ -9,5 +9,4 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     cooked.raw = raw;
     return cooked;
 };
-("I AM THE " + "TAG" + " " + " PORTION")(_a || (_a = __makeTemplateObject(["I ", " THE TEMPLATE PORTION"], ["I ", " THE TEMPLATE PORTION"])), "AM");
-var _a;
+("I AM THE " + "TAG" + " " + " PORTION")(__makeTemplateObject(["I ", " THE TEMPLATE PORTION"], ["I ", " THE TEMPLATE PORTION"]), "AM");

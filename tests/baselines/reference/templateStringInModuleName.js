@@ -14,11 +14,10 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 declare;
-module(_a || (_a = __makeTemplateObject(["M1"], ["M1"])));
+module(__makeTemplateObject(["M1"], ["M1"]));
 {
 }
 declare;
-module(_b || (_b = __makeTemplateObject(["M", ""], ["M", ""])), 2);
+module(__makeTemplateObject(["M", ""], ["M", ""]), 2);
 {
 }
-var _a, _b;

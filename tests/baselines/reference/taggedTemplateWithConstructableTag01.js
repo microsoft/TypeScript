@@ -16,5 +16,4 @@ var CtorTag = /** @class */ (function () {
     }
     return CtorTag;
 }());
-CtorTag(_a || (_a = __makeTemplateObject(["Hello world!"], ["Hello world!"])));
-var _a;
+CtorTag(__makeTemplateObject(["Hello world!"], ["Hello world!"]));

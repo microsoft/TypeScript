@@ -24,6 +24,5 @@ var c = 123 + 456 + " trailing";
 var d = "Hello " + 123 + " World";
 var e = "Hello";
 var f = 1 + (1 + " end of string");
-var g = tag(_a || (_a = __makeTemplateObject(["Hello ", " World"], ["Hello ", " World"])), 123);
-var h = tag(_b || (_b = __makeTemplateObject(["Hello"], ["Hello"])));
-var _a, _b;
+var g = tag(__makeTemplateObject(["Hello ", " World"], ["Hello ", " World"]), 123);
+var h = tag(__makeTemplateObject(["Hello"], ["Hello"]));

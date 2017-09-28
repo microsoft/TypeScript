@@ -15,5 +15,4 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 var tag;
-tag(_a || (_a = __makeTemplateObject(["Hello world!"], ["Hello world!"])));
-var _a;
+tag(__makeTemplateObject(["Hello world!"], ["Hello world!"]));

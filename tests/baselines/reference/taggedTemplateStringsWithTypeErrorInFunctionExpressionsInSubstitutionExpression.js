@@ -18,5 +18,4 @@ function foo() {
         rest[_i] = arguments[_i];
     }
 }
-foo(_a || (_a = __makeTemplateObject(["", ""], ["", ""])), function (x) { x = "bad"; });
-var _a;
+foo(__makeTemplateObject(["", ""], ["", ""]), function (x) { x = "bad"; });

@@ -18,5 +18,4 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(_a || (_a = __makeTemplateObject(["\t\n\v\f\r\\"], ["\\t\\n\\v\\f\\r\\\\"])));
-var _a;
+f(__makeTemplateObject(["\t\n\v\f\r\\"], ["\\t\\n\\v\\f\\r\\\\"]));

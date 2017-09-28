@@ -32,7 +32,7 @@ function foo1() {
     }
     return undefined;
 }
-var a = foo1(_a || (_a = __makeTemplateObject(["", ""], ["", ""])), 1);
+var a = foo1(__makeTemplateObject(["", ""], ["", ""]), 1);
 var b = foo1([], 1);
 function foo2() {
     var stuff = [];
@@ -41,6 +41,5 @@ function foo2() {
     }
     return undefined;
 }
-var c = foo2(_b || (_b = __makeTemplateObject(["", ""], ["", ""])), 1);
+var c = foo2(__makeTemplateObject(["", ""], ["", ""]), 1);
 var d = foo2([], 1);
-var _a, _b;

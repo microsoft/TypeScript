@@ -18,5 +18,4 @@ function declare(x) {
         ys[_i - 1] = arguments[_i];
     }
 }
-declare(_a || (_a = __makeTemplateObject(["Hello ", " world!"], ["Hello ", " world!"])), 0);
-var _a;
+declare(__makeTemplateObject(["Hello ", " world!"], ["Hello ", " world!"]), 0);

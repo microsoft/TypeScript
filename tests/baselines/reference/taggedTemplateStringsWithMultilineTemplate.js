@@ -21,5 +21,4 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(_a || (_a = __makeTemplateObject(["\n\n"], ["\n\\\n\n"])));
-var _a;
+f(__makeTemplateObject(["\n\n"], ["\n\\\n\n"]));

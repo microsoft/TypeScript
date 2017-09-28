@@ -18,5 +18,4 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(_a || (_a = __makeTemplateObject(["'\uD83D\uDCA9'", "'\uD83D\uDCA9'"], ["'\\u{1f4a9}'", "'\\uD83D\\uDCA9'"])), " should be converted to ");
-var _a;
+f(__makeTemplateObject(["'\uD83D\uDCA9'", "'\uD83D\uDCA9'"], ["'\\u{1f4a9}'", "'\\uD83D\\uDCA9'"]), " should be converted to ");
