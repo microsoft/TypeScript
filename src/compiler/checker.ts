@@ -4882,7 +4882,16 @@ namespace ts {
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments {
-            return getClassExtendsHeritageClauseElement(<ClassLikeDeclaration>type.symbol.valueDeclaration);
+            const decl = <ClassLikeDeclaration>type.symbol.valueDeclaration;
+            if (isInJavaScriptFile(decl)) {
+                // Prefer an @augments tag because it may have type parameters.
+                const tag = getJSDocAugmentsTag(decl);
+                if (tag) {
+                    return tag.class;
+                }
+            }
+
+            return getClassExtendsHeritageClauseElement(decl);
         }
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode>, location: Node): Signature[] {
@@ -4986,15 +4995,6 @@ namespace ts {
                 baseType = getReturnTypeOfSignature(constructors[0]);
             }
 
-            // In a JS file, you can use the @augments jsdoc tag to specify a base type with type parameters
-            const valueDecl = type.symbol.valueDeclaration;
-            if (valueDecl && isInJavaScriptFile(valueDecl)) {
-                const augTag = getJSDocAugmentsTag(type.symbol.valueDeclaration);
-                if (augTag && augTag.typeExpression && augTag.typeExpression.type) {
-                    baseType = getTypeFromTypeNode(augTag.typeExpression.type);
-                }
-            }
-
             if (baseType === unknownType) {
                 return;
             }
@@ -5003,7 +5003,7 @@ namespace ts {
                 return;
             }
             if (type === baseType || hasBaseType(baseType, type)) {
-                error(valueDecl, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
+                error(type.symbol.valueDeclaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                 return;
             }
@@ -14573,7 +14573,7 @@ namespace ts {
             if (node.expression) {
                 const type = checkExpression(node.expression, checkMode);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
-                    error(node, Diagnostics.JSX_spread_child_must_be_an_array_type, node.toString(), typeToString(type));
+                    error(node, Diagnostics.JSX_spread_child_must_be_an_array_type);
                 }
                 return type;
             }
@@ -19798,6 +19798,38 @@ namespace ts {
             }
         }
 
+        function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
+            const cls = getJSDocHost(node);
+            if (!isClassDeclaration(cls) && !isClassExpression(cls)) {
+                error(cls, Diagnostics.JSDoc_augments_is_not_attached_to_a_class_declaration);
+                return;
+            }
+
+            const name = getIdentifierFromEntityNameExpression(node.class.expression);
+            const extend = getClassExtendsHeritageClauseElement(cls);
+            if (extend) {
+                const className = getIdentifierFromEntityNameExpression(extend.expression);
+                if (className && name.escapedText !== className.escapedText) {
+                    error(name, Diagnostics.JSDoc_augments_0_does_not_match_the_extends_1_clause,
+                        unescapeLeadingUnderscores(name.escapedText),
+                        unescapeLeadingUnderscores(className.escapedText));
+                }
+            }
+        }
+
+        function getIdentifierFromEntityNameExpression(node: Identifier | PropertyAccessExpression): Identifier;
+        function getIdentifierFromEntityNameExpression(node: Expression): Identifier | undefined;
+        function getIdentifierFromEntityNameExpression(node: Expression): Identifier | undefined {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return node as Identifier;
+                case SyntaxKind.PropertyAccessExpression:
+                    return (node as PropertyAccessExpression).name;
+                default:
+                    return undefined;
+            }
+        }
+
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
@@ -22492,6 +22524,8 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TypeOperator:
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                case SyntaxKind.JSDocAugmentsTag:
+                    return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
                     return checkJSDocTypedefTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocParameterTag:

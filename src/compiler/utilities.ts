@@ -1401,11 +1401,10 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expression: ts.BinaryExpression): SpecialPropertyAssignmentKind {
-        if (!isInJavaScriptFile(expression)) {
+    export function getSpecialPropertyAssignmentKind(expr: ts.BinaryExpression): SpecialPropertyAssignmentKind {
+        if (!isInJavaScriptFile(expr)) {
             return SpecialPropertyAssignmentKind.None;
         }
-        const expr = <BinaryExpression>expression;
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || expr.left.kind !== SyntaxKind.PropertyAccessExpression) {
             return SpecialPropertyAssignmentKind.None;
         }
@@ -1581,14 +1580,18 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
-        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
-        const func = node.parent!.parent!;
+        const func = getJSDocHost(node);
         if (!isFunctionLike(func)) {
             return undefined;
         }
         const parameter = find(func.parameters, p =>
             p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
         return parameter && parameter.symbol;
+    }
+
+    export function getJSDocHost(node: JSDocTag): HasJSDoc {
+        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
+        return node.parent!.parent!;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {

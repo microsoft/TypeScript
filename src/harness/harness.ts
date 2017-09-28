@@ -1717,8 +1717,12 @@ namespace Harness {
             return resultName;
         }
 
-        function sanitizeTestFilePath(name: string) {
-            return ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", Utils.canonicalizeForHarness);
+        export function sanitizeTestFilePath(name: string) {
+            const path = ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", Utils.canonicalizeForHarness);
+            if (ts.startsWith(path, "/")) {
+                return path.substring(1);
+            }
+            return path;
         }
 
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
@@ -2062,13 +2066,13 @@ namespace Harness {
         export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]>, opts?: BaselineOptions, referencedExtensions?: string[]): void {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
-            /* tslint:disable-next-line:no-null-keyword */
             const errors: Error[] = [];
+            // tslint:disable-next-line:no-null-keyword
             if (gen !== null) {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
-                    const relativeFileName = relativeFileBase + (ts.startsWith(name, "/") ? "" : "/") + name + extension;
+                    const relativeFileName = relativeFileBase + "/" + name + extension;
                     const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
                     const comparison = compareToBaseline(content, relativeFileName, opts);
                     try {

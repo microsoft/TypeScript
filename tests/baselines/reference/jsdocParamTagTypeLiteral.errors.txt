@@ -1,4 +1,4 @@
-tests/cases/conformance/jsdoc/0.js(3,20): error TS8022: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
+tests/cases/conformance/jsdoc/0.js(3,20): error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
 
 
 ==== tests/cases/conformance/jsdoc/0.js (1 errors) ====
@@ -6,7 +6,7 @@ tests/cases/conformance/jsdoc/0.js(3,20): error TS8022: JSDoc '@param' tag has n
      * @param {Object} notSpecial
      * @param {string} unrelated - not actually related because it's not notSpecial.unrelated
                        ~~~~~~~~~
-!!! error TS8022: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
+!!! error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
      */
     function normal(notSpecial) {
         notSpecial; // should just be 'any'
