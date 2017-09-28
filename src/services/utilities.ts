@@ -1272,7 +1272,7 @@ namespace ts {
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
+            typeChecker.symbolToString(symbol, enclosingDeclaration, meaning, flags, writer);
         });
     }
 

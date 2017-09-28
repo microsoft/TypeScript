@@ -2647,7 +2647,7 @@ namespace ts {
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
-        symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, writer?: EmitTextWriter): string;
+        symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
@@ -2713,13 +2713,14 @@ namespace ts {
         /* @internal */ getJsxNamespace(): string;
     }
 
-    export enum NodeBuilderFlags {
+    export const enum NodeBuilderFlags {
         None                                    = 0,
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
         WriteTypeParametersInQualifiedName      = 1 << 9,
         MultilineObjectLiterals                 = 1 << 10,  // Always write object literals across multiple lines

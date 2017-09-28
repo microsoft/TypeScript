@@ -158,8 +158,8 @@ namespace ts {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
             getSymbolDisplayBuilder,
-            symbolToString: (symbol, enclosingDeclaration?, meaning?, writer?) => {
-                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, writer);
+            symbolToString: (symbol, enclosingDeclaration?, meaning?, flags?, writer?) => {
+                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
             getAugmentedPropertiesOfType,
             getRootSymbols,
@@ -2350,11 +2350,18 @@ namespace ts {
             writer.writeSpace(" ");
         }
 
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, writer?: EmitTextWriter): string {
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string {
+            let nodeFlags = NodeBuilderFlags.IgnoreErrors;
+            if (flags & SymbolFormatFlags.UseOnlyExternalAliasing) {
+                nodeFlags |= NodeBuilderFlags.UseOnlyExternalAliasing;
+            }
+            if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
+                nodeFlags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName;
+            }
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
             function symbolToStringWorker(writer: EmitTextWriter) {
-                const entity = nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, NodeBuilderFlags.IgnoreErrors);
+                const entity = nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, nodeFlags);
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
@@ -2461,7 +2468,7 @@ namespace ts {
                     const resultingNode = symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
-                }
+                },
             };
 
             function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined): NodeBuilderContext {
@@ -3054,7 +3061,7 @@ namespace ts {
 
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
-                    let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, /*useOnlyExternalAliasing*/ false);
+                    let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, !!(context.flags & NodeBuilderFlags.UseOnlyExternalAliasing));
                     let parentSymbol: Symbol;
 
                     if (!accessibleSymbolChain ||
