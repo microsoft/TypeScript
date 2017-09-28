@@ -300,7 +300,7 @@ namespace ts {
   * @property {number} age
   * @property {string} name
   */`);
-                parsesCorrectly("<> characters",
+                parsesCorrectly("less-than and greater-than characters",
 `/**
  * @param x hi
 < > still part of the previous comment
