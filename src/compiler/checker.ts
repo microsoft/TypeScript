@@ -3549,7 +3549,7 @@ namespace ts {
                             return;
                         }
 
-                        if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length && isStrictSignature(resolved.callSignatures[0])) {
+                        if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
                             const parenthesizeSignature = shouldAddParenthesisAroundFunctionType(resolved.callSignatures[0], flags);
                             if (parenthesizeSignature) {
                                 writePunctuation(writer, SyntaxKind.OpenParenToken);
@@ -3560,7 +3560,7 @@ namespace ts {
                             }
                             return;
                         }
-                        if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length && isStrictSignature(resolved.constructSignatures[0])) {
+                        if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
                             if (flags & TypeFormatFlags.InElementType) {
                                 writePunctuation(writer, SyntaxKind.OpenParenToken);
                             }
@@ -8522,17 +8522,6 @@ namespace ts {
                 /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
         }
 
-        // A signature is considered strict if it is declared in a function type literal, a constructor type
-        // literal, a function expression, an arrow function, or a function declaration with no overloads. A
-        // strict signature is subject to strict checking in strictFunctionTypes mode.
-        function isStrictSignature(signature: Signature) {
-            const declaration = signature.declaration;
-            const kind = declaration ? declaration.kind : SyntaxKind.Unknown;
-            return kind === SyntaxKind.FunctionType || kind === SyntaxKind.ConstructorType ||
-                kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction ||
-                (kind === SyntaxKind.FunctionDeclaration && getSingleCallSignature(getTypeOfSymbol(getSymbolOfNode(declaration))));
-        }
-
         type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
 
         /**
@@ -8558,7 +8547,9 @@ namespace ts {
                 source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
             }
 
-            const strictVariance = strictFunctionTypes && isStrictSignature(target);
+            const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
+            const strictVariance = strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
+                kind !== SyntaxKind.MethodSignature && kind !== SyntaxKind.Constructor;
             let result = Ternary.True;
 
             const sourceThisType = getThisTypeOfSignature(source);
