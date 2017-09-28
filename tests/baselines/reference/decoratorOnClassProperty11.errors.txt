@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(4,5): error TS1240: Unable to resolve signature of property decorator when called as an expression.
+tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(4,5): error TS1329: A decorator function must accept some number of arguments, but this expression takes none. Did you mean to call it first?
 
 
 ==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(
     class C {
         @dec prop;
         ~~~~
-!!! error TS1240: Unable to resolve signature of property decorator when called as an expression.
+!!! error TS1329: A decorator function must accept some number of arguments, but this expression takes none. Did you mean to call it first?
     }
