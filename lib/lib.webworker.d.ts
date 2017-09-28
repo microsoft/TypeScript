@@ -57,7 +57,7 @@ interface IDBIndexParameters {
 
 interface IDBObjectStoreParameters {
     autoIncrement?: boolean;
-    keyPath?: IDBKeyPath;
+    keyPath?: IDBKeyPath | null;
 }
 
 interface KeyAlgorithm {
@@ -94,7 +94,7 @@ interface RequestInit {
     body?: any;
     cache?: RequestCache;
     credentials?: RequestCredentials;
-    headers?: any;
+    headers?: Headers | string[][];
     integrity?: string;
     keepalive?: boolean;
     method?: string;
@@ -106,7 +106,7 @@ interface RequestInit {
 }
 
 interface ResponseInit {
-    headers?: any;
+    headers?: Headers | string[][];
     status?: number;
     statusText?: string;
 }
@@ -123,18 +123,18 @@ interface ExtendableMessageEventInit extends ExtendableEventInit {
     data?: any;
     origin?: string;
     lastEventId?: string;
-    source?: Client | ServiceWorker | MessagePort;
-    ports?: MessagePort[];
+    source?: Client | ServiceWorker | MessagePort | null;
+    ports?: MessagePort[] | null;
 }
 
 interface FetchEventInit extends ExtendableEventInit {
-    request?: Request;
-    clientId?: string;
+    request: Request;
+    clientId?: string | null;
     isReload?: boolean;
 }
 
 interface NotificationEventInit extends ExtendableEventInit {
-    notification?: Notification;
+    notification: Notification;
     action?: string;
 }
 
@@ -143,7 +143,7 @@ interface PushEventInit extends ExtendableEventInit {
 }
 
 interface SyncEventInit extends ExtendableEventInit {
-    tag?: string;
+    tag: string;
     lastChance?: boolean;
 }
 
@@ -195,9 +195,9 @@ interface Cache {
     add(request: RequestInfo): Promise<void>;
     addAll(requests: RequestInfo[]): Promise<void>;
     delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
-    keys(request?: RequestInfo, options?: CacheQueryOptions): any;
+    keys(request?: RequestInfo, options?: CacheQueryOptions): Promise<Request[]>;
     match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response>;
-    matchAll(request?: RequestInfo, options?: CacheQueryOptions): any;
+    matchAll(request?: RequestInfo, options?: CacheQueryOptions): Promise<Response[]>;
     put(request: RequestInfo, response: Response): Promise<void>;
 }
 
@@ -209,7 +209,7 @@ declare var Cache: {
 interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
-    keys(): any;
+    keys(): Promise<string[]>;
     match(request: RequestInfo, options?: CacheQueryOptions): Promise<any>;
     open(cacheName: string): Promise<Cache>;
 }
@@ -334,7 +334,7 @@ interface DOMException {
 
 declare var DOMException: {
     prototype: DOMException;
-    new(): DOMException;
+    new(message?: string, name?: string): DOMException;
     readonly ABORT_ERR: number;
     readonly DATA_CLONE_ERR: number;
     readonly DOMSTRING_SIZE_ERR: number;
@@ -490,7 +490,7 @@ interface Headers {
 
 declare var Headers: {
     prototype: Headers;
-    new(init?: any): Headers;
+    new(init?: Headers | string[][] | object): Headers;
 };
 
 interface IDBCursor {
@@ -980,6 +980,7 @@ interface Response extends Object, Body {
     readonly statusText: string;
     readonly type: ResponseType;
     readonly url: string;
+    readonly redirected: boolean;
     clone(): Response;
 }
 
@@ -1020,7 +1021,7 @@ interface ServiceWorkerRegistration extends EventTarget {
     readonly scope: USVString;
     readonly sync: SyncManager;
     readonly waiting: ServiceWorker | null;
-    getNotifications(filter?: GetNotificationOptions): any;
+    getNotifications(filter?: GetNotificationOptions): Promise<Notification[]>;
     showNotification(title: string, options?: NotificationOptions): Promise<void>;
     unregister(): Promise<boolean>;
     update(): Promise<void>;
@@ -1034,7 +1035,7 @@ declare var ServiceWorkerRegistration: {
 };
 
 interface SyncManager {
-    getTags(): any;
+    getTags(): Promise<string[]>;
     register(tag: string): Promise<void>;
 }
 
@@ -1268,13 +1269,13 @@ interface XMLHttpRequestEventTargetEventMap {
 }
 
 interface XMLHttpRequestEventTarget {
-    onabort: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onerror: (this: XMLHttpRequestEventTarget, ev: ErrorEvent) => any;
-    onload: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onloadend: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
-    onloadstart: (this: XMLHttpRequestEventTarget, ev: Event) => any;
-    onprogress: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
-    ontimeout: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
+    onabort: (this: XMLHttpRequest, ev: Event) => any;
+    onerror: (this: XMLHttpRequest, ev: ErrorEvent) => any;
+    onload: (this: XMLHttpRequest, ev: Event) => any;
+    onloadend: (this: XMLHttpRequest, ev: ProgressEvent) => any;
+    onloadstart: (this: XMLHttpRequest, ev: Event) => any;
+    onprogress: (this: XMLHttpRequest, ev: ProgressEvent) => any;
+    ontimeout: (this: XMLHttpRequest, ev: ProgressEvent) => any;
     addEventListener<K extends keyof XMLHttpRequestEventTargetEventMap>(type: K, listener: (this: XMLHttpRequestEventTarget, ev: XMLHttpRequestEventTargetEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -1294,7 +1295,7 @@ declare var Client: {
 interface Clients {
     claim(): Promise<void>;
     get(id: string): Promise<any>;
-    matchAll(options?: ClientQueryOptions): any;
+    matchAll(options?: ClientQueryOptions): Promise<Client[]>;
     openWindow(url: USVString): Promise<WindowClient>;
 }
 
@@ -1519,6 +1520,26 @@ interface WorkerUtils extends Object, WindowBase64 {
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
+interface BroadcastChannel extends EventTarget {
+    readonly name: string;
+    onmessage: (ev: MessageEvent) => any;
+    onmessageerror: (ev: MessageEvent) => any;
+    close(): void;
+    postMessage(message: any): void;
+    addEventListener<K extends keyof BroadcastChannelEventMap>(type: K, listener: (this: BroadcastChannel, ev: BroadcastChannelEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var BroadcastChannel: {
+    prototype: BroadcastChannel;
+    new(name: string): BroadcastChannel;
+};
+
+interface BroadcastChannelEventMap {
+    message: MessageEvent;
+    messageerror: MessageEvent;
+}
+
 interface ErrorEventInit {
     message?: string;
     filename?: string;
@@ -1582,8 +1603,7 @@ interface BlobPropertyBag {
     endings?: string;
 }
 
-interface FilePropertyBag {
-    type?: string;
+interface FilePropertyBag extends BlobPropertyBag {
     lastModified?: number;
 }
 

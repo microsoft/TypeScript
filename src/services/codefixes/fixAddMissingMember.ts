@@ -156,8 +156,9 @@ namespace ts.codefix {
             const propertyChangeTracker = textChanges.ChangeTracker.fromContext(context);
             propertyChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, property, { suffix: context.newLineCharacter });
 
-            (actions || (actions = [])).push({
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Declare_property_0), [tokenName]),
+            const diag = makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0;
+            actions = append(actions, {
+                description: formatStringFromArgs(getLocaleSpecificMessage(diag), [tokenName]),
                 changes: propertyChangeTracker.getChanges()
             });
 
@@ -197,11 +198,9 @@ namespace ts.codefix {
 
                 const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromContext(context);
                 methodDeclarationChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, methodDeclaration, { suffix: context.newLineCharacter });
+                const diag = makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0;
                 return {
-                    description: formatStringFromArgs(getLocaleSpecificMessage(makeStatic ?
-                        Diagnostics.Declare_method_0 :
-                        Diagnostics.Declare_static_method_0),
-                        [tokenName]),
+                    description: formatStringFromArgs(getLocaleSpecificMessage(diag), [tokenName]),
                     changes: methodDeclarationChangeTracker.getChanges()
                 };
             }

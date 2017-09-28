@@ -144,6 +144,11 @@ namespace ts {
 `/**
 * @type
 */`);
+
+                parsesIncorrectly("@augments with no type",
+`/**
+ * @augments
+ */`);
             });
 
             describe("parsesCorrectly", () => {
