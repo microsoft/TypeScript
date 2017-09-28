@@ -19,7 +19,7 @@ function f(_a, _b, _c) {
 
 //// [declarationEmitBindingPatterns.d.ts]
 declare const k: ({ x: z }: {
-        x?: string;
-    }) => void;
+    x?: string;
+}) => void;
 declare var a: any;
 declare function f({}?: any, []?: any, {p: {}}?: any): void;
