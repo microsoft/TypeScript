@@ -108,23 +108,16 @@ namespace ts {
             it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
         function runBaseline(extension: Extension) {
-            const f = {
-                path: "/a" + extension,
-                content: t.source
-            };
-            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
-            const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
-            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
+            const path = "/a" + extension;
+            const program = makeProgram({ path, content: t.source });
 
-            // Don't bother generating JS baselines for inputs that aren't valid JS.
-            const diags = program.getSyntacticDiagnostics();
-            if (diags && diags.length) {
+            if (hasSyntacticDiagnostics(program)) {
+                // Don't bother generating JS baselines for inputs that aren't valid JS.
                 assert.equal(Extension.Js, extension);
                 return;
             }
 
-            const sourceFile = program.getSourceFile(f.path);
+            const sourceFile = program.getSourceFile(path);
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
                 newLineCharacter,
@@ -150,9 +143,25 @@ namespace ts {
                     const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
+
+                    const diagProgram = makeProgram({ path, content: newText });
+                    assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
+        }
+
+        function makeProgram(f: {path: string, content: string }) {
+            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+            const projectService = projectSystem.createProjectService(host);
+            projectService.openClientFile(f.path);
+            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
+            return program;
+        }
+
+        function hasSyntacticDiagnostics(program: Program) {
+            const diags = program.getSyntacticDiagnostics();
+            return length(diags) > 0;
         }
     }
 
