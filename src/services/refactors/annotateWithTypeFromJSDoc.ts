@@ -189,8 +189,11 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     }
 
     function visitJSDocParameter(node: ParameterDeclaration) {
-        const name = node.name || "arg" + node.parent.parameters.indexOf(node);
-        return createParameter(node.decorators, node.modifiers, node.dotDotDotToken, name, node.questionToken, node.type, node.initializer);
+        const index = node.parent.parameters.indexOf(node);
+        const isRest = node.type.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1;
+        const name = node.name || (isRest ? "rest" : "arg" + index);
+        const dotdotdot = isRest ? createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
+        return createParameter(node.decorators, node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
     }
 
     function visitJSDocTypeReference(node: TypeReferenceNode) {

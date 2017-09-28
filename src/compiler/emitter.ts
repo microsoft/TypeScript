@@ -578,10 +578,10 @@ namespace ts {
                     return emitLiteralType(<LiteralTypeNode>node);
                 case SyntaxKind.JSDocAllType:
                     write("*");
-                    break;
+                    return;
                 case SyntaxKind.JSDocUnknownType:
                     write("?");
-                    break;
+                    return;
                 case SyntaxKind.JSDocNullableType:
                     return emitJSDocNullableType(node as JSDocNullableType);
                 case SyntaxKind.JSDocNonNullableType:
