@@ -3652,8 +3652,10 @@ namespace ts {
             // Visit the tag expression
             const tag = visitNode(node.tag, visitor, isExpression);
 
-            // Allocate storage for the template site object
-            const temp = createTempVariable(recordTaggedTemplateString);
+            // Allocate storage for the template site object if we're in a module.
+            // In the global scope, any variable we currently generate could conflict with
+            // variables from outside of the current compilation.
+            const temp = isExternalModule(currentSourceFile) ? createTempVariable(recordTaggedTemplateString) : undefined;
 
             // Build up the template arguments and the raw and cooked strings for the template.
             // We start out with 'undefined' for the first argument and revisit later
@@ -3676,12 +3678,19 @@ namespace ts {
                 }
             }
 
-            // Initialize the template object if necessary
-            templateArguments[0] = createLogicalOr(
-                temp,
-                createAssignment(
+            const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
+
+            // If we're in the global scope, we risk having conflicting variables.
+            // Since we currently lack the infrastructure to create sufficiently unique names,
+            // we'll fall back to creating the template object on every invocation.
+            templateArguments[0] = !temp ?
+                helperCall :
+                createLogicalOr(
                     temp,
-                    createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings))));
+                    createAssignment(
+                        temp,
+                        helperCall)
+                );
 
             return createCall(tag, /*typeArguments*/ undefined, templateArguments);
         }
