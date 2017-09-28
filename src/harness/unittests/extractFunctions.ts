@@ -1,8 +1,8 @@
 /// <reference path="extractTestHelpers.ts" />
 
 namespace ts {
-    describe("extractMethods", () => {
-        testExtractMethod("extractMethod1",
+    describe("extractFunctions", () => {
+        testExtractFunction("extractFunction1",
             `namespace A {
     let x = 1;
     function foo() {
@@ -18,7 +18,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod2",
+        testExtractFunction("extractFunction2",
             `namespace A {
     let x = 1;
     function foo() {
@@ -32,7 +32,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod3",
+        testExtractFunction("extractFunction3",
             `namespace A {
     function foo() {
     }
@@ -45,7 +45,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod4",
+        testExtractFunction("extractFunction4",
             `namespace A {
     function foo() {
     }
@@ -60,7 +60,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod5",
+        testExtractFunction("extractFunction5",
             `namespace A {
     let x = 1;
     export function foo() {
@@ -76,7 +76,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod6",
+        testExtractFunction("extractFunction6",
             `namespace A {
     let x = 1;
     export function foo() {
@@ -92,7 +92,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod7",
+        testExtractFunction("extractFunction7",
             `namespace A {
     let x = 1;
     export namespace C {
@@ -110,7 +110,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod8",
+        testExtractFunction("extractFunction8",
             `namespace A {
     let x = 1;
     namespace B {
@@ -120,7 +120,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod9",
+        testExtractFunction("extractFunction9",
             `namespace A {
     export interface I { x: number };
     namespace B {
@@ -130,7 +130,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod10",
+        testExtractFunction("extractFunction10",
             `namespace A {
     export interface I { x: number };
     class C {
@@ -141,7 +141,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod11",
+        testExtractFunction("extractFunction11",
             `namespace A {
     let y = 1;
     class C {
@@ -154,7 +154,7 @@ namespace ts {
         }
     }
 }`);
-        testExtractMethod("extractMethod12",
+        testExtractFunction("extractFunction12",
             `namespace A {
     let y = 1;
     class C {
@@ -174,7 +174,7 @@ namespace ts {
         // In all cases, we could use type inference, rather than passing explicit type arguments.
         // Note the inclusion of arrow functions to ensure that some type parameters are not from
         //   targetable scopes.
-        testExtractMethod("extractMethod13",
+        testExtractFunction("extractFunction13",
             `<U1a, U1b>(u1a: U1a, u1b: U1b) => {
     function F1<T1a, T1b>(t1a: T1a, t1b: T1b) {
         <U2a, U2b>(u2a: U2a, u2b: U2b) => {
@@ -192,7 +192,7 @@ namespace ts {
 }`);
         // This test is descriptive, rather than normative.  The current implementation
         // doesn't handle type parameter shadowing.
-        testExtractMethod("extractMethod14",
+        testExtractFunction("extractFunction14",
             `function F<T>(t1: T) {
     function G<T>(t2: T) {
         [#|t1.toString();
@@ -200,38 +200,38 @@ namespace ts {
     }
 }`);
         // Confirm that the constraint is preserved.
-        testExtractMethod("extractMethod15",
+        testExtractFunction("extractFunction15",
             `function F<T>(t1: T) {
     function G<U extends T[]>(t2: U) {
         [#|t2.toString();|]
     }
 }`);
         // Confirm that the contextual type of an extracted expression counts as a use.
-        testExtractMethod("extractMethod16",
+        testExtractFunction("extractFunction16",
             `function F<T>() {
     const array: T[] = [#|[]|];
 }`);
         // Class type parameter
-        testExtractMethod("extractMethod17",
+        testExtractFunction("extractFunction17",
             `class C<T1, T2> {
     M(t1: T1, t2: T2) {
         [#|t1.toString()|];
     }
 }`);
-        // Method type parameter
-        testExtractMethod("extractMethod18",
+        // Function type parameter
+        testExtractFunction("extractFunction18",
             `class C {
     M<T1, T2>(t1: T1, t2: T2) {
         [#|t1.toString()|];
     }
 }`);
         // Coupled constraints
-        testExtractMethod("extractMethod19",
+        testExtractFunction("extractFunction19",
             `function F<T, U extends T[], V extends U[]>(v: V) {
     [#|v.toString()|];
 }`);
 
-        testExtractMethod("extractMethod20",
+        testExtractFunction("extractFunction20",
         `const _ = class {
     a() {
         [#|let a1 = { x: 1 };
@@ -239,14 +239,14 @@ namespace ts {
     }
 }`);
         // Write + void return
-        testExtractMethod("extractMethod21",
+        testExtractFunction("extractFunction21",
             `function foo() {
     let x = 10;
     [#|x++;
     return;|]
 }`);
         // Return in finally block
-        testExtractMethod("extractMethod22",
+        testExtractFunction("extractFunction22",
             `function test() {
     try {
     }
@@ -255,7 +255,7 @@ namespace ts {
     }
 }`);
         // Extraction position - namespace
-        testExtractMethod("extractMethod23",
+        testExtractFunction("extractFunction23",
             `namespace NS {
     function M1() { }
     function M2() {
@@ -264,7 +264,7 @@ namespace ts {
     function M3() { }
 }`);
         // Extraction position - function
-        testExtractMethod("extractMethod24",
+        testExtractFunction("extractFunction24",
             `function Outer() {
     function M1() { }
     function M2() {
@@ -273,14 +273,14 @@ namespace ts {
     function M3() { }
 }`);
         // Extraction position - file
-        testExtractMethod("extractMethod25",
+        testExtractFunction("extractFunction25",
             `function M1() { }
 function M2() {
     [#|return 1;|]
 }
 function M3() { }`);
         // Extraction position - class without ctor
-        testExtractMethod("extractMethod26",
+        testExtractFunction("extractFunction26",
             `class C {
     M1() { }
     M2() {
@@ -289,7 +289,7 @@ function M3() { }`);
     M3() { }
 }`);
         // Extraction position - class with ctor in middle
-        testExtractMethod("extractMethod27",
+        testExtractFunction("extractFunction27",
             `class C {
     M1() { }
     M2() {
@@ -299,7 +299,7 @@ function M3() { }`);
     M3() { }
 }`);
         // Extraction position - class with ctor at end
-        testExtractMethod("extractMethod28",
+        testExtractFunction("extractFunction28",
             `class C {
     M1() { }
     M2() {
@@ -309,7 +309,7 @@ function M3() { }`);
     constructor() { }
 }`);
         // Shorthand property names
-        testExtractMethod("extractMethod29",
+        testExtractFunction("extractFunction29",
             `interface UnaryExpression {
     kind: "Unary";
     operator: string;
@@ -328,12 +328,12 @@ function parsePrimaryExpression(): any {
     throw "Not implemented";
 }`);
         // Type parameter as declared type
-        testExtractMethod("extractMethod30",
+        testExtractFunction("extractFunction30",
             `function F<T>() {
     [#|let t: T;|]
 }`);
         // Return in nested function
-        testExtractMethod("extractMethod31",
+        testExtractFunction("extractFunction31",
             `namespace N {
 
     export const value = 1;
@@ -346,7 +346,7 @@ function parsePrimaryExpression(): any {
     }
 }`);
         // Return in nested class
-        testExtractMethod("extractMethod32",
+        testExtractFunction("extractFunction32",
             `namespace N {
 
     export const value = 1;
@@ -360,20 +360,20 @@ function parsePrimaryExpression(): any {
     }
 }`);
         // Selection excludes leading trivia of declaration
-        testExtractMethod("extractMethod33",
+        testExtractFunction("extractFunction33",
             `function F() {
     [#|function G() { }|]
 }`);
 
 // TODO (acasey): handle repeated substitution
-//         testExtractMethod("extractMethod_RepeatedSubstitution",
+//         testExtractFunction("extractFunction_RepeatedSubstitution",
 //             `namespace X {
 //     export const j = 10;
 //     export const y = [#|j * j|];
 // }`);
     });
 
-    function testExtractMethod(caption: string, text: string) {
-        testExtractSymbol(caption, text, "extractMethod", Diagnostics.Extract_function);
+    function testExtractFunction(caption: string, text: string) {
+        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function);
     }
 }
