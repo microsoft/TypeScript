@@ -1382,9 +1382,9 @@ namespace ts.refactor.extractSymbol {
             if (symbolId) {
                 for (let i = 0; i < scopes.length; i++) {
                     // push substitution from map<symbolId, subst> to map<nodeId, subst> to simplify rewriting
-                    const substitition = substitutionsPerScope[i].get(symbolId);
-                    if (substitition) {
-                        usagesPerScope[i].substitutions.set(getNodeId(n).toString(), substitition);
+                    const substitution = substitutionsPerScope[i].get(symbolId);
+                    if (substitution) {
+                        usagesPerScope[i].substitutions.set(getNodeId(n).toString(), substitution);
                     }
                 }
             }

@@ -62,6 +62,13 @@ namespace ts {
     let x = [#|t + 1|];
 }`);
 
+// TODO (acasey): handle repeated substitution
+//         testExtractConstant("extractConstant_RepeatedSubstitution",
+//             `namespace X {
+//     export const j = 10;
+//     export const y = [#|j * j|];
+// }`);
+
         testExtractConstantFailed("extractConstant_BlockScopes_Dependencies",
             `for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {

@@ -364,6 +364,13 @@ function parsePrimaryExpression(): any {
             `function F() {
     [#|function G() { }|]
 }`);
+
+// TODO (acasey): handle repeated substitution
+//         testExtractMethod("extractMethod_RepeatedSubstitution",
+//             `namespace X {
+//     export const j = 10;
+//     export const y = [#|j * j|];
+// }`);
     });
 
     function testExtractMethod(caption: string, text: string) {
