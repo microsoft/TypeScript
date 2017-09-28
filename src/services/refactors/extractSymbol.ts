@@ -201,9 +201,9 @@ namespace ts.refactor.extractSymbol {
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        let start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
+        const start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
         // Do the same for the ending position
-        let end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
+        const end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
 
         const declarations: Symbol[] = [];
 
@@ -217,31 +217,10 @@ namespace ts.refactor.extractSymbol {
         }
 
         if (start.parent !== end.parent) {
-            // handle cases like 1 + [2 + 3] + 4
-            // user selection is marked with [].
-            // in this case 2 + 3 does not belong to the same tree node
-            // instead the shape of the tree looks like this:
-            //          +
-            //         / \
-            //        +   4
-            //       / \
-            //      +   3
-            //     / \
-            //    1   2
-            // in this case there is no such one node that covers ends of selection and is located inside the selection
-            // to handle this we check if both start and end of the selection belong to some binary operation
-            // and start node is parented by the parent of the end node
-            // if this is the case - expand the selection to the entire parent of end node (in this case it will be [1 + 2 + 3] + 4)
-            const startParent = skipParentheses(start.parent);
-            const endParent = skipParentheses(end.parent);
-            if (isBinaryExpression(startParent) && isBinaryExpression(endParent) && isNodeDescendantOf(startParent, endParent)) {
-                start = end = endParent;
-            }
-            else {
-                // start and end nodes belong to different subtrees
-                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractRange)] };
-            }
+            // start and end nodes belong to different subtrees
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.CannotExtractRange)] };
         }
+
         if (start !== end) {
             // start and end should be statements and parent should be either block or a source file
             if (!isBlockLike(start.parent)) {
