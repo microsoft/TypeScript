@@ -4287,7 +4287,8 @@ namespace ts {
         AsyncDelegator = 1 << 13,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
         AsyncValues = 1 << 14,          // __asyncValues (used by ES2017 for..await..of transformation)
         ExportStar = 1 << 15,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
-        GetTemplateObject = 1 << 16,    // __getTemplateObject (used for constructing template string array objects)
+        MakeTemplateObject = 1 << 16,   // __makeTemplateObject (used for constructing template string array objects)
+        " LastPlusOne",
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
@@ -4305,7 +4306,7 @@ namespace ts {
         SpreadIncludes = Read | Spread,
 
         FirstEmitHelper = Extends,
-        LastEmitHelper = ExportStar
+        LastEmitHelper = ExternalEmitHelpers[" LastPlusOne"] - 1
     }
 
     export const enum EmitHint {
