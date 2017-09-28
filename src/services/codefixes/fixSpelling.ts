@@ -31,7 +31,7 @@ namespace ts.codefix {
                     fileName: sourceFile.fileName,
                     textChanges: [{
                         span: { start: node.getStart(), length: node.getWidth() },
-                        newText: suggestion
+                        newText: suggestion.toLowerCase()
                     }],
                 }],
             }];
