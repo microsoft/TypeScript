@@ -473,18 +473,6 @@
           "kind": "space"
         },
         {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
           "text": "(",
           "kind": "punctuation"
         },
@@ -509,7 +497,11 @@
           "kind": "punctuation"
         },
         {
-          "text": ":",
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
           "kind": "punctuation"
         },
         {
@@ -519,18 +511,6 @@
         {
           "text": "number",
           "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
         }
       ],
       "documentation": [],

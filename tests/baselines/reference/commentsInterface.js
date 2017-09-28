@@ -142,13 +142,9 @@ declare var i2_i_nc_x: number;
 declare var i2_i_nc_foo: (b: number) => string;
 declare var i2_i_nc_foo_r: string;
 declare var i2_i_r: number;
-declare var i2_i_fnfoo: {
-    (b: number): string;
-};
+declare var i2_i_fnfoo: (b: number) => string;
 declare var i2_i_fnfoo_r: string;
-declare var i2_i_nc_fnfoo: {
-    (b: number): string;
-};
+declare var i2_i_nc_fnfoo: (b: number) => string;
 declare var i2_i_nc_fnfoo_r: string;
 interface i3 {
     /** Comment i3 x*/

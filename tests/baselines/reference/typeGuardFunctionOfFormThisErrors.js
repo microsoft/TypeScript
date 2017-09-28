@@ -154,6 +154,4 @@ declare let c: number | number[];
 declare let holder: {
     invalidGuard: (c: any) => this is number;
 };
-declare let detached: {
-    (): this is FollowerGuard;
-};
+declare let detached: () => this is FollowerGuard;
