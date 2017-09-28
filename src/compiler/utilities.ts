@@ -1590,7 +1590,7 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getJSDocHost(node: JSDocTag): Node {
+    export function getJSDocHost(node: JSDocTag): HasJSDoc {
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         return node.parent!.parent!;
     }
