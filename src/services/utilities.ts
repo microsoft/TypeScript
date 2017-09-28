@@ -1266,7 +1266,7 @@ namespace ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typechecker.typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         });
     }
 
@@ -1277,9 +1277,9 @@ namespace ts {
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
-            typechecker.signatureToString(signature, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, /*signatureKind*/ undefined, writer);
+            typechecker.signatureToString(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
         });
     }
 

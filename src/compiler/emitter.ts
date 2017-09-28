@@ -869,12 +869,8 @@ namespace ts {
                 writeLiteral(text);
             }
             else {
-                if (node.kind === SyntaxKind.StringLiteral) {
-                    writeStringLiteral(text);
-                }
-                else {
-                    write(text);
-                }
+                // Quick info expects all literals to be called with writeStringLiteral, as there's no specific type for numberLiterals
+                writeStringLiteral(text);
             }
         }
 
@@ -2574,7 +2570,15 @@ namespace ts {
                         if (delimiter && previousSibling.end !== parentNode.end) {
                             emitLeadingCommentsOfPosition(previousSibling.end);
                         }
-                        writePunctuation(delimiter);
+                        if (delimiter) {
+                            if (delimiter.charAt(0) === " ") {
+                                writeSpace(" ");
+                                writePunctuation(delimiter.charAt(1));
+                            }
+                            else {
+                                writePunctuation(delimiter);
+                            }
+                        }
 
                         // Write either a line terminator or whitespace to separate the elements.
                         if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {
@@ -3301,8 +3305,8 @@ namespace ts {
         HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SourceFileStatements = MultiLine | NoTrailingNewLine,
         Decorators = MultiLine | Optional,
-        TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
-        TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
+        TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
+        TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
     }

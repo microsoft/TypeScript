@@ -1114,8 +1114,8 @@ declare class Component1<Data, Computed> {
     get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
 }
 declare let c1: Component1<{
-        hello: string;
-    }, {}>;
+    hello: string;
+}, {}>;
 interface Options2<Data, Computed> {
     data?: Data;
     computed?: Computed;
