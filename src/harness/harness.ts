@@ -1717,8 +1717,12 @@ namespace Harness {
             return resultName;
         }
 
-        function sanitizeTestFilePath(name: string) {
-            return ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", Utils.canonicalizeForHarness);
+        export function sanitizeTestFilePath(name: string) {
+            const path = ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", Utils.canonicalizeForHarness);
+            if (ts.startsWith(path, "/")) {
+                return path.substring(1);
+            }
+            return path;
         }
 
         // This does not need to exist strictly speaking, but many tests will need to be updated if it's removed
@@ -2068,7 +2072,7 @@ namespace Harness {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
-                    const relativeFileName = relativeFileBase + (ts.startsWith(name, "/") ? "" : "/") + name + extension;
+                    const relativeFileName = relativeFileBase + "/" + name + extension;
                     const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
                     const comparison = compareToBaseline(content, relativeFileName, opts);
                     try {

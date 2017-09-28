@@ -19792,14 +19792,6 @@ namespace ts {
             }
         }
 
-        function checkJSDocComment(node: JSDoc) {
-            if ((node as JSDoc).tags) {
-                for (const tag of (node as JSDoc).tags) {
-                    checkSourceElement(tag);
-                }
-            }
-        }
-
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
@@ -22435,8 +22427,8 @@ namespace ts {
             }
 
             if (isInJavaScriptFile(node) && (node as JSDocContainer).jsDoc) {
-                for (const jsdoc of (node as JSDocContainer).jsDoc) {
-                    checkJSDocComment(jsdoc);
+                for (const { tags } of (node as JSDocContainer).jsDoc) {
+                    forEach(tags, checkSourceElement);
                 }
             }
 
@@ -22496,8 +22488,6 @@ namespace ts {
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
                 case SyntaxKind.JSDocTypedefTag:
                     return checkJSDocTypedefTag(node as JSDocTypedefTag);
-                case SyntaxKind.JSDocComment:
-                    return checkJSDocComment(node as JSDoc);
                 case SyntaxKind.JSDocParameterTag:
                     return checkSourceElement((node as JSDocParameterTag).typeExpression);
                 case SyntaxKind.JSDocFunctionType:
