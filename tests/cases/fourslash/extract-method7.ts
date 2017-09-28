@@ -10,11 +10,12 @@ goTo.select('a', 'b');
 edit.applyRefactor({
     refactorName: "Extract Method",
     actionName: "scope_0",
-    actionDescription: "Extract function into global scope",
-});
-verify.currentFileContentIs(`function fn(x = newFunction()) {
+    actionDescription: "Extract to function in global scope",
+    newContent:
+`function fn(x = /*RENAME*/newFunction()) {
 }
 function newFunction() {
     return 3;
 }
-`);
+`
+});

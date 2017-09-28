@@ -175,8 +175,10 @@ namespace ts.FindAllReferences {
         return {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
-            isWriteAccess: isWriteAccess(node),
-            isDefinition: isAnyDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
+            isWriteAccess: isWriteAccessForReference(node),
+            isDefinition: node.kind === SyntaxKind.DefaultKeyword
+                || isAnyDeclarationName(node)
+                || isLiteralComputedPropertyDeclarationName(node),
             isInString
         };
     }
@@ -222,7 +224,7 @@ namespace ts.FindAllReferences {
 
         const { node, isInString } = entry;
         const fileName = entry.node.getSourceFile().fileName;
-        const writeAccess = isWriteAccess(node);
+        const writeAccess = isWriteAccessForReference(node);
         const span: HighlightSpan = {
             textSpan: getTextSpan(node),
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
@@ -242,21 +244,8 @@ namespace ts.FindAllReferences {
     }
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
-    function isWriteAccess(node: Node): boolean {
-        if (isAnyDeclarationName(node)) {
-            return true;
-        }
-
-        const { parent } = node;
-        switch (parent && parent.kind) {
-            case SyntaxKind.PostfixUnaryExpression:
-            case SyntaxKind.PrefixUnaryExpression:
-                return true;
-            case SyntaxKind.BinaryExpression:
-                return (<BinaryExpression>parent).left === node && isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
-            default:
-                return false;
-        }
+    function isWriteAccessForReference(node: Node): boolean {
+        return node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node) || isWriteAccess(node);
     }
 }
 
@@ -526,7 +515,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
+        private readonly sourceFileToSeenSymbols: true[][] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
             const sourceId = getNodeId(sourceFile);
@@ -743,16 +732,19 @@ namespace ts.FindAllReferences.Core {
 
     function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
         // Compare the length so we filter out strict superstrings of the symbol we are looking for
-        switch (node && node.kind) {
+        switch (node.kind) {
             case SyntaxKind.Identifier:
                 return (node as Identifier).text.length === searchSymbolName.length;
 
             case SyntaxKind.StringLiteral:
-                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) &&
+                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node as StringLiteral) || isNameOfExternalModuleImportOrDeclaration(node)) &&
                     (node as StringLiteral).text.length === searchSymbolName.length;
 
             case SyntaxKind.NumericLiteral:
-                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && (node as NumericLiteral).text.length === searchSymbolName.length;
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral) && (node as NumericLiteral).text.length === searchSymbolName.length;
+
+            case SyntaxKind.DefaultKeyword:
+                return "default".length === searchSymbolName.length;
 
             default:
                 return false;
@@ -1435,22 +1427,27 @@ namespace ts.FindAllReferences.Core {
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker);
         if (bindingElementPropertySymbol) {
             result.push(bindingElementPropertySymbol);
+            addRootSymbols(bindingElementPropertySymbol);
         }
 
-        // If this is a union property, add all the symbols from all its source symbols in all unioned types.
-        // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-        for (const rootSymbol of checker.getRootSymbols(symbol)) {
-            if (rootSymbol !== symbol) {
-                result.push(rootSymbol);
-            }
-
-            // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
-            if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
-            }
-        }
+        addRootSymbols(symbol);
 
         return result;
+
+        function addRootSymbols(sym: Symbol): void {
+            // If this is a union property, add all the symbols from all its source symbols in all unioned types.
+            // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
+            for (const rootSymbol of checker.getRootSymbols(sym)) {
+                if (rootSymbol !== sym) {
+                    result.push(rootSymbol);
+                }
+
+                // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
+                if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
+                }
+            }
+        }
     }
 
     /**
@@ -1542,34 +1539,39 @@ namespace ts.FindAllReferences.Core {
         // then include the binding element in the related symbols
         //      let { a } : { a };
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, state.checker);
-        if (bindingElementPropertySymbol && search.includes(bindingElementPropertySymbol)) {
-            return bindingElementPropertySymbol;
+        if (bindingElementPropertySymbol) {
+            const fromBindingElement = findRootSymbol(bindingElementPropertySymbol);
+            if (fromBindingElement) return fromBindingElement;
         }
 
-        // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
-        // Or a union property, use its underlying unioned symbols
-        return forEach(state.checker.getRootSymbols(referenceSymbol), rootSymbol => {
-            // if it is in the list, then we are done
-            if (search.includes(rootSymbol)) {
-                return rootSymbol;
-            }
+        return findRootSymbol(referenceSymbol);
 
-            // Finally, try all properties with the same name in any type the containing type extended or implemented, and
-            // see if any is in the list. If we were passed a parent symbol, only include types that are subtypes of the
-            // parent symbol
-            if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                // Parents will only be defined if implementations is true
-                if (search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, state.checker))) {
-                    return undefined;
+        function findRootSymbol(sym: Symbol): Symbol | undefined {
+            // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
+            // Or a union property, use its underlying unioned symbols
+            return forEach(state.checker.getRootSymbols(sym), rootSymbol => {
+                // if it is in the list, then we are done
+                if (search.includes(rootSymbol)) {
+                    return rootSymbol;
                 }
 
-                const result: Symbol[] = [];
-                getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), state.checker);
-                return find(result, search.includes);
-            }
+                // Finally, try all properties with the same name in any type the containing type extended or implemented, and
+                // see if any is in the list. If we were passed a parent symbol, only include types that are subtypes of the
+                // parent symbol
+                if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    // Parents will only be defined if implementations is true
+                    if (search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, state.checker))) {
+                        return undefined;
+                    }
 
-            return undefined;
-        });
+                    const result: Symbol[] = [];
+                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), state.checker);
+                    return find(result, search.includes);
+                }
+
+                return undefined;
+            });
+        }
     }
 
     function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {

@@ -7,6 +7,6 @@ class greeter {
     public  z: string;
 
     public method1() {
-        this.x = "dummy value";
+        this.x;
     }
 }

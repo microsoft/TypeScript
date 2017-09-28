@@ -1,0 +1,5 @@
+=== tests/cases/compiler/catchClauseWithTypeAnnotation.ts ===
+try {
+} catch (e: any) {
+>e : Symbol(e, Decl(catchClauseWithTypeAnnotation.ts, 1, 9))
+}

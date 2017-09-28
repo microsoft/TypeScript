@@ -1,0 +1,24 @@
+=== tests/cases/compiler/voidArrayLit.ts ===
+var va = [(() => {})()]; // ok
+>va : void[]
+>[(() => {})()] : void[]
+>(() => {})() : void
+>(() => {}) : () => void
+>() => {} : () => void
+
+(() => {})(); // ok
+>(() => {})() : void
+>(() => {}) : () => void
+>() => {} : () => void
+
+function foo(s:string) {}
+>foo : (s: string) => void
+>s : string
+
+foo((()=>{})()); // error
+>foo((()=>{})()) : void
+>foo : (s: string) => void
+>(()=>{})() : void
+>(()=>{}) : () => void
+>()=>{} : () => void
+

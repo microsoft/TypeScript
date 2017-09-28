@@ -1,0 +1,35 @@
+=== tests/cases/compiler/bases.ts ===
+interface I {
+>I : Symbol(I, Decl(bases.ts, 0, 0))
+
+    x;
+>x : Symbol(I.x, Decl(bases.ts, 0, 13))
+}
+
+class B {
+>B : Symbol(B, Decl(bases.ts, 2, 1))
+
+    constructor() {
+        this.y: any;
+>this : Symbol(B, Decl(bases.ts, 2, 1))
+    }
+}
+
+class C extends B implements I {
+>C : Symbol(C, Decl(bases.ts, 8, 1))
+>B : Symbol(B, Decl(bases.ts, 2, 1))
+>I : Symbol(I, Decl(bases.ts, 0, 0))
+
+    constructor() {
+        this.x: any;
+>this : Symbol(C, Decl(bases.ts, 8, 1))
+    }
+}
+
+new C().x;
+>C : Symbol(C, Decl(bases.ts, 8, 1))
+
+new C().y;
+>C : Symbol(C, Decl(bases.ts, 8, 1))
+
+

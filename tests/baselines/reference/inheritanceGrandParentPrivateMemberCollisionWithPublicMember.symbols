@@ -1,0 +1,20 @@
+=== tests/cases/compiler/inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts ===
+class A {
+>A : Symbol(A, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 0, 0))
+
+    private myMethod() { }
+>myMethod : Symbol(A.myMethod, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 0, 9))
+}
+
+class B extends A { }
+>B : Symbol(B, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 2, 1))
+>A : Symbol(A, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 0, 0))
+
+class C extends B {
+>C : Symbol(C, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 4, 21))
+>B : Symbol(B, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 2, 1))
+
+    public myMethod() { }
+>myMethod : Symbol(C.myMethod, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 6, 19))
+}
+

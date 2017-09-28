@@ -93,7 +93,7 @@
 ////remotefoo([|remoteglobalVar|]);
 ////
 //////Increments
-////[|remotefooCls|].[|remoteclsSVar|]++;
+////[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
 ////remotemodTest.remotemodVar++;
 ////[|{| "isWriteAccess": true |}remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
 ////
@@ -129,8 +129,8 @@
 ////	constructor(public remoteclsParam: number) {
 ////		//Increments
 ////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
-////		this.[|remoteclsVar|]++;
-////		[|remotefooCls|].[|remoteclsSVar|]++;
+////		this.[|{| "isWriteAccess": true |}remoteclsVar|]++;
+////		[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
 ////		this.remoteclsParam++;
 ////		remotemodTest.remotemodVar++;
 ////	}
@@ -141,7 +141,7 @@
 ////	var remotefnVar = 1;
 ////
 ////	//Increments
-////	[|remotefooCls|].[|remoteclsSVar|]++;
+////	[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
 ////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
 ////	remotemodTest.remotemodVar++;
 ////	remotefnVar++;
@@ -156,7 +156,7 @@
 ////
 ////	//Increments
 ////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
-////	[|remotefooCls|].[|remoteclsSVar|]++;
+////	[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
 ////	remotemodVar++;
 ////
 ////	class remotetestCls {
@@ -168,7 +168,7 @@
 ////
 ////		//Increments
 ////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
-////		[|remotefooCls|].[|remoteclsSVar|]++;
+////		[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
 ////		remotemodVar++;
 ////    }
 ////

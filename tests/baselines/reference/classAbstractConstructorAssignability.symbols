@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructorAssignability.ts ===
+class A {}
+>A : Symbol(A, Decl(classAbstractConstructorAssignability.ts, 0, 0))
+
+abstract class B extends A {}
+>B : Symbol(B, Decl(classAbstractConstructorAssignability.ts, 0, 10))
+>A : Symbol(A, Decl(classAbstractConstructorAssignability.ts, 0, 0))
+
+class C extends B {}
+>C : Symbol(C, Decl(classAbstractConstructorAssignability.ts, 2, 29))
+>B : Symbol(B, Decl(classAbstractConstructorAssignability.ts, 0, 10))
+
+var AA : typeof A = B;
+>AA : Symbol(AA, Decl(classAbstractConstructorAssignability.ts, 6, 3))
+>A : Symbol(A, Decl(classAbstractConstructorAssignability.ts, 0, 0))
+>B : Symbol(B, Decl(classAbstractConstructorAssignability.ts, 0, 10))
+
+var BB : typeof B = A;
+>BB : Symbol(BB, Decl(classAbstractConstructorAssignability.ts, 7, 3))
+>B : Symbol(B, Decl(classAbstractConstructorAssignability.ts, 0, 10))
+>A : Symbol(A, Decl(classAbstractConstructorAssignability.ts, 0, 0))
+
+var CC : typeof C = B;
+>CC : Symbol(CC, Decl(classAbstractConstructorAssignability.ts, 8, 3))
+>C : Symbol(C, Decl(classAbstractConstructorAssignability.ts, 2, 29))
+>B : Symbol(B, Decl(classAbstractConstructorAssignability.ts, 0, 10))
+
+new AA;
+>AA : Symbol(AA, Decl(classAbstractConstructorAssignability.ts, 6, 3))
+
+new BB;
+>BB : Symbol(BB, Decl(classAbstractConstructorAssignability.ts, 7, 3))
+
+new CC;
+>CC : Symbol(CC, Decl(classAbstractConstructorAssignability.ts, 8, 3))
+

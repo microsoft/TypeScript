@@ -1,0 +1,45 @@
+=== tests/cases/compiler/sourceMapValidationForIn.ts ===
+for (var x in String) {
+>x : string
+>String : StringConstructor
+
+    WScript.Echo(x);
+>WScript.Echo(x) : any
+>WScript.Echo : any
+>WScript : any
+>Echo : any
+>x : string
+}
+for (x in String) {
+>x : string
+>String : StringConstructor
+
+    WScript.Echo(x);
+>WScript.Echo(x) : any
+>WScript.Echo : any
+>WScript : any
+>Echo : any
+>x : string
+}
+for (var x2 in String)
+>x2 : string
+>String : StringConstructor
+{
+    WScript.Echo(x2);
+>WScript.Echo(x2) : any
+>WScript.Echo : any
+>WScript : any
+>Echo : any
+>x2 : string
+}
+for (x in String)
+>x : string
+>String : StringConstructor
+{
+    WScript.Echo(x);
+>WScript.Echo(x) : any
+>WScript.Echo : any
+>WScript : any
+>Echo : any
+>x : string
+}

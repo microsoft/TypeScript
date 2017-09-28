@@ -8,12 +8,12 @@ namespace A {
         }
     }
 }
-// ==SCOPE::function 'a'==
+// ==SCOPE::inner function in function 'a'==
 namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
 
             function newFunction() {
                 let a1: I = { x: 1 };
@@ -22,12 +22,12 @@ namespace A {
         }
     }
 }
-// ==SCOPE::namespace 'B'==
+// ==SCOPE::function in namespace 'B'==
 namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
 
         function newFunction() {
@@ -36,12 +36,12 @@ namespace A {
         }
     }
 }
-// ==SCOPE::namespace 'A'==
+// ==SCOPE::function in namespace 'A'==
 namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 
@@ -50,12 +50,12 @@ namespace A {
         return a1.x + 10;
     }
 }
-// ==SCOPE::global scope==
+// ==SCOPE::function in global scope==
 namespace A {
     export interface I { x: number };
     namespace B {
         function a() {
-            return newFunction();
+            return /*RENAME*/newFunction();
         }
     }
 }

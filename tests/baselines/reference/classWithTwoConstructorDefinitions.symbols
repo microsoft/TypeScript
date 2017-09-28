@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts ===
+class C {
+>C : Symbol(C, Decl(classWithTwoConstructorDefinitions.ts, 0, 0))
+
+    constructor() { } // error
+    constructor(x) { } // error
+>x : Symbol(x, Decl(classWithTwoConstructorDefinitions.ts, 2, 16))
+}
+
+class D<T> {
+>D : Symbol(D, Decl(classWithTwoConstructorDefinitions.ts, 3, 1))
+>T : Symbol(T, Decl(classWithTwoConstructorDefinitions.ts, 5, 8))
+
+    constructor(x: T) { } // error
+>x : Symbol(x, Decl(classWithTwoConstructorDefinitions.ts, 6, 16))
+>T : Symbol(T, Decl(classWithTwoConstructorDefinitions.ts, 5, 8))
+
+    constructor(x: T, y: T) { } // error
+>x : Symbol(x, Decl(classWithTwoConstructorDefinitions.ts, 7, 16))
+>T : Symbol(T, Decl(classWithTwoConstructorDefinitions.ts, 5, 8))
+>y : Symbol(y, Decl(classWithTwoConstructorDefinitions.ts, 7, 21))
+>T : Symbol(T, Decl(classWithTwoConstructorDefinitions.ts, 5, 8))
+}

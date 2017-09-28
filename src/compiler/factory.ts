@@ -281,7 +281,7 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer), node)
+            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
             : node;
     }
 
@@ -773,13 +773,13 @@ namespace ts {
             : node;
     }
 
-    export function createLiteralTypeNode(literal: Expression) {
+    export function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
         const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         node.literal = literal;
         return node;
     }
 
-    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Expression) {
+    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]) {
         return node.literal !== literal
             ? updateNode(createLiteralTypeNode(literal), node)
             : node;
@@ -1016,19 +1016,49 @@ namespace ts {
         return node;
     }
 
+    /* @deprecated */ export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
-        body: ConciseBody) {
+        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
+        body: ConciseBody): ArrowFunction;
+    export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
+        bodyOrUndefined?: ConciseBody,
+    ): ArrowFunction {
+        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
+        let body: ConciseBody;
+        if (bodyOrUndefined === undefined) {
+            equalsGreaterThanToken = node.equalsGreaterThanToken;
+            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
+        }
+        else {
+            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
+                n.kind === SyntaxKind.EqualsGreaterThanToken);
+            body = bodyOrUndefined;
+        }
+
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
+            || node.equalsGreaterThanToken !== equalsGreaterThanToken
             || node.body !== body
-            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, node.equalsGreaterThanToken, body), node)
+            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
             : node;
     }
 
@@ -1135,11 +1165,31 @@ namespace ts {
         return node;
     }
 
-    export function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression) {
+    /* @deprecated */ export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        whenTrue: Expression,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        questionToken: Token<SyntaxKind.QuestionToken>,
+        whenTrue: Expression,
+        colonToken: Token<SyntaxKind.ColonToken>,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
+        if (args.length === 2) {
+            const [whenTrue, whenFalse] = args;
+            return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
+        }
+        Debug.assert(args.length === 4);
+        const [questionToken, whenTrue, colonToken, whenFalse] = args;
         return node.condition !== condition
+            || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue
+            || node.colonToken !== colonToken
             || node.whenFalse !== whenFalse
-            ? updateNode(createConditional(condition, node.questionToken, whenTrue, node.colonToken, whenFalse), node)
+            ? updateNode(createConditional(condition, questionToken, whenTrue, colonToken, whenFalse), node)
             : node;
     }
 
@@ -1155,6 +1205,30 @@ namespace ts {
             || node.templateSpans !== templateSpans
             ? updateNode(createTemplateExpression(head, templateSpans), node)
             : node;
+    }
+
+    export function createTemplateHead(text: string) {
+        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateMiddle(text: string) {
+        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateTail(text: string) {
+        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+        node.text = text;
+        return node;
+    }
+
+    export function createNoSubstitutionTemplateLiteral(text: string) {
+        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
+        node.text = text;
+        return node;
     }
 
     export function createYield(expression?: Expression): YieldExpression;
@@ -3891,11 +3965,10 @@ namespace ts {
                 return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
-        else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
-            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                return setTextRange(createParen(expression), expression);
-            }
+
+        const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
+        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+            return setTextRange(createParen(expression), expression);
         }
 
         return expression;
@@ -4108,7 +4181,8 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = hasExportStarsToExportValues
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015;
+                && moduleKind !== ModuleKind.ES2015
+                && moduleKind !== ModuleKind.ESNext;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {
