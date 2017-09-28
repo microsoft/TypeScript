@@ -365,7 +365,7 @@ function parsePrimaryExpression(): any {
     [#|function G() { }|]
 }`);
 
-// TODO (acasey): handle repeated substitution
+// TODO (18857): handle repeated substitution
 //         testExtractFunction("extractFunction_RepeatedSubstitution",
 //             `namespace X {
 //     export const j = 10;

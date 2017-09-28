@@ -890,33 +890,56 @@ namespace ts.refactor.extractSymbol {
                 createIdentifier(localNameText));
 
             // Declare
-            const minInsertionPos = node.end;
-            const nodeToInsertBefore = getNodeToInsertConstantBefore(minInsertionPos, scope);
+            const maxInsertionPos = node.pos;
+            const nodeToInsertBefore = getNodeToInsertPropertyBefore(maxInsertionPos, scope);
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: context.newLineCharacter + context.newLineCharacter });
 
             // Consume
             changeTracker.replaceNodeWithNodes(context.file, node, [localReference], { nodeSeparator: context.newLineCharacter });
         }
         else {
-            const newVariable = createVariableStatement(
-                /*modifiers*/ undefined,
-                createVariableDeclarationList(
-                    [createVariableDeclaration(localNameText, variableType, initializer)],
-                    NodeFlags.Const));
+            const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
 
-            // If the parent is an expression statement, replace the statement with the declaration
-            if (node.parent.kind === SyntaxKind.ExpressionStatement) {
-                changeTracker.replaceNodeWithNodes(context.file, node.parent, [newVariable], { nodeSeparator: context.newLineCharacter });
-            }
-            else {
+            // If the node is part of an initializer in a list of variable declarations, insert a new
+            // variable declaration into the list (in case it depends on earlier ones).
+            // CONSIDER: If the declaration list isn't const, we might want to split it into multiple
+            // lists so that the newly extracted one can be const.
+            const oldVariableDeclaration = getContainingVariableDeclarationIfInList(node, scope);
+            if (oldVariableDeclaration) {
                 // Declare
-                const minInsertionPos = node.end;
-                const nodeToInsertBefore = getNodeToInsertConstantBefore(minInsertionPos, scope);
-                changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: context.newLineCharacter + context.newLineCharacter });
+                // CONSIDER: could detect that each is on a separate line
+                changeTracker.insertNodeAt(context.file, oldVariableDeclaration.getStart(), newVariableDeclaration, { suffix: ", " });
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
-                changeTracker.replaceNodeWithNodes(context.file, node, [localReference], { nodeSeparator: context.newLineCharacter });
+                changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+            }
+            else if (node.parent.kind === SyntaxKind.ExpressionStatement) {
+                // If the parent is an expression statement, replace the statement with the declaration.
+                const newVariableStatement = createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
+                changeTracker.replaceNodeWithNodes(context.file, node.parent, [newVariableStatement], { nodeSeparator: context.newLineCharacter });
+            }
+            else {
+                const newVariableStatement = createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
+
+                // Declare
+                const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
+                if (nodeToInsertBefore.pos === 0) {
+                    // If we're at the beginning of the file, we need to take care not to insert before header comments
+                    // (e.g. copyright, triple-slash references).
+                    changeTracker.insertNodeAt(context.file, nodeToInsertBefore.getStart(), newVariableStatement, { suffix: context.newLineCharacter + context.newLineCharacter });
+                }
+                else {
+                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, { suffix: context.newLineCharacter + context.newLineCharacter });
+                }
+
+                // Consume
+                const localReference = createIdentifier(localNameText);
+                changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
             }
         }
 
@@ -925,6 +948,22 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
+    }
+
+    function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
+        let prevNode = undefined;
+        while (node !== undefined && node !== scope) {
+            if (isVariableDeclaration(node) &&
+                node.initializer === prevNode &&
+                isVariableDeclarationList(node.parent) &&
+                node.parent.declarations.length > 1) {
+
+                return node;
+            }
+
+            prevNode = node;
+            node = node.parent;
+        }
     }
 
     /**
@@ -1109,26 +1148,61 @@ namespace ts.refactor.extractSymbol {
             child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
     }
 
-    // TODO (acasey): need to dig into nested statements
-    // TODO (acasey): don't insert before pinned comments, directives, or triple-slash references
-    function getNodeToInsertConstantBefore(maxPos: number, scope: Scope): Node {
-        const children = getStatementsOrClassElements(scope);
-        Debug.assert(children.length > 0); // There must be at least one child, since we extracted from one.
+    function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): Node {
+        const members = scope.members;
+        Debug.assert(members.length > 0); // There must be at least one child, since we extracted from one.
 
-        const isClassLikeScope = isClassLike(scope);
-        let prevChild: Statement | ClassElement | undefined = undefined;
-        for (const child of children) {
-            if (child.pos >= maxPos) {
-                break;
+        let prevMember: ClassElement | undefined = undefined;
+        let allProperties = true;
+        for (const member of members) {
+            if (member.pos > maxPos) {
+                return prevMember || members[0];
             }
-            prevChild = child;
-            if (isClassLikeScope && !isPropertyDeclaration(child)) {
-                break;
+            if (allProperties && !isPropertyDeclaration(member)) {
+                // If it is non-vacuously true that all preceding members are properties,
+                // insert before the current member (i.e. at the end of the list of properties).
+                if (prevMember !== undefined) {
+                    return member;
+                }
+
+                allProperties = false;
+            }
+            prevMember = member;
+        }
+
+        Debug.assert(prevMember !== undefined); // If the loop didn't return, then it did set prevMember.
+        return prevMember;
+    }
+
+    function getNodeToInsertConstantBefore(node: Node, scope: Scope): Node {
+        Debug.assert(!isClassLike(scope));
+
+        let prevScope: Scope | undefined = undefined;
+        for (let curr = node; curr !== scope; curr = curr.parent) {
+            if (isScope(curr)) {
+                prevScope = curr;
             }
         }
 
-        Debug.assert(prevChild !== undefined);
-        return prevChild;
+        for (let curr = (prevScope || node).parent; ; curr = curr.parent) {
+            if (isBlockLike(curr)) {
+                let prevStatement = undefined;
+                for (const statement of curr.statements) {
+                    if (statement.pos > node.pos) {
+                        break;
+                    }
+                    prevStatement = statement;
+                }
+                // There must be at least one statement since we started in one.
+                Debug.assert(prevStatement !== undefined);
+                return prevStatement;
+            }
+
+            if (curr === scope) {
+                Debug.fail("Didn't encounter a block-like before encountering scope");
+                break;
+            }
+        }
     }
 
     function getPropertyAssignmentsForWrites(writes: ReadonlyArray<UsageEntry>): ShorthandPropertyAssignment[] {
