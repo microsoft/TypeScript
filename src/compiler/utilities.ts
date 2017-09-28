@@ -1581,7 +1581,7 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
-        const func = getNodeCommentedByJSDocTag(node);
+        const func = getJSDocHost(node);
         if (!isFunctionLike(func)) {
             return undefined;
         }
@@ -1590,7 +1590,7 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getNodeCommentedByJSDocTag(node: JSDocTag): Node {
+    export function getJSDocHost(node: JSDocTag): Node {
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         return node.parent!.parent!;
     }

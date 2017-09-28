@@ -3511,11 +3511,11 @@
         "category": "Error",
         "code": 8021
     },
-    "JSDoc '@augments' tag will be ignored if not attached to a class declaration.": {
+    "JSDoc '@augments' is not attached to a class declaration.": {
         "category": "Error",
         "code": 8022
     },
-    "JSDoc '@augments' tag declares to extend '{0}', but actual class augments '{1}'.": {
+    "JSDoc '@augments {0}' does not match the 'extends {1}' clause.": {
         "category": "Error",
         "code": 8023
     },

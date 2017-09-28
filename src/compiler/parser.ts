@@ -6610,11 +6610,11 @@ namespace ts {
                     const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.class = parseValidExpressionWithTypeArguments();
+                    result.class = parseExpressionWithTypeArgumentsForAugments();
                     return finishNode(result);
                 }
 
-                function parseValidExpressionWithTypeArguments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression } {
+                function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression } {
                     const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
                     const node = createNode(SyntaxKind.ExpressionWithTypeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
                     node.expression = parsePropertyAccessEntityNameExpression();

@@ -19790,25 +19790,27 @@ namespace ts {
         }
 
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
-            const cls = getNodeCommentedByJSDocTag(node);
+            const cls = getJSDocHost(node);
             if (!isClassDeclaration(cls) && !isClassExpression(cls)) {
-                error(cls, Diagnostics.JSDoc_augments_tag_will_be_ignored_if_not_attached_to_a_class_declaration);
+                error(cls, Diagnostics.JSDoc_augments_is_not_attached_to_a_class_declaration);
                 return;
             }
 
-            const name = node.class.expression.kind === SyntaxKind.PropertyAccessExpression ? node.class.expression.name : node.class.expression;
+            const name = getIdentifierFromEntityNameExpression(node.class.expression);
             const extend = getClassExtendsHeritageClauseElement(cls);
             if (extend) {
-                const className = getClassName(extend.expression);
+                const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {
-                    error(name, Diagnostics.JSDoc_augments_tag_declares_to_extend_0_but_actual_class_augments_1,
+                    error(name, Diagnostics.JSDoc_augments_0_does_not_match_the_extends_1_clause,
                         unescapeLeadingUnderscores(name.escapedText),
                         unescapeLeadingUnderscores(className.escapedText));
                 }
             }
         }
 
-        function getClassName(node: Expression): Identifier | undefined {
+        function getIdentifierFromEntityNameExpression(node: Identifier | PropertyAccessExpression): Identifier;
+        function getIdentifierFromEntityNameExpression(node: Expression): Identifier | undefined;
+        function getIdentifierFromEntityNameExpression(node: Expression): Identifier | undefined {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return node as Identifier;

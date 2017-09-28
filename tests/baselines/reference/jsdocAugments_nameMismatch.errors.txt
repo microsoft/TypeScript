@@ -1,4 +1,4 @@
-/b.js(4,15): error TS8023: JSDoc '@augments' tag declares to extend 'A', but actual class augments 'B'.
+/b.js(4,15): error TS8023: JSDoc '@augments A' does not match the 'extends B' clause.
 
 
 ==== /b.js (1 errors) ====
@@ -7,6 +7,6 @@
     
     /** @augments A */
                   ~
-!!! error TS8023: JSDoc '@augments' tag declares to extend 'A', but actual class augments 'B'.
+!!! error TS8023: JSDoc '@augments A' does not match the 'extends B' clause.
     class C extends B {}
     
