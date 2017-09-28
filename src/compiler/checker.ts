@@ -3036,16 +3036,17 @@ namespace ts {
                     Debug.assert(chain && 0 <= index && index < chain.length);
                     const symbol = chain[index];
                     let typeParameterNodes: ReadonlyArray<TypeNode> | undefined;
-                    if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index > 0) {
-                        const parentSymbol = chain[index - 1];
-                        let typeParameters: TypeParameter[];
-                        if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
-                            typeParameters = getTypeParametersOfClassOrInterface(parentSymbol);
+                    if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
+                        const parentSymbol = symbol;
+                        const nextSymbol = chain[index + 1];
+                        let typeParameters: Type[];
+                        if (getCheckFlags(nextSymbol) & CheckFlags.Instantiated) {
+                            typeParameters = map(getTypeParametersOfClassOrInterface(parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol), (nextSymbol as TransientSymbol).mapper);
                         }
                         else {
                             const targetSymbol = getTargetSymbol(parentSymbol);
                             if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                                typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
+                                typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(parentSymbol);
                             }
                         }
 
