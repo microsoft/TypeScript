@@ -1,0 +1,4 @@
+=== /a.ts ===
+import * as foo from "foo";
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+

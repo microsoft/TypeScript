@@ -663,9 +663,10 @@ namespace ts.formatting {
                     undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
                 }
 
-                // if child is a list item - try to get its indentation
+                // if child is a list item - try to get its indentation, only if parent is within the original range.
                 let childIndentationAmount = Constants.Unknown;
-                if (isListItem) {
+
+                if (isListItem && rangeContainsRange(originalRange, parent)) {
                     childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
                     if (childIndentationAmount !== Constants.Unknown) {
                         inheritedIndentation = childIndentationAmount;

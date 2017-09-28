@@ -271,6 +271,7 @@ namespace ts {
     export function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string {
         let output = "";
         for (const diagnostic of diagnostics) {
+            let context = "";
             if (diagnostic.file) {
                 const { start, length, file } = diagnostic;
                 const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
@@ -284,12 +285,12 @@ namespace ts {
                     gutterWidth = Math.max(ellipsis.length, gutterWidth);
                 }
 
-                output += host.getNewLine();
+                context += host.getNewLine();
                 for (let i = firstLine; i <= lastLine; i++) {
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                        output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
+                        context += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
                         i = lastLine - 1;
                     }
 
@@ -300,30 +301,28 @@ namespace ts {
                     lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
                     // Output the gutter and the actual contents of the line.
-                    output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    output += lineContent + host.getNewLine();
+                    context += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += lineContent + host.getNewLine();
 
                     // Output the gutter and the error span for the line using tildes.
-                    output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    output += redForegroundEscapeSequence;
+                    context += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += redForegroundEscapeSequence;
                     if (i === firstLine) {
                         // If we're on the last line, then limit it to the last character of the last line.
                         // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
                         const lastCharForLine = i === lastLine ? lastLineChar : undefined;
 
-                        output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
-                        output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
+                        context += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
+                        context += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
                     }
                     else if (i === lastLine) {
-                        output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
+                        context += lineContent.slice(0, lastLineChar).replace(/./g, "~");
                     }
                     else {
                         // Squiggle the entire line.
-                        output += lineContent.replace(/./g, "~");
+                        context += lineContent.replace(/./g, "~");
                     }
-                    output += resetEscapeSequence;
-
-                    output += host.getNewLine();
+                    context += resetEscapeSequence;
                 }
 
                 output += host.getNewLine();
@@ -333,6 +332,12 @@ namespace ts {
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
             output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
+
+            if (diagnostic.file) {
+                output += host.getNewLine();
+                output += context;
+            }
+
             output += host.getNewLine();
         }
         return output;
@@ -1172,9 +1177,7 @@ namespace ts {
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
-                return isSourceFileJavaScript(sourceFile)
-                    ? filter(diagnostics, shouldReportDiagnostic)
-                    : diagnostics;
+                return filter(diagnostics, shouldReportDiagnostic);
             });
         }
 
@@ -1464,7 +1467,7 @@ namespace ts {
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: StringLiteral[];
-            let moduleAugmentations: Array<StringLiteral | Identifier>;
+            let moduleAugmentations: (StringLiteral | Identifier)[];
             let ambientModules: string[];
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
@@ -1584,7 +1587,7 @@ namespace ts {
                         fail(Diagnostics.File_0_not_found, fileName);
                     }
                     else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
-                        fail(Diagnostics.A_file_cannot_have_a_reference_to_itself, fileName);
+                        fail(Diagnostics.A_file_cannot_have_a_reference_to_itself);
                     }
                 }
                 return sourceFile;
@@ -1846,7 +1849,8 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFileFromNodeModules = isFromNodeModulesSearch && !extensionIsTypeScript(resolution.extension);
+                    const isJsFile = !extensionIsTypeScript(resolution.extension);
+                    const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
                     if (isFromNodeModulesSearch) {
@@ -1861,7 +1865,12 @@ namespace ts {
                     const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                     // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
-                    const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
+                    const shouldAddFile = resolvedFileName
+                        && !getResolutionDiagnostic(options, resolution)
+                        && !options.noResolve
+                        && i < file.imports.length
+                        && !elideImport
+                        && !(isJsFile && !options.allowJs);
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2236,7 +2245,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
+            return options.allowJs || !options.noImplicitAny ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
     }
 

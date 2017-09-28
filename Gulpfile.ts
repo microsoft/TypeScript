@@ -674,11 +674,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
     });
 
     function failWithStatus(err?: any, status?: number) {
-        if (err) {
-            console.log(err);
+        if (err || status) {
+            process.exit(typeof status === "number" ? status : 2);
         }
-        done(err || status);
-        process.exit(status);
+        done();
     }
 
     function lintThenFinish() {
@@ -979,8 +978,9 @@ gulp.task(instrumenterJsPath, /*help*/ false, [servicesFile], () => {
         .pipe(gulp.dest(builtLocalDirectory));
 });
 
-gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
-    exec(host, [instrumenterJsPath, "record", "iocapture", builtLocalCompiler], done, done);
+gulp.task("tsc-instrumented", "Builds an instrumented tsc.js - run with --test=[testname]", ["local", loggedIOJsPath, instrumenterJsPath, servicesFile], (done) => {
+    const test = cmdLineOptions["tests"] || "iocapture";
+    exec(host, [instrumenterJsPath, "record", test, builtLocalCompiler], done, done);
 });
 
 gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", serverFile], () => {
@@ -1051,10 +1051,11 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
     const fileMatcher = cmdLineOptions["files"];
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+        : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    if (fold.isTravis()) console.log(fold.end("lint"));
 });
 
 gulp.task("default", "Runs 'local'", ["local"]);

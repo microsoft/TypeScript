@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration10.ts ===
+function data(): string;
+>data : Symbol(data, Decl(parserModuleDeclaration10.ts, 0, 0))
+
+function next(): string;
+>next : Symbol(next, Decl(parserModuleDeclaration10.ts, 0, 24))
+

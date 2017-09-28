@@ -1,14 +1,19 @@
 /// <reference path='fourslash.ts' />
 
-////[|class C {
+////class C {
 ////    static method() {
 ////        this.foo = 10;
 ////    }
-////}|]
+////}
 
-verify.rangeAfterCodeFix(`class C {
-    static foo: number;
+verify.codeFix({
+    description: "Declare static property 'foo'.",
+    index: 0,
+    // TODO: GH#18445
+    newFileContent: `class C {
+    static foo: number;\r
     static method() {
         this.foo = 10;
     }
-}`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 0);
+}`
+});

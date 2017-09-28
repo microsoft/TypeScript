@@ -1,0 +1,24 @@
+=== tests/cases/compiler/conflictMarkerDiff3Trivia2.ts ===
+class C {
+>C : C
+
+  foo() {
+>foo : () => void
+
+<<<<<<< B
+     a();
+>a() : any
+>a : any
+  }
+||||||| merged common ancestors
+     c();
+  }
+=======
+     b();
+  }
+>>>>>>> A
+
+  public bar() { }
+>bar : () => void
+}
+

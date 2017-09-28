@@ -1,0 +1,35 @@
+=== tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts ===
+class a {
+>a : a
+
+    private __x: () => string;
+>__x : () => string
+
+    get x() {
+>x : () => string
+
+        return this.__x;
+>this.__x : () => string
+>this : this
+>__x : () => string
+    }
+    set x(aValue: () => string) {
+>x : () => string
+>aValue : () => string
+
+        this.__x = aValue;
+>this.__x = aValue : () => string
+>this.__x : () => string
+>this : this
+>__x : () => string
+>aValue : () => string
+    }
+}
+
+class b extends a {
+>b : b
+>a : a
+
+    x: () => string;
+>x : () => string
+}

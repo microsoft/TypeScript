@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakNotInIterationOrSwitchStatement2.ts ===
+while (true) {
+>true : true
+
+  function f() {
+>f : () => void
+
+    break;
+  }
+}

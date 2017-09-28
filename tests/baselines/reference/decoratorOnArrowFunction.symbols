@@ -1,0 +1,12 @@
+=== tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts ===
+declare function dec<T>(target: T): T;
+>dec : Symbol(dec, Decl(decoratorOnArrowFunction.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnArrowFunction.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnArrowFunction.ts, 0, 24))
+>T : Symbol(T, Decl(decoratorOnArrowFunction.ts, 0, 21))
+>T : Symbol(T, Decl(decoratorOnArrowFunction.ts, 0, 21))
+
+var F = @dec () => {
+>F : Symbol(F, Decl(decoratorOnArrowFunction.ts, 2, 3))
+>dec : Symbol(dec, Decl(decoratorOnArrowFunction.ts, 0, 0))
+}

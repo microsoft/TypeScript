@@ -424,7 +424,7 @@ namespace ts {
             case SyntaxKind.JSDocTypeTag:
                 return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
             case SyntaxKind.JSDocAugmentsTag:
-                return visitNode(cbNode, (<JSDocAugmentsTag>node).typeExpression);
+                return visitNode(cbNode, (<JSDocAugmentsTag>node).class);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
@@ -1207,7 +1207,10 @@ namespace ts {
                 return finishNode(node);
             }
 
-            return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
+            // Only for end of file because the error gets reported incorrectly on embedded script tags.
+            const reportAtCurrentPosition = token() === SyntaxKind.EndOfFileToken;
+
+            return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
@@ -5621,11 +5624,14 @@ namespace ts {
         function parseExpressionWithTypeArguments(): ExpressionWithTypeArguments {
             const node = <ExpressionWithTypeArguments>createNode(SyntaxKind.ExpressionWithTypeArguments);
             node.expression = parseLeftHandSideExpressionOrHigher();
-            if (token() === SyntaxKind.LessThanToken) {
-                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
-            }
-
+            node.typeArguments = tryParseTypeArguments();
             return finishNode(node);
+        }
+
+        function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
+            return token() === SyntaxKind.LessThanToken
+               ? parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken)
+               : undefined;
         }
 
         function isHeritageClause(): boolean {
@@ -6132,11 +6138,14 @@ namespace ts {
             }
 
             // Parses out a JSDoc type expression.
-            /* @internal */
-            export function parseJSDocTypeExpression(): JSDocTypeExpression {
+            export function parseJSDocTypeExpression(): JSDocTypeExpression;
+            export function parseJSDocTypeExpression(requireBraces: true): JSDocTypeExpression | undefined;
+            export function parseJSDocTypeExpression(requireBraces?: boolean): JSDocTypeExpression | undefined {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
-                parseExpected(SyntaxKind.OpenBraceToken);
+                if (!parseExpected(SyntaxKind.OpenBraceToken) && requireBraces) {
+                    return undefined;
+                }
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
                 parseExpected(SyntaxKind.CloseBraceToken);
 
@@ -6483,14 +6492,8 @@ namespace ts {
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression | undefined {
-                    return tryParse(() => {
-                        skipWhitespace();
-                        if (token() !== SyntaxKind.OpenBraceToken) {
-                            return undefined;
-                        }
-
-                        return parseJSDocTypeExpression();
-                    });
+                    skipWhitespace();
+                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
@@ -6599,18 +6602,39 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = tryParseTypeExpression();
+                    result.typeExpression = parseJSDocTypeExpression(/*requireBraces*/ true);
                     return finishNode(result);
                 }
 
                 function parseAugmentsTag(atToken: AtToken, tagName: Identifier): JSDocAugmentsTag {
-                    const typeExpression = tryParseTypeExpression();
-
                     const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = typeExpression;
+                    result.class = parseExpressionWithTypeArgumentsForAugments();
                     return finishNode(result);
+                }
+
+                function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression } {
+                    const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
+                    const node = createNode(SyntaxKind.ExpressionWithTypeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
+                    node.expression = parsePropertyAccessEntityNameExpression();
+                    node.typeArguments = tryParseTypeArguments();
+                    const res = finishNode(node);
+                    if (usedBrace) {
+                        parseExpected(SyntaxKind.CloseBraceToken);
+                    }
+                    return res;
+                }
+
+                function parsePropertyAccessEntityNameExpression() {
+                    let node: Identifier | PropertyAccessEntityNameExpression = parseJSDocIdentifierName(/*createIfMissing*/ true);
+                    while (token() === SyntaxKind.DotToken) {
+                        const prop: PropertyAccessEntityNameExpression = createNode(SyntaxKind.PropertyAccessExpression, node.pos) as PropertyAccessEntityNameExpression;
+                        prop.expression = node;
+                        prop.name = parseJSDocIdentifierName();
+                        node = finishNode(prop);
+                    }
+                    return node;
                 }
 
                 function parseClassTag(atToken: AtToken, tagName: Identifier): JSDocClassTag {

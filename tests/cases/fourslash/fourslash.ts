@@ -114,6 +114,7 @@ declare namespace FourSlashInterface {
         markerNames(): string[];
         marker(name?: string): Marker;
         ranges(): Range[];
+        spans(): Array<{ start: number, length: number }>;
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
         symbolsInScope(range: Range): any[];
@@ -154,6 +155,13 @@ declare namespace FourSlashInterface {
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
+        codeFix(options: {
+            description: string,
+            newFileContent?: string,
+            newRangeContent?: string,
+            errorCode?: number,
+            index?: number,
+        });
         codeFixAvailable(): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
@@ -250,8 +258,8 @@ declare namespace FourSlashInterface {
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
-        navigationBar(json: any): void;
-        navigationTree(json: any): void;
+        navigationBar(json: any, options?: { checkSpans?: boolean }): void;
+        navigationTree(json: any, options?: { checkSpans?: boolean }): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;

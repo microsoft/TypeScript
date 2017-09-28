@@ -597,7 +597,7 @@ namespace ts {
         }
 
         const children = list.getChildren();
-        const listItemIndex = indexOf(children, node);
+        const listItemIndex = indexOfNode(children, node);
 
         return {
             listItemIndex,
@@ -1100,7 +1100,7 @@ namespace ts {
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
     export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
-        const seen: Array<true> = [];
+        const seen: true[] = [];
         return node => {
             const id = getNodeId(node);
             return !seen[id] && (seen[id] = true);

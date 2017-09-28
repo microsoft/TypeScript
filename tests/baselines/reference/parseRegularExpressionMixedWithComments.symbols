@@ -1,0 +1,17 @@
+=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts ===
+var regex1 = / asdf /;
+>regex1 : Symbol(regex1, Decl(parseRegularExpressionMixedWithComments.ts, 0, 3))
+
+var regex2 = /**// asdf /;
+>regex2 : Symbol(regex2, Decl(parseRegularExpressionMixedWithComments.ts, 1, 3))
+
+var regex3 = /**///**/ asdf /       // should be a comment line
+>regex3 : Symbol(regex3, Decl(parseRegularExpressionMixedWithComments.ts, 2, 3))
+
+1;
+var regex4 = /**// /**/asdf /;
+>regex4 : Symbol(regex4, Decl(parseRegularExpressionMixedWithComments.ts, 4, 3))
+
+var regex5 = /**// asdf/**/ /;
+>regex5 : Symbol(regex5, Decl(parseRegularExpressionMixedWithComments.ts, 5, 3))
+

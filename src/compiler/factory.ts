@@ -1207,6 +1207,30 @@ namespace ts {
             : node;
     }
 
+    export function createTemplateHead(text: string) {
+        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateMiddle(text: string) {
+        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateTail(text: string) {
+        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+        node.text = text;
+        return node;
+    }
+
+    export function createNoSubstitutionTemplateLiteral(text: string) {
+        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
+        node.text = text;
+        return node;
+    }
+
     export function createYield(expression?: Expression): YieldExpression;
     export function createYield(asteriskToken: AsteriskToken, expression: Expression): YieldExpression;
     export function createYield(asteriskTokenOrExpression?: AsteriskToken | Expression, expression?: Expression) {
@@ -3941,11 +3965,10 @@ namespace ts {
                 return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
-        else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
-            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                return setTextRange(createParen(expression), expression);
-            }
+
+        const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
+        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+            return setTextRange(createParen(expression), expression);
         }
 
         return expression;

@@ -1,6 +1,7 @@
 {
-    "rulesDirectory": "built/local/tslint",
+    "rulesDirectory": "built/local/tslint/rules",
     "rules": {
+        "array-type": [true, "array"],
         "boolean-trivia": true,
         "class-name": true,
         "comment-format": [true,

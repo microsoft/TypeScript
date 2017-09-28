@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/variableDeclarations/VariableDeclaration2_es6.ts ===
+const a
+>a : Symbol(a, Decl(VariableDeclaration2_es6.ts, 0, 5))
+

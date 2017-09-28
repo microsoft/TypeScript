@@ -1,0 +1,92 @@
+=== tests/cases/compiler/overloadResolutionTest1.ts ===
+function foo(bar:{a:number;}[]):string;
+>foo : Symbol(foo, Decl(overloadResolutionTest1.ts, 0, 0), Decl(overloadResolutionTest1.ts, 0, 39), Decl(overloadResolutionTest1.ts, 1, 40))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 0, 13))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 0, 18))
+
+function foo(bar:{a:boolean;}[]):number;
+>foo : Symbol(foo, Decl(overloadResolutionTest1.ts, 0, 0), Decl(overloadResolutionTest1.ts, 0, 39), Decl(overloadResolutionTest1.ts, 1, 40))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 1, 13))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 1, 18))
+
+function foo(bar:{a:any;}[]):any{ return bar };
+>foo : Symbol(foo, Decl(overloadResolutionTest1.ts, 0, 0), Decl(overloadResolutionTest1.ts, 0, 39), Decl(overloadResolutionTest1.ts, 1, 40))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 2, 13))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 2, 18))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 2, 13))
+
+var x1 = foo([{a:true}]); // works
+>x1 : Symbol(x1, Decl(overloadResolutionTest1.ts, 4, 3))
+>foo : Symbol(foo, Decl(overloadResolutionTest1.ts, 0, 0), Decl(overloadResolutionTest1.ts, 0, 39), Decl(overloadResolutionTest1.ts, 1, 40))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 4, 15))
+
+var x11 = foo([{a:0}]); // works
+>x11 : Symbol(x11, Decl(overloadResolutionTest1.ts, 5, 3))
+>foo : Symbol(foo, Decl(overloadResolutionTest1.ts, 0, 0), Decl(overloadResolutionTest1.ts, 0, 39), Decl(overloadResolutionTest1.ts, 1, 40))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 5, 16))
+
+var x111 = foo([{a:"s"}]); // error - does not match any signature
+>x111 : Symbol(x111, Decl(overloadResolutionTest1.ts, 6, 3))
+>foo : Symbol(foo, Decl(overloadResolutionTest1.ts, 0, 0), Decl(overloadResolutionTest1.ts, 0, 39), Decl(overloadResolutionTest1.ts, 1, 40))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 6, 17))
+
+var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
+>x1111 : Symbol(x1111, Decl(overloadResolutionTest1.ts, 7, 3))
+>foo : Symbol(foo, Decl(overloadResolutionTest1.ts, 0, 0), Decl(overloadResolutionTest1.ts, 0, 39), Decl(overloadResolutionTest1.ts, 1, 40))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 7, 18))
+
+
+
+function foo2(bar:{a:number;}):string;
+>foo2 : Symbol(foo2, Decl(overloadResolutionTest1.ts, 7, 28), Decl(overloadResolutionTest1.ts, 11, 38), Decl(overloadResolutionTest1.ts, 12, 39))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 11, 14))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 11, 19))
+
+function foo2(bar:{a:boolean;}):number;
+>foo2 : Symbol(foo2, Decl(overloadResolutionTest1.ts, 7, 28), Decl(overloadResolutionTest1.ts, 11, 38), Decl(overloadResolutionTest1.ts, 12, 39))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 12, 14))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 12, 19))
+
+function foo2(bar:{a:any;}):any{ return bar };
+>foo2 : Symbol(foo2, Decl(overloadResolutionTest1.ts, 7, 28), Decl(overloadResolutionTest1.ts, 11, 38), Decl(overloadResolutionTest1.ts, 12, 39))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 13, 14))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 13, 19))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 13, 14))
+
+var x2 = foo2({a:0}); // works
+>x2 : Symbol(x2, Decl(overloadResolutionTest1.ts, 15, 3))
+>foo2 : Symbol(foo2, Decl(overloadResolutionTest1.ts, 7, 28), Decl(overloadResolutionTest1.ts, 11, 38), Decl(overloadResolutionTest1.ts, 12, 39))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 15, 15))
+
+var x3 = foo2({a:true}); // works
+>x3 : Symbol(x3, Decl(overloadResolutionTest1.ts, 16, 3))
+>foo2 : Symbol(foo2, Decl(overloadResolutionTest1.ts, 7, 28), Decl(overloadResolutionTest1.ts, 11, 38), Decl(overloadResolutionTest1.ts, 12, 39))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 16, 15))
+
+var x4 = foo2({a:"s"}); // error
+>x4 : Symbol(x4, Decl(overloadResolutionTest1.ts, 17, 3))
+>foo2 : Symbol(foo2, Decl(overloadResolutionTest1.ts, 7, 28), Decl(overloadResolutionTest1.ts, 11, 38), Decl(overloadResolutionTest1.ts, 12, 39))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 17, 15))
+
+
+function foo4(bar:{a:number;}):number;
+>foo4 : Symbol(foo4, Decl(overloadResolutionTest1.ts, 17, 23), Decl(overloadResolutionTest1.ts, 20, 38), Decl(overloadResolutionTest1.ts, 21, 38))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 20, 14))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 20, 19))
+
+function foo4(bar:{a:string;}):string;
+>foo4 : Symbol(foo4, Decl(overloadResolutionTest1.ts, 17, 23), Decl(overloadResolutionTest1.ts, 20, 38), Decl(overloadResolutionTest1.ts, 21, 38))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 21, 14))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 21, 19))
+
+function foo4(bar:{a:any;}):any{ return bar };
+>foo4 : Symbol(foo4, Decl(overloadResolutionTest1.ts, 17, 23), Decl(overloadResolutionTest1.ts, 20, 38), Decl(overloadResolutionTest1.ts, 21, 38))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 22, 14))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 22, 19))
+>bar : Symbol(bar, Decl(overloadResolutionTest1.ts, 22, 14))
+
+var x = foo4({a:true}); // error
+>x : Symbol(x, Decl(overloadResolutionTest1.ts, 23, 3))
+>foo4 : Symbol(foo4, Decl(overloadResolutionTest1.ts, 17, 23), Decl(overloadResolutionTest1.ts, 20, 38), Decl(overloadResolutionTest1.ts, 21, 38))
+>a : Symbol(a, Decl(overloadResolutionTest1.ts, 23, 14))
+

@@ -976,8 +976,8 @@ namespace ts {
     }
 
     function loadModuleFromNodeModulesFolder(extensions: Extensions, moduleName: string, nodeModulesFolder: string, nodeModulesFolderExists: boolean, failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
-        const { top, rest } = getNameOfTopDirectory(moduleName);
-        const packageRootPath = combinePaths(nodeModulesFolder, top);
+        const { packageName, rest } = getPackageName(moduleName);
+        const packageRootPath = combinePaths(nodeModulesFolder, packageName);
         const { packageJsonContent, packageId } = getPackageJsonInfo(packageRootPath, rest, failedLookupLocations, !nodeModulesFolderExists, state);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
         const pathAndExtension = loadModuleFromFile(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state) ||
@@ -985,9 +985,12 @@ namespace ts {
         return withPackageId(packageId, pathAndExtension);
     }
 
-    function getNameOfTopDirectory(name: string): { top: string, rest: string } {
-        const idx = name.indexOf(directorySeparator);
-        return idx === -1 ? { top: name, rest: "" } : { top: name.slice(0, idx), rest: name.slice(idx + 1) };
+    function getPackageName(moduleName: string): { packageName: string, rest: string } {
+        let idx = moduleName.indexOf(directorySeparator);
+        if (moduleName[0] === "@") {
+            idx = moduleName.indexOf(directorySeparator, idx + 1);
+        }
+        return idx === -1 ? { packageName: moduleName, rest: "" } : { packageName: moduleName.slice(0, idx), rest: moduleName.slice(idx + 1) };
     }
 
     function loadModuleFromNodeModules(extensions: Extensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, cache: NonRelativeModuleNameResolutionCache): SearchResult<Resolved> {
