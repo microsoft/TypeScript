@@ -286,7 +286,7 @@ function f(s) {
 }
 ```
 
-In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emiting JavaScript.
+In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emitting JavaScript.
 
 ## <a name="1.1"/>1.1 Ambient Declarations
 
@@ -4910,7 +4910,7 @@ Object.defineProperty(<ClassName>, "<MemberName>", {
 };
 ```
 
-where *MemberName* is the name of the member accessor, *GetAccessorStatements* is the code generated for the statements in the get acessor's function body, *ParameterName* is the name of the set accessor parameter, and *SetAccessorStatements* is the code generated for the statements in the set accessor's function body. The 'get' property is included only if a get accessor is declared and the 'set' property is included only if a set accessor is declared.
+where *MemberName* is the name of the member accessor, *GetAccessorStatements* is the code generated for the statements in the get accessor's function body, *ParameterName* is the name of the set accessor parameter, and *SetAccessorStatements* is the code generated for the statements in the set accessor's function body. The 'get' property is included only if a get accessor is declared and the 'set' property is included only if a set accessor is declared.
 
 *StaticVariableAssignments* is a sequence of statements, one for each static member variable declaration with an initializer, in the order they are declared, of the form
 
