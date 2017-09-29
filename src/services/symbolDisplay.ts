@@ -519,7 +519,7 @@ namespace ts.SymbolDisplay {
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
             const typeParameterParts = mapToDisplayParts(writer => {
-                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
+                typeChecker.typeParametersToString(symbol, enclosingDeclaration, /*flags*/ undefined, writer);
             });
             addRange(displayParts, typeParameterParts);
         }

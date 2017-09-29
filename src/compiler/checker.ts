@@ -158,6 +158,9 @@ namespace ts {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
             getSymbolDisplayBuilder,
+            typeParametersToString: (symbol, enclosingDeclaration?, flags?, writer?) => {
+                return typeParametersToString(symbol, getParseTreeNode(enclosingDeclaration), flags, writer);
+            },
             symbolToString: (symbol, enclosingDeclaration?, meaning?, flags?, writer?) => {
                 return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
@@ -2369,6 +2372,30 @@ namespace ts {
             }
         }
 
+        function typeParametersToString(symbol: Symbol, enclosingDeclaration?: Node, flags: NodeBuilderFlags = NodeBuilderFlags.IgnoreErrors, writer?: EmitTextWriter) {
+            return writer ? typeParametersToStringWorker(writer).getText() : usingSingleLineStringWriter(typeParametersToStringWorker);
+
+            function typeParametersToStringWorker(writer: EmitTextWriter) {
+                const params = nodeBuilder.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags);
+                if (params && params.length) {
+                    writer.writePunctuation("<");
+                    const printer = createPrinter({ removeComments: true });
+                    const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                    let hasPrevious = false;
+                    for (const param of params) {
+                        if (hasPrevious) {
+                            writer.writePunctuation(",");
+                            writer.writeSpace(" ");
+                        }
+                        printer.writeNode(EmitHint.Unspecified, param, /*sourceFile*/ sourceFile, writer);
+                        hasPrevious = true;
+                    }
+                    writer.writePunctuation(">");
+                }
+                return writer;
+            }
+        }
+
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string {
             return writer ? signatureToStringWorker(writer).getText() : usingSingleLineStringWriter(signatureToStringWorker);
 
@@ -2475,6 +2502,12 @@ namespace ts {
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },
+                symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = typeParametersToTypeParameterDeclarations(symbol, context);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                }
             };
 
             function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined): NodeBuilderContext {
@@ -3065,6 +3098,28 @@ namespace ts {
                 }
             }
 
+            function typeParametersToTypeParameterDeclarations(symbol: Symbol, context: NodeBuilderContext) {
+                let typeParameterNodes: ReadonlyArray<TypeParameterDeclaration> | undefined;
+                const targetSymbol = getTargetSymbol(symbol);
+                if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
+                    const savedContextFlags = context.flags;
+                    context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a clodule with a generic
+                    typeParameterNodes = map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), typeParameterToDeclaration);
+                    context.flags = savedContextFlags;
+                }
+                return typeParameterNodes;
+
+                function typeParameterToDeclaration(tp: TypeParameter): TypeParameterDeclaration {
+                    const constraint = getConstraintFromTypeParameter(tp);
+                    const defaultT = getDefaultFromTypeParameter(tp);
+                    return createTypeParameterDeclaration(
+                        symbolToName(tp.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true),
+                        constraint ? typeToTypeNodeHelper(constraint, context) : undefined,
+                        defaultT ? typeToTypeNodeHelper(defaultT, context) : undefined,
+                    );
+                }
+            }
+
             function lookupTypeParameterNodes(chain: Symbol[], index: number, context: NodeBuilderContext) {
                 Debug.assert(chain && 0 <= index && index < chain.length);
                 const symbol = chain[index];
@@ -3078,26 +3133,10 @@ namespace ts {
                         ), (nextSymbol as TransientSymbol).mapper), context);
                     }
                     else {
-                        const targetSymbol = getTargetSymbol(parentSymbol);
-                        if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                            const savedContextFlags = context.flags;
-                            context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a clodule with a generic
-                            typeParameterNodes = map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(parentSymbol), typeParameterToDeclaration);
-                            context.flags = savedContextFlags;
-                        }
+                        typeParameterNodes = typeParametersToTypeParameterDeclarations(symbol, context);
                     }
                 }
                 return typeParameterNodes;
-
-                function typeParameterToDeclaration(tp: TypeParameter): TypeParameterDeclaration {
-                    const constraint = getConstraintFromTypeParameter(tp);
-                    const defaultT = getDefaultFromTypeParameter(tp);
-                    return createTypeParameterDeclaration(
-                        symbolToName(tp.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true),
-                        constraint ? typeToTypeNodeHelper(constraint, context) : undefined,
-                        defaultT ? typeToTypeNodeHelper(defaultT, context) : undefined,
-                    );
-                }
             }
 
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
