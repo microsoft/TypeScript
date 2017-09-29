@@ -187,7 +187,7 @@ namespace ts.SymbolDisplay {
                                 displayParts.push(spacePart());
                             }
                             if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
-                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
                             }
                             addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
                             break;
@@ -472,7 +472,7 @@ namespace ts.SymbolDisplay {
 
         function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
             const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
+                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             addRange(displayParts, fullSymbolDisplayParts);
         }
 

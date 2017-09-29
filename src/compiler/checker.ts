@@ -2361,7 +2361,7 @@ namespace ts {
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
             function symbolToStringWorker(writer: EmitTextWriter) {
-                const entity = (flags & SymbolFormatFlags.AllowAnyNodeKind) ? nodeBuilder.symbolToExpression(symbol, meaning, enclosingDeclaration) : nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, nodeFlags);
+                const entity = (flags & SymbolFormatFlags.AllowAnyNodeKind) ? nodeBuilder.symbolToExpression(symbol, meaning, enclosingDeclaration, nodeFlags) : nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, nodeFlags);
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
