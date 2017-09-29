@@ -468,7 +468,7 @@ namespace ts.refactor.extractSymbol {
      * you may be able to extract into a class method *or* local closure *or* namespace function,
      * depending on what's in the extracted body.
      */
-    function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
+    function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isReadonlyArray(range.range) ? firstOrUndefined(range.range) : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
@@ -501,6 +501,12 @@ namespace ts.refactor.extractSymbol {
             }
 
         }
+
+        // We could fail to find a scope if
+        //   a) there is no enclosing source file; or
+        //   b) the starting node is the entire source file.
+        // We believe that both of these cases are impossible.
+        Debug.assert(scopes !== undefined);
         return scopes;
     }
 
@@ -545,16 +551,11 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
+        Debug.assert(targetRange !== undefined); // Caller's responsibility.
+
         const { file: sourceFile } = context;
 
-        if (targetRange === undefined) {
-            return undefined;
-        }
-
         const scopes = collectEnclosingScopes(targetRange);
-        if (scopes === undefined) {
-            return undefined;
-        }
 
         const enclosingTextRange = getEnclosingTextRange(targetRange, sourceFile);
         const readsAndWrites = collectReadsAndWrites(
