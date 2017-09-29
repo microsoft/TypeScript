@@ -402,7 +402,7 @@ namespace ts.SymbolDisplay {
                         // If the type is type parameter, format it specially
                         if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                             const typeParameterParts = mapToDisplayParts(writer => {
-                                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
+                                typeChecker.typeParameterToString(type as TypeParameter, enclosingDeclaration, /*flags*/ undefined, writer);
                             });
                             addRange(displayParts, typeParameterParts);
                         }

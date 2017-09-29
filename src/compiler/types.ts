@@ -2648,6 +2648,7 @@ namespace ts {
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
         typeParametersToString(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, writer?: EmitTextWriter): string;
+        typeParameterToString(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, writer?: EmitTextWriter): string;
         typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
