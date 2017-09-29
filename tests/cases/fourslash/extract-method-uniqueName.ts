@@ -7,8 +7,8 @@
 // it's omitted right now.
 goTo.select('start', 'end')
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
     actionDescription: "Extract to function in global scope",
     newContent:
 `/*RENAME*/newFunction_1();

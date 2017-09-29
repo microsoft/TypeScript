@@ -1,0 +1,12 @@
+=== /b.js ===
+class A {}
+>A : A
+
+class B {}
+>B : B
+
+/** @augments A */
+class C extends B {}
+>C : C
+>B : A
+

@@ -7,4 +7,4 @@
 //// }
 
 goTo.select('start', 'end')
-verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Symbol');
