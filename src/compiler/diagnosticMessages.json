@@ -3511,13 +3511,25 @@
         "category": "Error",
         "code": 8021
     },
-    "Generic type '{0}' requires '{1}' type arguments; provide these with an '@augments' or '@extends' tag.": {
+    "JSDoc '@augments' is not attached to a class declaration.": {
         "category": "Error",
         "code": 8022
     },
-    "Generic type '{0}' requires between '{1}' and '{2}' type arguments; provide these with an '@augments' or '@extends' tag.": {
+    "JSDoc '@augments {0}' does not match the 'extends {1}' clause.": {
         "category": "Error",
         "code": 8023
+    },
+    "JSDoc '@param' tag has name '{0}', but there is no parameter with that name.": {
+        "category": "Error",
+        "code": 8024
+    },
+    "Generic type '{0}' requires '{1}' type arguments; provide these with an '@augments' or '@extends' tag.": {
+        "category": "Error",
+        "code": 8025
+    },
+    "Generic type '{0}' requires between '{1}' and '{2}' type arguments; provide these with an '@augments' or '@extends' tag.": {
+        "category": "Error",
+        "code": 8026
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -3711,7 +3723,7 @@
         "code": 95002
     },
 
-    "Extract function": {
+    "Extract symbol": {
         "category": "Message",
         "code": 95003
     },
@@ -3719,5 +3731,15 @@
     "Extract to {0}": {
         "category": "Message",
         "code": 95004
+    },
+
+    "Extract function": {
+        "category": "Message",
+        "code": 95005
+    },
+
+    "Extract constant": {
+        "category": "Message",
+        "code": 95006
     }
 }

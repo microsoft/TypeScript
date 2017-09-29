@@ -15,7 +15,7 @@
 
 // @Filename: declarations.d.ts
 //// declare class Thing<T> {
-////     mine: T;    
+////     mine: T;
 //// }
 
 goTo.marker();

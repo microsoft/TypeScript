@@ -2066,8 +2066,8 @@ namespace Harness {
         export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]>, opts?: BaselineOptions, referencedExtensions?: string[]): void {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
-            /* tslint:disable-next-line:no-null-keyword */
             const errors: Error[] = [];
+            // tslint:disable-next-line:no-null-keyword
             if (gen !== null) {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
