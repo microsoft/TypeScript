@@ -3138,13 +3138,11 @@ namespace ts {
                     if (index !== 0 && needsElementAccess) {
                         let expression: Expression;
                         if (isSingleOrDoubleQuote(firstChar)) {
-                            try {
-                                expression = createLiteral(JSON.parse(symbolName) as string);
-                            }
-                            catch {} // Wrap in try/catch to catch if stringy name is malformed; fallback to identifier behavior if that is the case
+                            expression = createLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
+                            (expression as StringLiteral).singleQuote = firstChar === CharacterCodes.singleQuote;
                         }
                         if (!expression) {
-                            // TODO: this matches legacy behavior, but results in syntactically invalid dientifiers for numeric symbols and computed property name symbols
+                            // TODO: this matches legacy behavior, but results in syntactically invalid identifiers for numeric symbols and computed property name symbols
                             expression = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                             expression.symbol = symbol;
                         }
