@@ -327,7 +327,7 @@ namespace ts {
         }
 
         get name(): string {
-            return unescapeLeadingUnderscores(this.escapedName);
+            return symbolName(this);
         }
 
         getEscapedName(): __String {
@@ -383,7 +383,7 @@ namespace ts {
         }
 
         get text(): string {
-            return unescapeLeadingUnderscores(this.escapedText);
+            return idText(this);
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;

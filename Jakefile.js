@@ -139,7 +139,10 @@ var harnessSources = harnessCoreSources.concat([
     "projectErrors.ts",
     "matchFiles.ts",
     "initializeTSConfig.ts",
-    "extractMethods.ts",
+    "extractConstants.ts",
+    "extractFunctions.ts",
+    "extractRanges.ts",
+    "extractTestHelpers.ts",
     "printer.ts",
     "textChanges.ts",
     "telemetry.ts",
@@ -1104,9 +1107,10 @@ var instrumenterPath = harnessDirectory + 'instrumenter.ts';
 var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
 compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true, { lib: "es6", types: ["node"], noOutFile: true, outDir: builtLocalDirectory });
 
-desc("Builds an instrumented tsc.js");
+desc("Builds an instrumented tsc.js - run with test=[testname]");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function () {
-    var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
+    var test = process.env.test || process.env.tests || process.env.t || "iocapture";
+    var cmd = host + ' ' + instrumenterJsPath + " record " + test + " " + builtLocalDirectory + compilerFilename;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
     ex.addListener("cmdEnd", function () {
