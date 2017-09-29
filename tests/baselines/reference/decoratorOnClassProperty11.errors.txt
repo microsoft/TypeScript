@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(4,5): error TS1329: A decorator function must accept some number of arguments, but this expression takes none. Did you mean to call it first?
+tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(4,5): error TS1329: This function cannot be used as a decorator. Did you mean to call it first?
 
 
 ==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(
     class C {
         @dec prop;
         ~~~~
-!!! error TS1329: A decorator function must accept some number of arguments, but this expression takes none. Did you mean to call it first?
+!!! error TS1329: This function cannot be used as a decorator. Did you mean to call it first?
     }

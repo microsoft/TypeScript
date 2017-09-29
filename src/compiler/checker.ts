@@ -16406,7 +16406,7 @@ namespace ts {
         function isPotentiallyUncalledDecorator(decorator: Decorator, signatures: Signature[]) {
             return signatures.length && every(signatures, signature =>
                 signature.minArgumentCount === 0 &&
-                signature.parameters.length < getEffectiveArgumentCount(decorator, /*args*/ undefined, signature))
+                signature.parameters.length < getEffectiveArgumentCount(decorator, /*args*/ undefined, signature));
         }
 
         /**
