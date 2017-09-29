@@ -2389,7 +2389,7 @@ namespace ts {
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer: EmitTextWriter = createTextWriter("")): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName, writer);
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
             Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
             const printer = createPrinter(options);
@@ -3035,22 +3035,24 @@ namespace ts {
                 function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
                     Debug.assert(chain && 0 <= index && index < chain.length);
                     const symbol = chain[index];
-                    let typeParameterNodes: ReadonlyArray<TypeNode> | undefined;
+                    let typeParameterNodes: ReadonlyArray<TypeNode> | ReadonlyArray<TypeParameterDeclaration> | undefined;
                     if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
                         const parentSymbol = symbol;
                         const nextSymbol = chain[index + 1];
-                        let typeParameters: Type[];
                         if (getCheckFlags(nextSymbol) & CheckFlags.Instantiated) {
-                            typeParameters = map(getTypeParametersOfClassOrInterface(parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol), (nextSymbol as TransientSymbol).mapper);
+                            typeParameterNodes = mapToTypeNodes(map(getTypeParametersOfClassOrInterface(
+                                parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
+                            ), (nextSymbol as TransientSymbol).mapper), context);
                         }
                         else {
                             const targetSymbol = getTargetSymbol(parentSymbol);
                             if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                                typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(parentSymbol);
+                                const savedContextFlags = context.flags;
+                                context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a clodule with a generic
+                                typeParameterNodes = map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(parentSymbol), typeParameterToDeclaration);
+                                context.flags = savedContextFlags;
                             }
                         }
-
-                        typeParameterNodes = mapToTypeNodes(typeParameters, context);
                     }
 
                     const symbolName = getNameOfSymbol(symbol, context);
@@ -3058,6 +3060,16 @@ namespace ts {
                     identifier.symbol = symbol;
 
                     return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
+                }
+
+                function typeParameterToDeclaration(tp: TypeParameter): TypeParameterDeclaration {
+                    const constraint = getConstraintFromTypeParameter(tp);
+                    const defaultT = getDefaultFromTypeParameter(tp);
+                    return createTypeParameterDeclaration(
+                        symbolToName(tp.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true),
+                        constraint ? typeToTypeNodeHelper(constraint, context) : undefined,
+                        defaultT ? typeToTypeNodeHelper(defaultT, context) : undefined,
+                    );
                 }
 
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */

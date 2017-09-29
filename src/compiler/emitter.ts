@@ -880,7 +880,7 @@ namespace ts {
 
         function emitIdentifier(node: Identifier) {
             (node.symbol ? writeSymbol : write)(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
-            emitTypeArguments(node, node.typeArguments);
+            emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
         }
 
         //
