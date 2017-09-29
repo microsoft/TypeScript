@@ -3344,6 +3344,7 @@ namespace ts {
         typeArguments?: Type[];  // Type reference type arguments (undefined if none)
     }
 
+    /* @internal */
     export const enum Variance {
         Invariant     = 0,  // Neither covariant nor contravariant
         Covariant     = 1,  // Covariant
@@ -3356,6 +3357,7 @@ namespace ts {
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
         instantiations: Map<TypeReference>;  // Generic instantiation cache
+        /* @internal */
         variances?: Variance[];  // Variance of each type parameter
     }
 
