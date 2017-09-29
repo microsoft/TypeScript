@@ -161,6 +161,9 @@ namespace ts {
             typeParametersToString: (symbol, enclosingDeclaration?, flags?, writer?) => {
                 return typeParametersToString(symbol, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
+            typePredicateToString: (predicate, enclosingDeclaration?, flags?, writer?) => {
+                return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
+            },
             symbolToString: (symbol, enclosingDeclaration?, meaning?, flags?, writer?) => {
                 return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
@@ -3197,8 +3200,10 @@ namespace ts {
             }
         }
 
-        function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
-            return usingSingleLineStringWriter(writer => {
+        function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string {
+            return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
+
+            function typePredicateToStringWorker(writer: EmitTextWriter) {
                 const predicate = createTypePredicateNode(
                     typePredicate.kind === TypePredicateKind.Identifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
                     nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)
@@ -3206,7 +3211,8 @@ namespace ts {
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, predicate, /*sourceFile*/ sourceFile, writer);
-            });
+                return writer;
+            }
         }
 
         function formatUnionTypes(types: Type[]): Type[] {

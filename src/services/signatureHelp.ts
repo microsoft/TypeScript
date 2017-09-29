@@ -390,8 +390,16 @@ namespace ts.SignatureHelp {
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
 
-            const returnTypeParts = mapToDisplayParts(writer =>
-                typeChecker.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
+            const returnTypeParts = mapToDisplayParts(writer => {
+                writer.writePunctuation(":");
+                writer.writeSpace(" ");
+                if (candidateSignature.typePredicate) {
+                    typeChecker.typePredicateToString(candidateSignature.typePredicate, invocation, /*flags*/ undefined, writer);
+                }
+                else {
+                    typeChecker.typeToString(typeChecker.getReturnTypeOfSignature(candidateSignature), invocation, /*flags*/ undefined, writer);
+                }
+            });
             addRange(suffixDisplayParts, returnTypeParts);
 
             return {
