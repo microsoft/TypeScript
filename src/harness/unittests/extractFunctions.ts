@@ -110,16 +110,6 @@ namespace ts {
         }
     }
 }`);
-        testExtractFunction("extractFunction8",
-            `namespace A {
-    let x = 1;
-    namespace B {
-        function a() {
-            let a1 = 1;
-            return 1 + [#|a1 + x|] + 100;
-        }
-    }
-}`);
         testExtractFunction("extractFunction9",
             `namespace A {
     export interface I { x: number };
