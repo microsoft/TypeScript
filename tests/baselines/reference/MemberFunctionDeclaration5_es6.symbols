@@ -4,5 +4,5 @@ class C {
 
    *
 }
-> : Symbol(C.(Missing), Decl(MemberFunctionDeclaration5_es6.ts, 0, 9))
+> : Symbol(C[(Missing)], Decl(MemberFunctionDeclaration5_es6.ts, 0, 9))
 

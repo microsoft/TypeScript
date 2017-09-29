@@ -2350,7 +2350,7 @@ namespace ts {
             writer.writeSpace(" ");
         }
 
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string {
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
             let nodeFlags = NodeBuilderFlags.IgnoreErrors;
             if (flags & SymbolFormatFlags.UseOnlyExternalAliasing) {
                 nodeFlags |= NodeBuilderFlags.UseOnlyExternalAliasing;
@@ -2361,7 +2361,7 @@ namespace ts {
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
             function symbolToStringWorker(writer: EmitTextWriter) {
-                const entity = nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, nodeFlags);
+                const entity = (flags & SymbolFormatFlags.AllowAnyNodeKind) ? nodeBuilder.symbolToExpression(symbol, meaning, enclosingDeclaration) : nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, nodeFlags);
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
@@ -2466,6 +2466,12 @@ namespace ts {
                 symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
                     const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
+                symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = symbolToExpression(symbol, context, meaning);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },
@@ -3010,9 +3016,7 @@ namespace ts {
                 }
             }
 
-            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
-            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: false): EntityName;
-            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: boolean): EntityName {
+            function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
                 context.tracker.trackSymbol(symbol, context.enclosingDeclaration, meaning);
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
@@ -3024,53 +3028,7 @@ namespace ts {
                 else {
                     chain = [symbol];
                 }
-
-                if (expectsIdentifier && chain.length !== 1
-                    && !context.encounteredError
-                    && !(context.flags & NodeBuilderFlags.AllowQualifedNameInPlaceOfIdentifier)) {
-                    context.encounteredError = true;
-                }
-                return createEntityNameFromSymbolChain(chain, chain.length - 1);
-
-                function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
-                    Debug.assert(chain && 0 <= index && index < chain.length);
-                    const symbol = chain[index];
-                    let typeParameterNodes: ReadonlyArray<TypeNode> | ReadonlyArray<TypeParameterDeclaration> | undefined;
-                    if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
-                        const parentSymbol = symbol;
-                        const nextSymbol = chain[index + 1];
-                        if (getCheckFlags(nextSymbol) & CheckFlags.Instantiated) {
-                            typeParameterNodes = mapToTypeNodes(map(getTypeParametersOfClassOrInterface(
-                                parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
-                            ), (nextSymbol as TransientSymbol).mapper), context);
-                        }
-                        else {
-                            const targetSymbol = getTargetSymbol(parentSymbol);
-                            if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                                const savedContextFlags = context.flags;
-                                context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a clodule with a generic
-                                typeParameterNodes = map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(parentSymbol), typeParameterToDeclaration);
-                                context.flags = savedContextFlags;
-                            }
-                        }
-                    }
-
-                    const symbolName = getNameOfSymbol(symbol, context);
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
-                    identifier.symbol = symbol;
-
-                    return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
-                }
-
-                function typeParameterToDeclaration(tp: TypeParameter): TypeParameterDeclaration {
-                    const constraint = getConstraintFromTypeParameter(tp);
-                    const defaultT = getDefaultFromTypeParameter(tp);
-                    return createTypeParameterDeclaration(
-                        symbolToName(tp.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true),
-                        constraint ? typeToTypeNodeHelper(constraint, context) : undefined,
-                        defaultT ? typeToTypeNodeHelper(defaultT, context) : undefined,
-                    );
-                }
+                return chain;
 
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
@@ -3103,6 +3061,100 @@ namespace ts {
                         !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
 
                         return [symbol];
+                    }
+                }
+            }
+
+            function lookupTypeParameterNodes(chain: Symbol[], index: number, context: NodeBuilderContext) {
+                Debug.assert(chain && 0 <= index && index < chain.length);
+                const symbol = chain[index];
+                let typeParameterNodes: ReadonlyArray<TypeNode> | ReadonlyArray<TypeParameterDeclaration> | undefined;
+                if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
+                    const parentSymbol = symbol;
+                    const nextSymbol = chain[index + 1];
+                    if (getCheckFlags(nextSymbol) & CheckFlags.Instantiated) {
+                        typeParameterNodes = mapToTypeNodes(map(getTypeParametersOfClassOrInterface(
+                            parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
+                        ), (nextSymbol as TransientSymbol).mapper), context);
+                    }
+                    else {
+                        const targetSymbol = getTargetSymbol(parentSymbol);
+                        if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
+                            const savedContextFlags = context.flags;
+                            context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a clodule with a generic
+                            typeParameterNodes = map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(parentSymbol), typeParameterToDeclaration);
+                            context.flags = savedContextFlags;
+                        }
+                    }
+                }
+                return typeParameterNodes;
+
+                function typeParameterToDeclaration(tp: TypeParameter): TypeParameterDeclaration {
+                    const constraint = getConstraintFromTypeParameter(tp);
+                    const defaultT = getDefaultFromTypeParameter(tp);
+                    return createTypeParameterDeclaration(
+                        symbolToName(tp.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true),
+                        constraint ? typeToTypeNodeHelper(constraint, context) : undefined,
+                        defaultT ? typeToTypeNodeHelper(defaultT, context) : undefined,
+                    );
+                }
+            }
+
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: false): EntityName;
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: boolean): EntityName {
+                const chain = lookupSymbolChain(symbol, context, meaning);
+
+                if (expectsIdentifier && chain.length !== 1
+                    && !context.encounteredError
+                    && !(context.flags & NodeBuilderFlags.AllowQualifedNameInPlaceOfIdentifier)) {
+                    context.encounteredError = true;
+                }
+                return createEntityNameFromSymbolChain(chain, chain.length - 1);
+
+                function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
+                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const symbol = chain[index];
+                    const symbolName = getNameOfSymbol(symbol, context);
+                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    identifier.symbol = symbol;
+
+                    return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
+                }
+            }
+
+            function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+                const chain = lookupSymbolChain(symbol, context, meaning);
+
+                return createExpressionFromSymbolChain(chain, chain.length - 1);
+
+                function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
+                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const symbol = chain[index];
+
+                    const symbolName = getNameOfSymbol(symbol);
+                    const firstChar = symbolName.charCodeAt(0);
+                    const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
+                    if (index !== 0 && needsElementAccess) {
+                        let expression: Expression;
+                        if (isSingleOrDoubleQuote(firstChar)) {
+                            try {
+                                expression = createLiteral(JSON.parse(symbolName) as string);
+                            }
+                            catch {} // Wrap in try/catch to catch if stringy name is malformed; fallback to identifier behavior if that is the case
+                        }
+                        if (!expression) {
+                            // TODO: this matches legacy behavior, but results in syntactically invalid dientifiers for numeric symbols and computed property name symbols
+                            expression = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                            expression.symbol = symbol;
+                        }
+                        return createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
+                    }
+                    else {
+                        const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                        identifier.symbol = symbol;
+
+                        return index > 0 ? createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                     }
                 }
             }

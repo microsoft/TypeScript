@@ -2800,6 +2800,9 @@ namespace ts {
         // eg.  module m { export class c { } } import x = m.c;
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
         UseOnlyExternalAliasing = 0x00000002,
+
+        // Build symbol name using property accesses and element accesses, instead of an entity name
+        AllowAnyNodeKind = 0x00000004,
     }
 
     export const enum SymbolAccessibility {
