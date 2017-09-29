@@ -547,33 +547,32 @@ namespace ts.server {
                 this.cachedUnresolvedImportsPerFile.remove(file);
             }
 
-            // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
-            // (can reuse cached imports for files that were not changed)
-            // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
-            // (can reuse cached imports for files that were not changed)
-            // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            let unresolvedImports: SortedReadonlyArray<string>;
-            if (hasChanges || changedFiles.length) {
-                const result: string[] = [];
-                for (const sourceFile of this.program.getSourceFiles()) {
-                    this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
-                }
-                this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
-            }
-            unresolvedImports = this.lastCachedUnresolvedImportsList;
-
-            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, unresolvedImports, hasChanges);
-            if (this.setTypings(cachedTypings)) {
-                hasChanges = this.updateGraphWorker() || hasChanges;
-            }
-
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
             if (this.languageServiceEnabled) {
+                // 1. no changes in structure, no changes in unresolved imports - do nothing
+                // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
+                // (can reuse cached imports for files that were not changed)
+                // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
+                // (can reuse cached imports for files that were not changed)
+                // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
+                if (hasChanges || changedFiles.length) {
+                    const result: string[] = [];
+                    for (const sourceFile of this.program.getSourceFiles()) {
+                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                    }
+                    this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
+                }
+
+                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
+                if (this.setTypings(cachedTypings)) {
+                    hasChanges = this.updateGraphWorker() || hasChanges;
+                }
+
                 this.builder.onProjectUpdateGraph();
             }
             else {
+                this.lastCachedUnresolvedImportsList = undefined;
                 this.builder.clear();
             }
 
@@ -747,7 +746,8 @@ namespace ts.server {
                 }
                 // compute and return the difference
                 const lastReportedFileNames = this.lastReportedFileNames;
-                const currentFiles = arrayToSet(this.getFileNames());
+                const externalFiles = this.getExternalFiles().map(f => toNormalizedPath(f));
+                const currentFiles = arrayToSet(this.getFileNames().concat(externalFiles));
 
                 const added: string[] = [];
                 const removed: string[] = [];
@@ -770,7 +770,8 @@ namespace ts.server {
             else {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
-                this.lastReportedFileNames = arrayToSet(projectFileNames);
+                const externalFiles = this.getExternalFiles().map(f => toNormalizedPath(f));
+                this.lastReportedFileNames = arrayToSet(projectFileNames.concat(externalFiles));
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, files: projectFileNames, projectErrors: this.getGlobalProjectErrors() };
             }
@@ -999,11 +1000,14 @@ namespace ts.server {
             if (this.projectService.globalPlugins) {
                 // Enable global plugins with synthetic configuration entries
                 for (const globalPluginName of this.projectService.globalPlugins) {
+                    // Skip empty names from odd commandline parses
+                    if (!globalPluginName) continue;
+
                     // Skip already-locally-loaded plugins
                     if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
 
                     // Provide global: true so plugins can detect why they can't find their config
-                    // TODO: Pluginimport has no `global` property!
+                    this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
                     // tslint:disable-next-line no-object-literal-type-assertion (TODO: GH#18217)
                     this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
                 }
@@ -1011,6 +1015,8 @@ namespace ts.server {
         }
 
         private enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]) {
+            this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
+
             const log = (message: string) => {
                 this.projectService.logger.info(message);
             };
@@ -1022,7 +1028,7 @@ namespace ts.server {
                     return;
                 }
             }
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name} anywhere in paths: ${searchPaths.join(",")}`);
+            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -1041,7 +1047,15 @@ namespace ts.server {
                 };
 
                 const pluginModule = pluginModuleFactory({ typescript: ts });
-                this.languageService = pluginModule.create(info);
+                const newLS = pluginModule.create(info);
+                for (const k of Object.keys(this.languageService)) {
+                    if (!(k in newLS)) {
+                        this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
+                        (newLS as any)[k] = (this.languageService as any)[k];
+                    }
+                }
+                this.projectService.logger.info(`Plugin validation succeded`);
+                this.languageService = newLS;
                 this.plugins.push(pluginModule);
             }
             catch (e) {
@@ -1073,6 +1087,9 @@ namespace ts.server {
                 }
                 catch (e) {
                     this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
+                    if (e.stack) {
+                        this.projectService.logger.info(e.stack);
+                    }
                 }
             }));
         }

@@ -84,7 +84,7 @@ namespace ts.server {
     }
 
     export interface SafeList {
-        [name: string]: { match: RegExp, exclude?: Array<Array<string | number>>, types?: string[] };
+        [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
     }
 
     function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<Map<number>> {
@@ -1191,7 +1191,8 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
+            const filesToAdd = projectOptions.files.concat(project.getExternalFiles());
+            this.addFilesToProjectAndUpdateGraph(project, filesToAdd, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
             if (!sizeLimitExceeded) {
@@ -1211,7 +1212,7 @@ namespace ts.server {
             }
         }
 
-        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: ReadonlyArray<Diagnostic>): void {
+        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: ReadonlyArray<T>, propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: ReadonlyArray<Diagnostic>): void {
             let errors: Diagnostic[];
             for (const f of files) {
                 const rootFileName = propertyReader.getFileName(f);
@@ -1687,11 +1688,13 @@ namespace ts.server {
             }
         }
 
-        private closeConfiguredProject(configFile: NormalizedPath): void {
+        private closeConfiguredProject(configFile: NormalizedPath): boolean {
             const configuredProject = this.findConfiguredProjectByProjectName(configFile);
             if (configuredProject && configuredProject.deleteOpenRef() === 0) {
                 this.removeProject(configuredProject);
+                return true;
             }
+            return false;
         }
 
         closeExternalProject(uncheckedFileName: string, suppressRefresh = false): void {
@@ -1778,7 +1781,7 @@ namespace ts.server {
 
                         if (rule.exclude) {
                             for (const exclude of rule.exclude) {
-                                const processedRule = root.replace(rule.match, (...groups: Array<string>) => {
+                                const processedRule = root.replace(rule.match, (...groups: string[]) => {
                                     return exclude.map(groupNumberOrString => {
                                         // RegExp group numbers are 1-based, but the first element in groups
                                         // is actually the original string, so it all works out in the end.

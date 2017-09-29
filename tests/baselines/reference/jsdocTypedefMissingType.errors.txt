@@ -1,0 +1,23 @@
+/a.js(2,14): error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
+/a.js(12,11): error TS1005: '{' expected.
+
+
+==== /a.js (2 errors) ====
+    // Bad: missing a type
+    /** @typedef T */
+                 ~
+!!! error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
+    
+    const t = 0;
+    
+    // OK: missing a type, but have property tags.
+    /**
+     * @typedef Person
+     * @property {string} name
+     */
+    
+    /** @type Person */
+              ~~~~~~
+!!! error TS1005: '{' expected.
+    const person = { name: "" };
+    

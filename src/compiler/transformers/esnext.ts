@@ -595,7 +595,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                node.equalsGreaterThanToken,
+                transformFunctionBody(node),
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
             return updated;
@@ -789,7 +790,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(unescapeLeadingUnderscores(node.name.escapedText)),
+                    createLiteral(idText(node.name)),
                     node
                 );
             }

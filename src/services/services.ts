@@ -327,7 +327,7 @@ namespace ts {
         }
 
         get name(): string {
-            return unescapeLeadingUnderscores(this.escapedName);
+            return symbolName(this);
         }
 
         getEscapedName(): __String {
@@ -383,7 +383,7 @@ namespace ts {
         }
 
         get text(): string {
-            return unescapeLeadingUnderscores(this.escapedText);
+            return idText(this);
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
@@ -672,7 +672,7 @@ namespace ts {
                         if (!hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                             break;
                         }
-                        // falls through
+                    // falls through
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
                         const decl = <VariableDeclaration>node;
@@ -684,7 +684,7 @@ namespace ts {
                             visit(decl.initializer);
                         }
                     }
-                        // falls through
+                    // falls through
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -722,6 +722,12 @@ namespace ts {
                         }
                         break;
 
+                    case SyntaxKind.BinaryExpression:
+                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                           addDeclaration(node as BinaryExpression);
+                        }
+                        // falls through
+
                     default:
                         forEachChild(node, visit);
                 }
@@ -731,7 +737,7 @@ namespace ts {
 
     class SourceMapSourceObject implements SourceMapSource {
         lineMap: number[];
-        constructor (public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
+        constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
 
         public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
             return ts.getLineAndCharacterOfPosition(this, pos);
@@ -1137,7 +1143,7 @@ namespace ts {
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
                  oldSettings.allowJs !== newSettings.allowJs ||
-                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
+                 oldSettings.disableSizeLimit !== newSettings.disableSizeLimit ||
                  oldSettings.baseUrl !== newSettings.baseUrl ||
                  !equalOwnProperties(oldSettings.paths, newSettings.paths));
 
@@ -1398,7 +1404,7 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
                 // Try getting just type at this position and show
@@ -1435,6 +1441,21 @@ namespace ts {
                 documentation: displayPartsDocumentationsAndKind.documentation,
                 tags: displayPartsDocumentationsAndKind.tags
             };
+        }
+
+        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+            if ((isIdentifier(node) || isStringLiteral(node))
+                && isPropertyAssignment(node.parent)
+                && node.parent.name === node) {
+                const type = checker.getContextualType(node.parent.parent);
+                if (type) {
+                    const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
+                    if (property) {
+                        return property;
+                    }
+                }
+            }
+            return checker.getSymbolAtLocation(node);
         }
 
         /// Goto definition
@@ -1511,7 +1532,21 @@ namespace ts {
 
         function getReferences(fileName: string, position: number, options?: FindAllReferences.Options) {
             synchronizeHostData();
-            return FindAllReferences.findReferencedEntries(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, options);
+
+            // Exclude default library when renaming as commonly user don't want to change that file.
+            let sourceFiles: SourceFile[] = [];
+            if (options && options.isForRename) {
+                for (const sourceFile of program.getSourceFiles()) {
+                    if (!program.isSourceFileDefaultLibrary(sourceFile)) {
+                        sourceFiles.push(sourceFile);
+                    }
+                }
+            }
+            else {
+                sourceFiles = program.getSourceFiles().slice();
+            }
+
+            return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] {
@@ -1998,7 +2033,7 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram(),
-                newLineCharacter: host.getNewLine(),
+                newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
                 rulesProvider: getRuleProvider(formatOptions),
                 cancellationToken
             };
@@ -2090,7 +2125,7 @@ namespace ts {
             }
 
             forEachChild(node, walk);
-            if (node.jsDoc) {
+            if (hasJSDocNodes(node)) {
                 for (const jsDoc of node.jsDoc) {
                     forEachChild(jsDoc, walk);
                 }
@@ -2111,7 +2146,7 @@ namespace ts {
             isLiteralComputedPropertyDeclarationName(node);
     }
 
-    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {
+    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
         switch (node.kind) {
             case SyntaxKind.JsxAttribute:
             case SyntaxKind.JsxSpreadAttribute:
@@ -2136,7 +2171,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
                     return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
-                // falls through
+            // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&

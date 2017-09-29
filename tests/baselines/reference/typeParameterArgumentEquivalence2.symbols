@@ -1,0 +1,25 @@
+=== tests/cases/compiler/typeParameterArgumentEquivalence2.ts ===
+function foo<T,U>() {
+>foo : Symbol(foo, Decl(typeParameterArgumentEquivalence2.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterArgumentEquivalence2.ts, 0, 13))
+>U : Symbol(U, Decl(typeParameterArgumentEquivalence2.ts, 0, 15))
+
+    var x: (item: U) => boolean;
+>x : Symbol(x, Decl(typeParameterArgumentEquivalence2.ts, 1, 7))
+>item : Symbol(item, Decl(typeParameterArgumentEquivalence2.ts, 1, 12))
+>U : Symbol(U, Decl(typeParameterArgumentEquivalence2.ts, 0, 15))
+
+    var y: (item: T) => boolean;
+>y : Symbol(y, Decl(typeParameterArgumentEquivalence2.ts, 2, 7))
+>item : Symbol(item, Decl(typeParameterArgumentEquivalence2.ts, 2, 12))
+>T : Symbol(T, Decl(typeParameterArgumentEquivalence2.ts, 0, 13))
+
+    x = y;  // Should be an error
+>x : Symbol(x, Decl(typeParameterArgumentEquivalence2.ts, 1, 7))
+>y : Symbol(y, Decl(typeParameterArgumentEquivalence2.ts, 2, 7))
+
+    y = x;  // Shound be an error
+>y : Symbol(y, Decl(typeParameterArgumentEquivalence2.ts, 2, 7))
+>x : Symbol(x, Decl(typeParameterArgumentEquivalence2.ts, 1, 7))
+}
+

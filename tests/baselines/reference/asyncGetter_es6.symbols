@@ -1,0 +1,8 @@
+=== tests/cases/conformance/async/es6/asyncGetter_es6.ts ===
+class C {
+>C : Symbol(C, Decl(asyncGetter_es6.ts, 0, 0))
+
+  async get foo() {
+>foo : Symbol(C.foo, Decl(asyncGetter_es6.ts, 0, 9))
+  }
+}

@@ -1,0 +1,7 @@
+=== tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts ===
+throw; 
+> : any
+
+export throw null;
+>null : null
+

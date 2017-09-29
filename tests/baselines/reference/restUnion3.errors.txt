@@ -1,0 +1,17 @@
+tests/cases/compiler/restUnion3.ts(3,9): error TS2700: Rest types may only be created from object types.
+tests/cases/compiler/restUnion3.ts(7,9): error TS2700: Rest types may only be created from object types.
+
+
+==== tests/cases/compiler/restUnion3.ts (2 errors) ====
+    declare const nullAndUndefinedUnion: null | undefined;
+    var rest4: { };
+    var {...rest4 } = nullAndUndefinedUnion;
+            ~~~~~
+!!! error TS2700: Rest types may only be created from object types.
+    
+    declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined;
+    var rest5: { n: number, s: string };
+    var {...rest5 } = unionWithIntersection;
+            ~~~~~
+!!! error TS2700: Rest types may only be created from object types.
+    

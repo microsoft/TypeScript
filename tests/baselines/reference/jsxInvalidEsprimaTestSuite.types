@@ -1,0 +1,227 @@
+=== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx ===
+declare var React: any;
+>React : any
+
+</>;
+>> : boolean
+> : any
+> : any
+
+<a: />;
+><a: /> : any
+>a : any
+
+<:a />;
+>< : boolean
+> : any
+> : any
+>a /> : boolean
+>a / : number
+>a : any
+> : any
+> : any
+
+<a b=d />;
+><a b=d />;<a>;<a></b>;<a foo="bar;<a:b></b> : any
+><a b=d />; : any
+>a : any
+>b : boolean
+>d /> : boolean
+>d / : number
+>d : any
+> : any
+> : any
+
+<a>;
+><a>;<a></b>;<a foo="bar;<a:b></b> : any
+>a : any
+
+<a></b>;
+><a></b> : any
+>a : any
+>b : any
+
+<a foo="bar;
+><a foo="bar;< : any
+>a : any
+>foo : string
+
+<a:b></b>;
+>b : any
+
+<a:b.c></a:b.c>;
+><a:b.c></a : any
+>a : any
+>b : true
+>c : true
+>a : any
+>b.c> : boolean
+>b.c : any
+>b : any
+>c : any
+> : any
+
+<a.b:c></a.b:c>;
+><a.b:c></a.b : any
+>a.b : any
+>a : any
+>b : any
+>c : true
+>a.b : any
+>a : any
+>b : any
+>c> : boolean
+>c : any
+> : any
+
+<a.b.c></a>;
+><a.b.c></a> : any
+>a.b.c : any
+>a.b : any
+>a : any
+>b : any
+>c : any
+>a : any
+
+<.a></.a>;
+><.a> : boolean
+><.a : boolean
+> : any
+>.a : any
+> : any
+>a : any
+> : any
+>a> : boolean
+>a : any
+> : any
+
+<a.></a.>;
+><a.></a.> : any
+>a. : any
+>a : any
+> : any
+>a. : any
+>a : any
+> : any
+
+<a[foo]></a[foo]>;
+><a : any
+>a : any
+>[foo]> : boolean
+>[foo] : any[]
+>foo : any
+> : any
+>a[foo]> : boolean
+>a[foo] : any
+>a : any
+>foo : any
+> : any
+
+<a['foo']></a['foo']>;
+><a : any
+>a : any
+>['foo']> : boolean
+>['foo'] : string[]
+>'foo' : "foo"
+> : any
+>a['foo']> : boolean
+>a['foo'] : any
+>a : any
+>'foo' : "foo"
+> : any
+
+<a><a />;
+><a><a />;<a b={}>;var x = <div>one</div><div>two</div>;;var x = <div>one</div> /* intervening comment */ <div>two</div>;;<a>{"str";}</a>;<span className="a", id="b" />;<div className"app">;<div {props} />;<div>stuff</div {...props}>;<div {...props}>stuff</div {...props}>;<a>></a>;<a> ></a>;<a b=}>;<a b=<}>;<a>}</a>;<a .../*hai*/asdf/>; : any
+>a : any
+><a /> : any
+>a : any
+
+<a b={}>;
+><a b={}>;var x = <div>one</div><div>two</div>;;var x = <div>one</div> /* intervening comment */ <div>two</div>;;<a>{"str";}</a>;<span className="a", id="b" />;<div className"app">;<div {props} />;<div>stuff</div {...props}>;<div {...props}>stuff</div {...props}>;<a>></a>;<a> ></a>;<a b=}>;<a b=<}>;<a>}</a>;<a .../*hai*/asdf/>; : any
+>a : any
+>b : any
+
+var x = <div>one</div><div>two</div>;;
+><div>one</div> : any
+>div : any
+>div : any
+><div>two</div> : any
+>div : any
+>div : any
+
+var x = <div>one</div> /* intervening comment */ <div>two</div>;;
+><div>one</div> : any
+>div : any
+>div : any
+><div>two</div> : any
+>div : any
+>div : any
+
+<a>{"str";}</a>;
+><a>{"str";}</a> : any
+>a : any
+>"str" : "str"
+>a : any
+
+<span className="a", id="b" />;
+><span className="a", : any
+>span : any
+>className : string
+
+<div className"app">;
+><div className"app" : any
+>div : any
+>className : true
+
+<div {props} />;
+><div {props} /> : any
+>div : any
+>props : any
+
+<div>stuff</div {...props}>;
+><div>stuff</div { : any
+>div : any
+>div : any
+
+<div {...props}>stuff</div {...props}>;
+><div {...props}>stuff</div { : any
+>div : any
+>props : any
+>div : any
+
+<a>></a>;
+><a>></a> : any
+>a : any
+>a : any
+
+<a> ></a>;
+><a> ></a> : any
+>a : any
+>a : any
+
+<a b=}>;
+><a b=}>;<a b=<}>;<a>}</a>;<a .../*hai*/asdf/>; : any
+>a : any
+>b : any
+
+<a b=<}>;
+><a b=<}>;<a>}</a>;<a .../*hai*/asdf/>; : any
+>a : any
+>b : boolean
+>< : boolean
+> : any
+> : any
+
+<a>}</a>;
+><a>}</a> : any
+>a : any
+>a : any
+
+<a .../*hai*/asdf/>;
+><a ... : any
+>a : any
+> : any
+> : any
+> : any
+> : any
+

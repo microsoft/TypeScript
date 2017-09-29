@@ -9,16 +9,8 @@ namespace ts.formatting {
 
         constructor() {
             this.globalRules = new Rules();
-            const activeRules = this.globalRules.HighPriorityCommonRules.slice(0).concat(this.globalRules.UserConfigurableRules).concat(this.globalRules.LowPriorityCommonRules);
+            const activeRules = this.globalRules.HighPriorityCommonRules.concat(this.globalRules.UserConfigurableRules).concat(this.globalRules.LowPriorityCommonRules);
             this.rulesMap = RulesMap.create(activeRules);
-        }
-
-        public getRuleName(rule: Rule): string {
-            return this.globalRules.getRuleName(rule);
-        }
-
-        public getRuleByName(name: string): Rule {
-            return this.globalRules[name];
         }
 
         public getRulesMap() {

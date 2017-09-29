@@ -6,5 +6,5 @@
 //// }
 
 goTo.select('start', 'end')
-verify.refactorAvailable('Extract Method', 'scope_0');
-verify.not.refactorAvailable('Extract Method', 'scope_1');
+verify.refactorAvailable('Extract Symbol', 'function_scope_0');
+verify.not.refactorAvailable('Extract Symbol', 'function_scope_1');

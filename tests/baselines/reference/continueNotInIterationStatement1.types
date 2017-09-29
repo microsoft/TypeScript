@@ -1,0 +1,3 @@
+=== tests/cases/compiler/continueNotInIterationStatement1.ts ===
+continue;
+No type information for this code.

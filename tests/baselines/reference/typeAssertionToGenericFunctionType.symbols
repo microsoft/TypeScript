@@ -1,0 +1,29 @@
+=== tests/cases/compiler/typeAssertionToGenericFunctionType.ts ===
+var x = {
+>x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 0, 3))
+
+    a: < <T>(x: T) => T > ((x: any) => 1),
+>a : Symbol(a, Decl(typeAssertionToGenericFunctionType.ts, 0, 9))
+>T : Symbol(T, Decl(typeAssertionToGenericFunctionType.ts, 1, 10))
+>x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 1, 13))
+>T : Symbol(T, Decl(typeAssertionToGenericFunctionType.ts, 1, 10))
+>T : Symbol(T, Decl(typeAssertionToGenericFunctionType.ts, 1, 10))
+>x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 1, 28))
+
+    b: <T>(x: T) => { x }
+>b : Symbol(b, Decl(typeAssertionToGenericFunctionType.ts, 1, 42))
+>T : Symbol(T, Decl(typeAssertionToGenericFunctionType.ts, 2, 8))
+>x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 2, 11))
+>T : Symbol(T, Decl(typeAssertionToGenericFunctionType.ts, 2, 8))
+>x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 2, 11))
+}
+x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return type T in the type assertion on x.a's definition
+>x.a : Symbol(a, Decl(typeAssertionToGenericFunctionType.ts, 0, 9))
+>x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 0, 3))
+>a : Symbol(a, Decl(typeAssertionToGenericFunctionType.ts, 0, 9))
+
+x.b<string>(); // error
+>x.b : Symbol(b, Decl(typeAssertionToGenericFunctionType.ts, 1, 42))
+>x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 0, 3))
+>b : Symbol(b, Decl(typeAssertionToGenericFunctionType.ts, 1, 42))
+

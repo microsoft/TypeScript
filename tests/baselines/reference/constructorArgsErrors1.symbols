@@ -1,0 +1,8 @@
+=== tests/cases/compiler/constructorArgsErrors1.ts ===
+class foo {
+>foo : Symbol(foo, Decl(constructorArgsErrors1.ts, 0, 0))
+
+    constructor (static a: number) {
+>a : Symbol(a, Decl(constructorArgsErrors1.ts, 1, 17))
+    }
+}

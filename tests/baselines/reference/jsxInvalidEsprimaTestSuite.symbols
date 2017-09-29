@@ -1,0 +1,113 @@
+=== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(jsxInvalidEsprimaTestSuite.tsx, 0, 11))
+
+</>;
+<a: />;
+>a : Symbol(unknown)
+
+<:a />;
+<a b=d />;
+>a : Symbol(unknown)
+>b : Symbol(b, Decl(jsxInvalidEsprimaTestSuite.tsx, 5, 2))
+
+<a>;
+>a : Symbol(unknown)
+
+<a></b>;
+>a : Symbol(unknown)
+>b : Symbol(unknown)
+
+<a foo="bar;
+>a : Symbol(unknown)
+>foo : Symbol(foo, Decl(jsxInvalidEsprimaTestSuite.tsx, 8, 2))
+
+<a:b></b>;
+>b : Symbol(unknown)
+
+<a:b.c></a:b.c>;
+>a : Symbol(unknown)
+>b : Symbol(b, Decl(jsxInvalidEsprimaTestSuite.tsx, 10, 3))
+>c : Symbol(c, Decl(jsxInvalidEsprimaTestSuite.tsx, 10, 5))
+>a : Symbol(unknown)
+
+<a.b:c></a.b:c>;
+>c : Symbol(c, Decl(jsxInvalidEsprimaTestSuite.tsx, 11, 5))
+
+<a.b.c></a>;
+>a : Symbol(unknown)
+
+<.a></.a>;
+<a.></a.>;
+<a[foo]></a[foo]>;
+>a : Symbol(unknown)
+
+<a['foo']></a['foo']>;
+>a : Symbol(unknown)
+
+<a><a />;
+>a : Symbol(unknown)
+>a : Symbol(unknown)
+
+<a b={}>;
+>a : Symbol(unknown)
+>b : Symbol(b, Decl(jsxInvalidEsprimaTestSuite.tsx, 18, 2))
+
+var x = <div>one</div><div>two</div>;;
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+
+var x = <div>one</div> /* intervening comment */ <div>two</div>;;
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+
+<a>{"str";}</a>;
+>a : Symbol(unknown)
+>a : Symbol(unknown)
+
+<span className="a", id="b" />;
+>span : Symbol(unknown)
+>className : Symbol(className, Decl(jsxInvalidEsprimaTestSuite.tsx, 22, 5))
+
+<div className"app">;
+>div : Symbol(unknown)
+>className : Symbol(className, Decl(jsxInvalidEsprimaTestSuite.tsx, 23, 4))
+
+<div {props} />;
+>div : Symbol(unknown)
+
+<div>stuff</div {...props}>;
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+
+<div {...props}>stuff</div {...props}>;
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+
+<a>></a>;
+>a : Symbol(unknown)
+>a : Symbol(unknown)
+
+<a> ></a>;
+>a : Symbol(unknown)
+>a : Symbol(unknown)
+
+<a b=}>;
+>a : Symbol(unknown)
+>b : Symbol(b, Decl(jsxInvalidEsprimaTestSuite.tsx, 31, 2))
+
+<a b=<}>;
+>a : Symbol(unknown)
+>b : Symbol(b, Decl(jsxInvalidEsprimaTestSuite.tsx, 32, 2))
+
+<a>}</a>;
+>a : Symbol(unknown)
+>a : Symbol(unknown)
+
+<a .../*hai*/asdf/>;
+>a : Symbol(unknown)
+
