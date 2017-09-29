@@ -3523,11 +3523,11 @@
         "category": "Error",
         "code": 8024
     },
-    "Generic type '{0}' requires '{1}' type arguments; provide these with an '@augments' or '@extends' tag.": {
+    "Generic type '{0}' requires '{1}' type arguments; provide these with an '@extends' tag.": {
         "category": "Error",
         "code": 8025
     },
-    "Generic type '{0}' requires between '{1}' and '{2}' type arguments; provide these with an '@augments' or '@extends' tag.": {
+    "Generic type '{0}' requires between '{1}' and '{2}' type arguments; provide these with an '@extends' tag.": {
         "category": "Error",
         "code": 8026
     },

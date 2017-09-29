@@ -8,3 +8,6 @@ declare class A<T> { x: T; }
 
 // @Filename: /b.js
 class B extends A {}
+
+/** @augments A */
+class C { }

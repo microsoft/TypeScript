@@ -6816,10 +6816,10 @@ namespace ts {
                     const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
                     const diag = minTypeArgumentCount === typeParameters.length
                         ? missingAugmentsTag
-                            ? Diagnostics.Generic_type_0_requires_1_type_arguments_provide_these_with_an_augments_or_extends_tag
+                            ? Diagnostics.Generic_type_0_requires_1_type_arguments_provide_these_with_an_extends_tag
                             : Diagnostics.Generic_type_0_requires_1_type_argument_s
                         : missingAugmentsTag
-                            ? Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments_provide_these_with_an_augments_or_extends_tag
+                            ? Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments_provide_these_with_an_extends_tag
                             : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
                     const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
                     error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
