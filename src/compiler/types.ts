@@ -2652,7 +2652,6 @@ namespace ts {
         parameterToString(parameter: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, writer?: EmitTextWriter): string;
         typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
-        getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
@@ -2753,20 +2752,6 @@ namespace ts {
         walkType(root: Type): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
         /** Note: Return values are not ordered. */
         walkSymbol(root: Symbol): { visitedTypes: ReadonlyArray<Type>, visitedSymbols: ReadonlyArray<Symbol> };
-    }
-
-    export interface SymbolDisplayBuilder {
-        buildTypeDisplay(type: Type, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildSymbolDisplay(symbol: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
-        buildSignatureDisplay(signature: Signature, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
-        buildIndexSignatureDisplay(info: IndexInfo, writer: EmitTextWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
-        buildParameterDisplay(parameter: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplay(tp: TypeParameter, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypePredicateDisplay(predicate: TypePredicate, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildReturnTypeDisplay(signature: Signature, writer: EmitTextWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
 
     export const enum TypeFormatFlags {
