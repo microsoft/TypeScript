@@ -1,0 +1,31 @@
+=== tests/cases/compiler/enumInitializers_const.ts ===
+const stride = 5;
+>stride : Symbol(stride, Decl(enumInitializers_const.ts, 0, 5))
+
+const enum E {
+>E : Symbol(E, Decl(enumInitializers_const.ts, 0, 17))
+
+    x = stride * 2,
+>x : Symbol(E.x, Decl(enumInitializers_const.ts, 1, 14))
+>stride : Symbol(stride, Decl(enumInitializers_const.ts, 0, 5))
+}
+E.x;
+>E.x : Symbol(E.x, Decl(enumInitializers_const.ts, 1, 14))
+>E : Symbol(E, Decl(enumInitializers_const.ts, 0, 17))
+>x : Symbol(E.x, Decl(enumInitializers_const.ts, 1, 14))
+
+const s = "abc";
+>s : Symbol(s, Decl(enumInitializers_const.ts, 6, 5))
+
+const enum S {
+>S : Symbol(S, Decl(enumInitializers_const.ts, 6, 16))
+
+    abc = s,
+>abc : Symbol(S.abc, Decl(enumInitializers_const.ts, 7, 14))
+>s : Symbol(s, Decl(enumInitializers_const.ts, 6, 5))
+}
+S.abc;
+>S.abc : Symbol(S.abc, Decl(enumInitializers_const.ts, 7, 14))
+>S : Symbol(S, Decl(enumInitializers_const.ts, 6, 16))
+>abc : Symbol(S.abc, Decl(enumInitializers_const.ts, 7, 14))
+

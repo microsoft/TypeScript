@@ -1,0 +1,15 @@
+=== tests/cases/compiler/enumInitializers_const_circular.ts ===
+const x = E.y;
+>x : E
+>E.y : E
+>E : typeof E
+>y : E
+
+const enum E {
+>E : E
+
+    y = x,
+>y : E
+>x : E
+}
+

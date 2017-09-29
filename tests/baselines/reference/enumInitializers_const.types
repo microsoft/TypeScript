@@ -1,0 +1,35 @@
+=== tests/cases/compiler/enumInitializers_const.ts ===
+const stride = 5;
+>stride : 5
+>5 : 5
+
+const enum E {
+>E : E
+
+    x = stride * 2,
+>x : E
+>stride * 2 : number
+>stride : 5
+>2 : 2
+}
+E.x;
+>E.x : E
+>E : typeof E
+>x : E
+
+const s = "abc";
+>s : "abc"
+>"abc" : "abc"
+
+const enum S {
+>S : S
+
+    abc = s,
+>abc : S
+>s : "abc"
+}
+S.abc;
+>S.abc : S
+>S : typeof S
+>abc : S
+

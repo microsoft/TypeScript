@@ -1,0 +1,15 @@
+=== tests/cases/compiler/enumInitializers_const_circular.ts ===
+const x = E.y;
+>x : Symbol(x, Decl(enumInitializers_const_circular.ts, 0, 5))
+>E.y : Symbol(E.y, Decl(enumInitializers_const_circular.ts, 1, 14))
+>E : Symbol(E, Decl(enumInitializers_const_circular.ts, 0, 14))
+>y : Symbol(E.y, Decl(enumInitializers_const_circular.ts, 1, 14))
+
+const enum E {
+>E : Symbol(E, Decl(enumInitializers_const_circular.ts, 0, 14))
+
+    y = x,
+>y : Symbol(E.y, Decl(enumInitializers_const_circular.ts, 1, 14))
+>x : Symbol(x, Decl(enumInitializers_const_circular.ts, 0, 5))
+}
+
