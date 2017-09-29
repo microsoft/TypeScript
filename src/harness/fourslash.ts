@@ -2824,7 +2824,7 @@ Actual: ${stringify(fullActual)}`);
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
             const refactor = refactors.find(r => r.name === refactorName);
             if (!refactor) {
-                this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.`);
+                this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
             }
 
             const action = refactor.actions.find(a => a.name === actionName);
