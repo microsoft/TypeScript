@@ -164,6 +164,9 @@ namespace ts {
             typeParameterToString: (parameter, enclosingDeclaration?, flags?, writer?) => {
                 return typeParameterToString(parameter, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
+            parameterToString: (parameter, enclosingDeclaration?, flags?, writer?) => {
+                return parameterToString(parameter, getParseTreeNode(enclosingDeclaration), flags, writer);
+            },
             typePredicateToString: (predicate, enclosingDeclaration?, flags?, writer?) => {
                 return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
@@ -2414,6 +2417,18 @@ namespace ts {
             }
         }
 
+        function parameterToString(parameter: Symbol, enclosingDeclaration?: Node, flags: NodeBuilderFlags = NodeBuilderFlags.IgnoreErrors, writer?: EmitTextWriter) {
+            return writer ? parameterToStringWorker(writer).getText() : usingSingleLineStringWriter(parameterToStringWorker);
+
+            function parameterToStringWorker(writer: EmitTextWriter) {
+                const param = nodeBuilder.symbolToParameterDeclaration(parameter, enclosingDeclaration, flags);
+                const printer = createPrinter({ removeComments: true });
+                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                printer.writeNode(EmitHint.Unspecified, param, /*sourceFile*/ sourceFile, writer);
+                return writer;
+            }
+        }
+
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string {
             return writer ? signatureToStringWorker(writer).getText() : usingSingleLineStringWriter(signatureToStringWorker);
 
@@ -2523,6 +2538,12 @@ namespace ts {
                 symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
                     const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = typeParametersToTypeParameterDeclarations(symbol, context);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
+                symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = symbolToParameterDeclaration(symbol, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },

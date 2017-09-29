@@ -375,14 +375,42 @@ namespace ts.SignatureHelp {
                 const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
-                const parameterParts = mapToDisplayParts(writer =>
-                    typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.thisParameter, candidateSignature.parameters, writer, invocation));
+                const parameterParts = mapToDisplayParts(writer => {
+                    writer.writePunctuation("(");
+                    let hadPrevious = false;
+                    if (candidateSignature.thisParameter) {
+                        typeChecker.parameterToString(candidateSignature.thisParameter, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors, writer);
+                        hadPrevious = true;
+                    }
+                    for (const param of candidateSignature.parameters) {
+                        if (hadPrevious) {
+                            writer.writePunctuation(",");
+                            writer.writeSpace(" ");
+                        }
+                        typeChecker.parameterToString(param, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors, writer);
+                        hadPrevious = true;
+                    }
+                    writer.writePunctuation(")");
+                });
                 addRange(suffixDisplayParts, parameterParts);
             }
             else {
                 isVariadic = candidateSignature.hasRestParameter;
-                const typeParameterParts = mapToDisplayParts(writer =>
-                    typeChecker.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
+                const typeParameterParts = mapToDisplayParts(writer => {
+                    if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
+                        writer.writePunctuation("<");
+                        let hadPrevious = false;
+                        for (const param of candidateSignature.typeParameters) {
+                            if (hadPrevious) {
+                                writer.writePunctuation(",");
+                                writer.writeSpace(" ");
+                            }
+                            typeChecker.typeParameterToString(param, invocation, /*flags*/ undefined, writer);
+                            hadPrevious = true;
+                        }
+                        writer.writePunctuation(">");
+                    }
+                });
                 addRange(prefixDisplayParts, typeParameterParts);
                 prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
@@ -423,8 +451,7 @@ namespace ts.SignatureHelp {
         return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
 
         function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
-            const displayParts = mapToDisplayParts(writer =>
-                typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
+            const displayParts = mapToDisplayParts(writer => typeChecker.parameterToString(parameter, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors, writer));
 
             return {
                 name: parameter.name,
@@ -436,7 +463,7 @@ namespace ts.SignatureHelp {
 
         function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
             const displayParts = mapToDisplayParts(writer =>
-                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
+                typeChecker.typeParameterToString(typeParameter, invocation, /*flags*/ undefined, writer));
 
             return {
                 name: typeParameter.symbol.name,
