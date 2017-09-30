@@ -30,7 +30,6 @@ function F0() {
 }
         
 // ==SCOPE::Extract to constant in global scope==
-
 const newLocal = 2 + 1;
 
 function F0() {

@@ -9,8 +9,8 @@ const x = 2 + 1;
 
 /*! Copyright */
 
-/* About x */
 const newLocal = 2 + 1;
 
+/* About x */
 const x = /*RENAME*/newLocal;
         

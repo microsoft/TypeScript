@@ -930,8 +930,13 @@ namespace ts.refactor.extractSymbol {
                 const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
                 if (nodeToInsertBefore.pos === 0) {
                     // If we're at the beginning of the file, we need to take care not to insert before header comments
-                    // (e.g. copyright, triple-slash references).
-                    changeTracker.insertNodeAt(context.file, nodeToInsertBefore.getStart(), newVariableStatement, { suffix: context.newLineCharacter + context.newLineCharacter });
+                    // (e.g. copyright, triple-slash references).  Fortunately, this problem has already been solved
+                    // for imports.
+                    const insertionPos = getSourceFileImportLocation(file);
+                    changeTracker.insertNodeAt(context.file, insertionPos, newVariableStatement, {
+                        prefix: insertionPos === 0 ? undefined : context.newLineCharacter,
+                        suffix: isLineBreak(file.text.charCodeAt(insertionPos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter
+                    });
                 }
                 else {
                     changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, { suffix: context.newLineCharacter + context.newLineCharacter });
