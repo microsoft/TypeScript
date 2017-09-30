@@ -4,9 +4,11 @@
 //// [templateStringInTaggedTemplate.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
-        return Object.defineProperty(cooked, "raw", { value: raw });
+        Object.defineProperty(cooked, "raw", { value: raw });
     }
-    cooked.raw = raw;
+    else {
+        cooked.raw = raw;
+    }
     return cooked;
 };
 ("I AM THE " + "TAG" + " " + " PORTION")(__makeTemplateObject(["I ", " THE TEMPLATE PORTION"], ["I ", " THE TEMPLATE PORTION"]), "AM");

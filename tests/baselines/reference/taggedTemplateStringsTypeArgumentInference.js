@@ -94,9 +94,11 @@ var arr: any[];
 //// [taggedTemplateStringsTypeArgumentInference.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) {
-        return Object.defineProperty(cooked, "raw", { value: raw });
+        Object.defineProperty(cooked, "raw", { value: raw });
     }
-    cooked.raw = raw;
+    else {
+        cooked.raw = raw;
+    }
     return cooked;
 };
 // Generic tag with one parameter
