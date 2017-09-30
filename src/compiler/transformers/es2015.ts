@@ -280,14 +280,11 @@ namespace ts {
         let currentText: string;
         let hierarchyFacts: HierarchyFacts;
         let taggedTemplateStringDeclarations: VariableDeclaration[];
+
         function recordTaggedTemplateString(temp: Identifier) {
-            const decl = createVariableDeclaration(temp);
-            if (!taggedTemplateStringDeclarations) {
-                taggedTemplateStringDeclarations = [decl];
-            }
-            else {
-                taggedTemplateStringDeclarations.push(decl);
-            }
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                createVariableDeclaration(temp));
         }
 
         /**
@@ -3652,11 +3649,6 @@ namespace ts {
             // Visit the tag expression
             const tag = visitNode(node.tag, visitor, isExpression);
 
-            // Allocate storage for the template site object if we're in a module.
-            // In the global scope, any variable we currently generate could conflict with
-            // variables from outside of the current compilation.
-            const temp = isExternalModule(currentSourceFile) ? createTempVariable(recordTaggedTemplateString) : undefined;
-
             // Build up the template arguments and the raw and cooked strings for the template.
             // We start out with 'undefined' for the first argument and revisit later
             // to avoid walking over the template string twice and shifting all our arguments over after the fact.
@@ -3680,17 +3672,21 @@ namespace ts {
 
             const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
 
-            // If we're in the global scope, we risk having conflicting variables.
-            // Since we currently lack the infrastructure to create sufficiently unique names,
-            // we'll fall back to creating the template object on every invocation.
-            templateArguments[0] = !temp ?
-                helperCall :
-                createLogicalOr(
-                    temp,
+            // Create a variable to cache the template object if we're in a module.
+            // Do not do this in the global scope, as any variable we currently generate could conflict with
+            // variables from outside of the current compilation. In the future, we can revisit this behavior.
+            if (isExternalModule(currentSourceFile)) {
+                const tempVar = createTempVariable(recordTaggedTemplateString);
+                templateArguments[0] = createLogicalOr(
+                    tempVar,
                     createAssignment(
-                        temp,
+                        tempVar,
                         helperCall)
                 );
+            }
+            else {
+                templateArguments[0] = helperCall;
+            }
 
             return createCall(tag, /*typeArguments*/ undefined, templateArguments);
         }
