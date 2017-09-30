@@ -16382,7 +16382,7 @@ namespace ts {
             }
 
             if (isPotentiallyUncalledDecorator(node, callSignatures)) {
-                error(node, Diagnostics.This_function_cannot_be_used_as_a_decorator_Did_you_mean_to_call_it_first);
+                error(node, Diagnostics.This_value_has_type_0_which_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first, typeToString(funcType));
                 return resolveErrorCall(node);
             }
 
@@ -16406,6 +16406,7 @@ namespace ts {
         function isPotentiallyUncalledDecorator(decorator: Decorator, signatures: Signature[]) {
             return signatures.length && every(signatures, signature =>
                 signature.minArgumentCount === 0 &&
+                !signature.hasRestParameter &&
                 signature.parameters.length < getEffectiveArgumentCount(decorator, /*args*/ undefined, signature));
         }
 
