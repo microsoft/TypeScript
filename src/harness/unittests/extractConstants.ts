@@ -84,12 +84,11 @@ namespace ts {
     let x = [#|t + 1|];
 }`);
 
-// TODO (18857): handle repeated substitution
-//         testExtractConstant("extractConstant_RepeatedSubstitution",
-//             `namespace X {
-//     export const j = 10;
-//     export const y = [#|j * j|];
-// }`);
+        testExtractConstant("extractConstant_RepeatedSubstitution",
+            `namespace X {
+    export const j = 10;
+    export const y = [#|j * j|];
+}`);
 
         testExtractConstant("extractConstant_VariableList_const",
             `const a = 1, b = [#|a + 1|];`);
