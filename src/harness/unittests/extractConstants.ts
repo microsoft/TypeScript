@@ -91,13 +91,6 @@ namespace ts {
 //     export const y = [#|j * j|];
 // }`);
 
-        testExtractConstantFailed("extractConstant_BlockScopes_Dependencies",
-            `for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-        let x = [#|i + 1|];
-    }
-}`);
-
         testExtractConstant("extractConstant_VariableList_const",
             `const a = 1, b = [#|a + 1|];`);
 
@@ -110,10 +103,7 @@ namespace ts {
             `const /*About A*/a = 1,
     /*About B*/b = [#|a + 1|];`);
 
-        // NOTE: this test isn't normative - it just documents our sub-optimal behavior.
-        // `i` doesn't bind in the target scope (file-level), so the extraction is disallowed.
-        // TODO (17098): should probably allow extraction into the same scope
-        testExtractConstantFailed("extractConstant_BlockScopeMismatch", `
+        testExtractConstant("extractConstant_BlockScopeMismatch", `
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
         const x = [#|i + 1|];
@@ -205,7 +195,6 @@ const x = [#|2 + 1|];
 const x = [#|2 + 1|];
         `);
 
-        // NOTE: this test isn't normative - it just documents our sub-optimal behavior.
         testExtractConstant("extractConstant_PinnedCommentAndDocComment", `
 /*! Copyright */
 
@@ -216,9 +205,5 @@ const x = [#|2 + 1|];
 
     function testExtractConstant(caption: string, text: string) {
         testExtractSymbol(caption, text, "extractConstant", Diagnostics.Extract_constant);
-    }
-
-    function testExtractConstantFailed(caption: string, text: string) {
-        testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
     }
 }

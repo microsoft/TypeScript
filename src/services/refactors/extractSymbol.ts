@@ -1349,7 +1349,10 @@ namespace ts.refactor.extractSymbol {
         for (let i = 0; i < scopes.length; i++) {
             if (!isReadonlyArray(targetRange.range)) {
                 const scopeUsages = usagesPerScope[i];
-                if (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0) {
+                // Special case: in the innermost scope, all usages are available.
+                // (The computed value reflects the value at the top-level of the scope, but the
+                // local will actually be declared at the same level as the extracted expression).
+                if (i > 0 && (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0)) {
                     constantErrorsPerScope[i].push(createDiagnosticForNode(targetRange.range, Messages.CannotAccessVariablesFromNestedScopes));
                 }
             }
