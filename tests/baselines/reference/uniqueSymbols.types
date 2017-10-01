@@ -76,12 +76,12 @@ var varInitToConstDeclAmbient = constType;
 
 // declaration from initializer with type query
 const constInitToConstCallWithTypeQuery: typeof constCall = constCall;
->constInitToConstCallWithTypeQuery : symbol
+>constInitToConstCallWithTypeQuery : symbol()
 >constCall : symbol()
 >constCall : symbol()
 
 const constInitToConstDeclAmbientWithTypeQuery: typeof constType = constType;
->constInitToConstDeclAmbientWithTypeQuery : symbol
+>constInitToConstDeclAmbientWithTypeQuery : symbol()
 >constType : symbol()
 >constType : symbol()
 
@@ -218,7 +218,7 @@ const constInitToCReadwriteStaticCall = C.readwriteStaticCall;
 >readwriteStaticCall : symbol
 
 const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall = C.readonlyStaticCall;
->constInitToCReadonlyStaticCallWithTypeQuery : symbol
+>constInitToCReadonlyStaticCallWithTypeQuery : symbol()
 >C.readonlyStaticCall : symbol()
 >C : typeof C
 >readonlyStaticCall : symbol()
@@ -227,7 +227,7 @@ const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall =
 >readonlyStaticCall : symbol()
 
 const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType = C.readonlyStaticType;
->constInitToCReadonlyStaticTypeWithTypeQuery : symbol
+>constInitToCReadonlyStaticTypeWithTypeQuery : symbol()
 >C.readonlyStaticType : symbol()
 >C : typeof C
 >readonlyStaticType : symbol()
@@ -236,7 +236,7 @@ const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType =
 >readonlyStaticType : symbol()
 
 const constInitToCReadonlyStaticTypeAndCallWithTypeQuery: typeof C.readonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
->constInitToCReadonlyStaticTypeAndCallWithTypeQuery : symbol
+>constInitToCReadonlyStaticTypeAndCallWithTypeQuery : symbol()
 >C.readonlyStaticTypeAndCall : symbol()
 >C : typeof C
 >readonlyStaticTypeAndCall : symbol()
@@ -315,7 +315,7 @@ const constInitToIReadonlyType = i.readonlyType;
 >readonlyType : symbol()
 
 const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyType;
->constInitToIReadonlyTypeWithTypeQuery : symbol
+>constInitToIReadonlyTypeWithTypeQuery : symbol()
 >i.readonlyType : symbol()
 >i : I
 >readonlyType : symbol()
@@ -324,7 +324,7 @@ const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyT
 >readonlyType : symbol()
 
 const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyType;
->constInitToIReadonlyTypeWithIndexedAccess : symbol
+>constInitToIReadonlyTypeWithIndexedAccess : symbol()
 >I : I
 >i.readonlyType : symbol()
 >i : I
@@ -363,7 +363,7 @@ const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
 >readonlyNestedType : symbol()
 
 const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyType;
->constInitToLReadonlyTypeWithTypeQuery : symbol
+>constInitToLReadonlyTypeWithTypeQuery : symbol()
 >l.readonlyType : symbol()
 >l : L
 >readonlyType : symbol()
@@ -372,7 +372,7 @@ const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyT
 >readonlyType : symbol()
 
 const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType = l.nested.readonlyNestedType;
->constInitToLReadonlyNestedTypeWithTypeQuery : symbol
+>constInitToLReadonlyNestedTypeWithTypeQuery : symbol()
 >l.nested.readonlyNestedType : symbol()
 >l.nested : { readonly readonlyNestedType: symbol(); }
 >l : L
@@ -385,14 +385,14 @@ const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNeste
 >readonlyNestedType : symbol()
 
 const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"] = l.readonlyType;
->constInitToLReadonlyTypeWithIndexedAccess : symbol
+>constInitToLReadonlyTypeWithIndexedAccess : symbol()
 >L : L
 >l.readonlyType : symbol()
 >l : L
 >readonlyType : symbol()
 
 const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"] = l.nested.readonlyNestedType;
->constInitToLReadonlyNestedTypeWithIndexedAccess : symbol
+>constInitToLReadonlyNestedTypeWithIndexedAccess : symbol()
 >L : L
 >l.nested.readonlyNestedType : symbol()
 >l.nested : { readonly readonlyNestedType: symbol(); }
