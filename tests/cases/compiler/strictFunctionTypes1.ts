@@ -1,4 +1,5 @@
 // @strict: true
+// @declaration: true
 
 declare function f1<T>(f1: (x: T) => void, f2: (x: T) => void): (x: T) => void;
 declare function f2<T>(obj: T, f1: (x: T) => void, f2: (x: T) => void): T;
