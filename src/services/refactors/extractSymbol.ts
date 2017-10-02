@@ -478,29 +478,24 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
-        const start = current;
-
         let scopes: Scope[] | undefined = undefined;
-        while (current) {
+        do {
+            current = current.parent;
+            // A function parameter's initializer is actually in the outer scope, not the function declaration
+            if (current.kind === SyntaxKind.Parameter) {
+                // Skip all the way to the outer scope of the function that declared this parameter
+                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
+            }
+
             // We want to find the nearest parent where we can place an "equivalent" sibling to the node we're extracting out of.
             // Walk up to the closest parent of a place where we can logically put a sibling:
             //  * Function declaration
             //  * Class declaration or expression
             //  * Module/namespace or source file
-            if (current !== start && isScope(current)) {
+            if (isScope(current)) {
                 (scopes = scopes || []).push(current);
             }
-
-            // A function parameter's initializer is actually in the outer scope, not the function declaration
-            if (current.parent.kind === SyntaxKind.Parameter) {
-                // Skip all the way to the outer scope of the function that declared this parameter
-                current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
-            }
-            else {
-                current = current.parent;
-            }
-
-        }
+        } while (current.kind !== SyntaxKind.SourceFile);
         return scopes;
     }
 
