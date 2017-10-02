@@ -14,9 +14,9 @@ class Derived extends Base {
 
     a: super();
 >a : any
-> : No type information available!
->super() : void
->super : any
+>super : No type information available!
+>() : any
+> : any
 
     b() {
 >b : () => void
@@ -46,9 +46,9 @@ class Derived extends Base {
 
     static a: super();
 >a : any
-> : No type information available!
->super() : void
->super : any
+>super : No type information available!
+>() : any
+> : any
 
     static b() {
 >b : () => void
