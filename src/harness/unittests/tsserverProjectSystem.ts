@@ -4247,7 +4247,7 @@ namespace ts.projectSystem {
     });
 
     describe("refactors", () => {
-        it("abcdefg", () => {
+        it("use formatting options", () => {
             const file = {
                 path: "/a.ts",
                 content: "function f() {\n  1;\n}",
