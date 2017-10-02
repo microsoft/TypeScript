@@ -288,16 +288,19 @@ namespace ts {
         let ownWriter: EmitTextWriter;
         let write = writeBase;
         let pendingSemicolon = false;
+        const syntheticParent: TextRange = { pos: -1, end: -1 };
 
         reset();
         return {
             // public API
             printNode,
+            printList,
             printFile,
             printBundle,
 
             // internal API
             writeNode,
+            writeList,
             writeFile,
             writeBundle
         };
@@ -322,6 +325,11 @@ namespace ts {
             return endPrint();
         }
 
+        function printList<T extends Node>(format: ListFormat, nodes: NodeArray<T>, sourceFile: SourceFile) {
+            writeList(format, nodes, sourceFile, beginPrint());
+            return endPrint();
+        }
+
         function printBundle(bundle: Bundle): string {
             writeBundle(bundle, beginPrint());
             return endPrint();
@@ -341,6 +349,17 @@ namespace ts {
             const previousWriter = writer;
             setWriter(output);
             print(hint, node, sourceFile);
+            reset();
+            writer = previousWriter;
+        }
+
+        function writeList<T extends Node>(format: ListFormat, nodes: NodeArray<T>, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
+            const previousWriter = writer;
+            setWriter(output);
+            if (sourceFile) {
+                setSourceFile(sourceFile);
+            }
+            emitList(syntheticParent, nodes, format);
             reset();
             writer = previousWriter;
         }
@@ -2505,15 +2524,15 @@ namespace ts {
             emitList(parentNode, parameters, ListFormat.IndexSignatureParameters);
         }
 
-        function emitList(parentNode: Node, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
+        function emitList(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
             emitNodeList(emit, parentNode, children, format, start, count);
         }
 
-        function emitExpressionList(parentNode: Node, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
+        function emitExpressionList(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
             emitNodeList(emitExpression, parentNode, children, format, start, count);
         }
 
-        function emitNodeList(emit: (node: Node) => void, parentNode: Node, children: NodeArray<Node>, format: ListFormat, start = 0, count = children ? children.length - start : 0) {
+        function emitNodeList(emit: (node: Node) => void, parentNode: TextRange, children: NodeArray<Node>, format: ListFormat, start = 0, count = children ? children.length - start : 0) {
             const isUndefined = children === undefined;
             if (isUndefined && format & ListFormat.OptionalIfUndefined) {
                 return;
@@ -2834,7 +2853,7 @@ namespace ts {
             }
         }
 
-        function shouldWriteLeadingLineTerminator(parentNode: Node, children: NodeArray<Node>, format: ListFormat) {
+        function shouldWriteLeadingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
             if (format & ListFormat.MultiLine) {
                 return true;
             }
@@ -2880,7 +2899,7 @@ namespace ts {
             }
         }
 
-        function shouldWriteClosingLineTerminator(parentNode: Node, children: NodeArray<Node>, format: ListFormat) {
+        function shouldWriteClosingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
             if (format & ListFormat.MultiLine) {
                 return (format & ListFormat.NoTrailingNewLine) === 0;
             }
@@ -3241,7 +3260,7 @@ namespace ts {
         _i = 0x10000000,  // Use/preference flag for '_i'
     }
 
-    const enum ListFormat {
+    export const enum ListFormat {
         None = 0,
 
         // Line separators

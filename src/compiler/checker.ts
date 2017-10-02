@@ -2372,19 +2372,9 @@ namespace ts {
             function typeParametersToStringWorker(writer: EmitTextWriter) {
                 const params = nodeBuilder.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags);
                 if (params && params.length) {
-                    writer.writePunctuation("<");
                     const printer = createPrinter({ removeComments: true });
                     const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-                    let hasPrevious = false;
-                    for (const param of params) {
-                        if (hasPrevious) {
-                            writer.writePunctuation(",");
-                            writer.writeSpace(" ");
-                        }
-                        printer.writeNode(EmitHint.Unspecified, param, /*sourceFile*/ sourceFile, writer);
-                        hasPrevious = true;
-                    }
-                    writer.writePunctuation(">");
+                    printer.printList(ListFormat.TypeParameters, params, sourceFile);
                 }
                 return writer;
             }
@@ -3132,10 +3122,10 @@ namespace ts {
             }
 
             function typeParametersToTypeParameterDeclarations(symbol: Symbol, context: NodeBuilderContext) {
-                let typeParameterNodes: ReadonlyArray<TypeParameterDeclaration> | undefined;
+                let typeParameterNodes: NodeArray<TypeParameterDeclaration> | undefined;
                 const targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                    typeParameterNodes = map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), tp => typeParameterToDeclaration(tp, context));
+                    typeParameterNodes = createNodeArray(map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), tp => typeParameterToDeclaration(tp, context)));
                 }
                 return typeParameterNodes;
             }
