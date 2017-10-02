@@ -2374,7 +2374,7 @@ namespace ts {
                 if (params && params.length) {
                     const printer = createPrinter({ removeComments: true });
                     const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-                    printer.printList(ListFormat.TypeParameters, params, sourceFile);
+                    printer.writeList(ListFormat.TypeParameters, params, sourceFile, writer);
                 }
                 return writer;
             }
