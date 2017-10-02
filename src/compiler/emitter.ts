@@ -253,9 +253,6 @@ namespace ts {
         }
     }
 
-    const typeAnnotationTriple: [string, string, string] = ["", ":", " "];
-    const assignmentTriple: [string, string, string] = [" ", "=", " "];
-    const extendsTriple: [string, string, string] = [" ", "extends", " "];
     export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
         const {
             hasGlobalName,
@@ -914,8 +911,13 @@ namespace ts {
 
         function emitTypeParameter(node: TypeParameterDeclaration) {
             emit(node.name);
-            emitWithPrefix(extendsTriple, writeKeyword, node.constraint);
-            emitWithPrefix(assignmentTriple, writeOperator, node.default);
+            if (node.constraint) {
+                writeSpace(" ");
+                writeKeyword("extends");
+                writeSpace(" ");
+                emit(node.constraint);
+            }
+            emitAsAssignmentTarget(node.default);
         }
 
         function emitParameter(node: ParameterDeclaration) {
@@ -927,8 +929,8 @@ namespace ts {
             emit(node.name);
             write = savedWrite;
             emitIfPresent(node.questionToken);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
-            emitExpressionWithPrefix(assignmentTriple, writeOperator, node.initializer);
+            emitAsTypeAnnotation(node.type);
+            emitAsAssignmentTarget(node.initializer);
         }
 
         function emitDecorator(decorator: Decorator) {
@@ -948,7 +950,7 @@ namespace ts {
             emit(node.name);
             write = savedWrite;
             emitIfPresent(node.questionToken);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
+            emitAsTypeAnnotation(node.type);
             writePunctuation(";");
         }
 
@@ -957,8 +959,8 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emit(node.name);
             emitIfPresent(node.questionToken);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
-            emitExpressionWithPrefix(assignmentTriple, writeOperator, node.initializer);
+            emitAsTypeAnnotation(node.type);
+            emitAsAssignmentTarget(node.initializer);
             writePunctuation(";");
         }
 
@@ -969,7 +971,7 @@ namespace ts {
             emitIfPresent(node.questionToken);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
+            emitAsTypeAnnotation(node.type);
             writePunctuation(";");
         }
 
@@ -1002,7 +1004,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
+            emitAsTypeAnnotation(node.type);
             writePunctuation(";");
         }
 
@@ -1013,7 +1015,7 @@ namespace ts {
             writeSpace(" ");
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
+            emitAsTypeAnnotation(node.type);
             writePunctuation(";");
         }
 
@@ -1021,7 +1023,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitParametersForIndexSignature(node, node.parameters);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
+            emitAsTypeAnnotation(node.type);
             writePunctuation(";");
         }
 
@@ -1196,7 +1198,7 @@ namespace ts {
             }
             emitIfPresent(node.dotDotDotToken);
             emit(node.name);
-            emitExpressionWithPrefix(assignmentTriple, writeOperator, node.initializer);
+            emitAsAssignmentTarget(node.initializer);
         }
 
         //
@@ -1321,7 +1323,7 @@ namespace ts {
         function emitArrowFunctionHead(node: ArrowFunction) {
             emitTypeParameters(node, node.typeParameters);
             emitParametersForArrow(node, node.parameters);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
+            emitAsTypeAnnotation(node.type);
             writeSpace(" ");
             emit(node.equalsGreaterThanToken);
         }
@@ -1692,8 +1694,8 @@ namespace ts {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
-            emitExpressionWithPrefix(assignmentTriple, writeOperator, node.initializer);
+            emitAsTypeAnnotation(node.type);
+            emitAsAssignmentTarget(node.initializer);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -1770,7 +1772,7 @@ namespace ts {
         function emitSignatureHead(node: FunctionDeclaration | FunctionExpression | MethodDeclaration | AccessorDeclaration | ConstructorDeclaration) {
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(typeAnnotationTriple, writePunctuation, node.type);
+            emitAsTypeAnnotation(node.type);
         }
 
         function shouldEmitBlockFunctionBodyOnSingleLine(body: Block) {
@@ -2283,7 +2285,7 @@ namespace ts {
 
         function emitEnumMember(node: EnumMember) {
             emit(node.name);
-            emitExpressionWithPrefix(assignmentTriple, writePunctuation, node.initializer);
+            emitAsAssignmentTarget(node.initializer);
         }
 
         //
@@ -2398,24 +2400,34 @@ namespace ts {
             }
         }
 
-        function emitWithPrefix(prefix: string | [string, string, string], writer: (s: string) => void, node: Node) {
+        function emitAsTypeAnnotation(node: Node) {
+            if (node) {
+                writePunctuation(":");
+                writeSpace(" ");
+                emit(node);
+            }
+        }
+
+        function emitAsAssignmentTarget(node: Node) {
+            if (node) {
+                writeSpace(" ");
+                writeOperator("=");
+                writeSpace(" ");
+                emit(node);
+            }
+        }
+
+        function emitWithPrefix(prefix: string, writer: (s: string) => void, node: Node) {
             emitNodeWithPrefix(prefix, writer, node, emit);
         }
 
-        function emitExpressionWithPrefix(prefix: string | [string, string, string], writer: (s: string) => void, node: Node) {
+        function emitExpressionWithPrefix(prefix: string, writer: (s: string) => void, node: Node) {
             emitNodeWithPrefix(prefix, writer, node, emitExpression);
         }
 
-        function emitNodeWithPrefix(prefix: string | [string, string, string], writer: (s: string) => void, node: Node, emit: (node: Node) => void) {
+        function emitNodeWithPrefix(prefix: string, writer: (s: string) => void, node: Node, emit: (node: Node) => void) {
             if (node) {
-                if (typeof prefix === "string") {
-                    writer(prefix);
-                }
-                else {
-                    prefix[0] && writeSpace(prefix[0]);
-                    writer(prefix[1]);
-                    prefix[2] && writeSpace(prefix[2]);
-                }
+                writer(prefix);
                 emit(node);
             }
         }
