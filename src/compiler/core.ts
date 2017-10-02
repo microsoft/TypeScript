@@ -853,6 +853,11 @@ namespace ts {
         return elementAt(array, -1);
     }
 
+    export function last<T>(array: ReadonlyArray<T>): T {
+        Debug.assert(array.length !== 0);
+        return array[array.length - 1];
+    }
+
     /**
      * Returns the only element of an array if it contains only one element, `undefined` otherwise.
      */

@@ -469,7 +469,7 @@ namespace ts.refactor.extractSymbol {
      * depending on what's in the extracted body.
      */
     function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
-        let current: Node = isReadonlyArray(range.range) ? firstOrUndefined(range.range) : range.range;
+        let current: Node = isReadonlyArray(range.range) ? range.range[0] : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
@@ -728,7 +728,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const minInsertionPos = (isReadonlyArray(range.range) ? lastOrUndefined(range.range) : range.range).end;
+        const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
         const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
         if (nodeToInsertBefore) {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
@@ -1175,7 +1175,7 @@ namespace ts.refactor.extractSymbol {
 
         const expressionDiagnostic =
             isReadonlyArray(targetRange.range) && !(targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0]))
-                ? ((start, end) => createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected))(firstOrUndefined(targetRange.range).getStart(), lastOrUndefined(targetRange.range).end)
+                ? ((start, end) => createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected))(targetRange.range[0].getStart(), last(targetRange.range).end)
                 : undefined;
 
         // initialize results
