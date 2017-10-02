@@ -4256,23 +4256,18 @@ namespace ts.projectSystem {
             const session = createSession(host);
             openFilesForSession([file], session);
 
-            const command0: server.protocol.ConfigureRequest = {
-                type: "request",
+            const response0 = session.executeCommandSeq<server.protocol.ConfigureRequest>({
                 command: server.protocol.CommandTypes.Configure,
-                seq: 0,
                 arguments: {
                     formatOptions: {
                         indentSize: 2,
                     },
                 },
-            };
-            const response0 = session.executeCommand(command0).response;
+            }).response;
             assert.deepEqual(response0, /*expected*/ undefined);
 
-            const command: server.protocol.GetEditsForRefactorRequest = {
-                type: "request",
+            const response1 = session.executeCommandSeq<server.protocol.GetEditsForRefactorRequest>({
                 command: server.protocol.CommandTypes.GetEditsForRefactor,
-                seq: 1,
                 arguments: {
                     refactor: "Extract Symbol",
                     action: "function_scope_1",
@@ -4282,9 +4277,8 @@ namespace ts.projectSystem {
                     endLine: 2,
                     endOffset: 4,
                 },
-            };
-            const response = session.executeCommand(command).response;
-            assert.deepEqual(response, {
+            }).response;
+            assert.deepEqual(response1, {
                 edits: [
                     {
                         fileName: "/a.ts",
