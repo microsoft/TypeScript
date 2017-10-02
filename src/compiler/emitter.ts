@@ -1583,7 +1583,7 @@ namespace ts {
         function emitForOfStatement(node: ForOfStatement) {
             const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos, writeKeyword);
             writeSpace(" ");
-            emitWithSuffix(node.awaitModifier, " ", writeSpace);
+            emitWithTrailingSpace(node.awaitModifier);
             writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
             emitForBinding(node.initializer);
             writeSpace(" ");
@@ -2432,10 +2432,10 @@ namespace ts {
             }
         }
 
-        function emitWithSuffix(node: Node, suffix: string, writer: (s: string) => void) {
+        function emitWithTrailingSpace(node: Node) {
             if (node) {
                 emit(node);
-                writer(suffix);
+                writeSpace(" ");
             }
         }
 
