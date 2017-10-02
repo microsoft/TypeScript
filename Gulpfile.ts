@@ -1046,16 +1046,23 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
     sendNextFile(files, child, callback, failures);
 }
 
-gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
-    if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = cmdLineOptions["files"];
-    const files = fileMatcher
-        ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
-    console.log("Linting: " + cmd);
-    child_process.execSync(cmd, { stdio: [0, 1, 2] });
-    if (fold.isTravis()) console.log(fold.end("lint"));
+gulp.task("prettier", "Runs prettier.", [], () => {
+    withFold("prettier", () => {
+        const cmd = "node node_modules/prettier-miscellaneous/bin/prettier --write src/**/*.ts";
+        child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    });
+});
+
+gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules", "pretty"], () => {
+    withFold("lint", () => {
+        const fileMatcher = cmdLineOptions["files"];
+        const files = fileMatcher
+            ? `src/**/${fileMatcher}`
+            : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        console.log("Linting: " + cmd);
+        child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    });
 });
 
 gulp.task("default", "Runs 'local'", ["local"]);
@@ -1063,3 +1070,13 @@ gulp.task("default", "Runs 'local'", ["local"]);
 gulp.task("watch", "Watches the src/ directory for changes and executes runtests-parallel.", [], () => {
     gulp.watch("src/**/*.*", ["runtests-parallel"]);
 });
+
+function withFold(name: string, action: () => void): void {
+    if (fold.isTravis()) {
+        console.log(fold.start(name));
+    }
+    action();
+    if (fold.isTravis()) {
+        console.log(fold.end(name));
+    }
+}

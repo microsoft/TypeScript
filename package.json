@@ -52,6 +52,7 @@
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
+        "colors": "latest",
         "convert-source-map": "latest",
         "del": "latest",
         "gulp": "3.X",
@@ -62,13 +63,16 @@
         "gulp-newer": "latest",
         "gulp-sourcemaps": "latest",
         "gulp-typescript": "latest",
+        "husky": "latest",
         "istanbul": "latest",
         "jake": "latest",
+        "lint-staged": "latest",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
+        "prettier-miscellaneous": "latest",
         "q": "latest",
         "run-sequence": "latest",
         "sorcery": "latest",
@@ -76,10 +80,10 @@
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
-        "colors": "latest",
         "typescript": "next"
     },
     "scripts": {
+        "precommit": "lint-staged",
         "pretest": "jake tests",
         "test": "jake runtests-parallel",
         "build": "npm run build:compiler && npm run build:tests",
@@ -91,6 +95,12 @@
         "jake": "jake",
         "lint": "jake lint",
         "setup-hooks": "node scripts/link-hooks.js"
+    },
+    "lint-staged": {
+        "src/**/*.ts": [
+            "prettier --write",
+            "git add"
+        ]
     },
     "browser": {
         "fs": false,
