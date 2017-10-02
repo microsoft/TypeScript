@@ -846,6 +846,11 @@ namespace ts {
         return elementAt(array, 0);
     }
 
+    export function first<T>(array: ReadonlyArray<T>): T {
+        Debug.assert(array.length !== 0);
+        return array[0];
+    }
+
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
