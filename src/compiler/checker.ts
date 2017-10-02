@@ -9415,7 +9415,16 @@ namespace ts {
                         // with a structural comparison. Otherwise, we know for certain the instantiations aren't
                         // related and we can return here.
                         if (variances !== emptyArray && !hasCovariantVoidArgument(<TypeReference>target, variances)) {
-                            return Ternary.False;
+                            // In some cases generic types that are covariant in regular type checking mode become
+                            // invariant in --strictFunctionTypes mode because one or more type parameters are used in
+                            // both co- and contravariant positions. In order to make it easier to diagnose *why* such
+                            // types are invariant, if any of the type parameters are invariant we reset the reported
+                            // errors and instead force a structural comparison (which will include elaborations that
+                            // reveal the reason).
+                            if (!(reportErrors && some(variances, v => v === Variance.Invariant))) {
+                                return Ternary.False;
+                            }
+                            errorInfo = saveErrorInfo;
                         }
                     }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
