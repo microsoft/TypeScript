@@ -764,8 +764,7 @@ namespace ts {
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
-                // If we want to reuse resolutions more aggressively, we can refine this to check for whether the
-                // text of the corresponding modulenames has changed.
+                // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
                     const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
                     if (oldResolvedModule) {

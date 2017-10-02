@@ -521,7 +521,7 @@ namespace ts {
                 }
 
                 // Return array of values that needs emit
-                return arrayFrom(seenFileNamesMap.values());
+                return flatMapIter(seenFileNamesMap.values(), value => value);
             }
         }
     }
