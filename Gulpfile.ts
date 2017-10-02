@@ -260,8 +260,8 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
-        copy.newLine = "lf";
     }
+    copy.newLine = "lf";
     if (useBuiltCompiler === true) {
         copy.typescript = require("./built/local/typescript.js");
     }
@@ -411,7 +411,7 @@ gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeDefinitionsFile;
-                return content + "\r\nexport = ts;";
+                return content + "\nexport = ts;";
             }))
             .pipe(gulp.dest("src/services")),
         completedDts.pipe(clone())
@@ -478,7 +478,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
             .pipe(gulp.dest("src/server")),
         dts.pipe(prependCopyright(/*outputCopyright*/ true))
             .pipe(insert.transform((content) => {
-                return content + "\r\nexport = ts;\r\nexport as namespace ts;";
+                return content + "\nexport = ts;\nexport as namespace ts;";
             }))
             .pipe(gulp.dest("src/server"))
     ]);
