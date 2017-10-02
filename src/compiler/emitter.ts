@@ -936,7 +936,12 @@ namespace ts {
                 writeSpace();
                 emit(node.constraint);
             }
-            emitAsAssignmentTarget(node.default);
+            if (node.default) {
+                writeSpace();
+                writeOperator("=");
+                writeSpace();
+                emit(node.default);
+            }
         }
 
         function emitParameter(node: ParameterDeclaration) {
@@ -2427,12 +2432,12 @@ namespace ts {
             }
         }
 
-        function emitAsAssignmentTarget(node: Node) {
+        function emitAsAssignmentTarget(node: Expression) {
             if (node) {
                 writeSpace();
                 writeOperator("=");
                 writeSpace();
-                emit(node);
+                emitExpression(node);
             }
         }
 
