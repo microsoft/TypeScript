@@ -1,0 +1,235 @@
+=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts ===
+// declarations
+declare const {}: symbol();
+declare let invalidLetType: symbol();
+>invalidLetType : symbol
+
+declare var invalidVarType: symbol();
+>invalidVarType : symbol
+
+// function arguments and return types
+declare function invalidArgType(arg: symbol()): void;
+>invalidArgType : (arg: symbol) => void
+>arg : symbol
+
+declare function invalidRestArgType(...arg: symbol()[]): void;
+>invalidRestArgType : (...arg: symbol[]) => void
+>arg : symbol[]
+
+declare function invalidReturnType(): symbol();
+>invalidReturnType : () => symbol
+
+declare function invalidThisType(this: symbol()): void;
+>invalidThisType : (this: symbol) => void
+>this : symbol
+
+declare function invalidTypePredicate(n: any): n is symbol();
+>invalidTypePredicate : (n: any) => n is symbol
+>n : any
+>n : any
+
+declare function invalidTypeParameterConstraint<T extends symbol()>(): void;
+>invalidTypeParameterConstraint : <T extends symbol>() => void
+>T : T
+
+declare function invalidTypeParameterDefault<T = symbol()>(): void;
+>invalidTypeParameterDefault : <T = symbol>() => void
+>T : T
+
+// classes
+class InvalidClass {
+>InvalidClass : InvalidClass
+
+    constructor(invalidConstructorArgType: symbol()) {}
+>invalidConstructorArgType : symbol
+
+    readonly invalidReadonlyPropertyType: symbol();
+>invalidReadonlyPropertyType : symbol
+
+    invalidPropertyType: symbol();
+>invalidPropertyType : symbol
+
+    invalidArgType(arg: symbol()): void { return; }
+>invalidArgType : (arg: symbol) => void
+>arg : symbol
+
+    invalidRestArgType(...args: symbol()[]): void { return; }
+>invalidRestArgType : (...args: symbol[]) => void
+>args : symbol[]
+
+    invalidReturnType(): symbol() { return; }
+>invalidReturnType : () => symbol
+
+    invalidThisType(this: symbol()): void { return; }
+>invalidThisType : (this: symbol) => void
+>this : symbol
+
+    invalidTypePredicate(n: any): n is symbol() { return; }
+>invalidTypePredicate : (n: any) => n is symbol
+>n : any
+>n : any
+
+    invalidTypeParameterConstraint<T extends symbol()>(): void { return; }
+>invalidTypeParameterConstraint : <T extends symbol>() => void
+>T : T
+
+    invalidTypeParameterDefault<T = symbol()>(): void { return; }
+>invalidTypeParameterDefault : <T = symbol>() => void
+>T : T
+
+    get invalidGetter(): symbol() { return; }
+>invalidGetter : symbol
+
+    set invalidSetter(arg: symbol()) { return; }
+>invalidSetter : symbol
+>arg : symbol
+
+    static invalidStaticPropertyType: symbol();
+>invalidStaticPropertyType : symbol
+
+    static invalidStaticArgType(arg: symbol()): void { return; }
+>invalidStaticArgType : (arg: symbol) => void
+>arg : symbol
+
+    static invalidStaticRestArgType(...args: symbol()[]): void { return; }
+>invalidStaticRestArgType : (...args: symbol[]) => void
+>args : symbol[]
+
+    static invalidStaticReturnType(): symbol() { return; }
+>invalidStaticReturnType : () => symbol
+
+    static invalidStaticThisType(this: symbol()): void { return; }
+>invalidStaticThisType : (this: symbol) => void
+>this : symbol
+
+    static invalidStaticTypePredicate(n: any): n is symbol() { return; }
+>invalidStaticTypePredicate : (n: any) => n is symbol
+>n : any
+>n : any
+
+    static invalidStaticTypeParameterConstraint<T extends symbol()>(): void { return; }
+>invalidStaticTypeParameterConstraint : <T extends symbol>() => void
+>T : T
+
+    static invalidStaticTypeParameterDefault<T = symbol()>(): void { return; }
+>invalidStaticTypeParameterDefault : <T = symbol>() => void
+>T : T
+
+    static get invalidStaticGetter(): symbol() { return; }
+>invalidStaticGetter : symbol
+
+    static set invalidStaticSetter(arg: symbol()) { return; }
+>invalidStaticSetter : symbol
+>arg : symbol
+}
+
+// interfaces
+interface InvalidInterface {
+>InvalidInterface : InvalidInterface
+
+    invalidPropertyType: symbol();
+>invalidPropertyType : symbol
+
+    invalidArgType(arg: symbol()): void;
+>invalidArgType : (arg: symbol) => void
+>arg : symbol
+
+    invalidRestArgType(...args: symbol()[]): void;
+>invalidRestArgType : (...args: symbol[]) => void
+>args : symbol[]
+
+    invalidReturnType(): symbol();
+>invalidReturnType : () => symbol
+
+    invalidThisType(this: symbol());
+>invalidThisType : (this: symbol) => any
+>this : symbol
+
+    invalidTypePredicate(n: any): n is symbol()
+>invalidTypePredicate : (n: any) => n is symbol
+>n : any
+>n : any
+
+    invalidTypeParameterConstraint<T extends symbol()>(): void;
+>invalidTypeParameterConstraint : <T extends symbol>() => void
+>T : T
+
+    invalidTypeParameterDefault<T = symbol()>(): void;
+>invalidTypeParameterDefault : <T = symbol>() => void
+>T : T
+}
+
+// type literals
+type InvalidTypeLiteral = {
+>InvalidTypeLiteral : InvalidTypeLiteral
+
+    invalidPropertyType: symbol();
+>invalidPropertyType : symbol
+
+    invalidArgType(arg: symbol()): void;
+>invalidArgType : (arg: symbol) => void
+>arg : symbol
+
+    invalidRestArgType(...args: symbol()[]): void;
+>invalidRestArgType : (...args: symbol[]) => void
+>args : symbol[]
+
+    invalidReturnType(): symbol();
+>invalidReturnType : () => symbol
+
+    invalidThisType(this: symbol());
+>invalidThisType : (this: symbol) => any
+>this : symbol
+
+    invalidTypePredicate(n: any): n is symbol()
+>invalidTypePredicate : (n: any) => n is symbol
+>n : any
+>n : any
+
+    invalidTypeParameterConstraint<T extends symbol()>(): void;
+>invalidTypeParameterConstraint : <T extends symbol>() => void
+>T : T
+
+    invalidTypeParameterDefault<T = symbol()>(): void;
+>invalidTypeParameterDefault : <T = symbol>() => void
+>T : T
+
+};
+
+// type alias
+type InvalidAlias = symbol();
+>InvalidAlias : symbol
+
+type InvalidAliasTypeParameterConstraint<T extends symbol()> = never;
+>InvalidAliasTypeParameterConstraint : never
+>T : T
+
+type InvalidAliasTypeParameterDefault<T extends symbol()> = never;
+>InvalidAliasTypeParameterDefault : never
+>T : T
+
+// type references
+declare const invalidTypeArgument: Promise<symbol()>;
+>invalidTypeArgument : Promise<symbol>
+>Promise : Promise<T>
+
+declare const invalidArrayType: symbol()[];
+>invalidArrayType : symbol[]
+
+declare const invalidTupleType: [symbol()];
+>invalidTupleType : [symbol]
+
+// mapped types
+declare const invalidMappedType: { [P in string]: symbol() };
+>invalidMappedType : { [x: string]: symbol; }
+>P : P
+
+// unions/intersection
+declare const invalidUnion: symbol() | symbol();
+>invalidUnion : symbol
+
+declare const invalidIntersection: symbol() | symbol();
+>invalidIntersection : symbol
+
+
+
