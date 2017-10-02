@@ -19792,7 +19792,7 @@ namespace ts {
             if (!getParameterSymbolFromJSDoc(node)) {
                 error(node.name,
                     Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
-                    unescapeLeadingUnderscores((node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name).escapedText));
+                    idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
             }
         }
 
@@ -19808,9 +19808,7 @@ namespace ts {
             if (extend) {
                 const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {
-                    error(name, Diagnostics.JSDoc_augments_0_does_not_match_the_extends_1_clause,
-                        unescapeLeadingUnderscores(name.escapedText),
-                        unescapeLeadingUnderscores(className.escapedText));
+                    error(name, Diagnostics.JSDoc_augments_0_does_not_match_the_extends_1_clause, idText(name), idText(className));
                 }
             }
         }
