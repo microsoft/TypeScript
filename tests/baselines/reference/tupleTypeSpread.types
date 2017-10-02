@@ -1,0 +1,15 @@
+=== tests/cases/compiler/tupleTypeSpread.ts ===
+type a = [1, ...[2]];
+>a : [1, 2]
+
+type Combine<Head, Tail extends any[]> = [Head, ...Tail];
+>Combine : [Head, ...Tail]
+>Head : Head
+>Tail : Tail
+>Head : Head
+>Tail : Tail
+
+type b = Combine<1, [2, 3]>;
+>b : [1, 2, 3]
+>Combine : [Head, ...Tail]
+

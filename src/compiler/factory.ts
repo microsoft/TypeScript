@@ -674,9 +674,10 @@ namespace ts {
             : node;
     }
 
-    export function createTupleTypeNode(elementTypes: ReadonlyArray<TypeNode>) {
+    export function createTupleTypeNode(elementTypes: ReadonlyArray<TypeNode>, idxIsSpread: boolean[] = []) {
         const node = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
-        node.elementTypes = createNodeArray(elementTypes);
+        const elements = map(elementTypes, (type: TypeNode, idx: number) => idxIsSpread[idx] ? createTypeSpread(type) : type);
+        node.elementTypes = createNodeArray(elements);
         return node;
     }
 
@@ -2256,6 +2257,18 @@ namespace ts {
     export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression) {
         return node.expression !== expression
             ? updateNode(createSpreadAssignment(expression), node)
+            : node;
+    }
+
+    export function createTypeSpread(type: TypeNode) {
+        const node = <TypeSpreadTypeNode>createSynthesizedNode(SyntaxKind.TypeSpread);
+        node.type = type !== undefined ? parenthesizeElementTypeMember(type) : undefined;
+        return node;
+    }
+
+    export function updateTypeSpread(node: TypeSpreadTypeNode, type: TypeNode) {
+        return node.type !== type
+            ? updateNode(createTypeSpread(type), node)
             : node;
     }
 
