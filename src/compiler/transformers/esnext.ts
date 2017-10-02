@@ -79,6 +79,8 @@ namespace ts {
                     return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
                 case SyntaxKind.ForStatement:
                     return visitForStatement(node as ForStatement);
+                case SyntaxKind.ThrowExpression:
+                    return visitThrowExpression(node as ThrowExpression);
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
@@ -276,6 +278,10 @@ namespace ts {
                 visitNode(node.incrementor, visitor, isExpression),
                 visitNode(node.statement, visitor, isStatement)
             );
+        }
+
+        function visitThrowExpression(node: ThrowExpression) {
+            return createThrowHelper(context, visitNode(node.expression, visitor, isExpression), node);
         }
 
         function visitVoidExpression(node: VoidExpression) {
@@ -981,6 +987,24 @@ namespace ts {
         return setTextRange(
             createCall(
                 getHelperName("__asyncValues"),
+                /*typeArguments*/ undefined,
+                [expression]
+            ),
+            location
+        );
+    }
+
+    const throwHelper: EmitHelper = {
+        name: "typescript:throw",
+        scoped: false,
+        text: `var __throw = (this && this.__throw) || function (e) { throw e; };`
+    };
+
+    function createThrowHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
+        context.requestEmitHelper(throwHelper);
+        return setTextRange(
+            createCall(
+                getHelperName("__throw"),
                 /*typeArguments*/ undefined,
                 [expression]
             ),

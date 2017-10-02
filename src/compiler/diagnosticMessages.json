@@ -907,6 +907,10 @@
         "category": "Error",
         "code": 1328
     },
+    "Experimental support for 'throw' expressions is a feature that is subject to change in a future release. Set the 'experimentalThrowExpressions' option to remove this warning.": {
+        "category": "Error",
+        "code": 1329
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -3314,6 +3318,11 @@
         "category": "Message",
         "code": 6185
     },
+    "Enables experimental support for ECMAScript Stage-2 'throw' expressions.": {
+        "category": "Message",
+        "code": 6186
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

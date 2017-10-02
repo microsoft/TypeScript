@@ -185,6 +185,8 @@ namespace ts {
                 return visitNode(cbNode, (<ParenthesizedExpression>node).expression);
             case SyntaxKind.DeleteExpression:
                 return visitNode(cbNode, (<DeleteExpression>node).expression);
+            case SyntaxKind.ThrowExpression:
+                return visitNode(cbNode, (<ThrowExpression>node).expression);
             case SyntaxKind.TypeOfExpression:
                 return visitNode(cbNode, (<TypeOfExpression>node).expression);
             case SyntaxKind.VoidExpression:
@@ -2952,6 +2954,7 @@ namespace ts {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DeleteKeyword:
                 case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.ThrowKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
@@ -2976,11 +2979,21 @@ namespace ts {
         }
 
         function isStartOfExpressionStatement(): boolean {
-            // As per the grammar, none of '{' or 'function' or 'class' can start an expression statement.
+            // As per the grammar, none of '{', 'function', 'async [no LineTerminator here] function', 'class', 'let [', or 'throw' can start an expression statement:
+            //
+            // An |ExpressionStatement| cannot start with a U+007B (LEFT CURLY BRACKET) because that might make it ambiguous with a |Block|.
+            // An |ExpressionStatement| cannot start with the `function` or `class` keywords because that would make it ambiguous with a |FunctionDeclaration|, a |GeneratorDeclaration|, or a |ClassDeclaration|.
+            // An |ExpressionStatement| cannot start with `async` `function` because that would make it ambiguous with an |AsyncFunctionDeclaration|.
+            // An |ExpressionStatement| cannot start with the two token sequence `let` `[` because that would make it ambiguous with a `let` |LexicalDeclaration| whose first |LexicalBinding| was an |ArrayBindingPattern|.
+            // An |ExpressionStatement| cannot start with `throw` because that would make it ambiguous with a |ThrowStatement|.
+            //
             return token() !== SyntaxKind.OpenBraceToken &&
                 token() !== SyntaxKind.FunctionKeyword &&
                 token() !== SyntaxKind.ClassKeyword &&
+                token() !== SyntaxKind.ThrowKeyword &&
                 token() !== SyntaxKind.AtToken &&
+                (token() !== SyntaxKind.AsyncKeyword || !lookAhead(nextTokenIsFunctionKeywordOnSameLine)) &&
+                (token() !== SyntaxKind.LetKeyword || !lookAhead(nextTokenIsOpenBracket)) &&
                 isStartOfExpression();
         }
 
@@ -3619,6 +3632,13 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseThrowExpression() {
+            const node = <ThrowExpression>createNode(SyntaxKind.ThrowExpression);
+            nextToken();
+            node.expression = parseSimpleUnaryExpression();
+            return finishNode(node);
+        }
+
         function parseTypeOfExpression() {
             const node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
             nextToken();
@@ -3725,6 +3745,8 @@ namespace ts {
                     return parsePrefixUnaryExpression();
                 case SyntaxKind.DeleteKeyword:
                     return parseDeleteExpression();
+                case SyntaxKind.ThrowKeyword:
+                    return parseThrowExpression();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeOfExpression();
                 case SyntaxKind.VoidKeyword:
@@ -3763,6 +3785,7 @@ namespace ts {
                 case SyntaxKind.TildeToken:
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DeleteKeyword:
+                case SyntaxKind.ThrowKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.AwaitKeyword:
@@ -5770,6 +5793,10 @@ namespace ts {
 
         function nextTokenIsOpenParen() {
             return nextToken() === SyntaxKind.OpenParenToken;
+        }
+
+        function nextTokenIsOpenBracket() {
+            return nextToken() === SyntaxKind.OpenBracketToken;
         }
 
         function nextTokenIsSlash() {

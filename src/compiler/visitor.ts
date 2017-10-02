@@ -495,6 +495,10 @@ namespace ts {
                 return updateDelete(<DeleteExpression>node,
                     visitNode((<DeleteExpression>node).expression, visitor, isExpression));
 
+            case SyntaxKind.ThrowExpression:
+                return updateThrowExpression(<ThrowExpression>node,
+                    visitNode((<ThrowExpression>node).expression, visitor, isExpression));
+
             case SyntaxKind.TypeOfExpression:
                 return updateTypeOf(<TypeOfExpression>node,
                     visitNode((<TypeOfExpression>node).expression, visitor, isExpression));
@@ -1104,13 +1108,14 @@ namespace ts {
 
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.DeleteExpression:
+            case SyntaxKind.ThrowExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.SpreadElement:
             case SyntaxKind.NonNullExpression:
-                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElement | NonNullExpression>node).expression, cbNode, result);
+                result = reduceNode((<ParenthesizedExpression | DeleteExpression | ThrowExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElement | NonNullExpression>node).expression, cbNode, result);
                 break;
 
             case SyntaxKind.PrefixUnaryExpression:

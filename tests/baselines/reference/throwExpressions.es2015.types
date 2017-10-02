@@ -1,0 +1,47 @@
+=== tests/cases/conformance/expressions/throwExpressions/throwExpressions.es2015.ts ===
+declare const condition: boolean;
+>condition : boolean
+
+const a = condition ? 1 : throw new Error();
+>a : 1
+>condition ? 1 : throw new Error() : 1
+>condition : boolean
+>1 : 1
+>throw new Error() : never
+>new Error() : Error
+>Error : ErrorConstructor
+
+const b = condition || throw new Error();
+>b : true
+>condition || throw new Error() : true
+>condition : boolean
+>throw new Error() : never
+>new Error() : Error
+>Error : ErrorConstructor
+
+function c(d = throw new TypeError()) { }
+>c : (d?: never) => void
+>d : never
+>throw new TypeError() : never
+>new TypeError() : TypeError
+>TypeError : TypeErrorConstructor
+
+const x = "x", y = "y", z = "z";
+>x : "x"
+>"x" : "x"
+>y : "y"
+>"y" : "y"
+>z : "z"
+>"z" : "z"
+
+const w = condition ? throw true ? x : y : z;
+>w : "x" | "y" | "z"
+>condition ? throw true ? x : y : z : "x" | "y" | "z"
+>condition : boolean
+>throw true ? x : y : "x" | "y"
+>throw true : never
+>true : true
+>x : "x"
+>y : "y"
+>z : "z"
+

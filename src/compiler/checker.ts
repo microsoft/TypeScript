@@ -17243,6 +17243,15 @@ namespace ts {
             return booleanType;
         }
 
+        function checkThrowExpression(node: ThrowExpression): Type {
+            if (!compilerOptions.experimentalThrowExpressions) {
+                error(node, Diagnostics.Experimental_support_for_throw_expressions_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalThrowExpressions_option_to_remove_this_warning);
+            }
+
+            checkExpression(node.expression);
+            return neverType;
+        }
+
         function checkTypeOfExpression(node: TypeOfExpression): Type {
             checkExpression(node.expression);
             return typeofType;
@@ -18205,6 +18214,8 @@ namespace ts {
                     return checkMetaProperty(<MetaProperty>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(<DeleteExpression>node);
+                case SyntaxKind.ThrowExpression:
+                    return checkThrowExpression(<ThrowExpression>node);
                 case SyntaxKind.VoidExpression:
                     return checkVoidExpression(<VoidExpression>node);
                 case SyntaxKind.AwaitExpression:

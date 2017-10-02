@@ -257,6 +257,7 @@ namespace ts {
         FunctionExpression,
         ArrowFunction,
         DeleteExpression,
+        ThrowExpression,
         TypeOfExpression,
         VoidExpression,
         AwaitExpression,
@@ -1152,6 +1153,11 @@ namespace ts {
 
     export interface DeleteExpression extends UnaryExpression {
         kind: SyntaxKind.DeleteExpression;
+        expression: UnaryExpression;
+    }
+
+    export interface ThrowExpression extends UnaryExpression {
+        kind: SyntaxKind.ThrowExpression;
         expression: UnaryExpression;
     }
 
@@ -3656,6 +3662,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalThrowExpressions?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;

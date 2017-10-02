@@ -1237,6 +1237,7 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
+            case SyntaxKind.ThrowExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
@@ -2084,6 +2085,7 @@ namespace ts {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
+            case SyntaxKind.ThrowExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.ConditionalExpression:
@@ -2171,6 +2173,7 @@ namespace ts {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
+            case SyntaxKind.ThrowExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.AwaitExpression:
                 return 15;
@@ -4409,6 +4412,10 @@ namespace ts {
         return node.kind === SyntaxKind.DeleteExpression;
     }
 
+    export function isThrowExpression(node: Node): node is ThrowExpression {
+        return node.kind === SyntaxKind.ThrowExpression;
+    }
+
     export function isTypeOfExpression(node: Node): node is TypeOfExpression {
         return node.kind === SyntaxKind.AwaitExpression;
     }
@@ -5227,6 +5234,7 @@ namespace ts {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.DeleteExpression:
+            case SyntaxKind.ThrowExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.AwaitExpression:

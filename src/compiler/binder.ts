@@ -3253,6 +3253,10 @@ namespace ts {
         let excludeFlags = TransformFlags.NodeExcludes;
 
         switch (kind) {
+            case SyntaxKind.ThrowExpression:
+                transformFlags |= TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.AwaitExpression:
                 // async/await is ES2017 syntax, but may be ESNext syntax (for async generators)
