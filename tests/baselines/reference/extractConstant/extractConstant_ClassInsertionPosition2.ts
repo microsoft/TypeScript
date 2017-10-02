@@ -1,12 +1,20 @@
 // ==ORIGINAL==
 class C {
-    M() {
+    a = 1;
+    M1() { }
+    b = 2;
+    M2() { }
+    M3() {
         let x = 1;
     }
 }
 // ==SCOPE::Extract to constant in enclosing scope==
 class C {
-    M() {
+    a = 1;
+    M1() { }
+    b = 2;
+    M2() { }
+    M3() {
         const newLocal = 1;
 
         let x = /*RENAME*/newLocal;
@@ -14,9 +22,13 @@ class C {
 }
 // ==SCOPE::Extract to readonly field in class 'C'==
 class C {
+    a = 1;
     private readonly newProperty = 1;
 
-    M() {
+    M1() { }
+    b = 2;
+    M2() { }
+    M3() {
         let x = this./*RENAME*/newProperty;
     }
 }
@@ -24,7 +36,11 @@ class C {
 const newLocal = 1;
 
 class C {
-    M() {
+    a = 1;
+    M1() { }
+    b = 2;
+    M2() { }
+    M3() {
         let x = /*RENAME*/newLocal;
     }
 }
