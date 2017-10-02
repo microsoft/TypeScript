@@ -492,7 +492,7 @@ namespace ts.refactor.extractSymbol {
             }
 
             // A function parameter's initializer is actually in the outer scope, not the function declaration
-            if (current && current.parent && current.parent.kind === SyntaxKind.Parameter) {
+            if (current.parent.kind === SyntaxKind.Parameter) {
                 // Skip all the way to the outer scope of the function that declared this parameter
                 current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
             }
