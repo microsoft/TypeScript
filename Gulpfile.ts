@@ -556,7 +556,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, /*help*/ false, [servicesFile], () => {
+gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))
