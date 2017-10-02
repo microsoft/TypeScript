@@ -1587,7 +1587,7 @@ namespace ts {
                         fail(Diagnostics.File_0_not_found, fileName);
                     }
                     else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
-                        fail(Diagnostics.A_file_cannot_have_a_reference_to_itself, fileName);
+                        fail(Diagnostics.A_file_cannot_have_a_reference_to_itself);
                     }
                 }
                 return sourceFile;

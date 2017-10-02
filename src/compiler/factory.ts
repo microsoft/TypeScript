@@ -126,7 +126,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.escapedText), typeArguments), node)
+        ? updateNode(createIdentifier(idText(node), typeArguments), node)
         : node;
     }
 
@@ -2951,12 +2951,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.escapedText));
+            const right = createIdentifier(idText(jsxFactory.right));
             right.escapedText = jsxFactory.right.escapedText;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.escapedText), parent);
+            return createReactNamespace(idText(jsxFactory), parent);
         }
     }
 
