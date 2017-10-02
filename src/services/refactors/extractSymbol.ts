@@ -43,7 +43,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0.message, [extraction.functionDescription]);
+                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.functionDescription, extraction.scopeDescription]);
                 if (!usedFunctionNames.has(description)) {
                     usedFunctionNames.set(description, true);
                     functionActions.push({
@@ -58,7 +58,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0.message, [extraction.constantDescription]);
+                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.constantDescription, extraction.scopeDescription]);
                 if (!usedConstantNames.has(description)) {
                     usedConstantNames.set(description, true);
                     constantActions.push({
@@ -547,6 +547,7 @@ namespace ts.refactor.extractSymbol {
         readonly functionErrors: ReadonlyArray<Diagnostic>;
         readonly constantDescription: string;
         readonly constantErrors: ReadonlyArray<Diagnostic>;
+        readonly scopeDescription: string;
     }
     /**
      * Given a piece of text to extract ('targetRange'), computes a list of possible extractions.
@@ -561,6 +562,11 @@ namespace ts.refactor.extractSymbol {
             functionErrors: functionErrorsPerScope[i],
             constantDescription: getDescriptionForConstantInScope(scope),
             constantErrors: constantErrorsPerScope[i],
+            scopeDescription: isFunctionLikeDeclaration(scope)
+                ? getDescriptionForFunctionLikeDeclaration(scope)
+                : isClassLike(scope)
+                    ? getDescriptionForClassLikeDeclaration(scope)
+                    : getDescriptionForModuleLikeDeclaration(scope)
         }));
         return extractions;
     }
@@ -590,17 +596,15 @@ namespace ts.refactor.extractSymbol {
 
     function getDescriptionForFunctionInScope(scope: Scope): string {
         return isFunctionLikeDeclaration(scope)
-            ? `inner function in ${getDescriptionForFunctionLikeDeclaration(scope)}`
+            ? "inner function"
             : isClassLike(scope)
-                ? `method in ${getDescriptionForClassLikeDeclaration(scope)}`
-                : `function in ${getDescriptionForModuleLikeDeclaration(scope)}`;
+                ? "method"
+                : "function";
     }
     function getDescriptionForConstantInScope(scope: Scope): string {
-        return isFunctionLikeDeclaration(scope)
-            ? `constant in ${getDescriptionForFunctionLikeDeclaration(scope)}`
-            : isClassLike(scope)
-                ? `readonly field in ${getDescriptionForClassLikeDeclaration(scope)}`
-                : `constant in ${getDescriptionForModuleLikeDeclaration(scope)}`;
+        return isClassLike(scope)
+            ? "readonly field"
+            : "constant";
     }
     function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration): string {
         switch (scope.kind) {
