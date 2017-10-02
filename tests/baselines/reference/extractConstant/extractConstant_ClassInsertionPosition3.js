@@ -8,7 +8,7 @@ class C {
         let x = 1;
     }
 }
-// ==SCOPE::Extract to constant in method 'M3==
+// ==SCOPE::Extract to constant in enclosing scope==
 class C {
     M1() { }
     a = 1;

@@ -8,7 +8,7 @@
 
 const x = 2 + 1;
         
-// ==SCOPE::Extract to constant in global scope==
+// ==SCOPE::Extract to constant in enclosing scope==
 
 /*! Copyright */
 

@@ -7,7 +7,7 @@ function F() {
     }
 }
         
-// ==SCOPE::Extract to constant in function 'F'==
+// ==SCOPE::Extract to constant in enclosing scope==
 
 const i = 0;
 function F() {

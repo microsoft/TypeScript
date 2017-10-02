@@ -9,7 +9,7 @@ class C {
     }
 }
         
-// ==SCOPE::Extract to constant in method 'M==
+// ==SCOPE::Extract to constant in enclosing scope==
 
 const i = 0;
 class C {

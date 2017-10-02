@@ -2,7 +2,7 @@
 function F() {
     let x = 1;
 }
-// ==SCOPE::Extract to constant in function 'F'==
+// ==SCOPE::Extract to constant in enclosing scope==
 function F() {
     const newLocal = 1;
 

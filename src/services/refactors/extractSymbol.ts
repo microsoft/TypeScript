@@ -43,7 +43,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.functionDescription, extraction.scopeDescription]);
+                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.functionDescription, extraction.functionScopeDescription]);
                 if (!usedFunctionNames.has(description)) {
                     usedFunctionNames.set(description, true);
                     functionActions.push({
@@ -58,7 +58,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.constantDescription, extraction.scopeDescription]);
+                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.constantDescription, extraction.constantScopeDescription]);
                 if (!usedConstantNames.has(description)) {
                     usedConstantNames.set(description, true);
                     constantActions.push({
@@ -544,10 +544,11 @@ namespace ts.refactor.extractSymbol {
 
     interface PossibleExtraction {
         readonly functionDescription: string;
+        readonly functionScopeDescription: string;
         readonly functionErrors: ReadonlyArray<Diagnostic>;
         readonly constantDescription: string;
+        readonly constantScopeDescription: string;
         readonly constantErrors: ReadonlyArray<Diagnostic>;
-        readonly scopeDescription: string;
     }
     /**
      * Given a piece of text to extract ('targetRange'), computes a list of possible extractions.
@@ -557,17 +558,23 @@ namespace ts.refactor.extractSymbol {
     function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<PossibleExtraction> | undefined {
         const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
-        const extractions = scopes.map((scope, i): PossibleExtraction => ({
-            functionDescription: getDescriptionForFunctionInScope(scope),
-            functionErrors: functionErrorsPerScope[i],
-            constantDescription: getDescriptionForConstantInScope(scope),
-            constantErrors: constantErrorsPerScope[i],
-            scopeDescription: isFunctionLikeDeclaration(scope)
+        const extractions = scopes.map((scope, i): PossibleExtraction => {
+            const scopeDescription = isFunctionLikeDeclaration(scope)
                 ? getDescriptionForFunctionLikeDeclaration(scope)
                 : isClassLike(scope)
                     ? getDescriptionForClassLikeDeclaration(scope)
-                    : getDescriptionForModuleLikeDeclaration(scope)
-        }));
+                    : getDescriptionForModuleLikeDeclaration(scope);
+            return {
+                functionDescription: getDescriptionForFunctionInScope(scope),
+                functionErrors: functionErrorsPerScope[i],
+                functionScopeDescription: scopeDescription,
+                constantDescription: getDescriptionForConstantInScope(scope),
+                constantErrors: constantErrorsPerScope[i],
+                constantScopeDescription: (i === 0 && !isClassLike(scope))
+                    ? "enclosing scope" // Like "global scope" and "module scope", this is not localized.
+                    : scopeDescription,
+            };
+        });
         return extractions;
     }
 

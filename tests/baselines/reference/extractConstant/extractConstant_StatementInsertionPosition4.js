@@ -6,7 +6,7 @@ function F() {
     }
 }
         
-// ==SCOPE::Extract to constant in function 'F'==
+// ==SCOPE::Extract to constant in enclosing scope==
 
 function F() {
     for (let j = 0; j < 10; j++) {
