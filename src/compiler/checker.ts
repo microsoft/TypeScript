@@ -2354,10 +2354,11 @@ namespace ts {
             if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
                 nodeFlags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName;
             }
+            const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToExpression : nodeBuilder.symbolToEntityName;
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
             function symbolToStringWorker(writer: EmitTextWriter) {
-                const entity = (flags & SymbolFormatFlags.AllowAnyNodeKind) ? nodeBuilder.symbolToExpression(symbol, meaning, enclosingDeclaration, nodeFlags) : nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, nodeFlags);
+                const entity = builder(symbol, meaning, enclosingDeclaration, nodeFlags);
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
@@ -3021,7 +3022,7 @@ namespace ts {
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {
                 const savedContextFlags = context.flags;
-                context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a clodule with a generic
+                context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
                 const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
@@ -3043,7 +3044,7 @@ namespace ts {
                         typeToTypeNodeHelper(anyArrayType, context),
                         /*initializer*/ undefined);
                 }
-                const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(getSynthesizedClone) : undefined;
+                const modifiers = (context.flags & NodeBuilderFlags.OmitParameterModifiers) || !parameterDeclaration.modifiers ? undefined : parameterDeclaration.modifiers.map(getSynthesizedClone);
                 const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration.name ?
                     parameterDeclaration.name.kind === SyntaxKind.Identifier ?
@@ -3147,9 +3148,10 @@ namespace ts {
                     const parentSymbol = symbol;
                     const nextSymbol = chain[index + 1];
                     if (getCheckFlags(nextSymbol) & CheckFlags.Instantiated) {
-                        typeParameterNodes = mapToTypeNodes(map(getTypeParametersOfClassOrInterface(
+                        const params = getTypeParametersOfClassOrInterface(
                             parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
-                        ), (nextSymbol as TransientSymbol).mapper), context);
+                        );
+                        typeParameterNodes = mapToTypeNodes(map(params, (nextSymbol as TransientSymbol).mapper), context);
                     }
                     else {
                         typeParameterNodes = typeParametersToTypeParameterDeclarations(symbol, context);
@@ -3192,8 +3194,14 @@ namespace ts {
 
                     const symbolName = getNameOfSymbol(symbol);
                     const firstChar = symbolName.charCodeAt(0);
-                    const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
-                    if (index !== 0 && needsElementAccess) {
+                    const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
+                    if (index === 0 || canUsePropertyAccess) {
+                        const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                        identifier.symbol = symbol;
+
+                        return index > 0 ? createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
+                    }
+                    else {
                         let expression: Expression;
                         if (isSingleOrDoubleQuote(firstChar)) {
                             expression = createLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
@@ -3205,12 +3213,6 @@ namespace ts {
                             expression.symbol = symbol;
                         }
                         return createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
-                    }
-                    else {
-                        const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
-                        identifier.symbol = symbol;
-
-                        return index > 0 ? createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                     }
                 }
             }
