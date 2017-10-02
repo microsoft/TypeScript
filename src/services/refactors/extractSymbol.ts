@@ -469,7 +469,7 @@ namespace ts.refactor.extractSymbol {
      * depending on what's in the extracted body.
      */
     function collectEnclosingScopes(range: TargetRange): Scope[] {
-        let current: Node = isReadonlyArray(range.range) ? firstOrUndefined(range.range) : range.range;
+        let current: Node = isReadonlyArray(range.range) ? range.range[0] : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
@@ -492,7 +492,7 @@ namespace ts.refactor.extractSymbol {
             }
 
             // A function parameter's initializer is actually in the outer scope, not the function declaration
-            if (current && current.parent && current.parent.kind === SyntaxKind.Parameter) {
+            if (current.parent && current.parent.kind === SyntaxKind.Parameter) {
                 // Skip all the way to the outer scope of the function that declared this parameter
                 current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
             }
@@ -502,10 +502,8 @@ namespace ts.refactor.extractSymbol {
 
         }
 
-        // We could fail to find a scope if
-        //   a) there is no enclosing source file; or
-        //   b) the starting node is the entire source file.
-        // We believe that both of these cases are impossible.
+        // We could fail to find a scope if there is no enclosing source file.
+        // We believe that this is impossible.
         Debug.assert(scopes !== undefined);
         return scopes;
     }
