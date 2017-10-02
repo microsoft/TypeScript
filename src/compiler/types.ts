@@ -2657,11 +2657,8 @@ namespace ts {
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
-        typeParametersToString(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, writer?: EmitTextWriter): string;
-        typeParameterToString(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, writer?: EmitTextWriter): string;
-        parameterToString(parameter: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, writer?: EmitTextWriter): string;
-        typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
+        typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];

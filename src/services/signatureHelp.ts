@@ -433,7 +433,11 @@ namespace ts.SignatureHelp {
         return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
 
         function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
-            const displayParts = mapToDisplayParts(writer => typeChecker.parameterToString(parameter, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors, writer));
+            const displayParts = mapToDisplayParts(writer => {
+                const printer = createPrinter({ removeComments: true });
+                const param = typeChecker.symbolToParameterDeclaration(parameter, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors);
+                printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
+            });
 
             return {
                 name: parameter.name,
@@ -444,8 +448,11 @@ namespace ts.SignatureHelp {
         }
 
         function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
-            const displayParts = mapToDisplayParts(writer =>
-                typeChecker.typeParameterToString(typeParameter, invocation, /*flags*/ undefined, writer));
+            const displayParts = mapToDisplayParts(writer => {
+                const printer = createPrinter({ removeComments: true });
+                const param = typeChecker.typeParameterToDeclaration(typeParameter, invocation);
+                printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
+            });
 
             return {
                 name: typeParameter.symbol.name,

@@ -162,20 +162,11 @@ namespace ts {
             typeToString: (type, enclosingDeclaration?, flags?, writer?) => {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
-            typeParametersToString: (symbol, enclosingDeclaration?, flags?, writer?) => {
-                return typeParametersToString(symbol, getParseTreeNode(enclosingDeclaration), flags, writer);
-            },
-            typeParameterToString: (parameter, enclosingDeclaration?, flags?, writer?) => {
-                return typeParameterToString(parameter, getParseTreeNode(enclosingDeclaration), flags, writer);
-            },
-            parameterToString: (parameter, enclosingDeclaration?, flags?, writer?) => {
-                return parameterToString(parameter, getParseTreeNode(enclosingDeclaration), flags, writer);
+            symbolToString: (symbol, enclosingDeclaration?, meaning?, flags?, writer?) => {
+                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
             typePredicateToString: (predicate, enclosingDeclaration?, flags?, writer?) => {
                 return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
-            },
-            symbolToString: (symbol, enclosingDeclaration?, meaning?, flags?, writer?) => {
-                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
             getAugmentedPropertiesOfType,
             getRootSymbols,
@@ -2367,44 +2358,6 @@ namespace ts {
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
-                return writer;
-            }
-        }
-
-        function typeParametersToString(symbol: Symbol, enclosingDeclaration?: Node, flags: NodeBuilderFlags = NodeBuilderFlags.IgnoreErrors, writer?: EmitTextWriter) {
-            return writer ? typeParametersToStringWorker(writer).getText() : usingSingleLineStringWriter(typeParametersToStringWorker);
-
-            function typeParametersToStringWorker(writer: EmitTextWriter) {
-                const params = nodeBuilder.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags);
-                if (params && params.length) {
-                    const printer = createPrinter({ removeComments: true });
-                    const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-                    printer.writeList(ListFormat.TypeParameters, params, sourceFile, writer);
-                }
-                return writer;
-            }
-        }
-
-        function typeParameterToString(parameter: TypeParameter, enclosingDeclaration?: Node, flags: NodeBuilderFlags = NodeBuilderFlags.IgnoreErrors, writer?: EmitTextWriter) {
-            return writer ? typeParameterToStringWorker(writer).getText() : usingSingleLineStringWriter(typeParameterToStringWorker);
-
-            function typeParameterToStringWorker(writer: EmitTextWriter) {
-                const param = nodeBuilder.typeParameterToDeclaration(parameter, enclosingDeclaration, flags);
-                const printer = createPrinter({ removeComments: true });
-                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-                printer.writeNode(EmitHint.Unspecified, param, /*sourceFile*/ sourceFile, writer);
-                return writer;
-            }
-        }
-
-        function parameterToString(parameter: Symbol, enclosingDeclaration?: Node, flags: NodeBuilderFlags = NodeBuilderFlags.IgnoreErrors, writer?: EmitTextWriter) {
-            return writer ? parameterToStringWorker(writer).getText() : usingSingleLineStringWriter(parameterToStringWorker);
-
-            function parameterToStringWorker(writer: EmitTextWriter) {
-                const param = nodeBuilder.symbolToParameterDeclaration(parameter, enclosingDeclaration, flags);
-                const printer = createPrinter({ removeComments: true });
-                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-                printer.writeNode(EmitHint.Unspecified, param, /*sourceFile*/ sourceFile, writer);
                 return writer;
             }
         }
