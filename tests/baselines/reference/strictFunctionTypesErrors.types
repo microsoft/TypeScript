@@ -416,3 +416,41 @@ dogComparer2 = animalComparer2;  // Ok
 >dogComparer2 : Comparer2<Dog>
 >animalComparer2 : Comparer2<Animal>
 
+// Crate<T> is invariant in --strictFunctionTypes mode
+
+interface Crate<T> {
+>Crate : Crate<T>
+>T : T
+
+    item: T;
+>item : T
+>T : T
+
+    onSetItem: (item: T) => void;
+>onSetItem : (item: T) => void
+>item : T
+>T : T
+}
+
+declare let animalCrate: Crate<Animal>;
+>animalCrate : Crate<Animal>
+>Crate : Crate<T>
+>Animal : Animal
+
+declare let dogCrate: Crate<Dog>;
+>dogCrate : Crate<Dog>
+>Crate : Crate<T>
+>Dog : Dog
+
+// Errors below should elaborate the reason for invariance
+
+animalCrate = dogCrate;  // Error
+>animalCrate = dogCrate : Crate<Dog>
+>animalCrate : Crate<Animal>
+>dogCrate : Crate<Dog>
+
+dogCrate = animalCrate;  // Error
+>dogCrate = animalCrate : Crate<Animal>
+>dogCrate : Crate<Dog>
+>animalCrate : Crate<Animal>
+

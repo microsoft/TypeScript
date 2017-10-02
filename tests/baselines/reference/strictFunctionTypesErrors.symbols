@@ -364,3 +364,39 @@ dogComparer2 = animalComparer2;  // Ok
 >dogComparer2 : Symbol(dogComparer2, Decl(strictFunctionTypesErrors.ts, 108, 11))
 >animalComparer2 : Symbol(animalComparer2, Decl(strictFunctionTypesErrors.ts, 107, 11))
 
+// Crate<T> is invariant in --strictFunctionTypes mode
+
+interface Crate<T> {
+>Crate : Symbol(Crate, Decl(strictFunctionTypesErrors.ts, 111, 31))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+
+    item: T;
+>item : Symbol(Crate.item, Decl(strictFunctionTypesErrors.ts, 115, 20))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+
+    onSetItem: (item: T) => void;
+>onSetItem : Symbol(Crate.onSetItem, Decl(strictFunctionTypesErrors.ts, 116, 12))
+>item : Symbol(item, Decl(strictFunctionTypesErrors.ts, 117, 16))
+>T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 115, 16))
+}
+
+declare let animalCrate: Crate<Animal>;
+>animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
+>Crate : Symbol(Crate, Decl(strictFunctionTypesErrors.ts, 111, 31))
+>Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
+
+declare let dogCrate: Crate<Dog>;
+>dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
+>Crate : Symbol(Crate, Decl(strictFunctionTypesErrors.ts, 111, 31))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+
+// Errors below should elaborate the reason for invariance
+
+animalCrate = dogCrate;  // Error
+>animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
+>dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
+
+dogCrate = animalCrate;  // Error
+>dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
+>animalCrate : Symbol(animalCrate, Decl(strictFunctionTypesErrors.ts, 120, 11))
+

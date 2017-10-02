@@ -111,3 +111,18 @@ declare let dogComparer2: Comparer2<Dog>;
 
 animalComparer2 = dogComparer2;  // Error
 dogComparer2 = animalComparer2;  // Ok
+
+// Crate<T> is invariant in --strictFunctionTypes mode
+
+interface Crate<T> {
+    item: T;
+    onSetItem: (item: T) => void;
+}
+
+declare let animalCrate: Crate<Animal>;
+declare let dogCrate: Crate<Dog>;
+
+// Errors below should elaborate the reason for invariance
+
+animalCrate = dogCrate;  // Error
+dogCrate = animalCrate;  // Error

@@ -79,9 +79,17 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(84,1): error TS2322: Type 'Fun
 tests/cases/compiler/strictFunctionTypesErrors.ts(111,1): error TS2322: Type 'Comparer2<Dog>' is not assignable to type 'Comparer2<Animal>'.
   Type 'Animal' is not assignable to type 'Dog'.
     Property 'dog' is missing in type 'Animal'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(126,1): error TS2322: Type 'Crate<Dog>' is not assignable to type 'Crate<Animal>'.
+  Types of property 'onSetItem' are incompatible.
+    Type '(item: Dog) => void' is not assignable to type '(item: Animal) => void'.
+      Types of parameters 'item' and 'item' are incompatible.
+        Type 'Animal' is not assignable to type 'Dog'.
+tests/cases/compiler/strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
+  Types of property 'item' are incompatible.
+    Type 'Animal' is not assignable to type 'Dog'.
 
 
-==== tests/cases/compiler/strictFunctionTypesErrors.ts (29 errors) ====
+==== tests/cases/compiler/strictFunctionTypesErrors.ts (31 errors) ====
     export {}
     
     
@@ -304,4 +312,29 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(111,1): error TS2322: Type 'Co
 !!! error TS2322:   Type 'Animal' is not assignable to type 'Dog'.
 !!! error TS2322:     Property 'dog' is missing in type 'Animal'.
     dogComparer2 = animalComparer2;  // Ok
+    
+    // Crate<T> is invariant in --strictFunctionTypes mode
+    
+    interface Crate<T> {
+        item: T;
+        onSetItem: (item: T) => void;
+    }
+    
+    declare let animalCrate: Crate<Animal>;
+    declare let dogCrate: Crate<Dog>;
+    
+    // Errors below should elaborate the reason for invariance
+    
+    animalCrate = dogCrate;  // Error
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'Crate<Dog>' is not assignable to type 'Crate<Animal>'.
+!!! error TS2322:   Types of property 'onSetItem' are incompatible.
+!!! error TS2322:     Type '(item: Dog) => void' is not assignable to type '(item: Animal) => void'.
+!!! error TS2322:       Types of parameters 'item' and 'item' are incompatible.
+!!! error TS2322:         Type 'Animal' is not assignable to type 'Dog'.
+    dogCrate = animalCrate;  // Error
+    ~~~~~~~~
+!!! error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
+!!! error TS2322:   Types of property 'item' are incompatible.
+!!! error TS2322:     Type 'Animal' is not assignable to type 'Dog'.
     
