@@ -2,7 +2,7 @@
 namespace N {
     let x = 1;
 }
-// ==SCOPE::Extract to constant in namespace 'N'==
+// ==SCOPE::Extract to constant in enclosing scope==
 namespace N {
     const newLocal = 1;
 

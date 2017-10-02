@@ -113,7 +113,7 @@ namespace ts {
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
-                assert.equal(Extension.Js, extension);
+                assert.equal(Extension.Js, extension, "Syntactic diagnostics found in non-JS file");
                 return;
             }
 

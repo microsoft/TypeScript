@@ -3198,6 +3198,7 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        MarkerType              = 1 << 26,  // Marker type used for variance probing
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3326,10 +3327,21 @@ namespace ts {
         typeArguments?: Type[];  // Type reference type arguments (undefined if none)
     }
 
+    /* @internal */
+    export const enum Variance {
+        Invariant     = 0,  // Neither covariant nor contravariant
+        Covariant     = 1,  // Covariant
+        Contravariant = 2,  // Contravariant
+        Bivariant     = 3,  // Both covariant and contravariant
+        Independent   = 4,  // Unwitnessed type parameter
+    }
+
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
-        instantiations: Map<TypeReference>;   // Generic instantiation cache
+        instantiations: Map<TypeReference>;  // Generic instantiation cache
+        /* @internal */
+        variances?: Variance[];  // Variance of each type parameter
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -3505,9 +3517,10 @@ namespace ts {
     }
 
     export const enum InferencePriority {
-        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
-        MappedType        = 1 << 1,  // Reverse inference for mapped type
-        ReturnType        = 1 << 2,  // Inference made from return type of generic function
+        Contravariant     = 1 << 0,  // Inference from contravariant position
+        NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
+        MappedType        = 1 << 2,  // Reverse inference for mapped type
+        ReturnType        = 1 << 3,  // Inference made from return type of generic function
     }
 
     export interface InferenceInfo {
@@ -3690,6 +3703,7 @@ namespace ts {
         sourceMap?: boolean;
         sourceRoot?: string;
         strict?: boolean;
+        strictFunctionTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
