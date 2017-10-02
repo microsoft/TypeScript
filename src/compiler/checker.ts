@@ -1272,8 +1272,10 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                     return node.parent ? getEntityNameForExtendingInterface(node.parent) : undefined;
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
-                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
+                    if (isEntityNameExpression((<ExpressionWithTypeArguments>node).expression)) {
+                        return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
+                    }
+                    // falls through
                 default:
                     return undefined;
             }
@@ -4917,6 +4919,8 @@ namespace ts {
          */
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
             if (!type.resolvedBaseConstructorType) {
+                const decl = <ClassLikeDeclaration>type.symbol.valueDeclaration;
+                const extended = getClassExtendsHeritageClauseElement(decl);
                 const baseTypeNode = getBaseTypeNodeOfClass(type);
                 if (!baseTypeNode) {
                     return type.resolvedBaseConstructorType = undefinedType;
@@ -4925,6 +4929,10 @@ namespace ts {
                     return unknownType;
                 }
                 const baseConstructorType = checkExpression(baseTypeNode.expression);
+                if (extended && baseTypeNode !== extended) {
+                    Debug.assert(!extended.typeArguments); // Because this is in a JS file, and baseTypeNode is in an @extends tag
+                    checkExpression(extended.expression);
+                }
                 if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                     // Resolving the members of a class requires us to resolve the base class of that class.
                     // We force resolution here such that we catch circularities now.
@@ -14866,6 +14874,7 @@ namespace ts {
 
         function getSuggestionForNonexistentSymbol(location: Node, name: __String, meaning: SymbolFlags): string {
             const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ false, (symbols, name, meaning) => {
+                // `name` from the callback === the outer `name`
                 const symbol = getSymbol(symbols, name, meaning);
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
                 // So the table *contains* `x` but `x` isn't actually in scope.
@@ -19792,7 +19801,7 @@ namespace ts {
             if (!getParameterSymbolFromJSDoc(node)) {
                 error(node.name,
                     Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
-                    unescapeLeadingUnderscores((node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name).escapedText));
+                    idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
             }
         }
 
@@ -19808,9 +19817,7 @@ namespace ts {
             if (extend) {
                 const className = getIdentifierFromEntityNameExpression(extend.expression);
                 if (className && name.escapedText !== className.escapedText) {
-                    error(name, Diagnostics.JSDoc_augments_0_does_not_match_the_extends_1_clause,
-                        unescapeLeadingUnderscores(name.escapedText),
-                        unescapeLeadingUnderscores(className.escapedText));
+                    error(name, Diagnostics.JSDoc_augments_0_does_not_match_the_extends_1_clause, idText(name), idText(className));
                 }
             }
         }

@@ -4874,7 +4874,7 @@ namespace ts.projectSystem {
                 };
                 const openFiles = [commonFile1.path];
                 const host = createServerHost([commonFile1, libFile, configFile]);
-                const { verifyProjectsUpdatedInBackgroundEventHandler, verifyInitialOpen } = createSession(host, );
+                const { verifyProjectsUpdatedInBackgroundEventHandler, verifyInitialOpen } = createSession(host);
                 verifyInitialOpen(commonFile1);
 
                 host.reloadFS([commonFile1, libFile, configFile, commonFile2]);
