@@ -4,8 +4,8 @@ import * as xml2js from "xml2js";
 
 function main(): void {
     const args = process.argv.slice(2);
-    if (args.length != 3) {
-        console.log("Usage:")
+    if (args.length !== 3) {
+        console.log("Usage:");
         console.log("\tnode generateLocalizedDiagnosticMessages.js <lcl source directory> <output directory> <generated diagnostics map file>");
         return;
     }
@@ -19,7 +19,7 @@ function main(): void {
 
     // generate other langs
     fs.readdir(inputPath, (err, files) => {
-        handelError(err);
+        handleError(err);
         files.forEach(visitDirectory);
     });
 
@@ -29,15 +29,15 @@ function main(): void {
         const inputFilePath = path.join(inputPath, name, "diagnosticMessages", "diagnosticMessages.generated.json.lcl");
         const outputFilePath = path.join(outputPath, name, "diagnosticMessages.generated.json");
         fs.readFile(inputFilePath, (err, data) => {
-            handelError(err);
+            handleError(err);
             xml2js.parseString(data.toString(), (err, result) => {
-                handelError(err);
+                handleError(err);
                 writeFile(outputFilePath, xmlObjectToString(result));
             });
         });
     }
 
-    function handelError(err: null | object) {
+    function handleError(err: null | object) {
         if (err) {
             console.error(err);
             process.exit(1);
@@ -80,12 +80,12 @@ function main(): void {
 
     function writeFile(fileName: string, contents: string) {
         ensureDirectoryExists(path.dirname(fileName), () => {
-            fs.writeFile(fileName, contents, handelError);
+            fs.writeFile(fileName, contents, handleError);
         });
     }
 
-    function objectToList(o:  Record<string, string>) {
-        let list: { key: string, value: string }[] = [];
+    function objectToList(o: Record<string, string>) {
+        const list: { key: string, value: string }[] = [];
         for (const key in o) {
             list.push({ key, value: o[key] });
         }
@@ -94,7 +94,7 @@ function main(): void {
 
     function generateLCGFile() {
         return fs.readFile(diagnosticsMapFilePath, (err, data) => {
-            handelError(err);
+            handleError(err);
             writeFile(
                 path.join(outputPath, "enu", "diagnosticMessages.generated.json.lcg"),
                 getLCGFileXML(
@@ -114,7 +114,7 @@ function main(): void {
                 <Val><![CDATA[${value}]]></Val>
               </Str>
               <Disp Icon="Str" />
-            </Item>`
+            </Item>`;
         }
 
         function getLCGFileXML(items: string) {
