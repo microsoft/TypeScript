@@ -3314,6 +3314,10 @@
         "category": "Message",
         "code": 6185
     },
+    "Enable strict checking of function types.": {
+        "category": "Message",
+        "code": 6186
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

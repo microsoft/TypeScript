@@ -270,6 +270,13 @@ namespace ts {
             description: Diagnostics.Enable_strict_null_checks
         },
         {
+            name: "strictFunctionTypes",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_function_types
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             showInSimplifiedHelpView: true,
