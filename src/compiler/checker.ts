@@ -4917,6 +4917,8 @@ namespace ts {
          */
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
             if (!type.resolvedBaseConstructorType) {
+                const decl = <ClassLikeDeclaration>type.symbol.valueDeclaration;
+                const extended = getClassExtendsHeritageClauseElement(decl);
                 const baseTypeNode = getBaseTypeNodeOfClass(type);
                 if (!baseTypeNode) {
                     return type.resolvedBaseConstructorType = undefinedType;
@@ -4925,6 +4927,10 @@ namespace ts {
                     return unknownType;
                 }
                 const baseConstructorType = checkExpression(baseTypeNode.expression);
+                if (extended && baseTypeNode !== extended) {
+                    Debug.assert(!extended.typeArguments); // Because this is in a JS file, and baseTypeNode is in an @extends tag
+                    checkExpression(extended.expression);
+                }
                 if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                     // Resolving the members of a class requires us to resolve the base class of that class.
                     // We force resolution here such that we catch circularities now.
