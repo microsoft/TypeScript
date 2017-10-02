@@ -4245,4 +4245,60 @@ namespace ts.projectSystem {
             }
         });
     });
+
+    describe("refactors", () => {
+        it("use formatting options", () => {
+            const file = {
+                path: "/a.ts",
+                content: "function f() {\n  1;\n}",
+            };
+            const host = createServerHost([file]);
+            const session = createSession(host);
+            openFilesForSession([file], session);
+
+            const response0 = session.executeCommandSeq<server.protocol.ConfigureRequest>({
+                command: server.protocol.CommandTypes.Configure,
+                arguments: {
+                    formatOptions: {
+                        indentSize: 2,
+                    },
+                },
+            }).response;
+            assert.deepEqual(response0, /*expected*/ undefined);
+
+            const response1 = session.executeCommandSeq<server.protocol.GetEditsForRefactorRequest>({
+                command: server.protocol.CommandTypes.GetEditsForRefactor,
+                arguments: {
+                    refactor: "Extract Symbol",
+                    action: "function_scope_1",
+                    file: "/a.ts",
+                    startLine: 2,
+                    startOffset: 3,
+                    endLine: 2,
+                    endOffset: 4,
+                },
+            }).response;
+            assert.deepEqual(response1, {
+                edits: [
+                    {
+                        fileName: "/a.ts",
+                        textChanges: [
+                            {
+                                start: { line: 2, offset: 1 },
+                                end: { line: 3, offset: 1 },
+                                newText: "  newFunction();\n",
+                            },
+                            {
+                                start: { line: 3, offset: 2 },
+                                end: { line: 3, offset: 2 },
+                                newText: "\nfunction newFunction() {\n  1;\n}\n",
+                            },
+                        ]
+                    }
+                ],
+                renameFilename: "/a.ts",
+                renameLocation: { line: 2, offset: 3 },
+            });
+        });
+    });
 }
