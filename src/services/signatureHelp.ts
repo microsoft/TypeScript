@@ -376,21 +376,11 @@ namespace ts.SignatureHelp {
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                 const parameterParts = mapToDisplayParts(writer => {
-                    writer.writePunctuation("(");
-                    let hadPrevious = false;
-                    if (candidateSignature.thisParameter) {
-                        typeChecker.parameterToString(candidateSignature.thisParameter, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors, writer);
-                        hadPrevious = true;
-                    }
-                    for (const param of candidateSignature.parameters) {
-                        if (hadPrevious) {
-                            writer.writePunctuation(",");
-                            writer.writeSpace(" ");
-                        }
-                        typeChecker.parameterToString(param, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors, writer);
-                        hadPrevious = true;
-                    }
-                    writer.writePunctuation(")");
+                    const printer = createPrinter({ removeComments: true });
+                    const flags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors;
+                    const thisParameter = candidateSignature.thisParameter ? [typeChecker.symbolToParameterDeclaration(candidateSignature.thisParameter, invocation, flags)] : [];
+                    const params = createNodeArray([...thisParameter, ...map(candidateSignature.parameters, param => typeChecker.symbolToParameterDeclaration(param, invocation, flags))]);
+                    printer.writeList(ListFormat.CallExpressionArguments, params, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
                 });
                 addRange(suffixDisplayParts, parameterParts);
             }
@@ -398,17 +388,9 @@ namespace ts.SignatureHelp {
                 isVariadic = candidateSignature.hasRestParameter;
                 const typeParameterParts = mapToDisplayParts(writer => {
                     if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                        writer.writePunctuation("<");
-                        let hadPrevious = false;
-                        for (const param of candidateSignature.typeParameters) {
-                            if (hadPrevious) {
-                                writer.writePunctuation(",");
-                                writer.writeSpace(" ");
-                            }
-                            typeChecker.typeParameterToString(param, invocation, /*flags*/ undefined, writer);
-                            hadPrevious = true;
-                        }
-                        writer.writePunctuation(">");
+                        const printer = createPrinter({ removeComments: true });
+                        const args = createNodeArray(map(candidateSignature.typeParameters, p => typeChecker.typeParameterToDeclaration(p, invocation)));
+                        printer.writeList(ListFormat.TypeParameters, args, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
                     }
                 });
                 addRange(prefixDisplayParts, typeParameterParts);
