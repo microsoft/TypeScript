@@ -26,9 +26,12 @@ namespace Harness.Parallel.Host {
         text?: string;
     }
 
-    const perfdataFileName = ".parallelperf.json";
-    function readSavedPerfData(): {[testHash: string]: number} {
-        const perfDataContents = Harness.IO.readFile(perfdataFileName);
+    const perfdataFileNameFragment = ".parallelperf";
+    function perfdataFileName(target?: string) {
+        return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
+    }
+    function readSavedPerfData(target?: string): {[testHash: string]: number} {
+        const perfDataContents = Harness.IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
         }
@@ -46,7 +49,7 @@ namespace Harness.Parallel.Host {
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
         let tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
         const newTasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
-        const perfData = readSavedPerfData();
+        const perfData = readSavedPerfData(configOption);
         let totalCost = 0;
         let unknownValue: string | undefined;
         for (const runner of runners) {
@@ -54,8 +57,19 @@ namespace Harness.Parallel.Host {
             for (const file of files) {
                 let size: number;
                 if (!perfData) {
-                    size = statSync(file).size;
-
+                    try {
+                        size = statSync(file).size;
+                    }
+                    catch {
+                        // May be a directory
+                        try {
+                            size = Harness.IO.listFiles(file, /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                        }
+                        catch {
+                            // Unknown test kind, just return 0 and let the historical analysis take over after one run
+                            size = 0;
+                        }
+                    }
                 }
                 else {
                     const hashedName = hashName(runner.kind(), file);
@@ -117,7 +131,7 @@ namespace Harness.Parallel.Host {
             child.on("message", (data: ParallelClientMessage) => {
                 switch (data.type) {
                     case "error": {
-                        console.error(`Test worker encounted unexpected error and was forced to close:
+                        console.error(`Test worker encounted unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
         Message: ${data.payload.error}
         Stack: ${data.payload.stack}`);
                         return process.exit(2);
@@ -290,7 +304,7 @@ namespace Harness.Parallel.Host {
                 reporter.epilogue();
             }
 
-            Harness.IO.writeFile(perfdataFileName, JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+            Harness.IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
             process.exit(errorResults.length);
         }

@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/parserKeywordsAsIdentifierName2.ts ===
+// 'public' should be marked unusable, should complain on trailing /*
+No type information for this code.a.public /*
+No type information for this code.

@@ -126,7 +126,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.escapedText), typeArguments), node)
+        ? updateNode(createIdentifier(idText(node), typeArguments), node)
         : node;
     }
 
@@ -1209,6 +1209,30 @@ namespace ts {
             || node.templateSpans !== templateSpans
             ? updateNode(createTemplateExpression(head, templateSpans), node)
             : node;
+    }
+
+    export function createTemplateHead(text: string) {
+        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateMiddle(text: string) {
+        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateTail(text: string) {
+        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+        node.text = text;
+        return node;
+    }
+
+    export function createNoSubstitutionTemplateLiteral(text: string) {
+        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
+        node.text = text;
+        return node;
     }
 
     export function createYield(expression?: Expression): YieldExpression;
@@ -2931,12 +2955,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.escapedText));
+            const right = createIdentifier(idText(jsxFactory.right));
             right.escapedText = jsxFactory.right.escapedText;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.escapedText), parent);
+            return createReactNamespace(idText(jsxFactory), parent);
         }
     }
 

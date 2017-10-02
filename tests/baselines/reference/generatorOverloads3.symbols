@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorOverloads3.ts ===
+class C {
+>C : Symbol(C, Decl(generatorOverloads3.ts, 0, 0))
+
+    *f(s: string): Iterable<any>;
+>f : Symbol(C.f, Decl(generatorOverloads3.ts, 0, 9), Decl(generatorOverloads3.ts, 1, 33), Decl(generatorOverloads3.ts, 2, 33))
+>s : Symbol(s, Decl(generatorOverloads3.ts, 1, 7))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    *f(s: number): Iterable<any>;
+>f : Symbol(C.f, Decl(generatorOverloads3.ts, 0, 9), Decl(generatorOverloads3.ts, 1, 33), Decl(generatorOverloads3.ts, 2, 33))
+>s : Symbol(s, Decl(generatorOverloads3.ts, 2, 7))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    *f(s: any): Iterable<any> { }
+>f : Symbol(C.f, Decl(generatorOverloads3.ts, 0, 9), Decl(generatorOverloads3.ts, 1, 33), Decl(generatorOverloads3.ts, 2, 33))
+>s : Symbol(s, Decl(generatorOverloads3.ts, 3, 7))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+}

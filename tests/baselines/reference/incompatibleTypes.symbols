@@ -1,0 +1,180 @@
+=== tests/cases/compiler/incompatibleTypes.ts ===
+interface IFoo1 {
+>IFoo1 : Symbol(IFoo1, Decl(incompatibleTypes.ts, 0, 0))
+
+    p1(): number;
+>p1 : Symbol(IFoo1.p1, Decl(incompatibleTypes.ts, 0, 17))
+}
+
+class C1 implements IFoo1 { // incompatible on the return type
+>C1 : Symbol(C1, Decl(incompatibleTypes.ts, 2, 1))
+>IFoo1 : Symbol(IFoo1, Decl(incompatibleTypes.ts, 0, 0))
+
+    public p1() {
+>p1 : Symbol(C1.p1, Decl(incompatibleTypes.ts, 4, 27))
+
+        return "s";
+    }
+}
+
+interface IFoo2 {
+>IFoo2 : Symbol(IFoo2, Decl(incompatibleTypes.ts, 8, 1))
+
+    p1(s:string): number;
+>p1 : Symbol(IFoo2.p1, Decl(incompatibleTypes.ts, 10, 17))
+>s : Symbol(s, Decl(incompatibleTypes.ts, 11, 7))
+}
+
+class C2 implements IFoo2 { // incompatible on the param type
+>C2 : Symbol(C2, Decl(incompatibleTypes.ts, 12, 1))
+>IFoo2 : Symbol(IFoo2, Decl(incompatibleTypes.ts, 8, 1))
+
+    public p1(n:number) {
+>p1 : Symbol(C2.p1, Decl(incompatibleTypes.ts, 14, 27))
+>n : Symbol(n, Decl(incompatibleTypes.ts, 15, 14))
+
+        return 0;
+    }
+}
+
+interface IFoo3 {
+>IFoo3 : Symbol(IFoo3, Decl(incompatibleTypes.ts, 18, 1))
+
+    p1: string;
+>p1 : Symbol(IFoo3.p1, Decl(incompatibleTypes.ts, 20, 17))
+}
+
+class C3 implements IFoo3 { // incompatible on the property type
+>C3 : Symbol(C3, Decl(incompatibleTypes.ts, 22, 1))
+>IFoo3 : Symbol(IFoo3, Decl(incompatibleTypes.ts, 18, 1))
+
+    public p1: number;
+>p1 : Symbol(C3.p1, Decl(incompatibleTypes.ts, 24, 27))
+}
+
+interface IFoo4 {
+>IFoo4 : Symbol(IFoo4, Decl(incompatibleTypes.ts, 26, 1))
+
+    p1: { a: { a: string; }; b: string; };
+>p1 : Symbol(IFoo4.p1, Decl(incompatibleTypes.ts, 28, 17))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 29, 9))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 29, 14))
+>b : Symbol(b, Decl(incompatibleTypes.ts, 29, 28))
+}
+
+class C4 implements IFoo4 { // incompatible on the property type
+>C4 : Symbol(C4, Decl(incompatibleTypes.ts, 30, 1))
+>IFoo4 : Symbol(IFoo4, Decl(incompatibleTypes.ts, 26, 1))
+
+    public p1: { c: { b: string; }; d: string; };
+>p1 : Symbol(C4.p1, Decl(incompatibleTypes.ts, 32, 27))
+>c : Symbol(c, Decl(incompatibleTypes.ts, 33, 16))
+>b : Symbol(b, Decl(incompatibleTypes.ts, 33, 21))
+>d : Symbol(d, Decl(incompatibleTypes.ts, 33, 35))
+}
+
+function if1(i: IFoo1): void;
+>if1 : Symbol(if1, Decl(incompatibleTypes.ts, 34, 1), Decl(incompatibleTypes.ts, 36, 29), Decl(incompatibleTypes.ts, 37, 29))
+>i : Symbol(i, Decl(incompatibleTypes.ts, 36, 13))
+>IFoo1 : Symbol(IFoo1, Decl(incompatibleTypes.ts, 0, 0))
+
+function if1(i: IFoo2): void;
+>if1 : Symbol(if1, Decl(incompatibleTypes.ts, 34, 1), Decl(incompatibleTypes.ts, 36, 29), Decl(incompatibleTypes.ts, 37, 29))
+>i : Symbol(i, Decl(incompatibleTypes.ts, 37, 13))
+>IFoo2 : Symbol(IFoo2, Decl(incompatibleTypes.ts, 8, 1))
+
+function if1(a: any) { }
+>if1 : Symbol(if1, Decl(incompatibleTypes.ts, 34, 1), Decl(incompatibleTypes.ts, 36, 29), Decl(incompatibleTypes.ts, 37, 29))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 38, 13))
+
+var c1: C1;
+>c1 : Symbol(c1, Decl(incompatibleTypes.ts, 39, 3))
+>C1 : Symbol(C1, Decl(incompatibleTypes.ts, 2, 1))
+
+var c2: C2;
+>c2 : Symbol(c2, Decl(incompatibleTypes.ts, 40, 3))
+>C2 : Symbol(C2, Decl(incompatibleTypes.ts, 12, 1))
+
+if1(c1);
+>if1 : Symbol(if1, Decl(incompatibleTypes.ts, 34, 1), Decl(incompatibleTypes.ts, 36, 29), Decl(incompatibleTypes.ts, 37, 29))
+>c1 : Symbol(c1, Decl(incompatibleTypes.ts, 39, 3))
+
+
+function of1(n: { a: { a: string; }; b: string; }): number;
+>of1 : Symbol(of1, Decl(incompatibleTypes.ts, 41, 8), Decl(incompatibleTypes.ts, 44, 59), Decl(incompatibleTypes.ts, 45, 59))
+>n : Symbol(n, Decl(incompatibleTypes.ts, 44, 13))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 44, 17))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 44, 22))
+>b : Symbol(b, Decl(incompatibleTypes.ts, 44, 36))
+
+function of1(s: { c: { b: string; }; d: string; }): string;
+>of1 : Symbol(of1, Decl(incompatibleTypes.ts, 41, 8), Decl(incompatibleTypes.ts, 44, 59), Decl(incompatibleTypes.ts, 45, 59))
+>s : Symbol(s, Decl(incompatibleTypes.ts, 45, 13))
+>c : Symbol(c, Decl(incompatibleTypes.ts, 45, 17))
+>b : Symbol(b, Decl(incompatibleTypes.ts, 45, 22))
+>d : Symbol(d, Decl(incompatibleTypes.ts, 45, 36))
+
+function of1(a: any) { return null; }
+>of1 : Symbol(of1, Decl(incompatibleTypes.ts, 41, 8), Decl(incompatibleTypes.ts, 44, 59), Decl(incompatibleTypes.ts, 45, 59))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 46, 13))
+
+of1({ e: 0, f: 0 });
+>of1 : Symbol(of1, Decl(incompatibleTypes.ts, 41, 8), Decl(incompatibleTypes.ts, 44, 59), Decl(incompatibleTypes.ts, 45, 59))
+>e : Symbol(e, Decl(incompatibleTypes.ts, 48, 5))
+>f : Symbol(f, Decl(incompatibleTypes.ts, 48, 11))
+
+interface IMap {
+>IMap : Symbol(IMap, Decl(incompatibleTypes.ts, 48, 20))
+
+ [key:string]:string;
+>key : Symbol(key, Decl(incompatibleTypes.ts, 51, 2))
+}
+
+function foo(fn:() => void) {
+>foo : Symbol(foo, Decl(incompatibleTypes.ts, 52, 1))
+>fn : Symbol(fn, Decl(incompatibleTypes.ts, 54, 13))
+ 
+}
+
+function bar() {
+>bar : Symbol(bar, Decl(incompatibleTypes.ts, 56, 1))
+
+ var map:IMap;
+>map : Symbol(map, Decl(incompatibleTypes.ts, 59, 4))
+>IMap : Symbol(IMap, Decl(incompatibleTypes.ts, 48, 20))
+
+ foo(() => {
+>foo : Symbol(foo, Decl(incompatibleTypes.ts, 52, 1))
+
+  map = {};
+>map : Symbol(map, Decl(incompatibleTypes.ts, 59, 4))
+
+ });
+}
+
+var o1: { a: { a: string; }; b: string; } = { e: 0, f: 0 };
+>o1 : Symbol(o1, Decl(incompatibleTypes.ts, 65, 3))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 65, 9))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 65, 14))
+>b : Symbol(b, Decl(incompatibleTypes.ts, 65, 28))
+>e : Symbol(e, Decl(incompatibleTypes.ts, 65, 45))
+>f : Symbol(f, Decl(incompatibleTypes.ts, 65, 51))
+
+var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
+>a1 : Symbol(a1, Decl(incompatibleTypes.ts, 67, 3))
+>e : Symbol(e, Decl(incompatibleTypes.ts, 67, 11))
+>f : Symbol(f, Decl(incompatibleTypes.ts, 67, 17))
+>e : Symbol(e, Decl(incompatibleTypes.ts, 67, 27))
+>f : Symbol(f, Decl(incompatibleTypes.ts, 67, 33))
+>e : Symbol(e, Decl(incompatibleTypes.ts, 67, 43))
+>g : Symbol(g, Decl(incompatibleTypes.ts, 67, 49))
+
+
+
+var i1c1: { (): string; } = 5;
+>i1c1 : Symbol(i1c1, Decl(incompatibleTypes.ts, 71, 3))
+
+var fp1: () =>any = a => 0;
+>fp1 : Symbol(fp1, Decl(incompatibleTypes.ts, 73, 3))
+>a : Symbol(a, Decl(incompatibleTypes.ts, 73, 19))
+

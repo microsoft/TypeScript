@@ -560,7 +560,7 @@ namespace ts {
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return getFullWidth(name) === 0 ? unescapeLeadingUnderscores(name.escapedText) : getTextOfNode(name);
+                return getFullWidth(name) === 0 ? idText(name) : getTextOfNode(name);
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
@@ -1418,11 +1418,10 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expression: ts.BinaryExpression): SpecialPropertyAssignmentKind {
-        if (!isInJavaScriptFile(expression)) {
+    export function getSpecialPropertyAssignmentKind(expr: ts.BinaryExpression): SpecialPropertyAssignmentKind {
+        if (!isInJavaScriptFile(expr)) {
             return SpecialPropertyAssignmentKind.None;
         }
-        const expr = <BinaryExpression>expression;
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || expr.left.kind !== SyntaxKind.PropertyAccessExpression) {
             return SpecialPropertyAssignmentKind.None;
         }
@@ -1531,7 +1530,7 @@ namespace ts {
     }
 
     export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
-        let result: Array<JSDoc | JSDocTag> | undefined;
+        let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
 
@@ -1598,14 +1597,18 @@ namespace ts {
             return undefined;
         }
         const name = node.name.escapedText;
-        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
-        const func = node.parent!.parent!;
+        const func = getJSDocHost(node);
         if (!isFunctionLike(func)) {
             return undefined;
         }
         const parameter = find(func.parameters, p =>
             p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
         return parameter && parameter.symbol;
+    }
+
+    export function getJSDocHost(node: JSDocTag): HasJSDoc {
+        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
+        return node.parent!.parent!;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -1990,8 +1993,7 @@ namespace ts {
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             const nameExpression = name.expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
-                const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.escapedText;
-                return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores(rightHandSideName));
+                return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
             }
             else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
                 return escapeLeadingUnderscores((<LiteralExpression>nameExpression).text);
@@ -2004,7 +2006,7 @@ namespace ts {
     export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
         if (node) {
             if (node.kind === SyntaxKind.Identifier) {
-                return unescapeLeadingUnderscores((node as Identifier).escapedText);
+                return idText(node as Identifier);
             }
             if (node.kind === SyntaxKind.StringLiteral ||
                 node.kind === SyntaxKind.NumericLiteral) {
@@ -3958,6 +3960,13 @@ namespace ts {
     export function unescapeLeadingUnderscores(identifier: __String): string {
         const id = identifier as string;
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
+    }
+
+    export function idText(identifier: Identifier): string {
+        return unescapeLeadingUnderscores(identifier.escapedText);
+    }
+    export function symbolName(symbol: Symbol): string {
+        return unescapeLeadingUnderscores(symbol.escapedName);
     }
 
     /**

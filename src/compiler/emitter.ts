@@ -1865,7 +1865,9 @@ namespace ts {
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
             emitModifiers(node, node.modifiers);
-            write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
+            if (~node.flags & NodeFlags.GlobalAugmentation) {
+                write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
+            }
             emit(node.name);
 
             let body = node.body;
@@ -2766,7 +2768,7 @@ namespace ts {
                 return generateName(node);
             }
             else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return unescapeLeadingUnderscores(node.escapedText);
+                return idText(node);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
@@ -2986,7 +2988,7 @@ namespace ts {
                 case GeneratedIdentifierKind.Loop:
                     return makeTempVariableName(TempFlags._i);
                 case GeneratedIdentifierKind.Unique:
-                    return makeUniqueName(unescapeLeadingUnderscores(name.escapedText));
+                    return makeUniqueName(idText(name));
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

@@ -568,11 +568,18 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+    interface RealizedDiagnostic {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
+    }
+    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDiagnostic {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,

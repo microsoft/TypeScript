@@ -1,0 +1,13 @@
+=== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts ===
+		var selection = a, 
+>selection : Symbol(selection, Decl(parserVariableDeclaration1.ts, 0, 5))
+
+			position = b,
+>position : Symbol(position, Decl(parserVariableDeclaration1.ts, 0, 20))
+
+			model = c,
+>model : Symbol(model, Decl(parserVariableDeclaration1.ts, 1, 16))
+
+			support = d;
+>support : Symbol(support, Decl(parserVariableDeclaration1.ts, 2, 13))
+

@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames17_ES6.ts ===
+var b: boolean;
+>b : boolean
+
+class C {
+>C : C
+
+    get [b]() { return 0;}
+>b : boolean
+>0 : 0
+
+    static set [true](v) { }
+>true : true
+>v : any
+
+    get [[]]() { return 0; }
+>[] : undefined[]
+>0 : 0
+
+    set [{}](v) { }
+>{} : {}
+>v : any
+
+    static get [undefined]() { return 0; }
+>undefined : undefined
+>0 : 0
+
+    set [null](v) { }
+>null : null
+>v : any
+}

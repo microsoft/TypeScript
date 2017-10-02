@@ -1,0 +1,11 @@
+=== tests/cases/compiler/overloadResolutionOverCTLambda.ts ===
+function foo(b: (item: number) => boolean) { }
+>foo : Symbol(foo, Decl(overloadResolutionOverCTLambda.ts, 0, 0))
+>b : Symbol(b, Decl(overloadResolutionOverCTLambda.ts, 0, 13))
+>item : Symbol(item, Decl(overloadResolutionOverCTLambda.ts, 0, 17))
+
+foo(a => a); // can not convert (number)=>bool to (number)=>number
+>foo : Symbol(foo, Decl(overloadResolutionOverCTLambda.ts, 0, 0))
+>a : Symbol(a, Decl(overloadResolutionOverCTLambda.ts, 1, 4))
+>a : Symbol(a, Decl(overloadResolutionOverCTLambda.ts, 1, 4))
+

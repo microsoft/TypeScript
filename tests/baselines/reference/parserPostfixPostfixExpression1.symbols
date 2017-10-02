@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixPostfixExpression1.ts ===
+a++ ++;
+No type information for this code.

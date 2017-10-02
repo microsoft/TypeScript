@@ -1856,6 +1856,12 @@ namespace ts {
                 case CharacterCodes.closeBracket:
                     pos++;
                     return token = SyntaxKind.CloseBracketToken;
+                case CharacterCodes.lessThan:
+                    pos++;
+                    return token = SyntaxKind.LessThanToken;
+                case CharacterCodes.greaterThan:
+                    pos++;
+                    return token = SyntaxKind.GreaterThanToken;
                 case CharacterCodes.equals:
                     pos++;
                     return token = SyntaxKind.EqualsToken;

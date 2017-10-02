@@ -59,4 +59,4 @@ internal/
 .idea
 yarn.lock
 package-lock.json
-.parallelperf.json
+.parallelperf.*

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts ===
+class A {
+>A : A
+
+    a: number;
+>a : number
+}
+module A {
+>A : typeof A
+
+    export var v: string;
+>v : string
+}
+
+module Foo {
+>Foo : typeof Foo
+
+    var A = 1;
+>A : number
+>1 : 1
+
+    class B extends A {
+>B : B
+>A : number
+
+        b: string;
+>b : string
+    }
+}
