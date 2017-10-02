@@ -1332,4 +1332,26 @@ namespace ts {
     export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
         return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
     }
+
+    export function getSourceFileImportLocation(node: SourceFile) {
+        // For a source file, it is possible there are detached comments we should not skip
+        const text = node.text;
+        let ranges = getLeadingCommentRanges(text, 0);
+        if (!ranges) return 0;
+        let position = 0;
+        // However we should still skip a pinned comment at the top
+        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+            position = ranges[0].end + 1;
+            ranges = ranges.slice(1);
+        }
+        // As well as any triple slash references
+        for (const range of ranges) {
+            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
+                position = range.end + 1;
+                continue;
+            }
+            break;
+        }
+        return position;
+    }
 }
