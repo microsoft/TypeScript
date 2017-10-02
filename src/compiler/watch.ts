@@ -2,6 +2,7 @@
 /// <reference path="builder.ts" />
 /// <reference path="resolutionCache.ts"/>
 
+/* @internal */
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     export type ParseConfigFile = (configFileName: string, optionsToExtend: CompilerOptions, system: DirectoryStructureHost, reportDiagnostic: DiagnosticReporter, reportWatchDiagnostic: DiagnosticReporter) => ParsedCommandLine;
@@ -341,7 +342,7 @@ namespace ts {
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
             program = createProgram(rootFileNames, compilerOptions, compilerHost, program);
             resolutionCache.finishCachingPerDirectoryResolution();
-            builder.onProgramUpdateGraph(program, hasInvalidatedResolution);
+            builder.updateProgram(program);
 
             // Update watches
             updateMissingFilePathsWatch(program, missingFilesMap || (missingFilesMap = createMap()), watchMissingFilePath);

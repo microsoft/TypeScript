@@ -2525,6 +2525,8 @@ namespace ts {
         /* @internal */ sourceFileToPackageName: Map<string>;
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsSet: Map<true>;
+        /** Returns true when file in the program had invalidated resolution at the time of program creation. */
+        hasInvalidatedResolution: HasInvalidatedResolution;
     }
 
     /* @internal */

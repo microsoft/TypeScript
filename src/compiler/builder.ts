@@ -18,18 +18,12 @@ namespace ts {
         text: string;
     }
 
-    export interface ChangedProgramFiles {
-        /** Minimal set of list of files that require emit */
-        readonly filesToEmit: ReadonlyArray<string>;
-        /** File paths of source files changed/added/removed or affected by changed files */
-        readonly changedFiles: ReadonlyArray<string>;
-    }
-
+    /* @internal */
     export interface Builder {
         /**
-         * This is the callback when file infos in the builder are updated
+         * Call this to feed new program
          */
-        onProgramUpdateGraph(program: Program, hasInvalidatedResolution: HasInvalidatedResolution): void;
+        updateProgram(newProgram: Program): void;
         getFilesAffectedBy(program: Program, path: Path): string[];
         emitFile(program: Program, path: Path): EmitOutput;
 
@@ -97,6 +91,7 @@ namespace ts {
         signature: string;
     }
 
+    /* @internal */
     export function createBuilder(
         getCanonicalFileName: (fileName: string) => string,
         getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed,
@@ -110,7 +105,7 @@ namespace ts {
         const changedFileNames = createMap<string>();
         let emitHandler: EmitHandler;
         return {
-            onProgramUpdateGraph,
+            updateProgram,
             getFilesAffectedBy,
             emitFile,
             emitChangedFiles,
@@ -118,7 +113,7 @@ namespace ts {
             clear
         };
 
-        function createProgramGraph(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
+        function createProgramGraph(program: Program) {
             const currentIsModuleEmit = program.getCompilerOptions().module !== ModuleKind.None;
             if (isModuleEmit !== currentIsModuleEmit) {
                 isModuleEmit = currentIsModuleEmit;
@@ -135,7 +130,7 @@ namespace ts {
                     // Remove existing file info
                     onDeleteValue: removeExistingFileInfo,
                     // We will update in place instead of deleting existing value and adding new one
-                    onExistingValue: (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile, hasInvalidatedResolution)
+                    onExistingValue: (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile)
                 }
             );
         }
@@ -157,13 +152,13 @@ namespace ts {
             emitHandler.onRemoveSourceFile(path);
         }
 
-        function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile, hasInvalidatedResolution: HasInvalidatedResolution) {
+        function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile) {
             if (existingInfo.version !== sourceFile.version) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
                 existingInfo.version = sourceFile.version;
                 emitHandler.onUpdateSourceFile(program, sourceFile);
             }
-            else if (hasInvalidatedResolution(sourceFile.path) &&
+            else if (program.hasInvalidatedResolution(sourceFile.path) &&
                 emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
                 registerChangedFile(sourceFile.path, sourceFile.fileName);
             }
@@ -171,13 +166,13 @@ namespace ts {
 
         function ensureProgramGraph(program: Program) {
             if (!emitHandler) {
-                createProgramGraph(program, returnFalse);
+                createProgramGraph(program);
             }
         }
 
-        function onProgramUpdateGraph(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
+        function updateProgram(newProgram: Program) {
             if (emitHandler) {
-                createProgramGraph(program, hasInvalidatedResolution);
+                createProgramGraph(newProgram);
             }
         }
 

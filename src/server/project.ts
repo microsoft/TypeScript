@@ -193,6 +193,7 @@ namespace ts.server {
             return result.module;
         }
 
+        /*@internal*/
         constructor(
             /*@internal*/readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -758,7 +759,7 @@ namespace ts.server {
                     hasChanges = this.updateGraphWorker() || hasChanges;
                 }
                 if (this.builder) {
-                    this.builder.onProgramUpdateGraph(this.program, this.hasInvalidatedResolution);
+                    this.builder.updateProgram(this.program);
                 }
             }
             else {
@@ -1030,6 +1031,7 @@ namespace ts.server {
             super.setCompilerOptions(newOptions);
         }
 
+        /*@internal*/
         constructor(
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
@@ -1119,6 +1121,7 @@ namespace ts.server {
 
         private projectErrors: Diagnostic[];
 
+        /*@internal*/
         constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
@@ -1363,6 +1366,7 @@ namespace ts.server {
     export class ExternalProject extends Project {
         excludedFiles: ReadonlyArray<NormalizedPath> = [];
         private typeAcquisition: TypeAcquisition;
+        /*@internal*/
         constructor(public externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,

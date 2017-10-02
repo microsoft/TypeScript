@@ -663,6 +663,7 @@ namespace ts {
             getSourceFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
+            hasInvalidatedResolution
         };
 
         verifyCompilerOptions();
