@@ -2405,22 +2405,23 @@ declare namespace ts {
         Dts = ".d.ts",
         Js = ".js",
         Jsx = ".jsx",
+        Json = ".json",
     }
     interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModuleFull | undefined;
+        readonly resolvedModule: ResolvedModuleFull | undefined;
     }
     interface ResolvedTypeReferenceDirective {
         primary: boolean;
-        resolvedFileName?: string;
+        resolvedFileName: string | undefined;
         packageId?: PackageId;
     }
     interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-        resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
-        failedLookupLocations: string[];
+        readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
+        readonly failedLookupLocations: ReadonlyArray<string>;
     }
     interface CompilerHost extends ModuleResolutionHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined;
-        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
@@ -2430,7 +2431,7 @@ declare namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
@@ -2683,14 +2684,26 @@ declare namespace ts {
         callback: FileWatcherCallback;
         mtime?: Date;
     }
-    interface System {
-        args: string[];
+    /**
+     * Partial interface of the System thats needed to support the caching of directory structure
+     */
+    interface DirectoryStructureHost {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string | undefined;
-        getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        fileExists(path: string): boolean;
+        directoryExists(path: string): boolean;
+        createDirectory(path: string): void;
+        getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        exit(exitCode?: number): void;
+    }
+    interface System extends DirectoryStructureHost {
+        args: string[];
+        getFileSize?(path: string): number;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
@@ -2698,13 +2711,7 @@ declare namespace ts {
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
-        fileExists(path: string): boolean;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
         getExecutingFilePath(): string;
-        getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -2712,17 +2719,12 @@ declare namespace ts {
          */
         createHash?(data: string): string;
         getMemoryUsage?(): number;
-        exit(exitCode?: number): void;
         realpath?(path: string): string;
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
     }
     interface FileWatcher {
         close(): void;
-    }
-    interface DirectoryWatcher extends FileWatcher {
-        directoryName: string;
-        referenceCount: number;
     }
     function getNodeMajorVersion(): number;
     let sys: System;
@@ -3711,6 +3713,23 @@ declare namespace ts {
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
 }
 declare namespace ts {
+    interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitSkipped: boolean;
+    }
+    interface EmitOutputDetailed extends EmitOutput {
+        diagnostics: Diagnostic[];
+        sourceMaps: SourceMapData[];
+        emittedSourceFiles: SourceFile[];
+    }
+    interface OutputFile {
+        name: string;
+        writeByteOrderMark: boolean;
+        text: string;
+    }
+    function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed;
+}
+declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
@@ -3721,6 +3740,7 @@ declare namespace ts {
         getNewLine(): string;
     }
     function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
+    function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
     function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     /**
@@ -3856,7 +3876,7 @@ declare namespace ts {
         readFile?(path: string, encoding?: string): string | undefined;
         fileExists?(path: string): boolean;
         getTypeRootsVersion?(): number;
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
@@ -3914,6 +3934,7 @@ declare namespace ts {
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, isDetailed?: boolean): EmitOutput | EmitOutputDetailed;
         getProgram(): Program;
         dispose(): void;
     }
@@ -4270,19 +4291,10 @@ declare namespace ts {
          */
         autoCollapse: boolean;
     }
-    interface EmitOutput {
-        outputFiles: OutputFile[];
-        emitSkipped: boolean;
-    }
     enum OutputFileType {
         JavaScript = 0,
         SourceMap = 1,
         Declaration = 2,
-    }
-    interface OutputFile {
-        name: string;
-        writeByteOrderMark: boolean;
-        text: string;
     }
     enum EndOfLineState {
         None = 0,
@@ -4751,28 +4763,6 @@ declare namespace ts.server {
     function isInferredProjectName(name: string): boolean;
     function makeInferredProjectName(counter: number): string;
     function createSortedArray<T>(): SortedArray<T>;
-    class ThrottledOperations {
-        private readonly host;
-        private pendingTimeouts;
-        constructor(host: ServerHost);
-        /**
-         * Wait `number` milliseconds and then invoke `cb`.  If, while waiting, schedule
-         * is called again with the same `operationId`, cancel this operation in favor
-         * of the new one.  (Note that the amount of time the canceled operation had been
-         * waiting does not affect the amount of time that the new operation waits.)
-         */
-        schedule(operationId: string, delay: number, cb: () => void): void;
-        private static run(self, operationId, cb);
-    }
-    class GcTimer {
-        private readonly host;
-        private readonly delay;
-        private readonly logger;
-        private timerId;
-        constructor(host: ServerHost, delay: number, logger: Logger);
-        scheduleCollect(): void;
-        private static run(self);
-    }
 }
 /**
  * Declaration module describing the TypeScript Server protocol
@@ -6359,6 +6349,17 @@ declare namespace ts.server.protocol {
          */
         languageServiceEnabled: boolean;
     }
+    type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
+    interface ProjectsUpdatedInBackgroundEvent extends Event {
+        event: ProjectsUpdatedInBackgroundEventName;
+        body: ProjectsUpdatedInBackgroundEventBody;
+    }
+    interface ProjectsUpdatedInBackgroundEventBody {
+        /**
+         * Current set of open files
+         */
+        openFiles: string[];
+    }
     /**
      * Arguments for reload request.
      */
@@ -6822,14 +6823,13 @@ declare namespace ts.server {
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);
+        private projectsUpdatedInBackgroundEvent(openFiles);
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
-        configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ReadonlyArray<Diagnostic>): void;
         event<T>(info: T, eventName: string): void;
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
-        private updateProjectStructure();
         private updateErrorCheck(next, checkList, ms, requireOpen?);
         private cleanProjects(caption, projects);
         private cleanup();
@@ -6862,9 +6862,10 @@ declare namespace ts.server {
          */
         private openClientFile(fileName, fileContent?, scriptKind?, projectRootPath?);
         private getPosition(args, scriptInfo);
-        private getFileAndProject(args, errorOnMissingProject?);
-        private getFileAndProjectWithoutRefreshingInferredProjects(args, errorOnMissingProject?);
-        private getFileAndProjectWorker(uncheckedFileName, projectFileName, refreshInferredProjects, errorOnMissingProject);
+        private getPositionInFile(args, file);
+        private getFileAndProject(args);
+        private getFileAndLanguageServiceForSyntacticOperation(args);
+        private getFileAndProjectWorker(uncheckedFileName, projectFileName);
         private getOutliningSpans(args);
         private getTodoComments(args);
         private getDocCommentTemplate(args);
@@ -6884,6 +6885,7 @@ declare namespace ts.server {
         private getCompileOnSaveAffectedFileList(args);
         private emitFile(args);
         private getSignatureHelpItems(args, simplifiedResult);
+        private createCheckList(fileNames, defaultProject?);
         private getDiagnostics(next, delay, fileNames);
         private change(args);
         private reload(args, reqSeq);
@@ -6927,50 +6929,19 @@ declare namespace ts.server {
     }
 }
 declare namespace ts.server {
-    interface AbsolutePositionAndLineText {
-        absolutePosition: number;
-        lineText: string | undefined;
-    }
-    class ScriptVersionCache {
-        private changes;
-        private readonly versions;
-        private minVersion;
-        private currentVersion;
-        private static readonly changeNumberThreshold;
-        private static readonly changeLengthThreshold;
-        private static readonly maxVersions;
-        private versionToIndex(version);
-        private currentVersionToIndex();
-        edit(pos: number, deleteLen: number, insertedText?: string): void;
-        reload(script: string): void;
-        getSnapshot(): IScriptSnapshot;
-        private _getSnapshot();
-        getSnapshotVersion(): number;
-        getLineInfo(line: number): AbsolutePositionAndLineText;
-        lineOffsetToPosition(line: number, column: number): number;
-        positionToLineOffset(position: number): protocol.Location;
-        lineToTextSpan(line: number): TextSpan;
-        getTextChangesBetweenVersions(oldVersion: number, newVersion: number): TextChangeRange;
-        static fromString(script: string): ScriptVersionCache;
-    }
-}
-declare namespace ts.server {
     class ScriptInfo {
         private readonly host;
         readonly fileName: NormalizedPath;
         readonly scriptKind: ScriptKind;
-        hasMixedContent: boolean;
-        isDynamic: boolean;
+        readonly hasMixedContent: boolean;
+        readonly path: Path;
         /**
          * All projects that include this file
          */
         readonly containingProjects: Project[];
         private formatCodeSettings;
-        readonly path: Path;
-        private fileWatcher;
         private textStorage;
-        private isOpen;
-        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent?: boolean, isDynamic?: boolean);
+        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path);
         isScriptOpen(): boolean;
         open(newText: string): void;
         close(): void;
@@ -6983,15 +6954,12 @@ declare namespace ts.server {
         getDefaultProject(): Project;
         registerFileUpdate(): void;
         setFormatOptions(formatSettings: FormatCodeSettings): void;
-        setWatcher(watcher: FileWatcher): void;
-        stopWatcher(): void;
         getLatestVersion(): string;
-        reload(script: string): void;
         saveTo(fileName: string): void;
         reloadFromFile(tempFileName?: NormalizedPath): void;
-        getLineInfo(line: number): AbsolutePositionAndLineText;
         editContent(start: number, end: number, newText: string): void;
         markContainingProjectsAsDirty(): void;
+        isOrphan(): boolean;
         /**
          *  @param line 1 based index
          */
@@ -7005,47 +6973,22 @@ declare namespace ts.server {
         isJavaScript(): boolean;
     }
 }
-declare namespace ts.server {
-    class LSHost implements LanguageServiceHost, ModuleResolutionHost {
-        private readonly host;
-        private project;
-        private readonly cancellationToken;
-        private compilationSettings;
-        private readonly resolvedModuleNames;
-        private readonly resolvedTypeReferenceDirectives;
-        private readonly getCanonicalFileName;
-        private filesWithChangedSetOfUnresolvedImports;
-        private resolveModuleName;
-        readonly trace: (s: string) => void;
-        readonly realpath?: (path: string) => string;
-        constructor(host: ServerHost, project: Project, cancellationToken: HostCancellationToken);
-        dispose(): void;
-        startRecordingFilesWithChangedResolutions(): void;
-        finishRecordingFilesWithChangedResolutions(): Path[];
-        private resolveNamesWithLocalCache<T, R>(names, containingFile, cache, loader, getResult, getResultFileName, logChanges);
-        getNewLine(): string;
-        getProjectVersion(): string;
-        getCompilationSettings(): CompilerOptions;
-        useCaseSensitiveFileNames(): boolean;
-        getCancellationToken(): HostCancellationToken;
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModuleFull[];
-        getDefaultLibFileName(): string;
-        getScriptSnapshot(filename: string): IScriptSnapshot;
-        getScriptFileNames(): string[];
-        getTypeRootsVersion(): number;
-        getScriptKind(fileName: string): ScriptKind;
-        getScriptVersion(filename: string): string;
-        getCurrentDirectory(): string;
-        resolvePath(path: string): string;
-        fileExists(file: string): boolean;
-        readFile(fileName: string): string | undefined;
-        directoryExists(path: string): boolean;
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        getDirectories(path: string): string[];
-        notifyFileRemoved(info: ScriptInfo): void;
-        setCompilationSettings(opt: CompilerOptions): void;
+declare namespace ts {
+    /**
+     * Updates the existing missing file watches with the new set of missing files after new program is created
+     */
+    function updateMissingFilePathsWatch(program: Program, missingFileWatches: Map<FileWatcher>, createMissingFileWatch: (missingFilePath: Path) => FileWatcher): void;
+    interface WildcardDirectoryWatcher {
+        watcher: FileWatcher;
+        flags: WatchDirectoryFlags;
     }
+    /**
+     * Updates the existing wild card directory watches with the new set of wild card directories from the config file
+     * after new program is created because the config file was reloaded or program was created first time from the config file
+     * Note that there is no need to call this function when the program is updated with additional files without reloading config files,
+     * as wildcard directories wont change unless reloading config file
+     */
+    function updateWatchingWildcardDirectories(existingWatchedForWildcards: Map<WildcardDirectoryWatcher>, wildcardDirectories: Map<WatchDirectoryFlags>, watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher): void;
 }
 declare namespace ts.server {
     interface ITypingsInstaller {
@@ -7064,40 +7007,6 @@ declare namespace ts.server {
         deleteTypingsForProject(projectName: string): void;
         onProjectClosed(project: Project): void;
     }
-}
-declare namespace ts.server {
-    function shouldEmitFile(scriptInfo: ScriptInfo): boolean;
-    /**
-     * An abstract file info that maintains a shape signature.
-     */
-    class BuilderFileInfo {
-        readonly scriptInfo: ScriptInfo;
-        readonly project: Project;
-        private lastCheckedShapeSignature;
-        constructor(scriptInfo: ScriptInfo, project: Project);
-        isExternalModuleOrHasOnlyAmbientExternalModules(): boolean;
-        /**
-         * For script files that contains only ambient external modules, although they are not actually external module files,
-         * they can only be consumed via importing elements from them. Regular script files cannot consume them. Therefore,
-         * there are no point to rebuild all script files if these special files have changed. However, if any statement
-         * in the file is not ambient external module, we treat it as a regular script file.
-         */
-        private containsOnlyAmbientModules(sourceFile);
-        private computeHash(text);
-        private getSourceFile();
-        /**
-         * @return {boolean} indicates if the shape signature has changed since last update.
-         */
-        updateShapeSignature(): boolean;
-    }
-    interface Builder {
-        readonly project: Project;
-        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
-        onProjectUpdateGraph(): void;
-        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
-        clear(): void;
-    }
-    function createBuilder(project: Project): Builder;
 }
 declare namespace ts.server {
     enum ProjectKind {
@@ -7132,13 +7041,19 @@ declare namespace ts.server {
             typescript: typeof ts;
         }): PluginModule;
     }
-    abstract class Project {
-        private readonly projectName;
+    /**
+     * The project root can be script info - if root is present,
+     * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
+     */
+    type ProjectRoot = ScriptInfo | NormalizedPath;
+    abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
+        readonly projectName: string;
         readonly projectKind: ProjectKind;
         readonly projectService: ProjectService;
         private documentRegistry;
         private compilerOptions;
         compileOnSaveEnabled: boolean;
+        directoryStructureHost: DirectoryStructureHost;
         private rootFiles;
         private rootFilesMap;
         private program;
@@ -7148,8 +7063,9 @@ declare namespace ts.server {
         private lastCachedUnresolvedImportsList;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
-        protected lsHost: LSHost;
-        builder: Builder;
+        readonly trace?: (s: string) => void;
+        readonly realpath?: (path: string) => string;
+        private builder;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -7175,13 +7091,29 @@ declare namespace ts.server {
          */
         private projectStateVersion;
         private typingFiles;
-        protected projectErrors: ReadonlyArray<Diagnostic>;
-        typesVersion: number;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
-        constructor(projectName: string, projectKind: ProjectKind, projectService: ProjectService, documentRegistry: DocumentRegistry, hasExplicitListOfFiles: boolean, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
+        getCompilationSettings(): CompilerOptions;
+        getNewLine(): string;
+        getProjectVersion(): string;
+        getScriptFileNames(): string[];
+        private getOrCreateScriptInfoAndAttachToProject(fileName);
+        getScriptKind(fileName: string): ScriptKind;
+        getScriptVersion(filename: string): string;
+        getScriptSnapshot(filename: string): IScriptSnapshot;
+        getCancellationToken(): HostCancellationToken;
+        getCurrentDirectory(): string;
+        getDefaultLibFileName(): string;
+        useCaseSensitiveFileNames(): boolean;
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        readFile(fileName: string): string | undefined;
+        fileExists(file: string): boolean;
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[];
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        directoryExists(path: string): boolean;
+        getDirectories(path: string): string[];
         private setInternalCompilerOptionsForEmittingJsFiles();
         /**
          * Get the errors that dont have any file name associated
@@ -7189,8 +7121,12 @@ declare namespace ts.server {
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
         getAllProjectErrors(): ReadonlyArray<Diagnostic>;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
+        private ensureBuilder();
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
-        getProjectVersion(): string;
+        /**
+         * Returns true if emit was conducted
+         */
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
         enableLanguageService(): void;
         disableLanguageService(): void;
         getProjectName(): string;
@@ -7198,24 +7134,22 @@ declare namespace ts.server {
         abstract getTypeAcquisition(): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile;
-        updateTypes(): void;
         close(): void;
-        getCompilerOptions(): CompilerOptions;
+        isClosed(): boolean;
         hasRoots(): boolean;
         getRootFiles(): NormalizedPath[];
-        getRootFilesLSHost(): string[];
         getRootScriptInfos(): ScriptInfo[];
         getScriptInfos(): ScriptInfo[];
-        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles: boolean): EmitOutput;
+        private getFileEmitOutput(sourceFile, emitOnlyDtsFiles, isDetailed);
         getExcludedFiles(): ReadonlyArray<NormalizedPath>;
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): NormalizedPath[];
         hasConfigFile(configFilePath: NormalizedPath): boolean;
-        getAllEmittableFiles(): string[];
         containsScriptInfo(info: ScriptInfo): boolean;
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
         isRoot(info: ScriptInfo): boolean;
         addRoot(info: ScriptInfo): void;
-        removeFile(info: ScriptInfo, detachFromProject?: boolean): void;
+        addMissingFileRoot(fileName: NormalizedPath): void;
+        removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean): void;
         registerFileUpdate(fileName: string): void;
         markAsDirty(): void;
         private extractUnresolvedImportsFromSourceFile(file, result);
@@ -7226,14 +7160,14 @@ declare namespace ts.server {
         updateGraph(): boolean;
         private setTypings(typings);
         private updateGraphWorker();
-        isWatchedMissingFile(path: Path): boolean;
-        getScriptInfoLSHost(fileName: string): ScriptInfo;
+        private detachScriptInfoFromProject(uncheckedFileName);
+        private addMissingFileWatcher(missingFilePath);
+        private isWatchedMissingFile(path);
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
-        filesToString(): string;
+        filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         reloadScript(filename: NormalizedPath, tempFileName?: NormalizedPath): boolean;
-        getReferencedFiles(path: Path): Path[];
         protected removeRoot(info: ScriptInfo): void;
     }
     /**
@@ -7246,10 +7180,9 @@ declare namespace ts.server {
         private _isJsInferredProject;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
-        directoriesWatchedForTsconfig: string[];
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, projectRootPath?: string);
         addRoot(info: ScriptInfo): void;
         removeRoot(info: ScriptInfo): void;
+        isProjectWithSingleRoot(): boolean;
         getProjectRootPath(): string;
         close(): void;
         getTypeAcquisition(): TypeAcquisition;
@@ -7260,35 +7193,40 @@ declare namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
-        private wildcardDirectories;
         compileOnSaveEnabled: boolean;
         private typeAcquisition;
-        private projectFileWatcher;
-        private directoryWatcher;
         private directoriesWatchedForWildcards;
-        private typeRootsWatchers;
         readonly canonicalConfigFilePath: NormalizedPath;
         private plugins;
         /** Used for configured projects which may have multiple open roots */
         openRefCount: number;
-        constructor(configFileName: NormalizedPath, projectService: ProjectService, documentRegistry: DocumentRegistry, hasExplicitListOfFiles: boolean, compilerOptions: CompilerOptions, wildcardDirectories: Map<WatchDirectoryFlags>, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean);
-        getConfigFilePath(): string;
+        private projectErrors;
+        /**
+         * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
+         * @returns: true if set of files in the project stays the same and false - otherwise.
+         */
+        updateGraph(): boolean;
+        getConfigFilePath(): NormalizedPath;
         enablePlugins(): void;
         private enablePlugin(pluginConfigEntry, searchPaths);
         private enableProxy(pluginModuleFactory, configEntry);
         getProjectRootPath(): string;
-        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>): void;
+        /**
+         * Get the errors that dont have any file name associated
+         */
+        getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
+        /**
+         * Get all the project errors
+         */
+        getAllProjectErrors(): ReadonlyArray<Diagnostic>;
+        setProjectErrors(projectErrors: Diagnostic[]): void;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
         getTypeAcquisition(): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
-        watchConfigFile(callback: (project: ConfiguredProject) => void): void;
-        watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void): void;
-        watchConfigDirectory(callback: (project: ConfiguredProject, path: string) => void): void;
-        watchWildcards(callback: (project: ConfiguredProject, path: string) => void): void;
-        stopWatchingDirectory(): void;
         close(): void;
         addOpenRef(): void;
         deleteOpenRef(): number;
+        hasOpenRef(): boolean;
         getEffectiveTypeRoots(): string[];
     }
     /**
@@ -7301,25 +7239,22 @@ declare namespace ts.server {
         private readonly projectFilePath;
         excludedFiles: ReadonlyArray<NormalizedPath>;
         private typeAcquisition;
-        constructor(externalProjectName: string, projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean, projectFilePath?: string);
         getExcludedFiles(): ReadonlyArray<NormalizedPath>;
         getProjectRootPath(): string;
         getTypeAcquisition(): TypeAcquisition;
-        setProjectErrors(projectErrors: ReadonlyArray<Diagnostic>): void;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }
 }
 declare namespace ts.server {
     const maxProgramSizeForNonTsFiles: number;
-    const ContextEvent = "context";
+    const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     const ProjectInfoTelemetryEvent = "projectInfo";
-    interface ContextEvent {
-        eventName: typeof ContextEvent;
+    interface ProjectsUpdatedInBackgroundEvent {
+        eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: {
-            project: Project;
-            fileName: NormalizedPath;
+            openFiles: string[];
         };
     }
     interface ConfigFileDiagEvent {
@@ -7376,7 +7311,7 @@ declare namespace ts.server {
         readonly tsx: number;
         readonly dts: number;
     }
-    type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
+    type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
     interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
     }
@@ -7444,21 +7379,33 @@ declare namespace ts.server {
         /**
          * projects specified by a tsconfig.json file
          */
-        readonly configuredProjects: ConfiguredProject[];
+        readonly configuredProjects: Map<ConfiguredProject>;
         /**
          * list of open files
          */
         readonly openFiles: ScriptInfo[];
         private compilerOptionsForInferredProjects;
         private compilerOptionsForInferredProjectsPerProjectRoot;
+        /**
+         * Project size for configured or external projects
+         */
         private readonly projectToSizeMap;
-        private readonly directoryWatchers;
+        /**
+         * This is a map of config file paths existance that doesnt need query to disk
+         * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
+         *   In this case the exists could be true/false based on config file is present or not
+         * - Or it is present if we have configured project open with config file at that location
+         *   In this case the exists property is always true
+         */
+        private readonly configFileExistenceInfoCache;
         private readonly throttledOperations;
         private readonly hostConfiguration;
         private safelist;
         private changedFiles;
+        private pendingProjectUpdates;
+        private pendingInferredProjectUpdate;
+        readonly currentDirectory: string;
         readonly toCanonicalFileName: (f: string) => string;
-        lastDeletedFile: ScriptInfo;
         readonly host: ServerHost;
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;
@@ -7474,90 +7421,137 @@ declare namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         constructor(opts: ProjectServiceOptions);
-        ensureInferredProjectsUpToDate_TestOnly(): void;
-        getCompilerOptionsForInferredProjects(): CompilerOptions;
-        onUpdateLanguageServiceStateForProject(project: Project, languageServiceEnabled: boolean): void;
+        private createWatcherLog(watchType, project);
+        toPath(fileName: string): Path;
         private loadTypesMap();
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void;
+        private delayInferredProjectsRefresh();
+        private delayUpdateProjectGraph(project);
+        private sendProjectsUpdatedInBackgroundEvent();
+        private delayUpdateProjectGraphs(projects);
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
-        stopWatchingDirectory(directory: string): void;
-        findProject(projectName: string): Project;
-        getDefaultProjectForFile(fileName: NormalizedPath, refreshInferredProjects: boolean): Project;
-        private ensureInferredProjectsUpToDate();
+        findProject(projectName: string): Project | undefined;
+        getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project;
+        getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo;
+        /**
+         * Ensures the project structures are upto date
+         * This means,
+         * - if there are changedFiles (the files were updated but their containing project graph was not upto date),
+         *   their project graph is updated
+         * - If there are pendingProjectUpdates (scheduled to be updated with delay so they can batch update the graph if there are several changes in short time span)
+         *   their project graph is updated
+         * - If there were project graph updates and/or there was pending inferred project update and/or called forced the inferred project structure refresh
+         *   Inferred projects are created/updated/deleted based on open files states
+         * @param forceInferredProjectsRefresh when true updates the inferred projects even if there is no pending work to update the files/project structures
+         */
+        private ensureProjectStructuresUptoDate(forceInferredProjectsRefresh?);
         private findContainingExternalProject(fileName);
         getFormatCodeOptions(file?: NormalizedPath): FormatCodeSettings;
         private updateProjectGraphs(projects);
-        private onSourceFileChanged(fileName);
+        private onSourceFileChanged(fileName, eventKind);
         private handleDeletedFile(info);
-        private onTypeRootFileChanged(project, fileName);
+        private onConfigChangedForConfiguredProject(project, eventKind);
         /**
-         * This is the callback function when a watched directory has added or removed source code files.
-         * @param project the project that associates with this directory watcher
-         * @param fileName the absolute file name that changed in watched directory
+         * This is the callback function for the config file add/remove/change at any location
+         * that matters to open script info but doesnt have configured project open
+         * for the config file
          */
-        private onSourceFileInDirectoryChangedForConfiguredProject(project, fileName);
-        private handleChangeInSourceFileForConfiguredProject(project, triggerFile);
-        private onConfigChangedForConfiguredProject(project);
-        /**
-         * This is the callback function when a watched directory has an added tsconfig file.
-         */
-        private onConfigFileAddedForInferredProject(fileName);
-        private getCanonicalFileName(fileName);
+        private onConfigFileChangeForOpenScriptInfo(configFileName, eventKind);
         private removeProject(project);
-        private assignScriptInfoToInferredProjectIfNecessary(info, addToListOfOpenFiles, projectRootPath?);
+        private addToListOfOpenFiles(info);
         /**
          * Remove this file from the set of open, non-configured files.
          * @param info The file that has been closed or newly configured
          */
         private closeOpenFile(info);
         private deleteOrphanScriptInfoNotInAnyProject();
+        private configFileExists(configFileName, canonicalConfigFilePath, info);
+        private setConfigFileExistenceByNewConfiguredProject(project);
         /**
-         * This function tries to search for a tsconfig.json for the given file. If we found it,
-         * we first detect if there is already a configured project created for it: if so, we re-read
-         * the tsconfig file content and update the project; otherwise we create a new one.
+         * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
          */
-        private openOrUpdateConfiguredProjectForFile(fileName, projectRootPath?);
-        private findConfigFile(searchPath, projectRootPath?);
+        private configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo);
+        private setConfigFileExistenceInfoByClosedConfiguredProject(closedProject);
+        private logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, status);
+        /**
+         * Create the watcher for the configFileExistenceInfo
+         */
+        private createConfigFileWatcherOfConfigFileExistence(configFileName, canonicalConfigFilePath, configFileExistenceInfo);
+        /**
+         * Close the config file watcher in the cached ConfigFileExistenceInfo
+         *   if there arent any open files that are root of inferred project
+         */
+        private closeConfigFileWatcherOfConfigFileExistenceInfo(configFileExistenceInfo);
+        /**
+         * This is called on file close, so that we stop watching the config file for this script info
+         */
+        private stopWatchingConfigFilesForClosedScriptInfo(info);
+        /**
+         * This function tries to search for a tsconfig.json for the given file.
+         * This is different from the method the compiler uses because
+         * the compiler can assume it will always start searching in the
+         * current directory (the directory in which tsc was invoked).
+         * The server must start searching from the directory containing
+         * the newly opened file.
+         */
+        private forEachConfigFileLocation(info, action, projectRootPath?);
+        /**
+         * This function tries to search for a tsconfig.json for the given file.
+         * This is different from the method the compiler uses because
+         * the compiler can assume it will always start searching in the
+         * current directory (the directory in which tsc was invoked).
+         * The server must start searching from the directory containing
+         * the newly opened file.
+         */
+        private getConfigFileNameForFile(info, projectRootPath?);
         private printProjects();
         private findConfiguredProjectByProjectName(configFileName);
+        private getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath);
         private findExternalProjectByProjectName(projectFileName);
-        private convertConfigFileContentToProjectOptions(configFilename);
+        private convertConfigFileContentToProjectOptions(configFilename, cachedDirectoryStructureHost);
         private exceededTotalSizeLimitForNonTsFiles<T>(name, options, fileNames, propertyReader);
-        private createAndAddExternalProject(projectFileName, files, options, typeAcquisition);
+        private createExternalProject(projectFileName, files, options, typeAcquisition);
         private sendProjectTelemetry(projectKey, project, projectOptions?);
-        private reportConfigFileDiagnostics(configFileName, diagnostics, triggerFile);
-        private createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, clientFileName?);
-        private watchConfigDirectoryForProject(project, options);
-        private addFilesToProjectAndUpdateGraph<T>(project, files, propertyReader, clientFileName, typeAcquisition, configFileErrors);
-        private openConfigFile(configFileName, clientFileName?);
-        private updateNonInferredProject<T>(project, newUncheckedFiles, propertyReader, newOptions, newTypeAcquisition, compileOnSave, configFileErrors);
-        private updateConfiguredProject(project);
-        private getOrCreateInferredProjectForProjectRootPathIfEnabled(root, projectRootPath);
+        private addFilesToNonInferredProjectAndUpdateGraph<T>(project, files, propertyReader, typeAcquisition);
+        private createConfiguredProject(configFileName);
+        private updateNonInferredProjectFiles<T>(project, files, propertyReader);
+        private updateNonInferredProject<T>(project, newUncheckedFiles, propertyReader, newOptions, newTypeAcquisition, compileOnSave);
+        private getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath);
         private getOrCreateSingleInferredProjectIfEnabled();
-        private createInferredProject(isSingleInferredProject?, projectRootPath?);
-        createInferredProjectWithRootFileIfNecessary(root: ScriptInfo, projectRootPath?: string): InferredProject;
-        /**
-         * @param uncheckedFileName is absolute pathname
-         * @param fileContent is a known version of the file content that is more up to date than the one on disk
-         */
-        getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind): ScriptInfo;
+        private createInferredProject(rootDirectoryForResolution, isSingleInferredProject?, projectRootPath?);
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
-        watchClosedScriptInfo(info: ScriptInfo): void;
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, isDynamic?: boolean): ScriptInfo;
+        private watchClosedScriptInfo(info);
+        private stopWatchingScriptInfo(info);
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost): ScriptInfo;
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
         getScriptInfoForPath(fileName: Path): ScriptInfo;
         setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
         closeLog(): void;
         /**
          * This function rebuilds the project for every file opened by the client
+         * This does not reload contents of open files from disk. But we could do that if needed
          */
         reloadProjects(): void;
+        private delayReloadConfiguredProjectForFiles(configFileExistenceInfo, ignoreIfNotRootOfInferredProject);
         /**
-         * This function is to update the project structure for every projects.
+         * This function goes through all the openFiles and tries to file the config file for them.
+         * If the config file is found and it refers to existing project, it reloads it either immediately
+         * or schedules it for reload depending on delayReload option
+         * If the there is no existing project it just opens the configured project for the config file
+         */
+        private reloadConfiguredProjectForFiles(openFiles, delayReload);
+        /**
+         * Remove the root of inferred project if script info is part of another project
+         */
+        private removeRootOfInferredProjectIfNowPartOfOtherProject(info);
+        /**
+         * This function is to update the project structure for every inferred project.
          * It is called on the premise that all the configured projects are
          * up to date.
+         * This will go through open files and assign them to inferred project if open file is not part of any other project
+         * After that all the inferred project graphs are updated
          */
-        refreshInferredProjects(): void;
+        private refreshInferredProjects();
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
