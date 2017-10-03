@@ -394,7 +394,7 @@ gulp.task(generateLocalizedDiagnosticMessagesJs, /*help*/ false, [], () => {
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest(scriptsDirectory));
 });
 
 // Localize diagnostics
