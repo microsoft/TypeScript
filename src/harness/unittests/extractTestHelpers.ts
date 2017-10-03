@@ -135,7 +135,7 @@ namespace ts {
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
                 const data: string[] = [];
                 data.push(`// ==ORIGINAL==`);
-                data.push(sourceFile.text);
+                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
                 for (const action of actions) {
                     const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name);
                     assert.lengthOf(edits, 1);

@@ -3,7 +3,7 @@ function test() {
     try {
     }
     finally {
-        return 1;
+        /*[#|*/return 1;/*|]*/
     }
 }
 // ==SCOPE::Extract to inner function in function 'test'==

@@ -2,7 +2,7 @@
 
 function F() {
     for (let j = 0; j < 10; j++) {
-        const x = 2 + 1;
+        const x = /*[#|*/2 + 1/*|]*/;
     }
 }
         

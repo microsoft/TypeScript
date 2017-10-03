@@ -1,6 +1,6 @@
 // ==ORIGINAL==
 function F<T, U extends T[], V extends U[]>(v: V) {
-    v.toString();
+    /*[#|*/v.toString()/*|]*/;
 }
 // ==SCOPE::Extract to inner function in function 'F'==
 function F<T, U extends T[], V extends U[]>(v: V) {

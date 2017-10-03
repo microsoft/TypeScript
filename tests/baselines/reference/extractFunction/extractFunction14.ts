@@ -1,8 +1,8 @@
 // ==ORIGINAL==
 function F<T>(t1: T) {
     function G<T>(t2: T) {
-        t1.toString();
-        t2.toString();
+        /*[#|*/t1.toString();
+        t2.toString();/*|]*/
     }
 }
 // ==SCOPE::Extract to inner function in function 'G'==

@@ -6,11 +6,11 @@ interface UnaryExpression {
 }
 
 function parseUnaryExpression(operator: string): UnaryExpression {
-    return {
+    /*[#|*/return {
         kind: "Unary",
         operator,
         operand: parsePrimaryExpression(),
-    };
+    };/*|]*/
 }
 
 function parsePrimaryExpression(): any {
