@@ -16821,6 +16821,9 @@ namespace ts {
         }
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
+            if (languageVersion < ScriptTarget.ES2015) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.MakeTemplateObject);
+            }
             return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
@@ -24217,6 +24220,7 @@ namespace ts {
                 case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
                 case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
                 case ExternalEmitHelpers.ExportStar: return "__exportStar";
+                case ExternalEmitHelpers.MakeTemplateObject: return "__makeTemplateObject";
                 default: Debug.fail("Unrecognized helper");
             }
         }

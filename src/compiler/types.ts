@@ -4316,22 +4316,25 @@ namespace ts {
      */
     /* @internal */
     export const enum ExternalEmitHelpers {
-        Extends = 1 << 0,           // __extends (used by the ES2015 class transformation)
-        Assign = 1 << 1,            // __assign (used by Jsx and ESNext object spread transformations)
-        Rest = 1 << 2,              // __rest (used by ESNext object rest transformation)
-        Decorate = 1 << 3,          // __decorate (used by TypeScript decorators transformation)
-        Metadata = 1 << 4,          // __metadata (used by TypeScript decorators transformation)
-        Param = 1 << 5,             // __param (used by TypeScript decorators transformation)
-        Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
-        Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
-        Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
-        Read = 1 << 9,              // __read (used by ES2015 iterator destructuring transformation)
-        Spread = 1 << 10,           // __spread (used by ES2015 array spread and argument list spread transformations)
-        Await = 1 << 11,            // __await (used by ES2017 async generator transformation)
-        AsyncGenerator = 1 << 12,   // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 13,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
-        ExportStar = 1 << 15,       // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        Extends = 1 << 0,               // __extends (used by the ES2015 class transformation)
+        Assign = 1 << 1,                // __assign (used by Jsx and ESNext object spread transformations)
+        Rest = 1 << 2,                  // __rest (used by ESNext object rest transformation)
+        Decorate = 1 << 3,              // __decorate (used by TypeScript decorators transformation)
+        Metadata = 1 << 4,              // __metadata (used by TypeScript decorators transformation)
+        Param = 1 << 5,                 // __param (used by TypeScript decorators transformation)
+        Awaiter = 1 << 6,               // __awaiter (used by ES2017 async functions transformation)
+        Generator = 1 << 7,             // __generator (used by ES2015 generator transformation)
+        Values = 1 << 8,                // __values (used by ES2015 for..of and yield* transformations)
+        Read = 1 << 9,                  // __read (used by ES2015 iterator destructuring transformation)
+        Spread = 1 << 10,               // __spread (used by ES2015 array spread and argument list spread transformations)
+        Await = 1 << 11,                // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 12,       // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 13,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 14,          // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 15,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        MakeTemplateObject = 1 << 16,   // __makeTemplateObject (used for constructing template string array objects)
+        FirstEmitHelper = Extends,
+        LastEmitHelper = MakeTemplateObject,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
@@ -4348,8 +4351,6 @@ namespace ts {
         // Helpers included by ES2015 spread
         SpreadIncludes = Read | Spread,
 
-        FirstEmitHelper = Extends,
-        LastEmitHelper = ExportStar
     }
 
     export const enum EmitHint {
