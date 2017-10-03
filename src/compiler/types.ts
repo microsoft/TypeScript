@@ -2408,6 +2408,7 @@ namespace ts {
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
+        /* @internal */ version: string;
     }
 
     export interface Bundle extends Node {
@@ -2524,6 +2525,8 @@ namespace ts {
         /* @internal */ sourceFileToPackageName: Map<string>;
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsSet: Map<true>;
+        /** Returns true when file in the program had invalidated resolution at the time of program creation. */
+        hasInvalidatedResolution: HasInvalidatedResolution;
     }
 
     /* @internal */
@@ -3659,6 +3662,7 @@ namespace ts {
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
+        /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
@@ -3828,6 +3832,7 @@ namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
+        configFileSpecs?: ConfigFileSpecs;
     }
 
     export const enum WatchDirectoryFlags {
@@ -3835,9 +3840,25 @@ namespace ts {
         Recursive = 1 << 0,
     }
 
+    export interface ConfigFileSpecs {
+        filesSpecs: ReadonlyArray<string>;
+        /**
+         * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
+         */
+        includeSpecs: ReadonlyArray<string>;
+        /**
+         * Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
+         */
+        excludeSpecs: ReadonlyArray<string>;
+        validatedIncludeSpecs: ReadonlyArray<string>;
+        validatedExcludeSpecs: ReadonlyArray<string>;
+        wildcardDirectories: MapLike<WatchDirectoryFlags>;
+    }
+
     export interface ExpandResult {
         fileNames: string[];
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
+        spec: ConfigFileSpecs;
     }
 
     /* @internal */
@@ -4086,31 +4107,36 @@ namespace ts {
         Tsx = ".tsx",
         Dts = ".d.ts",
         Js = ".js",
-        Jsx = ".jsx"
+        Jsx = ".jsx",
+        Json = ".json"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModuleFull | undefined;
+        readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
-        failedLookupLocations: string[];
+        readonly failedLookupLocations: ReadonlyArray<string>;
     }
 
     export interface ResolvedTypeReferenceDirective {
         // True if the type declaration file was found in a primary lookup location
         primary: boolean;
         // The location of the .d.ts file we located, or undefined if resolution failed
-        resolvedFileName?: string;
+        resolvedFileName: string | undefined;
         packageId?: PackageId;
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
-        resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
-        failedLookupLocations: string[];
+        readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
+        readonly failedLookupLocations: ReadonlyArray<string>;
+    }
+
+    export interface HasInvalidatedResolution {
+        (sourceFile: Path): boolean;
     }
 
     export interface CompilerHost extends ModuleResolutionHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined;
-        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined;
+        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
@@ -4128,12 +4154,15 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
+        onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
+        hasInvalidatedResolution?: HasInvalidatedResolution;
+        hasChangedAutomaticTypeDirectiveNames?: boolean;
     }
 
     /* @internal */
