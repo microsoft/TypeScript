@@ -18,7 +18,34 @@ namespace ts {
         text: string;
     }
 
-    /* @internal */
+    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean,
+        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed {
+        const outputFiles: OutputFile[] = [];
+        let emittedSourceFiles: SourceFile[];
+        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        if (!isDetailed) {
+            return { outputFiles, emitSkipped: emitResult.emitSkipped };
+        }
+
+        return {
+            outputFiles,
+            emitSkipped: emitResult.emitSkipped,
+            diagnostics: emitResult.diagnostics,
+            sourceMaps: emitResult.sourceMaps,
+            emittedSourceFiles
+        };
+
+        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, _onError: (message: string) => void, sourceFiles: SourceFile[]) {
+            outputFiles.push({ name: fileName, writeByteOrderMark, text });
+            if (isDetailed) {
+                emittedSourceFiles = addRange(emittedSourceFiles, sourceFiles);
+            }
+        }
+    }
+}
+
+/* @internal */
+namespace ts {
     export interface Builder {
         /**
          * Call this to feed new program
@@ -60,38 +87,12 @@ namespace ts {
         getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile, singleFileResult: string[]): string[];
     }
 
-    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean,
-        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed {
-        const outputFiles: OutputFile[] = [];
-        let emittedSourceFiles: SourceFile[];
-        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
-        if (!isDetailed) {
-            return { outputFiles, emitSkipped: emitResult.emitSkipped };
-        }
-
-        return {
-            outputFiles,
-            emitSkipped: emitResult.emitSkipped,
-            diagnostics: emitResult.diagnostics,
-            sourceMaps: emitResult.sourceMaps,
-            emittedSourceFiles
-        };
-
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, _onError: (message: string) => void, sourceFiles: SourceFile[]) {
-            outputFiles.push({ name: fileName, writeByteOrderMark, text });
-            if (isDetailed) {
-                emittedSourceFiles = addRange(emittedSourceFiles, sourceFiles);
-            }
-        }
-    }
-
     interface FileInfo {
         fileName: string;
         version: string;
         signature: string;
     }
 
-    /* @internal */
     export function createBuilder(
         getCanonicalFileName: (fileName: string) => string,
         getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed,
