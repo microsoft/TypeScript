@@ -40,6 +40,13 @@ function F() {
 }
         `);
 
+        testExtractConstant("extractConstant_ExpressionStatementConsumesLocal", `
+function F() {
+    let i = 0;
+    [#|i++|];
+}
+        `);
+
         testExtractConstant("extractConstant_BlockScopes_NoDependencies",
             `for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
