@@ -1,7 +1,12 @@
 //// [noUnusedLocals_selfReference.ts]
 export {}; // Make this a module scope, so these are local variables.
 
-function f() { f; }
+function f() {
+    f;
+    function g() {
+        g;
+    }
+}
 class C {
     m() { C; }
 }
@@ -19,7 +24,12 @@ P;
 //// [noUnusedLocals_selfReference.js]
 "use strict";
 exports.__esModule = true;
-function f() { f; }
+function f() {
+    f;
+    function g() {
+        g;
+    }
+}
 var C = /** @class */ (function () {
     function C() {
     }
