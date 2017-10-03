@@ -59,7 +59,7 @@ declare namespace ts {
         pos: number;
         end: number;
     }
-    const enum SyntaxKind {
+    enum SyntaxKind {
         Unknown = 0,
         EndOfFileToken = 1,
         SingleLineCommentTrivia = 2,
@@ -383,7 +383,7 @@ declare namespace ts {
         FirstJSDocTagNode = 276,
         LastJSDocTagNode = 285,
     }
-    const enum NodeFlags {
+    enum NodeFlags {
         None = 0,
         Let = 1,
         Const = 2,
@@ -411,7 +411,7 @@ declare namespace ts {
         ContextFlags = 96256,
         TypeExcludesFlags = 20480,
     }
-    const enum ModifierFlags {
+    enum ModifierFlags {
         None = 0,
         Export = 1,
         Ambient = 2,
@@ -431,7 +431,7 @@ declare namespace ts {
         TypeScriptModifier = 2270,
         ExportDefault = 513,
     }
-    const enum JsxFlags {
+    enum JsxFlags {
         None = 0,
         /** An element from a named property of the JSX.IntrinsicElements interface */
         IntrinsicNamedElement = 1,
@@ -1490,7 +1490,7 @@ declare namespace ts {
         /** If true, then this type literal represents an *array* of its type. */
         isArrayType?: boolean;
     }
-    const enum FlowFlags {
+    enum FlowFlags {
         Unreachable = 1,
         Start = 2,
         BranchLabel = 4,
@@ -1803,7 +1803,7 @@ declare namespace ts {
         reportInaccessibleThisError(): void;
         reportPrivateInBaseOfClassExpression(propertyName: string): void;
     }
-    const enum TypeFormatFlags {
+    enum TypeFormatFlags {
         None = 0,
         WriteArrayAsGenericType = 1,
         UseTypeOfFunction = 4,
@@ -1821,12 +1821,12 @@ declare namespace ts {
         InArrayType = 32768,
         UseAliasDefinedOutsideCurrentScope = 65536,
     }
-    const enum SymbolFormatFlags {
+    enum SymbolFormatFlags {
         None = 0,
         WriteTypeParametersOrArguments = 1,
         UseOnlyExternalAliasing = 2,
     }
-    const enum TypePredicateKind {
+    enum TypePredicateKind {
         This = 0,
         Identifier = 1,
     }
@@ -1843,7 +1843,7 @@ declare namespace ts {
         parameterIndex: number;
     }
     type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
-    const enum SymbolFlags {
+    enum SymbolFlags {
         None = 0,
         FunctionScopedVariable = 1,
         BlockScopedVariable = 2,
@@ -1913,7 +1913,7 @@ declare namespace ts {
         exports?: SymbolTable;
         globalExports?: SymbolTable;
     }
-    const enum InternalSymbolName {
+    enum InternalSymbolName {
         Call = "__call",
         Constructor = "__constructor",
         New = "__new",
@@ -1962,7 +1962,7 @@ declare namespace ts {
     }
     /** SymbolTable based on ES6 Map interface. */
     type SymbolTable = UnderscoreEscapedMap<Symbol>;
-    const enum TypeFlags {
+    enum TypeFlags {
         Any = 1,
         String = 2,
         Number = 4,
@@ -2021,7 +2021,7 @@ declare namespace ts {
     }
     interface EnumType extends Type {
     }
-    const enum ObjectFlags {
+    enum ObjectFlags {
         Class = 1,
         Interface = 2,
         Reference = 4,
@@ -2095,7 +2095,7 @@ declare namespace ts {
     interface IndexType extends Type {
         type: TypeVariable | UnionOrIntersectionType;
     }
-    const enum SignatureKind {
+    enum SignatureKind {
         Call = 0,
         Construct = 1,
     }
@@ -2104,7 +2104,7 @@ declare namespace ts {
         typeParameters?: TypeParameter[];
         parameters: Symbol[];
     }
-    const enum IndexKind {
+    enum IndexKind {
         String = 0,
         Number = 1,
     }
@@ -2113,7 +2113,7 @@ declare namespace ts {
         isReadonly: boolean;
         declaration?: SignatureDeclaration;
     }
-    const enum InferencePriority {
+    enum InferencePriority {
         Contravariant = 1,
         NakedTypeVariable = 2,
         MappedType = 4,
@@ -2127,7 +2127,7 @@ declare namespace ts {
         topLevel: boolean;
         isFixed: boolean;
     }
-    const enum InferenceFlags {
+    enum InferenceFlags {
         InferUnionTypes = 1,
         NoDefault = 2,
         AnyDefault = 4,
@@ -2141,7 +2141,7 @@ declare namespace ts {
      * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
      * x | y is True if either x or y is True.
      */
-    const enum Ternary {
+    enum Ternary {
         False = 0,
         Maybe = 1,
         True = -1,
@@ -2287,13 +2287,13 @@ declare namespace ts {
         ES2015 = 5,
         ESNext = 6,
     }
-    const enum JsxEmit {
+    enum JsxEmit {
         None = 0,
         Preserve = 1,
         React = 2,
         ReactNative = 3,
     }
-    const enum NewLineKind {
+    enum NewLineKind {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
@@ -2301,7 +2301,7 @@ declare namespace ts {
         line: number;
         character: number;
     }
-    const enum ScriptKind {
+    enum ScriptKind {
         Unknown = 0,
         JS = 1,
         JSX = 2,
@@ -2310,7 +2310,7 @@ declare namespace ts {
         External = 5,
         JSON = 6,
     }
-    const enum ScriptTarget {
+    enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
         ES2015 = 2,
@@ -2319,7 +2319,7 @@ declare namespace ts {
         ESNext = 5,
         Latest = 5,
     }
-    const enum LanguageVariant {
+    enum LanguageVariant {
         Standard = 0,
         JSX = 1,
     }
@@ -2333,7 +2333,7 @@ declare namespace ts {
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
     }
-    const enum WatchDirectoryFlags {
+    enum WatchDirectoryFlags {
         None = 0,
         Recursive = 1,
     }
@@ -2399,7 +2399,7 @@ declare namespace ts {
         /** Version of the package, e.g. "1.2.3" */
         version: string;
     }
-    const enum Extension {
+    enum Extension {
         Ts = ".ts",
         Tsx = ".tsx",
         Dts = ".d.ts",
@@ -2445,7 +2445,7 @@ declare namespace ts {
         text: string;
         skipTrivia?: (pos: number) => number;
     }
-    const enum EmitFlags {
+    enum EmitFlags {
         SingleLine = 1,
         AdviseOnEmitNode = 2,
         NoSubstitution = 4,
@@ -2481,7 +2481,7 @@ declare namespace ts {
         readonly text: string;
         readonly priority?: number;
     }
-    const enum EmitHint {
+    enum EmitHint {
         SourceFile = 0,
         Expression = 1,
         IdentifierName = 2,
@@ -4054,7 +4054,7 @@ declare namespace ts {
         fileName: string;
         highlightSpans: HighlightSpan[];
     }
-    const enum HighlightSpanKind {
+    enum HighlightSpanKind {
         none = "none",
         definition = "definition",
         reference = "reference",
@@ -4274,7 +4274,7 @@ declare namespace ts {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
     }
-    const enum OutputFileType {
+    enum OutputFileType {
         JavaScript = 0,
         SourceMap = 1,
         Declaration = 2,
@@ -4284,7 +4284,7 @@ declare namespace ts {
         writeByteOrderMark: boolean;
         text: string;
     }
-    const enum EndOfLineState {
+    enum EndOfLineState {
         None = 0,
         InMultiLineCommentTrivia = 1,
         InSingleQuoteStringLiteral = 2,
@@ -4336,7 +4336,7 @@ declare namespace ts {
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
         getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
-    const enum ScriptElementKind {
+    enum ScriptElementKind {
         unknown = "",
         warning = "warning",
         /** predefined type (void) or keyword (class) */
@@ -4403,7 +4403,7 @@ declare namespace ts {
          */
         jsxAttribute = "JSX attribute",
     }
-    const enum ScriptElementKindModifier {
+    enum ScriptElementKindModifier {
         none = "",
         publicMemberModifier = "public",
         privateMemberModifier = "private",
@@ -4413,7 +4413,7 @@ declare namespace ts {
         staticModifier = "static",
         abstractModifier = "abstract",
     }
-    const enum ClassificationTypeNames {
+    enum ClassificationTypeNames {
         comment = "comment",
         identifier = "identifier",
         keyword = "keyword",
@@ -4438,7 +4438,7 @@ declare namespace ts {
         jsxText = "jsx text",
         jsxAttributeStringLiteralValue = "jsx attribute string literal value",
     }
-    const enum ClassificationType {
+    enum ClassificationType {
         comment = 1,
         identifier = 2,
         keyword = 3,
@@ -4778,7 +4778,7 @@ declare namespace ts.server {
  * Declaration module describing the TypeScript Server protocol
  */
 declare namespace ts.server.protocol {
-    const enum CommandTypes {
+    enum CommandTypes {
         Brace = "brace",
         BraceCompletion = "braceCompletion",
         GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -6640,7 +6640,7 @@ declare namespace ts.server.protocol {
     interface NavTreeResponse extends Response {
         body?: NavigationTree;
     }
-    const enum IndentStyle {
+    enum IndentStyle {
         None = "None",
         Block = "Block",
         Smart = "Smart",
@@ -6739,13 +6739,13 @@ declare namespace ts.server.protocol {
         typeRoots?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
-    const enum JsxEmit {
+    enum JsxEmit {
         None = "None",
         Preserve = "Preserve",
         ReactNative = "ReactNative",
         React = "React",
     }
-    const enum ModuleKind {
+    enum ModuleKind {
         None = "None",
         CommonJS = "CommonJS",
         AMD = "AMD",
@@ -6755,15 +6755,15 @@ declare namespace ts.server.protocol {
         ES2015 = "ES2015",
         ESNext = "ESNext",
     }
-    const enum ModuleResolutionKind {
+    enum ModuleResolutionKind {
         Classic = "Classic",
         Node = "Node",
     }
-    const enum NewLineKind {
+    enum NewLineKind {
         Crlf = "Crlf",
         Lf = "Lf",
     }
-    const enum ScriptTarget {
+    enum ScriptTarget {
         ES3 = "ES3",
         ES5 = "ES5",
         ES6 = "ES6",
