@@ -911,12 +911,13 @@ namespace ts.refactor.extractSymbol {
                 const localReference = createIdentifier(localNameText);
                 changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
             }
-            else if (node.parent.kind === SyntaxKind.ExpressionStatement) {
-                // If the parent is an expression statement, replace the statement with the declaration.
+            else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
+                // If the parent is an expression statement and the target scope is the immediately enclosing one,
+                // replace the statement with the declaration.
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceNodeWithNodes(context.file, node.parent, [newVariableStatement], { nodeSeparator: context.newLineCharacter });
+                changeTracker.replaceRange(context.file, { pos: node.parent.getStart(), end: node.parent.end }, newVariableStatement);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -940,8 +941,14 @@ namespace ts.refactor.extractSymbol {
                 }
 
                 // Consume
-                const localReference = createIdentifier(localNameText);
-                changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                if (node.parent.kind === SyntaxKind.ExpressionStatement) {
+                    // If the parent is an expression statement, delete it.
+                    changeTracker.deleteRange(context.file, { pos: node.parent.getStart(), end: node.parent.end });
+                }
+                else {
+                    const localReference = createIdentifier(localNameText);
+                    changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                }
             }
         }
 
@@ -1344,14 +1351,13 @@ namespace ts.refactor.extractSymbol {
         }
 
         for (let i = 0; i < scopes.length; i++) {
-            if (!isReadonlyArray(targetRange.range)) {
-                const scopeUsages = usagesPerScope[i];
-                // Special case: in the innermost scope, all usages are available.
-                // (The computed value reflects the value at the top-level of the scope, but the
-                // local will actually be declared at the same level as the extracted expression).
-                if (i > 0 && (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0)) {
-                    constantErrorsPerScope[i].push(createDiagnosticForNode(targetRange.range, Messages.CannotAccessVariablesFromNestedScopes));
-                }
+            const scopeUsages = usagesPerScope[i];
+            // Special case: in the innermost scope, all usages are available.
+            // (The computed value reflects the value at the top-level of the scope, but the
+            // local will actually be declared at the same level as the extracted expression).
+            if (i > 0 && (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0)) {
+                const errorNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
+                constantErrorsPerScope[i].push(createDiagnosticForNode(errorNode, Messages.CannotAccessVariablesFromNestedScopes));
             }
 
             let hasWrite = false;
