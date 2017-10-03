@@ -6,12 +6,7 @@ f `'\u{1f4a9}'${ " should be converted to " }'\uD83D\uDCA9'`;
 
 //// [taggedTemplateStringsWithUnicodeEscapes.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) {
-        Object.defineProperty(cooked, "raw", { value: raw });
-    }
-    else {
-        cooked.raw = raw;
-    }
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
 function f() {

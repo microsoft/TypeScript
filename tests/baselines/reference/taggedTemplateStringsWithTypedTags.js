@@ -33,12 +33,7 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 
 //// [taggedTemplateStringsWithTypedTags.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) {
-        Object.defineProperty(cooked, "raw", { value: raw });
-    }
-    else {
-        cooked.raw = raw;
-    }
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
 var f;
