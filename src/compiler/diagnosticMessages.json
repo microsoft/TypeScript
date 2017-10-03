@@ -3142,10 +3142,6 @@
         "category": "Message",
         "code": 6128
     },
-    "The config file '{0}' found doesn't contain any source files.": {
-        "category": "Error",
-        "code": 6129
-    },
     "Resolving real path for '{0}', result '{1}'.": {
         "category": "Message",
         "code": 6130
@@ -3365,6 +3361,10 @@
     "Disable strict checking of generic signatures in function types.": {
         "category": "Message",
         "code": 6185
+    },
+    "Enable strict checking of function types.": {
+        "category": "Message",
+        "code": 6186
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3772,7 +3772,7 @@
         "code": 95003
     },
 
-    "Extract to {0}": {
+    "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
     },

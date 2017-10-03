@@ -104,7 +104,7 @@ namespace ts {
         "/dev/tests/scenarios/first.json": "",
         "/dev/tests/baselines/first/output.ts": ""
     });
-    const testContents = mapEntries(testContentsJson, (k, v) => [k, typeof v === "string" ? v : JSON.stringify(v)]);
+    const testContents = mapEntries(testContentsJson, (k, v) => [k, isString(v) ? v : JSON.stringify(v)]);
 
     const caseInsensitiveBasePath = "c:/dev/";
     const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapEntries(testContents, (key, content) => [`c:${key}`, content]));

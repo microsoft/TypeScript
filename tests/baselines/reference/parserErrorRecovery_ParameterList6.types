@@ -3,8 +3,7 @@ class Foo {
 >Foo : Foo
 
     public banana (x: break) { }
->banana : (x: any) => any
+>banana : (x: any) => void
 >x : any
-> : No type information available!
-> : any
+>break : No type information available!
 }
