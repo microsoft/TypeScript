@@ -33,6 +33,13 @@ namespace ts {
         testExtractConstant("extractConstant_ExpressionStatementExpression",
             `[#|"hello"|];`);
 
+        testExtractConstant("extractConstant_ExpressionStatementInNestedScope", `
+let i = 0;
+function F() {
+    [#|i++|];
+}
+        `);
+
         testExtractConstant("extractConstant_BlockScopes_NoDependencies",
             `for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
