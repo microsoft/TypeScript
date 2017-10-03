@@ -167,6 +167,8 @@ namespace ts.server {
 
         private typingFiles: SortedReadonlyArray<string>;
 
+        private readonly cancellationToken: ThrottledCancellationToken;
+
         public isNonTsProject() {
             this.updateGraph();
             return allFilesAreJsOrDts(this);
@@ -206,6 +208,7 @@ namespace ts.server {
             /*@internal*/public directoryStructureHost: DirectoryStructureHost,
             rootDirectoryForResolution: string | undefined) {
 
+            this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
             if (!this.compilerOptions) {
                 this.compilerOptions = getDefaultCompilerOptions();
                 this.compilerOptions.allowNonTsExtensions = true;
@@ -294,7 +297,7 @@ namespace ts.server {
         }
 
         getCancellationToken() {
-            return this.projectService.cancellationToken;
+            return this.cancellationToken;
         }
 
         getCurrentDirectory(): string {
