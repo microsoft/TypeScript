@@ -17,6 +17,7 @@ var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
 var unittestsDirectory = "src/harness/unittests/";
 var docDirectory = "doc/";
+var lclDirectory = "src/loc/lcl";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
@@ -427,7 +428,40 @@ compileFile(processDiagnosticMessagesJs,
     [processDiagnosticMessagesTs],
     [processDiagnosticMessagesTs],
     [],
-            /*useBuiltCompiler*/ false);
+    /*useBuiltCompiler*/ false);
+
+// Localize diagnostics script
+var generateLocalizedDiagnosticMessagesJs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.js");
+var generateLocalizedDiagnosticMessagesTs = path.join(scriptsDirectory, "generateLocalizedDiagnosticMessages.ts");
+
+file(generateLocalizedDiagnosticMessagesTs);
+
+compileFile(generateLocalizedDiagnosticMessagesJs,
+    [generateLocalizedDiagnosticMessagesTs],
+    [generateLocalizedDiagnosticMessagesTs],
+    [],
+    /*useBuiltCompiler*/ false, { noOutFile: true, types: ["node", "xml2js"] });
+
+// Localize diagnostics
+var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages.generated.json.lcg");
+file(generatedLCGFile, [generateLocalizedDiagnosticMessagesJs, diagnosticInfoMapTs, generatedDiagnosticMessagesJSON], function () {
+    var cmd = host + " " + generateLocalizedDiagnosticMessagesJs + " " + lclDirectory + " " + builtLocalDirectory + " " + generatedDiagnosticMessagesJSON;
+    console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function (output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function (error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function () {
+        complete();
+    });
+    ex.run();
+}, { async: true });
+
+task("localize", [generatedLCGFile]);
 
 var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
@@ -644,7 +678,7 @@ task("build-fold-end", [], function () {
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, buildProtocolDts, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end"]);
+task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, buildProtocolDts, builtGeneratedDiagnosticMessagesJSON, "lssl", "localize", "build-fold-end"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -699,7 +733,10 @@ task("generate-spec", [specMd]);
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
-    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile, cancellationTokenFile, typingsInstallerFile, buildProtocolDts, watchGuardFile].
+        concat(libraryTargets).
+        concat(fs.readdirSync(lclDirectory).map(function (d) { return path.join(builtLocalDirectory, d) })).
+        concat(path.dirname(generatedLCGFile));
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -1229,7 +1266,7 @@ task("lint", ["build-rules"], () => {
     const fileMatcher = process.env.f || process.env.file || process.env.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
     const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {
