@@ -6,56 +6,36 @@ namespace ts {
         emitSkipped: boolean;
     }
 
-    export interface EmitOutputDetailed extends EmitOutput {
-        diagnostics: Diagnostic[];
-        sourceMaps: SourceMapData[];
-        emittedSourceFiles: SourceFile[];
-    }
-
     export interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
     }
-
-    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean,
-        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput | EmitOutputDetailed {
-        const outputFiles: OutputFile[] = [];
-        let emittedSourceFiles: SourceFile[];
-        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
-        if (!isDetailed) {
-            return { outputFiles, emitSkipped: emitResult.emitSkipped };
-        }
-
-        return {
-            outputFiles,
-            emitSkipped: emitResult.emitSkipped,
-            diagnostics: emitResult.diagnostics,
-            sourceMaps: emitResult.sourceMaps,
-            emittedSourceFiles
-        };
-
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, _onError: (message: string) => void, sourceFiles: SourceFile[]) {
-            outputFiles.push({ name: fileName, writeByteOrderMark, text });
-            if (isDetailed) {
-                emittedSourceFiles = addRange(emittedSourceFiles, sourceFiles);
-            }
-        }
-    }
 }
 
 /* @internal */
 namespace ts {
+    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
+        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
+        const outputFiles: OutputFile[] = [];
+        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+            return { outputFiles, emitSkipped: emitResult.emitSkipped };
+
+        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
+            outputFiles.push({ name: fileName, writeByteOrderMark, text });
+        }
+    }
+
     export interface Builder {
         /** Called to inform builder about new program */
         updateProgram(newProgram: Program): void;
+
         /** Gets the files affected by the file path */
         getFilesAffectedBy(program: Program, path: Path): ReadonlyArray<SourceFile>;
-        /** Emits the given file */
-        emitFile(program: Program, path: Path): EmitOutput;
 
         /** Emit the changed files and clear the cache of the changed files */
-        emitChangedFiles(program: Program): EmitOutputDetailed[];
+        emitChangedFiles(program: Program, writeFileCallback: WriteFileCallback): ReadonlyArray<EmitResult>;
+
         /** When called gets the semantic diagnostics for the program. It also caches the diagnostics and manage them */
         getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): Diagnostic[];
 
@@ -98,9 +78,7 @@ namespace ts {
 
     export interface BuilderOptions {
         getCanonicalFileName: (fileName: string) => string;
-        getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed;
         computeHash: (data: string) => string;
-        shouldEmitFile: (sourceFile: SourceFile) => boolean;
     }
 
     export function createBuilder(options: BuilderOptions): Builder {
@@ -108,12 +86,13 @@ namespace ts {
         const fileInfos = createMap<FileInfo>();
         const semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
         /** The map has key by source file's path that has been changed */
-        const changedFileNames = createMap<true>();
+        const changedFilesSet = createMap<true>();
+        const hasShapeChanged = createMap<true>();
+        let allFilesExcludingDefaultLibraryFile: ReadonlyArray<SourceFile> | undefined;
         let emitHandler: EmitHandler;
         return {
             updateProgram,
             getFilesAffectedBy,
-            emitFile,
             emitChangedFiles,
             getSemanticDiagnostics,
             clear
@@ -127,6 +106,8 @@ namespace ts {
                 fileInfos.clear();
                 semanticDiagnosticsPerFile.clear();
             }
+            hasShapeChanged.clear();
+            allFilesExcludingDefaultLibraryFile = undefined;
             mutateMap(
                 fileInfos,
                 arrayToMap(program.getSourceFiles(), sourceFile => sourceFile.path),
@@ -142,7 +123,7 @@ namespace ts {
         }
 
         function registerChangedFile(path: Path) {
-            changedFileNames.set(path, true);
+            changedFilesSet.set(path, true);
             // All changed files need to re-evaluate its semantic diagnostics
             semanticDiagnosticsPerFile.delete(path);
         }
@@ -185,93 +166,70 @@ namespace ts {
             ensureProgramGraph(program);
 
             const sourceFile = program.getSourceFileByPath(path);
-            const info = fileInfos.get(path);
-            if (!info || !updateShapeSignature(program, sourceFile, info)) {
-                return sourceFile && [sourceFile] || emptyArray;
+            if (!sourceFile) {
+                return emptyArray;
             }
 
-            Debug.assert(!!sourceFile);
+            if (!updateShapeSignature(program, sourceFile)) {
+                return [sourceFile];
+            }
             return emitHandler.getFilesAffectedByUpdatedShape(program, sourceFile);
         }
 
-        function emitFile(program: Program, path: Path) {
+        function emitChangedFiles(program: Program, writeFileCallback: WriteFileCallback): ReadonlyArray<EmitResult> {
             ensureProgramGraph(program);
-            const sourceFile = program.getSourceFileByPath(path);
-            if (!fileInfos.has(path) || options.shouldEmitFile(sourceFile)) {
-                return { outputFiles: [], emitSkipped: true };
-            }
-
-            return options.getEmitOutput(program, program.getSourceFileByPath(path), /*emitOnlyDtsFiles*/ false, /*isDetailed*/ false);
-        }
-
-        function enumerateChangedFilesSet(
-            program: Program,
-            onAffectedFile: (sourceFile: SourceFile) => void
-        ) {
-            changedFileNames.forEach((_true, path) => {
-                const affectedFiles = getFilesAffectedBy(program, path as Path);
-                for (const file of affectedFiles) {
-                    onAffectedFile(file);
-                }
-            });
-        }
-
-        function enumerateChangedFilesEmitOutput(
-            program: Program,
-            emitOnlyDtsFiles: boolean,
-            onEmitOutput: (emitOutput: EmitOutputDetailed) => void
-        ) {
+            const compilerOptions = program.getCompilerOptions();
+            let result: EmitResult[] | undefined;
             const seenFiles = createMap<true>();
-            enumerateChangedFilesSet(program, sourceFile => {
-                if (!seenFiles.has(sourceFile.path)) {
-                    seenFiles.set(sourceFile.path, true);
-                    // Any affected file shouldnt have the cached diagnostics
-                    semanticDiagnosticsPerFile.delete(sourceFile.path);
+            changedFilesSet.forEach((_true, path) => {
+                const affectedFiles = getFilesAffectedBy(program, path as Path);
+                affectedFiles.forEach(affectedFile => {
+                    // Affected files shouldnt have cached diagnostics
+                    semanticDiagnosticsPerFile.delete(affectedFile.path);
 
-                    const emitOutput = options.getEmitOutput(program, sourceFile, emitOnlyDtsFiles, /*isDetailed*/ true) as EmitOutputDetailed;
+                    if (!seenFiles.has(affectedFile.path)) {
+                        seenFiles.set(affectedFile.path, true);
 
-                    // mark all the emitted source files as seen
-                    if (emitOutput.emittedSourceFiles) {
-                        for (const file of emitOutput.emittedSourceFiles) {
-                            seenFiles.set(file.path, true);
+                        // With --out or --outFile all outputs go into single file, do it only once
+                        if (compilerOptions.outFile || compilerOptions.out) {
+                            if (!result) {
+                                result = [program.emit(affectedFile, writeFileCallback)];
+                            }
+                        }
+                        else {
+                            // Emit the affected file
+                            (result || (result = [])).push(program.emit(affectedFile, writeFileCallback));
                         }
                     }
-
-                    onEmitOutput(emitOutput);
-                }
+                });
             });
-        }
-
-        function emitChangedFiles(program: Program): EmitOutputDetailed[] {
-            ensureProgramGraph(program);
-            const result: EmitOutputDetailed[] = [];
-            enumerateChangedFilesEmitOutput(program, /*emitOnlyDtsFiles*/ false, emitOutput => result.push(emitOutput));
-            changedFileNames.clear();
-            return result;
+            changedFilesSet.clear();
+            return result || emptyArray;
         }
 
         function getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): Diagnostic[] {
             ensureProgramGraph(program);
-
-            // Ensure that changed files have cleared their respective
-            enumerateChangedFilesSet(program, sourceFile => semanticDiagnosticsPerFile.delete(sourceFile.path));
+            Debug.assert(changedFilesSet.size === 0);
 
             let diagnostics: Diagnostic[];
             for (const sourceFile of program.getSourceFiles()) {
-                const path = sourceFile.path;
-                const cachedDiagnostics = semanticDiagnosticsPerFile.get(path);
-                // Report the semantic diagnostics from the cache if we already have those diagnostics present
-                if (cachedDiagnostics) {
-                    diagnostics = addRange(diagnostics, cachedDiagnostics);
-                }
-                else {
-                    // Diagnostics werent cached, get them from program, and cache the result
-                    const cachedDiagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
-                    semanticDiagnosticsPerFile.set(path, cachedDiagnostics);
-                    diagnostics = addRange(diagnostics, cachedDiagnostics);
-                }
+                diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(program, sourceFile, cancellationToken));
             }
             return diagnostics || emptyArray;
+        }
+
+        function getSemanticDiagnosticsOfFile(program: Program, sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
+            const path = sourceFile.path;
+            const cachedDiagnostics = semanticDiagnosticsPerFile.get(path);
+            // Report the semantic diagnostics from the cache if we already have those diagnostics present
+            if (cachedDiagnostics) {
+                cachedDiagnostics;
+            }
+
+            // Diagnostics werent cached, get them from program, and cache the result
+            const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
+            semanticDiagnosticsPerFile.set(path, diagnostics);
+            return diagnostics;
         }
 
         function clear() {
@@ -279,7 +237,8 @@ namespace ts {
             emitHandler = undefined;
             fileInfos.clear();
             semanticDiagnosticsPerFile.clear();
-            changedFileNames.clear();
+            changedFilesSet.clear();
+            hasShapeChanged.clear();
         }
 
         /**
@@ -300,7 +259,18 @@ namespace ts {
         /**
          * @return {boolean} indicates if the shape signature has changed since last update.
          */
-        function updateShapeSignature(program: Program, sourceFile: SourceFile, info: FileInfo) {
+        function updateShapeSignature(program: Program, sourceFile: SourceFile) {
+            Debug.assert(!!sourceFile);
+
+            // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
+            if (hasShapeChanged.has(sourceFile.path)) {
+                return false;
+            }
+
+            hasShapeChanged.set(sourceFile.path, true);
+            const info = fileInfos.get(sourceFile.path);
+            Debug.assert(!!info);
+
             const prevSignature = info.signature;
             let latestSignature: string;
             if (sourceFile.isDeclarationFile) {
@@ -308,7 +278,7 @@ namespace ts {
                 info.signature = latestSignature;
             }
             else {
-                const emitOutput = options.getEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true, /*isDetailed*/ false);
+                const emitOutput = getFileEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true);
                 if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
                     latestSignature = options.computeHash(emitOutput.outputFiles[0].text);
                     info.signature = latestSignature;
@@ -379,13 +349,20 @@ namespace ts {
          * Gets all files of the program excluding the default library file
          */
         function getAllFilesExcludingDefaultLibraryFile(program: Program, firstSourceFile: SourceFile): ReadonlyArray<SourceFile> {
+            // Use cached result
+            if (allFilesExcludingDefaultLibraryFile) {
+                return allFilesExcludingDefaultLibraryFile;
+            }
+
             let result: SourceFile[];
+            addSourceFile(firstSourceFile);
             for (const sourceFile of program.getSourceFiles()) {
                 if (sourceFile !== firstSourceFile) {
                     addSourceFile(sourceFile);
                 }
             }
-            return result || emptyArray;
+            allFilesExcludingDefaultLibraryFile = result || emptyArray;
+            return allFilesExcludingDefaultLibraryFile;
 
             function addSourceFile(sourceFile: SourceFile) {
                 if (!program.isSourceFileDefaultLibrary(sourceFile)) {
@@ -505,7 +482,7 @@ namespace ts {
                     if (!seenFileNamesMap.has(currentPath)) {
                         const currentSourceFile = program.getSourceFileByPath(currentPath);
                         seenFileNamesMap.set(currentPath, currentSourceFile);
-                        if (currentSourceFile && updateShapeSignature(program, currentSourceFile, fileInfos.get(currentPath))) {
+                        if (currentSourceFile && updateShapeSignature(program, currentSourceFile)) {
                             queue.push(...getReferencedByPaths(currentPath));
                         }
                     }

@@ -1106,7 +1106,7 @@ namespace ts.tscWatch {
             createWatchForOut(/*out*/ undefined, outJs);
         });
 
-        it("with --outFile and multiple declaration files in the program", () => {
+        function verifyFilesEmittedOnce(useOutFile: boolean) {
             const file1: FileOrFolder = {
                 path: "/a/b/output/AnotherDependency/file1.d.ts",
                 content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }"
@@ -1126,10 +1126,9 @@ namespace ts.tscWatch {
             const configFile: FileOrFolder = {
                 path: "/a/b/project/tsconfig.json",
                 content: JSON.stringify({
-                    compilerOptions: {
-                        outFile: "../output/common.js",
-                        target: "es5"
-                    },
+                    compilerOptions: useOutFile ?
+                        { outFile: "../output/common.js", target: "es5" } :
+                        { outDir: "../output", target: "es5" },
                     files: [file1.path, file2.path, file3.path, file4.path]
                 })
             };
@@ -1137,13 +1136,32 @@ namespace ts.tscWatch {
             const allfiles = files.concat(configFile);
             const host = createWatchedSystem(allfiles);
             const originalWriteFile = host.writeFile.bind(host);
-            let numberOfTimesFileWritten = 0;
+            const mapOfFilesWritten = createMap<number>();
             host.writeFile = (p: string, content: string) => {
-                numberOfTimesFileWritten++;
+                const count = mapOfFilesWritten.get(p);
+                mapOfFilesWritten.set(p, count ? count + 1 : 1);
                 return originalWriteFile(p, content);
             };
             createWatchModeWithConfigFile(configFile.path, host);
-            assert.equal(numberOfTimesFileWritten, 1);
+            if (useOutFile) {
+                // Only out file
+                assert.equal(mapOfFilesWritten.size, 1);
+            }
+            else {
+                // main.js and main2.js
+                assert.equal(mapOfFilesWritten.size, 2);
+            }
+            mapOfFilesWritten.forEach((value, key) => {
+                assert.equal(value, 1, "Key: " + key);
+            });
+        }
+
+        it("with --outFile and multiple declaration files in the program", () => {
+            verifyFilesEmittedOnce(/*useOutFile*/ true);
+        });
+
+        it("without --outFile and multiple declaration files in the program", () => {
+            verifyFilesEmittedOnce(/*useOutFile*/ false);
         });
     });
 
