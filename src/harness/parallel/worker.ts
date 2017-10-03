@@ -57,14 +57,14 @@ namespace Harness.Parallel.Worker {
             callback.call(fakeContext);
         }
         catch (e) {
-            errors.push({ error: `Error executing suite: ${e.message}`, stack: e.stack, name: namestack.join(" ") });
+            errors.push({ error: `Error executing suite: ${e.message}`, stack: e.stack, name: [...namestack] });
             return cleanup();
         }
         try {
             beforeFunc && beforeFunc();
         }
         catch (e) {
-            errors.push({ error: `Error executing before function: ${e.message}`, stack: e.stack, name: namestack.join(" ") });
+            errors.push({ error: `Error executing before function: ${e.message}`, stack: e.stack, name: [...namestack] });
             return cleanup();
         }
         finally {
@@ -76,7 +76,7 @@ namespace Harness.Parallel.Worker {
             afterFunc && afterFunc();
         }
         catch (e) {
-            errors.push({ error: `Error executing after function: ${e.message}`, stack: e.stack, name: namestack.join(" ") });
+            errors.push({ error: `Error executing after function: ${e.message}`, stack: e.stack, name: [...namestack] });
         }
         finally {
             afterFunc = undefined;
@@ -107,13 +107,12 @@ namespace Harness.Parallel.Worker {
             slow() { return this; },
         };
         namestack.push(name);
-        name = namestack.join(" ");
         if (beforeEachFunc) {
             try {
                 beforeEachFunc();
             }
             catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name });
+                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
                 namestack.pop();
                 return;
             }
@@ -124,7 +123,7 @@ namespace Harness.Parallel.Worker {
                 callback.call(fakeContext);
             }
             catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name });
+                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
                 return;
             }
             finally {
@@ -141,7 +140,7 @@ namespace Harness.Parallel.Worker {
                         throw new Error(`done() callback called multiple times; ensure it is only called once.`);
                     }
                     if (err) {
-                        errors.push({ error: err.toString(), stack: "", name });
+                        errors.push({ error: err.toString(), stack: "", name: [...namestack] });
                     }
                     else {
                         passing++;
@@ -150,14 +149,14 @@ namespace Harness.Parallel.Worker {
                 });
             }
             catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name });
+                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
                 return;
             }
             finally {
                 namestack.pop();
             }
             if (!completed) {
-                errors.push({ error: "Test completes asynchronously, which is unsupported by the parallel harness", stack: "", name });
+                errors.push({ error: "Test completes asynchronously, which is unsupported by the parallel harness", stack: "", name: [...namestack] });
             }
         }
     }
@@ -204,7 +203,7 @@ namespace Harness.Parallel.Worker {
             }
         });
         process.on("uncaughtException", error => {
-            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack, name: namestack.join(" ") } };
+            const message: ParallelErrorMessage = { type: "error", payload: { error: error.message, stack: error.stack, name: [...namestack] } };
             try {
                 process.send(message);
             }
