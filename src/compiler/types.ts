@@ -2526,7 +2526,7 @@ namespace ts {
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsSet: Map<true>;
         /** Returns true when file in the program had invalidated resolution at the time of program creation. */
-        hasInvalidatedResolution: HasInvalidatedResolution;
+        /* @internal */ hasInvalidatedResolution: HasInvalidatedResolution;
     }
 
     /* @internal */
@@ -3832,7 +3832,7 @@ namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
-        configFileSpecs?: ConfigFileSpecs;
+        /* @internal */ configFileSpecs?: ConfigFileSpecs;
     }
 
     export const enum WatchDirectoryFlags {
@@ -3840,6 +3840,7 @@ namespace ts {
         Recursive = 1 << 0,
     }
 
+    /* @internal */
     export interface ConfigFileSpecs {
         filesSpecs: ReadonlyArray<string>;
         /**
@@ -3858,7 +3859,7 @@ namespace ts {
     export interface ExpandResult {
         fileNames: string[];
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
-        spec: ConfigFileSpecs;
+        /* @internal */ spec: ConfigFileSpecs;
     }
 
     /* @internal */
@@ -4130,6 +4131,7 @@ namespace ts {
         readonly failedLookupLocations: ReadonlyArray<string>;
     }
 
+    /* @internal */
     export interface HasInvalidatedResolution {
         (sourceFile: Path): boolean;
     }
@@ -4160,9 +4162,9 @@ namespace ts {
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
-        onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
-        hasInvalidatedResolution?: HasInvalidatedResolution;
-        hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
+        /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
     }
 
     /* @internal */
