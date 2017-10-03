@@ -478,7 +478,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
             .pipe(gulp.dest("src/server")),
         dts.pipe(prependCopyright(/*outputCopyright*/ true))
             .pipe(insert.transform((content) => {
-                return content + "\nexport = ts;\nexport as namespace ts;";
+                return content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4") + "\nexport = ts;\nexport as namespace ts;";
             }))
             .pipe(gulp.dest("src/server"))
     ]);
