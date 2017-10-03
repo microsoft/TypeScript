@@ -94,6 +94,9 @@ declare function oneOptionalWithRest(x?: any, ...args: any[]): OmniDecorator;
 >args : any[]
 >OmniDecorator : OmniDecorator
 
+declare const anyDec: any;
+>anyDec : any
+
 @noArgs
 >noArgs : () => OmniDecorator
 
@@ -181,6 +184,21 @@ class F {
 
     @oneOptionalWithRest bar() { }
 >oneOptionalWithRest : (x?: any, ...args: any[]) => OmniDecorator
+>bar : () => void
+}
+
+@anyDec
+>anyDec : any
+
+class G {
+>G : G
+
+    @anyDec foo: any;
+>anyDec : any
+>foo : any
+
+    @anyDec bar() { }
+>anyDec : any
 >bar : () => void
 }
 

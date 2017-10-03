@@ -31,6 +31,7 @@ declare function oneOptional(x?: any): OmniDecorator;
 declare function twoOptional(x?: any, y?: any): OmniDecorator;
 declare function threeOptional(x?: any, y?: any, z?: any): OmniDecorator;
 declare function oneOptionalWithRest(x?: any, ...args: any[]): OmniDecorator;
+declare const anyDec: any;
 
 @noArgs
 class A {
@@ -66,6 +67,12 @@ class E {
 class F {
     @oneOptionalWithRest foo: any;
     @oneOptionalWithRest bar() { }
+}
+
+@anyDec
+class G {
+    @anyDec foo: any;
+    @anyDec bar() { }
 }
 
 export { };
@@ -168,3 +175,15 @@ __decorate([
 F = __decorate([
     oneOptionalWithRest
 ], F);
+let G = class G {
+    bar() { }
+};
+__decorate([
+    anyDec
+], G.prototype, "foo", void 0);
+__decorate([
+    anyDec
+], G.prototype, "bar", null);
+G = __decorate([
+    anyDec
+], G);
