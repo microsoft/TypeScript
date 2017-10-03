@@ -37,13 +37,13 @@ namespace ts.refactor.extractSymbol {
         const usedConstantNames: Map<boolean> = createMap();
 
         let i = 0;
-        for (const extraction of extractions) {
+        for (const {functionExtraction, constantExtraction} of extractions) {
             // Skip these since we don't have a way to report errors yet
-            if (extraction.functionErrors.length === 0) {
+            if (functionExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.functionDescription, extraction.functionScopeDescription]);
+                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [functionExtraction.description, functionExtraction.scopeDescription]);
                 if (!usedFunctionNames.has(description)) {
                     usedFunctionNames.set(description, true);
                     functionActions.push({
@@ -54,11 +54,11 @@ namespace ts.refactor.extractSymbol {
             }
 
             // Skip these since we don't have a way to report errors yet
-            if (extraction.constantErrors.length === 0) {
+            if (constantExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [extraction.constantDescription, extraction.constantScopeDescription]);
+                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [constantExtraction.description, constantExtraction.scopeDescription]);
                 if (!usedConstantNames.has(description)) {
                     usedConstantNames.set(description, true);
                     constantActions.push({
@@ -521,37 +521,44 @@ namespace ts.refactor.extractSymbol {
         return extractConstantInScope(expression, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange.facts, context);
     }
 
-    interface PossibleExtraction {
-        readonly functionDescription: string;
-        readonly functionScopeDescription: string;
-        readonly functionErrors: ReadonlyArray<Diagnostic>;
-        readonly constantDescription: string;
-        readonly constantScopeDescription: string;
-        readonly constantErrors: ReadonlyArray<Diagnostic>;
+    interface Extraction {
+        readonly description: string;
+        readonly scopeDescription: string;
+        readonly errors: ReadonlyArray<Diagnostic>;
     }
+
+    interface ScopeExtractions {
+        readonly functionExtraction: Extraction;
+        readonly constantExtraction: Extraction;
+    }
+
     /**
      * Given a piece of text to extract ('targetRange'), computes a list of possible extractions.
      * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
      * or an error explaining why we can't extract into that scope.
      */
-    function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<PossibleExtraction> | undefined {
+    function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): ReadonlyArray<ScopeExtractions> | undefined {
         const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
-        const extractions = scopes.map((scope, i): PossibleExtraction => {
+        const extractions = scopes.map((scope, i): ScopeExtractions => {
             const scopeDescription = isFunctionLikeDeclaration(scope)
                 ? getDescriptionForFunctionLikeDeclaration(scope)
                 : isClassLike(scope)
                     ? getDescriptionForClassLikeDeclaration(scope)
                     : getDescriptionForModuleLikeDeclaration(scope);
             return {
-                functionDescription: getDescriptionForFunctionInScope(scope),
-                functionErrors: functionErrorsPerScope[i],
-                functionScopeDescription: scopeDescription,
-                constantDescription: getDescriptionForConstantInScope(scope),
-                constantErrors: constantErrorsPerScope[i],
-                constantScopeDescription: (i === 0 && !isClassLike(scope))
-                    ? "enclosing scope" // Like "global scope" and "module scope", this is not localized.
-                    : scopeDescription,
+                functionExtraction: {
+                    description: getDescriptionForFunctionInScope(scope),
+                    errors: functionErrorsPerScope[i],
+                    scopeDescription,
+                },
+                constantExtraction: {
+                    description: getDescriptionForConstantInScope(scope),
+                    errors: constantErrorsPerScope[i],
+                    scopeDescription: (i === 0 && !isClassLike(scope))
+                        ? "enclosing scope" // Like "global scope" and "module scope", this is not localized.
+                        : scopeDescription,
+                },
             };
         });
         return extractions;
