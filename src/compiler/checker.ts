@@ -16382,8 +16382,7 @@ namespace ts {
             }
 
             if (isPotentiallyUncalledDecorator(node, callSignatures)) {
-                const printer = createPrinter({ removeComments: true });
-                const nodeStr = printer.printNode(EmitHint.Expression, node.expression, getSourceFileOfNode(node));
+                const nodeStr = getTextOfNode(node.expression, /*includeTrivia*/ false);
                 error(node, Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0, nodeStr);
                 return resolveErrorCall(node);
             }
