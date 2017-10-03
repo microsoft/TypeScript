@@ -907,7 +907,7 @@
         "category": "Error",
         "code": 1328
     },
-    "This value has type '{0}' which accepts too few arguments to be used as a decorator here. Did you mean to call it first?": {
+    "'{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?": {
         "category": "Error",
         "code": 1329
     },
