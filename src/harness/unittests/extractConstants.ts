@@ -33,6 +33,20 @@ namespace ts {
         testExtractConstant("extractConstant_ExpressionStatementExpression",
             `[#|"hello"|];`);
 
+        testExtractConstant("extractConstant_ExpressionStatementInNestedScope", `
+let i = 0;
+function F() {
+    [#|i++|];
+}
+        `);
+
+        testExtractConstant("extractConstant_ExpressionStatementConsumesLocal", `
+function F() {
+    let i = 0;
+    [#|i++|];
+}
+        `);
+
         testExtractConstant("extractConstant_BlockScopes_NoDependencies",
             `for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
@@ -84,12 +98,11 @@ namespace ts {
     let x = [#|t + 1|];
 }`);
 
-// TODO (18857): handle repeated substitution
-//         testExtractConstant("extractConstant_RepeatedSubstitution",
-//             `namespace X {
-//     export const j = 10;
-//     export const y = [#|j * j|];
-// }`);
+        testExtractConstant("extractConstant_RepeatedSubstitution",
+            `namespace X {
+    export const j = 10;
+    export const y = [#|j * j|];
+}`);
 
         testExtractConstant("extractConstant_VariableList_const",
             `const a = 1, b = [#|a + 1|];`);
@@ -201,6 +214,14 @@ const x = [#|2 + 1|];
 /* About x */
 const x = [#|2 + 1|];
         `);
+
+        testExtractConstant("extractConstant_ArrowFunction_Block", `
+const f = () => {
+    return [#|2 + 1|];
+};`);
+
+        testExtractConstant("extractConstant_ArrowFunction_Expression",
+            `const f = () => [#|2 + 1|];`);
     });
 
     function testExtractConstant(caption: string, text: string) {

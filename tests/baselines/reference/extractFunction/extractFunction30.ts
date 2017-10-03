@@ -1,6 +1,6 @@
 // ==ORIGINAL==
 function F<T>() {
-    let t: T;
+    /*[#|*/let t: T;/*|]*/
 }
 // ==SCOPE::Extract to inner function in function 'F'==
 function F<T>() {

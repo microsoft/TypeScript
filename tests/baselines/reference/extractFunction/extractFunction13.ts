@@ -4,11 +4,11 @@
         <U2a, U2b>(u2a: U2a, u2b: U2b) => {
             function F2<T2a, T2b>(t2a: T2a, t2b: T2b) {
                 <U3a, U3b>(u3a: U3a, u3b: U3b) => {
-                        t1a.toString();
+                        /*[#|*/t1a.toString();
                         t2a.toString();
                         u1a.toString();
                         u2a.toString();
-                        u3a.toString();
+                        u3a.toString();/*|]*/
                 }
             }
         }

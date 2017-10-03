@@ -613,7 +613,15 @@ namespace ts.server {
 
             fs.stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
-                    watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
+                    if (err.code === "ENOENT") {
+                        if (watchedFile.mtime.getTime() !== 0) {
+                            watchedFile.mtime = new Date(0);
+                            watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Deleted);
+                        }
+                    }
+                    else {
+                        watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
+                    }
                 }
                 else {
                     const oldTime = watchedFile.mtime.getTime();
