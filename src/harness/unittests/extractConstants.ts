@@ -214,6 +214,14 @@ const x = [#|2 + 1|];
 /* About x */
 const x = [#|2 + 1|];
         `);
+
+        testExtractConstant("extractConstant_ArrowFunction_Block", `
+const f = () => {
+    return [#|2 + 1|];
+};`);
+
+        testExtractConstant("extractConstant_ArrowFunction_Expression",
+            `const f = () => [#|2 + 1|];`);
     });
 
     function testExtractConstant(caption: string, text: string) {
