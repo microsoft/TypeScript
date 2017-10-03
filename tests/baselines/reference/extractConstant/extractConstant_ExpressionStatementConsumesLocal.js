@@ -2,7 +2,7 @@
 
 function F() {
     let i = 0;
-    i++;
+    /*[#|*/i++/*|]*/;
 }
         
 // ==SCOPE::Extract to constant in enclosing scope==

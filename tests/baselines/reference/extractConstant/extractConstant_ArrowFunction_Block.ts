@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 
 const f = () => {
-    return 2 + 1;
+    return /*[#|*/2 + 1/*|]*/;
 };
 // ==SCOPE::Extract to constant in enclosing scope==
 

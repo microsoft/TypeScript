@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 class C {
     M() {
-        let x = 1;
+        let x = /*[#|*/1/*|]*/;
     }
 }
 // ==SCOPE::Extract to constant in enclosing scope==

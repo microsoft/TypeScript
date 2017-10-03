@@ -5,7 +5,7 @@ class C {
     M1() { }
     M2() { }
     M3() {
-        let x = 1;
+        let x = /*[#|*/1/*|]*/;
     }
 }
 // ==SCOPE::Extract to constant in enclosing scope==

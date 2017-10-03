@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 namespace X {
     export const j = 10;
-    export const y = j * j;
+    export const y = /*[#|*/j * j/*|]*/;
 }
 // ==SCOPE::Extract to function in namespace 'X'==
 namespace X {

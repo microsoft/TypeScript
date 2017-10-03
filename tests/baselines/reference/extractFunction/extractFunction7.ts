@@ -8,11 +8,11 @@ namespace A {
     namespace B {
         function a() {
             let a = 1;
-        
+        /*[#|*/
             let y = 5;
             let z = x;
             a = y;
-            return C.foo();
+            return C.foo();/*|]*/
         }
     }
 }
