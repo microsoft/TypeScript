@@ -142,6 +142,7 @@ namespace ts.refactor.extractSymbol {
         export const CannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
         export const CannotExtractToOtherFunctionLike = createMessage("Cannot extract method to a function-like scope that is not a function");
         export const CannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
+        export const CannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
     }
 
     enum RangeFacts {
@@ -1298,6 +1299,10 @@ namespace ts.refactor.extractSymbol {
             }
             if (isClassLike(scope) && isInJavaScriptFile(scope)) {
                 constantErrors.push(createDiagnosticForNode(scope, Messages.CannotExtractToJSClass));
+            }
+            if (isArrowFunction(scope) && !isBlock(scope.body)) {
+                // TODO (https://github.com/Microsoft/TypeScript/issues/18924): allow this
+                constantErrors.push(createDiagnosticForNode(scope, Messages.CannotExtractToExpressionArrowFunction));
             }
             constantErrorsPerScope.push(constantErrors);
         }
