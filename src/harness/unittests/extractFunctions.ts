@@ -355,12 +355,11 @@ function parsePrimaryExpression(): any {
     [#|function G() { }|]
 }`);
 
-// TODO (18857): handle repeated substitution
-//         testExtractFunction("extractFunction_RepeatedSubstitution",
-//             `namespace X {
-//     export const j = 10;
-//     export const y = [#|j * j|];
-// }`);
+        testExtractFunction("extractFunction_RepeatedSubstitution",
+            `namespace X {
+    export const j = 10;
+    export const y = [#|j * j|];
+}`);
     });
 
     function testExtractFunction(caption: string, text: string) {
