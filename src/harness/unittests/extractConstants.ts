@@ -230,6 +230,30 @@ function f(): void { }
         testExtractConstantFailed("extractConstant_Never", `
 function f(): never { }
 [#|f();|]`);
+
+        testExtractConstant("extractConstant_This_Constructor", `
+class C {
+    constructor() {
+        [#|this.m2()|];
+    }
+    m2() { return 1; }
+}`);
+
+        testExtractConstant("extractConstant_This_Method", `
+class C {
+    m1() {
+        [#|this.m2()|];
+    }
+    m2() { return 1; }
+}`);
+
+        testExtractConstant("extractConstant_This_Property", `
+namespace N { // Force this test to be TS-only
+    class C {
+        x = 1;
+        y = [#|this.x|];
+    }
+}`);
     });
 
     function testExtractConstant(caption: string, text: string) {
