@@ -34,6 +34,14 @@ const gulp = helpMaker(originalGulp);
 
 Error.stackTraceLimit = 1000;
 
+/**
+ * This regexp exists to capture our const enums and replace them with normal enums in our public API
+ *   - this is fine since we compile with preserveConstEnums, and ensures our consumers are not locked
+ *     to the TS version they compile with.
+ */
+const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
+const constEnumReplacement = "$1$2enum $3 {$4";
+
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
@@ -261,8 +269,8 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
-        copy.newLine = "lf";
     }
+    copy.newLine = "lf";
     if (useBuiltCompiler === true) {
         copy.typescript = require("./built/local/typescript.js");
     }
@@ -432,7 +440,7 @@ gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
     const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/ true))
         .pipe(insert.transform((contents, file) => {
             file.path = standaloneDefinitionsFile;
-            return contents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4");
+            return contents.replace(constEnumCaptureRegexp, constEnumReplacement);
         }));
     return merge2([
         completedJs,
@@ -442,7 +450,7 @@ gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeDefinitionsFile;
-                return content + "\r\nexport = ts;";
+                return content + "\nexport = ts;";
             }))
             .pipe(gulp.dest("src/services")),
         completedDts.pipe(clone())
@@ -509,7 +517,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
             .pipe(gulp.dest("src/server")),
         dts.pipe(prependCopyright(/*outputCopyright*/ true))
             .pipe(insert.transform((content) => {
-                return content + "\r\nexport = ts;\r\nexport as namespace ts;";
+                return content.replace(constEnumCaptureRegexp, constEnumReplacement) + "\nexport = ts;\nexport as namespace ts;";
             }))
             .pipe(gulp.dest("src/server"))
     ]);
@@ -588,7 +596,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, /*help*/ false, [servicesFile], () => {
+gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))

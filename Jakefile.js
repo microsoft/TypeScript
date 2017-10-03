@@ -151,6 +151,7 @@ var harnessSources = harnessCoreSources.concat([
     "programMissingFiles.ts",
     "symbolWalker.ts",
     "languageService.ts",
+    "publicApi.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -341,9 +342,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
                 options += " -sourcemap";
             }
         }
-        else {
-            options += " --newLine LF";
-        }
+        options += " --newLine LF";
 
         if (opts.stripInternal) {
             options += " --stripInternal";
@@ -608,7 +607,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
 
         // Official node package definition file, pointed to by 'typings' in package.json
         // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
-        var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
+        var nodeDefinitionsFileContents = definitionFileContents + "\nexport = ts;";
         fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
 
         // Node package definition file to be distributed without the package. Created by replacing
@@ -655,8 +654,8 @@ compileFile(
         // Appending exports at the end of the server library
         var tsserverLibraryDefinitionFileContents =
             fs.readFileSync(tsserverLibraryDefinitionFile).toString() +
-            "\r\nexport = ts;" +
-            "\r\nexport as namespace ts;";
+            "\nexport = ts;" +
+            "\nexport as namespace ts;";
         tsserverLibraryDefinitionFileContents = removeConstModifierFromEnumDeclarations(tsserverLibraryDefinitionFileContents);
 
         fs.writeFileSync(tsserverLibraryDefinitionFile, tsserverLibraryDefinitionFileContents);
@@ -763,7 +762,7 @@ var run = path.join(builtLocalDirectory, "run.js");
 compileFile(
     /*outFile*/ run,
     /*source*/ harnessSources,
-    /*prereqs*/[builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
+    /*prereqs*/[builtLocalDirectory, tscFile, tsserverLibraryFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/[],
     /*useBuiltCompiler:*/ true,
     /*opts*/ { types: ["node", "mocha", "chai"], lib: "es6" });
