@@ -8206,8 +8206,7 @@ namespace ts {
                 switch (symbol.valueDeclaration.kind) {
                     case SyntaxKind.VariableDeclaration:
                         return getNameOfDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Identifier
-                            && symbol.valueDeclaration.parent.kind === SyntaxKind.VariableDeclarationList
-                            && symbol.valueDeclaration.parent.parent.kind === SyntaxKind.VariableStatement
+                            && isVariableDeclarationInVariableStatement(<VariableDeclaration>symbol.valueDeclaration)
                             && !!(symbol.valueDeclaration.parent.flags & NodeFlags.Const);
                     case SyntaxKind.PropertySignature:
                         return hasModifier(symbol.valueDeclaration, ModifierFlags.Readonly);
