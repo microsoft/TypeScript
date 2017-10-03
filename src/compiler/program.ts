@@ -403,6 +403,7 @@ namespace ts {
     /**
      * Determines if program structure is upto date or needs to be recreated
      */
+    /* @internal */
     export function isProgramUptoDate(
         program: Program | undefined,
         rootFileNames: string[],

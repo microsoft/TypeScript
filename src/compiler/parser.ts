@@ -2180,7 +2180,7 @@ namespace ts {
         function parseJSDocNodeWithType(kind: SyntaxKind.JSDocVariadicType | SyntaxKind.JSDocNonNullableType): TypeNode {
             const result = createNode(kind) as JSDocVariadicType | JSDocNonNullableType;
             nextToken();
-            result.type = parseType();
+            result.type = parseNonArrayType();
             return finishNode(result);
         }
 
@@ -2747,47 +2747,51 @@ namespace ts {
             return token() === SyntaxKind.CloseParenToken || isStartOfParameter() || isStartOfType();
         }
 
-        function parseJSDocPostfixTypeOrHigher(): TypeNode {
-            const type = parseNonArrayType();
-            const kind = getKind(token());
-            if (!kind) return type;
-            nextToken();
-
-            const postfix = createNode(kind, type.pos) as JSDocOptionalType | JSDocNonNullableType | JSDocNullableType;
-            postfix.type = type;
-            return finishNode(postfix);
-
-            function getKind(tokenKind: SyntaxKind): SyntaxKind | undefined {
-                switch (tokenKind) {
+        function parsePostfixTypeOrHigher(): TypeNode {
+            let type = parseNonArrayType();
+            while (!scanner.hasPrecedingLineBreak()) {
+                switch (token()) {
                     case SyntaxKind.EqualsToken:
                         // only parse postfix = inside jsdoc, because it's ambiguous elsewhere
-                        return contextFlags & NodeFlags.JSDoc ? SyntaxKind.JSDocOptionalType : undefined;
+                        if (!(contextFlags & NodeFlags.JSDoc)) {
+                            return type;
+                        }
+                        type = createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
+                        break;
                     case SyntaxKind.ExclamationToken:
-                        return SyntaxKind.JSDocNonNullableType;
+                        type = createJSDocPostfixType(SyntaxKind.JSDocNonNullableType, type);
+                        break;
                     case SyntaxKind.QuestionToken:
-                        return SyntaxKind.JSDocNullableType;
-                }
-            }
-        }
-
-        function parseArrayTypeOrHigher(): TypeNode {
-            let type = parseJSDocPostfixTypeOrHigher();
-            while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
-                if (isStartOfType()) {
-                    const node = <IndexedAccessTypeNode>createNode(SyntaxKind.IndexedAccessType, type.pos);
-                    node.objectType = type;
-                    node.indexType = parseType();
-                    parseExpected(SyntaxKind.CloseBracketToken);
-                    type = finishNode(node);
-                }
-                else {
-                    const node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
-                    node.elementType = type;
-                    parseExpected(SyntaxKind.CloseBracketToken);
-                    type = finishNode(node);
+                        type = createJSDocPostfixType(SyntaxKind.JSDocNullableType, type);
+                        break;
+                    case SyntaxKind.OpenBracketToken:
+                        parseExpected(SyntaxKind.OpenBracketToken);
+                        if (isStartOfType()) {
+                            const node = createNode(SyntaxKind.IndexedAccessType, type.pos) as IndexedAccessTypeNode;
+                            node.objectType = type;
+                            node.indexType = parseType();
+                            parseExpected(SyntaxKind.CloseBracketToken);
+                            type = finishNode(node);
+                        }
+                        else {
+                            const node = createNode(SyntaxKind.ArrayType, type.pos) as ArrayTypeNode;
+                            node.elementType = type;
+                            parseExpected(SyntaxKind.CloseBracketToken);
+                            type = finishNode(node);
+                        }
+                        break;
+                    default:
+                        return type;
                 }
             }
             return type;
+        }
+
+        function createJSDocPostfixType(kind: SyntaxKind, type: TypeNode) {
+            nextToken();
+            const postfix = createNode(kind, type.pos) as JSDocOptionalType | JSDocNonNullableType | JSDocNullableType;
+            postfix.type = type;
+            return finishNode(postfix);
         }
 
         function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
@@ -2803,7 +2807,7 @@ namespace ts {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
             }
-            return parseArrayTypeOrHigher();
+            return parsePostfixTypeOrHigher();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {

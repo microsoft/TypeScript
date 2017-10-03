@@ -2006,6 +2006,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param extraFileExtensions optionaly file extra file extension information from host
      */
+    /* @internal */
     export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo> = []): ExpandResult {
         basePath = normalizePath(basePath);
 
