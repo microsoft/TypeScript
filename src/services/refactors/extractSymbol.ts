@@ -468,8 +468,8 @@ namespace ts.refactor.extractSymbol {
      * you may be able to extract into a class method *or* local closure *or* namespace function,
      * depending on what's in the extracted body.
      */
-    function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
-        let current: Node = isReadonlyArray(range.range) ? firstOrUndefined(range.range) : range.range;
+    function collectEnclosingScopes(range: TargetRange): Scope[] {
+        let current: Node = isReadonlyArray(range.range) ? range.range[0] : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
@@ -492,7 +492,7 @@ namespace ts.refactor.extractSymbol {
             }
 
             // A function parameter's initializer is actually in the outer scope, not the function declaration
-            if (current && current.parent && current.parent.kind === SyntaxKind.Parameter) {
+            if (current.parent && current.parent.kind === SyntaxKind.Parameter) {
                 // Skip all the way to the outer scope of the function that declared this parameter
                 current = findAncestor(current, parent => isFunctionLikeDeclaration(parent)).parent;
             }
@@ -501,6 +501,10 @@ namespace ts.refactor.extractSymbol {
             }
 
         }
+
+        // We could fail to find a scope if there is no enclosing source file.
+        // We believe that this is impossible.
+        Debug.assert(scopes !== undefined);
         return scopes;
     }
 
@@ -565,16 +569,11 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
+        Debug.assert(targetRange !== undefined); // Caller's responsibility.
+
         const { file: sourceFile } = context;
 
-        if (targetRange === undefined) {
-            return undefined;
-        }
-
         const scopes = collectEnclosingScopes(targetRange);
-        if (scopes === undefined) {
-            return undefined;
-        }
 
         const enclosingTextRange = getEnclosingTextRange(targetRange, sourceFile);
         const readsAndWrites = collectReadsAndWrites(
