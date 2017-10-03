@@ -469,7 +469,7 @@ namespace ts.refactor.extractSymbol {
      * depending on what's in the extracted body.
      */
     function collectEnclosingScopes(range: TargetRange): Scope[] | undefined {
-        let current: Node = isReadonlyArray(range.range) ? firstOrUndefined(range.range) : range.range;
+        let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
@@ -746,7 +746,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const minInsertionPos = (isReadonlyArray(range.range) ? lastOrUndefined(range.range) : range.range).end;
+        const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
         const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
         if (nodeToInsertBefore) {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
@@ -830,7 +830,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         const edits = changeTracker.getChanges();
-        const renameRange = isReadonlyArray(range.range) ? range.range[0] : range.range;
+        const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
 
         const renameFilename = renameRange.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, functionNameText, /*isDeclaredBeforeUse*/ false);
@@ -1226,7 +1226,7 @@ namespace ts.refactor.extractSymbol {
      */
     function getEnclosingTextRange(targetRange: TargetRange, sourceFile: SourceFile): TextRange {
         return isReadonlyArray(targetRange.range)
-            ? { pos: targetRange.range[0].getStart(sourceFile), end: targetRange.range[targetRange.range.length - 1].getEnd() }
+            ? { pos: first(targetRange.range).getStart(sourceFile), end: last(targetRange.range).getEnd() }
             : targetRange.range;
     }
 
@@ -1272,7 +1272,7 @@ namespace ts.refactor.extractSymbol {
 
         const expressionDiagnostic =
             isReadonlyArray(targetRange.range) && !(targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0]))
-                ? ((start, end) => createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected))(firstOrUndefined(targetRange.range).getStart(), lastOrUndefined(targetRange.range).end)
+                ? ((start, end) => createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected))(first(targetRange.range).getStart(), last(targetRange.range).end)
                 : undefined;
 
         // initialize results
@@ -1299,7 +1299,7 @@ namespace ts.refactor.extractSymbol {
         const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
         const containingLexicalScopeOfExtraction = isBlockScope(scopes[0], scopes[0].parent) ? scopes[0] : getEnclosingBlockScopeContainer(scopes[0]);
 
-        const unmodifiedNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
+        const unmodifiedNode = isReadonlyArray(targetRange.range) ? first(targetRange.range) : targetRange.range;
         const inGenericContext = isInGenericContext(unmodifiedNode);
 
         collectUsages(target);
