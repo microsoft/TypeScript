@@ -129,6 +129,7 @@ var harnessSources = harnessCoreSources.concat([
     "textStorage.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
+    "builder.ts",
     "commandLineParsing.ts",
     "configurationExtension.ts",
     "convertCompilerOptionsFromJson.ts",

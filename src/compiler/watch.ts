@@ -308,7 +308,7 @@ namespace ts {
             getCurrentDirectory()
         );
         // There is no extra check needed since we can just rely on the program to decide emit
-        const builder = createBuilder(getCanonicalFileName, getFileEmitOutput, computeHash, _sourceFile => true);
+        const builder = createBuilder({ getCanonicalFileName, getEmitOutput: getFileEmitOutput, computeHash, shouldEmitFile: () => true });
 
         synchronizeProgram();
 
