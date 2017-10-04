@@ -420,12 +420,15 @@ namespace ts.server {
 
         private ensureBuilder() {
             if (!this.builder) {
-                this.builder = createBuilder(
-                    this.projectService.toCanonicalFileName,
-                    (_program, sourceFile, emitOnlyDts, isDetailed) => this.getFileEmitOutput(sourceFile, emitOnlyDts, isDetailed),
-                    data => this.projectService.host.createHash(data),
-                    sourceFile => !this.projectService.getScriptInfoForPath(sourceFile.path).isDynamicOrHasMixedContent()
-                );
+                this.builder = createBuilder({
+                    getCanonicalFileName: this.projectService.toCanonicalFileName,
+                    getEmitOutput: (_program, sourceFile, emitOnlyDts, isDetailed) =>
+                        this.getFileEmitOutput(sourceFile, emitOnlyDts, isDetailed),
+                    computeHash: data =>
+                        this.projectService.host.createHash(data),
+                    shouldEmitFile: sourceFile =>
+                        !this.projectService.getScriptInfoForPath(sourceFile.path).isDynamicOrHasMixedContent()
+                });
             }
         }
 
