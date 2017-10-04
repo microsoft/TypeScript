@@ -360,6 +360,142 @@ function parsePrimaryExpression(): any {
     export const j = 10;
     export const y = [#|j * j|];
 }`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Var", `
+[#|var x = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Let_Type", `
+[#|let x: number = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Let_NoType", `
+[#|let x = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Const_Type", `
+[#|const x: number = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Const_NoType", `
+[#|const x = 1;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Multiple1", `
+[#|const x = 1, y: string = "a";|]
+x; y;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Multiple2", `
+[#|const x = 1, y = "a";
+const z = 3;|]
+x; y; z;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Multiple3", `
+[#|const x = 1, y: string = "a";
+let z = 3;|]
+x; y; z;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_ConsumedTwice", `
+[#|const x: number = 1;|]
+x; x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_DeclaredTwice", `
+[#|var x = 1;
+var x = 2;|]
+x;
+`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Var", `
+function f() {
+    let a = 1;
+    [#|var x = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_NoType", `
+function f() {
+    let a = 1;
+    [#|let x = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Let_Type", `
+function f() {
+    let a = 1;
+    [#|let x: number = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Const_NoType", `
+function f() {
+    let a = 1;
+    [#|const x = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Const_Type", `
+function f() {
+    let a = 1;
+    [#|const x: number = 1;
+    a++;|]
+    a; x;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Mixed1", `
+function f() {
+    let a = 1;
+    [#|const x = 1;
+    let y = 2;
+    a++;|]
+    a; x; y;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Mixed2", `
+function f() {
+    let a = 1;
+    [#|var x = 1;
+    let y = 2;
+    a++;|]
+    a; x; y;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_Mixed3", `
+function f() {
+    let a = 1;
+    [#|let x: number = 1;
+    let y = 2;
+    a++;|]
+    a; x; y;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_Writes_UnionUndefined", `
+function f() {
+    let a = 1;
+    [#|let x: number | undefined = 1;
+    let y: undefined | number = 2;
+    let z: (undefined | number) = 3;
+    a++;|]
+    a; x; y; z;
+}`);
+
+        testExtractFunction("extractFunction_VariableDeclaration_ShorthandProperty", `
+function f() {
+    [#|let x;|]
+    return { x };
+}`);
     });
 
     function testExtractFunction(caption: string, text: string) {
