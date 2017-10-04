@@ -1,0 +1,22 @@
+=== tests/cases/compiler/getGlobalESSymbolType.ts ===
+interface A {
+>A : Symbol(A, Decl(getGlobalESSymbolType.ts, 0, 0))
+
+    m(x: string): void;
+>m : Symbol(A.m, Decl(getGlobalESSymbolType.ts, 0, 13))
+>x : Symbol(x, Decl(getGlobalESSymbolType.ts, 1, 6))
+}
+
+declare class B {
+>B : Symbol(B, Decl(getGlobalESSymbolType.ts, 2, 1))
+
+    m(x: string | symbol): void;
+>m : Symbol(B.m, Decl(getGlobalESSymbolType.ts, 4, 17))
+>x : Symbol(x, Decl(getGlobalESSymbolType.ts, 5, 6))
+}
+
+declare class C extends B implements A {}
+>C : Symbol(C, Decl(getGlobalESSymbolType.ts, 6, 1))
+>B : Symbol(B, Decl(getGlobalESSymbolType.ts, 2, 1))
+>A : Symbol(A, Decl(getGlobalESSymbolType.ts, 0, 0))
+
