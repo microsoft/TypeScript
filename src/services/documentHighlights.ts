@@ -285,12 +285,15 @@ namespace ts.DocumentHighlights {
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
+            case SyntaxKind.Block:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
                 // Container is either a class declaration or the declaration is a classDeclaration
                 if (modifierFlag & ModifierFlags.Abstract) {
                     return [...(<ClassDeclaration>declaration).members, declaration];
                 }
                 else {
-                    return (<Block>container).statements;
+                    return (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
                 }
             case SyntaxKind.Constructor:
                 return [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
