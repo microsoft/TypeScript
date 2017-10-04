@@ -92,7 +92,7 @@ namespace ts.codefix {
                     classDeclarationSourceFile,
                     classDeclaration,
                     staticInitialization,
-                    { suffix: context.newLineCharacter });
+                    { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
                 const initializeStaticAction = {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [tokenName]),
                     changes: staticInitializationChangeTracker.getChanges()
