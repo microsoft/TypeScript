@@ -576,6 +576,8 @@ namespace ts.server {
             // previously we did not expose a way for user to change these settings and this option was enabled by default
             compilerOptions.allowNonTsExtensions = true;
 
+            compilerOptions.isInferredProject = true;
+
             if (projectRootPath) {
                 this.compilerOptionsForInferredProjectsPerProjectRoot.set(projectRootPath, compilerOptions);
             }

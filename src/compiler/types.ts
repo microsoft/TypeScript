@@ -3679,6 +3679,7 @@ namespace ts {
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
+        isInferredProject?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
         lib?: string[];
