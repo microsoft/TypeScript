@@ -463,7 +463,7 @@ namespace ts.projectSystem {
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
-            assert.isTrue(!configFileErrors, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+            assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
             checkNumberOfInferredProjects(projectService, 0);
             checkNumberOfConfiguredProjects(projectService, 1);
 
@@ -503,7 +503,7 @@ namespace ts.projectSystem {
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
-            assert.isTrue(!configFileErrors, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+            assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
             checkNumberOfInferredProjects(projectService, 0);
             checkNumberOfConfiguredProjects(projectService, 1);
 
@@ -3168,6 +3168,69 @@ namespace ts.projectSystem {
             host.reloadFS([file, configFile]);
             host.runQueuedTimeoutCallbacks();
             serverEventManager.checkEventCountOfType("configFileDiag", 3);
+        });
+
+        it("are generated when the config file doesnot include file opened but has errors", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2 = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    },
+                    "files": ["app.ts"]
+                }`
+            };
+
+            const host = createServerHost([file, file2, libFile, configFile]);
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: serverEventManager.handler
+            });
+            openFilesForSession([file2], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+            for (const event of serverEventManager.events) {
+                if (event.eventName === "configFileDiag") {
+                    assert.equal(event.data.configFileName, configFile.path);
+                    assert.equal(event.data.triggerFile, file2.path);
+                    return;
+                }
+            }
+        });
+
+        it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2 = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "files": ["app.ts"]
+                }`
+            };
+
+            const host = createServerHost([file, file2, libFile, configFile]);
+            const session = createSession(host, {
+                canUseEvents: true,
+                eventHandler: serverEventManager.handler
+            });
+            openFilesForSession([file2], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 0);
         });
     });
 

@@ -1271,14 +1271,14 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file);
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
         }
 
         /**
          * Get all the project errors
          */
         getAllProjectErrors(): ReadonlyArray<Diagnostic> {
-            return this.projectErrors;
+            return this.projectErrors || emptyArray;
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
@@ -1335,6 +1335,8 @@ namespace ts.server {
             }
 
             this.stopWatchingWildCards();
+            this.projectErrors = undefined;
+            this.configFileSpecs = undefined;
         }
 
         addOpenRef() {

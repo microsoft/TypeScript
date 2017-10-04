@@ -7,7 +7,7 @@ namespace ts.projectSystem {
             const file = makeFile("/a.js");
             const et = new EventTracker([file]);
             et.service.openClientFile(file.path);
-            assert.equal(et.getEvents().length, 0);
+            assert.equal(et.getEventsWithName(ts.server.ProjectInfoTelemetryEvent).length, 0);
         });
 
         it("only sends an event once", () => {
@@ -25,12 +25,12 @@ namespace ts.projectSystem {
             et.service.openClientFile(file2.path);
             checkNumberOfProjects(et.service, { inferredProjects: 1 });
 
-            assert.equal(et.getEvents().length, 0);
+            assert.equal(et.getEventsWithName(ts.server.ProjectInfoTelemetryEvent).length, 0);
 
             et.service.openClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
 
-            assert.equal(et.getEvents().length, 0);
+            assert.equal(et.getEventsWithName(ts.server.ProjectInfoTelemetryEvent).length, 0);
         });
 
         it("counts files by extension", () => {
@@ -219,7 +219,7 @@ namespace ts.projectSystem {
             const et = new EventTracker([tsconfig, file]);
             et.host.getFileSize = () => server.maxProgramSizeForNonTsFiles + 1;
             et.service.openClientFile(file.path);
-            et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent, /*mayBeMore*/ true);
+            et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent);
             et.assertProjectInfoTelemetryEvent({
                 projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
@@ -255,6 +255,17 @@ namespace ts.projectSystem {
             return events;
         }
 
+        getEventsWithName<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): ReadonlyArray<T> {
+            let events: T[];
+            removeWhere(this.events, event => {
+                if (event.eventName === eventName) {
+                    (events || (events = [])).push(event as T);
+                    return true;
+                }
+            });
+            return events || emptyArray;
+        }
+
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
             assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
                 projectId: Harness.mockHash(configFile || "/tsconfig.json"),
@@ -278,10 +289,17 @@ namespace ts.projectSystem {
             });
         }
 
-        getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"], mayBeMore = false): T["data"] {
-            if (mayBeMore) { assert(this.events.length !== 0); }
-            else { assert.equal(this.events.length, 1); }
-            const event = this.events.shift();
+        getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
+            let event: server.ProjectServiceEvent;
+            removeWhere(this.events, e => {
+                if (e.eventName === eventName) {
+                    if (event) {
+                        assert(false, "more than one event found");
+                    }
+                    event = e;
+                    return true;
+                }
+            });
             assert.equal(event.eventName, eventName);
             return event.data;
         }

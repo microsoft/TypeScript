@@ -7517,6 +7517,7 @@ declare namespace ts.server {
         private createConfiguredProject(configFileName);
         private updateNonInferredProjectFiles<T>(project, files, propertyReader);
         private updateNonInferredProject<T>(project, newUncheckedFiles, propertyReader, newOptions, newTypeAcquisition, compileOnSave);
+        private sendConfigFileDiagEvent(project, triggerFile);
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath);
         private getOrCreateSingleInferredProjectIfEnabled();
         private createInferredProject(rootDirectoryForResolution, isSingleInferredProject?, projectRootPath?);
