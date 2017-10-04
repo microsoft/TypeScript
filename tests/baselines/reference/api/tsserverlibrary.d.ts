@@ -7203,6 +7203,7 @@ declare namespace ts.server {
          */
         private projectStateVersion;
         private typingFiles;
+        private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
@@ -7215,7 +7216,7 @@ declare namespace ts.server {
         getScriptKind(fileName: string): ScriptKind;
         getScriptVersion(filename: string): string;
         getScriptSnapshot(filename: string): IScriptSnapshot;
-        getCancellationToken(): HostCancellationToken;
+        getCancellationToken(): ThrottledCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(): string;
         useCaseSensitiveFileNames(): boolean;

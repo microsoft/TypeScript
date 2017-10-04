@@ -312,6 +312,9 @@ namespace Harness.Parallel.Host {
         function makeMochaTest(test: ErrorInfo) {
             return {
                 fullTitle: () => {
+                    return test.name.join(" ");
+                },
+                titlePath: () => {
                     return test.name;
                 },
                 err: {

@@ -3563,13 +3563,13 @@ namespace ts {
             if (parentType === unknownType) {
                 return unknownType;
             }
-            // If no type was specified or inferred for parent, or if the specified or inferred type is any,
-            // infer from the initializer of the binding element if one is present. Otherwise, go with the
-            // undefined or any type of the parent.
-            if (!parentType || isTypeAny(parentType)) {
-                if (declaration.initializer) {
-                    return checkDeclarationInitializer(declaration);
-                }
+            // If no type was specified or inferred for parent,
+            // infer from the initializer of the binding element if one is present.
+            // Otherwise, go with the undefined type of the parent.
+            if (!parentType) {
+                return declaration.initializer ? checkDeclarationInitializer(declaration) : parentType;
+            }
+            if (isTypeAny(parentType)) {
                 return parentType;
             }
 
@@ -3594,9 +3594,6 @@ namespace ts {
                     if (isComputedNonLiteralName(name)) {
                         // computed properties with non-literal names are treated as 'any'
                         return anyType;
-                    }
-                    if (declaration.initializer) {
-                        getContextualType(declaration.initializer);
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
@@ -12670,13 +12667,25 @@ namespace ts {
             const binaryExpression = <BinaryExpression>node.parent;
             const operator = binaryExpression.operatorToken.kind;
             if (isAssignmentOperator(operator)) {
-                // Don't do this for special property assignments to avoid circularity
-                if (getSpecialPropertyAssignmentKind(binaryExpression) !== SpecialPropertyAssignmentKind.None) {
-                    return undefined;
-                }
-
-                // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
+                    // Don't do this for special property assignments to avoid circularity
+                    switch (getSpecialPropertyAssignmentKind(binaryExpression)) {
+                        case SpecialPropertyAssignmentKind.None:
+                            break;
+                        case SpecialPropertyAssignmentKind.Property:
+                            // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
+                            // See `bindStaticPropertyAssignment` in `binder.ts`.
+                            if (!binaryExpression.left.symbol) {
+                                break;
+                            }
+                            // falls through
+                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                        case SpecialPropertyAssignmentKind.ModuleExports:
+                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        case SpecialPropertyAssignmentKind.ThisProperty:
+                            return undefined;
+                    }
+                    // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                     return getTypeOfExpression(binaryExpression.left);
                 }
             }
