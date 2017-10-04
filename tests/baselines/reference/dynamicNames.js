@@ -189,7 +189,7 @@ exports.o2 = exports.o1;
 //// [module.d.ts]
 export declare const c0 = "a";
 export declare const c1 = 1;
-export declare const s0: symbol();
+export declare const s0: unique symbol;
 export interface T0 {
     [c0]: number;
     [c1]: string;

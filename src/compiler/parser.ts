@@ -2609,19 +2609,6 @@ namespace ts {
             return token() === SyntaxKind.DotToken ? undefined : node;
         }
 
-        function parseSymbolType(): TypeNode | undefined {
-            const fullStart = scanner.getStartPos();
-            parseExpected(SyntaxKind.SymbolKeyword);
-            if (token() === SyntaxKind.DotToken) return undefined;
-            if (parseOptional(SyntaxKind.OpenParenToken)) {
-                parseExpected(SyntaxKind.CloseParenToken);
-                return finishNode(<ESSymbolTypeNode>createNode(SyntaxKind.ESSymbolType, fullStart));
-            }
-            else {
-                return finishNode(<TypeNode>createNode(SyntaxKind.SymbolKeyword, fullStart));
-            }
-        }
-
         function parseLiteralTypeNode(negative?: boolean): LiteralTypeNode {
             const node = createNode(SyntaxKind.LiteralType) as LiteralTypeNode;
             let unaryMinusExpression: PrefixUnaryExpression;
@@ -2655,10 +2642,9 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
-                    // If these are followed by a dot, then parse these out as a dotted type reference instead.
-                    return tryParse(parseKeywordAndNoDot) || parseTypeReference();
                 case SyntaxKind.SymbolKeyword:
-                    return tryParse(parseSymbolType) || parseTypeReference();
+                // If these are followed by a dot, then parse these out as a dotted type reference instead.
+                    return tryParse(parseKeywordAndNoDot) || parseTypeReference();
                 case SyntaxKind.AsteriskToken:
                     return parseJSDocAllType();
                 case SyntaxKind.QuestionToken:
@@ -2709,6 +2695,7 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.UniqueKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
@@ -2794,7 +2781,7 @@ namespace ts {
             return finishNode(postfix);
         }
 
-        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
+        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword) {
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
             node.operator = operator;
@@ -2803,9 +2790,11 @@ namespace ts {
         }
 
         function parseTypeOperatorOrHigher(): TypeNode {
-            switch (token()) {
+            const operator = token();
+            switch (operator) {
                 case SyntaxKind.KeyOfKeyword:
-                    return parseTypeOperator(SyntaxKind.KeyOfKeyword);
+                case SyntaxKind.UniqueKeyword:
+                    return parseTypeOperator(operator);
             }
             return parsePostfixTypeOrHigher();
         }

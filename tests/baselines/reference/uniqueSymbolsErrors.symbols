@@ -1,125 +1,125 @@
 === tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts ===
 // declarations
-declare const {}: symbol();
-declare let invalidLetType: symbol();
+declare const {}: unique symbol;
+declare let invalidLetType: unique symbol;
 >invalidLetType : Symbol(invalidLetType, Decl(uniqueSymbolsErrors.ts, 2, 11))
 
-declare var invalidVarType: symbol();
+declare var invalidVarType: unique symbol;
 >invalidVarType : Symbol(invalidVarType, Decl(uniqueSymbolsErrors.ts, 3, 11))
 
 // function arguments and return types
-declare function invalidArgType(arg: symbol()): void;
->invalidArgType : Symbol(invalidArgType, Decl(uniqueSymbolsErrors.ts, 3, 37))
+declare function invalidArgType(arg: unique symbol): void;
+>invalidArgType : Symbol(invalidArgType, Decl(uniqueSymbolsErrors.ts, 3, 42))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 6, 32))
 
-declare function invalidRestArgType(...arg: symbol()[]): void;
->invalidRestArgType : Symbol(invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 6, 53))
+declare function invalidRestArgType(...arg: unique symbol[]): void;
+>invalidRestArgType : Symbol(invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 6, 58))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 7, 36))
 
-declare function invalidReturnType(): symbol();
->invalidReturnType : Symbol(invalidReturnType, Decl(uniqueSymbolsErrors.ts, 7, 62))
+declare function invalidReturnType(): unique symbol;
+>invalidReturnType : Symbol(invalidReturnType, Decl(uniqueSymbolsErrors.ts, 7, 67))
 
-declare function invalidThisType(this: symbol()): void;
->invalidThisType : Symbol(invalidThisType, Decl(uniqueSymbolsErrors.ts, 8, 47))
+declare function invalidThisType(this: unique symbol): void;
+>invalidThisType : Symbol(invalidThisType, Decl(uniqueSymbolsErrors.ts, 8, 52))
 >this : Symbol(this, Decl(uniqueSymbolsErrors.ts, 9, 33))
 
-declare function invalidTypePredicate(n: any): n is symbol();
->invalidTypePredicate : Symbol(invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 9, 55))
+declare function invalidTypePredicate(n: any): n is unique symbol;
+>invalidTypePredicate : Symbol(invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 9, 60))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 10, 38))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 10, 38))
 
-declare function invalidTypeParameterConstraint<T extends symbol()>(): void;
->invalidTypeParameterConstraint : Symbol(invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 10, 61))
+declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
+>invalidTypeParameterConstraint : Symbol(invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 10, 66))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 11, 48))
 
-declare function invalidTypeParameterDefault<T = symbol()>(): void;
->invalidTypeParameterDefault : Symbol(invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 11, 76))
+declare function invalidTypeParameterDefault<T = unique symbol>(): void;
+>invalidTypeParameterDefault : Symbol(invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 11, 81))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 12, 45))
 
 // classes
 class InvalidClass {
->InvalidClass : Symbol(InvalidClass, Decl(uniqueSymbolsErrors.ts, 12, 67))
+>InvalidClass : Symbol(InvalidClass, Decl(uniqueSymbolsErrors.ts, 12, 72))
 
-    constructor(invalidConstructorArgType: symbol()) {}
+    constructor(invalidConstructorArgType: unique symbol) {}
 >invalidConstructorArgType : Symbol(invalidConstructorArgType, Decl(uniqueSymbolsErrors.ts, 16, 16))
 
-    readonly invalidReadonlyPropertyType: symbol();
->invalidReadonlyPropertyType : Symbol(InvalidClass.invalidReadonlyPropertyType, Decl(uniqueSymbolsErrors.ts, 16, 55))
+    readonly invalidReadonlyPropertyType: unique symbol;
+>invalidReadonlyPropertyType : Symbol(InvalidClass.invalidReadonlyPropertyType, Decl(uniqueSymbolsErrors.ts, 16, 60))
 
-    invalidPropertyType: symbol();
->invalidPropertyType : Symbol(InvalidClass.invalidPropertyType, Decl(uniqueSymbolsErrors.ts, 18, 51))
+    invalidPropertyType: unique symbol;
+>invalidPropertyType : Symbol(InvalidClass.invalidPropertyType, Decl(uniqueSymbolsErrors.ts, 18, 56))
 
-    invalidArgType(arg: symbol()): void { return; }
->invalidArgType : Symbol(InvalidClass.invalidArgType, Decl(uniqueSymbolsErrors.ts, 19, 34))
+    invalidArgType(arg: unique symbol): void { return; }
+>invalidArgType : Symbol(InvalidClass.invalidArgType, Decl(uniqueSymbolsErrors.ts, 19, 39))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 20, 19))
 
-    invalidRestArgType(...args: symbol()[]): void { return; }
->invalidRestArgType : Symbol(InvalidClass.invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 20, 51))
+    invalidRestArgType(...args: unique symbol[]): void { return; }
+>invalidRestArgType : Symbol(InvalidClass.invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 20, 56))
 >args : Symbol(args, Decl(uniqueSymbolsErrors.ts, 21, 23))
 
-    invalidReturnType(): symbol() { return; }
->invalidReturnType : Symbol(InvalidClass.invalidReturnType, Decl(uniqueSymbolsErrors.ts, 21, 61))
+    invalidReturnType(): unique symbol { return; }
+>invalidReturnType : Symbol(InvalidClass.invalidReturnType, Decl(uniqueSymbolsErrors.ts, 21, 66))
 
-    invalidThisType(this: symbol()): void { return; }
->invalidThisType : Symbol(InvalidClass.invalidThisType, Decl(uniqueSymbolsErrors.ts, 22, 45))
+    invalidThisType(this: unique symbol): void { return; }
+>invalidThisType : Symbol(InvalidClass.invalidThisType, Decl(uniqueSymbolsErrors.ts, 22, 50))
 >this : Symbol(this, Decl(uniqueSymbolsErrors.ts, 23, 20))
 
-    invalidTypePredicate(n: any): n is symbol() { return; }
->invalidTypePredicate : Symbol(InvalidClass.invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 23, 53))
+    invalidTypePredicate(n: any): n is unique symbol { return; }
+>invalidTypePredicate : Symbol(InvalidClass.invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 23, 58))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 24, 25))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 24, 25))
 
-    invalidTypeParameterConstraint<T extends symbol()>(): void { return; }
->invalidTypeParameterConstraint : Symbol(InvalidClass.invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 24, 59))
+    invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
+>invalidTypeParameterConstraint : Symbol(InvalidClass.invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 24, 64))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 25, 35))
 
-    invalidTypeParameterDefault<T = symbol()>(): void { return; }
->invalidTypeParameterDefault : Symbol(InvalidClass.invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 25, 74))
+    invalidTypeParameterDefault<T = unique symbol>(): void { return; }
+>invalidTypeParameterDefault : Symbol(InvalidClass.invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 25, 79))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 26, 32))
 
-    get invalidGetter(): symbol() { return; }
->invalidGetter : Symbol(InvalidClass.invalidGetter, Decl(uniqueSymbolsErrors.ts, 26, 65))
+    get invalidGetter(): unique symbol { return; }
+>invalidGetter : Symbol(InvalidClass.invalidGetter, Decl(uniqueSymbolsErrors.ts, 26, 70))
 
-    set invalidSetter(arg: symbol()) { return; }
->invalidSetter : Symbol(InvalidClass.invalidSetter, Decl(uniqueSymbolsErrors.ts, 27, 45))
+    set invalidSetter(arg: unique symbol) { return; }
+>invalidSetter : Symbol(InvalidClass.invalidSetter, Decl(uniqueSymbolsErrors.ts, 27, 50))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 28, 22))
 
-    static invalidStaticPropertyType: symbol();
->invalidStaticPropertyType : Symbol(InvalidClass.invalidStaticPropertyType, Decl(uniqueSymbolsErrors.ts, 28, 48))
+    static invalidStaticPropertyType: unique symbol;
+>invalidStaticPropertyType : Symbol(InvalidClass.invalidStaticPropertyType, Decl(uniqueSymbolsErrors.ts, 28, 53))
 
-    static invalidStaticArgType(arg: symbol()): void { return; }
->invalidStaticArgType : Symbol(InvalidClass.invalidStaticArgType, Decl(uniqueSymbolsErrors.ts, 30, 47))
+    static invalidStaticArgType(arg: unique symbol): void { return; }
+>invalidStaticArgType : Symbol(InvalidClass.invalidStaticArgType, Decl(uniqueSymbolsErrors.ts, 30, 52))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 31, 32))
 
-    static invalidStaticRestArgType(...args: symbol()[]): void { return; }
->invalidStaticRestArgType : Symbol(InvalidClass.invalidStaticRestArgType, Decl(uniqueSymbolsErrors.ts, 31, 64))
+    static invalidStaticRestArgType(...args: unique symbol[]): void { return; }
+>invalidStaticRestArgType : Symbol(InvalidClass.invalidStaticRestArgType, Decl(uniqueSymbolsErrors.ts, 31, 69))
 >args : Symbol(args, Decl(uniqueSymbolsErrors.ts, 32, 36))
 
-    static invalidStaticReturnType(): symbol() { return; }
->invalidStaticReturnType : Symbol(InvalidClass.invalidStaticReturnType, Decl(uniqueSymbolsErrors.ts, 32, 74))
+    static invalidStaticReturnType(): unique symbol { return; }
+>invalidStaticReturnType : Symbol(InvalidClass.invalidStaticReturnType, Decl(uniqueSymbolsErrors.ts, 32, 79))
 
-    static invalidStaticThisType(this: symbol()): void { return; }
->invalidStaticThisType : Symbol(InvalidClass.invalidStaticThisType, Decl(uniqueSymbolsErrors.ts, 33, 58))
+    static invalidStaticThisType(this: unique symbol): void { return; }
+>invalidStaticThisType : Symbol(InvalidClass.invalidStaticThisType, Decl(uniqueSymbolsErrors.ts, 33, 63))
 >this : Symbol(this, Decl(uniqueSymbolsErrors.ts, 34, 33))
 
-    static invalidStaticTypePredicate(n: any): n is symbol() { return; }
->invalidStaticTypePredicate : Symbol(InvalidClass.invalidStaticTypePredicate, Decl(uniqueSymbolsErrors.ts, 34, 66))
+    static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
+>invalidStaticTypePredicate : Symbol(InvalidClass.invalidStaticTypePredicate, Decl(uniqueSymbolsErrors.ts, 34, 71))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 35, 38))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 35, 38))
 
-    static invalidStaticTypeParameterConstraint<T extends symbol()>(): void { return; }
->invalidStaticTypeParameterConstraint : Symbol(InvalidClass.invalidStaticTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 35, 72))
+    static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
+>invalidStaticTypeParameterConstraint : Symbol(InvalidClass.invalidStaticTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 35, 77))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 36, 48))
 
-    static invalidStaticTypeParameterDefault<T = symbol()>(): void { return; }
->invalidStaticTypeParameterDefault : Symbol(InvalidClass.invalidStaticTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 36, 87))
+    static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
+>invalidStaticTypeParameterDefault : Symbol(InvalidClass.invalidStaticTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 36, 92))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 37, 45))
 
-    static get invalidStaticGetter(): symbol() { return; }
->invalidStaticGetter : Symbol(InvalidClass.invalidStaticGetter, Decl(uniqueSymbolsErrors.ts, 37, 78))
+    static get invalidStaticGetter(): unique symbol { return; }
+>invalidStaticGetter : Symbol(InvalidClass.invalidStaticGetter, Decl(uniqueSymbolsErrors.ts, 37, 83))
 
-    static set invalidStaticSetter(arg: symbol()) { return; }
->invalidStaticSetter : Symbol(InvalidClass.invalidStaticSetter, Decl(uniqueSymbolsErrors.ts, 38, 58))
+    static set invalidStaticSetter(arg: unique symbol) { return; }
+>invalidStaticSetter : Symbol(InvalidClass.invalidStaticSetter, Decl(uniqueSymbolsErrors.ts, 38, 63))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 39, 35))
 }
 
@@ -127,35 +127,35 @@ class InvalidClass {
 interface InvalidInterface {
 >InvalidInterface : Symbol(InvalidInterface, Decl(uniqueSymbolsErrors.ts, 40, 1))
 
-    invalidPropertyType: symbol();
+    invalidPropertyType: unique symbol;
 >invalidPropertyType : Symbol(InvalidInterface.invalidPropertyType, Decl(uniqueSymbolsErrors.ts, 43, 28))
 
-    invalidArgType(arg: symbol()): void;
->invalidArgType : Symbol(InvalidInterface.invalidArgType, Decl(uniqueSymbolsErrors.ts, 44, 34))
+    invalidArgType(arg: unique symbol): void;
+>invalidArgType : Symbol(InvalidInterface.invalidArgType, Decl(uniqueSymbolsErrors.ts, 44, 39))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 45, 19))
 
-    invalidRestArgType(...args: symbol()[]): void;
->invalidRestArgType : Symbol(InvalidInterface.invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 45, 40))
+    invalidRestArgType(...args: unique symbol[]): void;
+>invalidRestArgType : Symbol(InvalidInterface.invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 45, 45))
 >args : Symbol(args, Decl(uniqueSymbolsErrors.ts, 46, 23))
 
-    invalidReturnType(): symbol();
->invalidReturnType : Symbol(InvalidInterface.invalidReturnType, Decl(uniqueSymbolsErrors.ts, 46, 50))
+    invalidReturnType(): unique symbol;
+>invalidReturnType : Symbol(InvalidInterface.invalidReturnType, Decl(uniqueSymbolsErrors.ts, 46, 55))
 
-    invalidThisType(this: symbol());
->invalidThisType : Symbol(InvalidInterface.invalidThisType, Decl(uniqueSymbolsErrors.ts, 47, 34))
+    invalidThisType(this: unique symbol);
+>invalidThisType : Symbol(InvalidInterface.invalidThisType, Decl(uniqueSymbolsErrors.ts, 47, 39))
 >this : Symbol(this, Decl(uniqueSymbolsErrors.ts, 48, 20))
 
-    invalidTypePredicate(n: any): n is symbol()
->invalidTypePredicate : Symbol(InvalidInterface.invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 48, 36))
+    invalidTypePredicate(n: any): n is unique symbol
+>invalidTypePredicate : Symbol(InvalidInterface.invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 48, 41))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 49, 25))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 49, 25))
 
-    invalidTypeParameterConstraint<T extends symbol()>(): void;
->invalidTypeParameterConstraint : Symbol(InvalidInterface.invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 49, 47))
+    invalidTypeParameterConstraint<T extends unique symbol>(): void;
+>invalidTypeParameterConstraint : Symbol(InvalidInterface.invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 49, 52))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 50, 35))
 
-    invalidTypeParameterDefault<T = symbol()>(): void;
->invalidTypeParameterDefault : Symbol(InvalidInterface.invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 50, 63))
+    invalidTypeParameterDefault<T = unique symbol>(): void;
+>invalidTypeParameterDefault : Symbol(InvalidInterface.invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 50, 68))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 51, 32))
 }
 
@@ -163,72 +163,72 @@ interface InvalidInterface {
 type InvalidTypeLiteral = {
 >InvalidTypeLiteral : Symbol(InvalidTypeLiteral, Decl(uniqueSymbolsErrors.ts, 52, 1))
 
-    invalidPropertyType: symbol();
+    invalidPropertyType: unique symbol;
 >invalidPropertyType : Symbol(invalidPropertyType, Decl(uniqueSymbolsErrors.ts, 55, 27))
 
-    invalidArgType(arg: symbol()): void;
->invalidArgType : Symbol(invalidArgType, Decl(uniqueSymbolsErrors.ts, 56, 34))
+    invalidArgType(arg: unique symbol): void;
+>invalidArgType : Symbol(invalidArgType, Decl(uniqueSymbolsErrors.ts, 56, 39))
 >arg : Symbol(arg, Decl(uniqueSymbolsErrors.ts, 57, 19))
 
-    invalidRestArgType(...args: symbol()[]): void;
->invalidRestArgType : Symbol(invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 57, 40))
+    invalidRestArgType(...args: unique symbol[]): void;
+>invalidRestArgType : Symbol(invalidRestArgType, Decl(uniqueSymbolsErrors.ts, 57, 45))
 >args : Symbol(args, Decl(uniqueSymbolsErrors.ts, 58, 23))
 
-    invalidReturnType(): symbol();
->invalidReturnType : Symbol(invalidReturnType, Decl(uniqueSymbolsErrors.ts, 58, 50))
+    invalidReturnType(): unique symbol;
+>invalidReturnType : Symbol(invalidReturnType, Decl(uniqueSymbolsErrors.ts, 58, 55))
 
-    invalidThisType(this: symbol());
->invalidThisType : Symbol(invalidThisType, Decl(uniqueSymbolsErrors.ts, 59, 34))
+    invalidThisType(this: unique symbol);
+>invalidThisType : Symbol(invalidThisType, Decl(uniqueSymbolsErrors.ts, 59, 39))
 >this : Symbol(this, Decl(uniqueSymbolsErrors.ts, 60, 20))
 
-    invalidTypePredicate(n: any): n is symbol()
->invalidTypePredicate : Symbol(invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 60, 36))
+    invalidTypePredicate(n: any): n is unique symbol
+>invalidTypePredicate : Symbol(invalidTypePredicate, Decl(uniqueSymbolsErrors.ts, 60, 41))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 61, 25))
 >n : Symbol(n, Decl(uniqueSymbolsErrors.ts, 61, 25))
 
-    invalidTypeParameterConstraint<T extends symbol()>(): void;
->invalidTypeParameterConstraint : Symbol(invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 61, 47))
+    invalidTypeParameterConstraint<T extends unique symbol>(): void;
+>invalidTypeParameterConstraint : Symbol(invalidTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 61, 52))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 62, 35))
 
-    invalidTypeParameterDefault<T = symbol()>(): void;
->invalidTypeParameterDefault : Symbol(invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 62, 63))
+    invalidTypeParameterDefault<T = unique symbol>(): void;
+>invalidTypeParameterDefault : Symbol(invalidTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 62, 68))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 63, 32))
 
 };
 
 // type alias
-type InvalidAlias = symbol();
+type InvalidAlias = unique symbol;
 >InvalidAlias : Symbol(InvalidAlias, Decl(uniqueSymbolsErrors.ts, 64, 2))
 
-type InvalidAliasTypeParameterConstraint<T extends symbol()> = never;
->InvalidAliasTypeParameterConstraint : Symbol(InvalidAliasTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 67, 29))
+type InvalidAliasTypeParameterConstraint<T extends unique symbol> = never;
+>InvalidAliasTypeParameterConstraint : Symbol(InvalidAliasTypeParameterConstraint, Decl(uniqueSymbolsErrors.ts, 67, 34))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 68, 41))
 
-type InvalidAliasTypeParameterDefault<T extends symbol()> = never;
->InvalidAliasTypeParameterDefault : Symbol(InvalidAliasTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 68, 69))
+type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
+>InvalidAliasTypeParameterDefault : Symbol(InvalidAliasTypeParameterDefault, Decl(uniqueSymbolsErrors.ts, 68, 74))
 >T : Symbol(T, Decl(uniqueSymbolsErrors.ts, 69, 38))
 
 // type references
-declare const invalidTypeArgument: Promise<symbol()>;
+declare const invalidTypeArgument: Promise<unique symbol>;
 >invalidTypeArgument : Symbol(invalidTypeArgument, Decl(uniqueSymbolsErrors.ts, 72, 13))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
-declare const invalidArrayType: symbol()[];
+declare const invalidArrayType: unique symbol[];
 >invalidArrayType : Symbol(invalidArrayType, Decl(uniqueSymbolsErrors.ts, 73, 13))
 
-declare const invalidTupleType: [symbol()];
+declare const invalidTupleType: [unique symbol];
 >invalidTupleType : Symbol(invalidTupleType, Decl(uniqueSymbolsErrors.ts, 74, 13))
 
 // mapped types
-declare const invalidMappedType: { [P in string]: symbol() };
+declare const invalidMappedType: { [P in string]: unique symbol };
 >invalidMappedType : Symbol(invalidMappedType, Decl(uniqueSymbolsErrors.ts, 77, 13))
 >P : Symbol(P, Decl(uniqueSymbolsErrors.ts, 77, 36))
 
 // unions/intersection
-declare const invalidUnion: symbol() | symbol();
+declare const invalidUnion: unique symbol | unique symbol;
 >invalidUnion : Symbol(invalidUnion, Decl(uniqueSymbolsErrors.ts, 80, 13))
 
-declare const invalidIntersection: symbol() | symbol();
+declare const invalidIntersection: unique symbol | unique symbol;
 >invalidIntersection : Symbol(invalidIntersection, Decl(uniqueSymbolsErrors.ts, 81, 13))
 
 

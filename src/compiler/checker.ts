@@ -2497,7 +2497,7 @@ namespace ts {
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
-                    return createESSymbolTypeNode();
+                    return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.SymbolKeyword));
                 }
                 if (type.flags & TypeFlags.Void) {
                     return createKeywordTypeNode(SyntaxKind.VoidKeyword);
@@ -3313,9 +3313,9 @@ namespace ts {
                         writeAnonymousType(<ObjectType>type, nextFlags);
                     }
                     else if (type.flags & TypeFlags.UniqueESSymbol) {
+                        writeKeyword(writer, SyntaxKind.UniqueKeyword);
+                        writeSpace(writer);
                         writeKeyword(writer, SyntaxKind.SymbolKeyword);
-                        writePunctuation(writer, SyntaxKind.OpenParenToken);
-                        writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
@@ -4533,7 +4533,7 @@ namespace ts {
                     reportErrorsFromWidening(declaration, type);
                 }
 
-                // always widen a unique 'symbol()' type if the type was created for a different declaration.
+                // always widen a 'unique symbol' type if the type was created for a different declaration.
                 if (type.flags & TypeFlags.UniqueESSymbol && !declaration.type && type.symbol !== getSymbolOfNode(declaration)) {
                     type = esSymbolType;
                 }
@@ -5949,7 +5949,9 @@ namespace ts {
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
-            if (type.declaration.typeParameter.constraint.kind === SyntaxKind.TypeOperator) {
+            const constraintDeclaration = type.declaration.typeParameter.constraint;
+            if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
+                (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                 // We have a { [P in keyof T]: X }
                 for (const propertySymbol of getPropertiesOfType(modifiersType)) {
                     addMemberForKeyType(getLiteralTypeFromPropertyName(propertySymbol), propertySymbol);
@@ -6024,7 +6026,8 @@ namespace ts {
         function getModifiersTypeFromMappedType(type: MappedType) {
             if (!type.modifiersType) {
                 const constraintDeclaration = type.declaration.typeParameter.constraint;
-                if (constraintDeclaration.kind === SyntaxKind.TypeOperator) {
+                if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
+                    (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                     // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
                     // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
                     // 'keyof T' to a literal union type and we can't recover T from that type.
@@ -7822,7 +7825,21 @@ namespace ts {
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
+                switch (node.operator) {
+                    case SyntaxKind.KeyOfKeyword:
+                        links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
+                        break;
+                    case SyntaxKind.UniqueKeyword:
+                        if (node.type.kind === SyntaxKind.SymbolKeyword) {
+                            const parent = skipParentheses(node).parent;
+                            const symbol = getSymbolOfNode(parent);
+                            links.resolvedType = symbol ? getUniqueESSymbolTypeForSymbol(symbol) : esSymbolType;
+                        }
+                        else {
+                            links.resolvedType = unknownType;
+                        }
+                        break;
+                }
             }
             return links.resolvedType;
         }
@@ -8226,21 +8243,6 @@ namespace ts {
             return esSymbolType;
         }
 
-        function getTypeFromESSymbolTypeNode(node: ESSymbolTypeNode): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                const parent = skipParentheses(node).parent;
-                const symbol = getSymbolOfNode(parent);
-                if (symbol) {
-                    links.resolvedType = getUniqueESSymbolTypeForSymbol(symbol);
-                }
-                else {
-                    links.resolvedType = esSymbolType;
-                }
-            }
-            return links.resolvedType;
-        }
-
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -8300,8 +8302,6 @@ namespace ts {
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
-                case SyntaxKind.ESSymbolType:
-                    return getTypeFromESSymbolTypeNode(<ESSymbolTypeNode>node);
                 case SyntaxKind.TypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
@@ -17313,7 +17313,7 @@ namespace ts {
                     type = checkAwaitedType(type, /*errorNode*/ func, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
 
-                // widen 'symbol()' types when we infer the return type.
+                // widen 'unique symbol' types when we infer the return type.
                 type = getWidenedTypeOfUniqueESSymbolType(type);
             }
             else {
@@ -17349,7 +17349,7 @@ namespace ts {
                 // Return a union of the return expression types.
                 type = getUnionType(types, /*subtypeReduction*/ true);
 
-                // widen 'symbol()' types when we infer the return type.
+                // widen 'unique symbol' types when we infer the return type.
                 type = getWidenedTypeOfUniqueESSymbolType(type);
 
                 if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
@@ -19428,8 +19428,9 @@ namespace ts {
             checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
         }
 
-        function checkSymbolType(node: ESSymbolTypeNode) {
-            checkGrammarESSymbolTypeNode(node);
+        function checkTypeOperator(node: TypeOperatorNode) {
+            checkGrammarTypeOperatorNode(node);
+            checkSourceElement(node.type);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
@@ -23000,8 +23001,9 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.TypeOperator:
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                case SyntaxKind.TypeOperator:
+                    return checkTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
@@ -23026,8 +23028,6 @@ namespace ts {
                     return checkIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return checkMappedType(<MappedTypeNode>node);
-                case SyntaxKind.ESSymbolType:
-                    return checkSymbolType(<ESSymbolTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
@@ -25341,54 +25341,60 @@ namespace ts {
             }
         }
 
-        function checkGrammarESSymbolTypeNode(node: ESSymbolTypeNode) {
-            let parent = node.parent;
-            while (parent.kind === SyntaxKind.ParenthesizedType) {
-                parent = parent.parent;
-            }
+        function checkGrammarTypeOperatorNode(node: TypeOperatorNode) {
+            if (node.operator === SyntaxKind.UniqueKeyword) {
+                if (node.type.kind !== SyntaxKind.SymbolKeyword) {
+                    return grammarErrorOnNode(node.type, Diagnostics._0_expected, tokenToString(SyntaxKind.SymbolKeyword));
+                }
 
-            switch (parent.kind) {
-                case SyntaxKind.VariableDeclaration:
-                    const decl = parent as VariableDeclaration;
-                    if (decl.name.kind !== SyntaxKind.Identifier) {
-                        return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
-                    }
-                    if (!isVariableDeclarationInVariableStatement(decl)) {
-                        return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement);
-                    }
-                    if (!(decl.parent.flags & NodeFlags.Const)) {
-                        return grammarErrorOnNode((<VariableDeclaration>parent).name, Diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const);
-                    }
-                    break;
+                let parent = node.parent;
+                while (parent.kind === SyntaxKind.ParenthesizedType) {
+                    parent = parent.parent;
+                }
 
-                case SyntaxKind.PropertyDeclaration:
-                    if (!hasModifier(parent, ModifierFlags.Static) ||
-                        !hasModifier(parent, ModifierFlags.Readonly)) {
-                        return grammarErrorOnNode((<PropertyDeclaration>parent).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
-                    }
-                    break;
+                switch (parent.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                        const decl = parent as VariableDeclaration;
+                        if (decl.name.kind !== SyntaxKind.Identifier) {
+                            return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
+                        }
+                        if (!isVariableDeclarationInVariableStatement(decl)) {
+                            return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_only_allowed_on_variables_in_a_variable_statement);
+                        }
+                        if (!(decl.parent.flags & NodeFlags.Const)) {
+                            return grammarErrorOnNode((<VariableDeclaration>parent).name, Diagnostics.A_variable_whose_type_is_a_unique_symbol_type_must_be_const);
+                        }
+                        break;
 
-                case SyntaxKind.PropertySignature:
-                    if (!hasModifier(parent, ModifierFlags.Readonly)) {
-                        return grammarErrorOnNode((<PropertySignature>parent).name, Diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly);
-                    }
-                    break;
+                    case SyntaxKind.PropertyDeclaration:
+                        if (!hasModifier(parent, ModifierFlags.Static) ||
+                            !hasModifier(parent, ModifierFlags.Readonly)) {
+                            return grammarErrorOnNode((<PropertyDeclaration>parent).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
+                        }
+                        break;
 
-                // report specific errors for cases where a `symbol()` type is disallowed even when it is in a `const` or `readonly` declaration.
-                case SyntaxKind.UnionType:
-                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_a_union_type);
-                case SyntaxKind.IntersectionType:
-                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_an_intersection_type);
-                case SyntaxKind.ArrayType:
-                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_an_array_type);
-                case SyntaxKind.TupleType:
-                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_a_tuple_type);
-                case SyntaxKind.MappedType:
-                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_in_a_mapped_type);
+                    case SyntaxKind.PropertySignature:
+                        if (!hasModifier(parent, ModifierFlags.Readonly)) {
+                            return grammarErrorOnNode((<PropertySignature>parent).name, Diagnostics.A_property_of_an_interface_or_type_literal_whose_type_is_a_unique_symbol_type_must_be_readonly);
+                        }
+                        break;
 
-                // report a general error for any other invalid use site.
-                default:
-                    return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_not_allowed_here);
+                    // report specific errors for cases where a `unique symbol` type is disallowed even when it is in a `const` or `readonly` declaration.
+                    case SyntaxKind.UnionType:
+                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_a_union_type);
+                    case SyntaxKind.IntersectionType:
+                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_an_intersection_type);
+                    case SyntaxKind.ArrayType:
+                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_an_array_type);
+                    case SyntaxKind.TupleType:
+                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_a_tuple_type);
+                    case SyntaxKind.MappedType:
+                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_in_a_mapped_type);
+
+                    // report a general error for any other invalid use site.
+                    default:
+                        return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_here);
+                }
             }
         }
 

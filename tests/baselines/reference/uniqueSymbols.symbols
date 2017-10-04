@@ -13,11 +13,11 @@ var varCall = Symbol();
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 // ambient declaration with type
-declare const constType: symbol();
+declare const constType: unique symbol;
 >constType : Symbol(constType, Decl(uniqueSymbols.ts, 6, 13))
 
 // declaration with type and call initializer
-const constTypeAndCall: symbol() = Symbol();
+const constTypeAndCall: unique symbol = Symbol();
 >constTypeAndCall : Symbol(constTypeAndCall, Decl(uniqueSymbols.ts, 9, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
@@ -154,15 +154,15 @@ class C {
 >readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbols.ts, 56, 9))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
-    static readonly readonlyStaticType: symbol();
+    static readonly readonlyStaticType: unique symbol;
 >readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbols.ts, 57, 50))
 
-    static readonly readonlyStaticTypeAndCall: symbol() = Symbol();
->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 49))
+    static readonly readonlyStaticTypeAndCall: unique symbol = Symbol();
+>readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
     static readwriteStaticCall = Symbol();
->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 67))
+>readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
     readonly readonlyCall = Symbol();
@@ -191,15 +191,15 @@ const constInitToCReadonlyStaticType = C.readonlyStaticType;
 
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
 >constInitToCReadonlyStaticTypeAndCall : Symbol(constInitToCReadonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 69, 5))
->C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 49))
+>C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
 >C : Symbol(C, Decl(uniqueSymbols.ts, 53, 61))
->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 49))
+>readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
 
 const constInitToCReadwriteStaticCall = C.readwriteStaticCall;
 >constInitToCReadwriteStaticCall : Symbol(constInitToCReadwriteStaticCall, Decl(uniqueSymbols.ts, 70, 5))
->C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 67))
+>C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
 >C : Symbol(C, Decl(uniqueSymbols.ts, 53, 61))
->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 67))
+>readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
 
 const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall = C.readonlyStaticCall;
 >constInitToCReadonlyStaticCallWithTypeQuery : Symbol(constInitToCReadonlyStaticCallWithTypeQuery, Decl(uniqueSymbols.ts, 72, 5))
@@ -221,21 +221,21 @@ const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType =
 
 const constInitToCReadonlyStaticTypeAndCallWithTypeQuery: typeof C.readonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
 >constInitToCReadonlyStaticTypeAndCallWithTypeQuery : Symbol(constInitToCReadonlyStaticTypeAndCallWithTypeQuery, Decl(uniqueSymbols.ts, 74, 5))
->C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 49))
+>C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
 >C : Symbol(C, Decl(uniqueSymbols.ts, 53, 61))
->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 49))
->C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 49))
+>readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
+>C.readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
 >C : Symbol(C, Decl(uniqueSymbols.ts, 53, 61))
->readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 49))
+>readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
 
 const constInitToCReadwriteStaticCallWithTypeQuery: typeof C.readwriteStaticCall = C.readwriteStaticCall;
 >constInitToCReadwriteStaticCallWithTypeQuery : Symbol(constInitToCReadwriteStaticCallWithTypeQuery, Decl(uniqueSymbols.ts, 75, 5))
->C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 67))
+>C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
 >C : Symbol(C, Decl(uniqueSymbols.ts, 53, 61))
->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 67))
->C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 67))
+>readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
+>C.readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
 >C : Symbol(C, Decl(uniqueSymbols.ts, 53, 61))
->readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 67))
+>readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
 
 const constInitToCReadonlyCall = c.readonlyCall;
 >constInitToCReadonlyCall : Symbol(constInitToCReadonlyCall, Decl(uniqueSymbols.ts, 77, 5))
@@ -285,7 +285,7 @@ const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"] = c.readwri
 interface I {
 >I : Symbol(I, Decl(uniqueSymbols.ts, 82, 87))
 
-    readonly readonlyType: symbol();
+    readonly readonlyType: unique symbol;
 >readonlyType : Symbol(I.readonlyType, Decl(uniqueSymbols.ts, 85, 13))
 }
 declare const i: I;
@@ -318,13 +318,13 @@ const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyT
 type L = {
 >L : Symbol(L, Decl(uniqueSymbols.ts, 92, 84))
 
-    readonly readonlyType: symbol();
+    readonly readonlyType: unique symbol;
 >readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 95, 10))
 
     nested: {
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 
-        readonly readonlyNestedType: symbol();
+        readonly readonlyNestedType: unique symbol;
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
     }
 };
@@ -341,9 +341,9 @@ const constInitToLReadonlyType = l.readonlyType;
 const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedType : Symbol(constInitToLReadonlyNestedType, Decl(uniqueSymbols.ts, 104, 5))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 101, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
 
 const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyType;
@@ -358,14 +358,14 @@ const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyT
 const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedTypeWithTypeQuery : Symbol(constInitToLReadonlyNestedTypeWithTypeQuery, Decl(uniqueSymbols.ts, 106, 5))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 101, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 101, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
 
 const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"] = l.readonlyType;
@@ -379,9 +379,9 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 >constInitToLReadonlyNestedTypeWithIndexedAccess : Symbol(constInitToLReadonlyNestedTypeWithIndexedAccess, Decl(uniqueSymbols.ts, 108, 5))
 >L : Symbol(L, Decl(uniqueSymbols.ts, 92, 84))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 101, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 36))
+>nested : Symbol(nested, Decl(uniqueSymbols.ts, 96, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 97, 13))
 
 // type argument inference

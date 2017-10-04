@@ -199,6 +199,7 @@ namespace ts {
         SymbolKeyword,
         TypeKeyword,
         UndefinedKeyword,
+        UniqueKeyword,
         FromKeyword,
         GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
@@ -240,7 +241,6 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
-        ESSymbolType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -399,7 +399,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = ESSymbolType,
+        LastTypeNode = LiteralType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1030,7 +1030,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword;
         type: TypeNode;
     }
 
@@ -1051,11 +1051,6 @@ namespace ts {
     export interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
         literal: BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
-    }
-
-    // Represents a unique `symbol()` type
-    export interface ESSymbolTypeNode extends TypeNode {
-        kind: SyntaxKind.ESSymbolType;
     }
 
     export interface StringLiteral extends LiteralExpression {
@@ -3209,7 +3204,7 @@ namespace ts {
         BooleanLiteral          = 1 << 7,
         EnumLiteral             = 1 << 8,   // Always combined with StringLiteral, NumberLiteral, or Union
         ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
-        UniqueESSymbol          = 1 << 10,  // symbol()
+        UniqueESSymbol          = 1 << 10,  // unique symbol
         Void                    = 1 << 11,
         Undefined               = 1 << 12,
         Null                    = 1 << 13,

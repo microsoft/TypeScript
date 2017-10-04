@@ -730,15 +730,17 @@ namespace ts {
         return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
     }
 
-    export function createTypeOperatorNode(type: TypeNode) {
+    export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword, type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | TypeNode, type?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
-        node.operator = SyntaxKind.KeyOfKeyword;
-        node.type = parenthesizeElementTypeMember(type);
+        node.operator = typeof operatorOrType === "number" ? operatorOrType : SyntaxKind.KeyOfKeyword;
+        node.type = parenthesizeElementTypeMember(typeof operatorOrType === "number" ? type : operatorOrType);
         return node;
     }
 
     export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
-        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
+        return node.type !== type ? updateNode(createTypeOperatorNode(node.operator, type), node) : node;
     }
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
@@ -783,10 +785,6 @@ namespace ts {
         return node.literal !== literal
             ? updateNode(createLiteralTypeNode(literal), node)
             : node;
-    }
-
-    export function createESSymbolTypeNode() {
-        return <ESSymbolTypeNode>createSynthesizedNode(SyntaxKind.ESSymbolType);
     }
 
     // Binding Patterns

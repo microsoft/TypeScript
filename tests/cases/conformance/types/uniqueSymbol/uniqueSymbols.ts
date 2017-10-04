@@ -8,10 +8,10 @@ let letCall = Symbol();
 var varCall = Symbol();
 
 // ambient declaration with type
-declare const constType: symbol();
+declare const constType: unique symbol;
 
 // declaration with type and call initializer
-const constTypeAndCall: symbol() = Symbol();
+const constTypeAndCall: unique symbol = Symbol();
 
 // declaration from initializer
 const constInitToConstCall = constCall;
@@ -60,8 +60,8 @@ async function* asyncGenFuncYieldVarCall() { yield varCall; }
 // classes
 class C {
     static readonly readonlyStaticCall = Symbol();
-    static readonly readonlyStaticType: symbol();
-    static readonly readonlyStaticTypeAndCall: symbol() = Symbol();
+    static readonly readonlyStaticType: unique symbol;
+    static readonly readonlyStaticTypeAndCall: unique symbol = Symbol();
     static readwriteStaticCall = Symbol();
 
     readonly readonlyCall = Symbol();
@@ -88,7 +88,7 @@ const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"] = c.readwri
 
 // interfaces
 interface I {
-    readonly readonlyType: symbol();
+    readonly readonlyType: unique symbol;
 }
 declare const i: I;
 
@@ -98,9 +98,9 @@ const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyT
 
 // type literals
 type L = {
-    readonly readonlyType: symbol();
+    readonly readonlyType: unique symbol;
     nested: {
-        readonly readonlyNestedType: symbol();
+        readonly readonlyNestedType: unique symbol;
     }
 };
 declare const l: L;
