@@ -3121,7 +3121,7 @@ namespace ts {
                 }
             }
             if ((symbol as TransientSymbol).syntheticLiteralTypeOrigin) {
-                const stringValue = (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
+                const stringValue = "" + (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
                 if (!isIdentifierText(stringValue, compilerOptions.target)) {
                     return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
                 }
@@ -5736,6 +5736,7 @@ namespace ts {
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
             let stringIndexInfo: IndexInfo;
+            let numberIndexInfo: IndexInfo;
             // Resolve upfront such that recursive references see an empty object type.
             setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
@@ -5763,7 +5764,7 @@ namespace ts {
                 const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
                 forEachType(iterationType, addMemberForKeyType);
             }
-            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
 
             function addMemberForKeyType(t: Type, propertySymbolOrIndex?: Symbol | number) {
                 let propertySymbol: Symbol;
@@ -5779,24 +5780,33 @@ namespace ts {
                 const iterationMapper = createTypeMapper([typeParameter], [t]);
                 const templateMapper = type.mapper ? combineTypeMappers(type.mapper, iterationMapper) : iterationMapper;
                 const propType = instantiateType(templateType, templateMapper);
-                // If the current iteration type constituent is a string literal type, create a property.
+                // If the current iteration type constituent is a string or number literal type, create a property.
                 // Otherwise, for type string create a string index signature.
-                if (t.flags & TypeFlags.StringLiteral) {
-                    const propName = escapeLeadingUnderscores((<StringLiteralType>t).value);
-                    const modifiersProp = getPropertyOfType(modifiersType, propName);
-                    const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
-                    const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName);
-                    prop.checkFlags = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp) ? CheckFlags.Readonly : 0;
-                    prop.type = propType;
-                    if (propertySymbol) {
-                        prop.syntheticOrigin = propertySymbol;
-                        prop.declarations = propertySymbol.declarations;
+                if (t.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                    const propName = escapeLeadingUnderscores("" + (<StringLiteralType | NumberLiteralType>t).value);
+                    if (members.has(propName)) {
+                        // in case of a conflict between the literal types "1" and 1, for example, do not add either one
+                        members.delete(propName);
                     }
-                    prop.syntheticLiteralTypeOrigin = t as StringLiteralType;
-                    members.set(propName, prop);
+                    else {
+                        const modifiersProp = getPropertyOfType(modifiersType, propName);
+                        const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
+                        const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName);
+                        prop.checkFlags = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp) ? CheckFlags.Readonly : 0;
+                        prop.type = propType;
+                        if (propertySymbol) {
+                            prop.syntheticOrigin = propertySymbol;
+                            prop.declarations = propertySymbol.declarations;
+                        }
+                        prop.syntheticLiteralTypeOrigin = t as StringLiteralType | NumberLiteralType;
+                        members.set(propName, prop);
+                    }
                 }
                 else if (t.flags & TypeFlags.String) {
                     stringIndexInfo = createIndexInfo(propType, templateReadonly);
+                }
+                else if (t.flags & (TypeFlags.Enum | TypeFlags.Number)) {
+                    numberIndexInfo = createIndexInfo(propType, templateReadonly);
                 }
             }
         }
@@ -19125,7 +19135,7 @@ namespace ts {
             checkSourceElement(node.type);
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
-            checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
+            checkTypeAssignableTo(constraintType, getUnionType([stringType, numberType]), node.typeParameter.constraint);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
