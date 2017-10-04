@@ -222,9 +222,21 @@ const f = () => {
 
         testExtractConstant("extractConstant_ArrowFunction_Expression",
             `const f = () => [#|2 + 1|];`);
+
+        testExtractConstantFailed("extractConstant_Void", `
+function f(): void { }
+[#|f();|]`);
+
+        testExtractConstantFailed("extractConstant_Never", `
+function f(): never { }
+[#|f();|]`);
     });
 
     function testExtractConstant(caption: string, text: string) {
         testExtractSymbol(caption, text, "extractConstant", Diagnostics.Extract_constant);
+    }
+
+    function testExtractConstantFailed(caption: string, text: string) {
+        testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
     }
 }

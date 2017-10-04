@@ -127,6 +127,7 @@ namespace ts.refactor.extractSymbol {
         export const CannotExtractSuper: DiagnosticMessage = createMessage("Cannot extract super call.");
         export const CannotExtractEmpty: DiagnosticMessage = createMessage("Cannot extract empty range.");
         export const ExpressionExpected: DiagnosticMessage = createMessage("expression expected.");
+        export const UselessConstantType: DiagnosticMessage = createMessage("No reason to extract constant of type.");
         export const StatementOrExpressionExpected: DiagnosticMessage = createMessage("Statement or expression expected.");
         export const CannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = createMessage("Cannot extract range containing conditional break or continue statements.");
         export const CannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
@@ -1278,10 +1279,22 @@ namespace ts.refactor.extractSymbol {
         const constantErrorsPerScope: Diagnostic[][] = [];
         const visibleDeclarationsInExtractedRange: Symbol[] = [];
 
-        const expressionDiagnostic =
-            isReadonlyArray(targetRange.range) && !(targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0]))
-                ? ((start, end) => createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected))(first(targetRange.range).getStart(), last(targetRange.range).end)
+        const expression = !isReadonlyArray(targetRange.range)
+            ? targetRange.range
+            : targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0])
+                ? (targetRange.range[0] as ExpressionStatement).expression
                 : undefined;
+
+        let expressionDiagnostic: Diagnostic | undefined = undefined;
+        if (expression === undefined) {
+            const statements = targetRange.range as ReadonlyArray<Statement>;
+            const start = first(statements).getStart();
+            const end = last(statements).end;
+            expressionDiagnostic = createFileDiagnostic(sourceFile, start, end - start, Messages.ExpressionExpected);
+        }
+        else if (checker.getTypeAtLocation(expression).flags & (TypeFlags.Void | TypeFlags.Never)) {
+            expressionDiagnostic = createDiagnosticForNode(expression, Messages.UselessConstantType);
+        }
 
         // initialize results
         for (const scope of scopes) {
