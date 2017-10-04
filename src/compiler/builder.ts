@@ -93,7 +93,7 @@ namespace ts {
         signature: string;
     }
 
-    interface BuilderOptions {
+    export interface BuilderOptions {
         getCanonicalFileName: (fileName: string) => string;
         getEmitOutput: (program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, isDetailed: boolean) => EmitOutput | EmitOutputDetailed;
         computeHash: (data: string) => string;
