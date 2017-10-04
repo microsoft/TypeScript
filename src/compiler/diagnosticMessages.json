@@ -3733,5 +3733,15 @@
     "Extract constant": {
         "category": "Message",
         "code": 95006
+    },
+
+    "Extract to {0} in enclosing scope": {
+        "category": "Message",
+        "code": 95007
+    },
+
+    "Extract to {0} in {1} scope": {
+        "category": "Message",
+        "code": 95008
     }
 }
