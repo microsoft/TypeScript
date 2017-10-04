@@ -13258,13 +13258,25 @@ namespace ts {
             const binaryExpression = <BinaryExpression>node.parent;
             const operator = binaryExpression.operatorToken.kind;
             if (isAssignmentOperator(operator)) {
-                // Don't do this for special property assignments to avoid circularity
-                if (getSpecialPropertyAssignmentKind(binaryExpression) !== SpecialPropertyAssignmentKind.None) {
-                    return undefined;
-                }
-
-                // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
+                    // Don't do this for special property assignments to avoid circularity
+                    switch (getSpecialPropertyAssignmentKind(binaryExpression)) {
+                        case SpecialPropertyAssignmentKind.None:
+                            break;
+                        case SpecialPropertyAssignmentKind.Property:
+                            // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
+                            // See `bindStaticPropertyAssignment` in `binder.ts`.
+                            if (!binaryExpression.left.symbol) {
+                                break;
+                            }
+                            // falls through
+                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                        case SpecialPropertyAssignmentKind.ModuleExports:
+                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        case SpecialPropertyAssignmentKind.ThisProperty:
+                            return undefined;
+                    }
+                    // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                     return getTypeOfExpression(binaryExpression.left);
                 }
             }
