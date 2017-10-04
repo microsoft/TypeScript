@@ -4151,13 +4151,13 @@ namespace ts {
             if (parentType === unknownType) {
                 return unknownType;
             }
-            // If no type was specified or inferred for parent, or if the specified or inferred type is any,
-            // infer from the initializer of the binding element if one is present. Otherwise, go with the
-            // undefined or any type of the parent.
-            if (!parentType || isTypeAny(parentType)) {
-                if (declaration.initializer) {
-                    return checkDeclarationInitializer(declaration);
-                }
+            // If no type was specified or inferred for parent,
+            // infer from the initializer of the binding element if one is present.
+            // Otherwise, go with the undefined type of the parent.
+            if (!parentType) {
+                return declaration.initializer ? checkDeclarationInitializer(declaration) : parentType;
+            }
+            if (isTypeAny(parentType)) {
                 return parentType;
             }
 
@@ -4182,9 +4182,6 @@ namespace ts {
                     if (isComputedNonLiteralName(name)) {
                         // computed properties with non-literal names are treated as 'any'
                         return anyType;
-                    }
-                    if (declaration.initializer) {
-                        getContextualType(declaration.initializer);
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
