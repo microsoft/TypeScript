@@ -4253,11 +4253,7 @@ interface HTMLBodyElement extends HTMLElement {
     onafterprint: (this: HTMLBodyElement, ev: Event) => any;
     onbeforeprint: (this: HTMLBodyElement, ev: Event) => any;
     onbeforeunload: (this: HTMLBodyElement, ev: BeforeUnloadEvent) => any;
-    onblur: (this: HTMLBodyElement, ev: FocusEvent) => any;
-    onerror: (this: HTMLBodyElement, ev: ErrorEvent) => any;
-    onfocus: (this: HTMLBodyElement, ev: FocusEvent) => any;
     onhashchange: (this: HTMLBodyElement, ev: HashChangeEvent) => any;
-    onload: (this: HTMLBodyElement, ev: Event) => any;
     onmessage: (this: HTMLBodyElement, ev: MessageEvent) => any;
     onoffline: (this: HTMLBodyElement, ev: Event) => any;
     ononline: (this: HTMLBodyElement, ev: Event) => any;
@@ -4266,7 +4262,6 @@ interface HTMLBodyElement extends HTMLElement {
     onpageshow: (this: HTMLBodyElement, ev: PageTransitionEvent) => any;
     onpopstate: (this: HTMLBodyElement, ev: PopStateEvent) => any;
     onresize: (this: HTMLBodyElement, ev: UIEvent) => any;
-    onscroll: (this: HTMLBodyElement, ev: UIEvent) => any;
     onstorage: (this: HTMLBodyElement, ev: StorageEvent) => any;
     onunload: (this: HTMLBodyElement, ev: Event) => any;
     text: any;
@@ -4922,10 +4917,6 @@ interface HTMLFrameElement extends HTMLElement, GetSVGDocument {
      */
     noResize: boolean;
     /**
-     * Raised when the object has been completely received from the server.
-     */
-    onload: (this: HTMLFrameElement, ev: Event) => any;
-    /**
      * Sets or retrieves whether the frame can be scrolled.
      */
     scrolling: string;
@@ -4991,16 +4982,9 @@ interface HTMLFrameSetElement extends HTMLElement {
     onbeforeprint: (this: HTMLFrameSetElement, ev: Event) => any;
     onbeforeunload: (this: HTMLFrameSetElement, ev: BeforeUnloadEvent) => any;
     /**
-     * Fires when the object loses the input focus.
-     */
-    onblur: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
-    onerror: (this: HTMLFrameSetElement, ev: ErrorEvent) => any;
-    /**
      * Fires when the object receives focus.
      */
-    onfocus: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
     onhashchange: (this: HTMLFrameSetElement, ev: HashChangeEvent) => any;
-    onload: (this: HTMLFrameSetElement, ev: Event) => any;
     onmessage: (this: HTMLFrameSetElement, ev: MessageEvent) => any;
     onoffline: (this: HTMLFrameSetElement, ev: Event) => any;
     ononline: (this: HTMLFrameSetElement, ev: Event) => any;
@@ -5009,7 +4993,6 @@ interface HTMLFrameSetElement extends HTMLElement {
     onpageshow: (this: HTMLFrameSetElement, ev: PageTransitionEvent) => any;
     onpopstate: (this: HTMLFrameSetElement, ev: PopStateEvent) => any;
     onresize: (this: HTMLFrameSetElement, ev: UIEvent) => any;
-    onscroll: (this: HTMLFrameSetElement, ev: UIEvent) => any;
     onstorage: (this: HTMLFrameSetElement, ev: StorageEvent) => any;
     onunload: (this: HTMLFrameSetElement, ev: Event) => any;
     /**
@@ -5145,10 +5128,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
      * Sets or retrieves whether the user can resize the frame.
      */
     noResize: boolean;
-    /**
-     * Raised when the object has been completely received from the server.
-     */
-    onload: (this: HTMLIFrameElement, ev: Event) => any;
+
     readonly sandbox: DOMSettableTokenList;
     /**
      * Sets or retrieves whether the frame can be scrolled.
