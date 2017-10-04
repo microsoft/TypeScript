@@ -6588,17 +6588,15 @@ namespace ts {
         }
 
         function signatureHasTypePredicate(signature: Signature): boolean {
-            return signature.resolvedTypePredicate !== noTypePredicate;
+            return getTypePredicateOfSignature(signature) !== undefined;
         }
 
         function getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined {
-            if (signature.resolvedTypePredicate === noTypePredicate) {
-                return undefined;
+            if (!signature.resolvedTypePredicate) {
+                const targetTypePredicate = getTypePredicateOfSignature(signature.target);
+                signature.resolvedTypePredicate = targetTypePredicate ? instantiateTypePredicate(targetTypePredicate, signature.mapper) : noTypePredicate;
             }
-            if (signature.resolvedTypePredicate === undefined) {
-                signature.resolvedTypePredicate = instantiateTypePredicate(getTypePredicateOfSignature(signature.target), signature.mapper);
-            }
-            return signature.resolvedTypePredicate as TypePredicate;
+            return signature.resolvedTypePredicate === noTypePredicate ? undefined : signature.resolvedTypePredicate;
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -8225,7 +8223,7 @@ namespace ts {
                 signature.thisParameter && instantiateSymbol(signature.thisParameter, mapper),
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 /*resolvedReturnType*/ undefined,
-                /*resolvedTypePredicate*/ signatureHasTypePredicate(signature) ? undefined : noTypePredicate,
+                /*resolvedTypePredicate*/ undefined,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasLiteralTypes);
             result.target = signature;
             result.mapper = mapper;
