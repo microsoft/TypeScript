@@ -2,7 +2,7 @@
 /// <reference path="..\..\compiler\commandLineParser.ts" />
 
 namespace ts {
-    type ExpectedResult = { typeAcquisition: TypeAcquisition, errors: Diagnostic[] };
+    interface ExpectedResult { typeAcquisition: TypeAcquisition; errors: Diagnostic[]; }
     describe("convertTypeAcquisitionFromJson", () => {
         function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
             assertTypeAcquisitionWithJson(json, configFileName, expectedResult);

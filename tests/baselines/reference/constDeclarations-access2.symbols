@@ -1,0 +1,89 @@
+=== tests/cases/compiler/constDeclarations-access2.ts ===
+const x = 0
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+// Errors
+x = 1;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x += 2;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x -= 3;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x *= 4;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x /= 5;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x %= 6;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x <<= 7;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x >>= 8;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x >>>= 9;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x &= 10;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x |= 11;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x ^= 12;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x++;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x--;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+++x;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+--x;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+++((x));
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+// OK
+var a = x + 1;
+>a : Symbol(a, Decl(constDeclarations-access2.ts, 24, 3))
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+function f(v: number) { }
+>f : Symbol(f, Decl(constDeclarations-access2.ts, 24, 14))
+>v : Symbol(v, Decl(constDeclarations-access2.ts, 26, 11))
+
+f(x);
+>f : Symbol(f, Decl(constDeclarations-access2.ts, 24, 14))
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+if (x) { }
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+(x);
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+-x;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
++x;
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+
+x.toString();
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(constDeclarations-access2.ts, 0, 5))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

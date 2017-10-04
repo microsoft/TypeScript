@@ -33,7 +33,7 @@ var MsPortal;
         var TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
-            var StringTemplate = (function () {
+            var StringTemplate = /** @class */ (function () {
                 function StringTemplate(templateStorage) {
                     this._templateStorage = templateStorage;
                 }
@@ -42,7 +42,7 @@ var MsPortal;
                 };
                 return StringTemplate;
             }());
-            var TemplateStorage = (function () {
+            var TemplateStorage = /** @class */ (function () {
                 function TemplateStorage() {
                     this.templateSources = {};
                     this.templateData = {};

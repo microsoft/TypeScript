@@ -59,19 +59,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var _this = this;
 //'this' in static member initializer
-var ErrClass1 = (function () {
+var ErrClass1 = /** @class */ (function () {
     function ErrClass1() {
     }
     ErrClass1.t = this; // Error
     return ErrClass1;
 }());
-var BaseErrClass = (function () {
+var BaseErrClass = /** @class */ (function () {
     function BaseErrClass(t) {
     }
     return BaseErrClass;
 }());
-var ClassWithNoInitializer = (function (_super) {
+var ClassWithNoInitializer = /** @class */ (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
     function ClassWithNoInitializer() {
@@ -80,7 +81,7 @@ var ClassWithNoInitializer = (function (_super) {
     }
     return ClassWithNoInitializer;
 }(BaseErrClass));
-var ClassWithInitializer = (function (_super) {
+var ClassWithInitializer = /** @class */ (function (_super) {
     __extends(ClassWithInitializer, _super);
     //'this' in required super call
     function ClassWithInitializer() {
@@ -100,7 +101,7 @@ var M;
 //'this' as a type argument
 function genericFunc(x) { }
 genericFunc(undefined); // Should be an error
-var ErrClass3 = (function (_super) {
+var ErrClass3 = /** @class */ (function (_super) {
     __extends(ErrClass3, _super);
     function ErrClass3() {
         return _super !== null && _super.apply(this, arguments) || this;

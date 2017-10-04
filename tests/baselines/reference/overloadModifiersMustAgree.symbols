@@ -1,0 +1,35 @@
+=== tests/cases/compiler/overloadModifiersMustAgree.ts ===
+class baz {
+>baz : Symbol(baz, Decl(overloadModifiersMustAgree.ts, 0, 0))
+
+    public foo();
+>foo : Symbol(baz.foo, Decl(overloadModifiersMustAgree.ts, 0, 11), Decl(overloadModifiersMustAgree.ts, 1, 17))
+
+    private foo(bar?: any) { } // error - access modifiers do not agree
+>foo : Symbol(baz.foo, Decl(overloadModifiersMustAgree.ts, 0, 11), Decl(overloadModifiersMustAgree.ts, 1, 17))
+>bar : Symbol(bar, Decl(overloadModifiersMustAgree.ts, 2, 16))
+}
+
+declare function bar();
+>bar : Symbol(bar, Decl(overloadModifiersMustAgree.ts, 3, 1), Decl(overloadModifiersMustAgree.ts, 5, 23), Decl(overloadModifiersMustAgree.ts, 6, 31))
+
+export function bar(s: string);
+>bar : Symbol(bar, Decl(overloadModifiersMustAgree.ts, 5, 23))
+>s : Symbol(s, Decl(overloadModifiersMustAgree.ts, 6, 20))
+
+function bar(s?: string) { }
+>bar : Symbol(bar, Decl(overloadModifiersMustAgree.ts, 3, 1), Decl(overloadModifiersMustAgree.ts, 5, 23), Decl(overloadModifiersMustAgree.ts, 6, 31))
+>s : Symbol(s, Decl(overloadModifiersMustAgree.ts, 7, 13))
+
+interface I {
+>I : Symbol(I, Decl(overloadModifiersMustAgree.ts, 7, 28))
+
+    foo? ();
+>foo : Symbol(I.foo, Decl(overloadModifiersMustAgree.ts, 9, 13), Decl(overloadModifiersMustAgree.ts, 10, 12))
+
+    foo(s: string);
+>foo : Symbol(I.foo, Decl(overloadModifiersMustAgree.ts, 9, 13), Decl(overloadModifiersMustAgree.ts, 10, 12))
+>s : Symbol(s, Decl(overloadModifiersMustAgree.ts, 11, 8))
+}
+
+

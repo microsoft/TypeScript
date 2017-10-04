@@ -23,7 +23,7 @@ y = x;
 "use strict";
 // Same as moduleResolutionWithSymlinks.ts, but with outDir
 exports.__esModule = true;
-var MyClass = (function () {
+var MyClass = /** @class */ (function () {
     function MyClass() {
     }
     return MyClass;

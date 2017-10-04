@@ -23,7 +23,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 function classExtender(superClass, _instanceModifier) {
-    return (function (_super) {
+    return /** @class */ (function (_super) {
         __extends(decoratorFunc, _super);
         function decoratorFunc() {
             var args = [];

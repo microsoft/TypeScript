@@ -47,6 +47,14 @@ namespace ts.JsTyping {
         return createMapFromTemplate<string>(result.config);
     }
 
+    export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
+        const result = readConfigFile(typesMapPath, path => host.readFile(path));
+        if (result.config) {
+            return createMapFromTemplate<string>(result.config.simpleMap);
+        }
+        return undefined;
+    }
+
     /**
      * @param host is the object providing I/O related operations.
      * @param fileNames are the file names that belong to the same project
@@ -199,7 +207,7 @@ namespace ts.JsTyping {
             }
 
             // depth of 2, so we access `node_modules/foo` but not `node_modules/foo/bar`
-            const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            const fileNames = host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(fileNames)}`);
             const packageNames: string[] = [];
             for (const fileName of fileNames) {

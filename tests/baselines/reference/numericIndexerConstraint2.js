@@ -5,7 +5,7 @@ var a: { one: number; };
 x = a;
 
 //// [numericIndexerConstraint2.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.foo = function () { };

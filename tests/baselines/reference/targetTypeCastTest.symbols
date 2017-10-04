@@ -1,0 +1,60 @@
+=== tests/cases/compiler/targetTypeCastTest.ts ===
+declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
+>Point : Symbol(Point, Decl(targetTypeCastTest.ts, 0, 11))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 0, 25))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 0, 34))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 0, 47))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 0, 57))
+
+function Point(x, y) {
+>Point : Symbol(Point, Decl(targetTypeCastTest.ts, 0, 73))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 2, 15))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 2, 17))
+
+    this.x = x;
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 2, 15))
+
+    this.y = y;   
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 2, 17))
+}
+
+interface Adder {
+>Adder : Symbol(Adder, Decl(targetTypeCastTest.ts, 5, 1))
+
+    (x: number, y: number): number;   
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 8, 5))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 8, 15))
+}
+
+var add = <Adder>function(x,y) {    return x+ y;   }
+>add : Symbol(add, Decl(targetTypeCastTest.ts, 11, 3))
+>Adder : Symbol(Adder, Decl(targetTypeCastTest.ts, 5, 1))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 11, 26))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 11, 28))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 11, 26))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 11, 28))
+
+
+interface Adder2 {
+>Adder2 : Symbol(Adder2, Decl(targetTypeCastTest.ts, 11, 52))
+
+    (x: number, y: number): number;   
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 15, 5))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 15, 15))
+}
+
+var add2: Adder2 = function(x,y) {
+>add2 : Symbol(add2, Decl(targetTypeCastTest.ts, 18, 3))
+>Adder2 : Symbol(Adder2, Decl(targetTypeCastTest.ts, 11, 52))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 18, 28))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 18, 30))
+
+    return 0;
+}
+
+function add3(x,y) {x}
+>add3 : Symbol(add3, Decl(targetTypeCastTest.ts, 20, 1))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 22, 14))
+>y : Symbol(y, Decl(targetTypeCastTest.ts, 22, 16))
+>x : Symbol(x, Decl(targetTypeCastTest.ts, 22, 14))
+

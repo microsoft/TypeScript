@@ -1,0 +1,68 @@
+=== tests/cases/compiler/staticMemberExportAccess.ts ===
+class Sammy {
+>Sammy : Symbol(Sammy, Decl(staticMemberExportAccess.ts, 0, 0), Decl(staticMemberExportAccess.ts, 5, 1))
+
+   foo() { return "hi"; }
+>foo : Symbol(Sammy.foo, Decl(staticMemberExportAccess.ts, 0, 13))
+
+  static bar() {
+>bar : Symbol(Sammy.bar, Decl(staticMemberExportAccess.ts, 1, 25))
+
+    return -1;
+   }
+}
+module Sammy {
+>Sammy : Symbol(Sammy, Decl(staticMemberExportAccess.ts, 0, 0), Decl(staticMemberExportAccess.ts, 5, 1))
+
+    export var x = 1;
+>x : Symbol(x, Decl(staticMemberExportAccess.ts, 7, 14))
+}
+interface JQueryStatic {
+>JQueryStatic : Symbol(JQueryStatic, Decl(staticMemberExportAccess.ts, 8, 1))
+
+    sammy: Sammy; // class instance
+>sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+>Sammy : Symbol(Sammy, Decl(staticMemberExportAccess.ts, 0, 0), Decl(staticMemberExportAccess.ts, 5, 1))
+}
+var $: JQueryStatic;
+>$ : Symbol($, Decl(staticMemberExportAccess.ts, 12, 3))
+>JQueryStatic : Symbol(JQueryStatic, Decl(staticMemberExportAccess.ts, 8, 1))
+
+var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
+>instanceOfClassSammy : Symbol(instanceOfClassSammy, Decl(staticMemberExportAccess.ts, 13, 3))
+>Sammy : Symbol(Sammy, Decl(staticMemberExportAccess.ts, 0, 0), Decl(staticMemberExportAccess.ts, 5, 1))
+>$.sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+>$ : Symbol($, Decl(staticMemberExportAccess.ts, 12, 3))
+>sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+
+var r1 = instanceOfClassSammy.foo(); // r1 is string
+>r1 : Symbol(r1, Decl(staticMemberExportAccess.ts, 14, 3))
+>instanceOfClassSammy.foo : Symbol(Sammy.foo, Decl(staticMemberExportAccess.ts, 0, 13))
+>instanceOfClassSammy : Symbol(instanceOfClassSammy, Decl(staticMemberExportAccess.ts, 13, 3))
+>foo : Symbol(Sammy.foo, Decl(staticMemberExportAccess.ts, 0, 13))
+
+var r2 = $.sammy.foo();
+>r2 : Symbol(r2, Decl(staticMemberExportAccess.ts, 15, 3))
+>$.sammy.foo : Symbol(Sammy.foo, Decl(staticMemberExportAccess.ts, 0, 13))
+>$.sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+>$ : Symbol($, Decl(staticMemberExportAccess.ts, 12, 3))
+>sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+>foo : Symbol(Sammy.foo, Decl(staticMemberExportAccess.ts, 0, 13))
+
+var r3 = $.sammy.bar(); // error
+>r3 : Symbol(r3, Decl(staticMemberExportAccess.ts, 16, 3))
+>$.sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+>$ : Symbol($, Decl(staticMemberExportAccess.ts, 12, 3))
+>sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+
+var r4 = $.sammy.x; // error
+>r4 : Symbol(r4, Decl(staticMemberExportAccess.ts, 17, 3))
+>$.sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+>$ : Symbol($, Decl(staticMemberExportAccess.ts, 12, 3))
+>sammy : Symbol(JQueryStatic.sammy, Decl(staticMemberExportAccess.ts, 9, 24))
+
+Sammy.bar();
+>Sammy.bar : Symbol(Sammy.bar, Decl(staticMemberExportAccess.ts, 1, 25))
+>Sammy : Symbol(Sammy, Decl(staticMemberExportAccess.ts, 0, 0), Decl(staticMemberExportAccess.ts, 5, 1))
+>bar : Symbol(Sammy.bar, Decl(staticMemberExportAccess.ts, 1, 25))
+

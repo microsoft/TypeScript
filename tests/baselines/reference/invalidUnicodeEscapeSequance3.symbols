@@ -1,0 +1,3 @@
+=== tests/cases/compiler/invalidUnicodeEscapeSequance3.ts ===
+a\u
+No type information for this code.

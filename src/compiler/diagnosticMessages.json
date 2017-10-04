@@ -627,11 +627,11 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+    "Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'export default' or another module format instead.": {
+    "Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
     },
@@ -1912,6 +1912,18 @@
         "category": "Error",
         "code": 2560
     },
+    "Object literal may only specify known properties, but '{0}' does not exist in type '{1}'. Did you mean to write '{2}'?": {
+        "category": "Error",
+        "code": 2561
+    },
+    "Base class expressions cannot reference class type parameters.": {
+        "category": "Error",
+        "code": 2562
+    },
+    "The containing function or module body is too large for control flow analysis.": {
+        "category": "Error",
+        "code": 2563
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2199,6 +2211,10 @@
     "Cannot access '{0}.{1}' because '{0}' is a type, but not a namespace. Did you mean to retrieve the type of the property '{1}' in '{0}' with '{0}[\"{1}\"]'?": {
         "category": "Error",
         "code": 2713
+    },
+    "The expression of an export assignment must be an identifier or qualified name in an ambient context.": {
+        "category": "Error",
+        "code": 2714
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2662,11 +2678,15 @@
         "category": "Message",
         "code": 6012
     },
+    "Do not resolve the real path of symlinks.": {
+        "category": "Message",
+        "code": 6013
+    },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
+    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },
@@ -3070,10 +3090,6 @@
         "category": "Message",
         "code": 6128
     },
-    "The config file '{0}' found doesn't contain any source files.": {
-        "category": "Error",
-        "code": 6129
-    },
     "Resolving real path for '{0}', result '{1}'.": {
         "category": "Message",
         "code": 6130
@@ -3086,7 +3102,7 @@
         "category": "Message",
         "code": 6132
     },
-    "'{0}' is declared but never used.": {
+    "'{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6133
     },
@@ -3106,7 +3122,7 @@
         "category": "Error",
         "code": 6137
     },
-    "Property '{0}' is declared but never used.": {
+    "Property '{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6138
     },
@@ -3125,10 +3141,6 @@
     "Module '{0}' was resolved to '{1}', but '--jsx' is not set.": {
         "category": "Error",
         "code": 6142
-    },
-    "Module '{0}' was resolved to '{1}', but '--allowJs' is not set.": {
-        "category": "Error",
-        "code": 6143
     },
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
@@ -3297,6 +3309,10 @@
     "Disable strict checking of generic signatures in function types.": {
         "category": "Message",
         "code": 6185
+    },
+    "Enable strict checking of function types.": {
+        "category": "Message",
+        "code": 6186
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3491,6 +3507,22 @@
         "category": "Error",
         "code": 8020
     },
+    "JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.": {
+        "category": "Error",
+        "code": 8021
+    },
+    "JSDoc '@augments' is not attached to a class declaration.": {
+        "category": "Error",
+        "code": 8022
+    },
+    "JSDoc '@augments {0}' does not match the 'extends {1}' clause.": {
+        "category": "Error",
+        "code": 8023
+    },
+    "JSDoc '@param' tag has name '{0}', but there is no parameter with that name.": {
+        "category": "Error",
+        "code": 8024
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3669,6 +3701,10 @@
         "category": "Message",
         "code": 90026
     },
+    "Declare static property '{0}'.": {
+        "category": "Message",
+        "code": 90027
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -3677,5 +3713,35 @@
     "Convert function '{0}' to class": {
         "category": "Message",
         "code": 95002
+    },
+
+    "Extract symbol": {
+        "category": "Message",
+        "code": 95003
+    },
+
+    "Extract to {0} in {1}": {
+        "category": "Message",
+        "code": 95004
+    },
+
+    "Extract function": {
+        "category": "Message",
+        "code": 95005
+    },
+
+    "Extract constant": {
+        "category": "Message",
+        "code": 95006
+    },
+
+    "Extract to {0} in enclosing scope": {
+        "category": "Message",
+        "code": 95007
+    },
+
+    "Extract to {0} in {1} scope": {
+        "category": "Message",
+        "code": 95008
     }
 }

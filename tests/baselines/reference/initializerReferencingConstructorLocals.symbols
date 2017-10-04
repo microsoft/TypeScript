@@ -1,0 +1,50 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts ===
+// Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
+
+class C {
+>C : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
+
+    a = z; // error
+>a : Symbol(C.a, Decl(initializerReferencingConstructorLocals.ts, 2, 9))
+
+    b: typeof z; // error
+>b : Symbol(C.b, Decl(initializerReferencingConstructorLocals.ts, 3, 10))
+
+    c = this.z; // error
+>c : Symbol(C.c, Decl(initializerReferencingConstructorLocals.ts, 4, 16))
+>this : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
+
+    d: typeof this.z; // error
+>d : Symbol(C.d, Decl(initializerReferencingConstructorLocals.ts, 5, 15))
+
+    constructor(x) {
+>x : Symbol(x, Decl(initializerReferencingConstructorLocals.ts, 7, 16))
+
+        z = 1;
+    }
+}
+
+class D<T> {
+>D : Symbol(D, Decl(initializerReferencingConstructorLocals.ts, 10, 1))
+>T : Symbol(T, Decl(initializerReferencingConstructorLocals.ts, 12, 8))
+
+    a = z; // error
+>a : Symbol(D.a, Decl(initializerReferencingConstructorLocals.ts, 12, 12))
+
+    b: typeof z; // error
+>b : Symbol(D.b, Decl(initializerReferencingConstructorLocals.ts, 13, 10))
+
+    c = this.z; // error
+>c : Symbol(D.c, Decl(initializerReferencingConstructorLocals.ts, 14, 16))
+>this : Symbol(D, Decl(initializerReferencingConstructorLocals.ts, 10, 1))
+
+    d: typeof this.z; // error
+>d : Symbol(D.d, Decl(initializerReferencingConstructorLocals.ts, 15, 15))
+
+    constructor(x: T) {
+>x : Symbol(x, Decl(initializerReferencingConstructorLocals.ts, 17, 16))
+>T : Symbol(T, Decl(initializerReferencingConstructorLocals.ts, 12, 8))
+
+        z = 1;
+    }
+}

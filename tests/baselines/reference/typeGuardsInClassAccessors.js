@@ -109,7 +109,7 @@ class ClassWithAccessors {
 var num;
 var strOrNum;
 var var1;
-var ClassWithAccessors = (function () {
+var ClassWithAccessors = /** @class */ (function () {
     function ClassWithAccessors() {
     }
     Object.defineProperty(ClassWithAccessors.prototype, "p1", {

@@ -14,7 +14,7 @@ function bar() {
 }
 
 //// [out.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

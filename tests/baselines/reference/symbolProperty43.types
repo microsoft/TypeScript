@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty43.ts ===
+class C {
+>C : C
+
+    [Symbol.iterator](x: string): string;
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>x : string
+
+    [Symbol.iterator](x: number): number;
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>x : number
+}

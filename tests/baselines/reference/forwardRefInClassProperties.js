@@ -16,7 +16,7 @@ class Test
 
 
 //// [forwardRefInClassProperties.js]
-var Test = (function () {
+var Test = /** @class */ (function () {
     function Test() {
         this._b = this._a; // undefined, no error/warning
         this._a = 3;

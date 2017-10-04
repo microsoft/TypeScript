@@ -203,9 +203,11 @@ namespace ts {
             node.symbol = symbol;
 
             if (!symbol.declarations) {
-                symbol.declarations = [];
+                symbol.declarations = [node];
             }
-            symbol.declarations.push(node);
+            else {
+                symbol.declarations.push(node);
+            }
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
                 symbol.exports = createSymbolTable();
@@ -242,7 +244,7 @@ namespace ts {
                     }
 
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores((<PropertyAccessExpression>nameExpression).name.escapedText));
+                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
                 }
                 return getEscapedTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
             }
@@ -282,17 +284,8 @@ namespace ts {
                     const index = indexOf(functionType.parameters, node);
                     return "arg" + index as __String;
                 case SyntaxKind.JSDocTypedefTag:
-                    const parentNode = node.parent && node.parent.parent;
-                    let nameFromParentNode: __String;
-                    if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
-                        if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
-                            const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
-                            if (isIdentifier(nameIdentifier)) {
-                                nameFromParentNode = nameIdentifier.escapedText;
-                            }
-                        }
-                    }
-                    return nameFromParentNode;
+                    const name = getNameOfJSDocTypedef(node as JSDocTypedefTag);
+                    return typeof name !== "undefined" ? name.escapedText : undefined;
             }
         }
 
@@ -598,7 +591,7 @@ namespace ts {
             // Binding of JsDocComment should be done before the current block scope container changes.
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
-            if (node.jsDoc) {
+            if (hasJSDocNodes(node)) {
                 if (isInJavaScriptFile(node)) {
                     for (const j of node.jsDoc) {
                         bind(j);
@@ -806,11 +799,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return <FlowCondition>{
-                flags,
-                expression,
-                antecedent
-            };
+            return { flags, expression, antecedent };
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -818,31 +807,18 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return <FlowSwitchClause>{
-                flags: FlowFlags.SwitchClause,
-                switchStatement,
-                clauseStart,
-                clauseEnd,
-                antecedent
-            };
+            return { flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent };
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return <FlowAssignment>{
-                flags: FlowFlags.Assignment,
-                antecedent,
-                node
-            };
+            return { flags: FlowFlags.Assignment, antecedent, node };
         }
 
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return <FlowArrayMutation>{
-                flags: FlowFlags.ArrayMutation,
-                antecedent,
-                node
-            };
+            const res: FlowArrayMutation = { flags: FlowFlags.ArrayMutation, antecedent, node };
+            return res;
         }
 
         function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -1480,11 +1456,6 @@ namespace ts {
         }
 
         function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            // Just call this directly so that the return type of this function stays "void".
-            return declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
-        }
-
-        function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             switch (container.kind) {
                 // Modules, source files, and classes need specialized handling for how their
                 // members are declared (for example, a member of a class will go into a specific
@@ -1707,6 +1678,9 @@ namespace ts {
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: __String) {
             const symbol = createSymbol(symbolFlags, name);
+            if (symbolFlags & SymbolFlags.EnumMember) {
+                symbol.parent = container.symbol;
+            }
             addDeclarationToSymbol(symbol, node, symbolFlags);
         }
 
@@ -1803,7 +1777,7 @@ namespace ts {
                     // otherwise report generic error message.
                     const span = getErrorSpanForNode(file, name);
                     file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                        getStrictModeEvalOrArgumentsMessage(contextNode), unescapeLeadingUnderscores(identifier.escapedText)));
+                        getStrictModeEvalOrArgumentsMessage(contextNode), idText(identifier)));
                 }
             }
         }
@@ -1948,7 +1922,7 @@ namespace ts {
         }
 
         function bindJSDocTypedefTagIfAny(node: Node) {
-            if (!node.jsDoc) {
+            if (!hasJSDocNodes(node)) {
                 return;
             }
 
@@ -2457,7 +2431,7 @@ namespace ts {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(prototypeSymbol.escapedName)));
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
             }
             symbol.exports.set(prototypeSymbol.escapedName, prototypeSymbol);
             prototypeSymbol.parent = symbol;
@@ -2784,7 +2758,6 @@ namespace ts {
 
     function computeParameter(node: ParameterDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const modifierFlags = getModifierFlags(node);
         const name = node.name;
         const initializer = node.initializer;
         const dotDotDotToken = node.dotDotDotToken;
@@ -2799,7 +2772,7 @@ namespace ts {
         }
 
         // If a parameter has an accessibility modifier, then it is TypeScript syntax.
-        if (modifierFlags & ModifierFlags.ParameterPropertyModifier) {
+        if (hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
         }
 
@@ -2844,9 +2817,8 @@ namespace ts {
 
     function computeClassDeclaration(node: ClassDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const modifierFlags = getModifierFlags(node);
 
-        if (modifierFlags & ModifierFlags.Ambient) {
+        if (hasModifier(node, ModifierFlags.Ambient)) {
             // An ambient declaration is TypeScript syntax.
             transformFlags = TransformFlags.AssertTypeScript;
         }
@@ -3190,11 +3162,10 @@ namespace ts {
 
     function computeVariableStatement(node: VariableStatement, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const modifierFlags = getModifierFlags(node);
         const declarationListTransformFlags = node.declarationList.transformFlags;
 
         // An ambient declaration is TypeScript syntax.
-        if (modifierFlags & ModifierFlags.Ambient) {
+        if (hasModifier(node, ModifierFlags.Ambient)) {
             transformFlags = TransformFlags.AssertTypeScript;
         }
         else {

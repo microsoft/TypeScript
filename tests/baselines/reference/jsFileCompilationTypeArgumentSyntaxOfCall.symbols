@@ -1,0 +1,3 @@
+=== tests/cases/compiler/a.js ===
+Foo<number>();
+No type information for this code.

@@ -130,7 +130,7 @@ namespace Harness.LanguageService {
         }
 
         public getNewLine(): string {
-            return "\r\n";
+            return harnessNewLine;
         }
 
         public getFilenames(): string[] {
@@ -487,6 +487,9 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
+        getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
+            return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
+        }
         getCodeFixesAtPosition(): ts.CodeAction[] {
             throw new Error("Not supported on the shim.");
         }
@@ -686,7 +689,7 @@ namespace Harness.LanguageService {
             this.host.log(message);
         }
 
-        err(message: string): void {
+        msg(message: string): void {
             this.host.log(message);
         }
 
@@ -702,7 +705,8 @@ namespace Harness.LanguageService {
             return false;
         }
 
-        group() { throw ts.notImplemented(); }
+        startGroup() { throw ts.notImplemented(); }
+        endGroup() { throw ts.notImplemented(); }
 
         perftrc(message: string): void {
             return this.host.log(message);
@@ -825,6 +829,7 @@ namespace Harness.LanguageService {
                 host: serverHost,
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
+                useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
@@ -849,9 +854,5 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
         getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
-    }
-
-    export function mockHash(s: string): string {
-        return `hash-${s}`;
     }
 }

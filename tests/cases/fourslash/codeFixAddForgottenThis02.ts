@@ -6,4 +6,7 @@
 ////    bar() { [|foo = 10|] };
 ////}
 
-verify.rangeAfterCodeFix("this.foo = 10");
+verify.codeFix({
+    description: "Add 'this.' to unresolved variable.",
+    newRangeContent: "this.foo = 10",
+});

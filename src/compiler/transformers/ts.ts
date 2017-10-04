@@ -151,7 +151,17 @@ namespace ts {
                         break;
                     }
 
-                    recordEmittedDeclarationInScope(node);
+                    // Record these declarations provided that they have a name.
+                    if ((node as ClassDeclaration | FunctionDeclaration).name) {
+                        recordEmittedDeclarationInScope(node as ClassDeclaration | FunctionDeclaration);
+                    }
+                    else {
+                        // These nodes should always have names unless they are default-exports;
+                        // however, class declaration parsing allows for undefined names, so syntactically invalid
+                        // programs may also have an undefined name.
+                        Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasModifier(node, ModifierFlags.Default));
+                    }
+
                     break;
             }
         }
@@ -200,6 +210,24 @@ namespace ts {
         function sourceElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.ExportDeclaration:
+                    return visitEllidableStatement(<ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration>node);
+                default:
+                    return visitorWorker(node);
+            }
+        }
+
+        function visitEllidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node> {
+            const parsed = getParseTreeNode(node);
+            if (parsed !== node) {
+                // If the node has been transformed by a `before` transformer, perform no ellision on it
+                // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
+                return node;
+            }
+            switch (node.kind) {
+                case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
@@ -208,7 +236,7 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                     return visitExportDeclaration(<ExportDeclaration>node);
                 default:
-                    return visitorWorker(node);
+                    Debug.fail("Unhandled ellided statement");
             }
         }
 
@@ -493,7 +521,7 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile) {
             const alwaysStrict = (compilerOptions.alwaysStrict === undefined ? compilerOptions.strict : compilerOptions.alwaysStrict) &&
-                !(isExternalModule(node) && moduleKind === ModuleKind.ES2015);
+                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
             return updateSourceFileNode(
                 node,
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
@@ -603,13 +631,16 @@ namespace ts {
 
                 addRange(statements, context.endLexicalEnvironment());
 
+                const iife = createImmediatelyInvokedArrowFunction(statements);
+                setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
+
                 const varStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
                             /*type*/ undefined,
-                            createImmediatelyInvokedFunctionExpression(statements)
+                            iife
                         )
                     ])
                 );
@@ -1934,7 +1965,7 @@ namespace ts {
                     const name = getMutableClone(<Identifier>node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
-                    name.parent = currentScope;
+                    name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
                     if (useFallback) {
                         return createLogicalAnd(
                             createStrictInequality(
@@ -2007,7 +2038,7 @@ namespace ts {
                     : (<ComputedPropertyName>name).expression;
             }
             else if (isIdentifier(name)) {
-                return createLiteral(unescapeLeadingUnderscores(name.escapedText));
+                return createLiteral(idText(name));
             }
             else {
                 return getSynthesizedClone(name);
@@ -2278,7 +2309,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                visitFunctionBody(node.body, visitor, context)
+                node.equalsGreaterThanToken,
+                visitFunctionBody(node.body, visitor, context),
             );
             return updated;
         }
@@ -2633,42 +2665,40 @@ namespace ts {
             return isExportOfNamespace(node)
                 || (isExternalModuleExport(node)
                     && moduleKind !== ModuleKind.ES2015
+                    && moduleKind !== ModuleKind.ESNext
                     && moduleKind !== ModuleKind.System);
         }
 
         /**
          * Records that a declaration was emitted in the current scope, if it was the first
          * declaration for the provided symbol.
-         *
-         * NOTE: if there is ever a transformation above this one, we may not be able to rely
-         *       on symbol names.
          */
-        function recordEmittedDeclarationInScope(node: Node) {
-            const name = node.symbol && node.symbol.escapedName;
-            if (name) {
-                if (!currentScopeFirstDeclarationsOfName) {
-                    currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
-                }
+        function recordEmittedDeclarationInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration) {
+            if (!currentScopeFirstDeclarationsOfName) {
+                currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
+            }
 
-                if (!currentScopeFirstDeclarationsOfName.has(name)) {
-                    currentScopeFirstDeclarationsOfName.set(name, node);
-                }
+            const name = declaredNameInScope(node);
+            if (!currentScopeFirstDeclarationsOfName.has(name)) {
+                currentScopeFirstDeclarationsOfName.set(name, node);
             }
         }
 
         /**
-         * Determines whether a declaration is the first declaration with the same name emitted
-         * in the current scope.
+         * Determines whether a declaration is the first declaration with
+         * the same name emitted in the current scope.
          */
-        function isFirstEmittedDeclarationInScope(node: Node) {
+        function isFirstEmittedDeclarationInScope(node: ModuleDeclaration | EnumDeclaration) {
             if (currentScopeFirstDeclarationsOfName) {
-                const name = node.symbol && node.symbol.escapedName;
-                if (name) {
-                    return currentScopeFirstDeclarationsOfName.get(name) === node;
-                }
+                const name = declaredNameInScope(node);
+                return currentScopeFirstDeclarationsOfName.get(name) === node;
             }
+            return true;
+        }
 
-            return false;
+        function declaredNameInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration): __String {
+            Debug.assertNode(node.name, isIdentifier);
+            return (node.name as Identifier).escapedText;
         }
 
         /**
@@ -2746,7 +2776,7 @@ namespace ts {
                 return createNotEmittedStatement(node);
             }
 
-            Debug.assert(isIdentifier(node.name), "TypeScript module should have an Identifier name.");
+            Debug.assertNode(node.name, isIdentifier, "A TypeScript namespace should have an Identifier name.");
             enableSubstitutionForNamespaceExports();
 
             const statements: Statement[] = [];
@@ -3210,7 +3240,7 @@ namespace ts {
         function getClassAliasIfNeeded(node: ClassDeclaration) {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
-                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? unescapeLeadingUnderscores(node.name.escapedText) : "default");
+                const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
                 classAliases[getOriginalNodeId(node)] = classAlias;
                 hoistVariableDeclaration(classAlias);
                 return classAlias;

@@ -17,9 +17,20 @@ namespace ts.server {
         loggingEnabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;
-        err(s: string): void;
-        group(logGroupEntries: (log: (msg: string) => void) => void): void;
+        startGroup(): void;
+        endGroup(): void;
+        msg(s: string, type?: Msg.Types): void;
         getLogFileName(): string;
+    }
+
+    export namespace Msg {
+        export type Err = "Err";
+        export const Err: Err = "Err";
+        export type Info = "Info";
+        export const Info: Info = "Info";
+        export type Perf = "Perf";
+        export const Perf: Perf = "Perf";
+        export type Types = Err | Info | Perf;
     }
 
     function getProjectRootPath(project: Project): Path {
@@ -38,8 +49,8 @@ namespace ts.server {
     export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true),
-            compilerOptions: project.getCompilerOptions(),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
+            compilerOptions: project.getCompilationSettings(),
             typeAcquisition,
             unresolvedImports,
             projectRootPath: getProjectRootPath(project),
@@ -84,7 +95,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes(target: MapLike<any>, source: MapLike <any>): void {
+    export function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -115,9 +126,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-/* tslint:disable:no-null-keyword */
         const map = createMap<T>();
-/* tslint:enable:no-null-keyword */
         return {
             get(path) {
                 return map.get(path);
@@ -164,12 +173,23 @@ namespace ts.server {
     export function createSortedArray<T>(): SortedArray<T> {
         return [] as SortedArray<T>;
     }
+}
 
+/* @internal */
+namespace ts.server {
     export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = createMap<any>();
-        constructor(private readonly host: ServerHost) {
+        private readonly pendingTimeouts: Map<any> = createMap<any>();
+        private readonly logger?: Logger | undefined;
+        constructor(private readonly host: ServerHost, logger: Logger) {
+            this.logger = logger.hasLevel(LogLevel.verbose) && logger;
         }
 
+        /**
+         * Wait `number` milliseconds and then invoke `cb`.  If, while waiting, schedule
+         * is called again with the same `operationId`, cancel this operation in favor
+         * of the new one.  (Note that the amount of time the canceled operation had been
+         * waiting does not affect the amount of time that the new operation waits.)
+         */
         public schedule(operationId: string, delay: number, cb: () => void) {
             const pendingTimeout = this.pendingTimeouts.get(operationId);
             if (pendingTimeout) {
@@ -178,10 +198,16 @@ namespace ts.server {
             }
             // schedule new operation, pass arguments
             this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
+            if (this.logger) {
+                this.logger.info(`Scheduled: ${operationId}${pendingTimeout ? ", Cancelled earlier one" : ""}`);
+            }
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             self.pendingTimeouts.delete(operationId);
+            if (self.logger) {
+                self.logger.info(`Running: ${operationId}`);
+            }
             cb();
         }
     }
@@ -212,10 +238,12 @@ namespace ts.server {
             }
         }
     }
-}
 
-/* @internal */
-namespace ts.server {
+    export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
+        const base = getBaseFileName(configFilePath);
+        return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
+    }
+
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
         if (array.length === 0) {
             array.push(insert);

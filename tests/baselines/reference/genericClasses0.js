@@ -8,7 +8,7 @@ var v1 : C<string>;
 var y = v1.x; // should be 'string'
 
 //// [genericClasses0.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

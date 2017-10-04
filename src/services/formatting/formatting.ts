@@ -339,17 +339,17 @@ namespace ts.formatting {
     /* @internal */
     export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number,  rulesProvider: RulesProvider): TextChange[] {
         const range = { pos: 0, end: sourceFileLike.text.length };
-        return formatSpanWorker(
+        return getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end, scanner => formatSpanWorker(
             range,
             node,
             initialIndentation,
             delta,
-            getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end),
+            scanner,
             rulesProvider.getFormatOptions(),
             rulesProvider,
             FormattingRequestKind.FormatSelection,
             _ => false, // assume that node does not have any errors
-            sourceFileLike);
+            sourceFileLike));
     }
 
     function formatNodeLines(node: Node, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
@@ -372,17 +372,17 @@ namespace ts.formatting {
         requestKind: FormattingRequestKind): TextChange[] {
         // find the smallest node that fully wraps the range and compute the initial indentation for the node
         const enclosingNode = findEnclosingNode(originalRange, sourceFile);
-        return formatSpanWorker(
+        return getFormattingScanner(sourceFile.text, sourceFile.languageVariant, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end, scanner => formatSpanWorker(
             originalRange,
             enclosingNode,
             SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options),
             getOwnOrInheritedDelta(enclosingNode, options, sourceFile),
-            getFormattingScanner(sourceFile.text, sourceFile.languageVariant, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end),
+            scanner,
             options,
             rulesProvider,
             requestKind,
             prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange),
-            sourceFile);
+            sourceFile));
     }
 
     function formatSpanWorker(originalRange: TextRange,
@@ -398,7 +398,6 @@ namespace ts.formatting {
 
         // formatting context is used by rules provider
         const formattingContext = new FormattingContext(sourceFile, requestKind, options);
-        let previousRangeHasError: boolean;
         let previousRange: TextRangeWithKind;
         let previousParent: Node;
         let previousRangeStartLine: number;
@@ -427,8 +426,6 @@ namespace ts.formatting {
                 trimTrailingWhitespacesForRemainingRange();
             }
         }
-
-        formattingScanner.close();
 
         return edits;
 
@@ -666,9 +663,10 @@ namespace ts.formatting {
                     undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
                 }
 
-                // if child is a list item - try to get its indentation
+                // if child is a list item - try to get its indentation, only if parent is within the original range.
                 let childIndentationAmount = Constants.Unknown;
-                if (isListItem) {
+
+                if (isListItem && rangeContainsRange(originalRange, parent)) {
                     childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
                     if (childIndentationAmount !== Constants.Unknown) {
                         inheritedIndentation = childIndentationAmount;
@@ -729,6 +727,7 @@ namespace ts.formatting {
                 parent: Node,
                 parentStartLine: number,
                 parentDynamicIndentation: DynamicIndentation): void {
+                Debug.assert(isNodeArray(nodes));
 
                 const listStartToken = getOpenTokenForList(parent, nodes);
                 const listEndToken = getCloseTokenForOpenToken(listStartToken);
@@ -883,7 +882,7 @@ namespace ts.formatting {
 
             const rangeHasError = rangeContainsError(range);
             let lineAdded: boolean;
-            if (!rangeHasError && !previousRangeHasError) {
+            if (!rangeHasError) {
                 if (!previousRange) {
                     // trim whitespaces starting from the beginning of the span up to the current line
                     const originalStart = sourceFile.getLineAndCharacterOfPosition(originalRange.pos);
@@ -898,7 +897,6 @@ namespace ts.formatting {
             previousRange = range;
             previousParent = parent;
             previousRangeStartLine = rangeStart.line;
-            previousRangeHasError = rangeHasError;
 
             return lineAdded;
         }
@@ -1150,6 +1148,56 @@ namespace ts.formatting {
                     break;
             }
         }
+    }
+
+    /**
+     * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
+     */
+    export function getRangeOfEnclosingComment(
+        sourceFile: SourceFile,
+        position: number,
+        onlyMultiLine: boolean,
+        precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
+        tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+        predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
+        const tokenStart = tokenAtPosition.getStart(sourceFile);
+        if (tokenStart <= position && position < tokenAtPosition.getEnd()) {
+            return undefined;
+        }
+
+        if (precedingToken === undefined) {
+            precedingToken = findPrecedingToken(position, sourceFile);
+        }
+
+        // Between two consecutive tokens, all comments are either trailing on the former
+        // or leading on the latter (and none are in both lists).
+        const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
+        const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
+        const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
+            trailingRangesOfPreviousToken.concat(leadingCommentRangesOfNextToken) :
+            trailingRangesOfPreviousToken || leadingCommentRangesOfNextToken;
+        if (commentRanges) {
+            for (const range of commentRanges) {
+                // The end marker of a single-line comment does not include the newline character.
+                // With caret at `^`, in the following case, we are inside a comment (^ denotes the cursor position):
+                //
+                //    // asdf   ^\n
+                //
+                // But for closed multi-line comments, we don't want to be inside the comment in the following case:
+                //
+                //    /* asdf */^
+                //
+                // However, unterminated multi-line comments *do* contain their end.
+                //
+                // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+                //
+                if ((range.pos < position && position < range.end ||
+                    position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()))) {
+                    return (range.kind === SyntaxKind.MultiLineCommentTrivia || !onlyMultiLine) && (!predicate || predicate(range)) ? range : undefined;
+                }
+            }
+        }
+        return undefined;
     }
 
     function getOpenTokenForList(node: Node, list: ReadonlyArray<Node>) {

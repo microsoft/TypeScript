@@ -27,7 +27,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -52,7 +52,7 @@ var A = (function () {
     ], A);
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {

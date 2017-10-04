@@ -342,7 +342,7 @@ namespace ts.server {
         convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, _fileName: string): Diagnostic {
             let category: DiagnosticCategory;
             for (const id in DiagnosticCategory) {
-                if (typeof id === "string" && entry.category === id.toLowerCase()) {
+                if (isString(id) && entry.category === id.toLowerCase()) {
                     category = (<any>DiagnosticCategory)[id];
                 }
             }
@@ -527,6 +527,10 @@ namespace ts.server {
             return notImplemented();
         }
 
+        getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
+            return notImplemented();
+        }
+
         getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
@@ -582,9 +586,7 @@ namespace ts.server {
             const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
 
             if (!response.body) {
-                return {
-                    edits: []
-                };
+                return { edits: [], renameFilename: undefined, renameLocation: undefined };
             }
 
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);

@@ -15,13 +15,13 @@ namespace ts {
         sourceText?: SourceText;
     }
 
-    interface NamedSourceText {
+    export interface NamedSourceText {
         name: string;
         text: SourceText;
     }
 
-    interface ProgramWithSourceTexts extends Program {
-        sourceTexts?: NamedSourceText[];
+    export interface ProgramWithSourceTexts extends Program {
+        sourceTexts?: ReadonlyArray<NamedSourceText>;
         host: TestCompilerHost;
     }
 
@@ -29,7 +29,7 @@ namespace ts {
         getTrace(): string[];
     }
 
-    class SourceText implements IScriptSnapshot {
+    export class SourceText implements IScriptSnapshot {
         private fullText: string;
 
         constructor(private references: string,
@@ -103,10 +103,11 @@ namespace ts {
     function createSourceFileWithText(fileName: string, sourceText: SourceText, target: ScriptTarget) {
         const file = <SourceFileWithText>createSourceFile(fileName, sourceText.getFullText(), target);
         file.sourceText = sourceText;
+        file.version = "" + sourceText.getVersion();
         return file;
     }
 
-    function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
+    export function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
@@ -154,7 +155,7 @@ namespace ts {
         };
     }
 
-    function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
+    export function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
         const host = createTestCompilerHost(texts, options.target);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host);
         program.sourceTexts = texts;
@@ -162,7 +163,7 @@ namespace ts {
         return program;
     }
 
-    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
+    export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
         if (!newTexts) {
             newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
         }
@@ -174,7 +175,7 @@ namespace ts {
         return program;
     }
 
-    function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
+    export function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
         const file = find(files, f => f.name === fileName)!;
         file.text = file.text.updateProgram(newProgramText);
     }
@@ -346,7 +347,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], options, noop, newTexts);
             assert.deepEqual(emptyArray, program_2.getMissingFilePaths());
 
-            assert.equal(StructureIsReused.SafeModules, program_1.structureIsReused);
+            assert.equal(StructureIsReused.Not, program_1.structureIsReused);
         });
 
         it("resolution cache follows imports", () => {
@@ -441,20 +442,20 @@ namespace ts {
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.ts' does not exist.",
                         "File 'node_modules/a.tsx' does not exist.",
                         "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.ts' does not exist.",
                         "File 'node_modules/a/index.tsx' does not exist.",
                         "File 'node_modules/a/index.d.ts' does not exist.",
-                        "File 'node_modules/@types/a.d.ts' does not exist.",
                         "File 'node_modules/@types/a/package.json' does not exist.",
+                        "File 'node_modules/@types/a.d.ts' does not exist.",
                         "File 'node_modules/@types/a/index.d.ts' does not exist.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.js' does not exist.",
                         "File 'node_modules/a.jsx' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.js' does not exist.",
                         "File 'node_modules/a/index.jsx' does not exist.",
                         "======== Module name 'a' was not resolved. ========"
@@ -474,10 +475,10 @@ namespace ts {
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a.ts' does not exist.",
                         "File 'node_modules/a.tsx' does not exist.",
                         "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.ts' does not exist.",
                         "File 'node_modules/a/index.tsx' does not exist.",
                         "File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.",
@@ -510,14 +511,14 @@ namespace ts {
                     "File '/fs.ts' does not exist.",
                     "File '/fs.tsx' does not exist.",
                     "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",
@@ -552,14 +553,14 @@ namespace ts {
                     "File '/fs.ts' does not exist.",
                     "File '/fs.tsx' does not exist.",
                     "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/package.json' does not exist.",
+                    "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",
@@ -867,6 +868,174 @@ namespace ts {
     describe("host is optional", () => {
         it("should work if host is not provided", () => {
             createProgram([], {});
+        });
+    });
+
+    import TestSystem = ts.TestFSWithWatch.TestServerHost;
+    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
+    import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
+    import libFile = ts.TestFSWithWatch.libFile;
+
+    describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
+        function verifyProgramIsUptoDate(
+            program: Program,
+            newRootFileNames: string[],
+            newOptions: CompilerOptions
+        ) {
+            const actual = isProgramUptoDate(
+                program, newRootFileNames, newOptions,
+                path => program.getSourceFileByPath(path).version, /*fileExists*/ returnFalse,
+                /*hasInvalidatedResolution*/ returnFalse,
+                /*hasChangedAutomaticTypeDirectiveNames*/ false
+            );
+            assert.isTrue(actual);
+        }
+
+        function duplicate(options: CompilerOptions): CompilerOptions;
+        function duplicate(fileNames: string[]): string[];
+        function duplicate(filesOrOptions: CompilerOptions | string[]) {
+            return JSON.parse(JSON.stringify(filesOrOptions));
+        }
+
+        function createWatchingSystemHost(host: TestSystem) {
+            return ts.createWatchingSystemHost(/*pretty*/ undefined, host);
+        }
+
+        function verifyProgramWithoutConfigFile(watchingSystemHost: WatchingSystemHost, rootFiles: string[], options: CompilerOptions) {
+            const program = createWatchModeWithoutConfigFile(rootFiles, options, watchingSystemHost)();
+            verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
+        }
+
+        function getConfigParseResult(watchingSystemHost: WatchingSystemHost, configFileName: string) {
+            return parseConfigFile(configFileName, {}, watchingSystemHost.system, watchingSystemHost.reportDiagnostic, watchingSystemHost.reportWatchDiagnostic);
+        }
+
+        function verifyProgramWithConfigFile(watchingSystemHost: WatchingSystemHost, configFile: string) {
+            const result = getConfigParseResult(watchingSystemHost, configFile);
+            const program = createWatchModeWithConfigFile(result, {}, watchingSystemHost)();
+            const { fileNames, options } = getConfigParseResult(watchingSystemHost, configFile);
+            verifyProgramIsUptoDate(program, fileNames, options);
+        }
+
+        function verifyProgram(files: FileOrFolder[], rootFiles: string[], options: CompilerOptions, configFile: string) {
+            const watchingSystemHost = createWatchingSystemHost(createTestSystem(files));
+            verifyProgramWithoutConfigFile(watchingSystemHost, rootFiles, options);
+            verifyProgramWithConfigFile(watchingSystemHost, configFile);
+        }
+
+        it("has empty options", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: "let x = 1"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/file2.ts",
+                content: "let y = 1"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            verifyProgram([file1, file2, libFile, configFile], [file1.path, file2.path], {}, configFile.path);
+        });
+
+        it("has lib specified in the options", () => {
+            const compilerOptions: CompilerOptions = { lib: ["es5", "es2015.promise"] };
+            const app: FileOrFolder = {
+                path: "/src/app.ts",
+                content: "var x: Promise<string>;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+            const es5Lib: FileOrFolder = {
+                path: "/compiler/lib.es5.d.ts",
+                content: "declare const eval: any"
+            };
+            const es2015Promise: FileOrFolder = {
+                path: "/compiler/lib.es2015.promise.d.ts",
+                content: "declare class Promise<T> {}"
+            };
+
+            verifyProgram([app, configFile, es5Lib, es2015Promise], [app.path], compilerOptions, configFile.path);
+        });
+
+        it("has paths specified in the options", () => {
+            const compilerOptions: CompilerOptions = {
+                baseUrl: ".",
+                paths: {
+                    "*": [
+                        "packages/mail/data/*",
+                        "packages/styles/*",
+                        "*"
+                    ]
+                }
+            };
+            const app: FileOrFolder = {
+                path: "/src/packages/framework/app.ts",
+                content: 'import classc from "module1/lib/file1";\
+                          import classD from "module3/file3";\
+                          let x = new classc();\
+                          let y = new classD();'
+            };
+            const module1: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                content: 'import classc from "module2/file2";export default classc;',
+            };
+            const module2: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                content: 'class classc { method2() { return "hello"; } }\nexport default classc',
+            };
+            const module3: FileOrFolder = {
+                path: "/src/packages/styles/module3/file3.ts",
+                content: "class classD { method() { return 10; } }\nexport default classD;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+
+            verifyProgram([app, module1, module2, module3, libFile, configFile], [app.path], compilerOptions, configFile.path);
+        });
+
+        it("has include paths specified in tsconfig file", () => {
+            const compilerOptions: CompilerOptions = {
+                baseUrl: ".",
+                paths: {
+                    "*": [
+                        "packages/mail/data/*",
+                        "packages/styles/*",
+                        "*"
+                    ]
+                }
+            };
+            const app: FileOrFolder = {
+                path: "/src/packages/framework/app.ts",
+                content: 'import classc from "module1/lib/file1";\
+                          import classD from "module3/file3";\
+                          let x = new classc();\
+                          let y = new classD();'
+            };
+            const module1: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                content: 'import classc from "module2/file2";export default classc;',
+            };
+            const module2: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                content: 'class classc { method2() { return "hello"; } }\nexport default classc',
+            };
+            const module3: FileOrFolder = {
+                path: "/src/packages/styles/module3/file3.ts",
+                content: "class classD { method() { return 10; } }\nexport default classD;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] })
+            };
+
+            const watchingSystemHost = createWatchingSystemHost(createTestSystem([app, module1, module2, module3, libFile, configFile]));
+            verifyProgramWithConfigFile(watchingSystemHost, configFile.path);
         });
     });
 }

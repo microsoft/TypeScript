@@ -33,7 +33,7 @@ var b = {
 var r4 = b.foo(new Date());
 
 //// [propertyAccessOnTypeParameterWithConstraints4.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function () {
