@@ -557,7 +557,7 @@ namespace ts.refactor.extractSymbol {
                     description: getDescriptionForConstantInScope(scope),
                     errors: constantErrorsPerScope[i],
                     scopeDescription: (i === 0 && !isClassLike(scope))
-                        ? "enclosing scope" // Like "global scope" and "module scope", this is not localized.
+                        ? Diagnostics.enclosing_scope.message
                         : scopeDescription,
                 },
             };
@@ -630,7 +630,7 @@ namespace ts.refactor.extractSymbol {
     function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string {
         return scope.kind === SyntaxKind.ModuleBlock
             ? `namespace '${scope.parent.name.getText()}'`
-            : scope.externalModuleIndicator ? "module scope" : "global scope";
+            : formatStringFromArgs(Diagnostics._0_scope.message, [scope.externalModuleIndicator ? "module" : "global"]);
     }
 
     function getUniqueName(baseName: string, fileText: string): string {
