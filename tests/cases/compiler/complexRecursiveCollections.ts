@@ -1,3 +1,4 @@
+// @skipLibCheck: true
 // @lib: es6
 // @Filename: complex.d.ts
 interface Ara<T> { t: T }
