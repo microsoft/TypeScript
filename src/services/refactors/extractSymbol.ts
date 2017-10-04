@@ -5,7 +5,7 @@
 namespace ts.refactor.extractSymbol {
     const extractSymbol: Refactor = {
         name: "Extract Symbol",
-        description: Diagnostics.Extract_symbol.message,
+        description: getLocaleSpecificMessage(Diagnostics.Extract_symbol),
         getAvailableActions,
         getEditsForAction,
     };
@@ -43,7 +43,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [functionExtraction.description, functionExtraction.scopeDescription]);
+                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [functionExtraction.description, functionExtraction.scopeDescription]);
                 if (!usedFunctionNames.has(description)) {
                     usedFunctionNames.set(description, true);
                     functionActions.push({
@@ -58,7 +58,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(Diagnostics.Extract_to_0_in_1.message, [constantExtraction.description, constantExtraction.scopeDescription]);
+                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [constantExtraction.description, constantExtraction.scopeDescription]);
                 if (!usedConstantNames.has(description)) {
                     usedConstantNames.set(description, true);
                     constantActions.push({
@@ -78,7 +78,7 @@ namespace ts.refactor.extractSymbol {
         if (functionActions.length) {
             infos.push({
                 name: extractSymbol.name,
-                description: Diagnostics.Extract_function.message,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                 actions: functionActions
             });
         }
@@ -86,7 +86,7 @@ namespace ts.refactor.extractSymbol {
         if (constantActions.length) {
             infos.push({
                 name: extractSymbol.name,
-                description: Diagnostics.Extract_constant.message,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
             });
         }
@@ -557,7 +557,7 @@ namespace ts.refactor.extractSymbol {
                     description: getDescriptionForConstantInScope(scope),
                     errors: constantErrorsPerScope[i],
                     scopeDescription: (i === 0 && !isClassLike(scope))
-                        ? Diagnostics.enclosing_scope.message
+                        ? getLocaleSpecificMessage(Diagnostics.enclosing_scope)
                         : scopeDescription,
                 },
             };
@@ -630,7 +630,7 @@ namespace ts.refactor.extractSymbol {
     function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string {
         return scope.kind === SyntaxKind.ModuleBlock
             ? `namespace '${scope.parent.name.getText()}'`
-            : formatStringFromArgs(Diagnostics._0_scope.message, [scope.externalModuleIndicator ? "module" : "global"]);
+            : formatStringFromArgs(getLocaleSpecificMessage(Diagnostics._0_scope), [scope.externalModuleIndicator ? "module" : "global"]);
     }
 
     function getUniqueName(baseName: string, fileText: string): string {
