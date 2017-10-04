@@ -302,12 +302,15 @@ namespace ts.DocumentHighlights {
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
+            case SyntaxKind.Block:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
                 // Container is either a class declaration or the declaration is a classDeclaration
                 if (modifierFlag & ModifierFlags.Abstract) {
                     nodes = [...(<ClassDeclaration>declaration).members, declaration];
                 }
                 else {
-                    nodes = (<Block>container).statements;
+                    nodes = (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
                 }
                 break;
             case SyntaxKind.Constructor:
