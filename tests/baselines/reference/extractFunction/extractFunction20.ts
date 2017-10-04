@@ -1,8 +1,8 @@
 // ==ORIGINAL==
 const _ = class {
     a() {
-        let a1 = { x: 1 };
-        return a1.x + 10;
+        /*[#|*/let a1 = { x: 1 };
+        return a1.x + 10;/*|]*/
     }
 }
 // ==SCOPE::Extract to method in anonymous class expression==

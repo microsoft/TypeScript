@@ -33,6 +33,20 @@ namespace ts {
         testExtractConstant("extractConstant_ExpressionStatementExpression",
             `[#|"hello"|];`);
 
+        testExtractConstant("extractConstant_ExpressionStatementInNestedScope", `
+let i = 0;
+function F() {
+    [#|i++|];
+}
+        `);
+
+        testExtractConstant("extractConstant_ExpressionStatementConsumesLocal", `
+function F() {
+    let i = 0;
+    [#|i++|];
+}
+        `);
+
         testExtractConstant("extractConstant_BlockScopes_NoDependencies",
             `for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
@@ -200,9 +214,29 @@ const x = [#|2 + 1|];
 /* About x */
 const x = [#|2 + 1|];
         `);
+
+        testExtractConstant("extractConstant_ArrowFunction_Block", `
+const f = () => {
+    return [#|2 + 1|];
+};`);
+
+        testExtractConstant("extractConstant_ArrowFunction_Expression",
+            `const f = () => [#|2 + 1|];`);
+
+        testExtractConstantFailed("extractConstant_Void", `
+function f(): void { }
+[#|f();|]`);
+
+        testExtractConstantFailed("extractConstant_Never", `
+function f(): never { }
+[#|f();|]`);
     });
 
     function testExtractConstant(caption: string, text: string) {
         testExtractSymbol(caption, text, "extractConstant", Diagnostics.Extract_constant);
+    }
+
+    function testExtractConstantFailed(caption: string, text: string) {
+        testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
     }
 }

@@ -6646,7 +6646,7 @@ namespace ts {
 
                 function parsePropertyAccessEntityNameExpression() {
                     let node: Identifier | PropertyAccessEntityNameExpression = parseJSDocIdentifierName(/*createIfMissing*/ true);
-                    while (token() === SyntaxKind.DotToken) {
+                    while (parseOptional(SyntaxKind.DotToken)) {
                         const prop: PropertyAccessEntityNameExpression = createNode(SyntaxKind.PropertyAccessExpression, node.pos) as PropertyAccessEntityNameExpression;
                         prop.expression = node;
                         prop.name = parseJSDocIdentifierName();

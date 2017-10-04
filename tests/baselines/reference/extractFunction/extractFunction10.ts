@@ -4,8 +4,8 @@ namespace A {
     class C {
         a() {
             let z = 1;
-            let a1: I = { x: 1 };
-            return a1.x + 10;
+            /*[#|*/let a1: I = { x: 1 };
+            return a1.x + 10;/*|]*/
         }
     }
 }

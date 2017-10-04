@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 namespace X {
     export const j = 10;
-    export const y = j * j;
+    export const y = /*[#|*/j * j/*|]*/;
 }
 // ==SCOPE::Extract to constant in enclosing scope==
 namespace X {

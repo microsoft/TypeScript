@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 function F<T>(t1: T) {
     function G<U extends T[]>(t2: U) {
-        t2.toString();
+        /*[#|*/t2.toString();/*|]*/
     }
 }
 // ==SCOPE::Extract to inner function in function 'G'==
