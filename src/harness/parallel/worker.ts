@@ -12,6 +12,11 @@ namespace Harness.Parallel.Worker {
             testList.length = 0;
         }
         reportedUnitTests = true;
+        if (testList.length) {
+            // Execute unit tests
+            testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+            testList.length = 0;
+        }
         const start = +(new Date());
         runner.initializeTests();
         testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
