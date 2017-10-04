@@ -265,104 +265,80 @@ namespace ts.DocumentHighlights {
     }
 
     function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
-        const container = declaration.parent;
-
         // Make sure we only highlight the keyword when it makes sense to do so.
-        if (isAccessibilityModifier(modifier)) {
-            if (!(container.kind === SyntaxKind.ClassDeclaration ||
-                container.kind === SyntaxKind.ClassExpression ||
-                (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
-                return undefined;
-            }
-        }
-        else if (modifier === SyntaxKind.StaticKeyword) {
-            if (!(container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression)) {
-                return undefined;
-            }
-        }
-        else if (modifier === SyntaxKind.ExportKeyword || modifier === SyntaxKind.DeclareKeyword) {
-            if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
-                return undefined;
-            }
-        }
-        else if (modifier === SyntaxKind.AbstractKeyword) {
-            if (!(container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration)) {
-                return undefined;
-            }
-        }
-        else {
-            // unsupported modifier
+        if (!isLegalModifier(modifier, declaration)) {
             return undefined;
         }
 
-        const keywords: Node[] = [];
-        const modifierFlag: ModifierFlags = getFlagFromModifier(modifier);
+        const modifierFlag = modifierToFlag(modifier);
+        return mapDefined(getNodesToSearchForModifier(declaration, modifierFlag), node => {
+            if (getModifierFlags(node) & modifierFlag) {
+                const mod = find(node.modifiers, m => m.kind === modifier);
+                Debug.assert(!!mod);
+                return mod;
+            }
+        });
+    }
 
-        let nodes: ReadonlyArray<Node>;
+    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> {
+        const container = declaration.parent;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
                 // Container is either a class declaration or the declaration is a classDeclaration
                 if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = [...(<ClassDeclaration>declaration).members, declaration];
+                    return [...(<ClassDeclaration>declaration).members, declaration];
                 }
                 else {
-                    nodes = (<Block>container).statements;
+                    return (<Block>container).statements;
                 }
-                break;
             case SyntaxKind.Constructor:
-                nodes = [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
-                break;
+                return [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                nodes = (<ClassLikeDeclaration>container).members;
+                const nodes = (<ClassLikeDeclaration>container).members;
 
                 // If we're an accessibility modifier, we're in an instance member and should search
                 // the constructor's parameter list for instance members as well.
                 if (modifierFlag & ModifierFlags.AccessibilityModifier) {
-                    const constructor = forEach((<ClassLikeDeclaration>container).members, member => {
-                        return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
-                    });
-
+                    const constructor = find((<ClassLikeDeclaration>container).members, isConstructorDeclaration);
                     if (constructor) {
-                        nodes = [...nodes, ...constructor.parameters];
+                        return [...nodes, ...constructor.parameters];
                     }
                 }
                 else if (modifierFlag & ModifierFlags.Abstract) {
-                    nodes = [...nodes, container];
+                    return [...nodes, container];
                 }
-                break;
+                return nodes;
             default:
                 Debug.fail("Invalid container kind.");
         }
+    }
 
-        forEach(nodes, node => {
-            if (getModifierFlags(node) & modifierFlag) {
-                forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
-            }
-        });
-
-        return keywords;
-
-        function getFlagFromModifier(modifier: SyntaxKind) {
-            switch (modifier) {
-                case SyntaxKind.PublicKeyword:
-                    return ModifierFlags.Public;
-                case SyntaxKind.PrivateKeyword:
-                    return ModifierFlags.Private;
-                case SyntaxKind.ProtectedKeyword:
-                    return ModifierFlags.Protected;
-                case SyntaxKind.StaticKeyword:
-                    return ModifierFlags.Static;
-                case SyntaxKind.ExportKeyword:
-                    return ModifierFlags.Export;
-                case SyntaxKind.DeclareKeyword:
-                    return ModifierFlags.Ambient;
-                case SyntaxKind.AbstractKeyword:
-                    return ModifierFlags.Abstract;
-                default:
-                    Debug.fail();
-            }
+    function isLegalModifier(modifier: SyntaxKind, declaration: Node): boolean {
+        const container = declaration.parent;
+        switch (modifier) {
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.PublicKeyword:
+                switch (container.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
+                        return true;
+                    case SyntaxKind.Constructor:
+                        return declaration.kind === SyntaxKind.Parameter;
+                    default:
+                        return false;
+                }
+            case SyntaxKind.StaticKeyword:
+                return container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression;
+            case SyntaxKind.ExportKeyword:
+            case SyntaxKind.DeclareKeyword:
+                return container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile;
+            case SyntaxKind.AbstractKeyword:
+                return container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration;
+            default:
+                return false;
         }
     }
 
