@@ -43,7 +43,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [functionExtraction.description, functionExtraction.scopeDescription]);
+                const description = functionExtraction.description;
                 if (!usedFunctionNames.has(description)) {
                     usedFunctionNames.set(description, true);
                     functionActions.push({
@@ -58,7 +58,7 @@ namespace ts.refactor.extractSymbol {
                 // Don't issue refactorings with duplicated names.
                 // Scopes come back in "innermost first" order, so extractions will
                 // preferentially go into nearer scopes
-                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [constantExtraction.description, constantExtraction.scopeDescription]);
+                const description = constantExtraction.description;
                 if (!usedConstantNames.has(description)) {
                     usedConstantNames.set(description, true);
                     constantActions.push({
@@ -524,7 +524,6 @@ namespace ts.refactor.extractSymbol {
 
     interface Extraction {
         readonly description: string;
-        readonly scopeDescription: string;
         readonly errors: ReadonlyArray<Diagnostic>;
     }
 
@@ -542,23 +541,43 @@ namespace ts.refactor.extractSymbol {
         const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
         // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
         const extractions = scopes.map((scope, i): ScopeExtractions => {
+            const functionDescriptionPart = getDescriptionForFunctionInScope(scope);
+            const constantDescriptionPart = getDescriptionForConstantInScope(scope);
+
             const scopeDescription = isFunctionLikeDeclaration(scope)
                 ? getDescriptionForFunctionLikeDeclaration(scope)
                 : isClassLike(scope)
                     ? getDescriptionForClassLikeDeclaration(scope)
                     : getDescriptionForModuleLikeDeclaration(scope);
+
+            let functionDescription: string;
+            let constantDescription: string;
+            if (scopeDescription === SpecialScope.Global) {
+                functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "global"]);
+                constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "global"]);
+            }
+            else if (scopeDescription === SpecialScope.Module) {
+                functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "module"]);
+                constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "module"]);
+            }
+            else {
+                functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [functionDescriptionPart, scopeDescription]);
+                constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [constantDescriptionPart, scopeDescription]);
+            }
+
+            // Customize the phrasing for the innermost scope to increase clarity.
+            if (i === 0 && !isClassLike(scope)) {
+                constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_enclosing_scope), [constantDescriptionPart]);
+            }
+
             return {
                 functionExtraction: {
-                    description: getDescriptionForFunctionInScope(scope),
+                    description: functionDescription,
                     errors: functionErrorsPerScope[i],
-                    scopeDescription,
                 },
                 constantExtraction: {
-                    description: getDescriptionForConstantInScope(scope),
+                    description: constantDescription,
                     errors: constantErrorsPerScope[i],
-                    scopeDescription: (i === 0 && !isClassLike(scope))
-                        ? getLocaleSpecificMessage(Diagnostics.enclosing_scope)
-                        : scopeDescription,
                 },
             };
         });
@@ -627,10 +646,15 @@ namespace ts.refactor.extractSymbol {
             ? `class '${scope.name.text}'`
             : scope.name ? `class expression '${scope.name.text}'` : "anonymous class expression";
     }
-    function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string {
+    function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string | SpecialScope {
         return scope.kind === SyntaxKind.ModuleBlock
             ? `namespace '${scope.parent.name.getText()}'`
-            : formatStringFromArgs(getLocaleSpecificMessage(Diagnostics._0_scope), [scope.externalModuleIndicator ? "module" : "global"]);
+            : scope.externalModuleIndicator ? SpecialScope.Module : SpecialScope.Global;
+    }
+
+    const enum SpecialScope {
+        Module,
+        Global,
     }
 
     function getUniqueName(baseName: string, fileText: string): string {

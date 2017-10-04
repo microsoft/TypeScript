@@ -3735,12 +3735,12 @@
         "code": 95006
     },
 
-    "enclosing scope": {
+    "Extract to {0} in enclosing scope": {
         "category": "Message",
         "code": 95007
     },
 
-    "{0} scope": {
+    "Extract to {0} in {1} scope": {
         "category": "Message",
         "code": 95008
     }
