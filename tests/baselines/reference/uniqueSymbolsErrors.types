@@ -1,5 +1,8 @@
 === tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts ===
 // declarations
+declare const invalidUniqueType: unique number;
+>invalidUniqueType : any
+
 declare const {}: unique symbol;
 declare let invalidLetType: unique symbol;
 >invalidLetType : symbol
@@ -12,7 +15,7 @@ declare function invalidArgType(arg: unique symbol): void;
 >invalidArgType : (arg: symbol) => void
 >arg : symbol
 
-declare function invalidRestArgType(...arg: unique symbol[]): void;
+declare function invalidRestArgType(...arg: (unique symbol)[]): void;
 >invalidRestArgType : (...arg: symbol[]) => void
 >arg : symbol[]
 
@@ -53,7 +56,7 @@ class InvalidClass {
 >invalidArgType : (arg: symbol) => void
 >arg : symbol
 
-    invalidRestArgType(...args: unique symbol[]): void { return; }
+    invalidRestArgType(...args: (unique symbol)[]): void { return; }
 >invalidRestArgType : (...args: symbol[]) => void
 >args : symbol[]
 
@@ -91,7 +94,7 @@ class InvalidClass {
 >invalidStaticArgType : (arg: symbol) => void
 >arg : symbol
 
-    static invalidStaticRestArgType(...args: unique symbol[]): void { return; }
+    static invalidStaticRestArgType(...args: (unique symbol)[]): void { return; }
 >invalidStaticRestArgType : (...args: symbol[]) => void
 >args : symbol[]
 
@@ -134,7 +137,7 @@ interface InvalidInterface {
 >invalidArgType : (arg: symbol) => void
 >arg : symbol
 
-    invalidRestArgType(...args: unique symbol[]): void;
+    invalidRestArgType(...args: (unique symbol)[]): void;
 >invalidRestArgType : (...args: symbol[]) => void
 >args : symbol[]
 
@@ -170,7 +173,7 @@ type InvalidTypeLiteral = {
 >invalidArgType : (arg: symbol) => void
 >arg : symbol
 
-    invalidRestArgType(...args: unique symbol[]): void;
+    invalidRestArgType(...args: (unique symbol)[]): void;
 >invalidRestArgType : (...args: symbol[]) => void
 >args : symbol[]
 
@@ -213,7 +216,7 @@ declare const invalidTypeArgument: Promise<unique symbol>;
 >invalidTypeArgument : Promise<symbol>
 >Promise : Promise<T>
 
-declare const invalidArrayType: unique symbol[];
+declare const invalidArrayType: (unique symbol)[];
 >invalidArrayType : symbol[]
 
 declare const invalidTupleType: [unique symbol];

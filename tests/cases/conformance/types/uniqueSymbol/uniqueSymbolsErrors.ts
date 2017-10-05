@@ -1,13 +1,14 @@
 // @target: esnext
 
 // declarations
+declare const invalidUniqueType: unique number;
 declare const {}: unique symbol;
 declare let invalidLetType: unique symbol;
 declare var invalidVarType: unique symbol;
 
 // function arguments and return types
 declare function invalidArgType(arg: unique symbol): void;
-declare function invalidRestArgType(...arg: unique symbol[]): void;
+declare function invalidRestArgType(...arg: (unique symbol)[]): void;
 declare function invalidReturnType(): unique symbol;
 declare function invalidThisType(this: unique symbol): void;
 declare function invalidTypePredicate(n: any): n is unique symbol;
@@ -21,7 +22,7 @@ class InvalidClass {
     readonly invalidReadonlyPropertyType: unique symbol;
     invalidPropertyType: unique symbol;
     invalidArgType(arg: unique symbol): void { return; }
-    invalidRestArgType(...args: unique symbol[]): void { return; }
+    invalidRestArgType(...args: (unique symbol)[]): void { return; }
     invalidReturnType(): unique symbol { return; }
     invalidThisType(this: unique symbol): void { return; }
     invalidTypePredicate(n: any): n is unique symbol { return; }
@@ -32,7 +33,7 @@ class InvalidClass {
 
     static invalidStaticPropertyType: unique symbol;
     static invalidStaticArgType(arg: unique symbol): void { return; }
-    static invalidStaticRestArgType(...args: unique symbol[]): void { return; }
+    static invalidStaticRestArgType(...args: (unique symbol)[]): void { return; }
     static invalidStaticReturnType(): unique symbol { return; }
     static invalidStaticThisType(this: unique symbol): void { return; }
     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
@@ -46,7 +47,7 @@ class InvalidClass {
 interface InvalidInterface {
     invalidPropertyType: unique symbol;
     invalidArgType(arg: unique symbol): void;
-    invalidRestArgType(...args: unique symbol[]): void;
+    invalidRestArgType(...args: (unique symbol)[]): void;
     invalidReturnType(): unique symbol;
     invalidThisType(this: unique symbol);
     invalidTypePredicate(n: any): n is unique symbol
@@ -58,7 +59,7 @@ interface InvalidInterface {
 type InvalidTypeLiteral = {
     invalidPropertyType: unique symbol;
     invalidArgType(arg: unique symbol): void;
-    invalidRestArgType(...args: unique symbol[]): void;
+    invalidRestArgType(...args: (unique symbol)[]): void;
     invalidReturnType(): unique symbol;
     invalidThisType(this: unique symbol);
     invalidTypePredicate(n: any): n is unique symbol
@@ -73,7 +74,7 @@ type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
 
 // type references
 declare const invalidTypeArgument: Promise<unique symbol>;
-declare const invalidArrayType: unique symbol[];
+declare const invalidArrayType: (unique symbol)[];
 declare const invalidTupleType: [unique symbol];
 
 // mapped types
