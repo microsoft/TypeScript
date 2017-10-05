@@ -298,12 +298,12 @@ namespace ts {
         markerSubType.constraint = markerSuperType;
         const markerOtherType = <TypeParameter>createType(TypeFlags.TypeParameter);
 
-        const noTypePredicate: IdentifierTypePredicate = { kind: TypePredicateKind.Identifier, parameterName: "<<unresolved>>", parameterIndex: 0, type: anyType };
+        const noTypePredicate = createIdentifierTypePredicate("<<unresolved>>", 0, anyType);
 
-        const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, noTypePredicate, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, noTypePredicate, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, noTypePredicate, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, noTypePredicate, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
@@ -5490,8 +5490,17 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
-        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
-            resolvedReturnType: Type | undefined, resolvedTypePredicate: TypePredicate | undefined, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature {
+        function createSignature(
+            declaration: SignatureDeclaration,
+            typeParameters: TypeParameter[],
+            thisParameter: Symbol | undefined,
+            parameters: Symbol[],
+            resolvedReturnType: Type | undefined,
+            resolvedTypePredicate: TypePredicate | undefined,
+            minArgumentCount: number,
+            hasRestParameter: boolean,
+            hasLiteralTypes: boolean,
+        ): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
@@ -5506,8 +5515,8 @@ namespace ts {
         }
 
         function cloneSignature(sig: Signature): Signature {
-            return createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, sig.resolvedReturnType,
-                sig.resolvedTypePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes);
+            return createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, /*resolvedReturnType*/ undefined,
+                /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes);
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
@@ -5525,9 +5534,12 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
                 if ((isJavaScript || typeArgCount >= minTypeArgumentCount) && typeArgCount <= typeParamCount) {
-                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)) : cloneSignature(baseSig);
+                    const sig = typeParamCount
+                        ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript))
+                        : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
+                    sig.resolvedTypePredicate = noTypePredicate;
                     result.push(sig);
                 }
             }
@@ -5589,8 +5601,6 @@ namespace ts {
                                     const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType), /*subtypeReduction*/ true);
                                     s.thisParameter = createSymbolWithType(signature.thisParameter, thisType);
                                 }
-                                // Clear resolved return type we possibly got from cloneSignature
-                                s.resolvedReturnType = undefined;
                                 s.unionSignatures = unionSignatures;
                             }
                             (result || (result = [])).push(s);
@@ -5674,6 +5684,7 @@ namespace ts {
                         signatures = map(signatures, s => {
                             const clone = cloneSignature(s);
                             clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, i);
+                            clone.resolvedTypePredicate = noTypePredicate; // TODO: GH#17757
                             return clone;
                         });
                     }
@@ -6103,14 +6114,13 @@ namespace ts {
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol {
             let props: Symbol[];
-            const types = containingType.types;
             const isUnion = containingType.flags & TypeFlags.Union;
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
             // Flags we want to propagate to the result if they exist in all source symbols
             let commonFlags = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
             let syntheticFlag = CheckFlags.SyntheticMethod;
             let checkFlags = 0;
-            for (const current of types) {
+            for (const current of containingType.types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
                     const prop = getPropertyOfType(type, name);
@@ -6344,20 +6354,24 @@ namespace ts {
 
         function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
             const { parameterName } = node;
+            const type = getTypeFromTypeNode(node.type);
             if (parameterName.kind === SyntaxKind.Identifier) {
-                return {
-                    kind: TypePredicateKind.Identifier,
-                    parameterName: parameterName ? parameterName.escapedText : undefined,
-                    parameterIndex: parameterName ? getTypePredicateParameterIndex((node.parent as SignatureDeclaration).parameters, parameterName) : undefined,
-                    type: getTypeFromTypeNode(node.type)
-                } as IdentifierTypePredicate;
+                return createIdentifierTypePredicate(
+                    parameterName && parameterName.escapedText as string, // TODO: GH#18217
+                    parameterName && getTypePredicateParameterIndex((node.parent as SignatureDeclaration).parameters, parameterName),
+                    type);
             }
             else {
-                return {
-                    kind: TypePredicateKind.This,
-                    type: getTypeFromTypeNode(node.type)
-                };
+                return createThisTypePredicate(type);
             }
+        }
+
+        function createIdentifierTypePredicate(parameterName: string | undefined, parameterIndex: number | undefined, type: Type): IdentifierTypePredicate {
+            return { kind: TypePredicateKind.Identifier, parameterName, parameterIndex, type };
+        }
+
+        function createThisTypePredicate(type: Type): ThisTypePredicate {
+            return { kind: TypePredicateKind.This, type };
         }
 
         /**
@@ -6604,8 +6618,14 @@ namespace ts {
 
         function getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined {
             if (!signature.resolvedTypePredicate) {
-                const targetTypePredicate = getTypePredicateOfSignature(signature.target);
-                signature.resolvedTypePredicate = targetTypePredicate ? instantiateTypePredicate(targetTypePredicate, signature.mapper) : noTypePredicate;
+                if (signature.target) {
+                    const targetTypePredicate = getTypePredicateOfSignature(signature.target);
+                    signature.resolvedTypePredicate = targetTypePredicate ? instantiateTypePredicate(targetTypePredicate, signature.mapper) : noTypePredicate;
+                }
+                else {
+                    Debug.assert(!!signature.unionSignatures);
+                    signature.resolvedTypePredicate = getUnionTypePredicate(signature.unionSignatures);
+                }
             }
             return signature.resolvedTypePredicate === noTypePredicate ? undefined : signature.resolvedTypePredicate;
         }
@@ -7478,6 +7498,42 @@ namespace ts {
                         neverType;
             }
             return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
+        }
+
+        function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate | undefined {
+            let first: TypePredicate | undefined;
+            const types: Type[] = [];
+            for (let i = 0; i < signatures.length; i++) {
+                const pred = getTypePredicateOfSignature(signatures[i]);
+                if (!pred) {
+                    continue;
+                }
+
+                if (first) {
+                    if (!typePredicateKindsMatch(first, pred)) {
+                        // No common type predicate.
+                        return undefined;
+                    }
+                }
+                else {
+                    first = pred;
+                }
+                types.push(pred.type);
+            }
+            if (!first) {
+                // No union signatures had a type predicate.
+                return undefined;
+            }
+            const unionType = getUnionType(types);
+            return isIdentifierTypePredicate(first)
+                ? createIdentifierTypePredicate(first.parameterName, first.parameterIndex, unionType)
+                : createThisTypePredicate(unionType);
+        }
+
+        function typePredicateKindsMatch(a: TypePredicate, b: TypePredicate): boolean {
+            return isIdentifierTypePredicate(a)
+                ? isIdentifierTypePredicate(b) && a.parameterIndex === b.parameterIndex
+                : !isIdentifierTypePredicate(b);
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
@@ -10167,9 +10223,18 @@ namespace ts {
                 result &= related;
             }
             if (!ignoreReturnTypes) {
-                result &= compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+                const sourceTypePredicate = getTypePredicateOfSignature(source);
+                const targetTypePredicate = getTypePredicateOfSignature(target);
+                result &= sourceTypePredicate !== undefined || targetTypePredicate !== undefined
+                    ? compareTypePredicatesIdentical(sourceTypePredicate, targetTypePredicate, compareTypes)
+                    // If they're both type predicates their return types will both be `boolean`, so no need to compare those.
+                    : compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
             return result;
+        }
+
+        function compareTypePredicatesIdentical(source: TypePredicate | undefined, target: TypePredicate | undefined, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
+            return source === undefined || target === undefined || !typePredicateKindsMatch(source, target) ? Ternary.False : compareTypes(source.type, target.type);
         }
 
         function isRestParameterIndex(signature: Signature, parameterIndex: number) {
@@ -13612,8 +13677,6 @@ namespace ts {
             let result: Signature;
             if (signatureList) {
                 result = cloneSignature(signatureList[0]);
-                // Clear resolved return type we possibly got from cloneSignature
-                result.resolvedReturnType = undefined;
                 result.unionSignatures = signatureList;
             }
             return result;
